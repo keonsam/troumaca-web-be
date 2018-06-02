@@ -4,7 +4,6 @@ phases:
   install:
     commands:
       - echo Installing source NPM dependencies...
-      - cd backend-typescript
       - npm install
   build:
     commands:
@@ -16,5 +15,5 @@ phases:
 artifacts:
     files:
         - '**/*'
-    base-directory: 'backend-typescript/dist*'
+    base-directory: 'dist*'
     discard-paths: no
