@@ -1,0 +1,6 @@
+{"resourceTypeId":"7714d005-59a0-40f5-87f6-c2cb656215f6","name":"Test2","description":"","resourceId":"9fc95aad-3568-4bb3-993a-4b9ee9fa1d16","_id":"0DEsNlO6dzlPvuOy"}
+{"resourceId":"138682a9-22a5-4eff-a08b-154c5b653c3e","resourceTypeId":"e03c3bdc-e246-4bbb-bc9e-ac0ed87f5567","name":"test1.1","description":"","_id":"9rjjvRsdWLIeOoq8"}
+{"resourceId":"5b08edc3-017f-4286-9255-d91235a5bdb2","resourceTypeId":"e463ffae-e17f-4816-865c-0d4126d24241","name":"test2.2","description":"","_id":"DeB1t4gwJLM0Xb9M"}
+{"resourceTypeId":"b56befd7-de0d-4a72-81e0-04d9acf18dce","name":"Test1","description":"","resourceId":"c14bc835-98dd-4a8d-b208-e4db505b5d53","_id":"StFTM9tvdFmZAReV"}
+{"resourceTypeId":"7714d005-59a0-40f5-87f6-c2cb656215f6","name":"Test2","description":"","resourceId":"1c0f92cb-347f-466c-8bfd-1f32a7e3711c","_id":"aavWpiifij3wPorz"}
+{"$$indexCreated":{"fieldName":"resourceId","unique":true,"sparse":false}}

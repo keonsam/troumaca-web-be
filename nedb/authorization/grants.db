@@ -1,0 +1,6 @@
+{"resourceId":"c14bc835-98dd-4a8d-b208-e4db505b5d53","resourcePermissionId":"76ab2feb-8dfc-4d61-95f1-c2967a81141b","accessRoleId":"3b9c30dc-9c0a-48d9-bb98-440c29bc2a8f","grantId":"4422e73f-b029-4c43-bc0e-19ec146f5922","_id":"4xhlMpnL9reqvEyq"}
+{"resourceId":"c14bc835-98dd-4a8d-b208-e4db505b5d53","resourcePermissionId":"76ab2feb-8dfc-4d61-95f1-c2967a81141b","accessRoleId":"8976f2b0-e59b-40bb-a6d6-a55f38255286","grantId":"836677de-7abb-42b0-819e-40b305a25020","_id":"MwXr67dkR79aNfZm"}
+{"resourceId":"c14bc835-98dd-4a8d-b208-e4db505b5d53","resourcePermissionId":"4c891b5e-dd62-476c-bbdf-827b15ad4bf2","accessRoleId":"d16f4bdd-0085-4497-a275-a0f4b9fa6a50","grantId":"948832a6-6594-49b8-8dd4-b1d35de3c1ca","_id":"TyNWBfzYyIBqacoL"}
+{"resourceId":"c14bc835-98dd-4a8d-b208-e4db505b5d53","resourcePermissionId":"4c891b5e-dd62-476c-bbdf-827b15ad4bf2","accessRoleId":"8976f2b0-e59b-40bb-a6d6-a55f38255286","grantId":"a2fe3367-eff3-4952-ab63-402f47d33219","_id":"o6YPTSNBNJ7RZENb"}
+{"resourceId":"c14bc835-98dd-4a8d-b208-e4db505b5d53","resourcePermissionId":"76ab2feb-8dfc-4d61-95f1-c2967a81141b","accessRoleId":"d16f4bdd-0085-4497-a275-a0f4b9fa6a50","grantId":"2c01abb6-1efe-4c0c-b4b4-f4e98bf7bb3c","_id":"oXqXn9H9zidrazUe"}
+{"$$indexCreated":{"fieldName":"grantId","unique":true,"sparse":false}}

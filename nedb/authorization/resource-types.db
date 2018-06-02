@@ -1,0 +1,4 @@
+{"name":"Assets","description":"","resourceTypeId":"7714d005-59a0-40f5-87f6-c2cb656215f6","_id":"5crJTiTczx5GQ06n"}
+{"name":"test1","description":"","resourceTypeId":"e03c3bdc-e246-4bbb-bc9e-ac0ed87f5567","_id":"UzbqfkLyGoCOSXZP"}
+{"resourceTypeId":"b56befd7-de0d-4a72-81e0-04d9acf18dce","name":"Asset-type","description":"","_id":"khwoaKwT6FuA80xG"}
+{"$$indexCreated":{"fieldName":"resourceTypeId","unique":true,"sparse":false}}
