@@ -1,0 +1,172 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# Created by .ignore support plugin (hsz.mobi)
+### macOS template
+*.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+### Gradle template
+.gradle
+/build/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# Cache of project
+.gradletasknamecache
+
+# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
+# gradle/wrapper/gradle-wrapper.properties
+### macOS template
+
+### JetBrains template
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
+# Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
+
+# User-specific stuff:
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/dictionaries
+
+# Sensitive or high-churn files:
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.xml
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
+
+# Gradle:
+.idea/**/gradle.xml
+.idea/**/libraries
+
+# Mongo Explorer plugin:
+.idea/**/mongoSettings.xml
+
+## File-based project format:
+*.iws
+
+## Plugin-specific files:
+
+# IntelliJ
+/out/
+
+# mpeltonen/sbt-idea plugin
+.idea_modules/
+
+# JIRA plugin
+atlassian-ide-plugin.xml
+
+# Crashlytics plugin (for Android Studio and IntelliJ)
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+
+# compiled output
+/dist
+/tmp
+/out-tsc
+
+# dependencies
+/node_modules
+/backend/node_modules
+/backend-typescript/node_modules
+/backend-es6/node_modules
+/backend-tests/node_modules
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+testem.log
+/typings
+
+# e2e
+/e2e/*.js
+/e2e/*.map
+
+*.map
+
+# System Files
+.DS_Store
+Thumbs.db
+backend-typescript/dist/*
+backend-typescript/dist/authentication/credential/authenticate.response.js
+backend-typescript/dist/authorization/
+backend-typescript/dist/page.response.js
+backend-typescript/dist/party/account.controller.js
+backend-typescript/dist/party/account.orchestrator.js
+backend-typescript/dist/party/account.response.js
+backend-typescript/dist/party/account/
+backend-typescript/dist/party/organization/
+backend-typescript/dist/party/user/
+backend-typescript/dist/session/session.controller.js
+backend-typescript/dist/shipment/
+backend-typescript/dist/site/email/
+backend-typescript/dist/site/phone/
+backend-typescript/dist/site/physical.site.js
+backend-typescript/dist/site/post-office-box/
+backend-typescript/dist/site/site.js
+backend-typescript/dist/site/street-address/
+backend-typescript/dist/site/virtual.site.js
+backend-typescript/dist/site/web-site/
+backend-typescript/test/
+backend/routes/parties/organizations/
+src/account/organizations/
+src/account/person-info/
+src/account/prople/
+src/account/security/
+src/adapter/mapper/
+src/authentication/reset-password/
+src/contracts/contract-creation/
+src/contracts/contract-edit/
+src/contracts/orders/purchases/purchase-order-creation/
+src/contracts/orders/purchases/purchase-order-edit/
+src/contracts/orders/sales/sale-order-creation/
+src/contracts/orders/sales/sale-order-edit/

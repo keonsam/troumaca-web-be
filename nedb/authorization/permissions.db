@@ -1,0 +1,5 @@
+{"name":"View","description":"","permissionId":"dc984fae-cacf-49d6-9372-b4775f8d7c26","_id":"55Lbo9STR1znUsuL"}
+{"name":"Delete","description":"","permissionId":"54baacc2-5998-4399-bd5e-476e9d8a9d6d","_id":"OdG7FNWkqVKLIJIA"}
+{"permissionId":"f3265b6c-667e-4689-b3ce-f0b2f48eeed3","name":"read","description":"","_id":"jNrAI1Z75rSSpcTM"}
+{"name":"edit","description":"","permissionId":"50ccd7e1-1ea9-4004-b87a-afaf5b1a45a6","_id":"yLAfywySfEIoYA7a"}
+{"$$indexCreated":{"fieldName":"permissionId","unique":true,"sparse":false}}
