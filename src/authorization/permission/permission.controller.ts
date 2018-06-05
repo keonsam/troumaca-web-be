@@ -12,7 +12,7 @@ export let getPermissionsByArray = (req: Request, res: Response) => {
   let size = getNumericValueOrDefault(req.query.pageSize, 10);
   let field = getStringValueOrDefault(req.query.sortField, "");
   let direction = getStringValueOrDefault(req.query.sortOrder, "");
-  let assignedArray = req.body.assignedArray;
+  let assignedArray = req.query.assignedArray ? req.query.assignedArray.split(","): [];
 
   orchestrator.getPermissionsByArray(number, size, field, direction, assignedArray)
     .subscribe(result => {
@@ -31,7 +31,7 @@ export let getResourcePermissionsByArray = (req: Request, res: Response) => {
   let size = getNumericValueOrDefault(req.query.pageSize, 10);
   let field = getStringValueOrDefault(req.query.sortField, "");
   let direction = getStringValueOrDefault(req.query.sortOrder, "");
-  let assignedArray = req.body.assignedArray;
+  let assignedArray = req.query.assignedArray ? req.query.assignedArray.split(","): [];
 
   orchestrator.getResourcePermissionsByArray(number, size, field, direction, assignedArray)
     .subscribe(result => {

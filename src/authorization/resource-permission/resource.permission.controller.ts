@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
 import {ResourcePermissionOrchestrator} from "./resource.permission.orchestrator";
-import {getNumericValueOrDefault} from '../../number.util';
-import {getStringValueOrDefault} from '../../string.util';
+//import {getNumericValueOrDefault} from '../../number.util';
+//import {getStringValueOrDefault} from '../../string.util';
 
 let orchestrator:ResourcePermissionOrchestrator = new ResourcePermissionOrchestrator();
 

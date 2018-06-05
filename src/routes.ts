@@ -32,23 +32,20 @@ import * as organizationController from "./party/organization/organization.contr
 
 let router:Router = Router();
 
-router.get("/asset-kinds", assetKindController.getAssetKinds); // A get instead of find seeing you are getting all of them.
-router.get("/find-asset-types", assetTypeController.findAssetTypes);
-router.get("/find-sites", siteController.findSite);
-router.get("/find-unit-of-measures", unitOfMeasureController.findUnitOfMeasure);
-router.get("/find-persons", userController.findUser);
-router.get("/find-asset-type-classes", assetTypeClassController.findAssetTypeClass);
-router.get("/find-resource-types", resourceTypeController.findResourceTypes);
-router.get("/find-access-roles", accessRoleController.findAccessRoles);
-router.get("/find-access-role-types", accessRoleTypeController.findAccessRoleTypes);
+//asset-kind
+router.get("/asset-kinds", assetKindController.getAssetKinds);
+//unit-of-measure
+router.get("/unit-of-measures/find", unitOfMeasureController.findUnitOfMeasure);
+//data-type
 router.get("/data-types", dataTypeController.getDataTypes);
-//assets
+//asset
 router.get("/assets", assetController.getAssets);
 router.get("/assets/:assetId", assetController.getAssetById);
 router.post("/assets", assetController.saveAsset);
 router.put("/assets/:assetId", assetController.updateAsset);
 router.delete("/assets/:assetId", assetController.deleteAsset);
 //asset-type
+router.get("/asset-types/find", assetTypeController.findAssetTypes);
 router.get("/asset-types", assetTypeController.getAssetTypes);
 router.get("/asset-types/:assetTypeId", assetTypeController.getAssetTypeById);
 router.post("/asset-types", assetTypeController.saveAssetType);
@@ -60,6 +57,7 @@ router.post("/values", valueController.saveValue);
 router.put("/values/:assetTypeId", valueController.updateValue); // use assetTypeId to avoid sending one than one request to the server
 router.delete("/values/:valueId", valueController.deleteValue);
 //asset-type-class
+router.get("/asset-type-classes/find", assetTypeClassController.findAssetTypeClass);
 router.get("/asset-type-classes", assetTypeClassController.getAssetTypeClasses);
 router.get("/asset-type-classes/:assetTypeClassId", assetTypeClassController.getAssetTypeClass);
 router.post("/asset-type-classes", assetTypeClassController.saveAssetTypeClass);
@@ -75,6 +73,7 @@ router.post("/attributes", attributeController.saveAttribute);
 router.put("/attributes/:attributeId", attributeController.updateAttribute);
 router.delete("/attributes/:attributeId", attributeController.deleteAttribute);
 //site
+router.get("/sites/find", siteController.findSite);
 router.get("/street-addresses", streetAddressController.getStreetAddresses);
 router.get("/street-addresses/:siteId", streetAddressController.getStreetAddressById);
 router.post("/street-addresses", streetAddressController.saveStreetAddress);
@@ -101,6 +100,7 @@ router.post("/phones", phoneController.savePhone);
 router.put("/phones/:siteId", phoneController.updatePhone);
 router.delete("/phones/:siteId", phoneController.deletePhone);
 //party
+router.get("/users/find", userController.findUser);
 router.get("/users", userController.getUsers);
 router.get("/users/:partyId", userController.getUser);
 router.post("/users", userController.saveUser);
@@ -135,36 +135,39 @@ router.get("/partyId", sessionController.getPartyId);
 router.get("/sessions/log-out-user", sessionController.handleSessionLogOut);
 //permissions
 router.get("/permissions", permissionController.getPermissions);
+router.get("/permissions/permissions", permissionController.getPermissionsByArray);
+router.get("/permissions/resource-permissions", permissionController.getResourcePermissionsByArray);
 router.get("/permissions/:permissionId", permissionController.getPermissionById);
 router.post("/permissions", permissionController.savePermission);
-router.post("/permissions/permissions", permissionController.getPermissionsByArray);
-router.post("/permissions/resource-permissions", permissionController.getResourcePermissionsByArray);
 router.put("/permissions/:permissionId", permissionController.updatePermission);
 router.delete("/permissions/:permissionId", permissionController.deletePermission);
 //resources
 router.get("/resources", resourceController.getResources);
+router.get("/resources/resources", resourceController.getResourcesByArray);
+router.get("/resources/assigned-resources", resourceController.getAssignedResourcesByArray);
 router.get("/resources/:resourceId", resourceController.getResourceById);
-router.post("/get-resources/resources", resourceController.getResourcesByArray);
-router.post("/get-resources/assigned-resources", resourceController.getAssignedResourcesByArray);
 router.post("/resources", resourceController.saveResource);
 router.put("/resources/:resourceId", resourceController.updateResource);
 router.delete("/resources/:resourceId", resourceController.deleteResource);
 //resourcetypes
+router.get("/resource-types/find", resourceTypeController.findResourceTypes);
 router.get("/resource-types", resourceTypeController.getResourceTypes);
 router.get("/resource-types/:resourceTypeId", resourceTypeController.getResourceTypeById);
 router.post("/resource-types", resourceTypeController.saveResourceType);
 router.put("/resource-types/:resourceTypeId", resourceTypeController.updateResourceType);
 router.delete("/resource-types/:resourceTypeId", resourceTypeController.deleteResourceType);
 //resourcePermissions
-router.get("/resource-permissions-by-id/:resourceId", resourcePermissionController.getResourcePermissionsByResourceId);
-router.get("/get-all-resource-permissions", resourcePermissionController.getAllResourcePermissions);
+router.get("/resource-permissions", resourcePermissionController.getAllResourcePermissions);
+router.get("/resource-permissions/:resourceId", resourcePermissionController.getResourcePermissionsByResourceId);
 // access-roles
+router.get("/access-roles/find", accessRoleController.findAccessRoles);
 router.get("/access-roles", accessRoleController.getAccessRoles);
 router.get("/access-roles/:accessRoleId", accessRoleController.getAccessRoleById);
 router.post("/access-roles",accessRoleController.saveAccessRole);
 router.put("/access-roles/:accessRoleId", accessRoleController.updateAccessRole);
 router.delete("/access-roles/:accessRoleId", accessRoleController.deleteAccessRole);
 // access-role-types
+router.get("/access-role-types/find", accessRoleTypeController.findAccessRoleTypes);
 router.get("/access-role-types", accessRoleTypeController.getAccessRoleTypes);
 router.get("/access-role-types/:accessRoleTypeId", accessRoleTypeController.getAccessRoleTypeById);
 router.post("/access-role-types",accessRoleTypeController.saveAccessRoleType);

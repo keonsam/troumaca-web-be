@@ -6,6 +6,23 @@ import {getStringValueOrDefault} from "../string.util";
 
 let assetTypeOrchestrator:AssetTypeOrchestrator = new AssetTypeOrchestrator();
 
+export let findAssetTypes = (req: Request, res: Response) => {
+    let searchStr:string =  req.query.q;
+    let pageSize:number = req.query.pageSize;
+
+    assetTypeOrchestrator.findAssetTypes(searchStr, pageSize)
+        .map(value => {
+            return shapeAssetTypesResponse2(value);
+        }).subscribe(assetTypes => {
+        let body = JSON.stringify(assetTypes);
+        res.send(body);
+    }, error => {
+        res.status(400);
+        res.send(error);
+        console.log(error);
+    });
+};
+
 export let getAssetTypes = (req: Request, res: Response) => {
 
   let number = getNumericValueOrDefault(req.query.pageNumber, 1);
@@ -23,28 +40,6 @@ export let getAssetTypes = (req: Request, res: Response) => {
     });
 };
 
-export let saveAssetType = (req: Request, res: Response) => {
-  assetTypeOrchestrator.saveAssetType(req.body)
-    .subscribe(assetType => {
-      res.send(JSON.stringify(assetType));
-    }, error => {
-      res.status(400);
-      res.send(error);
-      console.log(error);
-    });
-};
-
-// export let getAssetTypeCount = (req: Request, res: Response) => {
-//   assetTypeOrchestrator.getAssetTypeCount()
-//     .subscribe(assetTypeCount => {
-//       res.send(JSON.stringify(assetTypeCount));
-//     }, error => {
-//       res.status(400);
-//       res.send(error);
-//       console.log(error);
-//     });
-// };
-
 export let getAssetTypeById = (req: Request, res: Response) => {
   assetTypeOrchestrator.getAssetTypeById(req.params.assetTypeId)
     .subscribe(assetTypes => {
@@ -56,22 +51,15 @@ export let getAssetTypeById = (req: Request, res: Response) => {
     });
 };
 
-export let findAssetTypes = (req: Request, res: Response) => {
-  let searchStr:string =  req.query.q;
-  let pageSize:number = req.query.pageSize;
-
-  assetTypeOrchestrator.findAssetTypes(searchStr, pageSize)
-    .map(value => {
-      return shapeAssetTypesResponse2(value);
-    }).subscribe(assetTypes => {
-    let body = JSON.stringify(assetTypes);
-    res.send(body);
-  }, error => {
-    res.status(400);
-    res.send(error);
-    console.log(error);
-  });
-
+export let saveAssetType = (req: Request, res: Response) => {
+    assetTypeOrchestrator.saveAssetType(req.body)
+        .subscribe(assetType => {
+            res.send(JSON.stringify(assetType));
+        }, error => {
+            res.status(400);
+            res.send(error);
+            console.log(error);
+        });
 };
 
 export let updateAssetType = (req: Request, res: Response) => {

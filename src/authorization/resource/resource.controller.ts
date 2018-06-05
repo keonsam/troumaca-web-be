@@ -11,7 +11,7 @@ export let getResourcesByArray = (req: Request, res: Response) => {
   let size = getNumericValueOrDefault(req.query.pageSize, 10);
   let field = getStringValueOrDefault(req.query.sortField, "");
   let direction = getStringValueOrDefault(req.query.sortOrder, "");
-  let assignedArray = req.body.assignedArray;
+  let assignedArray = req.query.assignedArray ? req.query.assignedArray.split(","): [];
 
   orchestrator.getResourcesByArray(number, size, field, direction, assignedArray)
     .subscribe(result => {
@@ -30,7 +30,7 @@ export let getAssignedResourcesByArray = (req: Request, res: Response) => {
   let size = getNumericValueOrDefault(req.query.pageSize, 10);
   let field = getStringValueOrDefault(req.query.sortField, "");
   let direction = getStringValueOrDefault(req.query.sortOrder, "");
-  let assignedArray = req.body.assignedArray;
+  let assignedArray = req.query.assignedArray ? req.query.assignedArray.split(","): [];
 
   orchestrator.getAssignedResourcesByArray(number, size, field, direction, assignedArray)
     .subscribe(result => {

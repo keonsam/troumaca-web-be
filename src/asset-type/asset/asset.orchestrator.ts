@@ -111,7 +111,7 @@ export class AssetOrchestrator {
     return this.assetRepository.getAssetById(assetId)
       .switchMap( (asset: Asset) => {
         if(!asset) {
-          return Observable.of(new Asset());
+          return Observable.err(new Asset());
         }else {
           return this.assetKindRepository.getAssetKindById(asset.assetKindId)
             .switchMap( assetKind => {
