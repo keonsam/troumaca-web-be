@@ -45,12 +45,13 @@ export let getResourcePermissionsByArray = (req: Request, res: Response) => {
 };
 
 export let getPermissions = (req: Request, res: Response) => {
+  console.log(req.query);
   let number = getNumericValueOrDefault(req.query.pageNumber, 1);
   let size = getNumericValueOrDefault(req.query.pageSize, 10);
   let field = getStringValueOrDefault(req.query.sortField, "");
   let direction = getStringValueOrDefault(req.query.sortOrder, "");
 
-  orchestrator
+    orchestrator
     .getPermissions(number, size, field, direction)
     .subscribe(permissions => {
       res.send(JSON.stringify(permissions.data));
@@ -75,7 +76,7 @@ export let savePermission = (req: Request, res: Response) => {
       res.send(error);
       console.log(error);
     });
-}
+};
 
 export let updatePermission = (req: Request, res: Response) => {
   let permissionId = req.params.permissionId;
