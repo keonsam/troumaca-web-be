@@ -61,12 +61,13 @@ router.delete("/asset-type-classes/:assetTypeClassId", assetTypeClassController.
 //attribute
 router.get("/attributes", attributeController.getAttributes);
 router.get("/attributes/:attributeId", attributeController.getAttributeById);
-router.get("/available-attributes", attributeController.getAvailableAttributes);
-router.get("/assigned-attributes", attributeController.getAssignedAttributes);
-router.get("/assigned-attributes/:assetTypeClassId", attributeController.getAssignedAttributeByClassId);
 router.post("/attributes", attributeController.saveAttribute);
 router.put("/attributes/:attributeId", attributeController.updateAttribute);
 router.delete("/attributes/:attributeId", attributeController.deleteAttribute);
+//assigned-attributes
+router.get("/available-attributes", attributeController.getAvailableAttributes);
+router.get("/assigned-attributes", attributeController.getAssignedAttributes);
+router.get("/assigned-attributes/:assetTypeClassId", attributeController.getAssignedAttributesByClassId);
 //site
 router.get("/sites/find", siteController.findSite);
 router.get("/street-addresses", streetAddressController.getStreetAddresses);

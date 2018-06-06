@@ -72,27 +72,26 @@ export class AssetTypeOrchestrator {
   };
 
   getAssetTypeById(assetTypeId:string):Observable<AssetTypeResponse> {
-      let assetTypeResponse: AssetTypeResponse = new AssetTypeResponse();
     return this.assetTypeRepository.getAssetTypeById(assetTypeId)
       .switchMap((assetType: AssetType) => {
         if (!assetType) {
-          return Observable.of(assetTypeResponse);
+          return Observable.of(null);
         } else {
           return this.assetTypeClassRepository.getAssetTypeClassById(assetType.assetTypeClassId)
             .switchMap(assetTypeClass => {
+                assetType.assetTypeClass = new AssetTypeClass();
               if (assetTypeClass) {
                 assetType.assetTypeClass = assetTypeClass;
               }
               return this.unitOfMeasureRepository.getUnitOfMeasureById(assetType.unitOfMeasureId)
                 .switchMap(unitOfMeasure => {
+                    assetType.unitOfMeasure = new UnitOfMeasure();
                   if (unitOfMeasure) {
                     assetType.unitOfMeasure = unitOfMeasure;
                   }
-                  assetTypeResponse.assetType = assetType;
                   return this.valueRepository.getValuesByAssetTypeId(assetType.assetTypeId)
                       .map((values:Value[]) => {
-                          assetTypeResponse.values = values;
-                          return assetTypeResponse;
+                          return new AssetTypeResponse(assetType,values);
                       });
                 });
             });

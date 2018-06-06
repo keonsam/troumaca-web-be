@@ -42,7 +42,7 @@ export class AssetTypeClassOrchestrator {
     return this.assetTypeClassRepository.getAssetTypeClassById(assetTypeClassId)
       .switchMap(assetTypeClass => {
         if(!assetTypeClass) {
-          return Observable.of(new AssetTypeClassResponse(false));
+          return Observable.of(null);
         }else {
           return this.attributeRepository.getAssignedAttributesById(assetTypeClassId)
             .map(assignedAttributes => {
@@ -79,17 +79,6 @@ export class AssetTypeClassOrchestrator {
     });
   }
 
-  deleteAssetTypeClass(assetTypeClassId:string):Observable<number> {
-    return this.assetTypeClassRepository.deleteAssetTypeClass(assetTypeClassId).
-      switchMap(numRemoved => {
-        if(!numRemoved) {
-          return Observable.of(numRemoved);
-        }else {
-          return this.attributeRepository.deleteAssignedAttribute(assetTypeClassId);
-        }
-    });
-  }
-
   updateAssetTypeClass(assetTypeClassId:string, assetTypeClass:AssetTypeClass, assignedAttribute: AssignedAttribute[]):Observable<number> {
     return this.assetTypeClassRepository.updateAssetTypeClass(assetTypeClassId, assetTypeClass)
       .switchMap(numReplaced => {
@@ -114,5 +103,16 @@ export class AssetTypeClassOrchestrator {
         }
       });
   }
+
+    deleteAssetTypeClass(assetTypeClassId:string):Observable<number> {
+        return this.assetTypeClassRepository.deleteAssetTypeClass(assetTypeClassId).
+        switchMap(numRemoved => {
+            if(!numRemoved) {
+                return Observable.of(numRemoved);
+            }else {
+                return this.attributeRepository.deleteAssignedAttribute(assetTypeClassId);
+            }
+        });
+    }
 
 }

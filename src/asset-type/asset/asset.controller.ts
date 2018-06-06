@@ -13,7 +13,7 @@ export let getAssets = (req: Request, res: Response) => {
 
   assetOrchestrator.getAssets(number, size, field, direction)
     .subscribe(result => {
-        if(result.data.length > 0) {
+        if(result.data.assets.length > 0) {
             res.status(200);
             res.send(JSON.stringify(result.data));
         }else {

@@ -6,6 +6,11 @@ export class AssetTypeResponse {
   private _assetType: AssetType;
   private _values: Value[];
 
+  constructor(assetType: AssetType, values: Value[]) {
+      this._assetType = assetType;
+      this._values = values;
+  }
+
   get assetType(): AssetType {
     return this._assetType;
   }
@@ -22,4 +27,10 @@ export class AssetTypeResponse {
     this._values = value;
   }
 
+  toJson() {
+    return {
+        assetType: this.assetType,
+        values: this.values
+    }
+  }
 }

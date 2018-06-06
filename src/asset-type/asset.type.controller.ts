@@ -34,7 +34,7 @@ export let getAssetTypes = (req: Request, res: Response) => {
 
   assetTypeOrchestrator.getAssetTypes(number, size, field, direction)
     .subscribe(result => {
-        if(result.data.length > 0) {
+        if(result.data.assetTypes.length > 0) {
             res.status(200);
             res.send(JSON.stringify(result.data));
         }else {
@@ -51,16 +51,16 @@ export let getAssetTypes = (req: Request, res: Response) => {
 export let getAssetTypeById = (req: Request, res: Response) => {
   assetTypeOrchestrator.getAssetTypeById(req.params.assetTypeId)
     .subscribe(assetTypeResponse => {
-        if(assetTypeResponse.assetType) {
+        if(assetTypeResponse) {
             res.status(200);
-            res.send(JSON.stringify(assetTypeResponse));
+            res.send(JSON.stringify(assetTypeResponse.toJson()));
         }else {
             res.status(404);
             res.send(JSON.stringify({message: 'No Data Found'}))
         }
     }, error => {
         res.status(400);
-        res.send(error);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
 };
