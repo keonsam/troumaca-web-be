@@ -51,11 +51,6 @@ router.get("/asset-types/:assetTypeId", assetTypeController.getAssetTypeById);
 router.post("/asset-types", assetTypeController.saveAssetType);
 router.put("/asset-types/:assetTypeId", assetTypeController.updateAssetType);
 router.delete("/asset-types/:assetTypeId", assetTypeController.deleteAssetType);
-router.get("/values", valueController.getValues);
-router.get("/values/:assetTypeId", valueController.getValuesByAssetTypeId);
-router.post("/values", valueController.saveValue);
-router.put("/values/:assetTypeId", valueController.updateValue); // use assetTypeId to avoid sending one than one request to the server
-router.delete("/values/:valueId", valueController.deleteValue);
 //asset-type-class
 router.get("/asset-type-classes/find", assetTypeClassController.findAssetTypeClass);
 router.get("/asset-type-classes", assetTypeClassController.getAssetTypeClasses);
