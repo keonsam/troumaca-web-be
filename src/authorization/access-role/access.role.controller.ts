@@ -49,13 +49,12 @@ export let getAccessRoles = (req: Request, res: Response) => {
 };
 
 export let getAccessRoleById = (req: Request, res: Response) => {
-  let accessRoleId = req.params.accessRoleId;
   orchestrator
-    .getAccessRoleById(accessRoleId)
-    .subscribe(accessRole => {
-        if(accessRole) {
+    .getAccessRoleById(req.params.accessRoleId)
+    .subscribe(accessRoleResponse => {
+        if(accessRoleResponse) {
             res.status(200);
-            res.send(JSON.stringify(accessRole));
+            res.send(JSON.stringify(accessRoleResponse.toJson()));
         }else {
             res.status(404);
             res.send(JSON.stringify({message: 'No Data Found'}))

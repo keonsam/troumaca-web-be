@@ -13,6 +13,7 @@ import {createPartyAccessRoleRepositoryFactory} from "../party-access-role/party
 import {AccessRoleTypeRepository} from "../access-role-type/access.role.type.repository";
 import {createAccessRoleTypeRepositoryFactory} from "../access-role-type/access.role.type.repository.factory";
 import {AccessRoleType} from "../access-role-type/access.role.type";
+import {AccessRoleResponse} from "./access.role.response";
 
 export class AccessRoleOrchestrator {
 
@@ -58,6 +59,22 @@ export class AccessRoleOrchestrator {
       });
   };
 
+    getAccessRoleById(accessRoleId:string):Observable<AccessRoleResponse> {
+        return this.accessRoleRepository.getAccessRoleById(accessRoleId)
+            .switchMap((accessRole:AccessRole) => {
+                if (!accessRole) return Observable.of(undefined);
+                return this.accessRoleTypeRepository.getAccessRoleTypeById(accessRole.accessRoleTypeId)
+                    .switchMap(accessRoleType => {
+                        accessRole.accessRoleType = new AccessRoleType();
+                        if (accessRoleType) accessRole.accessRoleType = accessRoleType;
+                        return this.grantRepository.getGrantsByAccessRoleId(accessRoleId)
+                            .map(grants => {
+                              return  new AccessRoleResponse(accessRole, grants);
+                            });
+                    });
+            });
+    };
+
   addAccessRole(accessRole:AccessRole, grants: Grant[]):Observable<AccessRole> {
     return this.accessRoleRepository.addAccessRole(accessRole)
       .switchMap(doc => {
@@ -76,19 +93,6 @@ export class AccessRoleOrchestrator {
               }
             });
         }
-      });
-  };
-
-  getAccessRoleById(accessRoleId:string):Observable<AccessRole> {
-    return this.accessRoleRepository.getAccessRoleById(accessRoleId)
-      .switchMap((accessRole:AccessRole)=> {
-        return this.accessRoleTypeRepository.getAccessRoleTypeById(accessRole.accessRoleTypeId)
-          .map(accessRoleType => {
-            if(accessRoleType) {
-              accessRole.accessRoleType = accessRoleType;
-            }
-            return accessRole;
-          });
       });
   };
 

@@ -8,23 +8,26 @@ import {CredentialRepository} from "../../authentication/credential/credential.r
 import {createCredentialRepositoryFactory} from "../../authentication/credential/credential.repository.factory";
 import {Credential} from "../../authentication/credential/credential";
 import {CredentialStatus} from "../../authentication/credential/credential.status";
-//import  generatePassword from 'password-generator';
 import {generate} from "generate-password";
 import {getSortOrderOrDefault} from "../../sort.order.util";
 import {PartyAccessRole} from "../../authorization/party-access-role/party.access.role";
 import {PartyAccessRoleRepository} from "../../authorization/party-access-role/party.access.role.repository";
 import {createPartyAccessRoleRepositoryFactory} from "../../authorization/party-access-role/party.access.role.repository.factory";
+import {UserResponse} from "./user.response";
+import {AccessRoleRepository} from "../../authorization/access-role/access.role.repository";
+import {createAccessRoleRepositoryFactory} from "../../authorization/access-role/access.role.repository.factory";
 
 export class UserOrchestrator {
 
   private userRepository:UserRepository;
   private credentialRepository: CredentialRepository;
   private partyAccessRoleRepository: PartyAccessRoleRepository;
-
+  private accessRoleRepository: AccessRoleRepository;
   constructor() {
     this.userRepository = createUserRepository();
     this.credentialRepository = createCredentialRepositoryFactory();
     this.partyAccessRoleRepository = createPartyAccessRoleRepositoryFactory();
+    this.accessRoleRepository = createAccessRoleRepositoryFactory();
   }
 
 
@@ -45,8 +48,26 @@ export class UserOrchestrator {
         });
     };
 
-    getUser (partyId:string):Observable<User> {
-      return this.userRepository.getUser(partyId);
+    getUser (partyId:string):Observable<UserResponse> {
+      return this.userRepository.getUser(partyId)
+          .switchMap(user => {
+              if (!user) return Observable.of(undefined);
+              return this.partyAccessRoleRepository.getPartyAccessRoleById(partyId)
+                  .switchMap((partyAccessRoles: PartyAccessRole[]) => {
+                      if (partyAccessRoles.length < 1) return Observable.of(new UserResponse(user));
+                      const accessRoleIds: string[] = partyAccessRoles.map(x => { if (x.accessRoleId) return x.accessRoleId});
+                      if (accessRoleIds.length < 1)  return Observable.of(new UserResponse(user, partyAccessRoles));
+                      return this.accessRoleRepository.getAccessRoleByIds(accessRoleIds)
+                          .map( accessRoles => {
+                             if (accessRoles.length < 1) return new UserResponse(user, partyAccessRoles);
+                              partyAccessRoles.forEach( value => {
+                                  const index = accessRoles.findIndex(x => x.accessRoleId === value.accessRoleId);
+                                  value.accessRole = accessRoles[index];
+                              });
+                              return new UserResponse(user, partyAccessRoles);
+                          });
+                  });
+          });
     };
 
      saveUser (user:User, partyAccessRoles:PartyAccessRole[]): Observable<User> {

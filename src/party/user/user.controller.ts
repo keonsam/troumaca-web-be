@@ -54,10 +54,10 @@ export  let getUsers = (req: Request, res: Response) => {
 export  let getUser = (req: Request, res: Response) => {
   let partyId = req.params.partyId;
   userOrchestrator.getUser(partyId)
-    .subscribe(user => {
-        if(user) {
+    .subscribe(userResponse => {
+        if(userResponse) {
             res.status(200);
-            res.send(JSON.stringify(user));
+            res.send(JSON.stringify(userResponse.toJson()));
         }else {
             res.status(404);
             res.send(JSON.stringify({message: 'No Data Found'}))

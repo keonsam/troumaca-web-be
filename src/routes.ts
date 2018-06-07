@@ -175,13 +175,8 @@ router.delete("/access-roles/:accessRoleId", accessRoleController.deleteAccessRo
 router.get("/access-role-types/find", accessRoleTypeController.findAccessRoleTypes);
 router.get("/access-role-types", accessRoleTypeController.getAccessRoleTypes);
 router.get("/access-role-types/:accessRoleTypeId", accessRoleTypeController.getAccessRoleTypeById);
-router.post("/access-role-types",accessRoleTypeController.saveAccessRoleType);
+router.post("/access-role-types", accessRoleTypeController.saveAccessRoleType);
 router.put("/access-role-types/:accessRoleTypeId", accessRoleTypeController.updateAccessRoleType);
 router.delete("/access-role-types/:accessRoleTypeId", accessRoleTypeController.deleteAccessRoleType);
-// grants
-router.get("/grants/:accessRoleId",grantController.getGrantsByAccessRoleId);
-// partyAccessRoles
-router.get("/party-access-roles",partyAccessRoleController.getPartyAccessRoles);
-router.get("/party-access-roles/:partyId",partyAccessRoleController.getPartyAccessRoleById);
 
 export default router;
