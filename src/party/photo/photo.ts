@@ -17,14 +17,4 @@ export class Photo extends Party {
     this._imageStr = value;
   }
 
-  toJson(){
-    return {
-      partyId: this.partyId,
-      imageStr: this.imageStr,
-      createdOn: this.createdOn,
-      modifiedOn: this.modifiedOn
-    }
-  }
-
-
 }

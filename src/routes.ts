@@ -121,6 +121,7 @@ router.get("/photos/:type/:partyId", photoController.getPhotoById);
 router.post("/photos/:type/:partyId", photoController.savePhoto);
 router.put("/photos/:type/:partyId", photoController.updatePhoto);
 //router.delete("/photos/:type/:partyId", photoController.deletePhoto);
+// acounts
 router.post("/accounts", accountController.saveAccount);
 //authentication
 router.post("/validate-password", credentialController.isValidPassword);

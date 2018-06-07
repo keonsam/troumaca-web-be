@@ -13,9 +13,9 @@ export let findUser = (req: Request, res: Response) => {
 
   userOrchestrator.findUser(searchStr, pageSize)
     .subscribe(users => {
-        if (sites.length > 0) {
+        if (users.length > 0) {
             res.status(200);
-            res.send(JSON.stringify(sites));
+            res.send(JSON.stringify(users));
         } else {
             res.status(404);
             res.send(JSON.stringify({message: 'No Data Found'}));
@@ -37,7 +37,7 @@ export  let getUsers = (req: Request, res: Response) => {
 
   userOrchestrator.getUsers(number, size, field, direction)
     .subscribe(result => {
-        if(result.data.phones.length > 0) {
+        if(result.data.users.length > 0) {
             res.status(200);
             res.send(JSON.stringify(result.data));
         }else {
@@ -69,15 +69,14 @@ export  let getUser = (req: Request, res: Response) => {
     });
 };
 
-// TODO FIX THIS
 export  let saveUser = (req: Request, res: Response) => {
   let user = req.body.user;
   let partyAccessRoles = req.body.partyAccessRoles;
   userOrchestrator.saveUser(user, partyAccessRoles)
-    .subscribe(result => {
-        if(result.data) {
+    .subscribe(user => {
+        if(user) {
             res.status(201);
-            res.send(JSON.stringify(result.data));
+            res.send(JSON.stringify(user));
         }else {
             res.status(204);
             res.send(JSON.stringify({message: 'Not Saved'}))
