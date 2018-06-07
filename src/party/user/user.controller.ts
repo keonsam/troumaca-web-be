@@ -116,7 +116,7 @@ export let updateUserMe = (req: Request, res: Response) => {
   userOrchestrator
     .updateUserMe(partyId, user, credential)
     .subscribe(affected => {
-        if(affected > 0) {
+        if (affected > 0) {
             res.status(200);
             res.send(JSON.stringify(affected));
         }else {

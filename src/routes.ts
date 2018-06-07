@@ -6,11 +6,8 @@ import * as confirmationController from "./authentication/credential/confirmatio
 import * as assetKindController from "./asset-type/kind/asset.kind.controller";
 import * as phoneController from "./site/phone/phone.controller";
 import * as resourceController from "./authorization/resource/resource.controller";
-import * as partyAccessRoleController from "./authorization/party-access-role/party.access.role.controller";
-import * as valueController from "./asset-type/value/value.controller";
 import * as accountController from "./party/account.controller";
 import * as accessRoleController from "./authorization/access-role/access.role.controller";
-import * as grantController from "./authorization/grant/grant.controller";
 import * as accessRoleTypeController from "./authorization/access-role-type/access.role.type.controller";
 import * as resourcePermissionController from "./authorization/resource-permission/resource.permission.controller";
 import * as photoController from "./party/photo/photo.controller";
@@ -30,41 +27,41 @@ import * as credentialController from "./authentication/credential/credential.co
 import * as assetTypeController from "./asset-type/asset.type.controller";
 import * as organizationController from "./party/organization/organization.controller";
 
-let router:Router = Router();
+const router:Router = Router();
 
-//asset-kind
+// asset-kind
 router.get("/asset-kinds", assetKindController.getAssetKinds);
-//unit-of-measure
+// unit-of-measure
 router.get("/unit-of-measures/find", unitOfMeasureController.findUnitOfMeasure);
-//data-type
+// data-type
 router.get("/data-types", dataTypeController.getDataTypes);
-//asset
+// asset
 router.get("/assets", assetController.getAssets);
 router.get("/assets/:assetId", assetController.getAssetById);
 router.post("/assets", assetController.saveAsset);
 router.put("/assets/:assetId", assetController.updateAsset);
 router.delete("/assets/:assetId", assetController.deleteAsset);
-//asset-type
+// asset-type
 router.get("/asset-types/find", assetTypeController.findAssetTypes);
 router.get("/asset-types", assetTypeController.getAssetTypes);
 router.get("/asset-types/:assetTypeId", assetTypeController.getAssetTypeById);
 router.post("/asset-types", assetTypeController.saveAssetType);
 router.put("/asset-types/:assetTypeId", assetTypeController.updateAssetType);
 router.delete("/asset-types/:assetTypeId", assetTypeController.deleteAssetType);
-//asset-type-class
+// asset-type-class
 router.get("/asset-type-classes/find", assetTypeClassController.findAssetTypeClass);
 router.get("/asset-type-classes", assetTypeClassController.getAssetTypeClasses);
 router.get("/asset-type-classes/:assetTypeClassId", assetTypeClassController.getAssetTypeClass);
 router.post("/asset-type-classes", assetTypeClassController.saveAssetTypeClass);
 router.put("/asset-type-classes/:assetTypeClassId", assetTypeClassController.updateAssetTypeClass);
 router.delete("/asset-type-classes/:assetTypeClassId", assetTypeClassController.deleteAssetTypeClass);
-//attribute
+// attribute
 router.get("/attributes", attributeController.getAttributes);
 router.get("/attributes/:attributeId", attributeController.getAttributeById);
 router.post("/attributes", attributeController.saveAttribute);
 router.put("/attributes/:attributeId", attributeController.updateAttribute);
 router.delete("/attributes/:attributeId", attributeController.deleteAttribute);
-//assigned-attributes
+// assigned-attributes
 router.get("/available-attributes", attributeController.getAvailableAttributes);
 router.get("/assigned-attributes", attributeController.getAssignedAttributes);
 router.get("/assigned-attributes/:assetTypeClassId", attributeController.getAssignedAttributesByClassId);
@@ -122,7 +119,7 @@ router.post("/photos/:type/:partyId", photoController.savePhoto);
 router.put("/photos/:type/:partyId", photoController.updatePhoto);
 // accounts
 router.post("/accounts", accountController.saveAccount);
-//authentication
+// authentication
 router.post("/validate-password", credentialController.isValidPassword);
 router.post("/validate-username", credentialController.isValidUsername);
 router.post("/validate-edit-username", credentialController.isValidEditUsername);
@@ -133,12 +130,11 @@ router.put("/credentials/:partyId", credentialController.updateCredential);
 router.post("/verify-credentials-confirmations", confirmationController.verifyCredentialConfirmation);
 router.get("/send-confirmation-codes/:confirmationId", confirmationController.sendPhoneVerificationCode);
 router.get("/get-confirmations-username/:credentialConfirmationId", confirmationController.getConfirmationsUsername);
-//router.get("/send-confirmation-codes/email/:confirmationId", confirmationController.sendEmailVerificationCode);
 router.get("/sessions/current-user-session", sessionController.getSimpleSession);
 router.get("/sessions/is-valid-session", sessionController.isValidSession);
 router.get("/partyId", sessionController.getPartyId);
 router.get("/sessions/log-out-user", sessionController.handleSessionLogOut);
-//permissions
+// permissions
 router.get("/permissions", permissionController.getPermissions);
 router.get("/permissions/permissions", permissionController.getPermissionsByArray);
 router.get("/permissions/resource-permissions", permissionController.getResourcePermissionsByArray);
@@ -146,7 +142,7 @@ router.get("/permissions/:permissionId", permissionController.getPermissionById)
 router.post("/permissions", permissionController.savePermission);
 router.put("/permissions/:permissionId", permissionController.updatePermission);
 router.delete("/permissions/:permissionId", permissionController.deletePermission);
-//resources
+// resources
 router.get("/resources", resourceController.getResources);
 router.get("/resources/resources", resourceController.getResourcesByArray);
 router.get("/resources/assigned-resources", resourceController.getAssignedResourcesByArray);
@@ -154,21 +150,21 @@ router.get("/resources/:resourceId", resourceController.getResourceById);
 router.post("/resources", resourceController.saveResource);
 router.put("/resources/:resourceId", resourceController.updateResource);
 router.delete("/resources/:resourceId", resourceController.deleteResource);
-//resource-types
+// resource-types
 router.get("/resource-types/find", resourceTypeController.findResourceTypes);
 router.get("/resource-types", resourceTypeController.getResourceTypes);
 router.get("/resource-types/:resourceTypeId", resourceTypeController.getResourceTypeById);
 router.post("/resource-types", resourceTypeController.saveResourceType);
 router.put("/resource-types/:resourceTypeId", resourceTypeController.updateResourceType);
 router.delete("/resource-types/:resourceTypeId", resourceTypeController.deleteResourceType);
-//resource-permissions
+// resource-permissions
 router.get("/resource-permissions", resourcePermissionController.getAllResourcePermissions);
 router.get("/resource-permissions/:resourceId", resourcePermissionController.getResourcePermissionsByResourceId);
 // access-roles
 router.get("/access-roles/find", accessRoleController.findAccessRoles);
 router.get("/access-roles", accessRoleController.getAccessRoles);
 router.get("/access-roles/:accessRoleId", accessRoleController.getAccessRoleById);
-router.post("/access-roles",accessRoleController.saveAccessRole);
+router.post("/access-roles", accessRoleController.saveAccessRole);
 router.put("/access-roles/:accessRoleId", accessRoleController.updateAccessRole);
 router.delete("/access-roles/:accessRoleId", accessRoleController.deleteAccessRole);
 // access-role-types
