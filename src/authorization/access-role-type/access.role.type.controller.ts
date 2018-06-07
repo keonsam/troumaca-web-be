@@ -11,11 +11,17 @@ export let findAccessRoleTypes = (req: Request, res: Response) => {
 
   orchestrator.findAccessRoleTypes(searchStr, pageSize)
     .subscribe( accessRoleTypes => {
-      res.send(JSON.stringify(accessRoleTypes));
+        if (accessRoleTypes.length > 0) {
+            res.status(200);
+            res.send(JSON.stringify(accessRoleTypes));
+        } else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'No Data Found'}));
+        }
     }, error => {
-      res.status(400);
-      res.send(error);
-      console.log(error);
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 };
 
@@ -27,8 +33,18 @@ export let getAccessRoleTypes = (req: Request, res: Response) => {
 
   orchestrator
     .getAccessRoleTypes(number, size, field, direction)
-    .subscribe(accessRoleTypes => {
-      res.send(JSON.stringify(accessRoleTypes.data));
+    .subscribe(result => {
+        if(result.data.accessRoleTypes.length > 0) {
+            res.status(200);
+            res.send(JSON.stringify(result.data));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'No Data Found'}));
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+
     });
 };
 
@@ -37,18 +53,34 @@ export let getAccessRoleTypeById = (req: Request, res: Response) => {
   orchestrator
     .getAccessRoleTypeById(accessRoleTypeId)
     .subscribe(accessRoleType => {
-      let body = JSON.stringify(accessRoleType);
-      res.send(body);
+        if(accessRoleType) {
+            res.status(200);
+            res.send(JSON.stringify(accessRoleType));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'No Data Found'}))
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 };
 
 export let saveAccessRoleType = (req: Request, res: Response) => {
   orchestrator.addAccessRoleType(req.body)
     .subscribe(accessRoleType => {
-      res.send(JSON.stringify(accessRoleType));
+        if(accessRoleType) {
+            res.status(201);
+            res.send(JSON.stringify(accessRoleType));
+        }else {
+            res.status(204);
+            res.send(JSON.stringify({message: 'Not Saved'}))
+        }
     }, error => {
-      res.send(error);
-      console.log(error);
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 }
 
@@ -57,18 +89,37 @@ export let updateAccessRoleType = (req: Request, res: Response) => {
   let accessRoleType = req.body;
   orchestrator
     .updateAccessRoleType(accessRoleTypeId, accessRoleType)
-    .subscribe(accessRoleType => {
-      res.send(JSON.stringify(accessRoleType));
+    .subscribe(affected => {
+        if(affected > 0) {
+            res.status(200);
+            res.send(JSON.stringify(affected));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'Not Updated'}))
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
-
 };
 
 export let deleteAccessRoleType = (req: Request, res: Response) => {
   let accessRoleTypeId = req.params.accessRoleTypeId;
   orchestrator
     .deleteAccessRoleType(accessRoleTypeId)
-    .subscribe(numRemoved => {
-      res.send(JSON.stringify(numRemoved));
+    .subscribe(affected => {
+        if(affected > 0) {
+            res.status(200);
+            res.send(JSON.stringify(affected));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'Not Deleted'}))
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 };
 

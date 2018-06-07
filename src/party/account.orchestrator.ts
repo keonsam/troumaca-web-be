@@ -7,7 +7,6 @@ import {createCredentialRepositoryFactory} from "../authentication/credential/cr
 import {UserRepository} from "./user/user.repository";
 import {OrganizationRepository} from "./organization/organization.repository";
 import {User} from "./user/user";
-import {Credential} from "../authentication/credential/credential";
 import {Session} from "../session/session";
 import {SessionRepository} from "../session/session.repository";
 import {Organization} from "./organization/organization";
@@ -30,70 +29,39 @@ export class AccountOrchestrator {
 
   saveAccount (accountType:string , user:User, organization:Organization, sessionId:string):Observable<AccountResponse> {
     // accountType not used in this current set up. you may find it of use in the future. I left it as is.
-    if (this.isValidAccount(user, organization)) {
-      return Rx.Observable.of(new AccountResponse(false));
-    } else {
-      return this.createAccount(user, organization, sessionId);
-    }
-  };
-
-  private createAccount(user: User, organization: Organization, sessionId:string):Observable<AccountResponse> {
-    // Todo: Change to concurrent update with forkJoin
-    return this.sessionRepository.getSessionById(sessionId)
-      .switchMap((session:Session)=> {
-        if(!session.credentialId) {
-          return Observable.of(new AccountResponse(false));
-        }else {
-          let credentialId:string = session["credentialId"];
-          return this.credentialRepository.getCredentialByCredentialId(credentialId)
-            .switchMap(credential => {
-              if (!credential) {
-                return Observable.of(new AccountResponse(false));
-              }
-              user.username = credential.username;
-              return this.userRepository.saveUser(user)
-                .switchMap(newUser => {
-                  if(!newUser) {
-                    return Observable.of(new AccountResponse(false));
-                  }
-                  if (organization) {
-                    organization.partyId = user.partyId;
-                    return this.organizationRepository.saveOrganization(organization)
-                      .switchMap(newOrganization => {
-                        if (!newOrganization) {
-                          return Observable.of(new AccountResponse(false));
-                        }
-                        return this.updateAccounts(credentialId, newUser, sessionId, organization);
-                      });
-                  }
-                  return this.updateAccounts(credentialId, newUser, sessionId, organization);
-                });
-            });
-        }
-      });
+      return this.sessionRepository.getSessionById(sessionId)
+          .switchMap((session: Session) => {
+              if (!session.credentialId) return Observable.of(new AccountResponse(false));
+              let credentialId: string = session["credentialId"];
+              return this.credentialRepository.getCredentialByCredentialId(credentialId)
+                  .switchMap(credential => {
+                      if (!credential) return Observable.of(new AccountResponse(false));
+                      user.username = credential.username;
+                      return this.userRepository.saveUser(user)
+                          .switchMap(newUser => {
+                              if (!newUser) return Observable.of(new AccountResponse(false));
+                              return this.credentialRepository.updateCredentialPartyId(credentialId, newUser.partyId)
+                                  .switchMap(numReplaced => {
+                                      if (!numReplaced) return Observable.of(new AccountResponse(false));
+                                      return this.sessionRepository.updateSessionPartyId(sessionId, newUser.partyId)
+                                          .switchMap(numReplaced => {
+                                              if (!numReplaced) return Observable.of(new AccountResponse(false));
+                                              if (!organization) return Observable.of(new AccountResponse(true, newUser));
+                                              return this.organizationRepository.saveOrganization(organization)
+                                                  .map(newOrganization => {
+                                                      if (!newOrganization) return new AccountResponse(false);
+                                                      return new AccountResponse(true, newUser, newOrganization);
+                                                  });
+                                          });
+                                  });
+                          });
+                  });
+          });
   }
 
-
-  private updateAccounts(credentialId:string, newUser: User, sessionId: string, organization: Organization){
-    return this.credentialRepository.updateCredentialPartyId(credentialId, newUser.partyId)
-      .switchMap(numReplaced => {
-        if(!numReplaced){
-          return Observable.of(new AccountResponse(false));
-        }else {
-          return this.sessionRepository.updateSessionPartyId(sessionId, newUser.partyId)
-            .map(numReplaced => {
-              if(!numReplaced) {
-                return new AccountResponse(false);
-              }
-              return new AccountResponse(true, newUser, organization);
-            });
-        }
-      });
-   }
-
-  private isValidAccount(user: User, organization: Organization) {
-    // TODO: implement
-    return false;
-  }
+  // private isValidAccount(user: User, organization: Organization) {
+  //   // TODO: implement
+  //   return false;
+  // }
 
 }

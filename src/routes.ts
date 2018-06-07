@@ -120,8 +120,7 @@ router.delete("/organizations/:partyId", organizationController.deleteOrganizati
 router.get("/photos/:type/:partyId", photoController.getPhotoById);
 router.post("/photos/:type/:partyId", photoController.savePhoto);
 router.put("/photos/:type/:partyId", photoController.updatePhoto);
-//router.delete("/photos/:type/:partyId", photoController.deletePhoto);
-// acounts
+// accounts
 router.post("/accounts", accountController.saveAccount);
 //authentication
 router.post("/validate-password", credentialController.isValidPassword);
@@ -155,14 +154,14 @@ router.get("/resources/:resourceId", resourceController.getResourceById);
 router.post("/resources", resourceController.saveResource);
 router.put("/resources/:resourceId", resourceController.updateResource);
 router.delete("/resources/:resourceId", resourceController.deleteResource);
-//resourcetypes
+//resource-types
 router.get("/resource-types/find", resourceTypeController.findResourceTypes);
 router.get("/resource-types", resourceTypeController.getResourceTypes);
 router.get("/resource-types/:resourceTypeId", resourceTypeController.getResourceTypeById);
 router.post("/resource-types", resourceTypeController.saveResourceType);
 router.put("/resource-types/:resourceTypeId", resourceTypeController.updateResourceType);
 router.delete("/resource-types/:resourceTypeId", resourceTypeController.deleteResourceType);
-//resourcePermissions
+//resource-permissions
 router.get("/resource-permissions", resourcePermissionController.getAllResourcePermissions);
 router.get("/resource-permissions/:resourceId", resourcePermissionController.getResourcePermissionsByResourceId);
 // access-roles

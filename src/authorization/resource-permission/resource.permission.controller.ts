@@ -9,7 +9,17 @@ export  let getAllResourcePermissions = (req: Request, res: Response) => {
   orchestrator
     .getAllResourcePermissions()
     .subscribe(response => {
-      res.send(JSON.stringify(response));
+        if(response.length > 0) {
+            res.status(200);
+            res.send(JSON.stringify(response));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'No Data Found'}));
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+
     });
 };
 
@@ -18,9 +28,20 @@ export let  getResourcePermissionsByResourceId = (req: Request, res: Response) =
   orchestrator
     .getResourcePermissionsByResourceId(resourceId)
     .subscribe(response => {
-      res.send(JSON.stringify(response));
+        if(response.length > 0) {
+            res.status(200);
+            res.send(JSON.stringify(response));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'No Data Found'}));
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+
     });
 };
+
 // export let getResourcePermissions = (req: Request, res: Response) => {
 //   let number = getNumericValueOrDefault(req.query.pageNumber, 1);
 //   let size = getNumericValueOrDefault(req.query.pageSize, 10);

@@ -12,11 +12,17 @@ export let findResourceTypes = (req: Request, res: Response) => {
 
   orchestrator.findResourceTypes(searchStr, pageSize)
     .subscribe( resourceTypes => {
-      res.send(JSON.stringify(resourceTypes));
+        if (resourceTypes.length > 0) {
+            res.status(200);
+            res.send(JSON.stringify(resourceTypes));
+        } else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'No Data Found'}));
+        }
     }, error => {
-      res.status(400);
-      res.send(error);
-      console.log(error);
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 };
 
@@ -28,8 +34,18 @@ export let getResourceTypes = (req: Request, res: Response) => {
 
   orchestrator
     .getResourceTypes(number, size, field, direction)
-    .subscribe(resourceTypes => {
-      res.send(JSON.stringify(resourceTypes.data));
+    .subscribe(result => {
+        if(result.data.resourceTypes.length > 0) {
+            res.status(200);
+            res.send(JSON.stringify(result.data));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'No Data Found'}));
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+
     });
 };
 
@@ -38,18 +54,34 @@ export let getResourceTypeById = (req: Request, res: Response) => {
   orchestrator
     .getResourceTypeById(resourceTypeId)
     .subscribe(resourceType => {
-      let body = JSON.stringify(resourceType);
-      res.send(body);
+        if(resourceType) {
+            res.status(200);
+            res.send(JSON.stringify(resourceType));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'No Data Found'}))
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 };
 
 export let saveResourceType = (req: Request, res: Response) => {
   orchestrator.addResourceType(req.body)
     .subscribe(resourceType => {
-      res.send(JSON.stringify(resourceType));
+        if(resourceType) {
+            res.status(201);
+            res.send(JSON.stringify(resourceType));
+        }else {
+            res.status(204);
+            res.send(JSON.stringify({message: 'Not Saved'}))
+        }
     }, error => {
-      res.send(error);
-      console.log(error);
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 }
 
@@ -58,17 +90,36 @@ export let updateResourceType = (req: Request, res: Response) => {
   let resourceType = req.body;
   orchestrator
     .updateResourceType(resourceTypeId, resourceType)
-    .subscribe(resourceType => {
-      res.send(JSON.stringify(resourceType));
+    .subscribe(affected => {
+        if(affected > 0) {
+            res.status(200);
+            res.send(JSON.stringify(affected));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'Not Updated'}))
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
-
 };
 
 export let deleteResourceType = (req: Request, res: Response) => {
   let resourceTypeId = req.params.resourceTypeId;
   orchestrator
     .deleteResourceType(resourceTypeId)
-    .subscribe(numRemoved => {
-      res.send(JSON.stringify(numRemoved));
+    .subscribe(affected => {
+        if(affected > 0) {
+            res.status(200);
+            res.send(JSON.stringify(affected));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'Not Deleted'}))
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 };
