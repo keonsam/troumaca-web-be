@@ -13,8 +13,18 @@ export let getPhones = (req: Request, res: Response) => {
 
   orchestrator
     .getPhones(number, size, field, direction)
-    .subscribe(phones => {
-      res.send(JSON.stringify(phones.data));
+    .subscribe(result => {
+        if(result.data.phones.length > 0) {
+            res.status(200);
+            res.send(JSON.stringify(result.data));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'No Data Found'}));
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 };
 
@@ -23,8 +33,17 @@ export let getPhoneById = (req: Request, res: Response) => {
   orchestrator
     .getPhoneById(siteId)
     .subscribe(phone => {
-      let body = JSON.stringify(phone);
-      res.send(body);
+        if(phone) {
+            res.status(200);
+            res.send(JSON.stringify(phone));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'No Data Found'}))
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 
 };
@@ -32,30 +51,56 @@ export let getPhoneById = (req: Request, res: Response) => {
 export let savePhone = (req: Request, res: Response) => {
   orchestrator.savePhone(req.body)
     .subscribe(phone => {
-      res.send(JSON.stringify(phone));
+        if(phone) {
+            res.status(201);
+            res.send(JSON.stringify(phone));
+        }else {
+            res.status(204);
+            res.send(JSON.stringify({message: 'Not Saved'}))
+        }
     }, error => {
-      res.send(error);
-      console.log(error);
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
-}
+};
 
 export let updatePhone = (req: Request, res: Response) => {
   let siteId = req.params.siteId;
   let phone = req.body;
   orchestrator
     .updatePhone(siteId, phone)
-    .subscribe(phone => {
-      res.send(JSON.stringify(phone));
+    .subscribe(affected => {
+        if(affected > 0) {
+            res.status(200);
+            res.send(JSON.stringify(affected));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'Not Updated'}))
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
-
 };
 
 export let deletePhone = (req: Request, res: Response) => {
   let siteId = req.params.siteId;
   orchestrator
     .deletePhone(siteId)
-    .subscribe(numRemoved => {
-      res.send(JSON.stringify(numRemoved));
+    .subscribe(affected => {
+        if(affected > 0) {
+            res.status(200);
+            res.send(JSON.stringify(affected));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'Not Deleted'}))
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 };
 

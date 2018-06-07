@@ -1,6 +1,5 @@
 import {Request, Response} from "express";
 import {SiteOrchestrator} from "./site.orchestrator";
-import {shapeSiteResponse2} from "./site.response.shaper";
 
 let siteOrchestrator:SiteOrchestrator = new SiteOrchestrator();
 
@@ -9,13 +8,17 @@ export let findSite = (req: Request, res: Response) => {
   let pageSize:number = req.query.pageSize;
 
   siteOrchestrator.findSite(searchStr, pageSize)
-  .map(value => {
-      return shapeSiteResponse2(value);
-  }).subscribe(sites => {
-    let body = JSON.stringify(sites);
-    res.send(body);
-  }, error => {
-    res.send(JSON.stringify(error));
-  });
-
+      .subscribe(sites => {
+          if (sites.length > 0) {
+              res.status(200);
+              res.send(JSON.stringify(sites));
+          } else {
+              res.status(404);
+              res.send(JSON.stringify({message: 'No Data Found'}));
+          }
+      }, error => {
+          res.status(400);
+          res.send(JSON.stringify({message: 'Error Occurred'}));
+          console.log(error);
+      });
 };

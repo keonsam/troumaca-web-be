@@ -14,10 +14,6 @@ export class PostOfficeBoxOrchestrator {
     this.postOfficeBoxRepository = createPostOfficeBoxRepository();
   }
 
-  savePostOfficeBox(postOfficeBox:PostOfficeBox):Observable<PostOfficeBox> {
-    return this.postOfficeBoxRepository.savePostOfficeBox(postOfficeBox);
-  };
-
   getPostOfficeBoxes(number:number, size:number, field:string, direction:string):Observable<Result<any>> {
     let sort:string = getSortOrderOrDefault(field, direction);
     return this.postOfficeBoxRepository
@@ -34,6 +30,10 @@ export class PostOfficeBoxOrchestrator {
 
   getPostOfficeBoxById(siteId:string):Observable<PostOfficeBox> {
     return this.postOfficeBoxRepository.getPostOfficeBoxById(siteId);
+  };
+
+  savePostOfficeBox(postOfficeBox:PostOfficeBox):Observable<PostOfficeBox> {
+    return this.postOfficeBoxRepository.savePostOfficeBox(postOfficeBox);
   };
 
   updatePostOfficeBox(siteId:string, postOfficeBox:PostOfficeBox):Observable<number> {

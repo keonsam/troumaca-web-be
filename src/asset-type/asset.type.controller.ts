@@ -1,6 +1,5 @@
 import {Request, Response} from "express";
 import {AssetTypeOrchestrator} from "./asset.type.orchestrator";
-import {shapeAssetTypesResponse2} from "./asset.type.response.shaper";
 import {getNumericValueOrDefault} from "../number.util";
 import {getStringValueOrDefault} from "../string.util";
 

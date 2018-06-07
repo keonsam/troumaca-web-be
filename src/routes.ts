@@ -68,46 +68,55 @@ router.delete("/attributes/:attributeId", attributeController.deleteAttribute);
 router.get("/available-attributes", attributeController.getAvailableAttributes);
 router.get("/assigned-attributes", attributeController.getAssignedAttributes);
 router.get("/assigned-attributes/:assetTypeClassId", attributeController.getAssignedAttributesByClassId);
-//site
+// site
 router.get("/sites/find", siteController.findSite);
+// street-address
 router.get("/street-addresses", streetAddressController.getStreetAddresses);
 router.get("/street-addresses/:siteId", streetAddressController.getStreetAddressById);
 router.post("/street-addresses", streetAddressController.saveStreetAddress);
 router.put("/street-addresses/:siteId", streetAddressController.updateStreetAddress);
 router.delete("/street-addresses/:siteId", streetAddressController.deleteStreetAddress);
+// post office box
 router.get("/post-office-boxes", postOfficeBoxController.getPostOfficeBoxes);
 router.get("/post-office-boxes/:siteId", postOfficeBoxController.getPostOfficeBoxById);
 router.post("/post-office-boxes", postOfficeBoxController.savePostOfficeBox);
 router.put("/post-office-boxes/:siteId", postOfficeBoxController.updatePostOfficeBox);
 router.delete("/post-office-boxes/:siteId", postOfficeBoxController.deletePostOfficeBox);
+// emails
 router.get("/emails", emailController.getEmails);
 router.get("/emails/:siteId", emailController.getEmailById);
 router.post("/emails", emailController.saveEmail);
 router.put("/emails/:siteId", emailController.updateEmail);
 router.delete("/emails/:siteId", emailController.deleteEmail);
+// web-site
 router.get("/web-sites", webSiteController.getWebSites);
 router.get("/web-sites/:siteId", webSiteController.getWebSiteById);
 router.post("/web-sites", webSiteController.saveWebSite);
 router.put("/web-sites/:siteId", webSiteController.updateWebSite);
 router.delete("/web-sites/:siteId", webSiteController.deleteWebSite);
+// phone
 router.get("/phones", phoneController.getPhones);
 router.get("/phones/:siteId", phoneController.getPhoneById);
 router.post("/phones", phoneController.savePhone);
 router.put("/phones/:siteId", phoneController.updatePhone);
 router.delete("/phones/:siteId", phoneController.deletePhone);
-//party
+// party
+// user
 router.get("/users/find", userController.findUser);
 router.get("/users", userController.getUsers);
 router.get("/users/:partyId", userController.getUser);
 router.post("/users", userController.saveUser);
 router.put("/users/:partyId", userController.updateUser);
+// TODO : Fix this /users-me
 router.put("/users-me/:partyId", userController.updateUserMe);
 router.delete("/users/:partyId", userController.deleteUser);
+// organizations
 router.get("/organizations", organizationController.getOrganizations);
 router.get("/organizations/:partyId", organizationController.getOrganization);
 router.post("/organizations", organizationController.saveOrganization);
 router.put("/organizations/:partyId", organizationController.updateOrganization);
 router.delete("/organizations/:partyId", organizationController.deleteOrganization);
+// photos
 router.get("/photos/:type/:partyId", photoController.getPhotoById);
 router.post("/photos/:type/:partyId", photoController.savePhoto);
 router.put("/photos/:type/:partyId", photoController.updatePhoto);
@@ -169,9 +178,9 @@ router.get("/access-role-types/:accessRoleTypeId", accessRoleTypeController.getA
 router.post("/access-role-types",accessRoleTypeController.saveAccessRoleType);
 router.put("/access-role-types/:accessRoleTypeId", accessRoleTypeController.updateAccessRoleType);
 router.delete("/access-role-types/:accessRoleTypeId", accessRoleTypeController.deleteAccessRoleType);
-//grants
+// grants
 router.get("/grants/:accessRoleId",grantController.getGrantsByAccessRoleId);
-//partyAccessRoles
+// partyAccessRoles
 router.get("/party-access-roles",partyAccessRoleController.getPartyAccessRoles);
 router.get("/party-access-roles/:partyId",partyAccessRoleController.getPartyAccessRoleById);
 

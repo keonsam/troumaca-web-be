@@ -13,8 +13,18 @@ export let getEmails = (req: Request, res: Response) => {
 
   orchestrator
     .getEmails(number, size, field, direction)
-    .subscribe(emails => {
-      res.send(JSON.stringify(emails.data));
+    .subscribe(result => {
+        if(result.data.emails.length > 0) {
+            res.status(200);
+            res.send(JSON.stringify(result.data));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'No Data Found'}));
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 };
 
@@ -23,18 +33,34 @@ export let getEmailById = (req: Request, res: Response) => {
   orchestrator
     .getEmailById(siteId)
     .subscribe(email => {
-      let body = JSON.stringify(email);
-      res.send(body);
+        if(email) {
+            res.status(200);
+            res.send(JSON.stringify(email));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'No Data Found'}))
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 };
 
 export let saveEmail = (req: Request, res: Response) => {
   orchestrator.saveEmail(req.body)
     .subscribe(email => {
-      res.send(JSON.stringify(email));
+        if(email) {
+            res.status(201);
+            res.send(JSON.stringify(email));
+        }else {
+            res.status(204);
+            res.send(JSON.stringify({message: 'Not Saved'}))
+        }
     }, error => {
-      res.send(error);
-      console.log(error);
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 }
 
@@ -43,18 +69,37 @@ export let updateEmail = (req: Request, res: Response) => {
   let email = req.body;
   orchestrator
     .updateEmail(siteId, email)
-    .subscribe(email => {
-      res.send(JSON.stringify(email));
+    .subscribe(affected => {
+        if(affected > 0) {
+            res.status(200);
+            res.send(JSON.stringify(affected));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'Not Updated'}))
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
-
 };
 
 export let deleteEmail = (req: Request, res: Response) => {
   let siteId = req.params.siteId;
   orchestrator
     .deleteEmail(siteId)
-    .subscribe(numRemoved => {
-      res.send(JSON.stringify(numRemoved));
+    .subscribe(affected => {
+        if(affected > 0) {
+            res.status(200);
+            res.send(JSON.stringify(affected));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'Not Deleted'}))
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 };
 
