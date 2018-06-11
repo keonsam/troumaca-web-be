@@ -11,11 +11,12 @@ phases:
       - npm run build-ts
   post_build:
     commands:
-      - echo Build completed on `date`
       - cp appspec.yml dist
       - cp -r bin dist
+      - cd dist
+      - zip -qr dev.zip
+      - mv dev.zip ../
+      - echo Build completed on `date`
 artifacts:
     files:
-        - '**/*'
-    base-directory: 'dist*'
-    discard-paths: no
+        - 'dev.zip'
