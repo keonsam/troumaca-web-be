@@ -315,7 +315,7 @@ class CredentialDBRepository implements CredentialRepository {
           observer.error(err);
         }
         observer.complete();
-      })
+      });
     });
   }
 

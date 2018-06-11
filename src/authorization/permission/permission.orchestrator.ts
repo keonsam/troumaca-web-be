@@ -56,12 +56,12 @@ export class PermissionOrchestrator {
       });
   };
 
-  addPermission(permission:Permission):Observable<Permission> {
-    return this.permissionRepository.addPermission(permission);
+  getPermissionById(permissionId:string):Observable<Permission> {
+      return this.permissionRepository.getPermissionById(permissionId);
   };
 
-  getPermissionById(permissionId:string):Observable<Permission> {
-    return this.permissionRepository.getPermissionById(permissionId);
+  addPermission(permission:Permission):Observable<Permission> {
+      return this.permissionRepository.addPermission(permission);
   };
 
   updatePermission(permissionId:string, permission:Permission):Observable<number> {

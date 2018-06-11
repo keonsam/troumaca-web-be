@@ -13,8 +13,18 @@ export  let getOrganizations = (req: Request, res: Response) => {
 
   organizationOrchestrator
     .getOrganizations(number, size, field, direction)
-    .subscribe(organizations => {
-      res.send(JSON.stringify(organizations.data));
+    .subscribe(result => {
+        if(result.data.organizations.length > 0) {
+            res.status(200);
+            res.send(JSON.stringify(result.data));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'No Data Found'}));
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 };
 
@@ -23,10 +33,17 @@ export  let getOrganization = (req: Request, res: Response) => {
   organizationOrchestrator
     .getOrganization(partyId)
     .subscribe(organization => {
-      let body = JSON.stringify(organization);
-      res.send(body);
+        if(organization) {
+            res.status(200);
+            res.send(JSON.stringify(organization));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'No Data Found'}))
+        }
     }, error => {
-      res.send(JSON.stringify(error));
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 };
 
@@ -35,17 +52,17 @@ export  let saveOrganization = (req: Request, res: Response) => {
   organizationOrchestrator
     .saveOrganization(organization)
     .subscribe(organization => {
-      res.send(JSON.stringify(organization));
-    });
-};
-
-export let deleteOrganization = (req: Request, res: Response) => {
-  let partyId = req.params.partyId;
-
-  organizationOrchestrator
-    .deleteOrganization(partyId)
-    .subscribe(numRemoved => {
-      res.send(JSON.stringify(numRemoved));
+        if(organization) {
+            res.status(201);
+            res.send(JSON.stringify(organization));
+        }else {
+            res.status(204);
+            res.send(JSON.stringify({message: 'Not Saved'}))
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 };
 
@@ -54,7 +71,37 @@ export let updateOrganization = (req: Request, res: Response) => {
   let organization = req.body;
   organizationOrchestrator
     .updateOrganization(partyId, organization)
-    .subscribe(numUpdated => {
-      res.send(JSON.stringify(numUpdated));
+    .subscribe(affected => {
+        if(affected > 0) {
+            res.status(200);
+            res.send(JSON.stringify(affected));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'Not Updated'}))
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
+};
+
+export let deleteOrganization = (req: Request, res: Response) => {
+    let partyId = req.params.partyId;
+
+    organizationOrchestrator
+        .deleteOrganization(partyId)
+        .subscribe(affected => {
+            if(affected > 0) {
+                res.status(200);
+                res.send(JSON.stringify(affected));
+            }else {
+                res.status(404);
+                res.send(JSON.stringify({message: 'Not Deleted'}))
+            }
+        }, error => {
+            res.status(400);
+            res.send(JSON.stringify({message: 'Error Occurred'}));
+            console.log(error);
+        });
 };

@@ -13,8 +13,18 @@ export let getWebSites = (req: Request, res: Response) => {
 
   orchestrator
     .getWebSites(number, size, field, direction)
-    .subscribe(webSites => {
-      res.send(JSON.stringify(webSites.data));
+    .subscribe(result => {
+        if(result.data.webSites.length > 0) {
+            res.status(200);
+            res.send(JSON.stringify(result.data));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'No Data Found'}));
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 };
 
@@ -23,8 +33,17 @@ export let getWebSiteById = (req: Request, res: Response) => {
   orchestrator
     .getWebSiteById(siteId)
     .subscribe(webSite => {
-      let body = JSON.stringify(webSite);
-      res.send(body);
+        if(webSite) {
+            res.status(200);
+            res.send(JSON.stringify(webSite));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'No Data Found'}))
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 
 };
@@ -32,10 +51,17 @@ export let getWebSiteById = (req: Request, res: Response) => {
 export let saveWebSite = (req: Request, res: Response) => {
   orchestrator.saveWebSite(req.body)
     .subscribe(webSite => {
-      res.send(JSON.stringify(webSite));
+        if(webSite) {
+            res.status(201);
+            res.send(JSON.stringify(webSite));
+        }else {
+            res.status(204);
+            res.send(JSON.stringify({message: 'Not Saved'}))
+        }
     }, error => {
-      res.send(error);
-      console.log(error);
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 }
 
@@ -44,18 +70,37 @@ export let updateWebSite = (req: Request, res: Response) => {
   let webSite = req.body;
   orchestrator
     .updateWebSite(siteId, webSite)
-    .subscribe(webSite => {
-      res.send(JSON.stringify(webSite));
+    .subscribe(affected => {
+        if(affected > 0) {
+            res.status(200);
+            res.send(JSON.stringify(affected));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'Not Updated'}))
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
-
 };
 
 export let deleteWebSite = (req: Request, res: Response) => {
   let siteId = req.params.siteId;
   orchestrator
     .deleteWebSite(siteId)
-    .subscribe(numRemoved => {
-      res.send(JSON.stringify(numRemoved));
+    .subscribe(affected => {
+        if(affected > 0) {
+            res.status(200);
+            res.send(JSON.stringify(affected));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'Not Deleted'}))
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 };
 

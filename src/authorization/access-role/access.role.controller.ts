@@ -11,12 +11,18 @@ export let findAccessRoles = (req: Request, res: Response) => {
 
   orchestrator.findAccessRoles(searchStr, pageSize)
     .subscribe( accessRoles => {
-      res.send(JSON.stringify(accessRoles));
+        if (accessRoles.length > 0) {
+            res.status(200);
+            res.send(JSON.stringify(accessRoles));
+        } else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'No Data Found'}));
+        }
     }, error => {
-    res.status(400);
-    res.send(error);
-    console.log(error);
-  });
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
+    });
 };
 
 export let getAccessRoles = (req: Request, res: Response) => {
@@ -27,18 +33,36 @@ export let getAccessRoles = (req: Request, res: Response) => {
 
   orchestrator
     .getAccessRoles(number, size, field, direction)
-    .subscribe(accessRoles => {
-      res.send(JSON.stringify(accessRoles.data));
+    .subscribe(result => {
+        if(result.data.accessRoles.length > 0) {
+            res.status(200);
+            res.send(JSON.stringify(result.data));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'No Data Found'}));
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+
     });
 };
 
 export let getAccessRoleById = (req: Request, res: Response) => {
-  let accessRoleId = req.params.accessRoleId;
   orchestrator
-    .getAccessRoleById(accessRoleId)
-    .subscribe(accessRole => {
-      let body = JSON.stringify(accessRole);
-      res.send(body);
+    .getAccessRoleById(req.params.accessRoleId)
+    .subscribe(accessRoleResponse => {
+        if(accessRoleResponse) {
+            res.status(200);
+            res.send(JSON.stringify(accessRoleResponse.toJson()));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'No Data Found'}))
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 };
 
@@ -47,10 +71,17 @@ export let saveAccessRole = (req: Request, res: Response) => {
   let grants = req.body.grant
   orchestrator.addAccessRole(accessRole, grants)
     .subscribe(accessRole => {
-      res.send(JSON.stringify(accessRole));
+        if(accessRole) {
+            res.status(201);
+            res.send(JSON.stringify(accessRole));
+        }else {
+            res.status(204);
+            res.send(JSON.stringify({message: 'Not Saved'}))
+        }
     }, error => {
-      res.send(error);
-      console.log(error);
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 }
 
@@ -60,18 +91,37 @@ export let updateAccessRole = (req: Request, res: Response) => {
   let grants = req.body.grant
   orchestrator
     .updateAccessRole(accessRoleId, accessRole, grants)
-    .subscribe(accessRole => {
-      res.send(JSON.stringify(accessRole));
+    .subscribe(affected => {
+        if(affected > 0) {
+            res.status(200);
+            res.send(JSON.stringify(affected));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'Not Updated'}))
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
-
 };
 
 export let deleteAccessRole = (req: Request, res: Response) => {
   let accessRoleId = req.params.accessRoleId;
   orchestrator
     .deleteAccessRole(accessRoleId)
-    .subscribe(numRemoved => {
-      res.send(JSON.stringify(numRemoved));
+    .subscribe(affected => {
+        if(affected > 0) {
+            res.status(200);
+            res.send(JSON.stringify(affected));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'Not Deleted'}))
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 };
 

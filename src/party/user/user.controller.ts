@@ -12,14 +12,19 @@ export let findUser = (req: Request, res: Response) => {
   let pageSize:number = req.query.pageSize;
 
   userOrchestrator.findUser(searchStr, pageSize)
-    .map(value => {
-      return shapeUserResponse2("persons", value); //TODO: change to new method
-    }).subscribe(users => {
-    let body = JSON.stringify(users);
-    res.send(body);
-  }, error => {
-    res.send(JSON.stringify(error));
-  });
+    .subscribe(users => {
+        if (users.length > 0) {
+            res.status(200);
+            res.send(JSON.stringify(users));
+        } else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'No Data Found'}));
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
+    });
 
 };
 
@@ -31,25 +36,36 @@ export  let getUsers = (req: Request, res: Response) => {
   let direction = getStringValueOrDefault(req.query.sortOrder, "");
 
   userOrchestrator.getUsers(number, size, field, direction)
-    .subscribe(users => {
-      res.send(JSON.stringify(users.data));
+    .subscribe(result => {
+        if(result.data.users.length > 0) {
+            res.status(200);
+            res.send(JSON.stringify(result.data));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'No Data Found'}));
+        }
     }, error => {
-      res.status(400);
-      res.send(error);
-      console.log(error);
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 };
 
 export  let getUser = (req: Request, res: Response) => {
   let partyId = req.params.partyId;
   userOrchestrator.getUser(partyId)
-    .subscribe(user => {
-      let body = JSON.stringify(user);
-      res.send(body);
+    .subscribe(userResponse => {
+        if(userResponse) {
+            res.status(200);
+            res.send(JSON.stringify(userResponse.toJson()));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'No Data Found'}))
+        }
     }, error => {
-      res.status(400);
-      res.send(error);
-      console.log(error);
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 };
 
@@ -57,26 +73,18 @@ export  let saveUser = (req: Request, res: Response) => {
   let user = req.body.user;
   let partyAccessRoles = req.body.partyAccessRoles;
   userOrchestrator.saveUser(user, partyAccessRoles)
-    .subscribe(result => {
-      res.send(JSON.stringify(result.data));
+    .subscribe(user => {
+        if(user) {
+            res.status(201);
+            res.send(JSON.stringify(user));
+        }else {
+            res.status(204);
+            res.send(JSON.stringify({message: 'Not Saved'}))
+        }
     }, error => {
-      res.status(400);
-      res.send(error);
-      console.log(error);
-    });
-};
-
-export let deleteUser = (req: Request, res: Response) => {
-  let partyId = req.params.partyId;
-
-  userOrchestrator
-    .deleteUser(partyId)
-    .subscribe(numRemoved => {
-      res.send(JSON.stringify(numRemoved));
-    }, error => {
-      res.status(400);
-      res.send(error);
-      console.log(error);
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 };
 
@@ -86,12 +94,18 @@ export let updateUser = (req: Request, res: Response) => {
   let partyAccessRoles = req.body.partyAccessRoles;
   userOrchestrator
     .updateUser(partyId, user, partyAccessRoles)
-    .subscribe(numUpdated => {
-      res.send(JSON.stringify(numUpdated));
+    .subscribe(affected => {
+        if(affected > 0) {
+            res.status(200);
+            res.send(JSON.stringify(affected));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'Not Updated'}))
+        }
     }, error => {
-      res.status(400);
-      res.send(error);
-      console.log(error);
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 };
 
@@ -101,11 +115,37 @@ export let updateUserMe = (req: Request, res: Response) => {
   let credential = req.body.credential;
   userOrchestrator
     .updateUserMe(partyId, user, credential)
-    .subscribe(numUpdated => {
-      res.send(JSON.stringify(numUpdated));
+    .subscribe(affected => {
+        if (affected > 0) {
+            res.status(200);
+            res.send(JSON.stringify(affected));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'Not Updated'}))
+        }
     }, error => {
-      res.status(400);
-      res.send(error);
-      console.log(error);
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
+};
+
+export let deleteUser = (req: Request, res: Response) => {
+    let partyId = req.params.partyId;
+
+    userOrchestrator
+        .deleteUser(partyId)
+        .subscribe(affected => {
+            if(affected > 0) {
+                res.status(200);
+                res.send(JSON.stringify(affected));
+            }else {
+                res.status(404);
+                res.send(JSON.stringify({message: 'Not Deleted'}))
+            }
+        }, error => {
+            res.status(400);
+            res.send(JSON.stringify({message: 'Error Occurred'}));
+            console.log(error);
+        });
 };

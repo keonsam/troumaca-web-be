@@ -12,7 +12,7 @@ export let isValidUsername = (req: Request, res: Response) => {
       res.send(next.valid);
     }, error => {
       res.status(400);
-      res.send(error);
+      res.send({message: 'Error Occurred'});
       console.log(error);
     });
 };
@@ -25,7 +25,7 @@ export let isValidEditUsername = (req: Request, res: Response) => {
       res.send(next.valid);
     }, error => {
       res.status(400);
-      res.send(error);
+      res.send({message: 'Error Occurred'});
       console.log(error);
     });
 };
@@ -37,7 +37,7 @@ export let isValidPassword = (req: Request, res: Response) => {
       res.send(next.valid);
     }, error => {
       res.status(400);
-      res.send(error);
+      res.send({message: 'Error Occurred'});
       console.log(error);
     });
 };
@@ -50,7 +50,7 @@ export let forgotPassword = (req: Request, res: Response) => {
       res.send(next.valid);
     }, error => {
       res.status(400);
-      res.send(error);
+      res.send({message: 'Error Occurred'});
       console.log(error);
     });
 };
@@ -60,8 +60,6 @@ export let authenticate = (req: Request, res: Response) => {
   let credential = req.body;
   credentialOrchestrator.authenticate(credential)
     .subscribe((authenticateResponse: AuthenticateResponse) => {
-      //res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
-      //res.setHeader('Content-Type', 'application/json');
       if (authenticateResponse && authenticateResponse.session && authenticateResponse.session.sessionId) {
         let sessionId = authenticateResponse.session.sessionId;
         // { path: '/', httpOnly: true, secure: false, maxAge: null }
@@ -70,7 +68,7 @@ export let authenticate = (req: Request, res: Response) => {
       res.send(JSON.stringify(authenticateResponse.toJson()));
     }, error => {
       res.status(400);
-      res.send(error);
+      res.send({message: 'Error Occurred'});
       console.log(error);
     });
 };
@@ -81,12 +79,17 @@ export let addCredential = (req: Request, res: Response) => {
   let opt = {correlationId:req.headers["correlationid"]};
   credentialOrchestrator.addCredential(credential, opt)
     .subscribe(credentialConfirmation => {
-      res.setHeader('Content-Type', 'application/json');
-      res.send(credentialConfirmation);
+        if(credentialConfirmation) {
+            res.status(201);
+            res.send(JSON.stringify(credentialConfirmation));
+        }else {
+            res.status(204);
+            res.send(JSON.stringify({message: 'Not Saved'}))
+        }
     }, error => {
-      res.status(400);
-      res.send(error);
-      console.log(error);
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 };
 
@@ -95,12 +98,18 @@ export let updateCredential = (req: Request, res: Response) => {
   let credential = req.body;
   credentialOrchestrator
     .updateCredential(partyId, credential)
-    .subscribe(numUpdated => {
-      res.send(JSON.stringify(numUpdated));
+    .subscribe(affected => {
+        if(affected > 0) {
+            res.status(200);
+            res.send(JSON.stringify(affected));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'Not Updated'}))
+        }
     }, error => {
-      res.status(400);
-      res.send(error);
-      console.log(error);
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 };
 

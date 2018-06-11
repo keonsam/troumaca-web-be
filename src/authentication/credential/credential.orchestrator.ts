@@ -59,18 +59,6 @@ export class CredentialOrchestrator {
 
   addCredential(credential:Credential, options?:any):Observable<CredentialConfirmation> {
     return this.credentialRepository.addCredential(credential, options);
-      // .switchMap(credential => {
-      //
-      //   let credentialConfirmation:CredentialConfirmation = new CredentialConfirmation();
-      //
-      //   credentialConfirmation.credentialId = credential.credentialId;
-      //   credentialConfirmation.createdOn = new Date();
-      //   credentialConfirmation.modifiedOn = new Date();
-      //
-      //   return this.confirmationRepository
-      //     .addCredentialConfirmation(credentialConfirmation);
-      //
-      // });
   };
 
   authenticate(credential:Credential):Observable<AuthenticateResponse> {
@@ -81,23 +69,13 @@ export class CredentialOrchestrator {
     return this.credentialRepository
       .authenticate(credential)
       .switchMap((result:Result<Credential>) => {
-
         // unable to find the credential specified
-        if (!result) {
-          return Observable.throw(this.createNotFoundError("Credential"));
-        }
-
+        if (!result) return Observable.of(undefined);
         let readCred = result.data;
         let authenticated:boolean = !result.fail;
-
-        if (!authenticated) {
-          return Observable.of(new AuthenticateResponse(authenticated));
-        }
-
+        if (!authenticated) return Observable.of(new AuthenticateResponse(authenticated));
         let readCredStatus = readCred.credentialStatus;
-
         let credentialActive:boolean = (readCredStatus === CredentialStatus.ACTIVE); // wrong logic before 1 === 1 = true while  1 !== 1 = false
-
         // do not continue if the status is not active
         if (!credentialActive) {
           // add credentialConfirmationId to redirect
@@ -106,19 +84,14 @@ export class CredentialOrchestrator {
               return new AuthenticateResponse(authenticated, credentialActive, credentialConfirmation.credentialConfirmationId);
             });
         }
-
         // account exist after session so that the user can login in and create their profile
         let accountExists = this.isNull(readCred.partyId);
-
         let session:Session = new Session();
-
-        session.partyId = readCred.partyId ? readCred.partyId: "";
+        session.partyId = readCred ? readCred.partyId : "";
         session.credentialId = readCred.credentialId;
         session.data.set("credentialStatus", readCred.credentialStatus);
 
-        if (!validator.isEmail(readCred.username)) {
-          session.data.set("phone", readCred.username);
-        }
+        if (!validator.isEmail(readCred.username)) session.data.set("phone", readCred.username);
 
         return this.sessionRepository.addSession(session)
         .map(readSession => {
@@ -149,11 +122,11 @@ export class CredentialOrchestrator {
     }
   }
 
-  createNotFoundError(name:string):any {
-    return new Error(JSON.stringify({
-      "statusCode":404,
-      "message": name + " not found."
-    }));
-  }
+  // createNotFoundError(name:string):any {
+  //   return new Error(JSON.stringify({
+  //     "statusCode":404,
+  //     "message": name + " not found."
+  //   }));
+  // }
 
 }

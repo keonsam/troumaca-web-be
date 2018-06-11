@@ -7,3 +7,4 @@
 {"accessRole":{"accessRoleId":"bc40d2b4-1517-4447-9c8d-ed2279a7f7a9","name":"test1"},"partyId":"80210a4b-dd81-4899-be4e-cf7274581ae7","partyAccessRoleId":"f924962f-a71c-4017-be51-6922c28847f4","_id":"uSIa8gJn2CiGJG1b"}
 {"partyId":"288fd7fe-04d9-4daa-8d59-07d6c073b445","accessRoleId":"3b9c30dc-9c0a-48d9-bb98-440c29bc2a8f","partyAccessRoleId":"e583e1dd-6dfe-41c9-93c3-9f6dd0ee69f8","_id":"uwPGNExiq7YryqdO"}
 {"$$indexCreated":{"fieldName":"partyAccessRoleId","unique":true,"sparse":false}}
+{"accessRoleId":"bc40d2b4-1517-4447-9c8d-ed2279a7f7a9","partyId":"5411cecb-a714-4f63-8b61-6cd665fd925f","partyAccessRoleId":"36d478ce-f530-4157-bac6-b9fcd02a84a5","_id":"OTyX4KgifYCDLe0x"}

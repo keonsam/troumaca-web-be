@@ -23,8 +23,8 @@ export class PhotoOrchestrator {
     return this.photoRepository.updatePhoto(partyId, type, photo);
   };
 
-  deletePhoto(partyId:string):Observable<number> {
-    return this.photoRepository.deletePhoto(partyId);
-  };
+  // deletePhoto(partyId:string):Observable<number> {
+  //   return this.photoRepository.deletePhoto(partyId);
+  // };
 
 }

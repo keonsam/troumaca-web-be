@@ -14,10 +14,6 @@ export class StreetAddressOrchestrator {
     this.streetAddressRepository = createStreetAddressRepository();
   }
 
-  saveStreetAddress(streetAddress:StreetAddress):Observable<StreetAddress> {
-    return this.streetAddressRepository.saveStreetAddress(streetAddress);
-  };
-
   getStreetAddresses(number:number, size:number, field:string, direction:string):Observable<Result<any>> {
     let sort:string = getSortOrderOrDefault(field, direction);
     return this.streetAddressRepository
@@ -34,6 +30,10 @@ export class StreetAddressOrchestrator {
 
   getStreetAddressById(siteId:string):Observable<StreetAddress> {
     return this.streetAddressRepository.getStreetAddressById(siteId);
+  };
+
+  saveStreetAddress(streetAddress:StreetAddress):Observable<StreetAddress> {
+    return this.streetAddressRepository.saveStreetAddress(streetAddress);
   };
 
   updateStreetAddress(siteId:string, streetAddress:StreetAddress):Observable<number> {

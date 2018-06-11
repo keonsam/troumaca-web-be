@@ -1,46 +1,60 @@
 import {Request, Response} from "express";
 import {PhotoOrchestrator} from "./photo.orchestrator";
-import {Photo} from "./photo";
 
 let orchestrator:PhotoOrchestrator = new PhotoOrchestrator();
 
 export let getPhotoById = (req: Request, res: Response) => {
-  let partyId = req.params.partyId;
-  let type: string = req.params.type;
   orchestrator
-    .getPhotoById(partyId, type)
+    .getPhotoById(req.params.partyId, req.params.type)
     .subscribe(photo => {
-      let imageStr:string = photo ? photo.imageStr : "";
-      let body = JSON.stringify(imageStr);
-      res.send(body);
+      // let imageStr:string = photo ? photo.imageStr : "";
+        if(photo) {
+            res.status(200);
+            res.send(JSON.stringify(photo));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'No Data Found'}))
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 };
 
 export let savePhoto = (req: Request, res: Response) => {
-  let partyId:string = req.params.partyId;
-  let type: string = req.params.type;
-  let photo:Photo = new Photo(partyId,req.body.imageStr);
-  orchestrator.savePhoto(partyId, type, photo)
+  orchestrator.savePhoto(req.params.partyId, req.params.type, req.body)
     .subscribe(photo => {
-      // TODO: can change the front-end to receive the photo class
-      let response: boolean = photo.imageStr ? true: false;
-      res.send(JSON.stringify(response));
+        if(photo) {
+            res.status(201);
+            res.send(JSON.stringify(photo));
+        }else {
+            res.status(204);
+            res.send(JSON.stringify({message: 'Not Saved'}))
+        }
     }, error => {
-      res.send(error);
-      console.log(error);
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 };
 
 export let updatePhoto = (req: Request, res: Response) => {
-  let partyId:string = req.params.partyId;
-  let type: string = req.params.type;
-  let photo:Photo = new Photo(partyId, req.body.imageStr);
   orchestrator
-    .updatePhoto(partyId, type, photo)
-    .subscribe(photo => {
-      res.send(JSON.stringify(photo));
+    .updatePhoto(req.params.partyId, req.params.type, req.body)
+    .subscribe(affected => {
+        if(affected > 0) {
+            res.status(200);
+            res.send(JSON.stringify(affected));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'Not Updated'}))
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
-
 };
 
 // export let deletePhoto = (req: Request, res: Response) => {

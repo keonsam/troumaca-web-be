@@ -13,6 +13,8 @@ import {UnitOfMeasureRepository} from "../unit-of-measure/unit.of.measure.reposi
 import {createUnitOfMeasureRepository} from "../unit-of-measure/unit.of.measure.repository.factory";
 import {AssetTypeClass} from "./asset-type-class/asset.type.class";
 import {UnitOfMeasure} from "../unit-of-measure/unit.of.measure";
+import {Value} from "./value/value";
+import {AssetTypeResponse} from "./asset.type.response";
 
 export class AssetTypeOrchestrator {
 
@@ -30,14 +32,6 @@ export class AssetTypeOrchestrator {
 
   findAssetTypes(searchStr:string, pageSize:number):Observable<AssetType[]> {
     return this.assetTypeRepository.findAssetTypes(searchStr, pageSize);
-  }
-
-  saveAssetType(assetType:AssetType):Observable<AssetType> {
-    return this.assetTypeRepository.saveAssetType(assetType);
-  };
-
-  getAssetTypeCount():Observable<number> {
-    return this.assetTypeRepository.getAssetTypeCount();
   }
 
   getAssetTypes(number:number, size:number, field:string, direction:string):Observable<Result<any>> {
@@ -75,40 +69,76 @@ export class AssetTypeOrchestrator {
             });
         }
       });
-  }
+  };
 
-  getAssetTypeById(assetTypeId:string):Observable<AssetType> {
+  getAssetTypeById(assetTypeId:string):Observable<AssetTypeResponse> {
     return this.assetTypeRepository.getAssetTypeById(assetTypeId)
       .switchMap((assetType: AssetType) => {
-        if (!assetType.assetTypeId) {
-          return Observable.of(new AssetType());
+        if (!assetType) {
+          return Observable.of(null);
         } else {
           return this.assetTypeClassRepository.getAssetTypeClassById(assetType.assetTypeClassId)
             .switchMap(assetTypeClass => {
+                assetType.assetTypeClass = new AssetTypeClass();
               if (assetTypeClass) {
                 assetType.assetTypeClass = assetTypeClass;
               }
               return this.unitOfMeasureRepository.getUnitOfMeasureById(assetType.unitOfMeasureId)
-                .map(unitOfMeasure => {
+                .switchMap(unitOfMeasure => {
+                    assetType.unitOfMeasure = new UnitOfMeasure();
                   if (unitOfMeasure) {
                     assetType.unitOfMeasure = unitOfMeasure;
                   }
-                  return assetType;
+                  return this.valueRepository.getValuesByAssetTypeId(assetType.assetTypeId)
+                      .map((values:Value[]) => {
+                          return new AssetTypeResponse(assetType,values);
+                      });
                 });
             });
         }
       });
-  }
+  };
 
-  updateAssetType(assetTypeId:string, assetType:AssetType):Observable<number> {
-    return this.assetTypeRepository.updateAssetType(assetTypeId, assetType);
+  saveAssetType(assetType:AssetType, values: Value[]):Observable<AssetType> {
+      return this.assetTypeRepository.saveAssetType(assetType)
+          .switchMap(assetType => {
+              if(!assetType || values.length < 1) Observable.of(assetType);
+              values.forEach(value => {
+                 value.assetTypeId = assetType.assetTypeId;
+              });
+              return this.valueRepository.saveValues(values)
+                  .map((values:Value[]) => {
+                     return assetType;
+                  });
+          });
+  };
+
+  updateAssetType(assetTypeId:string, assetType:AssetType, values: Value[]):Observable<number> {
+    return this.assetTypeRepository.updateAssetType(assetTypeId, assetType)
+        .switchMap(numReplaced => {
+            if(!numReplaced) return Observable.of(numReplaced);
+            return this.valueRepository.deleteValuesByAssetTypeId(assetTypeId)
+                .switchMap(numReplaced2 => {
+                if(values.length < 1) return Observable.of(numReplaced);
+                values.forEach(value => {
+                    value.assetTypeId = assetTypeId;
+                });
+                   return this.valueRepository.saveValues(values)
+                       .map( values => {
+                           return numReplaced;
+                       });
+                });
+        });
   }
 
   deleteAssetType(assetTypeId:string):Observable<number> {
     return this.assetTypeRepository.deleteAssetType(assetTypeId)
       .switchMap(numReplaced => {
         if(numReplaced > 0) {
-          return this.valueRepository.deleteValuesByAssetTypeId(assetTypeId);  // this will delete all the values with the same assetTypeId;
+          return this.valueRepository.deleteValuesByAssetTypeId(assetTypeId)
+              .map(numReplaced2 => {
+                  return numReplaced;
+              });  // this will delete all the values with the same assetTypeId;
         }else {
           return Observable.of(numReplaced);
         }
