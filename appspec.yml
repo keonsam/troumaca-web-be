@@ -5,7 +5,7 @@ files:
     destination: /home/ec2-user/Troumaca-web-server
 hooks:
   BeforeInstall:
-    - location: scripts/install_packages.sh
+    - location: scripts/install-packages.sh
       timeout: 300
       runas: ec2-user
   AfterInstall:
