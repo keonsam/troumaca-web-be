@@ -12,6 +12,7 @@ phases:
   post_build:
     commands:
       - cp appspec.yml dist
+      - cp node_modules dist
       - cp -r scripts dist
       - cd dist
       - zip -r troumaca-web-be.zip *
