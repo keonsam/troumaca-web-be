@@ -52,9 +52,8 @@ export  let saveOrganization = (req: Request, res: Response) => {
   organizationOrchestrator
     .saveOrganization(organization)
     .subscribe(organization => {
-        if(organization) {
-            res.status(201);
-            res.send(JSON.stringify(organization));
+        res.status(201);
+        res.send(JSON.stringify(organization));
     }, error => {
         res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));

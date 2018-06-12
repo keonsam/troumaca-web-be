@@ -17,7 +17,6 @@
   },
   "include": [
     "src/**/*",
-    "appspec.yml",
     "src/properties.file"
   ]
 }
