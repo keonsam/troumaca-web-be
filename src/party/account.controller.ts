@@ -6,19 +6,19 @@ import {Organization} from "./organization/organization";
 let accountOrchestrator:AccountOrchestrator = new AccountOrchestrator();
 
 export  let saveAccount = (req: Request, res: Response) => {
-  //these are not available sessionId exist in the cookie
-  /*let sessionId:string = req.header("sessionId");
-  let credentialId:string = req.header("credentialId");
-  console.log(req.header);
-  console.log(sessionId);
-  console.log(credentialId);*/
-
   let sessionId:string = req.cookies["sessionId"];
-  let accountType = req.body.accountType;
-  let user:User = req.body.user;
-  let organization:Organization = req.body.organization;
-  accountOrchestrator.saveAccount(accountType,user, organization, sessionId)
-    .subscribe(account => {
-      res.send(JSON.stringify(account));
+  accountOrchestrator.saveAccount(req.body.accountType, req.body.user, req.body.organization, sessionId)
+    .subscribe(accountResponse => {
+        if(accountResponse.created) {
+            res.status(201);
+            res.send(JSON.stringify(accountResponse));
+        }else {
+            res.status(404);
+            res.send(JSON.stringify({message: 'Not Saved'}))
+        }
+    }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: 'Error Occurred'}));
+        console.log(error);
     });
 };

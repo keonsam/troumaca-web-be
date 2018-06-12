@@ -11,3 +11,4 @@
 {"firstName":"test1","middleName":"test1.1","lastName":"test1.2","username":"test1@troumaca.com","partyId":"80210a4b-dd81-4899-be4e-cf7274581ae7","_id":"iQKYfYrX1UfrZCv1"}
 {"firstName":"Keon","middleName":"Erran","lastName":"Samuel","username":"18004555555","partyId":"b2f6ba51-6efc-4e4d-82b1-59fcfd6d2aa0","_id":"rgTE2nXxqfROqpW0"}
 {"$$indexCreated":{"fieldName":"partyId","unique":true,"sparse":false}}
+{"firstName":"Testalpha","middleName":"Testalpha","lastName":"Testalpha","username":"Testalpha@troumaca.com","partyId":"5411cecb-a714-4f63-8b61-6cd665fd925f","_id":"FKYwolM4JeKUuEXV"}

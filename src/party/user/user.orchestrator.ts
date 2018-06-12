@@ -8,25 +8,26 @@ import {CredentialRepository} from "../../authentication/credential/credential.r
 import {createCredentialRepositoryFactory} from "../../authentication/credential/credential.repository.factory";
 import {Credential} from "../../authentication/credential/credential";
 import {CredentialStatus} from "../../authentication/credential/credential.status";
-//import  generatePassword from 'password-generator';
 import {generate} from "generate-password";
 import {getSortOrderOrDefault} from "../../sort.order.util";
 import {PartyAccessRole} from "../../authorization/party-access-role/party.access.role";
 import {PartyAccessRoleRepository} from "../../authorization/party-access-role/party.access.role.repository";
 import {createPartyAccessRoleRepositoryFactory} from "../../authorization/party-access-role/party.access.role.repository.factory";
+import {UserResponse} from "./user.response";
+import {AccessRoleRepository} from "../../authorization/access-role/access.role.repository";
+import {createAccessRoleRepositoryFactory} from "../../authorization/access-role/access.role.repository.factory";
 
 export class UserOrchestrator {
 
   private userRepository:UserRepository;
   private credentialRepository: CredentialRepository;
-  private credential: Credential;
   private partyAccessRoleRepository: PartyAccessRoleRepository;
-
+  private accessRoleRepository: AccessRoleRepository;
   constructor() {
-    this.credential = new Credential();
     this.userRepository = createUserRepository();
     this.credentialRepository = createCredentialRepositoryFactory();
     this.partyAccessRoleRepository = createPartyAccessRoleRepositoryFactory();
+    this.accessRoleRepository = createAccessRoleRepositoryFactory();
   }
 
 
@@ -47,44 +48,55 @@ export class UserOrchestrator {
         });
     };
 
-    getUser (partyId:string):Observable<User> {
-      return this.userRepository.getUser(partyId);
+    getUser (partyId:string):Observable<UserResponse> {
+      return this.userRepository.getUser(partyId)
+          .switchMap(user => {
+              if (!user) return Observable.of(undefined);
+              return this.partyAccessRoleRepository.getPartyAccessRoleById(partyId)
+                  .switchMap((partyAccessRoles: PartyAccessRole[]) => {
+                      if (partyAccessRoles.length < 1) return Observable.of(new UserResponse(user));
+                      const accessRoleIds: string[] = partyAccessRoles.map(x => { if (x.accessRoleId) return x.accessRoleId});
+                      if (accessRoleIds.length < 1)  return Observable.of(new UserResponse(user, partyAccessRoles));
+                      return this.accessRoleRepository.getAccessRoleByIds(accessRoleIds)
+                          .map( accessRoles => {
+                             if (accessRoles.length < 1) return new UserResponse(user, partyAccessRoles);
+                              partyAccessRoles.forEach( value => {
+                                  const index = accessRoles.findIndex(x => x.accessRoleId === value.accessRoleId);
+                                  value.accessRole = accessRoles[index];
+                              });
+                              return new UserResponse(user, partyAccessRoles);
+                          });
+                  });
+          });
     };
 
-     saveUser (user:User, partyAccessRoles:PartyAccessRole[]): Observable<Result<any>> {
-       return this.userRepository.saveUser(user)
-         .switchMap(user => {
-           if (!user) {
-             return Observable.of(new Result<any>(true, "users", user));
-           } else {
-             partyAccessRoles.forEach( value => {
-               value.partyId = user.partyId;
-             });
-             return this.partyAccessRoleRepository.addPartyAccessRole(partyAccessRoles)
-               .switchMap(partyAccessRole => {
-                 if (partyAccessRole.length === 0) {
-                   return Observable.of(new Result<any>(true, "users", user));
-                 } else {
-                   this.credential.partyId = user.partyId;
-                   this.credential.username = user.username;
-                   this.credential.password = generate({ // upgraded to a new module https://www.npmjs.com/package/generate-password
+     saveUser (user:User, partyAccessRoles:PartyAccessRole[]): Observable<User> {
+         return this.userRepository.saveUser(user)
+             .switchMap(user => {
+                 if (!user) return Observable.of(user);
+                 let credential: Credential = new Credential();
+                 credential.partyId = user.partyId;
+                 credential.username = user.username;
+                 credential.password = generate({
                      length: 10,
                      numbers: true
-                   });
-                   this.credential.credentialStatus = CredentialStatus.ACTIVE;
-                   return this.credentialRepository.addUserCredential(this.credential)
-                     .map(credential => {
-                       if (!credential) {
-                         return new Result<any>(true, "credential", credential);
-                       } else {
-                         return new Result<any>(false, "credential", user);
-                       }
+                 });
+                 credential.credentialStatus = CredentialStatus.ACTIVE;
+                 return this.credentialRepository.addUserCredential(credential)
+                     .switchMap(credential => {
+                         if (!credential) return Observable.of(undefined);
+                         if (partyAccessRoles.length < 1) return Observable.of(user);
+                         partyAccessRoles.forEach(value => {
+                             value.partyId = user.partyId;
+                         });
+                         return this.partyAccessRoleRepository.addPartyAccessRole(partyAccessRoles)
+                             .map(partyAccessRoles2 => {
+                                 if (partyAccessRoles2.length === 0) return undefined;
+                                 return user;
+                             });
                      });
-                 }
-               });
-           }
-         });
-     };
+             });
+     }
 
     deleteUser (partyId:string):Observable<number> {
        return this.userRepository.deleteUser(partyId)

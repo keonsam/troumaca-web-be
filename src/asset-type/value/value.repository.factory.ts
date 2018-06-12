@@ -26,16 +26,12 @@ class ValueDBRepository implements ValueRepository {
     });
   }
 
-  saveValue(value: Value[]): Observable<Value[]> {
-    let newValue: Value[] = [];
-    value.forEach((next:Value) => {
-      if (!next.valueId){
-        next.valueId = generateUUID();
-    }
-      newValue.push(next);
+  saveValues(values2: Value[]): Observable<Value[]> {
+    values2.forEach((next:Value) => {
+      if (!next.valueId) next.valueId = generateUUID();
     });
     return Rx.Observable.create(function (observer: Observer<Value>) {
-      values.insert(newValue, function (err: any, doc: any) {
+      values.insert(values2, function (err: any, doc: any) {
         if (err) {
           observer.error(err);
         } else {
@@ -44,7 +40,7 @@ class ValueDBRepository implements ValueRepository {
         observer.complete();
       });
     });
-  }
+  };
 
   getValues(pageNumber: number, pageSize: number, order: string): Observable<Value[]> {
     return Rx.Observable.create(function (observer: Observer<Value[]>) {
@@ -162,7 +158,7 @@ class ValueRestRepository implements ValueRepository {
     return undefined;
   }
 
-  saveValue(value:Value[]):Observable<Value[]> {
+  saveValues(values:Value[]):Observable<Value[]> {
     return null
   }
 
