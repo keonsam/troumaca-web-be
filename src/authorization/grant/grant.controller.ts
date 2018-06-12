@@ -6,14 +6,14 @@ import {getStringValueOrDefault} from '../../string.util';
 let orchestrator:GrantOrchestrator = new GrantOrchestrator();
 
 
-export let getGrantsByAccessRoleId = (req: Request, res: Response) => {
-  let accessRoleId = req.params.accessRoleId;
-  orchestrator
-    .getGrantsByAccessRoleId(accessRoleId)
-    .subscribe(response => {
-      res.send(JSON.stringify(response));
-    });
-};
+// export let getGrantsByAccessRoleId = (req: Request, res: Response) => {
+//   let accessRoleId = req.params.accessRoleId;
+//   orchestrator
+//     .getGrantsByAccessRoleId(accessRoleId)
+//     .subscribe(response => {
+//       res.send(JSON.stringify(response));
+//     });
+// };
 
 // export let getGrantsByArray = (req: Request, res: Response) => {
 //

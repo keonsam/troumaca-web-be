@@ -9,15 +9,10 @@ export  let getAllResourcePermissions = (req: Request, res: Response) => {
   orchestrator
     .getAllResourcePermissions()
     .subscribe(response => {
-        if(response.length > 0) {
-            res.status(200);
-            res.send(JSON.stringify(response));
-        }else {
-            res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found'}));
-        }
+        res.status(200);
+        res.send(JSON.stringify(response));
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
 
     });
@@ -33,12 +28,12 @@ export let  getResourcePermissionsByResourceId = (req: Request, res: Response) =
             res.send(JSON.stringify(response));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found'}));
+            res.send(JSON.stringify({message: 'No Data Found For ' + req.params.resourceId}));
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
-
+        console.log(error);
     });
 };
 

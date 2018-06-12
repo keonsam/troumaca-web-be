@@ -9,8 +9,8 @@ export let getDataTypes = (req: Request, res: Response) => {
     .subscribe(dataTypes => {
       res.send(JSON.stringify(dataTypes));
     }, error => {
-      res.status(400);
-      res.send(error);
+      res.status(500);
+      res.send({message: 'Error Occurred'});
       console.log(error);
     });
 

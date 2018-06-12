@@ -54,8 +54,8 @@ export class AttributeOrchestrator {
                     attributes.forEach(value => {
                       let index = unitOfMeasures.findIndex(x => x.unitOfMeasureId === value.unitOfMeasureId);
                       let index2 = dataTypes.findIndex(x => x.dataTypeId === value.dataTypeId);
-                      value.unitOfMeasure = unitOfMeasures[index];
-                      value.dataType = dataTypes[index2];
+                      value.unitOfMeasure = index !== -1 ? unitOfMeasures[index] : new UnitOfMeasure();
+                      value.dataType = index2 !== -1 ? dataTypes[index2] : new DataType();
                     });
                     let shapeAttributesResp: any = shapeAttributesResponse(attributes, number, size, attributes.length, count, sort);
                     return new Result<any>(false, "attributes", shapeAttributesResp);
@@ -68,15 +68,12 @@ export class AttributeOrchestrator {
     getAttributeById(attributeId:string):Observable<Attribute> {
         return this.attributeClassRepository.getAttributeById(attributeId)
             .switchMap((attribute: Attribute) => {
-                if (!attribute.attributeId || !attribute.unitOfMeasureId) {
-                    return Observable.of(attribute);
-                } else {
+                if (!attribute.attributeId || !attribute.unitOfMeasureId) return Observable.of(attribute);
                     return this.unitOfMeasureRepository.getUnitOfMeasureById(attribute.unitOfMeasureId)
                         .map((unitOfMeasure: UnitOfMeasure) => {
                             attribute.unitOfMeasure = unitOfMeasure;
                             return attribute;
                         });
-                }
             });
     };
 
@@ -133,7 +130,7 @@ export class AttributeOrchestrator {
                         .map(attributes => {
                             assignedAttributes.forEach(value => {
                                 let index = attributes.findIndex(x => x.attributeId === value.attributeId);
-                                value.attribute = attributes[index];
+                                value.attribute = index !== -1 ? attributes[index] : new Attribute();
                             });
                             return assignedAttributes;
                         });
@@ -158,8 +155,8 @@ export class AttributeOrchestrator {
                 attributes.forEach(value => {
                   let index = unitOfMeasures.findIndex(x => x.unitOfMeasureId === value.unitOfMeasureId);
                   let index2 = dataTypes.findIndex(x => x.dataTypeId === value.dataTypeId);
-                  value.unitOfMeasure = unitOfMeasures[index];
-                  value.dataType = dataTypes[index2];
+                    value.unitOfMeasure = index !== -1 ? unitOfMeasures[index] : new UnitOfMeasure();
+                    value.dataType = index2 !== -1 ? dataTypes[index2] : new DataType();
                 });
                 return attributes;
               });

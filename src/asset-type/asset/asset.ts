@@ -15,7 +15,7 @@ export class Asset {
   private _serialNumber:string;
   private _quantity:string;
   private _unitOfMeasureId:string;
-  private _unitOfMeasure:UnitOfMeasure;
+  private _unitOfMeasure: UnitOfMeasure;
   private _description:string;
   private _personId: string;
   private _person: Person;
@@ -26,8 +26,6 @@ export class Asset {
 
 
   constructor() {
-    this._assetKind = new AssetKind();
-    this._assetType = new AssetType();
   }
 
   get assetId(): string {
