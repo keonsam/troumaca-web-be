@@ -14,9 +14,9 @@ phases:
       - cp appspec.yml dist
       - cp -r scripts dist
       - cd dist
-      - zip -r troumaca-web-be.zip *
-      - mv troumaca-web-be.zip ../
+      - tar -zcvf dev.tar.gz *
+      - mv dev.tar.gz ../
       - echo Build completed on `date`
 artifacts:
     files:
-      - troumaca-web-be.zip
+        - dev.tar.gz
