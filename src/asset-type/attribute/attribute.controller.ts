@@ -13,15 +13,10 @@ export let getAttributes = (req: Request, res: Response) => {
 
   orchestrator.getAttributes(number, size, field, direction)
     .subscribe(result => {
-        if(result.data.attributes.length > 0) {
-            res.status(200);
-            res.send(JSON.stringify(result.data));
-        }else {
-            res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found'}));
-        }
+        res.status(200);
+        res.send(JSON.stringify(result.data));
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
@@ -35,33 +30,38 @@ export let getAttributeById = (req: Request, res: Response) => {
                 res.send(JSON.stringify(attribute));
             }else {
                 res.status(404);
-                res.send(JSON.stringify({message: 'No Data Found'}))
+                res.send(JSON.stringify({message: 'No Data Found for ' + req.params.attributeId}))
             }
         }, error => {
-            res.status(400);
+            res.status(500);
             res.send(JSON.stringify({message: 'Error Occurred'}));
             console.log(error);
         });
 };
 
 export let saveAttribute = (req: Request, res: Response) => {
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Attribute can not be empty"
+        });
+    }
   orchestrator.saveAttribute(req.body)
     .subscribe(attribute => {
-        if(attribute) {
-            res.status(201);
-            res.send(JSON.stringify(attribute));
-        }else {
-            res.status(204);
-            res.send(JSON.stringify({message: 'Not Saved'}))
-        }
+        res.status(201);
+        res.send(JSON.stringify(attribute));
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
 };
 
 export let updateAttribute = (req: Request, res: Response) => {
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Attribute can not be empty"
+        });
+    }
   orchestrator.updateAttribute(req.params.attributeId, req.body)
     .subscribe(affected => {
         if(affected > 0) {
@@ -69,10 +69,10 @@ export let updateAttribute = (req: Request, res: Response) => {
             res.send(JSON.stringify(affected));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'Not Updated'}))
+            res.send(JSON.stringify({message: 'No Data Found for ' + req.params.attributeId}));
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
@@ -86,10 +86,10 @@ export let deleteAttribute = (req: Request, res: Response) => {
             res.send(JSON.stringify(affected));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'Not Deleted'}))
+            res.send(JSON.stringify({message: 'No Data Found for ' + req.params.attributeId}));
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
@@ -105,15 +105,10 @@ export let getAvailableAttributes = (req: Request, res: Response) => {
 
     orchestrator.getAvailableAttributes(number, size, field, direction, assignedArray)
         .subscribe(result => {
-            if(result.data.attributes.length > 0) {
-                res.status(200);
-                res.send(JSON.stringify(result.data));
-            }else {
-                res.status(404);
-                res.send(JSON.stringify({message: 'No Data Found'}));
-            }
+            res.status(200);
+            res.send(JSON.stringify(result.data));
         }, error => {
-            res.status(400);
+            res.status(500);
             res.send(JSON.stringify({message: 'Error Occurred'}));
             console.log(error);
         });
@@ -129,15 +124,10 @@ export let getAssignedAttributes = (req: Request, res: Response) => {
 
     orchestrator.getAssignedAttributes(number, size, field, direction, assignedArray)
         .subscribe(result => {
-            if(result.data.assetTypeClasses.length > 0) {
-                res.status(200);
-                res.send(JSON.stringify(result.data));
-            }else {
-                res.status(404);
-                res.send(JSON.stringify({message: 'No Data Found'}));
-            }
+            res.status(200);
+            res.send(JSON.stringify(result.data));
         }, error => {
-            res.status(400);
+            res.status(500);
             res.send(JSON.stringify({message: 'Error Occurred'}));
             console.log(error);
         });
@@ -148,15 +138,10 @@ export let getAssignedAttributesByClassId = (req: Request, res: Response) => {
 
     orchestrator.getAssignedAttributesByClassId(assetTypeClassId)
         .subscribe(assignedAttributes => {
-            if(assignedAttributes) {
-                res.status(200);
-                res.send(JSON.stringify(assignedAttributes));
-            }else {
-                res.status(404);
-                res.send(JSON.stringify({message: 'No Data Found'}))
-            }
+            res.status(200);
+            res.send(JSON.stringify(assignedAttributes));
         }, error => {
-            res.status(400);
+            res.status(500);
             res.send(JSON.stringify({message: 'Error Occurred'}));
             console.log(error);
         });

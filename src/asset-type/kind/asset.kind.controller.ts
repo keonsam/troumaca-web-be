@@ -8,10 +8,11 @@ export let getAssetKinds = (req: Request, res: Response) => {
   assetOrchestrator.getAssetKinds()
     .subscribe(assetKinds => {
       let body = JSON.stringify(shapeAssetKindResponse2("assetKinds", assetKinds));
+      res.status(200)
       res.send(body);
     }, error => {
-      res.status(400);
-      res.send(error);
+      res.status(500);
+      res.send(JSON.stringify({message: 'Error Occurred'}));
       console.log(error);
     });
 };

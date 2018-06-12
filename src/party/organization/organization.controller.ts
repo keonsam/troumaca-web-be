@@ -14,15 +14,10 @@ export  let getOrganizations = (req: Request, res: Response) => {
   organizationOrchestrator
     .getOrganizations(number, size, field, direction)
     .subscribe(result => {
-        if(result.data.organizations.length > 0) {
-            res.status(200);
-            res.send(JSON.stringify(result.data));
-        }else {
-            res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found'}));
-        }
+        res.status(200);
+        res.send(JSON.stringify(result.data));
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
@@ -38,10 +33,10 @@ export  let getOrganization = (req: Request, res: Response) => {
             res.send(JSON.stringify(organization));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found'}))
+            res.send(JSON.stringify({message: 'No Data Found For '+ req.params.partyId}));
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
@@ -49,18 +44,19 @@ export  let getOrganization = (req: Request, res: Response) => {
 
 export  let saveOrganization = (req: Request, res: Response) => {
   let organization = req.body;
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Organization can not be empty"
+        });
+    }
   organizationOrchestrator
     .saveOrganization(organization)
     .subscribe(organization => {
         if(organization) {
             res.status(201);
             res.send(JSON.stringify(organization));
-        }else {
-            res.status(204);
-            res.send(JSON.stringify({message: 'Not Saved'}))
-        }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
@@ -69,6 +65,11 @@ export  let saveOrganization = (req: Request, res: Response) => {
 export let updateOrganization = (req: Request, res: Response) => {
   let partyId = req.params.partyId;
   let organization = req.body;
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Organization can not be empty"
+        });
+    }
   organizationOrchestrator
     .updateOrganization(partyId, organization)
     .subscribe(affected => {
@@ -77,10 +78,10 @@ export let updateOrganization = (req: Request, res: Response) => {
             res.send(JSON.stringify(affected));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'Not Updated'}))
+            res.send(JSON.stringify({message: 'No Data Found For '+ req.params.partyId}));
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
@@ -97,10 +98,10 @@ export let deleteOrganization = (req: Request, res: Response) => {
                 res.send(JSON.stringify(affected));
             }else {
                 res.status(404);
-                res.send(JSON.stringify({message: 'Not Deleted'}))
+                res.send(JSON.stringify({message: 'No Data Found For '+ req.params.partyId}));
             }
         }, error => {
-            res.status(400);
+            res.status(500);
             res.send(JSON.stringify({message: 'Error Occurred'}));
             console.log(error);
         });

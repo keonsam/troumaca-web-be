@@ -64,7 +64,7 @@ export class ResourceOrchestrator {
             .switchMap((resourceTypes: ResourceType[]) => {
               resources.forEach(value => {
                 let index = resourceTypes.findIndex(x => x.resourceTypeId === value.resourceTypeId);
-                value.resourceType = resourceTypes[index];
+                value.resourceType = index !== -1 ? resourceTypes[index] : new ResourceType();
               });
               return this.resourceRepository
                 .getResourceCount()
@@ -80,21 +80,16 @@ export class ResourceOrchestrator {
   addResource(resource:Resource, resourcePermissions: ResourcePermission[]):Observable<Resource> {
     return this.resourceRepository.addResource(resource)
       .switchMap( value => {
-        if(resourcePermissions.length === 0) {
-          return Observable.of(value);
-        }
+        if(!value || resourcePermissions.length === 0) return Observable.of(value);
         let resourceId = value.resourceId;
-        if(resourceId) {
-          resourcePermissions.forEach(val => {
+        resourcePermissions.forEach(val => {
             val.resourceId = resourceId;
-          });
+        });
           return this.resourcePermissionRepository.addResourcePermission(resourcePermissions)
             .map( resourcePermissions => {
-              if(resourcePermissions.length > 0) {
+              if(!resourcePermissions) return new Resource();
                 return value;
-              }
             });
-        }
       });
   };
 
@@ -103,10 +98,8 @@ export class ResourceOrchestrator {
       .switchMap((resource:Resource) => {
         return this.resourceTypeRepository.getResourceTypeById(resource.resourceTypeId)
           .map(resourceType => {
-          if(resourceType) {
-            resource.resourceType = resourceType
-          }
-          return resource;
+              resource.resourceType = resourceType ? resourceType : new ResourceType();
+              return resource;
         });
       });
   };
@@ -114,22 +107,15 @@ export class ResourceOrchestrator {
   updateResource(resourceId:string, resource:Resource, resourcePermissions: ResourcePermission[]):Observable<number> {
     return this.resourceRepository.updateResource(resourceId, resource)
       .switchMap( numReplaced => {
-        if(resourcePermissions.length === 0) {
-          return Observable.of(numReplaced);
-        }
-        if(numReplaced) {
-          return this.resourcePermissionRepository.deleteResourcePermission(resourceId)
+        if(!numReplaced || resourcePermissions.length === 0) return Observable.of(numReplaced);
+        return this.resourcePermissionRepository.deleteResourcePermission(resourceId)
             .switchMap(numReplaced2 => {
-              if(numReplaced2) {
                 return this.resourcePermissionRepository.addResourcePermission(resourcePermissions)
                   .map( docs => {
-                    if(docs.length > 0) {
+                      if(!docs) return 0;
                       return numReplaced;
-                    }
                   });
-              }
             });
-        }
       });
   };
 

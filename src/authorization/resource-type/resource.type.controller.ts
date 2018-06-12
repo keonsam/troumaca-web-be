@@ -12,15 +12,10 @@ export let findResourceTypes = (req: Request, res: Response) => {
 
   orchestrator.findResourceTypes(searchStr, pageSize)
     .subscribe( resourceTypes => {
-        if (resourceTypes.length > 0) {
-            res.status(200);
-            res.send(JSON.stringify(resourceTypes));
-        } else {
-            res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found'}));
-        }
+        res.status(200);
+        res.send(JSON.stringify(resourceTypes));
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
@@ -35,17 +30,12 @@ export let getResourceTypes = (req: Request, res: Response) => {
   orchestrator
     .getResourceTypes(number, size, field, direction)
     .subscribe(result => {
-        if(result.data.resourceTypes.length > 0) {
-            res.status(200);
-            res.send(JSON.stringify(result.data));
-        }else {
-            res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found'}));
-        }
+        res.status(200);
+        res.send(JSON.stringify(result.data));
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
-
+        console.log(error);
     });
 };
 
@@ -59,27 +49,27 @@ export let getResourceTypeById = (req: Request, res: Response) => {
             res.send(JSON.stringify(resourceType));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found'}))
+            res.send(JSON.stringify({message: 'No Data Found For '+ req.params.resourceTypeId}));
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
 };
 
 export let saveResourceType = (req: Request, res: Response) => {
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Resource Type can not be empty"
+        });
+    }
   orchestrator.addResourceType(req.body)
     .subscribe(resourceType => {
-        if(resourceType) {
-            res.status(201);
-            res.send(JSON.stringify(resourceType));
-        }else {
-            res.status(204);
-            res.send(JSON.stringify({message: 'Not Saved'}))
-        }
+        res.status(201);
+        res.send(JSON.stringify(resourceType));
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
@@ -88,6 +78,11 @@ export let saveResourceType = (req: Request, res: Response) => {
 export let updateResourceType = (req: Request, res: Response) => {
   let resourceTypeId = req.params.resourceTypeId;
   let resourceType = req.body;
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Resource Type can not be empty"
+        });
+    }
   orchestrator
     .updateResourceType(resourceTypeId, resourceType)
     .subscribe(affected => {
@@ -96,10 +91,10 @@ export let updateResourceType = (req: Request, res: Response) => {
             res.send(JSON.stringify(affected));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'Not Updated'}))
+            res.send(JSON.stringify({message: 'No Data Found For '+ req.params.resourceTypeId}));
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
@@ -115,10 +110,10 @@ export let deleteResourceType = (req: Request, res: Response) => {
             res.send(JSON.stringify(affected));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'Not Deleted'}))
+            res.send(JSON.stringify({message: 'No Data Found For '+ req.params.resourceTypeId}));
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });

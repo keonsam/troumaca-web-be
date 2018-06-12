@@ -41,77 +41,53 @@ export class AssetTypeClassOrchestrator {
   getAssetTypeClass(assetTypeClassId:string):Observable<AssetTypeClassResponse> {
     return this.assetTypeClassRepository.getAssetTypeClassById(assetTypeClassId)
       .switchMap(assetTypeClass => {
-        if(!assetTypeClass) {
-          return Observable.of(null);
-        }else {
-          return this.attributeRepository.getAssignedAttributesById(assetTypeClassId)
+        if (!assetTypeClass) return Observable.of(undefined);
+        return this.attributeRepository.getAssignedAttributesById(assetTypeClassId)
             .map(assignedAttributes => {
-              if (assignedAttributes.length === 0) {
-                return new AssetTypeClassResponse(false);
-              } else {
-                return new AssetTypeClassResponse(true, assetTypeClass, assignedAttributes);
-              }
+              return new AssetTypeClassResponse(true, assetTypeClass, assignedAttributes);
             });
-        }
       });
   }
 
   saveAssetTypeClass(assetTypeClass:AssetTypeClass, assignedAttributes: AssignedAttribute[]):Observable<any> {
     return this.assetTypeClassRepository.saveAssetTypeClass(assetTypeClass)
       .switchMap((assetTypeClass:AssetTypeClass) => {
-        if(!assetTypeClass){
-          return Observable.of(assetTypeClass);
-        }else {
+        if(!assetTypeClass || assignedAttributes.length === 0) return Observable.of(assetTypeClass);
           assignedAttributes.forEach(value => {
             value.assetTypeClassId = assetTypeClass.assetTypeClassId;
           });
           return this.attributeRepository.saveAssignedAttributes(assignedAttributes)
             .map((newDoc:AssignedAttribute[]) => {
-              if (newDoc.length  === 0) {
-                // TODO do better error handling in the future
-                return new AssetTypeClass();
-              }else {
-                // return newDoc;
-                return assetTypeClass;
-              }
+              if (newDoc.length  === 0) return new AssetTypeClass();
+              return assetTypeClass;
           });
-        }
     });
   }
 
   updateAssetTypeClass(assetTypeClassId:string, assetTypeClass:AssetTypeClass, assignedAttribute: AssignedAttribute[]):Observable<number> {
     return this.assetTypeClassRepository.updateAssetTypeClass(assetTypeClassId, assetTypeClass)
       .switchMap(numReplaced => {
-        if(!numReplaced){
-          return Observable.of(numReplaced);
-        }else {
-          return this.attributeRepository.deleteAssignedAttribute(assetTypeClassId)
+        if(!numReplaced || assignedAttribute.length === 0) return Observable.of(numReplaced);
+        return this.attributeRepository.deleteAssignedAttribute(assetTypeClassId)
             .switchMap(numReplaced2 => {
-              if(!numReplaced2) {
-                return Observable.of(numReplaced2);
-              }else {
+              if(!numReplaced2) return Observable.of(numReplaced2);
                 return this.attributeRepository.saveAssignedAttributes(assignedAttribute)
                   .map( next => {
-                    if(next.length === 0){
-                      return 0;
-                    }else {
-                      return numReplaced2;
-                    }
+                    if(next.length === 0)return 0;
+                    return numReplaced2;
                   });
-              }
             });
-        }
       });
   }
 
     deleteAssetTypeClass(assetTypeClassId:string):Observable<number> {
         return this.assetTypeClassRepository.deleteAssetTypeClass(assetTypeClassId).
         switchMap(numRemoved => {
-            if(!numRemoved) {
-                return Observable.of(numRemoved);
-            }else {
-                return this.attributeRepository.deleteAssignedAttribute(assetTypeClassId);
-            }
+            if(!numRemoved) return Observable.of(numRemoved);
+            return this.attributeRepository.deleteAssignedAttribute(assetTypeClassId)
+                .map(numRemoved => {
+                    return numRemoved;
+                });
         });
     }
 

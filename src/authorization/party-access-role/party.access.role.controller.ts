@@ -20,23 +20,23 @@ let orchestrator:PartyAccessRoleOrchestrator = new PartyAccessRoleOrchestrator()
 // };
 //
 
-export let getPartyAccessRoles = (req: Request, res: Response) => {
-  orchestrator
-    .getPartyAccessRoles()
-    .subscribe(partyAccessRoles => {
-      res.send(JSON.stringify(partyAccessRoles));
-    });
-};
-
-export let getPartyAccessRoleById = (req: Request, res: Response) => {
-  let partyId = req.params.partyId;
-  orchestrator
-    .getPartyAccessRoleById(partyId)
-    .subscribe(partyAccessRoles => {
-      let body = JSON.stringify(partyAccessRoles);
-      res.send(body);
-    });
-};
+// export let getPartyAccessRoles = (req: Request, res: Response) => {
+//   orchestrator
+//     .getPartyAccessRoles()
+//     .subscribe(partyAccessRoles => {
+//       res.send(JSON.stringify(partyAccessRoles));
+//     });
+// };
+//
+// export let getPartyAccessRoleById = (req: Request, res: Response) => {
+//   let partyId = req.params.partyId;
+//   orchestrator
+//     .getPartyAccessRoleById(partyId)
+//     .subscribe(partyAccessRoles => {
+//       let body = JSON.stringify(partyAccessRoles);
+//       res.send(body);
+//     });
+// };
 
 // export let savePartyAccessRole = (req: Request, res: Response) => {
 //   let partyAccessRole = req.body.partyAccessRole;

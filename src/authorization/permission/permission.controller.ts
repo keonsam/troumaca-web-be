@@ -16,15 +16,10 @@ export let getPermissions = (req: Request, res: Response) => {
     orchestrator
         .getPermissions(number, size, field, direction)
         .subscribe(result => {
-            if(result.data.permissions.length > 0) {
-                res.status(200);
-                res.send(JSON.stringify(result.data));
-            }else {
-                res.status(404);
-                res.send(JSON.stringify({message: 'No Data Found'}));
-            }
+            res.status(200);
+            res.send(JSON.stringify(result.data));
         }, error => {
-            res.status(400);
+            res.status(500);
             res.send(JSON.stringify({message: 'Error Occurred'}));
 
         });
@@ -40,15 +35,10 @@ export let getPermissionsByArray = (req: Request, res: Response) => {
 
   orchestrator.getPermissionsByArray(number, size, field, direction, assignedArray)
     .subscribe(result => {
-        if(result.data.permissions.length > 0) {
-            res.status(200);
-            res.send(JSON.stringify(result.data));
-        }else {
-            res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found'}));
-        }
+        res.status(200);
+        res.send(JSON.stringify(result.data));
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
 
     });
@@ -64,15 +54,10 @@ export let getResourcePermissionsByArray = (req: Request, res: Response) => {
 
   orchestrator.getResourcePermissionsByArray(number, size, field, direction, assignedArray)
     .subscribe(result => {
-        if(result.data.permissions.length > 0) {
-            res.status(200);
-            res.send(JSON.stringify(result.data));
-        }else {
-            res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found'}));
-        }
+        res.status(200);
+        res.send(JSON.stringify(result.data));
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
 
     });
@@ -89,27 +74,27 @@ export let getPermissionById = (req: Request, res: Response) => {
             res.send(JSON.stringify(permission));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found'}))
+            res.send(JSON.stringify({message: 'No Data Found For ' + req.params.permissionId}));
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
 };
 
 export let savePermission = (req: Request, res: Response) => {
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Permission can not be empty"
+        });
+    }
   orchestrator.addPermission(req.body)
     .subscribe(permission => {
-        if(permission) {
-            res.status(201);
-            res.send(JSON.stringify(permission));
-        }else {
-            res.status(204);
-            res.send(JSON.stringify({message: 'Not Saved'}))
-        }
+        res.status(201);
+        res.send(JSON.stringify(permission));
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
@@ -118,6 +103,11 @@ export let savePermission = (req: Request, res: Response) => {
 export let updatePermission = (req: Request, res: Response) => {
   let permissionId = req.params.permissionId;
   let permission = req.body;
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Permission can not be empty"
+        });
+    }
   orchestrator
     .updatePermission(permissionId, permission)
     .subscribe(affected => {
@@ -126,10 +116,10 @@ export let updatePermission = (req: Request, res: Response) => {
             res.send(JSON.stringify(affected));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'Not Updated'}))
+            res.send(JSON.stringify({message: 'No Data Found For ' + req.params.permissionId}))
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
@@ -145,10 +135,10 @@ export let deletePermission = (req: Request, res: Response) => {
             res.send(JSON.stringify(affected));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'Not Deleted'}))
+            res.send(JSON.stringify({message: 'No Data Found For ' + req.params.permissionId}));
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });

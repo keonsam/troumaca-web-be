@@ -7,39 +7,43 @@ export let getPhotoById = (req: Request, res: Response) => {
   orchestrator
     .getPhotoById(req.params.partyId, req.params.type)
     .subscribe(photo => {
-      // let imageStr:string = photo ? photo.imageStr : "";
-        if(photo) {
+        if (photo) {
             res.status(200);
             res.send(JSON.stringify(photo));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found'}))
+            res.send(JSON.stringify({message: 'No Data Found For '+ req.params.partyId}));
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
 };
 
 export let savePhoto = (req: Request, res: Response) => {
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Photo can not be empty"
+        });
+    }
   orchestrator.savePhoto(req.params.partyId, req.params.type, req.body)
     .subscribe(photo => {
-        if(photo) {
-            res.status(201);
-            res.send(JSON.stringify(photo));
-        }else {
-            res.status(204);
-            res.send(JSON.stringify({message: 'Not Saved'}))
-        }
+        res.status(201);
+        res.send(JSON.stringify(photo));
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
 };
 
 export let updatePhoto = (req: Request, res: Response) => {
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Photo can not be empty"
+        });
+    }
   orchestrator
     .updatePhoto(req.params.partyId, req.params.type, req.body)
     .subscribe(affected => {
@@ -48,10 +52,10 @@ export let updatePhoto = (req: Request, res: Response) => {
             res.send(JSON.stringify(affected));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'Not Updated'}))
+            res.send(JSON.stringify({message: 'No Data Found For '+ req.params.partyId}));
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });

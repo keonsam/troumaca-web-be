@@ -46,8 +46,8 @@ export class AssetOrchestrator {
         return this.assetRepository
             .getAssets(number, size, sort)
             .switchMap((assets: Asset[]) => {
-                if (assets.length === 0) {
-                    let shapeAssetsResp: any = shapeAssetsResponse(assets, 0, 0, 0, 0, sort);
+                if (assets.length < 1) {
+                    let shapeAssetsResp: any = shapeAssetsResponse([], 0, 0, 0, 0, sort);
                     return Observable.of(new Result<any>(false, "no data found", shapeAssetsResp));
                 } else {
                     let assetKindIds:string[] = [];
@@ -78,11 +78,11 @@ export class AssetOrchestrator {
                                                                 let index3 = unitOfMeasures.findIndex(x => x.unitOfMeasureId === value.unitOfMeasureId);
                                                                 let index4 = persons.findIndex(x => x.partyId === value.personId);
                                                                 let index5 = sites.findIndex(x => x.siteId === value.siteId);
-                                                                value.assetKind = assetKinds[index];
-                                                                value.assetType = assetTypes[index2];
-                                                                value.unitOfMeasure = unitOfMeasures[index3];
-                                                                value.person = persons[index4];
-                                                                value.site = sites[index5];
+                                                                value.assetKind = index !== -1 ? assetKinds[index] : new AssetKind();
+                                                                value.assetType = index2 !== -1 ? assetTypes[index2] : new AssetType();
+                                                                value.unitOfMeasure = index3 !== -1 ? unitOfMeasures[index3] : new UnitOfMeasure();
+                                                                value.person = index4 !== -1 ? persons[index4] : new Person();
+                                                                value.site = index5 !== -1 ? sites[index5] : new Site();
                                                             });
                                                             return this.assetRepository
                                                                 .getAssetCount()
@@ -101,56 +101,43 @@ export class AssetOrchestrator {
 
     getAssetById(assetId:string):Observable<Asset> {
         return this.assetRepository.getAssetById(assetId)
-            .switchMap( (asset: Asset) => {
-                if(!asset) {
-                    return Observable.of(asset);
-                }else {
-                    return this.assetKindRepository.getAssetKindById(asset.assetKindId)
-                        .switchMap( assetKind => {
-                            if(assetKind) {
-                                asset.assetKind = assetKind;
-                            }
-                            return this.assetTypeRepository.getAssetTypeById(asset.assetTypeId)
-                                .switchMap( assetType => {
-                                    if(assetType){
-                                        asset.assetType = assetType;
-                                    }
-                                    return this.unitOfMeasureRepository.getUnitOfMeasureById(asset.unitOfMeasureId)
-                                        .switchMap(unitOfMeasure => {
-                                            if(unitOfMeasure) {
-                                                asset.unitOfMeasure = unitOfMeasure;
-                                            }
-                                            return this.userRepository.getPerson(asset.personId)
-                                                .switchMap(person => {
-                                                    if(person) {
-                                                        asset.person = person;
-                                                    }
-                                                    return this.siteRepository.getSiteById(asset.siteId)
-                                                        .map(site => {
-                                                            if(site) {
-                                                                asset.site = site;
-                                                            }
-                                                            return asset;
-                                                        });
-                                                });
-                                        });
-                                });
-                        });
-                }
+            .switchMap((asset: Asset) => {
+                if (!asset) return Observable.of(asset);
+                return this.assetKindRepository.getAssetKindById(asset.assetKindId)
+                    .switchMap(assetKind => {
+                        asset.assetKind = assetKind ? assetKind : new AssetKind();
+                        return this.assetTypeRepository.getAssetTypeById(asset.assetTypeId)
+                            .switchMap(assetType => {
+                                asset.assetType = assetType ? assetType : new AssetType();
+                                return this.unitOfMeasureRepository.getUnitOfMeasureById(asset.unitOfMeasureId)
+                                    .switchMap(unitOfMeasure => {
+                                        asset.unitOfMeasure = unitOfMeasure ? unitOfMeasure : new UnitOfMeasure();
+                                        return this.userRepository.getPerson(asset.personId)
+                                            .switchMap(person => {
+                                                asset.person = person ? person : new Person();
+                                                return this.siteRepository.getSiteById(asset.siteId)
+                                                    .map(site => {
+                                                        asset.site = site ? site : new Site();
+                                                        return asset;
+                                                    });
+                                            });
+                                    });
+                            });
+                    });
             });
     }
 
-  saveAsset(asset:Asset):Observable<Asset> {
-    return this.assetRepository.saveAsset(asset);
-  };
+    saveAsset(asset:Asset):Observable<Asset> {
+        return this.assetRepository.saveAsset(asset);
+    };
 
-  updateAsset(assetId:string, asset:Asset):Observable<number> {
-    return this.assetRepository.updateAsset(assetId, asset);
-  }
+    updateAsset(assetId:string, asset:Asset):Observable<number> {
+        return this.assetRepository.updateAsset(assetId, asset);
+    };
 
-  deleteAsset(assetId:string):Observable<number> {
-    return this.assetRepository.deleteAsset(assetId);
-  }
+    deleteAsset(assetId:string):Observable<number> {
+        return this.assetRepository.deleteAsset(assetId);
+    };
 
 }
 

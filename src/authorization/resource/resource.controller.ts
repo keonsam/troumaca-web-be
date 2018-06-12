@@ -15,17 +15,12 @@ export let getResourcesByArray = (req: Request, res: Response) => {
 
   orchestrator.getResourcesByArray(number, size, field, direction, assignedArray)
     .subscribe(result => {
-        if(result.data.resources.length > 0) {
-            res.status(200);
-            res.send(JSON.stringify(result.data));
-        }else {
-            res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found'}));
-        }
+        res.status(200);
+        res.send(JSON.stringify(result.data));
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
-
+        console.log(error);
     });
 
 };
@@ -40,17 +35,12 @@ export let getAssignedResourcesByArray = (req: Request, res: Response) => {
 
   orchestrator.getAssignedResourcesByArray(number, size, field, direction, assignedArray)
     .subscribe(result => {
-        if(result.data.resources.length > 0) {
-            res.status(200);
-            res.send(JSON.stringify(result.data));
-        }else {
-            res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found'}));
-        }
+        res.status(200);
+        res.send(JSON.stringify(result.data));
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
-
+        console.log(error);
     });
 };
 
@@ -63,17 +53,12 @@ export let getResources = (req: Request, res: Response) => {
   orchestrator
     .getResources(number, size, field, direction)
     .subscribe(result => {
-        if(result.data.resources.length > 0) {
-            res.status(200);
-            res.send(JSON.stringify(result.data));
-        }else {
-            res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found'}));
-        }
+        res.status(200);
+        res.send(JSON.stringify(result.data));
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
-
+        console.log(error);
     });
 };
 
@@ -87,10 +72,10 @@ export let getResourceById = (req: Request, res: Response) => {
             res.send(JSON.stringify(resource));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found'}))
+            res.send(JSON.stringify({message: 'No Data Found For' + req.params.resourceId}))
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
@@ -99,17 +84,17 @@ export let getResourceById = (req: Request, res: Response) => {
 export let saveResource = (req: Request, res: Response) => {
   let resource = req.body.resource;
   let resourcePermissions = req.body.resourcePermission;
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Resource can not be empty"
+        });
+    }
   orchestrator.addResource(resource, resourcePermissions)
     .subscribe(resource => {
-        if(resource) {
-            res.status(201);
-            res.send(JSON.stringify(resource));
-        }else {
-            res.status(204);
-            res.send(JSON.stringify({message: 'Not Saved'}))
-        }
+        res.status(201);
+        res.send(JSON.stringify(resource));
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
@@ -119,6 +104,11 @@ export let updateResource = (req: Request, res: Response) => {
   let resourceId = req.params.resourceId;
   let resource = req.body.resource;
   let resourcePermissions = req.body.resourcePermission;
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Resource can not be empty"
+        });
+    }
   orchestrator
     .updateResource(resourceId, resource, resourcePermissions)
     .subscribe(affected => {
@@ -127,10 +117,10 @@ export let updateResource = (req: Request, res: Response) => {
             res.send(JSON.stringify(affected));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'Not Updated'}))
+            res.send(JSON.stringify({message: 'No Data Found For' + req.params.resourceId}));
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
@@ -147,10 +137,10 @@ export let deleteResource = (req: Request, res: Response) => {
             res.send(JSON.stringify(affected));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'Not Deleted'}))
+            res.send(JSON.stringify({message: 'No Data Found For' + req.params.resourceId}));
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
