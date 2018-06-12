@@ -1,0 +1,22 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo Installing source NPM dependencies...
+      - npm install
+  build:
+    commands:
+      - echo Build started on `date`
+      - npm run build-ts
+  post_build:
+    commands:
+      - cp appspec.yml dist
+      - cp -r scripts dist
+      - cd dist
+      - tar -zcvf dev.tar.gz *
+      - mv dev.tar.gz ../
+      - echo Build completed on `date`
+artifacts:
+    files:
+        - dev.tar.gz
