@@ -12,7 +12,7 @@ phases:
   post_build:
     commands:
       - cp appspec.yml dist
-      - cp -r bin dist
+      - cp -r scripts dist
       - cd dist
       - tar -zcvf dev.tar.gz *
       - mv dev.tar.gz ../
