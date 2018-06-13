@@ -29,6 +29,11 @@ import * as organizationController from "./party/organization/organization.contr
 
 const router:Router = Router();
 
+router.get("/", (req, res, next) => {
+    res.json({
+        message: "Welcome to Troumaca API"
+    });
+});
 // asset-kind
 router.get("/asset-kinds", assetKindController.getAssetKinds);
 // unit-of-measure
