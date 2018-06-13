@@ -1,4 +1,3 @@
 #!/bin/sh
-source /home/ec2-user/.bash_profile
 cd /home/ec2-user/Troumaca-web-server
-forever stopall
+/usr/local/lib/node_modules/forever/bin/forever stopall
