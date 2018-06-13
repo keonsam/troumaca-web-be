@@ -13,16 +13,17 @@ let checkAccess = (req: Request, res: Response, next: NextFunction) => {
   let dev:boolean = true;
   // TODO: move this to its own file
   let openPaths:Array<string> = [
-    '/sessions/is-valid-session',
-    '/send-confirmation-codes',
-    '/get-confirmations-username',
-    '/verify-credentials-confirmations',
-    '/forgot-password',
-    '/authenticate',
-    '/validate-edit-username',
-    '/validate-username',
-    '/validate-password',
-    '/credentials'
+      "/",
+      '/sessions/is-valid-session',
+      '/send-confirmation-codes',
+      '/get-confirmations-username',
+      '/verify-credentials-confirmations',
+      '/forgot-password',
+      '/authenticate',
+      '/validate-edit-username',
+      '/validate-username',
+      '/validate-password',
+      '/credentials',
   ];
 
   // dev mode > no session id > view open page
