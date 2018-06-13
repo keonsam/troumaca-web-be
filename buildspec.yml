@@ -14,6 +14,7 @@ phases:
       - cp appspec.yml dist
       - cp -r node_modules dist
       - cp -r scripts dist
+      - cp properties.file dist
       - cd dist
       - zip -r troumaca-web-be.zip *
       - mv troumaca-web-be.zip ../
