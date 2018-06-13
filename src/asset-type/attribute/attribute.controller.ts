@@ -30,7 +30,7 @@ export let getAttributeById = (req: Request, res: Response) => {
                 res.send(JSON.stringify(attribute));
             }else {
                 res.status(404);
-                res.send(JSON.stringify({message: 'No Data Found for ' + req.params.attributeId}))
+                res.send(JSON.stringify({message: 'No Data Found For' + req.params.attributeId}))
             }
         }, error => {
             res.status(500);
@@ -69,7 +69,7 @@ export let updateAttribute = (req: Request, res: Response) => {
             res.send(JSON.stringify(affected));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found for ' + req.params.attributeId}));
+            res.send(JSON.stringify({message: 'No Data Found For' + req.params.attributeId}));
         }
     }, error => {
         res.status(500);
@@ -86,7 +86,7 @@ export let deleteAttribute = (req: Request, res: Response) => {
             res.send(JSON.stringify(affected));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found for ' + req.params.attributeId}));
+            res.send(JSON.stringify({message: 'No Data Found For' + req.params.attributeId}));
         }
     }, error => {
         res.status(500);

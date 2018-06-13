@@ -47,7 +47,7 @@ export let getAccessRoleById = (req: Request, res: Response) => {
             res.send(JSON.stringify(accessRoleResponse.toJson()));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found for ' + req.params.accessRoleId}));
+            res.send(JSON.stringify({message: 'No Data Found For ' + req.params.accessRoleId}));
         }
     }, error => {
         res.status(500);
@@ -92,7 +92,7 @@ export let updateAccessRole = (req: Request, res: Response) => {
             res.send(JSON.stringify(affected));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: {message: 'No Data Found for ' + req.params.accessRoleId}}));
+            res.send(JSON.stringify({message: {message: 'No Data Found For ' + req.params.accessRoleId}}));
         }
     }, error => {
         res.status(500);
@@ -111,7 +111,7 @@ export let deleteAccessRole = (req: Request, res: Response) => {
             res.send(JSON.stringify(affected));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: {message: 'No Data Found for ' + req.params.accessRoleId}}));
+            res.send(JSON.stringify({message: {message: 'No Data Found For ' + req.params.accessRoleId}}));
         }
     }, error => {
         res.status(500);
