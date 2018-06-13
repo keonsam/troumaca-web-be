@@ -15,6 +15,7 @@ phases:
       - cp -r node_modules dist
       - cp -r scripts dist
       - cp properties.file dist
+      - cp -r nedb dist
       - cd dist
       - zip -r troumaca-web-be.zip *
       - mv troumaca-web-be.zip ../
