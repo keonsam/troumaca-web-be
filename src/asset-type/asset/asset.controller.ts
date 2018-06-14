@@ -30,7 +30,7 @@ export let getAssetById = (req: Request, res: Response) => {
             res.send(JSON.stringify(assets));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found for ' + req.params.assetId}));
+            res.send(JSON.stringify({message: 'No Data Found For ' + req.params.assetId}));
         }
     }, error => {
         res.status(500);
@@ -69,7 +69,7 @@ export let updateAsset = (req: Request, res: Response) => {
             res.send(JSON.stringify(affected));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found for ' + req.params.assetId}));
+            res.send(JSON.stringify({message: 'No Data Found For ' + req.params.assetId}));
         }
     }, error => {
         res.status(500);
@@ -86,7 +86,7 @@ export let deleteAsset = (req: Request, res: Response) => {
             res.send(JSON.stringify(affected));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found for ' + req.params.assetId}));
+            res.send(JSON.stringify({message: 'No Data Found For ' + req.params.assetId}));
         }
     }, error => {
         res.status(500);

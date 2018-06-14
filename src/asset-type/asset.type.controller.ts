@@ -45,7 +45,7 @@ export let getAssetTypeById = (req: Request, res: Response) => {
             res.send(JSON.stringify(assetTypeResponse.toJson()));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found for '+ req.params.assetTypeId}))
+            res.send(JSON.stringify({message: 'No Data Found For '+ req.params.assetTypeId}))
         }
     }, error => {
         res.status(500);
@@ -84,7 +84,7 @@ export let updateAssetType = (req: Request, res: Response) => {
             res.send(JSON.stringify(affected));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found for '+ req.params.assetTypeId}));
+            res.send(JSON.stringify({message: 'No Data Found For '+ req.params.assetTypeId}));
         }
     }, error => {
         res.status(500);
@@ -102,7 +102,7 @@ export let deleteAssetType = (req: Request, res: Response) => {
             res.send(JSON.stringify(affected));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found for '+ req.params.assetTypeId}))
+            res.send(JSON.stringify({message: 'No Data Found For '+ req.params.assetTypeId}))
         }
     }, error => {
         res.status(500);
