@@ -28,8 +28,10 @@ function returnHost(origin:any) {
       return whitelist[index];
     }
 }
+const local = "http://localhost:4200";
+const server = "http://ec2-18-207-220-164.compute-1.amazonaws.com:4200";
 var corsOptions = {
-  origin: "http://ec2-18-207-220-164.compute-1.amazonaws.com:4200",
+  origin: server,
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
   credentials: true
 };

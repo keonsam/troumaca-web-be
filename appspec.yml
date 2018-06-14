@@ -4,3 +4,11 @@ files:
   - source: /
     destination: /home/ec2-user/Troumaca-web-server
 hooks:
+  AfterInstall:
+    - location: scripts/stop.sh
+      timeout: 300
+      runas: ec2-user
+  ApplicationStart:
+    - location: scripts/run.sh
+      timeout: 300
+      runas: ec2-user
