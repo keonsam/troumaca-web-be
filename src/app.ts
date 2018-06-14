@@ -29,7 +29,7 @@ function returnHost(origin:any) {
     }
 }
 var corsOptions = {
-  origin: "http://localhost:4200,http://ec2-18-207-220-164.compute-1.amazonaws.com:4200",
+  origin: "http://ec2-18-207-220-164.compute-1.amazonaws.com:4200",
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
   credentials: true
 };
