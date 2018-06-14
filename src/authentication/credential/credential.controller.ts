@@ -89,6 +89,7 @@ export let authenticate = (req: Request, res: Response) => {
     }
   credentialOrchestrator.authenticate(credential)
     .subscribe((authenticateResponse: AuthenticateResponse) => {
+        console.log(authenticateResponse);
       if (authenticateResponse && authenticateResponse.session && authenticateResponse.session.sessionId) {
         let sessionId = authenticateResponse.session.sessionId;
         // { path: '/', httpOnly: true, secure: false, maxAge: null }
