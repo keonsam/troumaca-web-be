@@ -31,7 +31,14 @@ function returnHost(origin:any) {
 const local = "http://localhost:4200";
 const server = "http://ec2-18-207-220-164.compute-1.amazonaws.com:4200";
 var corsOptions = {
-  origin: server,
+  origin: function (origin:any, callback:any) {
+      console.log(origin);
+      if (whitelist.indexOf(origin) !== -1) {
+          callback(null, true);
+      } else {
+          callback(new Error('Not allowed by CORS'));
+      }
+  },
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
   credentials: true
 };
