@@ -20,18 +20,10 @@ app.use(cookieParser());
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb',extended: false}));
 app.use(express.static(path.join(__dirname, "dist")));
-const whitelist = ["http://localhost:4200", "http://ec2-18-207-220-164.compute-1.amazonaws.com:4200"];
-function returnHost(origin:any) {
-    console.log(origin);
-    const index = whitelist.indexOf(origin);
-    if (index !== -1) {
-      return whitelist[index];
-    }
-}
-const local = "http://localhost:4200";
-const server = "http://ec2-18-207-220-164.compute-1.amazonaws.com:4200";
+const whitelist = ["http://localhost:4200", "http://ec2-18-207-220-164.compute-1.amazonaws.com:4200", "*.troumaca.com"];
+
 var corsOptions = {
-  origin: function (origin:any, callback:any) {
+  origin: function (origin: any, callback: any) {
       console.log(origin);
       if (whitelist.indexOf(origin) !== -1) {
           callback(null, true);

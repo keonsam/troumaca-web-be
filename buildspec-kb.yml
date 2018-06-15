@@ -16,9 +16,10 @@ phases:
       - cp -r scripts dist
       - cp properties.file dist
       - cp -r nedb dist
+      - cd dist
+      - zip -r troumaca-web-be.zip *
+      - mv troumaca-web-be.zip ../
       - echo Build completed on `date`
 artifacts:
     files:
-        - '**/*'
-    base-directory: 'dist*'
-    discard-paths: no
+      - troumaca-web-be.zip
