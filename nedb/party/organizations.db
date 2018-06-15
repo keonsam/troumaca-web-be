@@ -9,3 +9,4 @@
 {"purpose":"testing","name":"Tester","description":"","partyId":"7a1a0dd1-99bc-48ee-a84e-387d8883e8e3","_id":"hDQ0s5kavvikMNVt"}
 {"purpose":"SAAS","name":"Troumaca","description":"","partyId":"b2f6ba51-6efc-4e4d-82b1-59fcfd6d2aa0","_id":"v10bbTCmAzK8bxHq"}
 {"$$indexCreated":{"fieldName":"partyId","unique":true,"sparse":false}}
+{"purpose":"Asset Management","name":"Trouamca","description":"","partyId":"432c26b0-9d14-402d-a827-6b1b2000451a","_id":"Zb4W2CV1qEJN7Vgb"}
