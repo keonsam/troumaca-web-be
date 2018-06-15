@@ -4,9 +4,9 @@
 {"purpose":"Asset Management","name":"Troumaca","description":"","partyId":"46bf37eb-2626-4a7f-9fa7-d9e491d0d3b1","_id":"EInyk75H5UzNzNBu"}
 {"purpose":"Asset Management","name":"Troumaca","description":"","partyId":"fa58d96a-ad78-4cfc-a063-4429aaa6034d","_id":"HbxhNMvbIwklcUa2"}
 {"purpose":"Cloud Asset Management","name":"Troumaca","description":"","partyId":"3501ca69-65b7-44e1-bf9b-0b6d9bb7a9b8","_id":"JYskdBME5D2Eyz3e"}
+{"purpose":"Asset Management","name":"Trouamca","description":"","partyId":"432c26b0-9d14-402d-a827-6b1b2000451a","_id":"Zb4W2CV1qEJN7Vgb"}
 {"purpose":"Asset Management","name":"Troumaca","description":"","partyId":"18629467-57c0-4cae-a813-fbdee9eaa86e","_id":"coCDB3038g4b8B7Z"}
 {"partyId":"83e51087-cc18-4a91-93dd-62fc41f5d513","purpose":"Tech","name":"Microsoft","_id":"gR7lYXDcJe2EtsyJ"}
 {"purpose":"testing","name":"Tester","description":"","partyId":"7a1a0dd1-99bc-48ee-a84e-387d8883e8e3","_id":"hDQ0s5kavvikMNVt"}
 {"purpose":"SAAS","name":"Troumaca","description":"","partyId":"b2f6ba51-6efc-4e4d-82b1-59fcfd6d2aa0","_id":"v10bbTCmAzK8bxHq"}
 {"$$indexCreated":{"fieldName":"partyId","unique":true,"sparse":false}}
-{"purpose":"Asset Management","name":"Trouamca","description":"","partyId":"432c26b0-9d14-402d-a827-6b1b2000451a","_id":"Zb4W2CV1qEJN7Vgb"}
