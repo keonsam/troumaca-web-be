@@ -137,7 +137,7 @@ class SessionDBRepository implements SessionRepository {
       let now = new Date();
 
       return readExpirationDate  > now;
-    })
+    });
   }
 
   expireSession(sessionId:string): Observable<number> {
