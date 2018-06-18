@@ -29,6 +29,11 @@ import * as organizationController from "./party/organization/organization.contr
 
 const router:Router = Router();
 
+router.get("/", (req, res, next) => {
+    res.json({
+        message: "Welcome to Troumaca API"
+    });
+});
 // asset-kind
 router.get("/asset-kinds", assetKindController.getAssetKinds);
 
@@ -148,6 +153,7 @@ router.put("/credentials/:partyId", credentialController.updateCredential);
 router.post("/verify-credentials-confirmations", confirmationController.verifyCredentialConfirmation);
 router.get("/send-confirmation-codes/:confirmationId", confirmationController.sendPhoneVerificationCode);
 router.get("/get-confirmations-username/:credentialConfirmationId", confirmationController.getConfirmationsUsername);
+// session
 router.get("/sessions/current-user-session", sessionController.getSimpleSession);
 router.get("/sessions/is-valid-session", sessionController.isValidSession);
 router.get("/partyId", sessionController.getPartyId);

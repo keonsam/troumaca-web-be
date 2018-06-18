@@ -6,12 +6,18 @@ let confirmationOrchestrator:ConfirmationOrchestrator = new ConfirmationOrchestr
 // router.post("/verify-credentials-confirmations", function (req, res, next) {
 export let verifyCredentialConfirmation = (req: Request, res: Response) => {
   let credentialConfirmation = req.body;
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Confirmation can not be empty"
+        });
+    }
   confirmationOrchestrator.verifyCredentialConfirmation(credentialConfirmation)
     .subscribe(next => {
+      res.status(200);
       res.send(next);
     }, error => {
-      res.status(400);
-      res.send(error);
+      res.status(500);
+      res.send(JSON.stringify({message: 'Error Occurred'}));
       console.log(error);
     });
 };
@@ -21,9 +27,15 @@ export let sendPhoneVerificationCode = (req: Request, res: Response) => {
   let confirmationId = req.params.confirmationId;
   confirmationOrchestrator.sendPhoneVerificationCode(confirmationId)
     .subscribe(credentialConfirmation => {
-      res.send(JSON.stringify(credentialConfirmation));
+      if (credentialConfirmation) {
+          res.status(200);
+          res.send(JSON.stringify(credentialConfirmation));
+      } else {
+          res.status(404);
+          res.send(JSON.stringify({message: 'No Data Found For ' + req.params.confirmationId}));
+      }
     }, error => {
-      res.status(400);
+      res.status(500);
       res.send(error);
       console.log(error);
     });
@@ -33,9 +45,15 @@ export let getConfirmationsUsername = (req: Request, res: Response) => {
   let credentialConfirmationId = req.params.credentialConfirmationId;
   confirmationOrchestrator.getConfirmationsUsername(credentialConfirmationId)
     .subscribe(username => {
-      res.send(JSON.stringify(username));
+      if (username) {
+          res.status(200);
+          res.send(JSON.stringify(username));
+      }else {
+        res.status(404);
+        res.send(JSON.stringify({message: 'No Data Found For ' + req.params.credentialConfirmationId}));
+      }
     }, error => {
-      res.status(400);
+      res.status(500);
       res.send(error);
       console.log(error);
     });

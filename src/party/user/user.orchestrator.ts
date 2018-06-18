@@ -16,6 +16,7 @@ import {createPartyAccessRoleRepositoryFactory} from "../../authorization/party-
 import {UserResponse} from "./user.response";
 import {AccessRoleRepository} from "../../authorization/access-role/access.role.repository";
 import {createAccessRoleRepositoryFactory} from "../../authorization/access-role/access.role.repository.factory";
+import {AccessRole} from "../../authorization/access-role/access.role";
 
 export class UserOrchestrator {
 
@@ -62,7 +63,7 @@ export class UserOrchestrator {
                              if (accessRoles.length < 1) return new UserResponse(user, partyAccessRoles);
                               partyAccessRoles.forEach( value => {
                                   const index = accessRoles.findIndex(x => x.accessRoleId === value.accessRoleId);
-                                  value.accessRole = accessRoles[index];
+                                  value.accessRole = index !== -1 ? accessRoles[index] : new AccessRole();
                               });
                               return new UserResponse(user, partyAccessRoles);
                           });

@@ -46,7 +46,7 @@ export class AccessRoleOrchestrator {
             .switchMap((accessRoleTypes:AccessRoleType[]) => {
               accessRoles.forEach(value => {
                 let index = accessRoleTypes.findIndex(x => x.accessRoleTypeId === value.accessRoleTypeId);
-                value.accessRoleType = accessRoleTypes[index];
+                value.accessRoleType = index !== -1 ? accessRoleTypes[index] : new AccessRoleType();
               });
               return this.accessRoleRepository
                 .getAccessRoleCount()
@@ -77,44 +77,32 @@ export class AccessRoleOrchestrator {
 
   addAccessRole(accessRole:AccessRole, grants: Grant[]):Observable<AccessRole> {
     return this.accessRoleRepository.addAccessRole(accessRole)
-      .switchMap(doc => {
-        if(grants.length === 0) {
-          return Observable.of(doc);
-        }
-        if(doc) {
-          let accessRoleId = doc.accessRoleId;
+      .switchMap(accessRole => {
+          if (!accessRole || grants.length == 0) return Observable.of(accessRole);
+          let accessRoleId = accessRole.accessRoleId;
           grants.forEach(value => {
             value.accessRoleId = accessRoleId;
           });
           return this.grantRepository.addGrant(grants)
-            .map(docs => {
-              if(docs) {
-                return doc;
-              }
+            .map(grants => {
+              if( !grants) return new AccessRole();
+              return accessRole;
             });
-        }
       });
   };
 
   updateAccessRole(accessRoleId:string, accessRole:AccessRole, grants: Grant[]):Observable<number> {
     return this.accessRoleRepository.updateAccessRole(accessRoleId, accessRole)
       .switchMap(numUpdated => {
-        if(numUpdated) {
+          if(!numUpdated || grants.length === 0) return Observable.of(numUpdated);
           return this.grantRepository.deleteGrant(accessRoleId)
             .switchMap(numReplaced => {
-              if(grants.length === 0) {
-                return Observable.of(numUpdated);
-              }
-              if(numUpdated) {
                 return this.grantRepository.addGrant(grants)
-                  .map(docs => {
-                    if(docs) {
-                     return numUpdated;
-                    }
+                  .map(grants => {
+                    if (!grants) return 0;
+                    return numUpdated;
                   });
-              }
             });
-        }
       });
   };
 
@@ -124,12 +112,10 @@ export class AccessRoleOrchestrator {
         if(numReplaced){
           return this.grantRepository.deleteGrant(accessRoleId)
             .switchMap(numReplaced2 => {
-              if(numReplaced) {
                 return this.partyAccessRoleRepository.deletePartyAccessRoleByAccessRoleId(accessRoleId)
                   .map( numReplaced3 => {
                     return numReplaced;
                   });
-              }
             });
         }
         });

@@ -10,13 +10,8 @@ export let findAssetTypes = (req: Request, res: Response) => {
     let pageSize:number = req.query.pageSize;
     assetTypeOrchestrator.findAssetTypes(searchStr, pageSize)
         .subscribe(assetTypes => {
-            if (assetTypes.length > 0) {
-                res.status(200);
-                res.send(JSON.stringify(assetTypes));
-            } else {
-                res.status(404);
-                res.send(JSON.stringify({message: 'No Data Found'}));
-            }
+            res.status(200);
+            res.send(JSON.stringify(assetTypes));
         }, error => {
             res.status(400);
             res.send(JSON.stringify({message: 'Error Occurred'}));
@@ -33,13 +28,8 @@ export let getAssetTypes = (req: Request, res: Response) => {
 
   assetTypeOrchestrator.getAssetTypes(number, size, field, direction)
     .subscribe(result => {
-        if(result.data.assetTypes.length > 0) {
-            res.status(200);
-            res.send(JSON.stringify(result.data));
-        }else {
-            res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found'}));
-        }
+        res.status(200);
+        res.send(JSON.stringify(result.data));
     }, error => {
         res.status(400);
         res.send(JSON.stringify({message: 'Error Occurred'}));
@@ -55,33 +45,38 @@ export let getAssetTypeById = (req: Request, res: Response) => {
             res.send(JSON.stringify(assetTypeResponse.toJson()));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found'}))
+            res.send(JSON.stringify({message: 'No Data Found For '+ req.params.assetTypeId}))
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
 };
 
 export let saveAssetType = (req: Request, res: Response) => {
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Asset Type can not be empty"
+        });
+    }
     assetTypeOrchestrator.saveAssetType(req.body.assetType, req.body.values)
         .subscribe(assetType => {
-            if(assetType) {
-                res.status(201);
-                res.send(JSON.stringify(assetType));
-            }else {
-                res.status(204);
-                res.send(JSON.stringify({message: 'Not Saved'}))
-            }
+            res.status(201);
+            res.send(JSON.stringify(assetType));
         }, error => {
-            res.status(400);
+            res.status(500);
             res.send(JSON.stringify({message: 'Error Occurred'}));
             console.log(error);
         });
 };
 
 export let updateAssetType = (req: Request, res: Response) => {
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Asset Type can not be empty"
+        });
+    }
   assetTypeOrchestrator.updateAssetType(req.params.assetTypeId, req.body.assetType, req.body.values)
     .subscribe(affected => {
         if(affected > 0) {
@@ -89,10 +84,10 @@ export let updateAssetType = (req: Request, res: Response) => {
             res.send(JSON.stringify(affected));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'Not Updated'}))
+            res.send(JSON.stringify({message: 'No Data Found For '+ req.params.assetTypeId}));
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
@@ -107,10 +102,10 @@ export let deleteAssetType = (req: Request, res: Response) => {
             res.send(JSON.stringify(affected));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'Not Deleted'}))
+            res.send(JSON.stringify({message: 'No Data Found For '+ req.params.assetTypeId}))
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });

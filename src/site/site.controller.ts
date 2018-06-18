@@ -9,15 +9,10 @@ export let findSite = (req: Request, res: Response) => {
 
   siteOrchestrator.findSite(searchStr, pageSize)
       .subscribe(sites => {
-          if (sites.length > 0) {
-              res.status(200);
-              res.send(JSON.stringify(sites));
-          } else {
-              res.status(404);
-              res.send(JSON.stringify({message: 'No Data Found'}));
-          }
+          res.status(200);
+          res.send(JSON.stringify(sites));
       }, error => {
-          res.status(400);
+          res.status(500);
           res.send(JSON.stringify({message: 'Error Occurred'}));
           console.log(error);
       });

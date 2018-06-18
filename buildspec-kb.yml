@@ -1,0 +1,25 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo Installing source NPM dependencies...
+      - npm install
+  build:
+    commands:
+      - echo Build started on `date`
+      - npm run build-ts
+  post_build:
+    commands:
+      - cp appspec.yml dist
+      - cp -r node_modules dist
+      - cp -r scripts dist
+      - cp properties.file dist
+      - cp -r nedb dist
+      - cd dist
+      - zip -r troumaca-web-be.zip *
+      - mv troumaca-web-be.zip ../
+      - echo Build completed on `date`
+artifacts:
+    files:
+      - troumaca-web-be.zip

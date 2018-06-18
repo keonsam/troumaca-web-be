@@ -10,19 +10,20 @@ let checkAccess = (req: Request, res: Response, next: NextFunction) => {
   // console.log(req.baseUrl); // '/admin'
   // console.log(req.path); // '/new'
 
-  let dev:boolean = true;
+  const dev:boolean = true;
   // TODO: move this to its own file
-  let openPaths:Array<string> = [
-    '/sessions/is-valid-session',
-    '/send-confirmation-codes',
-    '/get-confirmations-username',
-    '/verify-credentials-confirmations',
-    '/forgot-password',
-    '/authenticate',
-    '/validate-edit-username',
-    '/validate-username',
-    '/validate-password',
-    '/credentials'
+  const openPaths:Array<string> = [
+      "/",
+      '/sessions/is-valid-session',
+      '/send-confirmation-codes',
+      '/get-confirmations-username',
+      '/verify-credentials-confirmations',
+      '/forgot-password',
+      '/authenticate',
+      '/validate-edit-username',
+      '/validate-username',
+      '/validate-password',
+      '/credentials',
   ];
 
   // dev mode > no session id > view open page
@@ -42,12 +43,12 @@ let checkAccess = (req: Request, res: Response, next: NextFunction) => {
     // this limit the url if you can think of a better regex let me know
     // let testRegex = /\/[a-z-]*\/[a-z-]*\/[a-z-]*/gi; // test the string not a pro
     // let matchRegex = /\/[a-z-]*\/[a-z-]*\//gi; // not good with regex if you can fix this that will be great
-    let matchRegex = /\/[a-z-]*\//gi;
-    if(originalPath.indexOf("send-confirmation-codes") !== -1 || originalPath.indexOf("get-confirmations-username") !== -1 ) {
+    const matchRegex = /\/[a-z-]*\//gi;
+    if (originalPath.indexOf("send-confirmation-codes") !== -1 || originalPath.indexOf("get-confirmations-username") !== -1 ) {
       originalPath = originalPath.match(matchRegex)[0].slice(0, -1);
     }
 
-    if(openPaths.indexOf(originalPath) !== -1) {
+    if (openPaths.indexOf(originalPath) !== -1) {
       return true;
     }else {
       return false;
@@ -80,7 +81,6 @@ let checkAccess = (req: Request, res: Response, next: NextFunction) => {
       res.status(401);
       res.send( "Cannot access this resource without a session...");
     }
-  //};
 };
 
 export default checkAccess;

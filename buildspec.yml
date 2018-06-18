@@ -12,11 +12,13 @@ phases:
   post_build:
     commands:
       - cp appspec.yml dist
+      - cp -r node_modules dist
       - cp -r scripts dist
-      - cd dist
-      - tar -zcvf dev.tar.gz *
-      - mv dev.tar.gz ../
+      - cp properties.file dist
+      - cp -r nedb dist
       - echo Build completed on `date`
 artifacts:
     files:
-        - dev.tar.gz
+        - '**/*'
+    base-directory: 'dist*'
+    discard-paths: no

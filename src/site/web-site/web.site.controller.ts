@@ -14,15 +14,10 @@ export let getWebSites = (req: Request, res: Response) => {
   orchestrator
     .getWebSites(number, size, field, direction)
     .subscribe(result => {
-        if(result.data.webSites.length > 0) {
-            res.status(200);
-            res.send(JSON.stringify(result.data));
-        }else {
-            res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found'}));
-        }
+        res.status(200);
+        res.send(JSON.stringify(result.data));
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
@@ -38,10 +33,10 @@ export let getWebSiteById = (req: Request, res: Response) => {
             res.send(JSON.stringify(webSite));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found'}))
+            res.send(JSON.stringify({message: 'No Data Found For ' + req.params.siteId}))
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
@@ -49,6 +44,11 @@ export let getWebSiteById = (req: Request, res: Response) => {
 };
 
 export let saveWebSite = (req: Request, res: Response) => {
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Web Site can not be empty"
+        });
+    }
   orchestrator.saveWebSite(req.body)
     .subscribe(webSite => {
         if(webSite) {
@@ -59,7 +59,7 @@ export let saveWebSite = (req: Request, res: Response) => {
             res.send(JSON.stringify({message: 'Not Saved'}))
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
@@ -68,6 +68,11 @@ export let saveWebSite = (req: Request, res: Response) => {
 export let updateWebSite = (req: Request, res: Response) => {
   let siteId = req.params.siteId;
   let webSite = req.body;
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Web Site can not be empty"
+        });
+    }
   orchestrator
     .updateWebSite(siteId, webSite)
     .subscribe(affected => {
@@ -76,10 +81,10 @@ export let updateWebSite = (req: Request, res: Response) => {
             res.send(JSON.stringify(affected));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'Not Updated'}))
+            res.send(JSON.stringify({message: 'No Data Found For ' + req.params.siteId}))
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
@@ -95,10 +100,10 @@ export let deleteWebSite = (req: Request, res: Response) => {
             res.send(JSON.stringify(affected));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'Not Deleted'}))
+            res.send(JSON.stringify({message: 'No Data Found For ' + req.params.siteId}))
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });

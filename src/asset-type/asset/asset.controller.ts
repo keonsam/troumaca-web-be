@@ -13,15 +13,10 @@ export let getAssets = (req: Request, res: Response) => {
 
   assetOrchestrator.getAssets(number, size, field, direction)
     .subscribe(result => {
-        if(result.data.assets.length > 0) {
-            res.status(200);
-            res.send(JSON.stringify(result.data));
-        }else {
-            res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found'}));
-        }
+        res.status(200);
+        res.send(JSON.stringify(result.data));
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
@@ -35,25 +30,25 @@ export let getAssetById = (req: Request, res: Response) => {
             res.send(JSON.stringify(assets));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found'}))
+            res.send(JSON.stringify({message: 'No Data Found For ' + req.params.assetId}));
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(error);
         console.log(error);
     });
 };
 
 export let saveAsset = (req: Request, res: Response) => {
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Asset can not be empty"
+        });
+    }
     assetOrchestrator.saveAsset(req.body)
         .subscribe(assets => {
-            if(assets) {
-                res.status(201);
-                res.send(JSON.stringify(assets));
-            }else {
-                res.status(204);
-                res.send(JSON.stringify({message: 'Not Saved'}))
-            }
+            res.status(201);
+            res.send(JSON.stringify(assets));
         }, error => {
             res.status(400);
             res.send(JSON.stringify({message: 'Error Occurred'}));
@@ -62,17 +57,22 @@ export let saveAsset = (req: Request, res: Response) => {
 };
 
 export let updateAsset = (req: Request, res: Response) => {
-  assetOrchestrator.updateAsset(req.params.assetId, req.body)
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Asset content can not be empty"
+        });
+    }
+    assetOrchestrator.updateAsset(req.params.assetId, req.body)
     .subscribe(affected => {
         if(affected > 0) {
             res.status(200);
             res.send(JSON.stringify(affected));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'Not Updated'}))
+            res.send(JSON.stringify({message: 'No Data Found For ' + req.params.assetId}));
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
@@ -81,15 +81,15 @@ export let updateAsset = (req: Request, res: Response) => {
 export let deleteAsset = (req: Request, res: Response) => {
   assetOrchestrator.deleteAsset(req.params.assetId)
     .subscribe(affected => {
-        if(affected > 0) {
+        if (affected > 0) {
             res.status(200);
             res.send(JSON.stringify(affected));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'Not Deleted'}))
+            res.send(JSON.stringify({message: 'No Data Found For ' + req.params.assetId}));
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });

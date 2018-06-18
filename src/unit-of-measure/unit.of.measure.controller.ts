@@ -8,13 +8,14 @@ export let findUnitOfMeasure = (req: Request, res: Response) => {
   let pageSize:number = req.query.pageSize;
 
   unitOfMeasureOrchestrator.findUnitOfMeasure(searchStr,pageSize)
-    .map(value => {
-      return value // upgraded to new method
-    }).subscribe(unitOfMeasures => {
+    .subscribe(unitOfMeasures => {
     let body = JSON.stringify(unitOfMeasures);
+    res.status(200);
     res.send(body);
   }, error => {
-    res.send(JSON.stringify(error));
+      res.status(500);
+    res.send(JSON.stringify({message: 'Error Occurred'}));
+    console.log(error);
   });
 
 };

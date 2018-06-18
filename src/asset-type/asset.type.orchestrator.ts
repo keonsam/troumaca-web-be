@@ -46,8 +46,8 @@ export class AssetTypeOrchestrator {
           let assetTypeClassIds:string[] = [];
           let unitOfMeasureIds:string[] = [];
           assetTypes.forEach(value => {
-            if(value.assetTypeClassId) assetTypeClassIds.push(value.assetTypeClassId);
-            if(value.unitOfMeasureId) unitOfMeasureIds.push(value.unitOfMeasureId);
+            if (value.assetTypeClassId) assetTypeClassIds.push(value.assetTypeClassId);
+            if (value.unitOfMeasureId) unitOfMeasureIds.push(value.unitOfMeasureId);
           });
           return this.assetTypeClassRepository.getAssetTypeClassByIds(assetTypeClassIds)
             .switchMap((assetTypeClasses:AssetTypeClass[]) => {
@@ -56,8 +56,8 @@ export class AssetTypeOrchestrator {
                   assetTypes.forEach(value => {
                     let index = assetTypeClasses.findIndex(x => x.assetTypeClassId === value.assetTypeClassId);
                     let index2 = unitOfMeasures.findIndex(x => x.unitOfMeasureId === value.unitOfMeasureId);
-                    value.assetTypeClass = assetTypeClasses[index];
-                    value.unitOfMeasure = unitOfMeasures[index2];
+                    value.assetTypeClass = index !== -1 ? assetTypeClasses[index] : new AssetTypeClass();
+                    value.unitOfMeasure = index2 !== -1 ? unitOfMeasures[index2] : new UnitOfMeasure();
                   });
                   return this.assetTypeRepository
                     .getAssetTypeCount()
@@ -75,23 +75,19 @@ export class AssetTypeOrchestrator {
     return this.assetTypeRepository.getAssetTypeById(assetTypeId)
       .switchMap((assetType: AssetType) => {
         if (!assetType) {
-          return Observable.of(null);
+          return Observable.of(undefined);
         } else {
           return this.assetTypeClassRepository.getAssetTypeClassById(assetType.assetTypeClassId)
             .switchMap(assetTypeClass => {
                 assetType.assetTypeClass = new AssetTypeClass();
-              if (assetTypeClass) {
-                assetType.assetTypeClass = assetTypeClass;
-              }
+              if (assetTypeClass) assetType.assetTypeClass = assetTypeClass;
               return this.unitOfMeasureRepository.getUnitOfMeasureById(assetType.unitOfMeasureId)
                 .switchMap(unitOfMeasure => {
                     assetType.unitOfMeasure = new UnitOfMeasure();
-                  if (unitOfMeasure) {
-                    assetType.unitOfMeasure = unitOfMeasure;
-                  }
+                  if (unitOfMeasure) assetType.unitOfMeasure = unitOfMeasure;
                   return this.valueRepository.getValuesByAssetTypeId(assetType.assetTypeId)
                       .map((values:Value[]) => {
-                          return new AssetTypeResponse(assetType,values);
+                          return new AssetTypeResponse(assetType, values);
                       });
                 });
             });
@@ -102,7 +98,7 @@ export class AssetTypeOrchestrator {
   saveAssetType(assetType:AssetType, values: Value[]):Observable<AssetType> {
       return this.assetTypeRepository.saveAssetType(assetType)
           .switchMap(assetType => {
-              if(!assetType || values.length < 1) Observable.of(assetType);
+              if (!assetType || values.length < 1) Observable.of(assetType);
               values.forEach(value => {
                  value.assetTypeId = assetType.assetTypeId;
               });

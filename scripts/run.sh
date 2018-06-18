@@ -3,7 +3,5 @@
 set -e
 
 source /home/ec2-user/.bash_profile
-
-cd /home/ec2-user/app
-/usr/local/bin/npm install > /home/ec2-user/npm_install.log
-/usr/local/bin/forever start server.js
+cd /home/ec2-user/Troumaca-web-server
+~/.nvm/versions/node/v10.4.0/bin/forever start server.js

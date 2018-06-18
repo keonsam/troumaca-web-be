@@ -11,15 +11,10 @@ export let findAccessRoleTypes = (req: Request, res: Response) => {
 
   orchestrator.findAccessRoleTypes(searchStr, pageSize)
     .subscribe( accessRoleTypes => {
-        if (accessRoleTypes.length > 0) {
-            res.status(200);
-            res.send(JSON.stringify(accessRoleTypes));
-        } else {
-            res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found'}));
-        }
+        res.status(200);
+        res.send(JSON.stringify(accessRoleTypes));
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
@@ -34,15 +29,10 @@ export let getAccessRoleTypes = (req: Request, res: Response) => {
   orchestrator
     .getAccessRoleTypes(number, size, field, direction)
     .subscribe(result => {
-        if(result.data.accessRoleTypes.length > 0) {
-            res.status(200);
-            res.send(JSON.stringify(result.data));
-        }else {
-            res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found'}));
-        }
+        res.status(200);
+        res.send(JSON.stringify(result.data));
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
 
     });
@@ -58,27 +48,27 @@ export let getAccessRoleTypeById = (req: Request, res: Response) => {
             res.send(JSON.stringify(accessRoleType));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found'}))
+            res.send(JSON.stringify({message: 'No Data Found For '+ req.params.accessRoleTypeId}));
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
 };
 
 export let saveAccessRoleType = (req: Request, res: Response) => {
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Access Role Type can not be empty"
+        });
+    }
   orchestrator.addAccessRoleType(req.body)
     .subscribe(accessRoleType => {
-        if(accessRoleType) {
-            res.status(201);
-            res.send(JSON.stringify(accessRoleType));
-        }else {
-            res.status(204);
-            res.send(JSON.stringify({message: 'Not Saved'}))
-        }
+        res.status(201);
+        res.send(JSON.stringify(accessRoleType));
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
@@ -87,6 +77,11 @@ export let saveAccessRoleType = (req: Request, res: Response) => {
 export let updateAccessRoleType = (req: Request, res: Response) => {
   let accessRoleTypeId = req.params.accessRoleTypeId;
   let accessRoleType = req.body;
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Access Role Type can not be empty"
+        });
+    }
   orchestrator
     .updateAccessRoleType(accessRoleTypeId, accessRoleType)
     .subscribe(affected => {
@@ -95,10 +90,10 @@ export let updateAccessRoleType = (req: Request, res: Response) => {
             res.send(JSON.stringify(affected));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'Not Updated'}))
+            res.send(JSON.stringify({message: 'No Data Found For '+ req.params.accessRoleTypeId}));
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
@@ -114,10 +109,10 @@ export let deleteAccessRoleType = (req: Request, res: Response) => {
             res.send(JSON.stringify(affected));
         }else {
             res.status(404);
-            res.send(JSON.stringify({message: 'Not Deleted'}))
+            res.send(JSON.stringify({message: 'No Data Found For '+ req.params.accessRoleTypeId}));
         }
     }, error => {
-        res.status(400);
+        res.status(500);
         res.send(JSON.stringify({message: 'Error Occurred'}));
         console.log(error);
     });
