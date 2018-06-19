@@ -13,7 +13,8 @@ import {ConfirmationRepository} from "./confirmation/confirmation.repository";
 import {CredentialConfirmation} from "./confirmation/credential.confirmation";
 import {AuthenticateResponse} from "./authenticate.response";
 import {Result} from "../../result.success";
-import {RepositoryKind} from "../../repository.kind";
+import "rxjs/add/operator/map";
+import {ValidatedUsername} from "./confirmation/validated.username";
 
 export class CredentialOrchestrator {
 
@@ -28,20 +29,14 @@ export class CredentialOrchestrator {
     this.confirmationRepository = createCredentialConfirmationRepositoryFactory();
   }
 
-  isValidUsername(credential:Credential):Observable<ValidateResponse> {
+  isValidUsername(credential:Credential):Observable<boolean> {
     return this.credentialRepository
-    .isValidUsername(credential.username)
-    .map(valid => {
-      return new ValidateResponse(valid);
-    });
+    .isValidUsername(credential.username);
   };
 
-  isValidPassword(credential:Credential):Observable<ValidateResponse> {
+  isValidPassword(credential:Credential):Observable<boolean> {
     return this.credentialRepository
-    .isValidPassword(credential.password)
-    .map(valid => {
-      return new ValidateResponse(valid);
-    });
+    .isValidPassword(credential.password);
   };
 
   forgotPassword(username:string):Observable<ValidateResponse> {

@@ -2,6 +2,7 @@ import {Observable} from "rxjs/Observable";
 import {Credential} from './credential';
 import {Result} from "../../result.success";
 import {CredentialConfirmation} from "./confirmation/credential.confirmation";
+import {ValidatedUsername} from "./confirmation/validated.username";
 
 export interface CredentialRepository {
 

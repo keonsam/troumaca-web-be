@@ -224,4 +224,9 @@ fabric.properties
 # Editor-based Rest Client
 .idea/httpRequests
 
+web-be-tests
+
+/web-be-tests/node_modules
+/web-be-tests/test-result
+
 *.iml
