@@ -40,13 +40,15 @@ export class AccountOrchestrator {
                       return this.userRepository.saveUser(user)
                           .switchMap(newUser => {
                               if (!newUser) return Observable.of(new AccountResponse(false));
-                              return this.credentialRepository.updateCredentialPartyId(credentialId, newUser.partyId)
+                              const partyId = newUser.partyId;
+                              return this.credentialRepository.updateCredentialPartyId(credentialId, partyId)
                                   .switchMap(numReplaced => {
                                       if (!numReplaced) return Observable.of(new AccountResponse(false));
-                                      return this.sessionRepository.updateSessionPartyId(sessionId, newUser.partyId)
+                                      return this.sessionRepository.updateSessionPartyId(sessionId, partyId)
                                           .switchMap(numReplaced => {
                                               if (!numReplaced) return Observable.of(new AccountResponse(false));
                                               if (!organization) return Observable.of(new AccountResponse(true, newUser));
+                                              organization.partyId = partyId;
                                               return this.organizationRepository.saveOrganization(organization)
                                                   .map(newOrganization => {
                                                       if (!newOrganization) return new AccountResponse(false);
