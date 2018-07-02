@@ -1,7 +1,5 @@
 import {Request, Response} from "express";
 import {AccountOrchestrator} from "./account.orchestrator";
-import {User} from "./user/user";
-import {Organization} from "./organization/organization";
 
 let accountOrchestrator:AccountOrchestrator = new AccountOrchestrator();
 
