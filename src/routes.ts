@@ -29,7 +29,7 @@ import * as organizationController from "./party/organization/organization.contr
 
 const router:Router = Router();
 
-router.get("/", (req, res, next) => {
+router.get("/", (req, res) => {
     res.json({
         message: "Welcome to Troumaca API"
     });
