@@ -7,8 +7,8 @@ import {RepositoryKind} from "../repository.kind";
 import {Observer} from "rxjs/Observer";
 
 class DataTypeDBRepository implements DataTypeRepository {
-  getDataTypes():Observable<DataType> {
-    return Rx.Observable.create(function (observer:Observer<DataType>) {
+  getDataTypes():Observable<DataType[]> {
+    return Rx.Observable.create(function (observer:Observer<DataType[]>) {
       dataTypes.find({}, function (err:any, doc:any) {
         if (!err) {
           observer.next(doc);
@@ -36,7 +36,7 @@ class DataTypeDBRepository implements DataTypeRepository {
 }
 
 class DataTypeRestRepository implements DataTypeRepository {
-  getDataTypes(): Observable<DataType> {
+  getDataTypes(): Observable<DataType[]> {
     return undefined;
   }
 

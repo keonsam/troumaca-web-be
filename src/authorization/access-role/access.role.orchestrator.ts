@@ -41,7 +41,7 @@ export class AccessRoleOrchestrator {
           let shapeAccessRolesResp:any = shapeAccessRolesResponse(accessRoles, 0, 0, 0, 0, sort);
           return Observable.of(new Result<any>(false, "no data found", shapeAccessRolesResp));
         }else {
-          let accessRoleTypeIds:string[] = accessRoles.map(x => {if(x.accessRoleTypeId) return x.accessRoleTypeId});
+          let accessRoleTypeIds:string[] = accessRoles.map(x => {if (x.accessRoleTypeId) return x.accessRoleTypeId});
           return this.accessRoleTypeRepository.getAccessRoleTypeByIds(accessRoleTypeIds)
             .switchMap((accessRoleTypes:AccessRoleType[]) => {
               accessRoles.forEach(value => {

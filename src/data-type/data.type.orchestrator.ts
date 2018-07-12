@@ -11,7 +11,7 @@ export class DataTypeOrchestrator {
     this.dataTypeRepository = createDataTypeRepository();
   }
 
-  getDataTypes():Observable<DataType> {
+  getDataTypes():Observable<DataType[]> {
     return this.dataTypeRepository.getDataTypes();
   }
 
