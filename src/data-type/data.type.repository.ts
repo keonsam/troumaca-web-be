@@ -3,7 +3,7 @@ import {Observable} from "rxjs/Observable";
 
 export interface DataTypeRepository {
 
-  getDataTypes():Observable<DataType>;
+  getDataTypes():Observable<DataType[]>;
 
   getDataTypeByIds(dataTypeIds: string[]): Observable<DataType[]>;
 

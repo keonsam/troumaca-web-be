@@ -73,6 +73,12 @@ class AssetDBRepository implements AssetRepository {
   };
 
   updateAsset(assetId:string, asset:Asset):Observable<number> {
+    if(asset.assetKindId === "65694257-0aa8-4fb6-abb7-e6c7b83cf4f2") {
+      asset.serialNumber = undefined;
+    } else {
+      asset.quantity = undefined;
+      asset.unitOfMeasureId = undefined;
+    }
     return Rx.Observable.create(function (observer:Observer<number>) {
       let query = {
         "assetId":assetId
@@ -84,7 +90,7 @@ class AssetDBRepository implements AssetRepository {
           observer.error(err);
         }
         observer.complete();
-      })
+      });
     });
   };
 
