@@ -3,6 +3,7 @@ import {Credential} from './credential';
 import {Result} from "../../result.success";
 import {CredentialConfirmation} from "./confirmation/credential.confirmation";
 import {ValidatedUsername} from "./confirmation/validated.username";
+import {AuthenticatedCredential} from "./authenticated.credential";
 
 export interface CredentialRepository {
 
@@ -18,7 +19,8 @@ export interface CredentialRepository {
 
   getSanitizeCredentialByUsername(credentialId:string):Observable<Credential>;
 
-  authenticate(credential:Credential):Observable<Result<Credential>>;
+  //authenticate(credential:Credential, options:any):Observable<Result<AuthenticatedCredential>>;
+  authenticate(credential:Credential, options:any):Observable<AuthenticatedCredential>;
 
   checkUsernameValid(partyId:string, username:string):Observable<Credential>;
 
@@ -35,5 +37,7 @@ export interface CredentialRepository {
   updateCredentialPartyId(credentialId: string, partyId: string): Observable<number>;
 
   deleteCredentialByPartyId(partyId:string): Observable<number>;
+
+  deleteCredentialById(credentialId:string, options?:any): Observable<number>;
 
 }

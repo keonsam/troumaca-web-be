@@ -83,6 +83,10 @@ class SessionDBRepository implements SessionRepository {
     });
   };
 
+  getOrCreate(session: Session): Observable<Session> {
+    return this.addSession(session);
+  }
+
   updateSession(sessionId:string, session:Session):Observable<number> {
     return Rx.Observable.create(function (observer:Observer<number>) {
       let query = {
@@ -160,7 +164,12 @@ class SessionDBRepository implements SessionRepository {
 }
 
 class SessionRestRepository implements SessionRepository {
+
   addSession(session:Session): Observable<Session> {
+    return undefined;
+  }
+
+  getOrCreate(session: Session): Observable<Session> {
     return undefined;
   }
 

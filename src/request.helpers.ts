@@ -35,7 +35,7 @@ export function postJsonOptions(uri: any, headers: any, json: any) {
   }
 
   return {
-    uri:uri,
+    uri: uri,
     method: "POST",
     headers: headers,
     json: json

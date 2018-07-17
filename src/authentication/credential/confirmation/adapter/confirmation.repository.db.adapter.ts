@@ -29,6 +29,14 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
     });
   };
 
+  confirmCode(confirmationId:string, credentialId:string, options?:any):Observable<boolean> {
+    throw new Error();
+  }
+
+  resendConfirmCode(confirmationId: string, credentialId: string, options?: any): Observable<boolean> {
+    return undefined;
+  }
+
   getCredentialConfirmationByCode(credentialConfirmationId:string, confirmationCode:string):Observable<CredentialConfirmation> {
     return Rx.Observable.create(function (observer:Observer<CredentialConfirmation>) {
       let query1 = {

@@ -1,4 +1,5 @@
 import {Router} from "express";
+import bodyParser from "body-parser";
 
 import * as assetController from "./asset-type/asset/asset.controller";
 import * as attributeController from "./asset-type/attribute/attribute.controller";
@@ -28,6 +29,8 @@ import * as assetTypeController from "./asset-type/asset.type.controller";
 import * as organizationController from "./party/organization/organization.controller";
 
 const router:Router = Router();
+const jsonParser = bodyParser.json({ type: 'application/json'});
+// const jsonParser = bodyParser.json();
 
 router.get("/", (req, res, next) => {
     res.json({
@@ -142,14 +145,15 @@ router.put("/photos/:type/:partyId", photoController.updatePhoto);
 router.post("/accounts", accountController.saveAccount);
 
 // authentication
-router.post("/validate-password", credentialController.isValidPassword);
-router.post("/validate-username", credentialController.isValidUsername);
+router.post("/validate-password", jsonParser, credentialController.isValidPassword);
+router.post("/validate-username", jsonParser, credentialController.isValidUsername);
 // Todo: Check into why this is needed
 router.post("/validate-edit-username", credentialController.isValidEditUsername);
 router.post("/authenticate", credentialController.authenticate);
 router.post("/forgot-password", credentialController.forgotPassword);
 router.post("/credentials", credentialController.addCredential);
 router.put("/credentials/:partyId", credentialController.updateCredential);
+router.delete("/credentials/:credentialId", credentialController.deleteCredential);
 router.post("/verify-credentials-confirmations", confirmationController.verifyCredentialConfirmation);
 router.get("/send-confirmation-codes/:confirmationId", confirmationController.sendPhoneVerificationCode);
 router.get("/get-confirmations-username/:credentialConfirmationId", confirmationController.getConfirmationsUsername);

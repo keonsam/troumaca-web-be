@@ -69,6 +69,14 @@ export class ConfirmationOrchestrator {
       });
   };
 
+  confirmCode(confirmationId:string, credentialId:string, options?:any):Observable<boolean> {
+    return this.confirmationRepository.confirmCode(confirmationId, credentialId, options);
+  }
+
+  resendConfirmCode(confirmationId:string, credentialId:string, options?:any):Observable<CredentialConfirmation> {
+    return this.confirmationRepository.resendConfirmCode(confirmationId, credentialId, options);
+  }
+
   confirmationCodeTimeHasExpired(credentialConfirmation:CredentialConfirmation):boolean {
     // 1 second * 60 = 1 minute * 20 = 20 minutes
     let createdOnTime:number = 0;

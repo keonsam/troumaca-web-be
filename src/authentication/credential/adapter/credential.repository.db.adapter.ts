@@ -9,10 +9,12 @@ import {Observer} from "rxjs/Observer";
 import {CredentialStatus} from "../credential.status"
 import {credentialConfirmations, credentials} from "../../../db";
 import {CredentialRepository} from "../credential.repository";
-import {Result} from "../../../result.success";
+// import {Result} from "../../../result.success";
 import {CredentialConfirmation} from "../confirmation/credential.confirmation";
 import phoneToken from "generate-sms-verification-code";
-import {ValidatedUsername} from "../confirmation/validated.username";
+// import {ValidatedUsername} from "../confirmation/validated.username";
+import {AuthenticatedCredential} from "../authenticated.credential";
+import "rxjs/add/observable/of";
 
 export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
 
@@ -156,18 +158,45 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
     });
   };
 
-  authenticate(credential: Credential): Observable<Result<Credential>> {
+  authenticate(credential: Credential, options?:any): Observable<AuthenticatedCredential> {
     return this.getCredentialByUsername(credential.username)
-      .map((resultCred:Credential) => {
+    .switchMap((resultCred:Credential, options:any) => {
+      let authenticatedCredential = new AuthenticatedCredential();
+      authenticatedCredential.credentialId =  resultCred.credentialId;
+      return this.getCredentialConfirmationByCredentialId(resultCred.credentialId)
+      .switchMap((d:CredentialConfirmation, index:number) => {
         if (!resultCred) {
-          return new Result(true, );
+          return Observable.of(authenticatedCredential);
         } else if (resultCred.password === credential.password) {
-          return new Result(false, "", resultCred);
+          //authenticatedCredential.credential = resultCred;
+          return Observable.of(authenticatedCredential);
         } else {
-          return new Result(true, "", resultCred);
+          authenticatedCredential.credentialId = d.credentialConfirmationId;
+          return Observable.of(authenticatedCredential);
         }
-      });
+      })
+    })
   }
+
+  getCredentialConfirmationByCredentialId(credentialId:string):Observable<CredentialConfirmation> {
+    return Rx.Observable.create(function (observer:Observer<CredentialConfirmation>) {
+      let query = {
+        "credentialId":credentialId
+      };
+
+      credentialConfirmations
+        .find(query)
+        .sort({ status: 'NEW'})
+        .exec(function (err:any, doc:any) {
+          if (!err) {
+            observer.next(doc[0]);
+          } else {
+            observer.error(err);
+          }
+          observer.complete();
+        });
+    });
+  };
 
   getCredentialByCredentialId(credentialId:string):Observable<Credential> {
     return Rx.Observable.create(function (observer:Observer<Credential>) {
@@ -363,7 +392,13 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
         observer.complete();
       })
     });
+  }
 
+  deleteCredentialById(credentialId: string, options?: any): Observable<number> {
+    return Rx.Observable.create(function (observer:Observer<AuthenticatedCredential>) {
+      observer.error(new Error(""));
+      observer.complete();
+    });
   }
 
 }

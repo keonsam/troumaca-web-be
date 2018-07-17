@@ -3,13 +3,14 @@ import {Credential} from "../credential";
 import {Observable} from "rxjs/Observable";
 import {Observer} from "rxjs/Observer";
 import {CredentialRepository} from "../credential.repository";
-import {Result} from "../../../result.success";
+// import {Result} from "../../../result.success";
 import request from "request";
 import {classToPlain, plainToClass} from "class-transformer";
 import {jsonRequestHeaderMap, postJsonOptions} from "../../../request.helpers";
 import {properties} from "../../../properties.helpers";
 import {CredentialConfirmation} from "../confirmation/credential.confirmation";
-import {ValidatedPassword} from "../confirmation/validated.password";
+// import {ValidatedPassword} from "../confirmation/validated.password";
+import {AuthenticatedCredential} from "../authenticated.credential";
 // import {ValidatedUsername} from "../confirmation/validated.username";
 
 export class CredentialRepositoryRestAdapter implements CredentialRepository {
@@ -24,21 +25,23 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
     // let headers:any = strMapToJson(headerMap);
     let credentialJson = classToPlain(credential);
 
-    uri = uri + '/authentication/credentials';
+    let uriAndPath:string = uri + '/authentication/credentials';
 
-    let requestOptions:any = postJsonOptions(uri, headerMap, credentialJson);
+    let requestOptions:any = postJsonOptions(uriAndPath, headerMap, credentialJson);
 
     return Rx.Observable.create(function (observer:Observer<CredentialConfirmation>) {
-
       request(requestOptions, function (error:any, response:any, body:any) {
-        if (response && response.statusCode != 200) {
-          observer.error(body);
+        if (error) {
+          observer.error(error);
         } else {
-
-          // let credentialObj = plainToClass(Credential, body);
-          let credentialObject = plainToClass(CredentialConfirmation, body["confirmation"] as Object);
-          console.log(credentialObject);
-          observer.next(credentialObject);
+          if (response && response.statusCode != 200) {
+            observer.error(body);
+          } else {
+            // let credentialObj = plainToClass(Credential, body);
+            let credentialObject = plainToClass(CredentialConfirmation, body["confirmation"] as Object);
+            console.log(credentialObject);
+            observer.next(credentialObject);
+          }
         }
         observer.complete();
       });
@@ -150,13 +153,76 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
     return undefined;
   }
 
-  authenticate(credential: Credential): Observable<Result<Credential>> {
-    return undefined;
+  authenticate(credential: Credential, options:any): Observable<AuthenticatedCredential> {
+    let uri:string = properties.get("credential.host.port") as string;
+
+    let headerMap = jsonRequestHeaderMap(options ? options : {});
+
+    // let headers:any = strMapToJson(headerMap);
+    let json = {
+      username:credential.username,
+      password:credential.password
+    };
+
+    let uriAndPath:string = uri + '/authentication/authenticate';
+
+    let requestOptions:any = postJsonOptions(uriAndPath, headerMap, json);
+
+    return Observable.create(function (observer:Observer<number>) {
+      request(requestOptions, function (error:any, response:any, body:any) {
+        try {
+          if (error) {
+            observer.error(error);
+            observer.complete();
+          } else if (response && response.statusCode != 200) {
+            observer.error(body);
+            observer.complete();
+          } else {
+            //let vp:boolean = plainToClass(Boolean, body["valid"] as Object);
+            observer.next(body);
+            observer.complete();
+          }
+        } catch (e) {
+          observer.error(new Error(e.message));
+          observer.complete();
+        }
+      });
+    });
   }
 
   deleteCredentialByPartyId(partyId:string): Observable<number> {
     return undefined;
   }
 
+  deleteCredentialById(credentialId: string, options?: any): Observable<number> {
+    let uri:string = properties.get("credential.host.port") as string;
+
+    let headerMap = jsonRequestHeaderMap(options ? options : {});
+
+    // let headers:any = strMapToJson(headerMap);
+    let json = {credentialId:credentialId};
+
+    let uriAndPath:string = uri + '/authentication/credentials/' + credentialId;
+
+    let requestOptions:any = postJsonOptions(uriAndPath, headerMap, json);
+
+    return Observable.create(function (observer:Observer<number>) {
+      request(requestOptions, function (error:any, response:any, body:any) {
+        try {
+          if (response && response.statusCode != 200) {
+            observer.error(body);
+            observer.complete();
+          } else {
+            //let vp:boolean = plainToClass(Boolean, body["valid"] as Object);
+            observer.next(body["affected"]);
+            observer.complete();
+          }
+        } catch (e) {
+          observer.error(new Error(e.message));
+          observer.complete();
+        }
+      });
+    });
+  }
 
 }
