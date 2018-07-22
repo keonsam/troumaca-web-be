@@ -49,6 +49,10 @@ let resourceTypesDb = path.resolve(__dirname, "..",) + '/nedb/authorization/reso
 let resourcePermissionsDb = path.resolve(__dirname, "..",) + '/nedb/authorization/resource-permissions.db';
 let partyAccessRolesDb = path.resolve(__dirname, "..",) + '/nedb/authorization/party-access-roles.db';
 
+// lobby
+const subscriptionDb = path.resolve(__dirname, "..") + '/nedb/lobby/subscriptions.db';
+const billingDb = path.resolve(__dirname, "..") + '/nedb/lobby/billings.db';
+const methodDb = path.resolve(__dirname, "..") + '/nedb/lobby/methods.db';
 // Todo: Fix remove
 
 export let userPhotos = new Datastore(theUserPhotosDb);
@@ -185,6 +189,21 @@ resourceTypes.ensureIndex({ fieldName: 'resourceTypeId', unique: true }, handleE
 export let partyAccessRoles = new Datastore(partyAccessRolesDb);
 partyAccessRoles.loadDatabase(handleError);
 partyAccessRoles.ensureIndex({ fieldName: 'partyAccessRoleId', unique: true }, handleError);
+
+// LOBBY
+export const subscriptions = new Datastore(subscriptionDb);
+subscriptions.loadDatabase(handleError);
+subscriptions.ensureIndex({ fieldName: 'subscriptionId', unique: true }, handleError);
+
+export const billings = new Datastore(billingDb);
+billings.loadDatabase(handleError);
+billings.ensureIndex({ fieldName: 'billingId', unique: true }, handleError);
+
+export const payMethods = new Datastore(methodDb);
+payMethods.loadDatabase(handleError);
+payMethods.ensureIndex({ fieldName: 'methodId', unique: true }, handleError);
+
+
 
 function handleError( err:any ) {
   if (err) {

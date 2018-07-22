@@ -1,5 +1,5 @@
-import validator from 'validator';
-import {CredentialStatus} from './credential.status';
+// import validator from 'validator';
+// import {CredentialStatus} from './credential.status';
 import {ValidateResponse} from "./validate.response";
 import {Credential} from "./credential";
 import {createCredentialRepositoryFactory} from "./credential.repository.factory";
@@ -12,8 +12,10 @@ import {SessionRepository} from "../../session/session.repository";
 import {ConfirmationRepository} from "./confirmation/confirmation.repository";
 import {CredentialConfirmation} from "./confirmation/credential.confirmation";
 import {AuthenticateResponse} from "./authenticate.response";
-import {Result} from "../../result.success";
-import {RepositoryKind} from "../../repository.kind";
+// import {Result} from "../../result.success";
+import "rxjs/add/operator/map";
+import {AuthenticatedCredential} from "./authenticated.credential";
+import { Confirmation} from "./confirmation/confirmation";
 
 export class CredentialOrchestrator {
 
@@ -28,20 +30,14 @@ export class CredentialOrchestrator {
     this.confirmationRepository = createCredentialConfirmationRepositoryFactory();
   }
 
-  isValidUsername(credential:Credential):Observable<ValidateResponse> {
+  isValidUsername(credential:Credential):Observable<boolean> {
     return this.credentialRepository
-    .isValidUsername(credential.username)
-    .map(valid => {
-      return new ValidateResponse(valid);
-    });
+    .isValidUsername(credential.username);
   };
 
-  isValidPassword(credential:Credential):Observable<ValidateResponse> {
+  isValidPassword(credential:Credential):Observable<boolean> {
     return this.credentialRepository
-    .isValidPassword(credential.password)
-    .map(valid => {
-      return new ValidateResponse(valid);
-    });
+    .isValidPassword(credential.password);
   };
 
   forgotPassword(username:string):Observable<ValidateResponse> {
@@ -57,48 +53,64 @@ export class CredentialOrchestrator {
   };
 
 
-  addCredential(credential:Credential, options?:any):Observable<CredentialConfirmation> {
+  addCredential(credential:Credential, options?:any):Observable<Confirmation> {
     return this.credentialRepository.addCredential(credential, options);
   };
 
-  authenticate(credential:Credential):Observable<AuthenticateResponse> {
+  authenticate(credential:Credential, options?:any):Observable<AuthenticateResponse> {
     // A person can access the application under the following conditions:
     // 1. He/she provides a valid set of credentials
     // 2. He/she has confirmed their username (email, or phone)
     // 3. He/she has completed the quick profile, person, account type, and possible organization name.
+
     return this.credentialRepository
-      .authenticate(credential)
-      .switchMap((result:Result<Credential>) => {
-        // unable to find the credential specified
-        if (!result) return Observable.of(undefined);
-        let readCred = result.data;
-        let authenticated:boolean = !result.fail;
-        if (!authenticated) return Observable.of(new AuthenticateResponse(authenticated));
-        let readCredStatus = readCred.credentialStatus;
-        let credentialActive:boolean = (readCredStatus === CredentialStatus.ACTIVE); // wrong logic before 1 === 1 = true while  1 !== 1 = false
-        // do not continue if the status is not active
-        if (!credentialActive) {
-          // add credentialConfirmationId to redirect
-          return this.confirmationRepository.getCredentialConfirmationByCredentialId(readCred.credentialId)
-            .map(credentialConfirmation => {
-              return new AuthenticateResponse(authenticated, credentialActive, credentialConfirmation.credentialConfirmationId);
-            });
-        }
-        // account exist after session so that the user can login in and create their profile
-        let accountExists = this.isNull(readCred.partyId);
-        let session:Session = new Session();
-        session.partyId = readCred ? readCred.partyId : "";
-        session.credentialId = readCred.credentialId;
-        session.data.set("credentialStatus", readCred.credentialStatus);
+    .authenticate(credential, options)
+    .switchMap((result:AuthenticatedCredential) => {
+      // unable to find the credential specified
+      if (!result) return Observable.of(undefined);
 
-        if (!validator.isEmail(readCred.username)) session.data.set("phone", readCred.username);
+      if (!result.authenticated) {
+        return Observable.of(new AuthenticateResponse(
+          result.authenticated,
+          result.authenticateStatus,
+          result.confirmationId,
+          result.username,
+          result.credentialId,
+          null,
+          result.partyId
+        ));
+      }
 
-        return this.sessionRepository.addSession(session)
-        .map(readSession => {
-          return new AuthenticateResponse(authenticated, credentialActive, "",accountExists, readCred, readSession);
-        });
+      // account exist after session so that the user can login in and create their profile
+      let session:Session = new Session();
+      session.partyId = result ? result.partyId : "";
+      session.credentialId = result.credentialId;
 
+      if (result.authenticateStatus) {
+        session.data.set("authenticateStatus", result.authenticateStatus);
+      }
+
+      if (result.username) {
+        session.data.set("username", result.username);
+      }
+
+      if (result.confirmationId) {
+        session.data.set("confirmationId", result.confirmationId);
+      }
+
+      return this.sessionRepository.getOrCreate(session)
+      .map(readSession => {
+        return new AuthenticateResponse(
+          result.authenticated,
+          result.authenticateStatus,
+          result.confirmationId,
+          result.username,
+          result.credentialId,
+          readSession.sessionId,
+          result.partyId
+        );
       });
+    });
   }
 
   isValidEditUsername (partyId:string, username: string) {
@@ -114,19 +126,8 @@ export class CredentialOrchestrator {
     return this.credentialRepository.updateCredential(partyId, credential);
   }
 
-  isNull(obj:any):boolean {
-    if (obj) {
-      return true;
-    } else {
-      return false;
-    }
+  deleteCredential (credentialId:string, options?:any):Observable<number> {
+    return this.credentialRepository.deleteCredentialById(credentialId, options);
   }
-
-  // createNotFoundError(name:string):any {
-  //   return new Error(JSON.stringify({
-  //     "statusCode":404,
-  //     "message": name + " not found."
-  //   }));
-  // }
 
 }

@@ -2,6 +2,9 @@ import {Observable} from "rxjs/Observable";
 import {Credential} from './credential';
 import {Result} from "../../result.success";
 import {CredentialConfirmation} from "./confirmation/credential.confirmation";
+import {ValidatedUsername} from "./confirmation/validated.username";
+import {AuthenticatedCredential} from "./authenticated.credential";
+import {Confirmation} from "./confirmation/confirmation";
 
 export interface CredentialRepository {
 
@@ -17,11 +20,12 @@ export interface CredentialRepository {
 
   getSanitizeCredentialByUsername(credentialId:string):Observable<Credential>;
 
-  authenticate(credential:Credential):Observable<Result<Credential>>;
+  //authenticate(credential:Credential, options:any):Observable<Result<AuthenticatedCredential>>;
+  authenticate(credential:Credential, options:any):Observable<AuthenticatedCredential>;
 
   checkUsernameValid(partyId:string, username:string):Observable<Credential>;
 
-  addCredential(credential:Credential, options?:any):Observable<CredentialConfirmation>;
+  addCredential(credential:Credential, options?:any):Observable<Confirmation>;
 
   addUserCredential(credential:Credential):Observable<Credential>;
 
@@ -34,5 +38,7 @@ export interface CredentialRepository {
   updateCredentialPartyId(credentialId: string, partyId: string): Observable<number>;
 
   deleteCredentialByPartyId(partyId:string): Observable<number>;
+
+  deleteCredentialById(credentialId:string, options?:any): Observable<number>;
 
 }

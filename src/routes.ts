@@ -1,4 +1,5 @@
 import {Router} from "express";
+import bodyParser from "body-parser";
 
 import * as assetController from "./asset-type/asset/asset.controller";
 import * as attributeController from "./asset-type/attribute/attribute.controller";
@@ -26,8 +27,12 @@ import * as assetTypeClassController from "./asset-type/asset-type-class/asset.t
 import * as credentialController from "./authentication/credential/credential.controller";
 import * as assetTypeController from "./asset-type/asset.type.controller";
 import * as organizationController from "./party/organization/organization.controller";
+import * as subscriptionController from "./subscription/subscription.controller";
+import * as billingController from "./billing/billing.controller";
 
 const router:Router = Router();
+const jsonParser = bodyParser.json({ type: 'application/json'});
+// const jsonParser = bodyParser.json();
 
 router.get("/", (req, res) => {
     res.json({
@@ -141,17 +146,21 @@ router.put("/photos/:type/:partyId", photoController.updatePhoto);
 // accounts
 router.post("/accounts", accountController.saveAccount);
 
-// authentication
-router.post("/validate-password", credentialController.isValidPassword);
-router.post("/validate-username", credentialController.isValidUsername);
+// AUTHENTICATION
+router.post("/authentication/credentials", credentialController.addCredential);
+router.post("/validate-password", jsonParser, credentialController.isValidPassword);
+router.post("/validate-username", jsonParser, credentialController.isValidUsername);
+router.get("/send-confirmation-codes/:credentialId/:confirmationId", confirmationController.resendConfirmCode);
+router.post("/verify-credentials-confirmations", confirmationController.confirmCode);
+
 // Todo: Check into why this is needed
 router.post("/validate-edit-username", credentialController.isValidEditUsername);
 router.post("/authenticate", credentialController.authenticate);
 router.post("/forgot-password", credentialController.forgotPassword);
-router.post("/credentials", credentialController.addCredential);
+// router.post("/credentials", credentialController.addCredential);
 router.put("/credentials/:partyId", credentialController.updateCredential);
-router.post("/verify-credentials-confirmations", confirmationController.verifyCredentialConfirmation);
-router.get("/send-confirmation-codes/:confirmationId", confirmationController.sendPhoneVerificationCode);
+router.delete("/credentials/:credentialId", credentialController.deleteCredential);
+//router.get("/send-confirmation-codes/:confirmationId", confirmationController.sendPhoneVerificationCode);
 router.get("/get-confirmations-username/:credentialConfirmationId", confirmationController.getConfirmationsUsername);
 // session
 router.get("/sessions/is-valid-session", sessionController.isValidSession);
@@ -204,4 +213,11 @@ router.post("/access-role-types", accessRoleTypeController.saveAccessRoleType);
 router.put("/access-role-types/:accessRoleTypeId", accessRoleTypeController.updateAccessRoleType);
 router.delete("/access-role-types/:accessRoleTypeId", accessRoleTypeController.deleteAccessRoleType);
 
+// SUBSCRIPTION
+router.get("/subscriptions/:type", subscriptionController.getSubscription);
+router.post("/subscriptions", subscriptionController.addSubscription);
+
+// BILLING
+router.get("/billings", billingController.getBilling);
+router.post("/billings", billingController.addBilling);
 export default router;

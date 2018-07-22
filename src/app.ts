@@ -18,7 +18,7 @@ const app = express();
 app.use(logger("dev"));
 app.use(cookieParser());
 app.use(bodyParser.json({limit: '50mb'}));
-app.use(bodyParser.urlencoded({limit: '50mb',extended: false}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: false}));
 app.use(express.static(path.join(__dirname, "dist")));
 const whitelist = ["http://localhost:4200", "http://ec2-18-207-220-164.compute-1.amazonaws.com:4200", "http://dev.troumaca.com"];
 
@@ -34,7 +34,7 @@ var corsOptions = {
   credentials: true
 };
 app.use(cors(corsOptions));
-app.use(checkAccess);
+//app.use(checkAccess);
 
 // routes
 app.use(router);

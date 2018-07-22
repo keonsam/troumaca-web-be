@@ -8,6 +8,7 @@ import {CredentialConfirmation} from "./credential.confirmation";
 import {CredentialStatus} from "../credential.status";
 import {Result} from "../../../result.success";
 import {Credential} from "../credential";
+import { Confirmation } from "./confirmation";
 
 export class ConfirmationOrchestrator {
 
@@ -69,6 +70,18 @@ export class ConfirmationOrchestrator {
       });
   };
 
+  confirmCode(confirmationId:string, credentialId:string, confirmation: Confirmation, options?:any):Observable<boolean> {
+    return this.confirmationRepository.confirmCode(confirmationId, credentialId, confirmation, options);
+  }
+
+  resendConfirmCode(confirmationId:string, credentialId:string, options?:any):Observable<CredentialConfirmation> {
+    return this.confirmationRepository.resendConfirmCode(confirmationId, credentialId, options)
+        .map(res => {
+            console.log(res);
+            return new CredentialConfirmation();
+        });
+  }
+
   confirmationCodeTimeHasExpired(credentialConfirmation:CredentialConfirmation):boolean {
     // 1 second * 60 = 1 minute * 20 = 20 minutes
     let createdOnTime:number = 0;
@@ -80,23 +93,23 @@ export class ConfirmationOrchestrator {
     return createdOnTime + (20 * 60 * 1000) <= new Date().getTime();
   }
 
-  sendPhoneVerificationCode(credentialConfirmationId:string):Observable<Result<CredentialConfirmation>> {
-    return this.confirmationRepository
-      .getCredentialConfirmationById(credentialConfirmationId)
-      .switchMap((credentialConfirmation:CredentialConfirmation) => {
-        if(!credentialConfirmation) {
-          return Rx.Observable.of(new Result<CredentialConfirmation>(true, "Unknown confirmation", credentialConfirmation));
-        }
-        if (credentialConfirmation && credentialConfirmation.credentialStatus === CredentialStatus.CONFIRMED) {
-          return Rx.Observable.of(new Result<CredentialConfirmation>(true, "Confirmed previously", credentialConfirmation)); //failed because the verification code would not have been sent
-        } else if (this.confirmationCodeTimeHasExpired(credentialConfirmation)) {
-          //return Rx.Observable.of(new Result<CredentialConfirmation>(true, "Confirmed previously", credentialConfirmation)); //failed because the verification code would not have been sent
-          return this.sessionExpired(credentialConfirmation);
-        } else {
-          return Rx.Observable.of(new Result<CredentialConfirmation>(false, "Code Sent", credentialConfirmation));
-        }
-      });
-  }
+  // sendPhoneVerificationCode(credentialConfirmationId:string):Observable<Result<CredentialConfirmation>> {
+  //   return this.confirmationRepository
+  //     .getCredentialConfirmationById(credentialConfirmationId)
+  //     .switchMap((credentialConfirmation:CredentialConfirmation) => {
+  //       if(!credentialConfirmation) {
+  //         return Rx.Observable.of(new Result<CredentialConfirmation>(true, "Unknown confirmation", credentialConfirmation));
+  //       }
+  //       if (credentialConfirmation && credentialConfirmation.credentialStatus === CredentialStatus.CONFIRMED) {
+  //         return Rx.Observable.of(new Result<CredentialConfirmation>(true, "Confirmed previously", credentialConfirmation)); //failed because the verification code would not have been sent
+  //       } else if (this.confirmationCodeTimeHasExpired(credentialConfirmation)) {
+  //         //return Rx.Observable.of(new Result<CredentialConfirmation>(true, "Confirmed previously", credentialConfirmation)); //failed because the verification code would not have been sent
+  //         return this.sessionExpired(credentialConfirmation);
+  //       } else {
+  //         return Rx.Observable.of(new Result<CredentialConfirmation>(false, "Code Sent", credentialConfirmation));
+  //       }
+  //     });
+  // }
 
   getConfirmationsUsername(credentialConfirmationId:string):Observable<string> {
     return this.confirmationRepository.getCredentialConfirmationById(credentialConfirmationId)

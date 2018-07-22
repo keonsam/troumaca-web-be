@@ -1,0 +1,2 @@
+{"type":"Credit Card","billingId":"20e15518-0e32-4cdc-b8cd-29facdcf44de","methodId":"956345ef-66ef-4985-9cf7-20ade25c122b","confirmed":true,"_id":"r0yrIHPjYMxRfpEV"}
+{"$$indexCreated":{"fieldName":"billingId","unique":true,"sparse":false}}

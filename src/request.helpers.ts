@@ -13,7 +13,12 @@ export function jsonRequestHeaderMap(options: any) {
   // }
   return {
     "Content-Type": "application/json",
-    "correlationId": options.correlationId
+    "correlationId": options.correlationId,
+    "sourceHostName": "",
+    "sourceHostAddress": "",
+    "sourcePartyId" : "",
+    "sourceSystemHost": options.sourceSystemHost,
+    "sourceSystemName": "Troumaca"
   };
 }
 
@@ -35,7 +40,7 @@ export function postJsonOptions(uri: any, headers: any, json: any) {
   }
 
   return {
-    uri:uri,
+    uri: uri,
     method: "POST",
     headers: headers,
     json: json
