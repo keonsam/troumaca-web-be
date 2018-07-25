@@ -13,10 +13,7 @@ export class SessionOrchestrator {
 
   isValidSession(sessionId:string):Observable<boolean> {
     return Observable.of(true);
-    // return this.sessionRepository.isValidSession(sessionId)
-    // .map(valid => {
-    //   return valid;
-    // });
+    // return this.sessionRepository.isValidSession(sessionId);
   }
 
   getSimpleSession(sessionId:string): Observable<Session> {

@@ -3,7 +3,7 @@ import {getNumericValueOrDefault} from '../../number.util';
 import {getStringValueOrDefault} from '../../string.util';
 import {AssetOrchestrator} from "./asset.orchestrator";
 
-let assetOrchestrator:AssetOrchestrator = new AssetOrchestrator();
+let assetOrchestrator: AssetOrchestrator = new AssetOrchestrator();
 
 export let getAssets = (req: Request, res: Response) => {
   let number = getNumericValueOrDefault(req.query.pageNumber, 1);

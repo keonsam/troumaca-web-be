@@ -95,21 +95,6 @@ class AssetTypeDBRepository implements AssetTypeRepository {
     });
   };
 
-  getAssetTypeByIds(assetTypeIds: string[]): Observable<AssetType[]> {
-    return Rx.Observable.create(function (observer: Observer<AssetType[]>) {
-      // let query = {
-      //   "assetTypeId": assetTypeId
-      // };
-      assetTypes.find({assetTypeId:{$in: assetTypeIds}}, function (err: any, doc: any) {
-        if (!err) {
-          observer.next(doc);
-        } else {
-          observer.error(err);
-        }
-        observer.complete();
-      });
-    });
-  };
 
   updateAssetType(assetTypeId: string, assetType: AssetType): Observable<number> {
     return Rx.Observable.create(function (observer: Observer<number>) {
@@ -173,10 +158,6 @@ class AssetTypeRestRepository implements AssetTypeRepository {
   };
 
   getAssetTypeById(assetTypeId:string):Observable<AssetType> {
-    return null;
-  };
-
-  getAssetTypeByIds(assetTypeIds:string[]):Observable<AssetType[]> {
     return null;
   };
 

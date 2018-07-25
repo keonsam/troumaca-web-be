@@ -49,21 +49,6 @@ class SiteDBRepository implements SiteRepository {
     });
   }
 
-  getSiteByIds(siteIds: string[]): Observable<Site[]> {
-    // let query = {
-    //   "siteId": siteId
-    // };
-    return Rx.Observable.create(function (observer: Observer<Site[]>) {
-      sites.find({siteId:{$in:siteIds}}, function (err: any, doc: any) {
-        if (!err) {
-          observer.next(doc);
-        } else {
-          observer.error(err);
-        }
-        observer.complete();
-      });
-    });
-  }
 
 }
 
@@ -76,9 +61,6 @@ class SiteRestRepository implements SiteRepository {
     return undefined;
   }
 
-  getSiteByIds(siteIds: string[]): Observable<Site[]> {
-    return undefined;
-  }
 
 }
 

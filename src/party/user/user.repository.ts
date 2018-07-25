@@ -14,8 +14,6 @@ export interface UserRepository {
 
   getPerson(partyId:string):Observable<Person>;
 
-  getPersonByIds(partyIds:string[]):Observable<Person[]>;
-
   saveUser(user:User):Observable<User>;
 
   deleteUser(partyId:string):Observable<number>;

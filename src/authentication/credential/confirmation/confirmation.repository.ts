@@ -4,9 +4,9 @@ import { Confirmation } from "./confirmation";
 
 export interface ConfirmationRepository {
 
-  confirmCode(confirmationId:string, credentialId:string, confirmation: Confirmation, options?:any):Observable<boolean>;
+  confirmCode(confirmationId:string, credentialId:string, confirmation: Confirmation, options?:any):Observable<Confirmation>;
 
-  resendConfirmCode(confirmationId:string, credentialId:string, options?:any):Observable<boolean>;
+  resendConfirmCode(confirmationId:string, credentialId:string, options?:any):Observable<Confirmation>;
 
   addCredentialConfirmation(credentialConfirmation:CredentialConfirmation):Observable<CredentialConfirmation>;
 

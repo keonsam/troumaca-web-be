@@ -172,6 +172,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
 
     return Observable.create(function (observer:Observer<number>) {
       request(requestOptions, function (error:any, response:any, body:any) {
+        console.log(body);
         try {
           if (error) {
             observer.error(error);

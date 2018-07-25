@@ -6,6 +6,4 @@ export interface UnitOfMeasureRepository {
 
   getUnitOfMeasureById(unitOfMeasureId: string): Observable<UnitOfMeasure>;
 
-  getUnitOfMeasureByIds(unitOfMeasureIds: string[]): Observable<UnitOfMeasure[]>;
-
 }

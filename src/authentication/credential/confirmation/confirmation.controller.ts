@@ -57,8 +57,9 @@ export let confirmCode = (req: Request, res: Response) => {
   confirmationOrchestrator
     .confirmCode(confirmationId, credentialId, confirmation, headerOptions)
     .subscribe(next => {
+      const body = JSON.stringify(next);
       res.status(200);
-      res.send(next);
+      res.send(body);
     }, error => {
       res.status(500);
       res.send(JSON.stringify({message: 'Error Occurred'}));
@@ -90,8 +91,9 @@ export let resendConfirmCode = (req: Request, res: Response) => {
   confirmationOrchestrator
     .resendConfirmCode(confirmationId, credentialId, headerOptions)
     .subscribe(next => {
-      res.status(200);
-      res.send(next);
+        const body = JSON.stringify(next);
+        res.status(200);
+        res.send(body);
     }, error => {
       res.status(500);
       res.send(JSON.stringify({message: 'Error Occurred'}));

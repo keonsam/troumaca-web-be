@@ -99,21 +99,6 @@ class UserDBRepository implements UserRepository {
     });
   }
 
-  getPersonByIds(partyIds:string[]):Observable<Person[]> {
-    return Rx.Observable.create(function (observer:Observer<Person[]>) {
-      // let query = {
-      //   "partyId": partyId
-      // };
-      users.find({partyId:{$in:partyIds}}, function (err:any, docs:any) {
-        if (!err) {
-          observer.next(docs);
-        } else {
-          observer.error(err);
-        }
-        observer.complete();
-      });
-    });
-  }
 
   saveUser(user:User):Observable<User> {
     user.partyId = generateUUID();
@@ -178,10 +163,6 @@ class UserRestRepository implements UserRepository {
   }
 
   getPerson(partyId:string):Observable<Person> {
-    return undefined
-  }
-
-  getPersonByIds(partyIds:string[]):Observable<Person[]> {
     return undefined
   }
 

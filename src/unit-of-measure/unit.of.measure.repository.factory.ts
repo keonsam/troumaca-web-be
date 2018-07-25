@@ -48,19 +48,6 @@ class UnitOfMeasureDBRepository implements UnitOfMeasureRepository {
     });
   }
 
-  getUnitOfMeasureByIds(unitOfMeasureIds: string[]): Observable<UnitOfMeasure[]> {
-
-    return Rx.Observable.create(function (observer: Observer<UnitOfMeasure[]>) {
-      unitOfMeasures.find({unitOfMeasureId: { $in: unitOfMeasureIds}}, function (err: any, docs:any) {
-        if (!err) {
-          observer.next(docs);
-        } else {
-          observer.error(err);
-        }
-        observer.complete();
-      });
-    });
-  }
 
 }
 
@@ -73,9 +60,6 @@ class UnitOfMeasureRestRepository implements UnitOfMeasureRepository {
     return null;
   }
 
-  getUnitOfMeasureByIds(unitOfMeasureIds: string[]): Observable<UnitOfMeasure[]> {
-    return null;
-  }
 }
 
 export function createUnitOfMeasureRepository(kind?:RepositoryKind):UnitOfMeasureRepository {

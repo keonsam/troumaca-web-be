@@ -7,6 +7,7 @@ import {CredentialStatus} from '../../credential.status';
 import {Observable} from "rxjs/Observable";
 import {CredentialConfirmation} from "../credential.confirmation";
 import {Observer} from "rxjs/Observer";
+import { Confirmation } from "../confirmation";
 
 export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository {
 
@@ -29,11 +30,11 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
     });
   };
 
-  confirmCode(confirmationId:string, credentialId:string, options?:any):Observable<boolean> {
+  confirmCode(confirmationId:string, credentialId:string, options?:any):Observable<Confirmation> {
     throw new Error();
   }
 
-  resendConfirmCode(confirmationId: string, credentialId: string, options?: any): Observable<boolean> {
+  resendConfirmCode(confirmationId: string, credentialId: string, options?: any): Observable<Confirmation> {
     return undefined;
   }
 

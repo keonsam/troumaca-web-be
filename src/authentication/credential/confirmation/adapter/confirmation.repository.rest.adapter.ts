@@ -13,8 +13,7 @@ export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository
     return undefined;
   }
 
-  confirmCode(confirmationId:string, credentialId:string, confirmation: Confirmation, options?:any):Observable<boolean> {
-    console.log("confirmCodeWOrks");
+  confirmCode(confirmationId:string, credentialId:string, confirmation: Confirmation, options?:any):Observable<Confirmation> {
     let uri:string = properties.get("credential.host.port") as string;
 
     let headerMap = jsonRequestHeaderMap(options ? options : {});
@@ -26,9 +25,8 @@ export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository
 
     let requestOptions:any = postJsonOptions(uriAndPath, headerMap, json);
 
-    return Observable.create(function (observer:Observer<number>) {
+    return Observable.create(function (observer:Observer<Confirmation>) {
       request(requestOptions, function (error:any, response:any, body:any) {
-        console.log("confirmationCode");
         console.log(body);
         try {
           if (response && response.statusCode != 200) {
@@ -36,7 +34,7 @@ export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository
             observer.complete();
           } else {
             //let vp:boolean = plainToClass(Boolean, body["valid"] as Object);
-            observer.next(body["affected"]);
+            observer.next(body["confirmation"]);
             observer.complete();
           }
         } catch (e) {
@@ -47,7 +45,7 @@ export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository
     });
   }
 
-  resendConfirmCode(confirmationId:string, credentialId:string, options?:any):Observable<boolean> {
+  resendConfirmCode(confirmationId:string, credentialId:string, options?:any):Observable<Confirmation> {
     let uri:string = properties.get("credential.host.port") as string;
 
     let headerMap = jsonRequestHeaderMap(options ? options : {});
@@ -58,7 +56,7 @@ export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository
 
     let requestOptions:any = postJsonOptions(uriAndPath, headerMap, json);
 
-    return Observable.create(function (observer:Observer<number>) {
+    return Observable.create(function (observer:Observer<Confirmation>) {
       request(requestOptions, function (error:any, response:any, body:any) {
         console.log(body);
         try {
@@ -66,7 +64,6 @@ export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository
             observer.error(body);
             observer.complete();
           } else {
-            //let vp:boolean = plainToClass(Boolean, body["valid"] as Object);
             observer.next(body["confirmation"]);
             observer.complete();
           }

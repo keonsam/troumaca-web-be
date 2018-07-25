@@ -36,63 +36,65 @@ export class AssetTypeOrchestrator {
 
   getAssetTypes(number:number, size:number, field:string, direction:string):Observable<Result<any>> {
     let sort:string = getSortOrderOrDefault(field, direction);
-    return this.assetTypeRepository
-      .getAssetTypes(number, size, sort)
-      .switchMap(assetTypes => {
-        if(assetTypes.length === 0) {
-          let shapeAssetTypesResp:any = shapeAssetTypesResponse(assetTypes, 0, 0, 0, 0, sort);
-          return Observable.of(new Result<any>(false, "No entry in database", shapeAssetTypesResp));
-        }else {
-          let assetTypeClassIds:string[] = [];
-          let unitOfMeasureIds:string[] = [];
-          assetTypes.forEach(value => {
-            if (value.assetTypeClassId) assetTypeClassIds.push(value.assetTypeClassId);
-            if (value.unitOfMeasureId) unitOfMeasureIds.push(value.unitOfMeasureId);
-          });
-          return this.assetTypeClassRepository.getAssetTypeClassByIds(assetTypeClassIds)
-            .switchMap((assetTypeClasses:AssetTypeClass[]) => {
-              return this.unitOfMeasureRepository.getUnitOfMeasureByIds(unitOfMeasureIds)
-                .switchMap((unitOfMeasures:UnitOfMeasure[]) => {
-                  assetTypes.forEach(value => {
-                    let index = assetTypeClasses.findIndex(x => x.assetTypeClassId === value.assetTypeClassId);
-                    let index2 = unitOfMeasures.findIndex(x => x.unitOfMeasureId === value.unitOfMeasureId);
-                    value.assetTypeClass = index !== -1 ? assetTypeClasses[index] : new AssetTypeClass();
-                    value.unitOfMeasure = index2 !== -1 ? unitOfMeasures[index2] : new UnitOfMeasure();
-                  });
-                  return this.assetTypeRepository
-                    .getAssetTypeCount()
-                    .map(count => {
-                      let shapeAssetTypesResp:any = shapeAssetTypesResponse(assetTypes, number, size, assetTypes.length, count, sort);
-                      return new Result<any>(false, "assetTypes", shapeAssetTypesResp);
-                    });
-                });
-            });
-        }
-      });
+      return null;
+    // return this.assetTypeRepository
+    //   .getAssetTypes(number, size, sort)
+    //   .switchMap(assetTypes => {
+    //     if(assetTypes.length === 0) {
+    //       let shapeAssetTypesResp:any = shapeAssetTypesResponse(assetTypes, 0, 0, 0, 0, sort);
+    //       return Observable.of(new Result<any>(false, "No entry in database", shapeAssetTypesResp));
+    //     }else {
+    //       let assetTypeClassIds:string[] = [];
+    //       let unitOfMeasureIds:string[] = [];
+    //       assetTypes.forEach(value => {
+    //         if (value.assetTypeClassId) assetTypeClassIds.push(value.assetTypeClassId);
+    //         if (value.unitOfMeasureId) unitOfMeasureIds.push(value.unitOfMeasureId);
+    //       });
+    //       return this.assetTypeClassRepository.getAssetTypeClassByIds(assetTypeClassIds)
+    //         .switchMap((assetTypeClasses:AssetTypeClass[]) => {
+    //           return this.unitOfMeasureRepository.getUnitOfMeasureByIds(unitOfMeasureIds)
+    //             .switchMap((unitOfMeasures:UnitOfMeasure[]) => {
+    //               assetTypes.forEach(value => {
+    //                 let index = assetTypeClasses.findIndex(x => x.assetTypeClassId === value.assetTypeClassId);
+    //                 let index2 = unitOfMeasures.findIndex(x => x.unitOfMeasureId === value.unitOfMeasureId);
+    //                 value.assetTypeClass = index !== -1 ? assetTypeClasses[index] : new AssetTypeClass();
+    //                 value.unitOfMeasure = index2 !== -1 ? unitOfMeasures[index2] : new UnitOfMeasure();
+    //               });
+    //               return this.assetTypeRepository
+    //                 .getAssetTypeCount()
+    //                 .map(count => {
+    //                   let shapeAssetTypesResp:any = shapeAssetTypesResponse(assetTypes, number, size, assetTypes.length, count, sort);
+    //                   return new Result<any>(false, "assetTypes", shapeAssetTypesResp);
+    //                 });
+    //             });
+    //         });
+    //     }
+    //   });
   };
 
   getAssetTypeById(assetTypeId:string):Observable<AssetTypeResponse> {
-    return this.assetTypeRepository.getAssetTypeById(assetTypeId)
-      .switchMap((assetType: AssetType) => {
-        if (!assetType) {
-          return Observable.of(undefined);
-        } else {
-          return this.assetTypeClassRepository.getAssetTypeClassById(assetType.assetTypeClassId)
-            .switchMap(assetTypeClass => {
-                assetType.assetTypeClass = new AssetTypeClass();
-              if (assetTypeClass) assetType.assetTypeClass = assetTypeClass;
-              return this.unitOfMeasureRepository.getUnitOfMeasureById(assetType.unitOfMeasureId)
-                .switchMap(unitOfMeasure => {
-                    assetType.unitOfMeasure = new UnitOfMeasure();
-                  if (unitOfMeasure) assetType.unitOfMeasure = unitOfMeasure;
-                  return this.valueRepository.getValuesByAssetTypeId(assetType.assetTypeId)
-                      .map((values:Value[]) => {
-                          return new AssetTypeResponse(assetType, values);
-                      });
-                });
-            });
-        }
-      });
+      return null;
+    // return this.assetTypeRepository.getAssetTypeById(assetTypeId)
+    //   .switchMap((assetType: AssetType) => {
+    //     if (!assetType) {
+    //       return Observable.of(undefined);
+    //     } else {
+    //       return this.assetTypeClassRepository.getAssetTypeClassById(assetType.assetTypeClassId)
+    //         .switchMap(assetTypeClass => {
+    //             assetType.assetTypeClass = new AssetTypeClass();
+    //           if (assetTypeClass) assetType.assetTypeClass = assetTypeClass;
+    //           return this.unitOfMeasureRepository.getUnitOfMeasureById(assetType.unitOfMeasureId)
+    //             .switchMap(unitOfMeasure => {
+    //                 assetType.unitOfMeasure = new UnitOfMeasure();
+    //               if (unitOfMeasure) assetType.unitOfMeasure = unitOfMeasure;
+    //               return this.valueRepository.getValuesByAssetTypeId(assetType.assetTypeId)
+    //                   .map((values:Value[]) => {
+    //                       return new AssetTypeResponse(assetType, values);
+    //                   });
+    //             });
+    //         });
+    //     }
+    //   });
   };
 
   saveAssetType(assetType:AssetType, values: Value[]):Observable<AssetType> {

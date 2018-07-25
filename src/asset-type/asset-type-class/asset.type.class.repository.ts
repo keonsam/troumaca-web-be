@@ -1,5 +1,7 @@
 import {Observable} from "rxjs/Observable";
 import {AssetTypeClass} from "./asset.type.class";
+import { AssetTypeClassResponse } from "./asset.type.class.response";
+import { AssignedAttribute } from "../attribute/assigned.attribute";
 
 export interface AssetTypeClassRepository {
 
@@ -9,14 +11,13 @@ export interface AssetTypeClassRepository {
 
   getAssetTypeClassCount():Observable<number>;
 
-  getAssetTypeClassById(assetTypeClassId:string):Observable<AssetTypeClass>;
+  getAssetTypeClassById(assetTypeClassId:string):Observable<AssetTypeClassResponse>;
 
-  getAssetTypeClassByIds(assetTypeClassIds:string[]):Observable<AssetTypeClass[]>;
+  saveAssetTypeClass(assetTypeClass:AssetTypeClass, assignedAttributes: AssignedAttribute[]):Observable<AssetTypeClass>;
 
-  saveAssetTypeClass(assetTypeClass:AssetTypeClass):Observable<AssetTypeClass>;
+  updateAssetTypeClass(assetTypeClassId:string, assetTypeClass:AssetTypeClass, assignedAttributes: AssignedAttribute[]):Observable<number>;
 
   deleteAssetTypeClass(assetTypeClassId:string):Observable<number>;
 
-  updateAssetTypeClass(assetTypeClassId:string, assetTypeClass:AssetTypeClass):Observable<number>;
 
 }

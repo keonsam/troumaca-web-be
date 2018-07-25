@@ -13,8 +13,6 @@ export interface AssetTypeRepository {
 
   getAssetTypeById(assetId:string):Observable<AssetType>;
 
-  getAssetTypeByIds(assetIds:string[]):Observable<AssetType[]>;
-
   updateAssetType(assetId:string, assetType:AssetType):Observable<number>;
 
   deleteAssetType(assetId:string):Observable<number>;

@@ -5,6 +5,4 @@ export interface AssetKindRepository {
   getAssetKinds():Observable<AssetKind[]>
 
   getAssetKindById(assetKindId:string): Observable<AssetKind>;
-
-  getAssetKindByIds(assetKindIds:string[]): Observable<AssetKind[]>;
 }

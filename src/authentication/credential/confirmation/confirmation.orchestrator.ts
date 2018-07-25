@@ -70,16 +70,12 @@ export class ConfirmationOrchestrator {
       });
   };
 
-  confirmCode(confirmationId:string, credentialId:string, confirmation: Confirmation, options?:any):Observable<boolean> {
+  confirmCode(confirmationId:string, credentialId:string, confirmation: Confirmation, options?:any):Observable<Confirmation> {
     return this.confirmationRepository.confirmCode(confirmationId, credentialId, confirmation, options);
   }
 
-  resendConfirmCode(confirmationId:string, credentialId:string, options?:any):Observable<CredentialConfirmation> {
-    return this.confirmationRepository.resendConfirmCode(confirmationId, credentialId, options)
-        .map(res => {
-            console.log(res);
-            return new CredentialConfirmation();
-        });
+  resendConfirmCode(confirmationId:string, credentialId:string, options?:any):Observable<Confirmation> {
+    return this.confirmationRepository.resendConfirmCode(confirmationId, credentialId, options);
   }
 
   confirmationCodeTimeHasExpired(credentialConfirmation:CredentialConfirmation):boolean {

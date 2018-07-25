@@ -8,6 +8,4 @@ export interface SiteRepository {
 
   getSiteById(siteId: string): Observable<Site>;
 
-  getSiteByIds(siteIds: string[]): Observable<Site[]>;
-
 }

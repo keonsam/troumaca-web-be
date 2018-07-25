@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from "express";
 import {SessionOrchestrator} from "../session/session.orchestrator";
 
-let checkAccess = (req: Request, res: Response, next: NextFunction) => {
+const checkAccess = (req: Request, res: Response, next: NextFunction) => {
 
   const sessionOrchestrator = new SessionOrchestrator();
 

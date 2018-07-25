@@ -36,22 +36,6 @@ class AssetKindDBRepository implements AssetKindRepository {
       });
     });
   }
-
-  getAssetKindByIds(assetKindIds:string[]): Observable<AssetKind[]> {
-    // let query = {
-    //     //   "assetKindId": assetKindId
-    //     // }
-    return Rx.Observable.create(function (observer:Observer<AssetKind[]>) {
-      assetKinds.find({assetKindId: {$in : assetKindIds}}, function (err:any, doc:any) {
-        if (!err) {
-          observer.next(doc);
-        } else {
-          observer.error(err);
-        }
-        observer.complete();
-      });
-    });
-  }
 }
 
 class AssetKindRestRepository implements AssetKindRepository {
@@ -63,9 +47,6 @@ class AssetKindRestRepository implements AssetKindRepository {
     return undefined;
   }
 
-  getAssetKindByIds(assetKindIds:string[]): Observable<AssetKind[]>{
-    return undefined;
-  }
 }
 
 
