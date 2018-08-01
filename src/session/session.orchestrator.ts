@@ -12,8 +12,8 @@ export class SessionOrchestrator {
   }
 
   isValidSession(sessionId:string):Observable<boolean> {
-    return Observable.of(true);
-    // return this.sessionRepository.isValidSession(sessionId);
+    // return Observable.of(true);
+    return this.sessionRepository.isValidSession(sessionId);
   }
 
   getSimpleSession(sessionId:string): Observable<Session> {

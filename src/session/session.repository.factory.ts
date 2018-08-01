@@ -70,11 +70,12 @@ class SessionDBRepository implements SessionRepository {
     if (!session.data) {
       session.data = new Map();
     }
+    console.log(session);
 
     return Rx.Observable.create(function (observer:Observer<Session>) {
       sessions.insert(session.toJson(), function (err:any, doc:any) {
         if (!err) {
-          observer.next(session);
+          observer.next(doc);
         } else {
           observer.error(err);
         }
@@ -83,9 +84,6 @@ class SessionDBRepository implements SessionRepository {
     });
   };
 
-  getOrCreate(session: Session): Observable<Session> {
-    return this.addSession(session);
-  }
 
   updateSession(sessionId:string, session:Session):Observable<number> {
     return Rx.Observable.create(function (observer:Observer<number>) {

@@ -31,32 +31,22 @@ export class AccountOrchestrator {
     // accountType not used in this current set up. you may find it of use in the future. I left it as is.
       return this.sessionRepository.getSessionById(sessionId)
           .switchMap((session: Session) => {
-              if (!session.credentialId) return Observable.of(new AccountResponse(false));
-              let credentialId: string = session["credentialId"];
-              return this.credentialRepository.getCredentialByCredentialId(credentialId)
-                  .switchMap(credential => {
-                      if (!credential) return Observable.of(new AccountResponse(false));
-                      user.username = credential.username;
-                      return this.userRepository.saveUser(user)
-                          .switchMap(newUser => {
-                              if (!newUser) return Observable.of(new AccountResponse(false));
-                              const partyId = newUser.partyId;
-                              return this.credentialRepository.updateCredentialPartyId(credentialId, partyId)
-                                  .switchMap(numReplaced => {
-                                      if (!numReplaced) return Observable.of(new AccountResponse(false));
-                                      return this.sessionRepository.updateSessionPartyId(sessionId, partyId)
-                                          .switchMap(numReplaced => {
-                                              if (!numReplaced) return Observable.of(new AccountResponse(false));
-                                              if (!organization) return Observable.of(new AccountResponse(true, newUser));
-                                              organization.partyId = partyId;
-                                              return this.organizationRepository.saveOrganization(organization)
-                                                  .map(newOrganization => {
-                                                      if (!newOrganization) return new AccountResponse(false);
-                                                      return new AccountResponse(true, newUser, newOrganization);
-                                                  });
-                                          });
-                                  });
-                          });
+              if (!session) return Observable.of(new AccountResponse(false));
+              user.partyId = session.partyId;
+              user.username = "";
+              return this.userRepository.saveUser(user)
+                  .switchMap(newUser => {
+                      if (!newUser) return Observable.of(new AccountResponse(false));
+                      if (accountType === "personal") {
+                          return Observable.of(new AccountResponse(true, newUser));
+                      } else {
+                          organization.partyId = session.partyId;
+                          return this.organizationRepository.saveOrganization(organization)
+                              .map(newOrganization => {
+                                  if (!newOrganization) return new AccountResponse(false);
+                                  return new AccountResponse(true, newUser, newOrganization);
+                              });
+                      }
                   });
           });
   }

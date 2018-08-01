@@ -147,21 +147,25 @@ router.put("/photos/:type/:partyId", photoController.updatePhoto);
 router.post("/accounts", accountController.saveAccount);
 
 // AUTHENTICATION
-router.post("/authentication/credentials", credentialController.addCredential);
 router.post("/validate-password", jsonParser, credentialController.isValidPassword);
 router.post("/validate-username", jsonParser, credentialController.isValidUsername);
+router.post("/authentication/credentials", credentialController.addCredential);
+router.post("/authenticate", credentialController.authenticate);
+
+// CONFIRMATION
 router.get("/send-confirmation-codes/:credentialId/:confirmationId", confirmationController.resendConfirmCode);
 router.post("/verify-credentials-confirmations", confirmationController.confirmCode);
 
 // Todo: Check into why this is needed
-router.post("/validate-edit-username", credentialController.isValidEditUsername);
-router.post("/authenticate", credentialController.authenticate);
-router.post("/forgot-password", credentialController.forgotPassword);
+//router.post("/validate-edit-username", credentialController.isValidEditUsername);
+//router.post("/authenticate", credentialController.authenticate);
+//router.post("/forgot-password", credentialController.forgotPassword);
 // router.post("/credentials", credentialController.addCredential);
-router.put("/credentials/:partyId", credentialController.updateCredential);
-router.delete("/credentials/:credentialId", credentialController.deleteCredential);
+//router.put("/credentials/:partyId", credentialController.updateCredential);
+//router.delete("/credentials/:credentialId", credentialController.deleteCredential);
 //router.get("/send-confirmation-codes/:confirmationId", confirmationController.sendPhoneVerificationCode);
-router.get("/get-confirmations-username/:credentialConfirmationId", confirmationController.getConfirmationsUsername);
+//router.get("/get-confirmations-username/:credentialConfirmationId", confirmationController.getConfirmationsUsername);
+
 // session
 router.get("/sessions/is-valid-session", sessionController.isValidSession);
 router.get("/partyId", sessionController.getPartyId);

@@ -6,6 +6,7 @@ export class AuthenticatedCredential {
   private _authenticateStatus: string;
   private _confirmationId: string;
   private _partyId: string;
+  private _sessionId: string;
 
   constructor(credentialId?: string) {
     this._credentialId = credentialId;
@@ -59,4 +60,11 @@ export class AuthenticatedCredential {
     this._partyId = value;
   }
 
+  get sessionId(): string {
+    return this._sessionId;
+  }
+
+  set sessionId(value: string) {
+    this._sessionId = value;
+  }
 }

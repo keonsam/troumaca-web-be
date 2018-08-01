@@ -101,7 +101,9 @@ class UserDBRepository implements UserRepository {
 
 
   saveUser(user:User):Observable<User> {
-    user.partyId = generateUUID();
+    if (!user.partyId) {
+        user.partyId = generateUUID();
+    }
     return Rx.Observable.create(function (observer:Observer<User>) {
       users.insert(user, function (err:any, doc:any) {
         if (!err) {

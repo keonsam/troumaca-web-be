@@ -1,10 +1,9 @@
-import { CredentialStatus } from "../credential.status";
 
 export class  Confirmation {
     private _confirmationId:string;
     private _credentialId:string;
     private _code:string;
-    private _status:CredentialStatus;
+    private _status:string;
     private _modifiedOn:Date;
     private _createdOn:Date;
 
@@ -32,11 +31,11 @@ export class  Confirmation {
         this._code = value;
     }
 
-    get status(): CredentialStatus {
+    get status(): string {
         return this._status;
     }
 
-    set status(value: CredentialStatus) {
+    set status(value: string) {
         this._status = value;
     }
 

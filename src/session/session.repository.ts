@@ -11,7 +11,7 @@ export interface SessionRepository {
 
   addSession(session:Session):Observable<Session>;
 
-  getOrCreate(session:Session):Observable<Session>;
+  // getOrCreate(session:Session):Observable<Session>;
 
   updateSession(sessionId:string, session:Session):Observable<number>;
 

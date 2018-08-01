@@ -4,8 +4,8 @@ import {Observable} from "rxjs/Observable";
 import {User} from "./user";
 import {shapeUsersResponse} from "./user.response.shaper";
 import {Result} from "../../result.success";
-import {CredentialRepository} from "../../authentication/credential/credential.repository";
-import {createCredentialRepositoryFactory} from "../../authentication/credential/credential.repository.factory";
+// import {CredentialRepository} from "../../authentication/credential/credential.repository";
+// import {createCredentialRepositoryFactory} from "../../authentication/credential/credential.repository.factory";
 import {Credential} from "../../authentication/credential/credential";
 import {CredentialStatus} from "../../authentication/credential/credential.status";
 import {generate} from "generate-password";
@@ -21,12 +21,12 @@ import {AccessRole} from "../../authorization/access-role/access.role";
 export class UserOrchestrator {
 
   private userRepository:UserRepository;
-  private credentialRepository: CredentialRepository;
+  // private credentialRepository: CredentialRepository;
   private partyAccessRoleRepository: PartyAccessRoleRepository;
   private accessRoleRepository: AccessRoleRepository;
   constructor() {
     this.userRepository = createUserRepository();
-    this.credentialRepository = createCredentialRepositoryFactory();
+    // this.credentialRepository = createCredentialRepositoryFactory();
     this.partyAccessRoleRepository = createPartyAccessRoleRepositoryFactory();
     this.accessRoleRepository = createAccessRoleRepositoryFactory();
   }
@@ -83,19 +83,19 @@ export class UserOrchestrator {
                      length: 10,
                      numbers: true
                  });
-                 credential.credentialStatus = CredentialStatus.ACTIVE;
-                 return this.credentialRepository.addUserCredential(credential)
-                     .switchMap(credential => {
-                         if (!credential) return Observable.of(undefined);
-                         if (partyAccessRoles.length < 1) return Observable.of(user);
-                         partyAccessRoles.forEach(value => {
-                             value.partyId = user.partyId;
-                         });
+                 credential.status = "Active";
+                 // return this.credentialRepository.addUserCredential(credential)
+                 //     .switchMap(credential => {
+                 //         if (!credential) return Observable.of(undefined);
+                 //         if (partyAccessRoles.length < 1) return Observable.of(user);
+                 //         partyAccessRoles.forEach(value => {
+                 //             value.partyId = user.partyId;
+                 //         });
                          return this.partyAccessRoleRepository.addPartyAccessRole(partyAccessRoles)
                              .map(partyAccessRoles2 => {
                                  if (partyAccessRoles2.length === 0) return undefined;
                                  return user;
-                             });
+                             // });
                      });
              });
      }
@@ -106,10 +106,10 @@ export class UserOrchestrator {
            if(!value) {
              return Observable.of(value);
            }else {
-             return this.partyAccessRoleRepository.deletePartyAccessRole(partyId)
-               .switchMap(numRemoved => {
-                 return this.credentialRepository.deleteCredentialByPartyId(partyId);
-               });
+             return this.partyAccessRoleRepository.deletePartyAccessRole(partyId);
+               // .switchMap(numRemoved => {
+               //   return this.credentialRepository.deleteCredentialByPartyId(partyId);
+               // });
            }
          });
     };
@@ -134,11 +134,11 @@ export class UserOrchestrator {
   updateUserMe (partyId:string, user:User, credential:Credential):Observable<number> {
     return this.userRepository.updateUser(partyId, user)
       .switchMap(numUpdated => {
-        if (numUpdated) {
-          return this.credentialRepository.updateCredential(partyId, credential);
-        }else {
+        // if (numUpdated) {
+        //   return this.credentialRepository.updateCredential(partyId, credential);
+        // }else {
           return Observable.of(0);
-        }
+        // }
       });
   };
 
