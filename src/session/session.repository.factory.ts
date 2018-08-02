@@ -70,7 +70,6 @@ class SessionDBRepository implements SessionRepository {
     if (!session.data) {
       session.data = new Map();
     }
-    console.log(session);
 
     return Rx.Observable.create(function (observer:Observer<Session>) {
       sessions.insert(session.toJson(), function (err:any, doc:any) {

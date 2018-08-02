@@ -41,12 +41,9 @@ export class CredentialOrchestrator {
 
       return this.credentialRepository
           .authenticate(credential, options)
-          .switchMap((authenticatedCredential: AuthenticatedCredential) => {
-              console.log("here");
+          .switchMap((authenticatedCredential: AuthenticatedCredential) =>  {
 
-              if (!authenticatedCredential.authenticated) {
-                  return Observable.of(authenticatedCredential);
-              } else {
+              if (authenticatedCredential.authenticateStatus === "AccountConfirmed" || authenticatedCredential.authenticateStatus === "AccountActive") {
                   const session: Session = new Session();
                   session.partyId = authenticatedCredential.partyId;
                   session.credentialId = authenticatedCredential.credentialId;
@@ -62,12 +59,13 @@ export class CredentialOrchestrator {
                   if (authenticatedCredential.confirmationId) {
                       session.data.set("confirmationId", authenticatedCredential.confirmationId);
                   }
-                  console.log(session);
                   return this.sessionRepository.addSession(session)
                       .map(session => {
                           authenticatedCredential.sessionId = session.sessionId;
                           return authenticatedCredential;
                       });
+              } else {
+                  return Observable.of(authenticatedCredential);
               }
           });
     }

@@ -82,7 +82,7 @@ credentials.ensureIndex({ fieldName: 'credentialId', unique: true }, handleError
 
 export let credentialConfirmations = new Datastore(theCredentialConfirmationsDb);
 credentialConfirmations.loadDatabase(handleError);
-credentialConfirmations.ensureIndex({ fieldName: 'credentialConfirmationId', unique: true }, handleError);
+credentialConfirmations.ensureIndex({ fieldName: 'confirmationId', unique: true }, handleError);
 
 
 // sites

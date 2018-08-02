@@ -67,4 +67,14 @@ export class AuthenticatedCredential {
   set sessionId(value: string) {
     this._sessionId = value;
   }
+
+  toJson() {
+    return {
+        "authenticateStatus": this.authenticateStatus,
+        "credentialId": this.credentialId,
+        "confirmationId": this.confirmationId,
+        "partyId": this.partyId,
+        "sessionId": this.sessionId
+    };
+  }
 }

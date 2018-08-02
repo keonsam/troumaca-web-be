@@ -5,7 +5,6 @@ import {generateUUID} from "../../../uuid.generator";
 import {Credential} from "../credential";
 import {Observable} from "rxjs/Observable";
 import {Observer} from "rxjs/Observer";
-import { ErrorObservable } from "rxjs/observable/ErrorObservable";
 import { credentials} from "../../../db";
 import {CredentialRepository} from "../credential.repository";
 import {AuthenticatedCredential} from "../authenticated.credential";
@@ -18,7 +17,6 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
   private confirmationRepositoryNeDbAdapter: ConfirmationRepositoryNeDbAdapter = new ConfirmationRepositoryNeDbAdapter();
 
   isValidUsername(username:string):Observable<boolean> {
-      console.log(username);
     if (!username) {
       return Observable.of(false);
     }
@@ -28,6 +26,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
     let validUsername:boolean = false;
     // 1. is username and email
     let validEmail:boolean = validator.isEmail(username);
+    console.log(validEmail);
 
     if (validEmail) {
       validUsername = true;
@@ -46,13 +45,13 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
       return this.getCredentialByUsername(username)
         .map(credential => {
           if (!credential) {
-            return false;
+            return true;
           } else {
-            return !credential.username;
+            return false;
           }
         });
     }
-  };
+  }
 
   // isValidEditUsername(partyId: string,username:string):Observable<boolean> {
   //   if (!username) {
@@ -130,18 +129,21 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
 
               confirmation.credentialId = credential.credentialId;
 
-              return this.confirmationRepositoryNeDbAdapter.addConfirmation(confirmation);
+              return this.confirmationRepositoryNeDbAdapter.addConfirmation(confirmation)
+                  .map(confirmation => {
+                     console.log(confirmation);
+                     return confirmation;
+                  });
           });
   }
 
   authenticate(credential: Credential, options?:any): Observable<AuthenticatedCredential> {
     return this.verifyCredential(credential.username, credential.password)
     .switchMap((credential: Credential) => {
-        console.log(credential);
       if (!credential) {
-        return Observable.throw(credential);
+        return Observable.of(undefined);
       } else {
-          const authenticatedCredential = new AuthenticatedCredential();
+          const authenticatedCredential = new AuthenticatedCredential().toJson();
           const credentialId = credential.credentialId;
           authenticatedCredential.credentialId = credentialId;
           if (credential.status === "Active") {
@@ -151,7 +153,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
               authenticatedCredential.authenticateStatus = "AccountConfirmed";
               return Observable.of(authenticatedCredential);
           } else if (credential.status === "New") {
-              return this.confirmationRepositoryNeDbAdapter.getConfirmationByCredentialId(credentialId)
+              return this.confirmationRepositoryNeDbAdapter.getConfirmationByCredentialId(credentialId, "New")
                   .map((confirmation: Confirmation) => {
                       // TODO: ADD ERROR HANDLING THIS SHOULD TEST AND GENERATE A NEW CONFIRMATION IF NECESSARY
                       authenticatedCredential.confirmationId = confirmation.confirmationId;
@@ -259,13 +261,13 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
       });
   }
 
-  updateCredentialStatusById(credentialId:string, credentialStatus:string):Observable<number> {
+  updateCredentialStatusById(credentialId:string, status:string):Observable<number> {
       return Observable.create(function (observer:Observer<number>) {
           let query = {
               "credentialId":credentialId
           };
 
-          credentials.update(query, {$set: {credentialStatus}}, {}, function (err:any, numReplaced:number) {
+          credentials.update(query, {$set: {status: status}}, {}, function (err:any, numReplaced:number) {
               if (!err) {
                   observer.next(numReplaced);
               } else {
@@ -341,8 +343,8 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
               "username": username,
               "password": password
           };
-          credentials.findOne(query, (err: any, doc: Credential) => {
-              if(!err) {
+          credentials.findOne(query, (err: any, doc: any) => {
+              if (!err) {
                   observer.next(doc);
               }else {
                   observer.error(err);
