@@ -1,8 +1,8 @@
-import {Response, Request, NextFunction} from 'express';
-import {ConfirmationOrchestrator} from "./confirmation.orchestrator";
+import { Response, Request, NextFunction } from "express";
+import { ConfirmationOrchestrator } from "./confirmation.orchestrator";
 import { Confirmation } from "./confirmation";
 
-let confirmationOrchestrator:ConfirmationOrchestrator = new ConfirmationOrchestrator();
+const confirmationOrchestrator: ConfirmationOrchestrator = new ConfirmationOrchestrator();
 
 export let confirmCode = (req: Request, res: Response) => {
 
@@ -22,7 +22,7 @@ export let confirmCode = (req: Request, res: Response) => {
 
   if (!correlationId) {
     res.status(400);
-    res.setHeader('content-type', 'application/json');
+    res.setHeader("content-type", "application/json");
     res.send(JSON.stringify({message: "A \"correlationId\" is required."}));
     return;
   }
@@ -41,7 +41,7 @@ export let confirmCode = (req: Request, res: Response) => {
       res.send(body);
     }, error => {
       res.status(500);
-      res.send(JSON.stringify({message: 'Error Occurred'}));
+      res.send(JSON.stringify({message: "Error Occurred"}));
       console.log(error);
     });
 
@@ -49,19 +49,19 @@ export let confirmCode = (req: Request, res: Response) => {
 
 export let resendConfirmCode = (req: Request, res: Response) => {
 
-  let correlationId = req.headers.correlationid;
+  const correlationId = req.headers.correlationid;
 
   if (!correlationId) {
     res.status(400);
-    res.setHeader('content-type', 'application/json');
+    res.setHeader("content-type", "application/json");
     res.send(JSON.stringify({message: "A \"correlationId\" is required."}));
     return;
   }
 
-  let confirmationId = req.params.confirmationId;
-  let credentialId = req.params.credentialId;
+  const confirmationId = req.params.confirmationId;
+  const credentialId = req.params.credentialId;
 
-  let headerOptions = {
+  const headerOptions = {
     correlationId: correlationId,
     sourceSystemHost: req.headers.host,
     sourceSystemName: ""
@@ -75,7 +75,7 @@ export let resendConfirmCode = (req: Request, res: Response) => {
         res.send(body);
     }, error => {
       res.status(500);
-      res.send(JSON.stringify({message: 'Error Occurred'}));
+      res.send(JSON.stringify({message: "Error Occurred"}));
       console.log(error);
     });
 

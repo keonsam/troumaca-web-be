@@ -1,9 +1,9 @@
-import {Request, Response} from "express";
-import {PartyAccessRoleOrchestrator} from "./party.access.role.orchestrator";
-//import {getNumericValueOrDefault} from '../../number.util';
-//import {getStringValueOrDefault} from '../../string.util';
+import { Request, Response } from "express";
+import { PartyAccessRoleOrchestrator } from "./party.access.role.orchestrator";
+// import {getNumericValueOrDefault} from '../../number.util';
+// import {getStringValueOrDefault} from '../../string.util';
 
-let orchestrator:PartyAccessRoleOrchestrator = new PartyAccessRoleOrchestrator();
+const orchestrator: PartyAccessRoleOrchestrator = new PartyAccessRoleOrchestrator();
 
 // export let findPartyAccessRoles = (req: Request, res: Response) => {
 //   let searchStr:string =  req.query.q;

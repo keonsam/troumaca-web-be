@@ -1,7 +1,7 @@
-import {Request, Response} from "express";
-import {DataTypeOrchestrator} from "./data.type.orchestrator";
+import { Request, Response } from "express";
+import { DataTypeOrchestrator } from "./data.type.orchestrator";
 
-let dataTypeOrchestrator:DataTypeOrchestrator = new DataTypeOrchestrator();
+const dataTypeOrchestrator: DataTypeOrchestrator = new DataTypeOrchestrator();
 
 export let getDataTypes = (req: Request, res: Response) => {
 
@@ -10,7 +10,7 @@ export let getDataTypes = (req: Request, res: Response) => {
       res.send(JSON.stringify(dataTypes));
     }, error => {
       res.status(500);
-      res.send({message: 'Error Occurred'});
+      res.send({message: "Error Occurred"});
       console.log(error);
     });
 

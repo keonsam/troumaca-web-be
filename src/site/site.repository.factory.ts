@@ -1,15 +1,15 @@
-import * as Rx from 'rxjs';
-import {SiteRepository} from "./site.repository";
-import {Observable} from "rxjs/Observable";
-import {Observer} from "rxjs/Observer";
-import {RepositoryKind} from "../repository.kind";
-import {sites} from "../db";
-import {UnionOfPhysicalSite} from "./union.of.physical.site";
-import {Site} from "./site";
+import * as Rx from "rxjs";
+import { SiteRepository } from "./site.repository";
+import { Observable } from "rxjs/Observable";
+import { Observer } from "rxjs/Observer";
+import { RepositoryKind } from "../repository.kind";
+import { sites } from "../db";
+import { UnionOfPhysicalSite } from "./union.of.physical.site";
+import { Site } from "./site";
 
 class SiteDBRepository implements SiteRepository {
   findSite(searchStr: string, pageSize: number): Observable<UnionOfPhysicalSite[]> {
-    let searchStrLocal = new RegExp(searchStr);
+    const searchStrLocal = new RegExp(searchStr);
     return Rx.Observable.create(function (observer: Observer<UnionOfPhysicalSite[]>) {
       if (!searchStr) {
         sites.find({}).limit(100).exec(function (err: any, doc: any) {
@@ -29,12 +29,12 @@ class SiteDBRepository implements SiteRepository {
           }
           observer.complete();
         });
-      };
+      }
     });
   }
 
   getSiteById(siteId: string): Observable<Site> {
-    let query = {
+    const query = {
       "siteId": siteId
     };
     return Rx.Observable.create(function (observer: Observer<Site>) {
@@ -64,7 +64,7 @@ class SiteRestRepository implements SiteRepository {
 
 }
 
-export function createSiteRepository(kind?:RepositoryKind):SiteRepository {
+export function createSiteRepository(kind?: RepositoryKind): SiteRepository {
   switch (kind) {
     case RepositoryKind.Nedb:
       return new SiteDBRepository();

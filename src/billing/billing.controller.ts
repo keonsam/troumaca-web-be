@@ -1,5 +1,5 @@
-import {Request, Response} from "express";
-import {BillingOrchestrator} from "./billing.orchestrator";
+import { Request, Response } from "express";
+import { BillingOrchestrator } from "./billing.orchestrator";
 import { Billing } from "./billing";
 
 const billingOrchestrator: BillingOrchestrator = new BillingOrchestrator();
@@ -10,12 +10,12 @@ export const getBilling = (req: Request, res: Response) => {
         .subscribe( billing => {
             const body = JSON.stringify(billing);
             res.status(200);
-            res.setHeader('content-type', 'application/json');
+            res.setHeader("content-type", "application/json");
             res.send(body);
         }, error => {
             console.log(error);
             res.status(500);
-            res.send(JSON.stringify({message: 'Server Error, please try again'}));
+            res.send(JSON.stringify({message: "Server Error, please try again"}));
         });
 };
 
@@ -33,12 +33,12 @@ export const addBilling = (req: Request, res: Response) => {
         .subscribe( billing => {
             const body = JSON.stringify(billing);
             res.status(201);
-            res.setHeader('content-type', 'application/json');
+            res.setHeader("content-type", "application/json");
             res.send(body);
         }, error => {
             console.log(error);
             res.status(500);
-            res.send(JSON.stringify({message: 'Server Error, please try again'}));
+            res.send(JSON.stringify({message: "Server Error, please try again"}));
         });
 };
 

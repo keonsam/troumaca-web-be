@@ -5,8 +5,8 @@ export class Credential {
   private _username: string;
   private _password: string;
   private _status: string;
-  private _modifiedOn:Date;
-  private _createdOn:Date;
+  private _modifiedOn: Date;
+  private _createdOn: Date;
 
   get partyId(): string {
     return this._partyId;
@@ -64,7 +64,7 @@ export class Credential {
     this._createdOn = value;
   }
 
-  toJson(){
+  toJson() {
     return {
       partyId: this.partyId,
       credentialId: this.credentialId,
@@ -73,7 +73,7 @@ export class Credential {
       status: this.status,
       modifiedOn: this.modifiedOn,
       createdOn: this.createdOn
-    }
+    };
   }
 
 }

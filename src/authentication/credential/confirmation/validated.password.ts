@@ -1,5 +1,5 @@
 export class ValidatedPassword {
-  private _valid:boolean;
+  private _valid: boolean;
 
 
   get valid(): boolean {

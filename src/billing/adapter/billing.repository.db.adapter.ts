@@ -12,7 +12,7 @@ export class BillingRepositoryNeDbAdapter implements BillingRepository {
             // const query = {
             //     "type": type
             // };
-            billings.findOne({}, function (err:any, doc:any) {
+            billings.findOne({}, function (err: any, doc: any) {
                 if (!err) {
                     observer.next(doc);
                 } else {
@@ -30,9 +30,9 @@ export class BillingRepositoryNeDbAdapter implements BillingRepository {
             billing.billingId = generateUUID();
             billing.methodId = method.methodId;
             billing.confirmed = true;
-            payMethods.insert(method, function (err:any, doc:any) {
+            payMethods.insert(method, function (err: any, doc: any) {
                 if (!err) {
-                    billings.insert(billing, function (err:any, doc2:any) {
+                    billings.insert(billing, function (err: any, doc2: any) {
                         if (!err) {
                             observer.next(doc2);
                         } else {

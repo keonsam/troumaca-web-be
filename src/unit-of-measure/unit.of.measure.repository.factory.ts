@@ -1,14 +1,14 @@
-import * as Rx from 'rxjs';
-import {Observable} from "rxjs/Observable";
-import {UnitOfMeasure} from "./unit.of.measure";
-import {UnitOfMeasureRepository} from "./unit.of.measure.repository";
-import {RepositoryKind} from "../repository.kind";
-import {unitOfMeasures} from "../db";
-import {Observer} from "rxjs/Observer";
+import * as Rx from "rxjs";
+import { Observable } from "rxjs/Observable";
+import { UnitOfMeasure } from "./unit.of.measure";
+import { UnitOfMeasureRepository } from "./unit.of.measure.repository";
+import { RepositoryKind } from "../repository.kind";
+import { unitOfMeasures } from "../db";
+import { Observer } from "rxjs/Observer";
 
 class UnitOfMeasureDBRepository implements UnitOfMeasureRepository {
   findUnitOfMeasure(searchStr: string, pageSize: number): Observable<UnitOfMeasure[]> {
-    let searchStrLocal = new RegExp(searchStr);
+    const searchStrLocal = new RegExp(searchStr);
     return Rx.Observable.create(function (observer: Observer<UnitOfMeasure[]>) {
       if (!searchStr) {
         unitOfMeasures.find({}).limit(100).exec(function (err: any, doc: any) {
@@ -33,11 +33,11 @@ class UnitOfMeasureDBRepository implements UnitOfMeasureRepository {
   }
 
   getUnitOfMeasureById(unitOfMeasureId: string): Observable<UnitOfMeasure> {
-    let query = {
+    const query = {
       "unitOfMeasureId": unitOfMeasureId
-    }
+    };
     return Rx.Observable.create(function (observer: Observer<UnitOfMeasure>) {
-      unitOfMeasures.findOne(query, function (err: any, doc:any) {
+      unitOfMeasures.findOne(query, function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -52,7 +52,7 @@ class UnitOfMeasureDBRepository implements UnitOfMeasureRepository {
 }
 
 class UnitOfMeasureRestRepository implements UnitOfMeasureRepository {
-  findUnitOfMeasure(searchStr: string, pageSize:number): Observable<UnitOfMeasure[]> {
+  findUnitOfMeasure(searchStr: string, pageSize: number): Observable<UnitOfMeasure[]> {
     return null;
   }
 
@@ -62,7 +62,7 @@ class UnitOfMeasureRestRepository implements UnitOfMeasureRepository {
 
 }
 
-export function createUnitOfMeasureRepository(kind?:RepositoryKind):UnitOfMeasureRepository {
+export function createUnitOfMeasureRepository(kind?: RepositoryKind): UnitOfMeasureRepository {
   switch (kind) {
     case RepositoryKind.Nedb:
       return new UnitOfMeasureDBRepository();

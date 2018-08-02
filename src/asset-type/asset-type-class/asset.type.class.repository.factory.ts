@@ -1,5 +1,5 @@
-import {RepositoryKind} from "../../repository.kind";
-import {properties} from "../../properties.helpers";
+import { RepositoryKind } from "../../repository.kind";
+import { properties } from "../../properties.helpers";
 import { AssetTypeClassRepositoryRestAdapter } from "./adapter/asset.type.class.repository.rest.adapter";
 import { AssetTypeClassRepository } from "./asset.type.class.repository";
 import { AssetTypeClassRepositoryNeDbAdapter } from "./adapter/asset.type.class.repository.db.adapter";
@@ -7,7 +7,7 @@ import { AssetTypeClassRepositoryNeDbAdapter } from "./adapter/asset.type.class.
 
 
 
-export function createAssetTypeClassRepositoryFactory(kind?:RepositoryKind): AssetTypeClassRepository {
+export function createAssetTypeClassRepositoryFactory(kind?: RepositoryKind): AssetTypeClassRepository {
   const type: number = properties.get("assetType.repository.type") as number;
 
   const k: RepositoryKind = (kind) ? kind : (type === 2) ? RepositoryKind.Rest : RepositoryKind.Nedb;

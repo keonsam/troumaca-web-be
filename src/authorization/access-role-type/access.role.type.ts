@@ -1,11 +1,11 @@
 export class AccessRoleType {
 
-  private _accessRoleTypeId:string;
-  private _name:string;
-  private _description:string;
-  private _ownerPartyId:string;
-  private _createdOn:Date;
-  private _modifiedOn:Date;
+  private _accessRoleTypeId: string;
+  private _name: string;
+  private _description: string;
+  private _ownerPartyId: string;
+  private _createdOn: Date;
+  private _modifiedOn: Date;
 
   get accessRoleTypeId(): string {
     return this._accessRoleTypeId;

@@ -1,21 +1,21 @@
-import * as Rx from 'rxjs';
-import {WebSiteRepository} from "./web.site.repository";
-import {Observable} from "rxjs/Observable";
-import {Observer} from "rxjs/Observer";
-import {RepositoryKind} from "../../repository.kind";
-import {webSites} from "../../db";
-import {WebSite} from "./web.site";
-import {calcSkip} from "../../db.util";
-import {generateUUID} from "../../uuid.generator";
+import * as Rx from "rxjs";
+import { WebSiteRepository } from "./web.site.repository";
+import { Observable } from "rxjs/Observable";
+import { Observer } from "rxjs/Observer";
+import { RepositoryKind } from "../../repository.kind";
+import { webSites } from "../../db";
+import { WebSite } from "./web.site";
+import { calcSkip } from "../../db.util";
+import { generateUUID } from "../../uuid.generator";
 
 class WebSiteDBRepository implements WebSiteRepository {
 
-  private defaultPageSize:number = 10;
+  private defaultPageSize: number = 10;
 
-  saveWebSite(webSite:WebSite):Observable<WebSite> {
+  saveWebSite(webSite: WebSite): Observable<WebSite> {
     webSite.siteId = generateUUID();
-    return Rx.Observable.create(function(observer:Observer<WebSite>) {
-      webSites.insert(webSite, function(err:any, doc:any) {
+    return Rx.Observable.create(function(observer: Observer<WebSite>) {
+      webSites.insert(webSite, function(err: any, doc: any) {
         if (err) {
           observer.error(err);
         } else {
@@ -26,11 +26,11 @@ class WebSiteDBRepository implements WebSiteRepository {
     });
   }
 
-  getWebSites(pageNumber:number, pageSize:number, order:string):Observable<WebSite[]> {
-    let localDefaultPageSize = this.defaultPageSize;
-    return Rx.Observable.create(function (observer:Observer<WebSite[]>) {
-      let skip = calcSkip(pageNumber, pageSize, localDefaultPageSize);
-      webSites.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err:any, doc:any) {
+  getWebSites(pageNumber: number, pageSize: number, order: string): Observable<WebSite[]> {
+    const localDefaultPageSize = this.defaultPageSize;
+    return Rx.Observable.create(function (observer: Observer<WebSite[]>) {
+      const skip = calcSkip(pageNumber, pageSize, localDefaultPageSize);
+      webSites.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -41,9 +41,9 @@ class WebSiteDBRepository implements WebSiteRepository {
     });
   }
 
-  getWebSiteCount():Observable<number> {
-    return Rx.Observable.create(function (observer:Observer<number>) {
-      webSites.count({}, function (err:any, count:number) {
+  getWebSiteCount(): Observable<number> {
+    return Rx.Observable.create(function (observer: Observer<number>) {
+      webSites.count({}, function (err: any, count: number) {
         if (!err) {
           observer.next(count);
         } else {
@@ -52,14 +52,14 @@ class WebSiteDBRepository implements WebSiteRepository {
         observer.complete();
       });
     });
-  };
+  }
 
-  getWebSiteById(siteId:string):Observable<WebSite> {
-    return Rx.Observable.create(function (observer:Observer<WebSite>) {
-      let query = {
-        "siteId":siteId
+  getWebSiteById(siteId: string): Observable<WebSite> {
+    return Rx.Observable.create(function (observer: Observer<WebSite>) {
+      const query = {
+        "siteId": siteId
       };
-      webSites.findOne(query, function (err:any, doc:any) {
+      webSites.findOne(query, function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -68,49 +68,49 @@ class WebSiteDBRepository implements WebSiteRepository {
         observer.complete();
       });
     });
-  };
+  }
 
-  updateWebSite(siteId:string, webSite:WebSite):Observable<number> {
-    return Rx.Observable.create(function (observer:Observer<number>) {
-      let query = {
-        "siteId":siteId
+  updateWebSite(siteId: string, webSite: WebSite): Observable<number> {
+    return Rx.Observable.create(function (observer: Observer<number>) {
+      const query = {
+        "siteId": siteId
       };
-      webSites.update(query, webSite, {}, function (err:any, numReplaced:number) {
+      webSites.update(query, webSite, {}, function (err: any, numReplaced: number) {
         if (!err) {
           observer.next(numReplaced);
         } else {
           observer.error(err);
         }
         observer.complete();
-      })
+      });
     });
-  };
+  }
 
-  deleteWebSite(siteId:string):Observable<number> {
-    return Rx.Observable.create(function (observer:Observer<number>) {
-      let query = {
-        "siteId":siteId
+  deleteWebSite(siteId: string): Observable<number> {
+    return Rx.Observable.create(function (observer: Observer<number>) {
+      const query = {
+        "siteId": siteId
       };
-      webSites.remove(query, {}, function (err:any, numRemoved:number) {
+      webSites.remove(query, {}, function (err: any, numRemoved: number) {
         if (!err) {
           observer.next(numRemoved);
         } else {
           observer.error(err);
         }
         observer.complete();
-      })
+      });
     });
-  };
+  }
 
 }
 
 class WebSiteRestRepository implements WebSiteRepository {
 
-  deleteWebSite(siteId:string): Observable<number> {
+  deleteWebSite(siteId: string): Observable<number> {
     return undefined;
   }
 
-  getWebSiteById(siteId:string): Observable<WebSite> {
+  getWebSiteById(siteId: string): Observable<WebSite> {
     return undefined;
   }
 
@@ -126,12 +126,12 @@ class WebSiteRestRepository implements WebSiteRepository {
     return undefined;
   }
 
-  updateWebSite(siteId:string, webSite:WebSite): Observable<number> {
+  updateWebSite(siteId: string, webSite: WebSite): Observable<number> {
     return undefined;
   }
 }
 
-export function createWebSiteRepository(kind?:RepositoryKind):WebSiteRepository {
+export function createWebSiteRepository(kind?: RepositoryKind): WebSiteRepository {
   switch (kind) {
     case RepositoryKind.Nedb:
       return new WebSiteDBRepository();

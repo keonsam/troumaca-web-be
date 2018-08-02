@@ -1,16 +1,16 @@
 import Rx from "rxjs";
-import {Credential} from "../credential";
-import {Observable} from "rxjs/Observable";
-import {Observer} from "rxjs/Observer";
-import {CredentialRepository} from "../credential.repository";
+import { Credential } from "../credential";
+import { Observable } from "rxjs/Observable";
+import { Observer } from "rxjs/Observer";
+import { CredentialRepository } from "../credential.repository";
 // import {Result} from "../../../result.success";
 import request from "request";
-import {classToPlain, plainToClass} from "class-transformer";
-import {jsonRequestHeaderMap, postJsonOptions} from "../../../request.helpers";
-import {properties} from "../../../properties.helpers";
-import {CredentialConfirmation} from "../confirmation/credential.confirmation";
+import { classToPlain, plainToClass } from "class-transformer";
+import { jsonRequestHeaderMap, postJsonOptions } from "../../../request.helpers";
+import { properties } from "../../../properties.helpers";
+import { CredentialConfirmation } from "../confirmation/credential.confirmation";
 // import {ValidatedPassword} from "../confirmation/validated.password";
-import {AuthenticatedCredential} from "../authenticated.credential";
+import { AuthenticatedCredential } from "../authenticated.credential";
 // import {ValidatedUsername} from "../confirmation/validated.username";
 import { Confirmation } from "../confirmation/confirmation";
 
@@ -19,22 +19,22 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
   constructor() {
   }
 
-  isValidPassword(password:string, options?:any): Observable<boolean> {
-      let uri:string = properties.get("credential.host.port") as string;
+  isValidPassword(password: string, options?: any): Observable<boolean> {
+      let uri: string = properties.get("credential.host.port") as string;
 
-      let headerMap = jsonRequestHeaderMap(options ? options : {});
+      const headerMap = jsonRequestHeaderMap(options ? options : {});
 
       // let headers:any = strMapToJson(headerMap);
-      let json = {
-          password:password
+      const json = {
+          password: password
       };
 
-      uri = uri + '/authentication/credentials/validate-password';
+      uri = uri + "/authentication/credentials/validate-password";
 
-      let requestOptions:any = postJsonOptions(uri, headerMap, json);
+      const requestOptions: any = postJsonOptions(uri, headerMap, json);
 
-      return Rx.Observable.create(function (observer:Observer<boolean>) {
-          request(requestOptions, function (error:any, response:any, body:any) {
+      return Rx.Observable.create(function (observer: Observer<boolean>) {
+          request(requestOptions, function (error: any, response: any, body: any) {
               try {
                   if (response && response.statusCode != 200) {
                       observer.error(error);
@@ -51,27 +51,27 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
       });
   }
 
-  isValidUsername(username:string, options?:any): Observable<boolean> {
-      let uri:string = properties.get("credential.host.port") as string;
+  isValidUsername(username: string, options?: any): Observable<boolean> {
+      let uri: string = properties.get("credential.host.port") as string;
 
 
-      let headerMap = jsonRequestHeaderMap(options ? options : {});
+      const headerMap = jsonRequestHeaderMap(options ? options : {});
 
       // let headers:any = strMapToJson(headerMap);
-      let json = {username:username};
+      const json = {username: username};
 
-      uri = uri + '/authentication/credentials/validate-username';
+      uri = uri + "/authentication/credentials/validate-username";
 
-      let requestOptions:any = postJsonOptions(uri, headerMap, json);
+      const requestOptions: any = postJsonOptions(uri, headerMap, json);
 
-      return Observable.create(function (observer:Observer<boolean>) {
-          request(requestOptions, function (error:any, response:any, body:any) {
+      return Observable.create(function (observer: Observer<boolean>) {
+          request(requestOptions, function (error: any, response: any, body: any) {
               try {
                   if (response && response.statusCode != 200) {
                       observer.error(body);
                       observer.complete();
                   } else {
-                      //let vp:boolean = plainToClass(Boolean, body["valid"] as Object);
+                      // let vp:boolean = plainToClass(Boolean, body["valid"] as Object);
                       observer.next(body["valid"]);
                       observer.complete();
                   }
@@ -83,19 +83,19 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
       });
   }
 
-  addCredential(credential:Credential, options?:any): Observable<Confirmation> {
-    let uri:string = properties.get("credential.host.port") as string;
+  addCredential(credential: Credential, options?: any): Observable<Confirmation> {
+    const uri: string = properties.get("credential.host.port") as string;
 
-    let headerMap = jsonRequestHeaderMap(options ? options : {});
+    const headerMap = jsonRequestHeaderMap(options ? options : {});
     // let headers:any = strMapToJson(headerMap);
-    let credentialJson = classToPlain(credential);
+    const credentialJson = classToPlain(credential);
 
-    let uriAndPath:string = uri + '/authentication/credentials';
+    const uriAndPath: string = uri + "/authentication/credentials";
 
-    let requestOptions:any = postJsonOptions(uriAndPath, headerMap, credentialJson);
+    const requestOptions: any = postJsonOptions(uriAndPath, headerMap, credentialJson);
 
-    return Rx.Observable.create(function (observer:Observer<CredentialConfirmation>) {
-      request(requestOptions, function (error:any, response:any, body:any) {
+    return Rx.Observable.create(function (observer: Observer<CredentialConfirmation>) {
+      request(requestOptions, function (error: any, response: any, body: any) {
         if (error) {
           observer.error(error);
         } else {
@@ -103,7 +103,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
             observer.error(body);
           } else {
             // let credentialObj = plainToClass(Credential, body);
-            let credentialObject = plainToClass(Confirmation, body["confirmation"] as Object);
+            const credentialObject = plainToClass(Confirmation, body["confirmation"] as Object);
             console.log(body["confirmation"]);
             observer.next(body["confirmation"]);
           }
@@ -113,23 +113,23 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
     });
   }
 
-  authenticate(credential: Credential, options:any): Observable<AuthenticatedCredential> {
-      let uri:string = properties.get("credential.host.port") as string;
+  authenticate(credential: Credential, options: any): Observable<AuthenticatedCredential> {
+      const uri: string = properties.get("credential.host.port") as string;
 
-      let headerMap = jsonRequestHeaderMap(options ? options : {});
+      const headerMap = jsonRequestHeaderMap(options ? options : {});
 
       // let headers:any = strMapToJson(headerMap);
-      let json = {
-          username:credential.username,
-          password:credential.password
+      const json = {
+          username: credential.username,
+          password: credential.password
       };
 
-      let uriAndPath:string = uri + '/authentication/authenticate';
+      const uriAndPath: string = uri + "/authentication/authenticate";
 
-      let requestOptions:any = postJsonOptions(uriAndPath, headerMap, json);
+      const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
 
-      return Observable.create(function (observer:Observer<number>) {
-          request(requestOptions, function (error:any, response:any, body:any) {
+      return Observable.create(function (observer: Observer<number>) {
+          request(requestOptions, function (error: any, response: any, body: any) {
               console.log(body);
               try {
                   if (error) {
@@ -139,7 +139,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
                       observer.error(body);
                       observer.complete();
                   } else {
-                      //let vp:boolean = plainToClass(Boolean, body["valid"] as Object);
+                      // let vp:boolean = plainToClass(Boolean, body["valid"] as Object);
                       observer.next(body);
                       observer.complete();
                   }

@@ -1,4 +1,4 @@
-import {Router} from "express";
+import { Router } from "express";
 import bodyParser from "body-parser";
 
 import * as assetController from "./asset-type/asset/asset.controller";
@@ -30,8 +30,8 @@ import * as organizationController from "./party/organization/organization.contr
 import * as subscriptionController from "./subscription/subscription.controller";
 import * as billingController from "./billing/billing.controller";
 
-const router:Router = Router();
-const jsonParser = bodyParser.json({ type: 'application/json'});
+const router: Router = Router();
+const jsonParser = bodyParser.json({ type: "application/json"});
 // const jsonParser = bodyParser.json();
 
 router.get("/", (req, res) => {
@@ -157,14 +157,14 @@ router.get("/send-confirmation-codes/:credentialId/:confirmationId", confirmatio
 router.post("/verify-credentials-confirmations", confirmationController.confirmCode);
 
 // Todo: Check into why this is needed
-//router.post("/validate-edit-username", credentialController.isValidEditUsername);
-//router.post("/authenticate", credentialController.authenticate);
-//router.post("/forgot-password", credentialController.forgotPassword);
+// router.post("/validate-edit-username", credentialController.isValidEditUsername);
+// router.post("/authenticate", credentialController.authenticate);
+// router.post("/forgot-password", credentialController.forgotPassword);
 // router.post("/credentials", credentialController.addCredential);
-//router.put("/credentials/:partyId", credentialController.updateCredential);
-//router.delete("/credentials/:credentialId", credentialController.deleteCredential);
-//router.get("/send-confirmation-codes/:confirmationId", confirmationController.sendPhoneVerificationCode);
-//router.get("/get-confirmations-username/:credentialConfirmationId", confirmationController.getConfirmationsUsername);
+// router.put("/credentials/:partyId", credentialController.updateCredential);
+// router.delete("/credentials/:credentialId", credentialController.deleteCredential);
+// router.get("/send-confirmation-codes/:confirmationId", confirmationController.sendPhoneVerificationCode);
+// router.get("/get-confirmations-username/:credentialConfirmationId", confirmationController.getConfirmationsUsername);
 
 // session
 router.get("/sessions/is-valid-session", sessionController.isValidSession);

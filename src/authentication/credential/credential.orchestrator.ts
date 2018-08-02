@@ -1,39 +1,39 @@
-import {ValidateResponse} from "./validate.response";
-import {Credential} from "./credential";
-import {createCredentialRepositoryFactory} from "./credential.repository.factory";
-import {CredentialRepository} from "./credential.repository";
-import {Observable} from "rxjs/Observable";
-import {Session} from "../../session/session";
-import {createSessionRepositoryFactory} from "../../session/session.repository.factory";
-import {SessionRepository} from "../../session/session.repository";
+import { ValidateResponse } from "./validate.response";
+import { Credential } from "./credential";
+import { createCredentialRepositoryFactory } from "./credential.repository.factory";
+import { CredentialRepository } from "./credential.repository";
+import { Observable } from "rxjs/Observable";
+import { Session } from "../../session/session";
+import { createSessionRepositoryFactory } from "../../session/session.repository.factory";
+import { SessionRepository } from "../../session/session.repository";
 import "rxjs/add/operator/map";
-import {AuthenticatedCredential} from "./authenticated.credential";
-import { Confirmation} from "./confirmation/confirmation";
+import { AuthenticatedCredential } from "./authenticated.credential";
+import { Confirmation } from "./confirmation/confirmation";
 
 export class CredentialOrchestrator {
 
-  private credentialRepository:CredentialRepository;
-  private sessionRepository:SessionRepository;
+  private credentialRepository: CredentialRepository;
+  private sessionRepository: SessionRepository;
 
   constructor() {
     this.sessionRepository = createSessionRepositoryFactory();
     this.credentialRepository = createCredentialRepositoryFactory();
   }
 
-  isValidUsername(credential:Credential):Observable<boolean> {
+  isValidUsername(credential: Credential): Observable<boolean> {
     return this.credentialRepository.isValidUsername(credential.username);
-  };
+  }
 
-  isValidPassword(credential:Credential):Observable<boolean> {
+  isValidPassword(credential: Credential): Observable<boolean> {
     return this.credentialRepository
     .isValidPassword(credential.password);
-  };
+  }
 
-  addCredential(credential:Credential, options?:any):Observable<Confirmation> {
+  addCredential(credential: Credential, options?: any): Observable<Confirmation> {
       return this.credentialRepository.addCredential(credential, options);
-  };
+  }
 
-  authenticate(credential:Credential, options?:any):Observable<AuthenticatedCredential> {
+  authenticate(credential: Credential, options?: any): Observable<AuthenticatedCredential> {
         // A person can access the application under the following conditions:
         // 1. He/she provides a valid set of credentials
         // 2. He/she has confirmed their username (email, or phone)

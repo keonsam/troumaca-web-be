@@ -1,13 +1,13 @@
-import {Permission} from "../permission/permission";
+import { Permission } from "../permission/permission";
 
 export class ResourcePermission {
 
-  private _resourcePermissionId:string;
-  private _resourceId:string;
-  private _permission:Permission;
-  //private _ownerPartyId:string;
-  private _createdOn:Date;
-  private _modifiedOn:Date;
+  private _resourcePermissionId: string;
+  private _resourceId: string;
+  private _permission: Permission;
+  // private _ownerPartyId:string;
+  private _createdOn: Date;
+  private _modifiedOn: Date;
 
   get resourcePermissionId(): string {
     return this._resourcePermissionId;

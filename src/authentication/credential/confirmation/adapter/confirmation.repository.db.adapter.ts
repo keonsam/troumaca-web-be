@@ -1,9 +1,9 @@
-import {ConfirmationRepository} from "../confirmation.repository";
-import {generateUUID} from "../../../../uuid.generator";
+import { ConfirmationRepository } from "../confirmation.repository";
+import { generateUUID } from "../../../../uuid.generator";
 import phoneToken from "generate-sms-verification-code";
 import { credentialConfirmations, credentials } from "../../../../db";
-import {Observable} from "rxjs/Observable";
-import {Observer} from "rxjs/Observer";
+import { Observable } from "rxjs/Observable";
+import { Observer } from "rxjs/Observer";
 import { Confirmation } from "../confirmation";
 
 export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository {
@@ -31,7 +31,7 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
           });
   }
 
-  confirmCode(confirmationId:string, credentialId:string, confirmation: Confirmation ,options?:any):Observable<Confirmation> {
+  confirmCode(confirmationId: string, credentialId: string, confirmation: Confirmation , options?: any): Observable<Confirmation> {
       return this.verifyCode(confirmationId, confirmation.code)
           .switchMap(confirmation => {
               console.log(confirmation);
@@ -123,7 +123,7 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
         confirmation.createdOn = new Date();
         confirmation.modifiedOn = new Date();
         return Observable.create(function (observer: Observer<Confirmation>) {
-            credentialConfirmations.insert(confirmation.toJson(), function (err:any, doc:any) {
+            credentialConfirmations.insert(confirmation.toJson(), function (err: any, doc: any) {
                 if (!err) {
                     console.log(doc);
                     observer.next(doc);
@@ -133,16 +133,16 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
                 observer.complete();
             });
         });
-    };
+    }
 
-  getConfirmationByCredentialId(credentialId:string, status: string): Observable<Confirmation> {
+  getConfirmationByCredentialId(credentialId: string, status: string): Observable<Confirmation> {
       return Observable.create( (observer: Observer<Confirmation>) => {
-          let query = {
+          const query = {
               "credentialId": credentialId,
               "status": status
           };
 
-          credentialConfirmations.findOne(query,  (err:any, doc:any) => {
+          credentialConfirmations.findOne(query,  (err: any, doc: any) => {
               if (!err) {
                   observer.next(doc);
               } else {
@@ -160,7 +160,7 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
       const query = {
         "credentialId": credentialId
       };
-      credentialConfirmations.update(query, {$set: {status: status}}, {multi: true}, (err:any, numReplaced:number) => {
+      credentialConfirmations.update(query, {$set: {status: status}}, {multi: true}, (err: any, numReplaced: number) => {
           if (!err) {
               observer.next(numReplaced);
           } else {
@@ -172,13 +172,13 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
   }
 
   verifyCode(confirmationId: string , code: string): Observable<Confirmation> {
-      return Observable.create(function (observer:Observer<Confirmation>) {
+      return Observable.create(function (observer: Observer<Confirmation>) {
           const query = {
               "confirmationId": confirmationId,
               "code": code
           };
 
-          credentialConfirmations.findOne(query, function (err:any, doc:any) {
+          credentialConfirmations.findOne(query, function (err: any, doc: any) {
               if (!err) {
                   observer.next(doc);
               } else {
@@ -189,13 +189,13 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
       });
   }
 
-  updateCredentialStatusById(credentialId:string, status:string):Observable<number> {
-      return Observable.create(function (observer:Observer<number>) {
-          let query = {
-              "credentialId":credentialId
+  updateCredentialStatusById(credentialId: string, status: string): Observable<number> {
+      return Observable.create(function (observer: Observer<number>) {
+          const query = {
+              "credentialId": credentialId
           };
 
-          credentials.update(query, {$set: {status: status}}, {}, function (err:any, numReplaced:number) {
+          credentials.update(query, {$set: {status: status}}, {}, function (err: any, numReplaced: number) {
               if (!err) {
                   observer.next(numReplaced);
               } else {
@@ -204,6 +204,6 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
               observer.complete();
           });
       });
-  };
+  }
 
 }

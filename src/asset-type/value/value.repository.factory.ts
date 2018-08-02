@@ -1,19 +1,19 @@
-import * as Rx from 'rxjs';
-import {ValueRepository} from "./value.repository";
-import {Observable} from "rxjs/Observable";
-import {Value} from "./value";
-import {Observer} from "rxjs/Observer";
-import {RepositoryKind} from "../../repository.kind";
-import {calcSkip} from "../../db.util";
-import {generateUUID} from "../../uuid.generator";
-import {values} from "../../db";
+import * as Rx from "rxjs";
+import { ValueRepository } from "./value.repository";
+import { Observable } from "rxjs/Observable";
+import { Value } from "./value";
+import { Observer } from "rxjs/Observer";
+import { RepositoryKind } from "../../repository.kind";
+import { calcSkip } from "../../db.util";
+import { generateUUID } from "../../uuid.generator";
+import { values } from "../../db";
 
 class ValueDBRepository implements ValueRepository {
 
-  private defaultPageSize:number = 10;
+  private defaultPageSize: number = 10;
 
   findValues(searchStr: string, pageSize: number): Observable<Value[]> {
-    let searchStrLocal = new RegExp(searchStr);
+    const searchStrLocal = new RegExp(searchStr);
     return Rx.Observable.create(function (observer: Observer<Value[]>) {
       values.find({name: {$regex: searchStrLocal}}).limit(pageSize).exec(function (err: any, doc: any) {
         if (!err) {
@@ -27,7 +27,7 @@ class ValueDBRepository implements ValueRepository {
   }
 
   saveValues(values2: Value[]): Observable<Value[]> {
-    values2.forEach((next:Value) => {
+    values2.forEach((next: Value) => {
       if (!next.valueId) next.valueId = generateUUID();
     });
     return Rx.Observable.create(function (observer: Observer<Value>) {
@@ -40,11 +40,11 @@ class ValueDBRepository implements ValueRepository {
         observer.complete();
       });
     });
-  };
+  }
 
   getValues(pageNumber: number, pageSize: number, order: string): Observable<Value[]> {
     return Rx.Observable.create(function (observer: Observer<Value[]>) {
-      let skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
+      const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
       values.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
@@ -58,7 +58,7 @@ class ValueDBRepository implements ValueRepository {
 
   getValuesByAssetTypeId(assetTypeId: string): Observable<Value[]> {
     return Rx.Observable.create(function (observer: Observer<Value[]>) {
-      values.find({assetTypeId},function (err: any, doc: any) {
+      values.find({assetTypeId}, function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -80,11 +80,11 @@ class ValueDBRepository implements ValueRepository {
         observer.complete();
       });
     });
-  };
+  }
 
   getValueById(valueId: string): Observable<Value> {
     return Rx.Observable.create(function (observer: Observer<Value>) {
-      let query = {
+      const query = {
         "valueId": valueId
       };
       values.findOne(query, function (err: any, doc: any) {
@@ -96,11 +96,11 @@ class ValueDBRepository implements ValueRepository {
         observer.complete();
       });
     });
-  };
+  }
 
   updateValue(assetTypeId: string, value: Value[]): Observable<number> {
     return Rx.Observable.create(function (observer: Observer<number>) {
-      let query = {
+      const query = {
         "assetTypeId": assetTypeId
       };
       values.update(query, value, {}, function (err: any, numReplaced: number) {
@@ -110,47 +110,47 @@ class ValueDBRepository implements ValueRepository {
           observer.error(err);
         }
         observer.complete();
-      })
+      });
     });
-  };
+  }
 
-  deleteValue(valueId:string): Observable<number> {
+  deleteValue(valueId: string): Observable<number> {
     return Rx.Observable.create(function (observer: Observer<number>) {
-      let query = {
-        "valueId":valueId
+      const query = {
+        "valueId": valueId
       };
 
-      values.remove(query, {}, function (err:any, numRemoved:number) {
+      values.remove(query, {}, function (err: any, numRemoved: number) {
         if (!err) {
           observer.next(numRemoved);
         } else {
           observer.error(err);
         }
         observer.complete();
-      })
+      });
     });
-  };
+  }
 
-  deleteValuesByAssetTypeId(assetTypeId:string): Observable<number> {
+  deleteValuesByAssetTypeId(assetTypeId: string): Observable<number> {
     return Rx.Observable.create(function (observer: Observer<number>) {
-      let query = {
+      const query = {
         assetTypeId
       };
 
-      values.remove(query, { multi: true }, function (err:any, numRemoved:number) {
+      values.remove(query, { multi: true }, function (err: any, numRemoved: number) {
         if (!err) {
           observer.next(numRemoved);
         } else {
           observer.error(err);
         }
         observer.complete();
-      })
+      });
     });
-  };
+  }
 }
 
 class ValueRestRepository implements ValueRepository {
-  findValues(searchStr:string, pageSize:number): Observable<Value[]> {
+  findValues(searchStr: string, pageSize: number): Observable<Value[]> {
     return undefined;
   }
 
@@ -158,38 +158,38 @@ class ValueRestRepository implements ValueRepository {
     return undefined;
   }
 
-  saveValues(values:Value[]):Observable<Value[]> {
-    return null
-  }
-
-  getValues(pageNumber:number, pageSize:number, order:string):Observable<Value[]> {
+  saveValues(values: Value[]): Observable<Value[]> {
     return null;
   }
 
-  getValueCount():Observable<number> {
+  getValues(pageNumber: number, pageSize: number, order: string): Observable<Value[]> {
     return null;
-  };
+  }
 
-  getValueById(valueId:string):Observable<Value> {
+  getValueCount(): Observable<number> {
     return null;
-  };
+  }
 
-  updateValue(assetTypeId:string, value:Value[]):Observable<number> {
+  getValueById(valueId: string): Observable<Value> {
     return null;
-  };
+  }
 
-  deleteValue(valueId:string): Observable<number> {
+  updateValue(assetTypeId: string, value: Value[]): Observable<number> {
     return null;
-  };
+  }
 
-  deleteValuesByAssetTypeId(assetTypeId:string): Observable<number> {
+  deleteValue(valueId: string): Observable<number> {
+    return null;
+  }
+
+  deleteValuesByAssetTypeId(assetTypeId: string): Observable<number> {
     return null;
   }
 
 
   }
 
-export function createValueRepository(kind?:RepositoryKind):ValueRepository {
+export function createValueRepository(kind?: RepositoryKind): ValueRepository {
   switch (kind) {
     case RepositoryKind.Nedb:
       return new ValueDBRepository();

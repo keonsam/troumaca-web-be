@@ -1,37 +1,37 @@
-import validator from 'validator';
-import libphonenumberjs from 'libphonenumber-js';
-import PasswordValidator from 'password-validator';
-import {generateUUID} from "../../../uuid.generator";
-import {Credential} from "../credential";
-import {Observable} from "rxjs/Observable";
-import {Observer} from "rxjs/Observer";
-import { credentials} from "../../../db";
-import {CredentialRepository} from "../credential.repository";
-import {AuthenticatedCredential} from "../authenticated.credential";
+import validator from "validator";
+import libphonenumberjs from "libphonenumber-js";
+import PasswordValidator from "password-validator";
+import { generateUUID } from "../../../uuid.generator";
+import { Credential } from "../credential";
+import { Observable } from "rxjs/Observable";
+import { Observer } from "rxjs/Observer";
+import { credentials } from "../../../db";
+import { CredentialRepository } from "../credential.repository";
+import { AuthenticatedCredential } from "../authenticated.credential";
 import "rxjs/add/observable/of";
-import { Confirmation} from "../confirmation/confirmation";
+import { Confirmation } from "../confirmation/confirmation";
 import { ConfirmationRepositoryNeDbAdapter } from "../confirmation/adapter/confirmation.repository.db.adapter";
 
 export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
 
   private confirmationRepositoryNeDbAdapter: ConfirmationRepositoryNeDbAdapter = new ConfirmationRepositoryNeDbAdapter();
 
-  isValidUsername(username:string):Observable<boolean> {
+  isValidUsername(username: string): Observable<boolean> {
     if (!username) {
       return Observable.of(false);
     }
 
 
     // the user name is valid if:
-    let validUsername:boolean = false;
+    let validUsername: boolean = false;
     // 1. is username and email
-    let validEmail:boolean = validator.isEmail(username);
+    const validEmail: boolean = validator.isEmail(username);
     console.log(validEmail);
 
     if (validEmail) {
       validUsername = true;
     } else {
-      let parsedObj:any = libphonenumberjs.parse(username, 'US');
+      const parsedObj: any = libphonenumberjs.parse(username, "US");
       if (parsedObj && parsedObj.phone) {
         // 2. or username is a phone number
         validUsername = libphonenumberjs.isValidNumber(parsedObj);
@@ -98,14 +98,14 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
   //   }
   // };
 
-  isValidPassword(password:string):Observable<boolean> {
+  isValidPassword(password: string): Observable<boolean> {
     if (!password) {
 
       return Observable.of(false);
 
     } else {
       // Create a schema
-      let schema:any = new PasswordValidator();
+      const schema: any = new PasswordValidator();
 
       // Add properties to it
       schema
@@ -115,14 +115,14 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
         .has().lowercase()                              // Must have lowercase letters
         .has().digits()                                 // Must have digits
         .has().not().spaces()                           // Should not have spaces
-        .is().not().oneOf(['Passw0rd', 'Password123']); // Blacklist these values
+        .is().not().oneOf(["Passw0rd", "Password123"]); // Blacklist these values
 
       return Observable.of(schema.validate(password));
     }
 
-  };
+  }
 
-  addCredential(credential:Credential, options?:any):Observable<Confirmation> {
+  addCredential(credential: Credential, options?: any): Observable<Confirmation> {
       return this.addCredentialLocal(credential)
           .switchMap(credential => {
               const confirmation: Confirmation = new Confirmation();
@@ -137,7 +137,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
           });
   }
 
-  authenticate(credential: Credential, options?:any): Observable<AuthenticatedCredential> {
+  authenticate(credential: Credential, options?: any): Observable<AuthenticatedCredential> {
     return this.verifyCredential(credential.username, credential.password)
     .switchMap((credential: Credential) => {
       if (!credential) {
@@ -164,7 +164,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
       }
     });
   }
-  
+
   // checkUsernameValid(partyId:string, username:string):Observable<Credential> {
   //   return Observable.create(function (observer:Observer<Credential>) {
   //     let query1 = {
@@ -186,7 +186,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
   //     });
   //   });
   // };
-  
+
   // authenticateCredential(credential:Credential):Observable<Credential> {
   //   return Observable.create(function (observer:Observer<Credential>) {
   //     let query1 = {
@@ -206,16 +206,16 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
   //     });
   //   });
   // };
-  
+
   // USED BY OTHER REPO
 
-  getCredentialByCredentialId(credentialId:string):Observable<Credential> {
-      return Observable.create(function (observer:Observer<Credential>) {
-          let query = {
-              "credentialId":credentialId
+  getCredentialByCredentialId(credentialId: string): Observable<Credential> {
+      return Observable.create(function (observer: Observer<Credential>) {
+          const query = {
+              "credentialId": credentialId
           };
 
-          credentials.findOne(query, function (err:any, doc:any) {
+          credentials.findOne(query, function (err: any, doc: any) {
               if (!err) {
                   observer.next(doc);
               } else {
@@ -224,13 +224,13 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
               observer.complete();
           });
       });
-  };
-  
-  addUserCredential(credential:Credential):Observable<Credential> {
+  }
+
+  addUserCredential(credential: Credential): Observable<Credential> {
       // done for the toJson().
       credential.credentialId = generateUUID();
-      return Observable.create(function (observer:Observer<Credential>) {
-          credentials.insert(credential.toJson(), function (err:any, doc:any) {
+      return Observable.create(function (observer: Observer<Credential>) {
+          credentials.insert(credential.toJson(), function (err: any, doc: any) {
               if (!err) {
                   observer.next(credential);
               } else {
@@ -239,15 +239,15 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
               observer.complete();
           });
       });
-  };
+  }
 
   updateCredential(partyId: string, credential: Credential): Observable<number> {
-      return Observable.create(function (observer:Observer<number>) {
-          if(!credential.password) {
+      return Observable.create(function (observer: Observer<number>) {
+          if (!credential.password) {
               delete credential.password;
           }
-          let query:any = {
-              "partyId":partyId
+          const query: any = {
+              "partyId": partyId
           };
 
           credentials.update(query, {$set : credential}, {}, function (err, numReplaced) {
@@ -261,13 +261,13 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
       });
   }
 
-  updateCredentialStatusById(credentialId:string, status:string):Observable<number> {
-      return Observable.create(function (observer:Observer<number>) {
-          let query = {
-              "credentialId":credentialId
+  updateCredentialStatusById(credentialId: string, status: string): Observable<number> {
+      return Observable.create(function (observer: Observer<number>) {
+          const query = {
+              "credentialId": credentialId
           };
 
-          credentials.update(query, {$set: {status: status}}, {}, function (err:any, numReplaced:number) {
+          credentials.update(query, {$set: {status: status}}, {}, function (err: any, numReplaced: number) {
               if (!err) {
                   observer.next(numReplaced);
               } else {
@@ -276,14 +276,14 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
               observer.complete();
           });
       });
-  };
+  }
 
   updateCredentialPartyId(credentialId: string, partyId: string): Observable<number> {
-        return Observable.create(function (observer:Observer<number>) {
-            let query = {
-                "credentialId":credentialId
+        return Observable.create(function (observer: Observer<number>) {
+            const query = {
+                "credentialId": credentialId
             };
-            credentials.update(query, {$set : {partyId}}, {}, function (err:any, numReplaced:number) {
+            credentials.update(query, {$set : {partyId}}, {}, function (err: any, numReplaced: number) {
                 if (!err) {
                     observer.next(numReplaced);
                 } else {
@@ -292,41 +292,41 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
                 observer.complete();
             });
         });
-    };
+    }
 
-  deleteCredentialByPartyId(partyId:string): Observable<number> {
-        return Observable.create(function (observer:Observer<number>) {
-            let query = {
+  deleteCredentialByPartyId(partyId: string): Observable<number> {
+        return Observable.create(function (observer: Observer<number>) {
+            const query = {
                 partyId
             };
 
-            credentials.remove(query, {multi:true}, function (err:any, numRemoved:number) {
+            credentials.remove(query, {multi: true}, function (err: any, numRemoved: number) {
                 if (!err) {
                     observer.next(numRemoved);
                 } else {
                     observer.error(err);
                 }
                 observer.complete();
-            })
+            });
         });
     }
-    
+
   deleteCredentialById(credentialId: string, options?: any): Observable<number> {
-        return Observable.create(function (observer:Observer<AuthenticatedCredential>) {
+        return Observable.create(function (observer: Observer<AuthenticatedCredential>) {
             observer.error(new Error(""));
             observer.complete();
         });
     }
-  
+
   // HELPERS
 
-  getCredentialByUsername(username:string):Observable<Credential> {
-      return Observable.create(function (observer:Observer<Credential>) {
-          let query = {
-              "username":username
+  getCredentialByUsername(username: string): Observable<Credential> {
+      return Observable.create(function (observer: Observer<Credential>) {
+          const query = {
+              "username": username
           };
 
-          credentials.findOne(query, function (err:any, doc:any) {
+          credentials.findOne(query, function (err: any, doc: any) {
               if (!err) {
                   observer.next(doc);
               } else {
@@ -335,7 +335,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
               observer.complete();
           });
       });
-  };
+  }
 
   verifyCredential(username: string, password: string): Observable<Credential> {
       return Observable.create( (observer: Observer<Credential> ) => {
@@ -346,7 +346,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
           credentials.findOne(query, (err: any, doc: any) => {
               if (!err) {
                   observer.next(doc);
-              }else {
+              } else {
                   observer.error(err);
               }
               observer.complete();
@@ -359,8 +359,8 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
       if (!credential.status) {
           credential.status = "New";
       }
-      return Observable.create(function (observer:Observer<Credential>) {
-          credentials.insert(credential, function (err:any, doc:any) {
+      return Observable.create(function (observer: Observer<Credential>) {
+          credentials.insert(credential, function (err: any, doc: any) {
               if (!err) {
                   observer.next(credential);
               } else {

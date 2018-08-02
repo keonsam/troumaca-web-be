@@ -1,17 +1,17 @@
 import Rx from "rxjs";
-import {resourcePermissions} from "../../db";
-import {ResourcePermissionRepository} from "./resource.permission.repository";
-import {ResourcePermission} from "./resource.permission";
-import {Observable} from "rxjs/Observable";
-import {RepositoryKind} from "../../repository.kind";
-import {Observer} from "rxjs/Observer";
-import {generateUUID} from "../../uuid.generator";
+import { resourcePermissions } from "../../db";
+import { ResourcePermissionRepository } from "./resource.permission.repository";
+import { ResourcePermission } from "./resource.permission";
+import { Observable } from "rxjs/Observable";
+import { RepositoryKind } from "../../repository.kind";
+import { Observer } from "rxjs/Observer";
+import { generateUUID } from "../../uuid.generator";
 
 class ResourcePermissionDBRepository implements ResourcePermissionRepository {
 
   getAllResourcePermissions(): Observable<ResourcePermission[]> {
-    return Rx.Observable.create(function(observer:Observer<ResourcePermission[]>) {
-      resourcePermissions.find({}, function (err:any, docs:any) {
+    return Rx.Observable.create(function(observer: Observer<ResourcePermission[]>) {
+      resourcePermissions.find({}, function (err: any, docs: any) {
         if (err) {
           observer.error(err);
         } else {
@@ -20,11 +20,11 @@ class ResourcePermissionDBRepository implements ResourcePermissionRepository {
         observer.complete();
       });
     });
-  };
+  }
 
-  getResourcePermissionsByResourceId(resourceId:string):Observable<ResourcePermission[]> {
-    return Rx.Observable.create(function(observer:Observer<ResourcePermission[]>) {
-      resourcePermissions.find({resourceId}, function (err:any, docs:any) {
+  getResourcePermissionsByResourceId(resourceId: string): Observable<ResourcePermission[]> {
+    return Rx.Observable.create(function(observer: Observer<ResourcePermission[]>) {
+      resourcePermissions.find({resourceId}, function (err: any, docs: any) {
         if (err) {
           observer.error(err);
         } else {
@@ -33,17 +33,17 @@ class ResourcePermissionDBRepository implements ResourcePermissionRepository {
         observer.complete();
       });
     });
-  };
+  }
 
   addResourcePermission(resourcePermission: ResourcePermission[]): Observable<ResourcePermission[]> {
     // more than one here
     resourcePermission.forEach(value => {
-      if(!value.resourcePermissionId) {
+      if (!value.resourcePermissionId) {
         value.resourcePermissionId = generateUUID();
       }
     });
-    return Rx.Observable.create(function(observer:Observer<ResourcePermission[]>) {
-      resourcePermissions.insert(resourcePermission, function(err:any, doc:any) {
+    return Rx.Observable.create(function(observer: Observer<ResourcePermission[]>) {
+      resourcePermissions.insert(resourcePermission, function(err: any, doc: any) {
         if (err) {
           observer.error(err);
         } else {
@@ -55,27 +55,27 @@ class ResourcePermissionDBRepository implements ResourcePermissionRepository {
   }
 
   deleteResourcePermission(resourceId: string): Observable<number> {
-    return Rx.Observable.create(function (observer:Observer<number>) {
-      let query = {
-        "resourceId":resourceId
+    return Rx.Observable.create(function (observer: Observer<number>) {
+      const query = {
+        "resourceId": resourceId
       };
-      resourcePermissions.remove(query, {multi: true}, function (err:any, numRemoved:number) {
+      resourcePermissions.remove(query, {multi: true}, function (err: any, numRemoved: number) {
         if (!err) {
           observer.next(numRemoved);
         } else {
           observer.error(err);
         }
         observer.complete();
-      })
+      });
     });
   }
 
   getResourcePermissionById(resourcePermissionId: string, ownerPartyId: string): Observable<ResourcePermission> {
-    return Rx.Observable.create(function (observer:Observer<ResourcePermission>) {
-      let query = {
-        "resourcePermissionId":resourcePermissionId
+    return Rx.Observable.create(function (observer: Observer<ResourcePermission>) {
+      const query = {
+        "resourcePermissionId": resourcePermissionId
       };
-      resourcePermissions.findOne(query, function (err:any, doc:any) {
+      resourcePermissions.findOne(query, function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -87,18 +87,18 @@ class ResourcePermissionDBRepository implements ResourcePermissionRepository {
   }
 
   updateResourcePermission(resourcePermissionId: string, resourcePermission: ResourcePermission): Observable<number> {
-    return Rx.Observable.create(function (observer:Observer<number>) {
-      let query = {
-        "resourcePermissionId":resourcePermissionId
+    return Rx.Observable.create(function (observer: Observer<number>) {
+      const query = {
+        "resourcePermissionId": resourcePermissionId
       };
-      resourcePermissions.update(query, resourcePermission, {}, function (err:any, numReplaced:number) {
+      resourcePermissions.update(query, resourcePermission, {}, function (err: any, numReplaced: number) {
         if (!err) {
           observer.next(numReplaced);
         } else {
           observer.error(err);
         }
         observer.complete();
-      })
+      });
     });
   }
 
@@ -111,7 +111,7 @@ class ResourcePermissionRestRepository implements ResourcePermissionRepository {
     return undefined;
   }
 
-  getResourcePermissionsByResourceId(resourceId:string):Observable<ResourcePermission[]> {
+  getResourcePermissionsByResourceId(resourceId: string): Observable<ResourcePermission[]> {
     return undefined;
   }
 
@@ -133,7 +133,7 @@ class ResourcePermissionRestRepository implements ResourcePermissionRepository {
 
 }
 
-export function createResourcePermissionRepositoryFactory(kind?:RepositoryKind):ResourcePermissionRepository {
+export function createResourcePermissionRepositoryFactory(kind?: RepositoryKind): ResourcePermissionRepository {
   switch (kind) {
     case RepositoryKind.Nedb:
       return new ResourcePermissionDBRepository();

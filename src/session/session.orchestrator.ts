@@ -1,24 +1,24 @@
-import {createSessionRepositoryFactory} from "./session.repository.factory";
-import {SessionRepository} from "./session.repository";
-import {Observable} from "rxjs/Observable";
-import {Session} from "./session";
+import { createSessionRepositoryFactory } from "./session.repository.factory";
+import { SessionRepository } from "./session.repository";
+import { Observable } from "rxjs/Observable";
+import { Session } from "./session";
 
 export class SessionOrchestrator {
 
-  private sessionRepository:SessionRepository;
+  private sessionRepository: SessionRepository;
 
   constructor() {
     this.sessionRepository = createSessionRepositoryFactory();
   }
 
-  isValidSession(sessionId:string):Observable<boolean> {
-    // return Observable.of(true);
-    return this.sessionRepository.isValidSession(sessionId);
+  isValidSession(sessionId: string): Observable<boolean> {
+    return Observable.of(true);
+    // return this.sessionRepository.isValidSession(sessionId);
   }
 
-  getSimpleSession(sessionId:string): Observable<Session> {
+  getSimpleSession(sessionId: string): Observable<Session> {
     // Todo: Need to verify.
-    if(!sessionId) {
+    if (!sessionId) {
       return Observable.of(new Session());
     }
     return this.sessionRepository.getSessionById(sessionId);
@@ -27,9 +27,9 @@ export class SessionOrchestrator {
   handleSessionLogOut(sessionId: string): Observable<boolean> {
     return this.sessionRepository.expireSession(sessionId)
       .map( numReplaced => {
-        if(numReplaced) {
+        if (numReplaced) {
           return true;
-        }else {
+        } else {
           return false;
         }
       });

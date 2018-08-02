@@ -1,13 +1,13 @@
 export class Grant {
 
-  private _grantId:string;
-  private _resourcePermissionId:string;
-  private _resourceId:string;
+  private _grantId: string;
+  private _resourcePermissionId: string;
+  private _resourceId: string;
   private _permissionId: string;
   private _accessRoleId: string;
-  private _ownerPartyId:string;
-  private _createdOn:Date;
-  private _modifiedOn:Date;
+  private _ownerPartyId: string;
+  private _createdOn: Date;
+  private _modifiedOn: Date;
 
   get grantId(): string {
     return this._grantId;

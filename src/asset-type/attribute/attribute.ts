@@ -1,22 +1,22 @@
-import {DataType} from "../../data-type/data.type";
-import  {UnitOfMeasure} from "../../unit-of-measure/unit.of.measure";
+import { DataType } from "../../data-type/data.type";
+import  { UnitOfMeasure } from "../../unit-of-measure/unit.of.measure";
 
 export class Attribute {
 
-  private _attributeId:string;
-  private _tenantId:string;
-  private _name:string;
-  private _format:string;
+  private _attributeId: string;
+  private _tenantId: string;
+  private _name: string;
+  private _format: string;
   // replace with data type
   private _dataTypeId: string;
   private _dataType: DataType;
   // replace with unit of measure
   private _unitOfMeasureId: string;
   private _unitOfMeasure: UnitOfMeasure;
-  private _maximumValue:string;
-  private _minimumValue:string;
-  private _createdOn:Date;
-  private _modifiedOn:Date;
+  private _maximumValue: string;
+  private _minimumValue: string;
+  private _createdOn: Date;
+  private _modifiedOn: Date;
 
   get attributeId(): string {
     return this._attributeId;

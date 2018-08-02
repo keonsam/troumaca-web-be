@@ -1,9 +1,9 @@
 export class Pagination {
 
-  private _page:number;
-  private _sort:string;
+  private _page: number;
+  private _sort: string;
 
-  constructor(page:number, sort:string) {
+  constructor(page: number, sort: string) {
     this.page = page;
     this.sort = sort;
   }

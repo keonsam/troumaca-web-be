@@ -1,9 +1,9 @@
-import {DataType} from "./data.type";
-import {Observable} from "rxjs/Observable";
+import { DataType } from "./data.type";
+import { Observable } from "rxjs/Observable";
 
 export interface DataTypeRepository {
 
-  getDataTypes():Observable<DataType[]>;
+  getDataTypes(): Observable<DataType[]>;
 
   getDataTypeByIds(dataTypeIds: string[]): Observable<DataType[]>;
 

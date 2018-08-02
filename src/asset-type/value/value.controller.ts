@@ -1,7 +1,7 @@
-import {Request, Response} from "express";
-import {ValueOrchestrator} from "./value.orchestrator";
+import { Request, Response } from "express";
+import { ValueOrchestrator } from "./value.orchestrator";
 
-let valueOrchestrator:ValueOrchestrator = new ValueOrchestrator();
+const valueOrchestrator: ValueOrchestrator = new ValueOrchestrator();
 
 // export let getValuesByAssetTypeId = (req: Request, res: Response) => {
 //     valueOrchestrator.getValuesByAssetTypeId(req.params.assetTypeId)

@@ -1,24 +1,24 @@
 import Rx from "rxjs";
-import {Observable} from "rxjs/Observable";
-import {createUserRepository} from "./user/user.repository.factory";
-import {createOrganizationRepository} from "./organization/organization.repository.factory";
-import {createSessionRepositoryFactory} from "../session/session.repository.factory";
-import {createCredentialRepositoryFactory} from "../authentication/credential/credential.repository.factory";
-import {UserRepository} from "./user/user.repository";
-import {OrganizationRepository} from "./organization/organization.repository";
-import {User} from "./user/user";
-import {Session} from "../session/session";
-import {SessionRepository} from "../session/session.repository";
-import {Organization} from "./organization/organization";
-import {AccountResponse} from "./account.response";
-import {CredentialRepository} from "../authentication/credential/credential.repository";
+import { Observable } from "rxjs/Observable";
+import { createUserRepository } from "./user/user.repository.factory";
+import { createOrganizationRepository } from "./organization/organization.repository.factory";
+import { createSessionRepositoryFactory } from "../session/session.repository.factory";
+import { createCredentialRepositoryFactory } from "../authentication/credential/credential.repository.factory";
+import { UserRepository } from "./user/user.repository";
+import { OrganizationRepository } from "./organization/organization.repository";
+import { User } from "./user/user";
+import { Session } from "../session/session";
+import { SessionRepository } from "../session/session.repository";
+import { Organization } from "./organization/organization";
+import { AccountResponse } from "./account.response";
+import { CredentialRepository } from "../authentication/credential/credential.repository";
 
 export class AccountOrchestrator {
 
-  private userRepository:UserRepository;
-  private organizationRepository:OrganizationRepository;
-  private sessionRepository:SessionRepository;
-  private credentialRepository:CredentialRepository;
+  private userRepository: UserRepository;
+  private organizationRepository: OrganizationRepository;
+  private sessionRepository: SessionRepository;
+  private credentialRepository: CredentialRepository;
 
   constructor() {
     this.userRepository = createUserRepository();
@@ -27,7 +27,7 @@ export class AccountOrchestrator {
     this.credentialRepository = createCredentialRepositoryFactory();
   }
 
-  saveAccount (accountType:string , user:User, organization:Organization, sessionId:string):Observable<AccountResponse> {
+  saveAccount (accountType: string , user: User, organization: Organization, sessionId: string): Observable<AccountResponse> {
     // accountType not used in this current set up. you may find it of use in the future. I left it as is.
       return this.sessionRepository.getSessionById(sessionId)
           .switchMap((session: Session) => {

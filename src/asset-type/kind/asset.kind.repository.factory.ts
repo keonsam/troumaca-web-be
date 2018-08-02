@@ -1,16 +1,16 @@
-import Rx from 'rxjs';
-import {Observable} from "rxjs/Observable";
-import {AssetKind} from "./asset.kind";
-import {AssetKindRepository} from "./asset.kind.repository";
-import {RepositoryKind} from "../../repository.kind";
-import {assetKinds} from "../../db";
-import {Observer} from "rxjs/Observer";
+import Rx from "rxjs";
+import { Observable } from "rxjs/Observable";
+import { AssetKind } from "./asset.kind";
+import { AssetKindRepository } from "./asset.kind.repository";
+import { RepositoryKind } from "../../repository.kind";
+import { assetKinds } from "../../db";
+import { Observer } from "rxjs/Observer";
 
 class AssetKindDBRepository implements AssetKindRepository {
 
-  getAssetKinds():Observable<AssetKind[]> {
-    return Rx.Observable.create(function (observer:Observer<AssetKind[]>) {
-      assetKinds.find({}, function (err:any, doc:any) {
+  getAssetKinds(): Observable<AssetKind[]> {
+    return Rx.Observable.create(function (observer: Observer<AssetKind[]>) {
+      assetKinds.find({}, function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -21,12 +21,12 @@ class AssetKindDBRepository implements AssetKindRepository {
     });
   }
 
-  getAssetKindById(assetKindId:string): Observable<AssetKind> {
-    let query = {
+  getAssetKindById(assetKindId: string): Observable<AssetKind> {
+    const query = {
       "assetKindId": assetKindId
     };
-    return Rx.Observable.create(function (observer:Observer<AssetKind[]>) {
-      assetKinds.findOne(query, function (err:any, doc:any) {
+    return Rx.Observable.create(function (observer: Observer<AssetKind[]>) {
+      assetKinds.findOne(query, function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -39,18 +39,18 @@ class AssetKindDBRepository implements AssetKindRepository {
 }
 
 class AssetKindRestRepository implements AssetKindRepository {
-  getAssetKinds():Observable<AssetKind[]> {
+  getAssetKinds(): Observable<AssetKind[]> {
     return undefined;
   }
 
-  getAssetKindById(assetKindId:string): Observable<AssetKind>{
+  getAssetKindById(assetKindId: string): Observable<AssetKind> {
     return undefined;
   }
 
 }
 
 
-export function createAssetKindRepository(kind?:RepositoryKind):AssetKindRepository {
+export function createAssetKindRepository(kind?: RepositoryKind): AssetKindRepository {
   switch (kind) {
     case RepositoryKind.Nedb:
       return new AssetKindDBRepository();

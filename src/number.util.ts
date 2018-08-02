@@ -1,4 +1,4 @@
-export function getNumericValueOrDefault(value:any, defaultValue:any) {
+export function getNumericValueOrDefault(value: any, defaultValue: any) {
   if (!value) {
     return defaultValue;
   }
@@ -11,5 +11,5 @@ export function getNumericValueOrDefault(value:any, defaultValue:any) {
     return defaultValue;
   }
 
-  return value
+  return value;
 }

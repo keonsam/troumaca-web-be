@@ -16,7 +16,7 @@ export class AssetRepositoryRestAdapter implements AssetRepository {
         return undefined;
     }
 
-    getAssetById(assetId:string): Observable<Asset> {
+    getAssetById(assetId: string): Observable<Asset> {
         return undefined;
     }
 
@@ -24,11 +24,11 @@ export class AssetRepositoryRestAdapter implements AssetRepository {
         return undefined;
     }
 
-    updateAsset(assetId:string, asset:Asset): Observable<number> {
+    updateAsset(assetId: string, asset: Asset): Observable<number> {
         return undefined;
     }
 
-    deleteAsset(assetId:string): Observable<number> {
+    deleteAsset(assetId: string): Observable<number> {
         return undefined;
     }
 

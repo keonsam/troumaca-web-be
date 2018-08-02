@@ -9,7 +9,7 @@ export class AuthenticateResponse {
   private _partyId: string;
 
   constructor(authenticated?: boolean, authenticatedStatus?: string, confirmationId?: string,
-              username?:string, credentialId?: string, sessionId?: string, partyId?:string) {
+              username?: string, credentialId?: string, sessionId?: string, partyId?: string) {
     this._authenticated = authenticated;
     this._authenticatedStatus = authenticatedStatus;
     this._confirmationId = confirmationId;
@@ -83,7 +83,7 @@ export class AuthenticateResponse {
       username: this.username,
       credentialId: this.credentialId,
       sessionId: this.sessionId
-    }
+    };
   }
 
 }

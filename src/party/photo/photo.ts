@@ -1,4 +1,4 @@
-import {Party} from "../party";
+import { Party } from "../party";
 
 export class Photo extends Party {
   private _imageStr: string;
@@ -9,7 +9,7 @@ export class Photo extends Party {
     this._imageStr = imageStr;
   }
 
-  get imageStr():string {
+  get imageStr(): string {
     return this._imageStr;
   }
 

@@ -1,20 +1,20 @@
-import * as Rx from 'rxjs';
-import {UserRepository} from "./user.repository";
-import {Observable} from "rxjs/Observable";
-import {Observer} from "rxjs/Observer";
-import {RepositoryKind} from "../../repository.kind";
-import {User} from "./user";
-import {users} from "../../db";
-import {calcSkip} from "../../db.util";
-import {generateUUID} from "../../uuid.generator";
-import {Person} from "../person/person";
+import * as Rx from "rxjs";
+import { UserRepository } from "./user.repository";
+import { Observable } from "rxjs/Observable";
+import { Observer } from "rxjs/Observer";
+import { RepositoryKind } from "../../repository.kind";
+import { User } from "./user";
+import { users } from "../../db";
+import { calcSkip } from "../../db.util";
+import { generateUUID } from "../../uuid.generator";
+import { Person } from "../person/person";
 
 class UserDBRepository implements UserRepository {
 
-  private defaultPageSize:number = 10;
+  private defaultPageSize: number = 10;
 
-  findUser(searchStr:string, pageSize:number):Observable<User[]> {
-    let searchStrLocal = new RegExp(searchStr);
+  findUser(searchStr: string, pageSize: number): Observable<User[]> {
+    const searchStrLocal = new RegExp(searchStr);
     return Rx.Observable.create(function (observer: Observer<User[]>) {
       if (!searchStr) {
         users.find({}).limit(100).exec(function (err: any, doc: any) {
@@ -34,15 +34,15 @@ class UserDBRepository implements UserRepository {
           }
           observer.complete();
         });
-      };
+      }
     });
   }
 
-  getUsers(pageNumber:number, pageSize:number, order:string):Observable<User[]> {
-    let defaultPageSize = this.defaultPageSize;
-    return Rx.Observable.create(function (observer:Observer<User[]>) {
-      let skip = calcSkip(pageNumber, pageSize, defaultPageSize);
-      users.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err:any, doc:any) {
+  getUsers(pageNumber: number, pageSize: number, order: string): Observable<User[]> {
+    const defaultPageSize = this.defaultPageSize;
+    return Rx.Observable.create(function (observer: Observer<User[]>) {
+      const skip = calcSkip(pageNumber, pageSize, defaultPageSize);
+      users.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -53,9 +53,9 @@ class UserDBRepository implements UserRepository {
     });
   }
 
-  getUserCount():Observable<number> {
-    return Rx.Observable.create(function (observer:Observer<number>) {
-      users.count({}, function (err:any, count:number) {
+  getUserCount(): Observable<number> {
+    return Rx.Observable.create(function (observer: Observer<number>) {
+      users.count({}, function (err: any, count: number) {
         if (!err) {
           observer.next(count);
         } else {
@@ -66,13 +66,13 @@ class UserDBRepository implements UserRepository {
     });
   }
 
-  getUser(partyId:string):Observable<User> {
-    return Rx.Observable.create(function (observer:Observer<User>) {
-      let query = {
+  getUser(partyId: string): Observable<User> {
+    return Rx.Observable.create(function (observer: Observer<User>) {
+      const query = {
        partyId
       };
 
-      users.findOne(query, function (err:any, doc:any) {
+      users.findOne(query, function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -83,12 +83,12 @@ class UserDBRepository implements UserRepository {
     });
   }
 
-  getPerson(partyId:string):Observable<Person> {
-    return Rx.Observable.create(function (observer:Observer<Person>) {
-      let query = {
+  getPerson(partyId: string): Observable<Person> {
+    return Rx.Observable.create(function (observer: Observer<Person>) {
+      const query = {
         "partyId": partyId
       };
-      users.findOne(query, function (err:any, doc:any) {
+      users.findOne(query, function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -100,12 +100,12 @@ class UserDBRepository implements UserRepository {
   }
 
 
-  saveUser(user:User):Observable<User> {
+  saveUser(user: User): Observable<User> {
     if (!user.partyId) {
         user.partyId = generateUUID();
     }
-    return Rx.Observable.create(function (observer:Observer<User>) {
-      users.insert(user, function (err:any, doc:any) {
+    return Rx.Observable.create(function (observer: Observer<User>) {
+      users.insert(user, function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -116,43 +116,43 @@ class UserDBRepository implements UserRepository {
     });
   }
 
-  deleteUser(partyId:string):Observable<number> {
-    return Rx.Observable.create(function (observer:Observer<number>) {
-      let query = {
-        "partyId":partyId
+  deleteUser(partyId: string): Observable<number> {
+    return Rx.Observable.create(function (observer: Observer<number>) {
+      const query = {
+        "partyId": partyId
       };
 
-      users.remove(query, {}, function (err:any, numRemoved:number) {
+      users.remove(query, {}, function (err: any, numRemoved: number) {
         if (!err) {
           observer.next(numRemoved);
         } else {
           observer.error(err);
         }
         observer.complete();
-      })
+      });
     });
   }
 
-  updateUser(partyId:string, user:User):Observable<number> {
-    return Rx.Observable.create(function (observer:Observer<number>) {
-      let query = {
-        "partyId":partyId
+  updateUser(partyId: string, user: User): Observable<number> {
+    return Rx.Observable.create(function (observer: Observer<number>) {
+      const query = {
+        "partyId": partyId
       };
-      users.update(query, user, {}, function (err:any, numReplaced:number) {
+      users.update(query, user, {}, function (err: any, numReplaced: number) {
         if (!err) {
           observer.next(numReplaced);
         } else {
           observer.error(err);
         }
         observer.complete();
-      })
+      });
     });
   }
 }
 
 class UserRestRepository implements UserRepository {
 
-  findUser(searchStr:string, pageSize:number):Observable<User[]> {
+  findUser(searchStr: string, pageSize: number): Observable<User[]> {
     return undefined;
   }
 
@@ -164,8 +164,8 @@ class UserRestRepository implements UserRepository {
     return undefined;
   }
 
-  getPerson(partyId:string):Observable<Person> {
-    return undefined
+  getPerson(partyId: string): Observable<Person> {
+    return undefined;
   }
 
   getUserCount(): Observable<number> {
@@ -185,7 +185,7 @@ class UserRestRepository implements UserRepository {
   }
 }
 
-export function createUserRepository(kind?:RepositoryKind):UserRepository {
+export function createUserRepository(kind?: RepositoryKind): UserRepository {
   switch (kind) {
     case RepositoryKind.Nedb:
       return new UserDBRepository();

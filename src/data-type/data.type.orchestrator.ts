@@ -1,17 +1,17 @@
-import {createDataTypeRepository} from './data.type.repository.factory';
-import {DataTypeRepository} from "./data.type.repository";
-import {DataType} from "./data.type";
-import {Observable} from "rxjs/Observable";
+import { createDataTypeRepository } from "./data.type.repository.factory";
+import { DataTypeRepository } from "./data.type.repository";
+import { DataType } from "./data.type";
+import { Observable } from "rxjs/Observable";
 
 export class DataTypeOrchestrator {
 
-  private dataTypeRepository:DataTypeRepository;
+  private dataTypeRepository: DataTypeRepository;
 
   constructor() {
     this.dataTypeRepository = createDataTypeRepository();
   }
 
-  getDataTypes():Observable<DataType[]> {
+  getDataTypes(): Observable<DataType[]> {
     return this.dataTypeRepository.getDataTypes();
   }
 

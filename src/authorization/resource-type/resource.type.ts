@@ -1,11 +1,11 @@
 export class ResourceType {
 
-  private _resourceTypeId:string;
-  private _name:string;
-  private _description:string;
-  //private _ownerPartyId:string;
-  private _createdOn:Date;
-  private _modifiedOn:Date;
+  private _resourceTypeId: string;
+  private _name: string;
+  private _description: string;
+  // private _ownerPartyId:string;
+  private _createdOn: Date;
+  private _modifiedOn: Date;
 
   get resourceTypeId(): string {
     return this._resourceTypeId;

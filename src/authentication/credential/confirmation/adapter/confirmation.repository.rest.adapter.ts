@@ -1,39 +1,39 @@
-import {CredentialConfirmation} from "../credential.confirmation";
-import {ConfirmationRepository} from "../confirmation.repository";
-import {Observable} from "rxjs/Observable";
-import {properties} from "../../../../properties.helpers";
-import {Observer} from "rxjs/Observer";
-import {jsonRequestHeaderMap, postJsonOptions} from "../../../../request.helpers";
+import { CredentialConfirmation } from "../credential.confirmation";
+import { ConfirmationRepository } from "../confirmation.repository";
+import { Observable } from "rxjs/Observable";
+import { properties } from "../../../../properties.helpers";
+import { Observer } from "rxjs/Observer";
+import { jsonRequestHeaderMap, postJsonOptions } from "../../../../request.helpers";
 import request from "request";
 import { Confirmation } from "../confirmation";
 // import {classToPlain, plainToClass} from "class-transformer";
 
 export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository {
-  addCredentialConfirmation(credentialConfirmation:CredentialConfirmation): Observable<CredentialConfirmation> {
+  addCredentialConfirmation(credentialConfirmation: CredentialConfirmation): Observable<CredentialConfirmation> {
     return undefined;
   }
 
-  confirmCode(confirmationId:string, credentialId:string, confirmation: Confirmation, options?:any):Observable<Confirmation> {
-    let uri:string = properties.get("credential.host.port") as string;
+  confirmCode(confirmationId: string, credentialId: string, confirmation: Confirmation, options?: any): Observable<Confirmation> {
+    const uri: string = properties.get("credential.host.port") as string;
 
-    let headerMap = jsonRequestHeaderMap(options ? options : {});
+    const headerMap = jsonRequestHeaderMap(options ? options : {});
 
     // let headers:any = strMapToJson(headerMap);
-    let json = confirmation;
+    const json = confirmation;
 
-    let uriAndPath:string = uri + "/authentication/confirmations/" + confirmationId + "/credentials/" + credentialId;
+    const uriAndPath: string = uri + "/authentication/confirmations/" + confirmationId + "/credentials/" + credentialId;
 
-    let requestOptions:any = postJsonOptions(uriAndPath, headerMap, json);
+    const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
 
-    return Observable.create(function (observer:Observer<Confirmation>) {
-      request(requestOptions, function (error:any, response:any, body:any) {
+    return Observable.create(function (observer: Observer<Confirmation>) {
+      request(requestOptions, function (error: any, response: any, body: any) {
         console.log(body);
         try {
           if (response && response.statusCode != 200) {
             observer.error(body);
             observer.complete();
           } else {
-            //let vp:boolean = plainToClass(Boolean, body["valid"] as Object);
+            // let vp:boolean = plainToClass(Boolean, body["valid"] as Object);
             observer.next(body["confirmation"]);
             observer.complete();
           }
@@ -45,19 +45,19 @@ export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository
     });
   }
 
-  resendConfirmCode(confirmationId:string, credentialId:string, options?:any):Observable<Confirmation> {
-    let uri:string = properties.get("credential.host.port") as string;
+  resendConfirmCode(confirmationId: string, credentialId: string, options?: any): Observable<Confirmation> {
+    const uri: string = properties.get("credential.host.port") as string;
 
-    let headerMap = jsonRequestHeaderMap(options ? options : {});
+    const headerMap = jsonRequestHeaderMap(options ? options : {});
     // let headers:any = strMapToJson(headerMap);
-    let json = {credentialId:credentialId};
+    const json = {credentialId: credentialId};
 
-    let uriAndPath:string = uri + "/authentication/confirmations/credentials/" + credentialId + "/resend";
+    const uriAndPath: string = uri + "/authentication/confirmations/credentials/" + credentialId + "/resend";
 
-    let requestOptions:any = postJsonOptions(uriAndPath, headerMap, json);
+    const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
 
-    return Observable.create(function (observer:Observer<Confirmation>) {
-      request(requestOptions, function (error:any, response:any, body:any) {
+    return Observable.create(function (observer: Observer<Confirmation>) {
+      request(requestOptions, function (error: any, response: any, body: any) {
         console.log(body);
         try {
           if (response && response.statusCode != 200) {
@@ -75,23 +75,23 @@ export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository
     });
   }
 
-  getCredentialConfirmationByCode(credentialConfirmationId:string, confirmationCode:string): Observable<CredentialConfirmation> {
+  getCredentialConfirmationByCode(credentialConfirmationId: string, confirmationCode: string): Observable<CredentialConfirmation> {
     return undefined;
   }
 
-  getCredentialConfirmationByCredentialId(credentialId:string): Observable<CredentialConfirmation> {
+  getCredentialConfirmationByCredentialId(credentialId: string): Observable<CredentialConfirmation> {
     return undefined;
   }
 
-  getCredentialConfirmationById(credentialConfirmationId:string): Observable<CredentialConfirmation> {
+  getCredentialConfirmationById(credentialConfirmationId: string): Observable<CredentialConfirmation> {
     return undefined;
   }
 
-  updateCredentialConfirmation(credentialConfirmation:CredentialConfirmation): Observable<number> {
+  updateCredentialConfirmation(credentialConfirmation: CredentialConfirmation): Observable<number> {
     return undefined;
   }
 
-  getConfirmedConfirmation(credentialId:string):Observable<CredentialConfirmation> {
+  getConfirmedConfirmation(credentialId: string): Observable<CredentialConfirmation> {
     return undefined;
   }
 }

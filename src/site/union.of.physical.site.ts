@@ -1,6 +1,6 @@
 export class UnionOfPhysicalSite {
 
-  private _siteId:string;
+  private _siteId: string;
   private _name: string;
   private _describe: string;
   private _city: string;

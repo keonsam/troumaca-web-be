@@ -5,14 +5,14 @@ import { Observer } from "rxjs/Observer";
 import { subscriptions } from "../../db";
 import { generateUUID } from "../../uuid.generator";
 
-export class SubscriptionRepositoryNeDbAdapter implements SubscriptionRepository{
+export class SubscriptionRepositoryNeDbAdapter implements SubscriptionRepository {
 
     public getSubscription(type: string): Observable<Subscription> {
         return Observable.create(function (observer: Observer<Subscription>) {
             const query = {
-                'type': type
+                "type": type
             };
-            subscriptions.findOne(query, function (err:any, doc:any) {
+            subscriptions.findOne(query, function (err: any, doc: any) {
                 if (!err) {
                     observer.next(doc);
                 } else {
@@ -28,7 +28,7 @@ export class SubscriptionRepositoryNeDbAdapter implements SubscriptionRepository
             subscription.subscriptionId = generateUUID();
             subscription.subscribed = true;
 
-            subscriptions.insert(subscription, function (err:any, doc:any) {
+            subscriptions.insert(subscription, function (err: any, doc: any) {
                 if (!err) {
                     observer.next(doc);
                 } else {

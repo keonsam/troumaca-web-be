@@ -1,22 +1,22 @@
-import {AssetKind} from "../kind/asset.kind";
-import {AssetType} from "../asset.type";
-import {UnitOfMeasure} from "../../unit-of-measure/unit.of.measure";
-import {Person} from "../../party/person/person";
-import {Site} from "../../site/site";
+import { AssetKind } from "../kind/asset.kind";
+import { AssetType } from "../asset.type";
+import { UnitOfMeasure } from "../../unit-of-measure/unit.of.measure";
+import { Person } from "../../party/person/person";
+import { Site } from "../../site/site";
 
 export class Asset {
 
-  private _assetId:string;
-  private _tenantId:string;
+  private _assetId: string;
+  private _tenantId: string;
   private _assetKindId: string;
   private _assetKind: AssetKind;
   private _assetTypeId: string;
   private _assetType: AssetType;
-  private _serialNumber:string;
-  private _quantity:string;
-  private _unitOfMeasureId:string;
+  private _serialNumber: string;
+  private _quantity: string;
+  private _unitOfMeasureId: string;
   private _unitOfMeasure: UnitOfMeasure;
-  private _description:string;
+  private _description: string;
   private _personId: string;
   private _person: Person;
   private _siteId: string;
@@ -121,7 +121,7 @@ export class Asset {
   }
 
   set personId(value: string) {
-    this._personId = value
+    this._personId = value;
   }
 
   get person(): Person {

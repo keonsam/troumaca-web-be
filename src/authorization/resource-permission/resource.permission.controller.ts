@@ -1,9 +1,9 @@
-import {Request, Response} from "express";
-import {ResourcePermissionOrchestrator} from "./resource.permission.orchestrator";
-//import {getNumericValueOrDefault} from '../../number.util';
-//import {getStringValueOrDefault} from '../../string.util';
+import { Request, Response } from "express";
+import { ResourcePermissionOrchestrator } from "./resource.permission.orchestrator";
+// import {getNumericValueOrDefault} from '../../number.util';
+// import {getStringValueOrDefault} from '../../string.util';
 
-let orchestrator:ResourcePermissionOrchestrator = new ResourcePermissionOrchestrator();
+const orchestrator: ResourcePermissionOrchestrator = new ResourcePermissionOrchestrator();
 
 export  let getAllResourcePermissions = (req: Request, res: Response) => {
   orchestrator
@@ -13,26 +13,26 @@ export  let getAllResourcePermissions = (req: Request, res: Response) => {
         res.send(JSON.stringify(response));
     }, error => {
         res.status(500);
-        res.send(JSON.stringify({message: 'Error Occurred'}));
+        res.send(JSON.stringify({message: "Error Occurred"}));
 
     });
 };
 
 export let  getResourcePermissionsByResourceId = (req: Request, res: Response) => {
-  let resourceId = req.params.resourceId;
+  const resourceId = req.params.resourceId;
   orchestrator
     .getResourcePermissionsByResourceId(resourceId)
     .subscribe(response => {
-        if(response.length > 0) {
+        if (response.length > 0) {
             res.status(200);
             res.send(JSON.stringify(response));
-        }else {
+        } else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found For ' + req.params.resourceId}));
+            res.send(JSON.stringify({message: "No Data Found For " + req.params.resourceId}));
         }
     }, error => {
         res.status(500);
-        res.send(JSON.stringify({message: 'Error Occurred'}));
+        res.send(JSON.stringify({message: "Error Occurred"}));
         console.log(error);
     });
 };

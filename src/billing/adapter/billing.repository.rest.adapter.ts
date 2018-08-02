@@ -2,7 +2,7 @@ import { BillingRepository } from "../billing.repository";
 import { Observable } from "rxjs/Observable";
 import { Billing } from "../billing";
 
-export class BillingRepositoryRestAdapter implements BillingRepository{
+export class BillingRepositoryRestAdapter implements BillingRepository {
     public getBilling(): Observable<Billing> {
         return undefined;
     }

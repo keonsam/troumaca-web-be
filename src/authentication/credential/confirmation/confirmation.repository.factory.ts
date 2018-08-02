@@ -1,10 +1,10 @@
-import {ConfirmationRepository} from "./confirmation.repository";
-import {RepositoryKind} from "../../../repository.kind";
-import {ConfirmationRepositoryNeDbAdapter} from "./adapter/confirmation.repository.db.adapter";
-import {ConfirmationRepositoryRestAdapter} from "./adapter/confirmation.repository.rest.adapter";
+import { ConfirmationRepository } from "./confirmation.repository";
+import { RepositoryKind } from "../../../repository.kind";
+import { ConfirmationRepositoryNeDbAdapter } from "./adapter/confirmation.repository.db.adapter";
+import { ConfirmationRepositoryRestAdapter } from "./adapter/confirmation.repository.rest.adapter";
 import { properties } from "../../../properties.helpers";
 
-export function createCredentialConfirmationRepositoryFactory(kind?:RepositoryKind):ConfirmationRepository {
+export function createCredentialConfirmationRepositoryFactory(kind?: RepositoryKind): ConfirmationRepository {
 
     const type: number = properties.get("confirmation.repository.type") as number;
 

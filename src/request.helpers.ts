@@ -1,4 +1,4 @@
-import {CoreOptions} from "request";
+import { CoreOptions } from "request";
 
 export function jsonRequestHeaderMap(options: any) {
   // let headerMap = new Map();
@@ -28,7 +28,7 @@ export function postJsonOptions(uri: any, headers: any, json: any) {
     throw new Error('A \"uri\" is required to make a post request');
   }
 
-  let headerMap = new Map();
+  const headerMap = new Map();
   headerMap.set("uri", uri);
   headerMap.set("method", "POST");
   if (headers) {
@@ -47,12 +47,12 @@ export function postJsonOptions(uri: any, headers: any, json: any) {
   };
 
   // if (headers) {
-    //headerMap.set("headers", headers);
+    // headerMap.set("headers", headers);
     // options.headers = headers;
   // }
 
   // if (headers) {
-    //headerMap.set("json", json);
+    // headerMap.set("json", json);
     // options.json = json;
   // }
 

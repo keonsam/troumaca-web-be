@@ -2,7 +2,7 @@ import { Observable } from "rxjs/Observable";
 import { generateUUID } from "../../../uuid.generator";
 import Rx from "rxjs";
 import { Observer } from "rxjs/Observer";
-import { assetTypeClasses, assignedAttributes} from "../../../db";
+import { assetTypeClasses, assignedAttributes } from "../../../db";
 import { calcSkip } from "../../../db.util";
 import { AssetTypeClassRepository } from "../asset.type.class.repository";
 import { AssetTypeClass } from "../asset.type.class";
@@ -34,10 +34,10 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
         });
     }
 
-    getAssetTypeClasses(pageNumber:number, pageSize:number, order:string):Observable<AssetTypeClass[]> {
-        return Rx.Observable.create(function (observer:Observer<AssetTypeClass[]>) {
-            let skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
-            assetTypeClasses.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err:any, doc:any) {
+    getAssetTypeClasses(pageNumber: number, pageSize: number, order: string): Observable<AssetTypeClass[]> {
+        return Rx.Observable.create(function (observer: Observer<AssetTypeClass[]>) {
+            const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
+            assetTypeClasses.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
                 if (!err) {
                     observer.next(doc);
                 } else {
@@ -48,9 +48,9 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
         });
     }
 
-    getAssetTypeClassCount():Observable<number> {
-        return Rx.Observable.create(function (observer:Observer<number>) {
-            assetTypeClasses.count({}, function (err:any, count:number) {
+    getAssetTypeClassCount(): Observable<number> {
+        return Rx.Observable.create(function (observer: Observer<number>) {
+            assetTypeClasses.count({}, function (err: any, count: number) {
                 if (!err) {
                     observer.next(count);
                 } else {
@@ -61,16 +61,16 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
         });
     }
 
-    getAssetTypeClassById(assetTypeClassId:string):Observable<AssetTypeClassResponse> {
-        return Rx.Observable.create(function (observer:Observer<AssetTypeClassResponse>) {
-            const query = {"assetTypeClassId":assetTypeClassId};
-            assetTypeClasses.findOne(query, function (err:any, assetTypeClass:any) {
+    getAssetTypeClassById(assetTypeClassId: string): Observable<AssetTypeClassResponse> {
+        return Rx.Observable.create(function (observer: Observer<AssetTypeClassResponse>) {
+            const query = {"assetTypeClassId": assetTypeClassId};
+            assetTypeClasses.findOne(query, function (err: any, assetTypeClass: any) {
                 if (!err) {
                     if (!assetTypeClass) {
                         observer.next(new AssetTypeClassResponse());
                         observer.complete();
                     } else {
-                        assignedAttributes.find(query, function (err:any, assignedAttributeArr:any) {
+                        assignedAttributes.find(query, function (err: any, assignedAttributeArr: any) {
                             if (!err) {
                                 observer.next(new AssetTypeClassResponse(true, assetTypeClass, assignedAttributeArr));
                             } else {
@@ -100,16 +100,16 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
     //     });
     // }
 
-    saveAssetTypeClass(assetTypeClass:AssetTypeClass, assignedAttributeArr: AssignedAttribute[]):Observable<AssetTypeClass> {
+    saveAssetTypeClass(assetTypeClass: AssetTypeClass, assignedAttributeArr: AssignedAttribute[]): Observable<AssetTypeClass> {
         assetTypeClass.assetTypeClassId = generateUUID();
         assignedAttributeArr.forEach(value => {
             value.assetTypeClassId = assetTypeClass.assetTypeClassId;
             value.assignedAttributeId = generateUUID();
         });
-        return Rx.Observable.create(function (observer:Observer<AssetTypeClass>) {
-            assetTypeClasses.insert(assetTypeClass, function (err:any, doc:any) {
+        return Rx.Observable.create(function (observer: Observer<AssetTypeClass>) {
+            assetTypeClasses.insert(assetTypeClass, function (err: any, doc: any) {
                 if (!err) {
-                    assignedAttributes.insert(assignedAttributeArr, function (err:any, doc2:any) {
+                    assignedAttributes.insert(assignedAttributeArr, function (err: any, doc2: any) {
                         if (!err) {
                             observer.next(doc);
                         } else {
@@ -125,14 +125,14 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
         });
     }
 
-    updateAssetTypeClass(assetTypeClassId:string, assetTypeClass:AssetTypeClass, assignedAttributeArr: AssignedAttribute[]):Observable<number> {
-        return Rx.Observable.create(function (observer:Observer<number>) {
-            let query = { "assetTypeClassId":assetTypeClassId};
-            assetTypeClasses.update(query, assetTypeClass, {}, function (err:any, numReplaced:number) {
+    updateAssetTypeClass(assetTypeClassId: string, assetTypeClass: AssetTypeClass, assignedAttributeArr: AssignedAttribute[]): Observable<number> {
+        return Rx.Observable.create(function (observer: Observer<number>) {
+            const query = { "assetTypeClassId": assetTypeClassId};
+            assetTypeClasses.update(query, assetTypeClass, {}, function (err: any, numReplaced: number) {
                 if (!err) {
-                    assignedAttributes.remove(query, {multi: true}, function (err:any, numRemoved2:number) {
+                    assignedAttributes.remove(query, {multi: true}, function (err: any, numRemoved2: number) {
                         if (!err) {
-                            assignedAttributes.insert(assignedAttributeArr, function (err:any, doc2:any) {
+                            assignedAttributes.insert(assignedAttributeArr, function (err: any, doc2: any) {
                                 if (!err) {
                                     observer.next(numReplaced);
                                 } else {
@@ -153,13 +153,13 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
         });
     }
 
-    deleteAssetTypeClass(assetTypeClassId:string):Observable<number> {
-        return Rx.Observable.create(function (observer:Observer<number>) {
-            let query = {"assetTypeClassId":assetTypeClassId};
+    deleteAssetTypeClass(assetTypeClassId: string): Observable<number> {
+        return Rx.Observable.create(function (observer: Observer<number>) {
+            const query = {"assetTypeClassId": assetTypeClassId};
 
-            assetTypeClasses.remove(query, {}, function (err:any, numRemoved:number) {
+            assetTypeClasses.remove(query, {}, function (err: any, numRemoved: number) {
                 if (!err) {
-                    assignedAttributes.remove(query, {multi: true}, function (err:any, numRemoved2:number) {
+                    assignedAttributes.remove(query, {multi: true}, function (err: any, numRemoved2: number) {
                         if (!err) {
                             observer.next(numRemoved);
                         } else {

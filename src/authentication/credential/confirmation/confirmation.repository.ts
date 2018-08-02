@@ -1,11 +1,11 @@
-import {Observable} from "rxjs/Observable";
+import { Observable } from "rxjs/Observable";
 import { Confirmation } from "./confirmation";
 
 export interface ConfirmationRepository {
 
-  confirmCode(confirmationId:string, credentialId:string, confirmation: Confirmation, options?:any):Observable<Confirmation>;
+  confirmCode(confirmationId: string, credentialId: string, confirmation: Confirmation, options?: any): Observable<Confirmation>;
 
-  resendConfirmCode(confirmationId:string, credentialId:string, options?:any):Observable<Confirmation>;
+  resendConfirmCode(confirmationId: string, credentialId: string, options?: any): Observable<Confirmation>;
 
   // addCredentialConfirmation(credentialConfirmation:CredentialConfirmation):Observable<CredentialConfirmation>;
   //

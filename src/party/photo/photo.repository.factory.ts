@@ -1,19 +1,19 @@
-import * as Rx from 'rxjs';
-import {PhotoRepository} from "./photo.repository";
-import {Observable} from "rxjs/Observable";
-import {Observer} from "rxjs/Observer";
-import {RepositoryKind} from "../../repository.kind";
-import {userPhotos, organizationPhotos} from "../../db";
-import {Photo} from "./photo";
+import * as Rx from "rxjs";
+import { PhotoRepository } from "./photo.repository";
+import { Observable } from "rxjs/Observable";
+import { Observer } from "rxjs/Observer";
+import { RepositoryKind } from "../../repository.kind";
+import { userPhotos, organizationPhotos } from "../../db";
+import { Photo } from "./photo";
 
 class PhotoDBRepository implements PhotoRepository {
 
-  //private defaultPageSize:number = 10;
+  // private defaultPageSize:number = 10;
 
-  savePhoto(partyId: string, type:string, photo:Photo):Observable<Photo> {
-    return Rx.Observable.create(function(observer:Observer<Photo>) {
-      if(type === "user") {
-        userPhotos.insert(photo, function(err:any, doc:any) {
+  savePhoto(partyId: string, type: string, photo: Photo): Observable<Photo> {
+    return Rx.Observable.create(function(observer: Observer<Photo>) {
+      if (type === "user") {
+        userPhotos.insert(photo, function(err: any, doc: any) {
           if (err) {
             observer.error(err);
           } else {
@@ -21,8 +21,8 @@ class PhotoDBRepository implements PhotoRepository {
           }
           observer.complete();
         });
-      }else {
-        organizationPhotos.insert(photo, function(err:any, doc:any) {
+      } else {
+        organizationPhotos.insert(photo, function(err: any, doc: any) {
           if (err) {
             observer.error(err);
           } else {
@@ -34,13 +34,13 @@ class PhotoDBRepository implements PhotoRepository {
     });
   }
 
-  getPhotoById(partyId:string, type: string):Observable<Photo> {
-    return Rx.Observable.create(function (observer:Observer<Photo>) {
-      let query = {
-        "partyId":partyId
+  getPhotoById(partyId: string, type: string): Observable<Photo> {
+    return Rx.Observable.create(function (observer: Observer<Photo>) {
+      const query = {
+        "partyId": partyId
       };
-      if(type === "user") {
-        userPhotos.findOne(query, function (err:any, doc:any) {
+      if (type === "user") {
+        userPhotos.findOne(query, function (err: any, doc: any) {
           if (!err) {
             observer.next(doc);
           } else {
@@ -48,8 +48,8 @@ class PhotoDBRepository implements PhotoRepository {
           }
           observer.complete();
         });
-      }else {
-        organizationPhotos.findOne(query, function (err:any, doc:any) {
+      } else {
+        organizationPhotos.findOne(query, function (err: any, doc: any) {
           if (!err) {
             observer.next(doc);
           } else {
@@ -59,15 +59,15 @@ class PhotoDBRepository implements PhotoRepository {
         });
       }
     });
-  };
+  }
 
-  updatePhoto(partyId:string, type:string, photo:Photo):Observable<number> {
-    return Rx.Observable.create(function (observer:Observer<number>) {
-      let query = {
-        "partyId":partyId
+  updatePhoto(partyId: string, type: string, photo: Photo): Observable<number> {
+    return Rx.Observable.create(function (observer: Observer<number>) {
+      const query = {
+        "partyId": partyId
       };
-      if(type === "user"){
-        userPhotos.update(query, photo, {}, function (err:any, numReplaced:number) {
+      if (type === "user") {
+        userPhotos.update(query, photo, {}, function (err: any, numReplaced: number) {
           if (!err) {
             observer.next(numReplaced);
           } else {
@@ -75,8 +75,8 @@ class PhotoDBRepository implements PhotoRepository {
           }
           observer.complete();
         });
-      }else {
-        organizationPhotos.update(query, photo, {}, function (err:any, numReplaced:number) {
+      } else {
+        organizationPhotos.update(query, photo, {}, function (err: any, numReplaced: number) {
           if (!err) {
             observer.next(numReplaced);
           } else {
@@ -86,46 +86,46 @@ class PhotoDBRepository implements PhotoRepository {
         });
       }
     });
-  };
+  }
 
-  deletePhoto(partyId:string):Observable<number> {
-    return Rx.Observable.create(function (observer:Observer<number>) {
-      let query = {
-        "partyId":partyId
+  deletePhoto(partyId: string): Observable<number> {
+    return Rx.Observable.create(function (observer: Observer<number>) {
+      const query = {
+        "partyId": partyId
       };
-      userPhotos.remove(query, {}, function (err:any, numRemoved:number) {
+      userPhotos.remove(query, {}, function (err: any, numRemoved: number) {
         if (!err) {
           observer.next(numRemoved);
         } else {
           observer.error(err);
         }
         observer.complete();
-      })
+      });
     });
-  };
+  }
 
 }
 
 class PhotoRestRepository implements PhotoRepository {
 
-  deletePhoto(partyId:string): Observable<number> {
+  deletePhoto(partyId: string): Observable<number> {
     return undefined;
   }
 
-  getPhotoById(partyId:string, type: string): Observable<Photo> {
+  getPhotoById(partyId: string, type: string): Observable<Photo> {
     return undefined;
   }
 
-  savePhoto(partyId: string, type:string, photo: Photo): Observable<Photo> {
+  savePhoto(partyId: string, type: string, photo: Photo): Observable<Photo> {
     return undefined;
   }
 
-  updatePhoto(partyId:string, type: string, photo:Photo): Observable<number> {
+  updatePhoto(partyId: string, type: string, photo: Photo): Observable<number> {
     return undefined;
   }
 }
 
-export function createPhotoRepository(kind?:RepositoryKind):PhotoRepository {
+export function createPhotoRepository(kind?: RepositoryKind): PhotoRepository {
   switch (kind) {
     case RepositoryKind.Nedb:
       return new PhotoDBRepository();

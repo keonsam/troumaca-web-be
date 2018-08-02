@@ -1,15 +1,15 @@
-import Rx from 'rxjs';
-import {AssetTypeClassRepository} from "./asset.type.class.repository";
-import {Observable} from "rxjs/Observable";
-import {AssetTypeClass} from "./asset.type.class";
+import Rx from "rxjs";
+import { AssetTypeClassRepository } from "./asset.type.class.repository";
+import { Observable } from "rxjs/Observable";
+import { AssetTypeClass } from "./asset.type.class";
 
-import {generateUUID} from "../../uuid.generator";
-import {calcSkip} from "../../db.util";
-import {Observer} from "rxjs/Observer";
-import {RepositoryKind} from "../../repository.kind";
-import {assetTypeClasses} from "../../db";
+import { generateUUID } from "../../uuid.generator";
+import { calcSkip } from "../../db.util";
+import { Observer } from "rxjs/Observer";
+import { RepositoryKind } from "../../repository.kind";
+import { assetTypeClasses } from "../../db";
 
-let defaultPageSize = 10;
+const defaultPageSize = 10;
 
 class AssetTypeClassDBRepository  {
 

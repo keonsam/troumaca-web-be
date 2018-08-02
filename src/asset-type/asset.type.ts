@@ -1,16 +1,16 @@
-import {AssetTypeClass} from "./asset-type-class/asset.type.class";
-import {UnitOfMeasure} from "../unit-of-measure/unit.of.measure";
+import { AssetTypeClass } from "./asset-type-class/asset.type.class";
+import { UnitOfMeasure } from "../unit-of-measure/unit.of.measure";
 
 export class AssetType {
 
-  private _assetTypeId:string;
+  private _assetTypeId: string;
   private _assetTypeClassId: string;
-  private _unitOfMeasureId:string;
-  private _modelNumber:string;
-  private _description:string;
-  private _name:string;
-  private _materialCode:string;
-  private _assetTypeClass:AssetTypeClass = new AssetTypeClass();
+  private _unitOfMeasureId: string;
+  private _modelNumber: string;
+  private _description: string;
+  private _name: string;
+  private _materialCode: string;
+  private _assetTypeClass: AssetTypeClass = new AssetTypeClass();
   private _unitOfMeasure: UnitOfMeasure = new UnitOfMeasure();
 
   get assetTypeId(): string {

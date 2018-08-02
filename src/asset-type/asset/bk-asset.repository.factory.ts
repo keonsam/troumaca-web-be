@@ -1,12 +1,12 @@
-import Rx from 'rxjs';
-import {generateUUID} from '../../uuid.generator';
-import {calcSkip} from '../../db.util';
-import {assets} from '../../db';
-import {Asset} from "./asset";
-import {Observer} from "rxjs/Observer";
-import {AssetRepository} from "./asset.repository";
-import {Observable} from "rxjs/Observable";
-import {RepositoryKind} from "../../repository.kind";
+import Rx from "rxjs";
+import { generateUUID } from "../../uuid.generator";
+import { calcSkip } from "../../db.util";
+import { assets } from "../../db";
+import { Asset } from "./asset";
+import { Observer } from "rxjs/Observer";
+import { AssetRepository } from "./asset.repository";
+import { Observable } from "rxjs/Observable";
+import { RepositoryKind } from "../../repository.kind";
 
 
 

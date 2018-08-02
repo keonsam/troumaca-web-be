@@ -1,20 +1,20 @@
-import {Observable} from "rxjs/Observable";
-import {Credential} from './credential';
-import {Result} from "../../result.success";
-import {CredentialConfirmation} from "./confirmation/credential.confirmation";
-import {ValidatedUsername} from "./confirmation/validated.username";
-import {AuthenticatedCredential} from "./authenticated.credential";
-import {Confirmation} from "./confirmation/confirmation";
+import { Observable } from "rxjs/Observable";
+import { Credential } from "./credential";
+import { Result } from "../../result.success";
+import { CredentialConfirmation } from "./confirmation/credential.confirmation";
+import { ValidatedUsername } from "./confirmation/validated.username";
+import { AuthenticatedCredential } from "./authenticated.credential";
+import { Confirmation } from "./confirmation/confirmation";
 
 export interface CredentialRepository {
 
-  isValidUsername(username:string):Observable<boolean>;
+  isValidUsername(username: string): Observable<boolean>;
 
-  isValidPassword(password:string):Observable<boolean>;
+  isValidPassword(password: string): Observable<boolean>;
 
-  addCredential(credential:Credential, options?:any):Observable<Confirmation>;
+  addCredential(credential: Credential, options?: any): Observable<Confirmation>;
 
-  authenticate(credential:Credential, options:any):Observable<AuthenticatedCredential>;
+  authenticate(credential: Credential, options: any): Observable<AuthenticatedCredential>;
 
     // isValidEditUsername(partyId:string, username:string):Observable<boolean>;
 

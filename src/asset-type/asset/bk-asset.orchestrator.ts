@@ -1,27 +1,27 @@
 // import {createAssetRepository} from './asset.repository.factory';
-import {shapeAssetsResponse} from "./asset.response.shaper";
-import {getSortOrderOrDefault} from '../../sort.order.util';
-import {AssetRepository} from "./asset.repository";
-import {Observable} from "rxjs/Observable";
-//import { forkJoin } from "rxjs/observable/forkJoin";
-import {Asset} from "./asset";
-import {AssetKind} from "../kind/asset.kind";
-import {AssetType} from "../asset.type";
-import {UnitOfMeasure} from "../../unit-of-measure/unit.of.measure";
-import {Person} from "../../party/person/person";
-import {Site} from "../../site/site";
-import {Result} from "../../result.success";
+import { shapeAssetsResponse } from "./asset.response.shaper";
+import { getSortOrderOrDefault } from "../../sort.order.util";
+import { AssetRepository } from "./asset.repository";
+import { Observable } from "rxjs/Observable";
+// import { forkJoin } from "rxjs/observable/forkJoin";
+import { Asset } from "./asset";
+import { AssetKind } from "../kind/asset.kind";
+import { AssetType } from "../asset.type";
+import { UnitOfMeasure } from "../../unit-of-measure/unit.of.measure";
+import { Person } from "../../party/person/person";
+import { Site } from "../../site/site";
+import { Result } from "../../result.success";
 
-import {AssetTypeRepository} from "../asset.type.repository";
-import {createAssetTypeRepository} from "../asset.type.repository.factory";
-import {AssetKindRepository} from "../kind/asset.kind.repository";
-import {createAssetKindRepository} from "../kind/asset.kind.repository.factory";
-import {UnitOfMeasureRepository} from "../../unit-of-measure/unit.of.measure.repository";
-import {createUnitOfMeasureRepository} from "../../unit-of-measure/unit.of.measure.repository.factory";
-import {UserRepository} from "../../party/user/user.repository";
-import {createUserRepository} from "../../party/user/user.repository.factory";
-import {SiteRepository} from "../../site/site.repository";
-import {createSiteRepository} from "../../site/site.repository.factory";
+import { AssetTypeRepository } from "../asset.type.repository";
+import { createAssetTypeRepository } from "../asset.type.repository.factory";
+import { AssetKindRepository } from "../kind/asset.kind.repository";
+import { createAssetKindRepository } from "../kind/asset.kind.repository.factory";
+import { UnitOfMeasureRepository } from "../../unit-of-measure/unit.of.measure.repository";
+import { createUnitOfMeasureRepository } from "../../unit-of-measure/unit.of.measure.repository.factory";
+import { UserRepository } from "../../party/user/user.repository";
+import { createUserRepository } from "../../party/user/user.repository.factory";
+import { SiteRepository } from "../../site/site.repository";
+import { createSiteRepository } from "../../site/site.repository.factory";
 
 export class BkAssetOrchestrator {
 
@@ -32,7 +32,7 @@ export class BkAssetOrchestrator {
   // private userRepository:UserRepository;
   // private siteRepository:SiteRepository;
 
-  constructor(options?:any) {
+  constructor(options?: any) {
     // this.assetRepository = createAssetRepository(options);
     // this.assetTypeRepository = createAssetTypeRepository(options);
     // this.assetKindRepository = createAssetKindRepository(options);

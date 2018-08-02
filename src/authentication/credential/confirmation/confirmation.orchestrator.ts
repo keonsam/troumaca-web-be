@@ -1,21 +1,21 @@
-import {createCredentialConfirmationRepositoryFactory} from "./confirmation.repository.factory";
-import {ConfirmationRepository} from "./confirmation.repository";
-import {Observable} from "rxjs/Observable";
+import { createCredentialConfirmationRepositoryFactory } from "./confirmation.repository.factory";
+import { ConfirmationRepository } from "./confirmation.repository";
+import { Observable } from "rxjs/Observable";
 import { Confirmation } from "./confirmation";
 
 export class ConfirmationOrchestrator {
 
-  private confirmationRepository:ConfirmationRepository;
+  private confirmationRepository: ConfirmationRepository;
 
   constructor() {
     this.confirmationRepository = createCredentialConfirmationRepositoryFactory();
   }
 
-  confirmCode(confirmationId:string, credentialId:string, confirmation: Confirmation, options?:any):Observable<Confirmation> {
+  confirmCode(confirmationId: string, credentialId: string, confirmation: Confirmation, options?: any): Observable<Confirmation> {
     return this.confirmationRepository.confirmCode(confirmationId, credentialId, confirmation, options);
   }
 
-  resendConfirmCode(confirmationId:string, credentialId:string, options?:any):Observable<Confirmation> {
+  resendConfirmCode(confirmationId: string, credentialId: string, options?: any): Observable<Confirmation> {
     return this.confirmationRepository.resendConfirmCode(confirmationId, credentialId, options);
   }
 

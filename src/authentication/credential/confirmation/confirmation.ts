@@ -1,11 +1,11 @@
 
 export class  Confirmation {
-    private _confirmationId:string;
-    private _credentialId:string;
-    private _code:string;
-    private _status:string;
-    private _modifiedOn:Date;
-    private _createdOn:Date;
+    private _confirmationId: string;
+    private _credentialId: string;
+    private _code: string;
+    private _status: string;
+    private _modifiedOn: Date;
+    private _createdOn: Date;
 
     get confirmationId(): string {
         return this._confirmationId;
@@ -63,6 +63,6 @@ export class  Confirmation {
             status: this.status,
             createdOn: this.createdOn,
             modifiedOn: this.modifiedOn
-        }
+        };
     }
 }

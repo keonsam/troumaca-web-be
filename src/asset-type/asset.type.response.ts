@@ -1,5 +1,5 @@
-import {AssetType} from "./asset.type";
-import {Value} from "./value/value";
+import { AssetType } from "./asset.type";
+import { Value } from "./value/value";
 
 export class AssetTypeResponse {
 
@@ -31,6 +31,6 @@ export class AssetTypeResponse {
     return {
         assetType: this.assetType,
         values: this.values
-    }
+    };
   }
 }

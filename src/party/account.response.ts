@@ -1,11 +1,11 @@
-import {User} from "./user/user";
-import {Organization} from "./organization/organization";
+import { User } from "./user/user";
+import { Organization } from "./organization/organization";
 
 export class AccountResponse {
 
-  private _created:boolean;
-  private _user:User;
-  private _organization:Organization;
+  private _created: boolean;
+  private _user: User;
+  private _organization: Organization;
 
   constructor(created?: boolean, user?: User, organization?: Organization) {
     this._created = created;

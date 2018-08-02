@@ -1,6 +1,6 @@
 export class ValidatedUsername {
 
-  private _valid:boolean;
+  private _valid: boolean;
 
   constructor(valid?: boolean) {
     this._valid = valid;

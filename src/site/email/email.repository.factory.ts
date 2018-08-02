@@ -1,21 +1,21 @@
-import * as Rx from 'rxjs';
-import {EmailRepository} from "./email.repository";
-import {Observable} from "rxjs/Observable";
-import {Observer} from "rxjs/Observer";
-import {RepositoryKind} from "../../repository.kind";
-import {emails} from "../../db";
-import {Email} from "./email";
-import {calcSkip} from "../../db.util";
-import {generateUUID} from "../../uuid.generator";
+import * as Rx from "rxjs";
+import { EmailRepository } from "./email.repository";
+import { Observable } from "rxjs/Observable";
+import { Observer } from "rxjs/Observer";
+import { RepositoryKind } from "../../repository.kind";
+import { emails } from "../../db";
+import { Email } from "./email";
+import { calcSkip } from "../../db.util";
+import { generateUUID } from "../../uuid.generator";
 
 class EmailDBRepository implements EmailRepository {
 
-  private defaultPageSize:number = 10;
+  private defaultPageSize: number = 10;
 
-  saveEmail(email:Email):Observable<Email> {
+  saveEmail(email: Email): Observable<Email> {
     email.siteId = generateUUID();
-    return Rx.Observable.create(function(observer:Observer<Email>) {
-      emails.insert(email, function(err:any, doc:any) {
+    return Rx.Observable.create(function(observer: Observer<Email>) {
+      emails.insert(email, function(err: any, doc: any) {
         if (err) {
           observer.error(err);
         } else {
@@ -26,11 +26,11 @@ class EmailDBRepository implements EmailRepository {
     });
   }
 
-  getEmails(pageNumber:number, pageSize:number, order:string):Observable<Email[]> {
-    let localDefaultPageSize = this.defaultPageSize;
-    return Rx.Observable.create(function (observer:Observer<Email[]>) {
-      let skip = calcSkip(pageNumber, pageSize, localDefaultPageSize);
-      emails.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err:any, doc:any) {
+  getEmails(pageNumber: number, pageSize: number, order: string): Observable<Email[]> {
+    const localDefaultPageSize = this.defaultPageSize;
+    return Rx.Observable.create(function (observer: Observer<Email[]>) {
+      const skip = calcSkip(pageNumber, pageSize, localDefaultPageSize);
+      emails.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -41,9 +41,9 @@ class EmailDBRepository implements EmailRepository {
     });
   }
 
-  getEmailCount():Observable<number> {
-    return Rx.Observable.create(function (observer:Observer<number>) {
-      emails.count({}, function (err:any, count:number) {
+  getEmailCount(): Observable<number> {
+    return Rx.Observable.create(function (observer: Observer<number>) {
+      emails.count({}, function (err: any, count: number) {
         if (!err) {
           observer.next(count);
         } else {
@@ -52,14 +52,14 @@ class EmailDBRepository implements EmailRepository {
         observer.complete();
       });
     });
-  };
+  }
 
-  getEmailById(siteId:string):Observable<Email> {
-    return Rx.Observable.create(function (observer:Observer<Email>) {
-      let query = {
-        "siteId":siteId
+  getEmailById(siteId: string): Observable<Email> {
+    return Rx.Observable.create(function (observer: Observer<Email>) {
+      const query = {
+        "siteId": siteId
       };
-      emails.findOne(query, function (err:any, doc:any) {
+      emails.findOne(query, function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -68,49 +68,49 @@ class EmailDBRepository implements EmailRepository {
         observer.complete();
       });
     });
-  };
+  }
 
-  updateEmail(siteId:string, email:Email):Observable<number> {
-    return Rx.Observable.create(function (observer:Observer<number>) {
-      let query = {
-        "siteId":siteId
+  updateEmail(siteId: string, email: Email): Observable<number> {
+    return Rx.Observable.create(function (observer: Observer<number>) {
+      const query = {
+        "siteId": siteId
       };
-      emails.update(query, email, {}, function (err:any, numReplaced:number) {
+      emails.update(query, email, {}, function (err: any, numReplaced: number) {
         if (!err) {
           observer.next(numReplaced);
         } else {
           observer.error(err);
         }
         observer.complete();
-      })
+      });
     });
-  };
+  }
 
-  deleteEmail(siteId:string):Observable<number> {
-    return Rx.Observable.create(function (observer:Observer<number>) {
-      let query = {
-        "siteId":siteId
+  deleteEmail(siteId: string): Observable<number> {
+    return Rx.Observable.create(function (observer: Observer<number>) {
+      const query = {
+        "siteId": siteId
       };
-      emails.remove(query, {}, function (err:any, numRemoved:number) {
+      emails.remove(query, {}, function (err: any, numRemoved: number) {
         if (!err) {
           observer.next(numRemoved);
         } else {
           observer.error(err);
         }
         observer.complete();
-      })
+      });
     });
-  };
+  }
 
 }
 
 class EmailRestRepository implements EmailRepository {
 
-  deleteEmail(siteId:string): Observable<number> {
+  deleteEmail(siteId: string): Observable<number> {
     return undefined;
   }
 
-  getEmailById(siteId:string): Observable<Email> {
+  getEmailById(siteId: string): Observable<Email> {
     return undefined;
   }
 
@@ -126,12 +126,12 @@ class EmailRestRepository implements EmailRepository {
     return undefined;
   }
 
-  updateEmail(siteId:string, email:Email): Observable<number> {
+  updateEmail(siteId: string, email: Email): Observable<number> {
     return undefined;
   }
 }
 
-export function createEmailRepository(kind?:RepositoryKind):EmailRepository {
+export function createEmailRepository(kind?: RepositoryKind): EmailRepository {
   switch (kind) {
     case RepositoryKind.Nedb:
       return new EmailDBRepository();

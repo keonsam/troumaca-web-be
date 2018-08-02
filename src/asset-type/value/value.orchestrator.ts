@@ -1,18 +1,18 @@
-import {createValueRepository} from './value.repository.factory';
-import {ValueRepository} from "./value.repository";
-import {Observable} from "rxjs/Observable";
-import {Value} from "./value";
-import {shapeValuesResponse} from "./value.response.shaper";
-import {shapeValuesResponse2} from "./value.response.shaper";
-import {Result} from "../../result.success";
-import {getSortOrderOrDefault} from "../../sort.order.util";
+import { createValueRepository } from "./value.repository.factory";
+import { ValueRepository } from "./value.repository";
+import { Observable } from "rxjs/Observable";
+import { Value } from "./value";
+import { shapeValuesResponse } from "./value.response.shaper";
+import { shapeValuesResponse2 } from "./value.response.shaper";
+import { Result } from "../../result.success";
+import { getSortOrderOrDefault } from "../../sort.order.util";
 
 
 export class ValueOrchestrator {
 
-  private valueRepository:ValueRepository;
+  private valueRepository: ValueRepository;
 
-  constructor(options?:any) {
+  constructor(options?: any) {
     this.valueRepository = createValueRepository(options);
   }
 

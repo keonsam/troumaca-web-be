@@ -1,16 +1,16 @@
 export class Session {
 
-  private _sessionId:string;
-  private _partyId:string;
-  private _credentialId:string;
-  private _customerId:string;
-  private _expirationTime:Date;
-  private _createdOn:Date;
-  private _modifiedOn:Date;
-  private _data:Map<String, Object>;
+  private _sessionId: string;
+  private _partyId: string;
+  private _credentialId: string;
+  private _customerId: string;
+  private _expirationTime: Date;
+  private _createdOn: Date;
+  private _modifiedOn: Date;
+  private _data: Map<String, Object>;
 
 
-  constructor(sessionId?: string, credentialId?:string, customerId?:string, expirationTime?: Date, createdOn?: Date, modifiedOn?: Date, data?: Map<String, Object>) {
+  constructor(sessionId?: string, credentialId?: string, customerId?: string, expirationTime?: Date, createdOn?: Date, modifiedOn?: Date, data?: Map<String, Object>) {
     this._sessionId = sessionId;
     this._credentialId = credentialId;
     this._customerId = customerId;
@@ -88,7 +88,7 @@ export class Session {
     this._data = value;
   }
 
-  toJson(){
+  toJson() {
     return {
       sessionId: this.sessionId,
       partyId: this.partyId,
@@ -98,7 +98,7 @@ export class Session {
       createdOn: this.createdOn,
       modifiedOn: this.modifiedOn,
       data: this.data
-    }
+    };
   }
 
 }
