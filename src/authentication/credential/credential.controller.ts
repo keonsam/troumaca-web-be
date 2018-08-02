@@ -125,15 +125,15 @@ export let authenticate = (req: Request, res: Response) => {
 
     credentialOrchestrator.authenticate(credential, headerOptions)
         .subscribe((authenticatedCredential: AuthenticatedCredential) => {
-            if (authenticatedCredential.authenticated && authenticatedCredential.sessionId) {
+            if (authenticatedCredential.sessionId) {
                 res.cookie("sessionId", authenticatedCredential.sessionId, {path: '/', maxAge: 20*60*1000, httpOnly: true });
             }
             const body = JSON.stringify(authenticatedCredential);
             res.status(200);
             res.send(body);
         }, error => {
-            res.status(error.status);
-            res.send(JSON.stringify(error));
+            res.status(500);
+            res.send(JSON.stringify({message: 'Error Occurred'}));
             console.log(error);
         });
 };

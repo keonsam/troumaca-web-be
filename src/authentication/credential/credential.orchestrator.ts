@@ -42,8 +42,9 @@ export class CredentialOrchestrator {
       return this.credentialRepository
           .authenticate(credential, options)
           .switchMap((authenticatedCredential: AuthenticatedCredential) =>  {
-
-              if (authenticatedCredential.authenticateStatus === "AccountConfirmed" || authenticatedCredential.authenticateStatus === "AccountActive") {
+              if (!authenticatedCredential) {
+                  return Observable.of(new AuthenticatedCredential());
+              } else if (authenticatedCredential.authenticateStatus === "AccountConfirmed" || authenticatedCredential.authenticateStatus === "AccountActive") {
                   const session: Session = new Session();
                   session.partyId = authenticatedCredential.partyId;
                   session.credentialId = authenticatedCredential.credentialId;
