@@ -166,7 +166,7 @@ router.post("/verify-credentials-confirmations", confirmationController.confirmC
 // router.get("/send-confirmation-codes/:confirmationId", confirmationController.sendPhoneVerificationCode);
 // router.get("/get-confirmations-username/:credentialConfirmationId", confirmationController.getConfirmationsUsername);
 
-// session
+// SESSION
 router.get("/sessions/is-valid-session", sessionController.isValidSession);
 router.get("/partyId", sessionController.getPartyId);
 router.get("/sessions/log-out-user", sessionController.handleSessionLogOut);

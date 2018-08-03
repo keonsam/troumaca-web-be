@@ -97,7 +97,7 @@ export class Session {
       expirationTime: this.expirationTime,
       createdOn: this.createdOn,
       modifiedOn: this.modifiedOn,
-      data: this.data
+      data: this.data.values()
     };
   }
 

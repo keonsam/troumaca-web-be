@@ -3,22 +3,24 @@ import { Session } from "./session";
 
 export interface SessionRepository {
 
-  getSessionById(sessionId: string): Observable<Session> ;
+  isValidSession(sessionId: string, options?: any): Observable<boolean>;
 
-  getSessionByCredentialId(credentialId: string): Observable<Session>;
+  getSessionById(sessionId: string, options?: any): Observable<Session>;
 
-  getSessionByPartyId(partyId: string): Observable<Session>;
+  expireSession(sessionId: string, options?: any): Observable<number>;
 
-  addSession(session: Session): Observable<Session>;
+  // getSessionByCredentialId(credentialId: string): Observable<Session>;
+  //
+  // getSessionByPartyId(partyId: string): Observable<Session>;
+  //
+  // // getOrCreate(session:Session):Observable<Session>;
+  //
+  // updateSession(sessionId: string, session: Session): Observable<number>;
+  //
+  // updateSessionPartyId(sessionId: string, partyId: string): Observable<number>;
 
-  // getOrCreate(session:Session):Observable<Session>;
+  // USED BY OTHER REPO
 
-  updateSession(sessionId: string, session: Session): Observable<number>;
-
-  updateSessionPartyId(sessionId: string, partyId: string): Observable<number>;
-
-  isValidSession(sessionId: string): Observable<boolean>;
-
-  expireSession(sessionId: string): Observable<number>;
+  addSession(session: Session, options?: any ): Observable<Session>;
 
 }

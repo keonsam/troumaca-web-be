@@ -9,6 +9,7 @@ import { Confirmation } from "../confirmation";
 // import {classToPlain, plainToClass} from "class-transformer";
 
 export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository {
+
   addCredentialConfirmation(credentialConfirmation: CredentialConfirmation): Observable<CredentialConfirmation> {
     return undefined;
   }

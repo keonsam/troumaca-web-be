@@ -11,21 +11,17 @@ export class SessionOrchestrator {
     this.sessionRepository = createSessionRepositoryFactory();
   }
 
-  isValidSession(sessionId: string): Observable<boolean> {
-    return Observable.of(true);
-    // return this.sessionRepository.isValidSession(sessionId);
+  isValidSession(sessionId: string, options?: any): Observable<boolean> {
+    // return Observable.of(true);
+     return this.sessionRepository.isValidSession(sessionId, options);
   }
 
-  getSimpleSession(sessionId: string): Observable<Session> {
-    // Todo: Need to verify.
-    if (!sessionId) {
-      return Observable.of(new Session());
-    }
-    return this.sessionRepository.getSessionById(sessionId);
+  getSession(sessionId: string, options?: any): Observable<Session> {
+    return this.sessionRepository.getSessionById(sessionId, options);
   }
 
-  handleSessionLogOut(sessionId: string): Observable<boolean> {
-    return this.sessionRepository.expireSession(sessionId)
+  handleSessionLogOut(sessionId: string, options?: any): Observable<boolean> {
+    return this.sessionRepository.expireSession(sessionId, options)
       .map( numReplaced => {
         if (numReplaced) {
           return true;

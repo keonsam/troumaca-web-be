@@ -60,8 +60,12 @@ export class CredentialOrchestrator {
                   if (authenticatedCredential.confirmationId) {
                       session.data.set("confirmationId", authenticatedCredential.confirmationId);
                   }
-                  return this.sessionRepository.addSession(session)
+                  return this.sessionRepository.addSession(session, options)
                       .map(session => {
+                          console.log(session);
+                          if (!session) {
+                              return new AuthenticatedCredential();
+                          }
                           authenticatedCredential.sessionId = session.sessionId;
                           return authenticatedCredential;
                       });
