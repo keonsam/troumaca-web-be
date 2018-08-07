@@ -53,6 +53,9 @@ const partyAccessRolesDb = path.resolve(__dirname, "..", ) + "/nedb/authorizatio
 const subscriptionDb = path.resolve(__dirname, "..") + "/nedb/lobby/subscriptions.db";
 const billingDb = path.resolve(__dirname, "..") + "/nedb/lobby/billings.db";
 const methodDb = path.resolve(__dirname, "..") + "/nedb/lobby/methods.db";
+
+// depreciation
+const depreciationDb = path.resolve(__dirname, "..") + "/nedb/depreciation.db";
 // Todo: Fix remove
 
 export let userPhotos = new Datastore(theUserPhotosDb);
@@ -203,6 +206,12 @@ export const payMethods = new Datastore(methodDb);
 payMethods.loadDatabase(handleError);
 payMethods.ensureIndex({ fieldName: "methodId", unique: true }, handleError);
 
+
+// depreciation
+
+export const depreciations = new Datastore(depreciationDb);
+depreciations.loadDatabase(handleError);
+depreciations.ensureIndex({ fieldName: "depreciationId", unique: true }, handleError);
 
 
 function handleError( err: any ) {

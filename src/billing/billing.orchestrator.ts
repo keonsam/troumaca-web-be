@@ -17,4 +17,8 @@ export class  BillingOrchestrator {
         return this.billingRepository.addBilling(billing, method);
     }
 
+    public updateBilling(billingId: string, billing: Billing, method: any): Observable<number> {
+        return this.billingRepository.updateBilling(billingId, billing, method);
+    }
+
 }

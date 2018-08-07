@@ -7,4 +7,6 @@ export interface BillingRepository {
 
     addBilling(billing: Billing, method: any): Observable<Billing>;
 
+    updateBilling(billingId: string, billing: Billing, method: any): Observable<number>;
+
 }

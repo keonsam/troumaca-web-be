@@ -22,6 +22,22 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
         this.defaultPageSize = 10;
     }
 
+    findAssets(searchStr: string, pageSize: number): Observable<Asset[]> {
+        const searchStrLocal = new RegExp(searchStr);
+        const query = searchStr ? {name: {$regex: searchStrLocal}} : {};
+        const size = searchStr ? pageSize : 100;
+        return Observable.create((observer: Observer<Asset[]>) => {
+            assets.find(query).limit(size).exec( (err: any, docs: any) => {
+                if (!err) {
+                    observer.next(docs);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
+        });
+    }
+
     getAssets(pageNumber: number, pageSize: number, order: string): Observable<Asset[]> {
         return Rx.Observable.create(function (observer: Observer<Asset[]>) {
             const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);

@@ -5,6 +5,21 @@ import { AssetOrchestrator } from "./asset.orchestrator";
 
 const assetOrchestrator: AssetOrchestrator = new AssetOrchestrator();
 
+export  let findAssets = (req: Request, res: Response) => {
+    const searchStr: string =  req.query.q;
+    const pageSize: number = req.query.pageSize;
+
+    assetOrchestrator.findAssets(searchStr, pageSize)
+        .subscribe(assets => {
+            res.status(200);
+            res.send(JSON.stringify(assets));
+        }, error => {
+            res.status(500);
+            res.send(JSON.stringify({message: "Error Occurred"}));
+            console.log(error);
+        });
+};
+
 export let getAssets = (req: Request, res: Response) => {
   const number = getNumericValueOrDefault(req.query.pageNumber, 1);
   const size = getNumericValueOrDefault(req.query.pageSize, 10);

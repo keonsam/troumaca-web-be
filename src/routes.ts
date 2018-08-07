@@ -29,6 +29,7 @@ import * as assetTypeController from "./asset-type/asset.type.controller";
 import * as organizationController from "./party/organization/organization.controller";
 import * as subscriptionController from "./subscription/subscription.controller";
 import * as billingController from "./billing/billing.controller";
+import * as depreciationController from "./depreciation/depreciation.controller";
 
 const router: Router = Router();
 const jsonParser = bodyParser.json({ type: "application/json"});
@@ -49,6 +50,7 @@ router.get("/unit-of-measures/find", unitOfMeasureController.findUnitOfMeasure);
 router.get("/data-types", dataTypeController.getDataTypes);
 
 // asset
+router.get("/assets/find", assetController.findAssets);
 router.get("/assets", assetController.getAssets);
 router.get("/assets/:assetId", assetController.getAssetById);
 router.post("/assets", assetController.saveAsset);
@@ -224,4 +226,14 @@ router.post("/subscriptions", subscriptionController.addSubscription);
 // BILLING
 router.get("/billings", billingController.getBilling);
 router.post("/billings", billingController.addBilling);
+router.put("/billings/:billingId", billingController.updateBilling);
+
+// DEPRECIATION
+router.get("/depreciation", depreciationController.getDepreciationArr);
+router.get("/depreciation/:depreciationId", depreciationController.getDepreciationById);
+router.post("/depreciation", depreciationController.saveDepreciation);
+router.put("/depreciation/:depreciationId", depreciationController.updateDepreciation);
+router.delete("/depreciation/:depreciationId", depreciationController.deleteDepreciation);
+
+
 export default router;

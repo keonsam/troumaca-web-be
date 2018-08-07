@@ -42,3 +42,32 @@ export const addBilling = (req: Request, res: Response) => {
         });
 };
 
+export const updateBilling = (req: Request, res: Response) => {
+
+    const billing: Billing = req.body.billing;
+    const method: any = req.body.method;
+    const billingId: string = req.params.billingId;
+
+    if (!billing || !method) {
+        res.status(400);
+        res.send(JSON.stringify({message: "Either 'billing' or 'method' cannot be empty"}));
+    }
+
+    if (!billingId) {
+        res.status(400);
+        res.send(JSON.stringify({message: "billingId is required"}));
+    }
+
+    billingOrchestrator.updateBilling(billingId, billing, method)
+        .subscribe( numReplaced => {
+            const body = JSON.stringify(numReplaced);
+            res.status(201);
+            res.setHeader("content-type", "application/json");
+            res.send(body);
+        }, error => {
+            console.log(error);
+            res.status(500);
+            res.send(JSON.stringify({message: "Server Error, please try again"}));
+        });
+};
+

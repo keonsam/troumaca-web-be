@@ -10,4 +10,8 @@ export class BillingRepositoryRestAdapter implements BillingRepository {
     public addBilling(billing: Billing, method: any): Observable<Billing> {
         return undefined;
     }
+
+    public updateBilling(billingId: string, billing: Billing, method: any): Observable<number> {
+        return undefined;
+    }
 }

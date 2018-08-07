@@ -14,19 +14,23 @@ export class AssetOrchestrator {
     this.assetRepository = createAssetRepositoryFactory(options);
   }
 
-    getAssets(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
-        const sort: string = getSortOrderOrDefault(field, direction);
-        return this.assetRepository
-            .getAssets(number, size, sort)
-            .switchMap((assets: Asset[]) => {
-                return this.assetRepository
-                    .getAssetCount()
-                    .map(count => {
-                        const shapeAssetsResp: any = shapeAssetsResponse(assets, number, size, assets.length, count, sort);
-                        return new Result<any>(false, "assets", shapeAssetsResp);
-                    });
-            });
-    }
+  findAssets(searchStr: string, pageSize: number): Observable<Asset[]> {
+      return this.assetRepository.findAssets(searchStr, pageSize);
+  }
+
+  getAssets(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
+      const sort: string = getSortOrderOrDefault(field, direction);
+      return this.assetRepository
+          .getAssets(number, size, sort)
+          .switchMap((assets: Asset[]) => {
+              return this.assetRepository
+                  .getAssetCount()
+                  .map(count => {
+                      const shapeAssetsResp: any = shapeAssetsResponse(assets, number, size, assets.length, count, sort);
+                      return new Result<any>(false, "assets", shapeAssetsResp);
+                  });
+          });
+  }
 
     getAssetById(assetId: string): Observable<Asset> {
         return this.assetRepository.getAssetById(assetId);

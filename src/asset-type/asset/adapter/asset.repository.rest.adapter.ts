@@ -8,9 +8,13 @@ export class AssetRepositoryRestAdapter implements AssetRepository {
   constructor() {
   }
 
-    getAssets(pageNumber: number, pageSize: number, order: string): Observable<Asset[]> {
-        return undefined;
-    }
+  findAssets(searchStr: string, pageSize: number): Observable<Asset[]> {
+      return undefined;
+  }
+
+  getAssets(pageNumber: number, pageSize: number, order: string): Observable<Asset[]> {
+      return undefined;
+  }
 
     getAssetCount(): Observable<number> {
         return undefined;

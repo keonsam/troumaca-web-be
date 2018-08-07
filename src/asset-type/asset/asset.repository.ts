@@ -3,6 +3,8 @@ import { Observable } from "rxjs/Observable";
 
 export interface AssetRepository {
 
+  findAssets(searchStr: string, pageSize: number): Observable<Asset[]>;
+
   getAssets(pageNumber: number, pageSize: number, order: string): Observable<Asset[]>;
 
   getAssetCount(): Observable<number>;

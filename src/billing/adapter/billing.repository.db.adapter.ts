@@ -47,4 +47,33 @@ export class BillingRepositoryNeDbAdapter implements BillingRepository {
             });
         });
     }
+
+    public updateBilling(billingId: string, billing: Billing, method: any): Observable<number> {
+        return Observable.create(function (observer: Observer<number>) {
+            const query = {
+              "billingId": billingId
+            };
+
+
+            method.methodId = generateUUID();
+            billing.methodId = method.methodId;
+            billing.confirmed = true;
+            payMethods.insert(method, function (err: any, doc: any) {
+                if (!err) {
+                    billings.update(query, billing, {}, function (err: any, numReplaced:any) {
+                        if (!err) {
+                            observer.next(numReplaced);
+                        } else {
+                            observer.error(err);
+                        }
+                        observer.complete();
+                    });
+                } else {
+                    observer.error(err);
+                    observer.complete();
+                }
+            });
+        });
+    }
+
 }
