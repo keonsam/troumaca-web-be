@@ -101,5 +101,19 @@ export class DepreciationRepositoryNeDbAdapter implements DepreciationRepository
         });
     }
 
+    // USED BY OTHER REPO
+    getDepreciationArrHelp(): Observable<Depreciation[]> {
+        return Observable.create(function (observer: Observer<Depreciation[]>) {
+            depreciations.find({}, function (err: any, docs: any) {
+                if (!err) {
+                    observer.next(docs);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
+        });
+    }
+
 
 }

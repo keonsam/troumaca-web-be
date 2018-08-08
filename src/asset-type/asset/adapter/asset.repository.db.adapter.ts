@@ -4,7 +4,7 @@ import { Observable } from "rxjs/Observable";
 import { generateUUID } from "../../../uuid.generator";
 import Rx from "rxjs";
 import { Observer } from "rxjs/Observer";
-import { assetKinds, assets, assetTypes, sites, unitOfMeasures, users } from "../../../db";
+import { assetKinds, assets, assetTypes, depreciations, sites, unitOfMeasures, users } from "../../../db";
 import { calcSkip } from "../../../db.util";
 import { AssetKind } from "../../kind/asset.kind";
 import { AssetType } from "../../asset.type";
@@ -12,30 +12,27 @@ import { UnitOfMeasure } from "../../../unit-of-measure/unit.of.measure";
 import { Person } from "../../../party/person/person";
 import { Site } from "../../../site/site";
 import { User } from "../../../party/user/user";
+import { DepreciationRepositoryNeDbAdapter} from "../../../depreciation/adapter/depreciation.repository.db.adapter";
 
 
 export class AssetRepositoryNeDbAdapter implements AssetRepository {
 
     private defaultPageSize: number;
+    private depreciationRepositoryNeDbAdapter: DepreciationRepositoryNeDbAdapter = new DepreciationRepositoryNeDbAdapter();
 
     constructor() {
         this.defaultPageSize = 10;
     }
 
     findAssets(searchStr: string, pageSize: number): Observable<Asset[]> {
-        const searchStrLocal = new RegExp(searchStr);
-        const query = searchStr ? {name: {$regex: searchStrLocal}} : {};
-        const size = searchStr ? pageSize : 100;
-        return Observable.create((observer: Observer<Asset[]>) => {
-            assets.find(query).limit(size).exec( (err: any, docs: any) => {
-                if (!err) {
-                    observer.next(docs);
-                } else {
-                    observer.error(err);
-                }
-                observer.complete();
-            });
-        });
+       return this.findAssetsLocal(searchStr, pageSize)
+           .switchMap( assets => {
+               return this.depreciationRepositoryNeDbAdapter.getDepreciationArrHelp()
+                   .map(depreciationArr => {
+                       const assetIds = depreciationArr.map(x => x.assetId);
+                       return assets.filter((x: Asset) => assetIds.indexOf(x.assetId) === -1);
+                   });
+           });
     }
 
     getAssets(pageNumber: number, pageSize: number, order: string): Observable<Asset[]> {
@@ -245,5 +242,20 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
         });
     }
 
-
+    // HELPS
+    findAssetsLocal(searchStr: string, pageSize: number): Observable<Asset[]> {
+        const searchStrLocal = new RegExp(searchStr);
+        const query = searchStr ? {name: {$regex: searchStrLocal}} : {};
+        const size = searchStr ? pageSize : 100;
+        return Observable.create((observer: Observer<Asset[]>) => {
+            assets.find(query).limit(size).exec( (err: any, docs: any) => {
+                if (!err) {
+                    observer.next(docs);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
+        });
+    }
 }
