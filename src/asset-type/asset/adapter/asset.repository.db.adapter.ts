@@ -2,119 +2,103 @@ import { AssetRepository } from "../asset.repository";
 import { Asset } from "../asset";
 import { Observable } from "rxjs/Observable";
 import { generateUUID } from "../../../uuid.generator";
-import Rx from "rxjs";
 import { Observer } from "rxjs/Observer";
-import { assetKinds, assets, assetTypes, depreciations, sites, unitOfMeasures, users } from "../../../db";
+import { assets, assetTypes } from "../../../db";
 import { calcSkip } from "../../../db.util";
 import { AssetKind } from "../../kind/asset.kind";
 import { AssetType } from "../../asset.type";
 import { UnitOfMeasure } from "../../../unit-of-measure/unit.of.measure";
-import { Person } from "../../../party/person/person";
 import { Site } from "../../../site/site";
 import { User } from "../../../party/user/user";
-import { DepreciationRepositoryNeDbAdapter} from "../../../depreciation/adapter/depreciation.repository.db.adapter";
-
+import { AssetKindRepositoryNeDbAdapter } from "../../kind/adapter/asset.kind.repository.db.adapter";
+import { AssetTypeRepositoryNeDbAdapter } from "../../adapter/asset.type.repository.db.adapter";
+import { UnitOfMeasureRepositoryNeDbAdapter } from "../../../unit-of-measure/adapter/unit.of.measure.repository.db.adapter";
+import { UserRepositoryNeDbAdapter } from "../../../party/user/adapter/user.repository.db.adapter";
+import { SiteRepositoryNeDbAdapter } from "../../../site/adapter/site.repository.db.adapter";
 
 export class AssetRepositoryNeDbAdapter implements AssetRepository {
 
-    private defaultPageSize: number;
-    private depreciationRepositoryNeDbAdapter: DepreciationRepositoryNeDbAdapter = new DepreciationRepositoryNeDbAdapter();
+    private defaultPageSize: number = 10;
+    private assetKindRepositoryNeDbAdapter: AssetKindRepositoryNeDbAdapter = new AssetKindRepositoryNeDbAdapter();
+    private assetTypeRepositoryNeDbAdapter: AssetTypeRepositoryNeDbAdapter = new AssetTypeRepositoryNeDbAdapter();
+    private unitOfMeasureRepositoryNeDbAdapter: UnitOfMeasureRepositoryNeDbAdapter = new UnitOfMeasureRepositoryNeDbAdapter();
+    private userRepositoryNeDbAdapter: UserRepositoryNeDbAdapter = new UserRepositoryNeDbAdapter();
+    private siteRepositoryNeDbAdapter: SiteRepositoryNeDbAdapter = new SiteRepositoryNeDbAdapter();
 
     constructor() {
-        this.defaultPageSize = 10;
     }
 
     findAssets(searchStr: string, pageSize: number): Observable<Asset[]> {
-       return this.findAssetsLocal(searchStr, pageSize)
-           .switchMap( assets => {
-               return this.depreciationRepositoryNeDbAdapter.getDepreciationArrHelp()
-                   .map(depreciationArr => {
-                       const assetIds = depreciationArr.map(x => x.assetId);
-                       return assets.filter((x: Asset) => assetIds.indexOf(x.assetId) === -1);
-                   });
-           });
+        return this.findAssetsLocal(searchStr, pageSize)
+            .switchMap(assets => {
+                if (assets.length < 1) {
+                    return Observable.of(assets);
+                } else  {
+                    const assetTypeIds: string[] = assets.map(x => x.assetTypeId);
+                    return this.assetTypeRepositoryNeDbAdapter.getAssetTypesByIds(assetTypeIds)
+                        .map( assetTypes => {
+                            assets.forEach( value => {
+                                const index = assetTypes.findIndex((x: AssetType) => x.assetTypeId === value.assetTypeId);
+                                value.assetTypeName = index !== -1 ? assetTypes[index].name : "";
+                            });
+                            return assets;
+                        });
+                }
+            });
     }
 
     getAssets(pageNumber: number, pageSize: number, order: string): Observable<Asset[]> {
-        return Rx.Observable.create(function (observer: Observer<Asset[]>) {
-            const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
-            assets.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, assetArr: any) {
-                if (!err) {
-                    if (assetArr.length < 1) {
-                        observer.next(assetArr);
-                        observer.complete();
-                    } else {
-                        const assetKindIds: string[] = [];
-                        const assetTypeIds: string[] = [];
-                        const unitOfMeasureIds: string[] = [];
-                        const partyIds: string[] = [];
-                        const siteIds: string[] = [];
-                        assetArr.forEach((x: Asset) => {
-                            if (x.assetKindId) assetKindIds.push(x.assetKindId);
-                            if (x.assetTypeId) assetTypeIds.push(x.assetTypeId);
-                            if (x.unitOfMeasureId) unitOfMeasureIds.push(x.unitOfMeasureId);
-                            if (x.personId) partyIds.push(x.personId);
-                            if (x.siteId) siteIds.push(x.siteId);
-                            assetKinds.find({assetKindId: {$in: assetKindIds}}, function (err: any, assetKindArr: any) {
-                                if (!err) {
-                                    assetTypes.find({assetTypeId: {$in: assetTypeIds}}, function (err: any, assetTypeArr: any) {
-                                        if (!err) {
-                                            unitOfMeasures.find({unitOfMeasureId: {$in: unitOfMeasureIds}}, function (err: any, unitOfMeasureArr: any) {
-                                                if (!err) {
-                                                    users.find({partyId: {$in: partyIds}}, function (err: any, userArr: any) {
-                                                        if (!err) {
-                                                            sites.find({siteId: {$in: siteIds}}, function (err: any, siteArr: any) {
-                                                                if (!err) {
-                                                                    assetArr.forEach((value: Asset) => {
-                                                                        const index = assetKindArr.findIndex((x: AssetKind) => x.assetKindId === value.assetKindId);
-                                                                        const index2 = assetTypeArr.findIndex((x: AssetType) => x.assetTypeId === value.assetTypeId);
-                                                                        const index3 = unitOfMeasureArr.findIndex((x: UnitOfMeasure) => x.unitOfMeasureId === value.unitOfMeasureId);
-                                                                        const index4 = userArr.findIndex((x: User) => x.partyId === value.personId);
-                                                                        const index5 = siteArr.findIndex((x: Site) => x.siteId === value.siteId);
-                                                                        value.assetKind = index !== -1 ? assetKindArr[index] : new AssetKind();
-                                                                        value.assetType = index2 !== -1 ? assetTypeArr[index2] : new AssetType();
-                                                                        value.unitOfMeasure = index3 !== -1 ? unitOfMeasureArr[index3] : new UnitOfMeasure();
-                                                                        value.person = index4 !== -1 ? userArr[index4] : new Person();
-                                                                        value.site = index5 !== -1 ? siteArr[index5] : new Site();
-                                                                    });
-                                                                    observer.next(assetArr);
-                                                                } else {
-                                                                    observer.error(err);
-                                                                }
-                                                                observer.complete();
-                                                            });
-                                                        } else {
-                                                            observer.error(err);
-                                                            observer.complete();
-                                                        }
-                                                    });
-                                                } else {
-                                                    observer.error(err);
-                                                    observer.complete();
-                                                }
-                                            });
-                                        } else {
-                                            observer.error(err);
-                                            observer.complete();
-                                        }
-                                    });
-                                } else {
-                                    observer.error(err);
-                                    observer.complete();
-                                }
-                            });
-                        });
-                    }
-                } else {
-                    observer.error(err);
-                    observer.complete();
-                }
+        return this.getAssetsLocal(pageNumber, pageSize, order)
+            .switchMap(assets => {
+               if (assets.length < 1) {
+                   return Observable.of(assets);
+               } else {
+                   const assetKindIds: string[] = [];
+                   const assetTypeIds: string[] = [];
+                   const unitOfMeasureIds: string[] = [];
+                   const partyIds: string[] = [];
+                   const siteIds: string[] = [];
+                   assets.forEach((x: Asset) => {
+                       if (x.assetKindId) assetKindIds.push(x.assetKindId);
+                       if (x.assetTypeId) assetTypeIds.push(x.assetTypeId);
+                       if (x.unitOfMeasureId) unitOfMeasureIds.push(x.unitOfMeasureId);
+                       if (x.personId) partyIds.push(x.personId);
+                       if (x.siteId) siteIds.push(x.siteId);
+                   });
+                   return this.assetKindRepositoryNeDbAdapter.getAssetKindByIds(assetKindIds)
+                       .switchMap(assetKinds => {
+                           return this.assetTypeRepositoryNeDbAdapter.getAssetTypesByIds(assetTypeIds)
+                               .switchMap(assetTypes => {
+                                   return this.unitOfMeasureRepositoryNeDbAdapter.getUnitOfMeasuresByIds(unitOfMeasureIds)
+                                       .switchMap( unitOfMeasures => {
+                                          return this.userRepositoryNeDbAdapter.getUsersByIds(partyIds)
+                                              .switchMap(users => {
+                                                  return this.siteRepositoryNeDbAdapter.getSitesByIds(siteIds)
+                                                      .map(sites => {
+                                                          assets.forEach((value: Asset) => {
+                                                              const index = assetKinds.findIndex((x: AssetKind) => x.assetKindId === value.assetKindId);
+                                                              const index2 = assetTypes.findIndex((x: AssetType) => x.assetTypeId === value.assetTypeId);
+                                                              const index3 = unitOfMeasures.findIndex((x: UnitOfMeasure) => x.unitOfMeasureId === value.unitOfMeasureId);
+                                                              const index4 = users.findIndex((x: User) => x.partyId === value.personId);
+                                                              const index5 = sites.findIndex((x: Site) => x.siteId === value.siteId);
+                                                              value.assetKindName = index !== -1 ? assetKinds[index].name : "";
+                                                              value.assetTypeName = index2 !== -1 ? assetTypes[index2].name : "";
+                                                              value.unitOfMeasureName = index3 !== -1 ? unitOfMeasures[index3].name : "";
+                                                              value.personName = index4 !== -1 ? users[index4].firstName : "";
+                                                              value.siteName = index5 !== -1 ? sites[index5].name : "";
+                                                          });
+                                                          return assets;
+                                                      });
+                                              });
+                                       });
+                               });
+                       });
+               }
             });
-        });
     }
 
     getAssetCount(): Observable<number> {
-        return Rx.Observable.create(function (observer: Observer<number>) {
+        return Observable.create(function (observer: Observer<number>) {
             assets.count({}, function (err: any, count: number) {
                 if (!err) {
                     observer.next(count);
@@ -127,77 +111,44 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
     }
 
     getAssetById(assetId: string): Observable<Asset> {
-        return Rx.Observable.create(function (observer: Observer<Asset>) {
-            const query = {"assetId": assetId};
-            assets.findOne(query, function (err: any, asset: any) {
-                if (!err) {
-                    if (!asset) {
-                        observer.next(asset);
-                        observer.complete();
-                    } else {
-                        const query2 = {"assetKindId": asset.assetKindId};
-                        assetKinds.findOne(query2, function (err: any, assetKind: any) {
-                            if (!err) {
-                                const query3 = {"assetTypeId": asset.assetTypeId};
-                                assetTypes.findOne(query3, function (err: any, assetType: any) {
-                                    if (!err) {
-                                        const query4 = {"unitOfMeasureId": asset.unitOfMeasureId};
-                                        unitOfMeasures.findOne(query4, function (err: any, unitOfMeasure: any) {
-                                            if (!err) {
-                                                const query5 = {"partyId": asset.partyId};
-                                                users.findOne(query5, function (err: any, user: any) {
-                                                    if (!err) {
-                                                        const query6 = {"siteId": asset.siteId};
-                                                        sites.findOne(query6, function (err: any, site: any) {
-                                                            if (!err) {
-                                                                asset.assetKind = assetKind ? assetKind : new AssetKind();
-                                                                asset.assetType = assetType ? assetType : new AssetType();
-                                                                asset.unitOfMeasure = unitOfMeasure ? unitOfMeasure : new UnitOfMeasure();
-                                                                asset.person = user ? user : new Person();
-                                                                asset.site = site ? site : new Site();
-                                                                observer.next(asset);
-                                                            } else {
-                                                                observer.error(err);
-                                                            }
-                                                            observer.complete();
-                                                        });
-                                                    } else {
-                                                        observer.error(err);
-                                                        observer.complete();
-                                                    }
-                                                });
-                                            } else {
-                                                observer.error(err);
-                                                observer.complete();
-                                            }
-                                        });
-                                    } else {
-                                        observer.error(err);
-                                        observer.complete();
-                                    }
-                                });
-                            } else {
-                                observer.error(err);
-                                observer.complete();
-                            }
-                        });
-                    }
-                } else {
-                    observer.error(err);
-                    observer.complete();
-                }
+        return this.getAssetByIdLocal(assetId)
+            .switchMap((asset: Asset) => {
+               if (!asset) {
+                   return Observable.of(asset);
+               } else {
+                   return this.assetKindRepositoryNeDbAdapter.getAssetKindById(asset.assetKindId)
+                       .switchMap(assetKind => {
+                          return this.assetTypeRepositoryNeDbAdapter.getAssetTypeByIdLocal(asset.assetTypeId)
+                              .switchMap( assetType => {
+                                 return this.unitOfMeasureRepositoryNeDbAdapter.getUnitOfMeasureById(asset.unitOfMeasureId)
+                                     .switchMap( unitOfMeasure => {
+                                        return this.userRepositoryNeDbAdapter.getUser(asset.personId)
+                                            .switchMap( user => {
+                                                return this.siteRepositoryNeDbAdapter.getSiteById(asset.siteId)
+                                                    .map( site => {
+                                                        asset.assetKindName = assetKind ? assetKind.name : "";
+                                                        asset.assetTypeName = assetType ? assetType.name : "";
+                                                        asset.unitOfMeasureName = unitOfMeasure ? unitOfMeasure.name : "";
+                                                        asset.personName = user ? user.firstName : "";
+                                                        asset.siteName = site ? site.name : "";
+                                                        return asset;
+                                                    });
+                                            });
+                                     });
+                              });
+                       });
+               }
             });
-        });
     }
 
     saveAsset(asset: Asset): Observable<Asset> {
         asset.assetId = generateUUID();
-        return Rx.Observable.create(function(observer: Observer<Asset>) {
+        return Observable.create(function(observer: Observer<Asset>) {
             assets.insert(asset, function(err: any, doc: any) {
                 if (err) {
                     observer.error(err);
                 } else {
-                    observer.next(asset);
+                    observer.next(doc);
                 }
                 observer.complete();
             });
@@ -211,7 +162,7 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
             asset.quantity = undefined;
             asset.unitOfMeasureId = undefined;
         }
-        return Rx.Observable.create(function (observer: Observer<number>) {
+        return Observable.create(function (observer: Observer<number>) {
             const query = {
                 "assetId": assetId
             };
@@ -227,7 +178,7 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
     }
 
     deleteAsset(assetId: string): Observable<number> {
-        return Rx.Observable.create(function (observer: Observer<number>) {
+        return Observable.create(function (observer: Observer<number>) {
             const query = {
                 "assetId": assetId
             };
@@ -242,7 +193,69 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
         });
     }
 
+    // USED BY OTHER REPOS
+    getAssetsByIds(assetIds: string[]): Observable<Asset[]> {
+        return this.getAssetsByIdsLocal(assetIds)
+            .switchMap(assets => {
+               if (!assets) {
+                   return Observable.of(assets);
+               } else {
+                   const assetTypeIds: string[] = assets.map(x => x.assetTypeId);
+                   return this.assetTypeRepositoryNeDbAdapter.getAssetTypesByIds(assetTypeIds)
+                       .map( assetTypes => {
+                           assets.forEach( value => {
+                               const index = assetTypes.findIndex((x: AssetType) => x.assetTypeId === value.assetTypeId);
+                               value.assetTypeName = index !== -1 ? assetTypes[index].name : "";
+                           });
+                           return assets;
+                       });
+               }
+            });
+    }
+
     // HELPS
+
+    getAssetsLocal(pageNumber: number, pageSize: number, order: string): Observable<Asset[]> {
+        return Observable.create( (observer: Observer<Asset[]>) => {
+            const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
+            assets.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, docs: any) {
+                if (!err) {
+                    observer.next(docs);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
+        });
+    }
+
+    getAssetByIdLocal(assetId: string): Observable<Asset> {
+        return Observable.create( (observer: Observer<Asset>)  => {
+            const query = {"assetId": assetId};
+            assets.findOne(query, function (err: any, doc: any) {
+               if (!err) {
+                   observer.next(doc);
+               } else {
+                   observer.error(err);
+               }
+               observer.complete();
+            });
+        });
+    }
+
+    getAssetsByIdsLocal(assetIds: string[]): Observable<Asset[]> {
+        return Observable.create( (observer: Observer<Asset[]>) => {
+            assets.find({assetId: {$in: assetIds}}, function (err: any, docs: any) {
+                if (!err) {
+                    observer.next(docs);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
+        });
+    }
+
     findAssetsLocal(searchStr: string, pageSize: number): Observable<Asset[]> {
         const searchStrLocal = new RegExp(searchStr);
         const query = searchStr ? {name: {$regex: searchStrLocal}} : {};

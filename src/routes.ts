@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 
 import * as assetController from "./asset-type/asset/asset.controller";
 import * as attributeController from "./asset-type/attribute/attribute.controller";
+import * as assignedAttributeController from "./asset-type/attribute/assigned-attributes/assigned.attribute.controller"
 import * as confirmationController from "./authentication/credential/confirmation/confirmation.controller";
 import * as assetKindController from "./asset-type/kind/asset.kind.controller";
 import * as phoneController from "./site/phone/phone.controller";
@@ -81,9 +82,9 @@ router.put("/attributes/:attributeId", attributeController.updateAttribute);
 router.delete("/attributes/:attributeId", attributeController.deleteAttribute);
 
 // assigned-attributes
-router.get("/available-attributes", attributeController.getAvailableAttributes);
-router.get("/assigned-attributes", attributeController.getAssignedAttributes);
-router.get("/assigned-attributes/:assetTypeClassId", attributeController.getAssignedAttributesByClassId);
+// router.get("/available-attributes", attributeController.getAvailableAttributes);
+router.get("/assignable-attributes/:type", assignedAttributeController.getAssignableAttributes);
+router.get("/assigned-attributes/:assetTypeClassId", assignedAttributeController.getAssignedAttributesByClassId);
 
 // site
 router.get("/sites/find", siteController.findSite);
@@ -229,6 +230,7 @@ router.post("/billings", billingController.addBilling);
 router.put("/billings/:billingId", billingController.updateBilling);
 
 // DEPRECIATION
+router.get("/depreciation/assets/find", depreciationController.getDepreciableAssets);
 router.get("/depreciation", depreciationController.getDepreciationArr);
 router.get("/depreciation/:depreciationId", depreciationController.getDepreciationById);
 router.post("/depreciation", depreciationController.saveDepreciation);

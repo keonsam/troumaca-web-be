@@ -59,7 +59,7 @@ export let getAssetTypeClass = (req: Request, res: Response) => {
 export let saveAssetTypeClass = (req: Request, res: Response) => {
   const assetTypeClass = req.body.newAssetTypeClass;
   const assignedAttributes = req.body.newAssignedAttributes;
-    if (!req.body) {
+    if (!assetTypeClass) {
         return res.status(400).send({
             message: "Asset Type Class can not be empty"
         });

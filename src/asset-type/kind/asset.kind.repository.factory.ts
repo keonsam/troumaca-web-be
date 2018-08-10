@@ -1,62 +1,20 @@
-import Rx from "rxjs";
-import { Observable } from "rxjs/Observable";
-import { AssetKind } from "./asset.kind";
 import { AssetKindRepository } from "./asset.kind.repository";
 import { RepositoryKind } from "../../repository.kind";
-import { assetKinds } from "../../db";
-import { Observer } from "rxjs/Observer";
-
-class AssetKindDBRepository implements AssetKindRepository {
-
-  getAssetKinds(): Observable<AssetKind[]> {
-    return Rx.Observable.create(function (observer: Observer<AssetKind[]>) {
-      assetKinds.find({}, function (err: any, doc: any) {
-        if (!err) {
-          observer.next(doc);
-        } else {
-          observer.error(err);
-        }
-        observer.complete();
-      });
-    });
-  }
-
-  getAssetKindById(assetKindId: string): Observable<AssetKind> {
-    const query = {
-      "assetKindId": assetKindId
-    };
-    return Rx.Observable.create(function (observer: Observer<AssetKind[]>) {
-      assetKinds.findOne(query, function (err: any, doc: any) {
-        if (!err) {
-          observer.next(doc);
-        } else {
-          observer.error(err);
-        }
-        observer.complete();
-      });
-    });
-  }
-}
-
-class AssetKindRestRepository implements AssetKindRepository {
-  getAssetKinds(): Observable<AssetKind[]> {
-    return undefined;
-  }
-
-  getAssetKindById(assetKindId: string): Observable<AssetKind> {
-    return undefined;
-  }
-
-}
-
+import { properties } from "../../properties.helpers";
+import { AssetKindRepositoryNeDbAdapter } from "./adapter/asset.kind.repository.db.adapter";
+import { AssetKindRepositoryRestAdapter } from "./adapter/asset.kind.repository.rest.adapter";
 
 export function createAssetKindRepository(kind?: RepositoryKind): AssetKindRepository {
-  switch (kind) {
+  const type: number = properties.get("assetKind.repository.type") as number;
+
+  const k: RepositoryKind = (kind) ? kind : (type === 2) ? RepositoryKind.Rest : RepositoryKind.Nedb;
+
+  switch (k) {
     case RepositoryKind.Nedb:
-      return new AssetKindDBRepository();
+      return new AssetKindRepositoryNeDbAdapter();
     case RepositoryKind.Rest:
-      return new AssetKindRestRepository();
+      return new AssetKindRepositoryRestAdapter();
     default:
-      return new AssetKindDBRepository();
+        throw new Error(`Unknown Asset Kind Repository Type ${k}`);
   }
 }

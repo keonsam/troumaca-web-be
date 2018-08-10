@@ -2,8 +2,24 @@ import { Request, Response } from "express";
 import { getNumericValueOrDefault } from "../number.util";
 import { getStringValueOrDefault } from "../string.util";
 import { DepreciationOrchestrator } from "./depreciation.orchestrator";
+import { error } from "util";
 
 const orchestrator: DepreciationOrchestrator = new DepreciationOrchestrator();
+
+
+export let getDepreciableAssets = (req: Request, res: Response) => {
+    const searchStr: string =  req.query.q;
+    const pageSize: number = req.query.pageSize;
+    orchestrator.getDepreciableAssets(searchStr, pageSize)
+        .subscribe( assets => {
+            res.status(200);
+            res.send(JSON.stringify(assets));
+        }, error => {
+            res.status(400);
+            res.send(JSON.stringify({message: "Error Occurred"}));
+            console.log(error);
+        });
+}
 
 export let getDepreciationArr = (req: Request, res: Response) => {
   const number = getNumericValueOrDefault(req.query.pageNumber, 1);

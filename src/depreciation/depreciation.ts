@@ -8,6 +8,7 @@ export class Depreciation {
   private _usefulLife: string;
   private _unitProduced: string[] = [];
   private _totalUnits: string;
+  private _assetName: string;
 
   get depreciationId(): string {
     return this._depreciationId;
@@ -79,5 +80,13 @@ export class Depreciation {
 
   set totalUnits(value: string) {
     this._totalUnits = value;
+  }
+
+  get assetName(): string {
+    return this._assetName;
+  }
+
+  set assetName(value: string) {
+    this._assetName = value;
   }
 }

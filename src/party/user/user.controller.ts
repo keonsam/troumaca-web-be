@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { UserOrchestrator } from "./user.orchestrator";
 import { getNumericValueOrDefault } from "../../number.util";
 import { getStringValueOrDefault } from "../../string.util";
-import { shapeUserResponse2 } from "../user/user.response.shaper";
 
 const userOrchestrator: UserOrchestrator = new UserOrchestrator();
 
@@ -109,7 +108,7 @@ export let updateUserMe = (req: Request, res: Response) => {
   const credential = req.body.credential;
     if (!req.body) {
         return res.status(400).send({
-            message: "User can not be empty"
+            message: "User Me can not be empty"
         });
     }
   userOrchestrator

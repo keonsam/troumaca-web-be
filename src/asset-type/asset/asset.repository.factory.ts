@@ -18,6 +18,6 @@ export function createAssetRepositoryFactory(kind?: RepositoryKind): AssetReposi
     case RepositoryKind.Rest:
       return new AssetRepositoryRestAdapter();
     default:
-      throw new Error(`Unknown Credential Repository Type ${k}`);
+      throw new Error(`Unknown Asset Repository Type ${k}`);
   }
 }

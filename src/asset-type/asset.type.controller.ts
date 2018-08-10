@@ -55,12 +55,14 @@ export let getAssetTypeById = (req: Request, res: Response) => {
 };
 
 export let saveAssetType = (req: Request, res: Response) => {
-    if (!req.body) {
+    const assetType = req.body.assetType;
+    const values = req.body.values;
+    if (!assetType) {
         return res.status(400).send({
             message: "Asset Type can not be empty"
         });
     }
-    assetTypeOrchestrator.saveAssetType(req.body.assetType, req.body.values)
+    assetTypeOrchestrator.saveAssetType(assetType, values)
         .subscribe(assetType => {
             res.status(201);
             res.send(JSON.stringify(assetType));
@@ -72,12 +74,14 @@ export let saveAssetType = (req: Request, res: Response) => {
 };
 
 export let updateAssetType = (req: Request, res: Response) => {
-    if (!req.body) {
+    const assetType = req.body.assetType;
+    const values = req.body.values;
+    if (!assetType) {
         return res.status(400).send({
             message: "Asset Type can not be empty"
         });
     }
-  assetTypeOrchestrator.updateAssetType(req.params.assetTypeId, req.body.assetType, req.body.values)
+  assetTypeOrchestrator.updateAssetType(req.params.assetTypeId, assetType, values)
     .subscribe(affected => {
         if (affected > 0) {
             res.status(200);

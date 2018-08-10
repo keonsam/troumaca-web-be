@@ -1,6 +1,5 @@
 import { Observable } from "rxjs/Observable";
 import { generateUUID } from "../../../uuid.generator";
-import Rx from "rxjs";
 import { Observer } from "rxjs/Observer";
 import { assetTypeClasses, assignedAttributes } from "../../../db";
 import { calcSkip } from "../../../db.util";
@@ -8,11 +7,13 @@ import { AssetTypeClassRepository } from "../asset.type.class.repository";
 import { AssetTypeClass } from "../asset.type.class";
 import { AssetTypeClassResponse } from "../asset.type.class.response";
 import { AssignedAttribute } from "../../attribute/assigned.attribute";
-
+import { AssignedAttributeRepositoryNeDbAdapter } from "../../attribute/assigned-attributes/adapter/assigned.attribute.repository.db.adapter";
+import { observable } from "rxjs/symbol/observable";
 
 export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassRepository {
 
     private defaultPageSize: number;
+    private assignedAttributeRepositoryNeDbAdapter: AssignedAttributeRepositoryNeDbAdapter = new AssignedAttributeRepositoryNeDbAdapter();
 
     constructor() {
         this.defaultPageSize = 10;
@@ -22,7 +23,7 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
         const searchStrLocal = new RegExp(searchStr);
         const query = searchStr ? {name: {$regex: searchStrLocal}} : {};
         const size = searchStr ? pageSize : 100;
-        return Rx.Observable.create(function (observer: Observer<AssetTypeClass[]>) {
+        return Observable.create(function (observer: Observer<AssetTypeClass[]>) {
             assetTypeClasses.find(query).limit(size).exec(function (err: any, doc: any) {
                 if (!err) {
                     observer.next(doc);
@@ -35,7 +36,7 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
     }
 
     getAssetTypeClasses(pageNumber: number, pageSize: number, order: string): Observable<AssetTypeClass[]> {
-        return Rx.Observable.create(function (observer: Observer<AssetTypeClass[]>) {
+        return Observable.create(function (observer: Observer<AssetTypeClass[]>) {
             const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
             assetTypeClasses.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
                 if (!err) {
@@ -49,7 +50,7 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
     }
 
     getAssetTypeClassCount(): Observable<number> {
-        return Rx.Observable.create(function (observer: Observer<number>) {
+        return Observable.create(function (observer: Observer<number>) {
             assetTypeClasses.count({}, function (err: any, count: number) {
                 if (!err) {
                     observer.next(count);
@@ -62,43 +63,14 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
     }
 
     getAssetTypeClassById(assetTypeClassId: string): Observable<AssetTypeClassResponse> {
-        return Rx.Observable.create(function (observer: Observer<AssetTypeClassResponse>) {
-            const query = {"assetTypeClassId": assetTypeClassId};
-            assetTypeClasses.findOne(query, function (err: any, assetTypeClass: any) {
-                if (!err) {
-                    if (!assetTypeClass) {
-                        observer.next(new AssetTypeClassResponse());
-                        observer.complete();
-                    } else {
-                        assignedAttributes.find(query, function (err: any, assignedAttributeArr: any) {
-                            if (!err) {
-                                observer.next(new AssetTypeClassResponse(true, assetTypeClass, assignedAttributeArr));
-                            } else {
-                                observer.error(err);
-                            }
-                            observer.complete();
-                        });
-                    }
-                } else {
-                    observer.error(err);
-                }
-                observer.complete();
+        return this.getAssetTypeClassByIdLocal(assetTypeClassId)
+            .switchMap(assetTypeClass => {
+                return this.assignedAttributeRepositoryNeDbAdapter.getAssignedAttributesById(assetTypeClassId)
+                    .map(assignedAttributes => {
+                        return new AssetTypeClassResponse(true, assetTypeClass, assignedAttributes);
+                    });
             });
-        });
     }
-
-    // getAssetTypeClassByIds(assetTypeClassIds:string[]):Observable<AssetTypeClass[]> {
-    //     return Rx.Observable.create(function (observer:Observer<AssetTypeClass[]>) {
-    //         assetTypeClasses.find({assetTypeClassId: { $in: assetTypeClassIds}}, function (err:any, docs:any) {
-    //             if (!err) {
-    //                 observer.next(docs);
-    //             } else {
-    //                 observer.error(err);
-    //             }
-    //             observer.complete();
-    //         });
-    //     });
-    // }
 
     saveAssetTypeClass(assetTypeClass: AssetTypeClass, assignedAttributeArr: AssignedAttribute[]): Observable<AssetTypeClass> {
         assetTypeClass.assetTypeClassId = generateUUID();
@@ -106,45 +78,53 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
             value.assetTypeClassId = assetTypeClass.assetTypeClassId;
             value.assignedAttributeId = generateUUID();
         });
-        return Rx.Observable.create(function (observer: Observer<AssetTypeClass>) {
-            assetTypeClasses.insert(assetTypeClass, function (err: any, doc: any) {
-                if (!err) {
-                    assignedAttributes.insert(assignedAttributeArr, function (err: any, doc2: any) {
-                        if (!err) {
-                            observer.next(doc);
-                        } else {
-                            observer.error(err);
-                        }
-                        observer.complete();
-                    });
+        return this.saveAssetTypeClassLocal(assetTypeClass)
+            .switchMap(doc => {
+                if (!doc) {
+                    return Observable.of(doc);
                 } else {
-                    observer.error(err);
+                    return this.assignedAttributeRepositoryNeDbAdapter.saveAssignedAttributes(assignedAttributeArr)
+                        .map(assignedAttributes => {
+                            return doc;
+                        });
                 }
-                observer.complete();
             });
-        });
     }
 
     updateAssetTypeClass(assetTypeClassId: string, assetTypeClass: AssetTypeClass, assignedAttributeArr: AssignedAttribute[]): Observable<number> {
-        return Rx.Observable.create(function (observer: Observer<number>) {
-            const query = { "assetTypeClassId": assetTypeClassId};
-            assetTypeClasses.update(query, assetTypeClass, {}, function (err: any, numReplaced: number) {
+        return this.updateAssetTypeClassLocal(assetTypeClassId, assetTypeClass)
+            .switchMap(numReplaced => {
+                if (!numReplaced) {
+                    return Observable.of(numReplaced);
+                } else {
+                    return this.assignedAttributeRepositoryNeDbAdapter.deleteAssignedAttributes(assetTypeClassId)
+                        .switchMap( num => {
+                            return this.assignedAttributeRepositoryNeDbAdapter.saveAssignedAttributes(assignedAttributeArr)
+                                .map( assignedAttributeArr => {
+                                    return numReplaced;
+                                });
+                        });
+                }
+            });
+    }
+
+    deleteAssetTypeClass(assetTypeClassId: string): Observable<number> {
+        return this.deleteAssetTypeClassLocal(assetTypeClassId)
+            .switchMap(num => {
+                if (!num) {
+                    return Observable.of(num);
+                } else {
+                    return this.assignedAttributeRepositoryNeDbAdapter.deleteAssignedAttributes(assetTypeClassId);
+                }
+            });
+    }
+
+    // USED BY OTHER REPOS
+    getAssetTypeClassByIds(assetTypeClassIds: string[]): Observable<AssetTypeClass[]> {
+        return Observable.create(function (observer: Observer<AssetTypeClass[]>) {
+            assetTypeClasses.find({assetTypeClassId: {$in: assetTypeClassIds}}, function (err: any, docs: any) {
                 if (!err) {
-                    assignedAttributes.remove(query, {multi: true}, function (err: any, numRemoved2: number) {
-                        if (!err) {
-                            assignedAttributes.insert(assignedAttributeArr, function (err: any, doc2: any) {
-                                if (!err) {
-                                    observer.next(numReplaced);
-                                } else {
-                                    observer.error(err);
-                                }
-                                observer.complete();
-                            });
-                        } else {
-                            observer.error(err);
-                        }
-                        observer.complete();
-                    });
+                    observer.next(docs);
                 } else {
                     observer.error(err);
                 }
@@ -153,20 +133,56 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
         });
     }
 
-    deleteAssetTypeClass(assetTypeClassId: string): Observable<number> {
-        return Rx.Observable.create(function (observer: Observer<number>) {
+    // HELPS
+
+    getAssetTypeClassByIdLocal(assetTypeClassId: string): Observable<AssetTypeClass> {
+        return Observable.create(function (observer: Observer<AssetTypeClass>) {
+            const query = {"assetTypeClassId": assetTypeClassId};
+            assetTypeClasses.findOne(query, function (err: any, doc: any) {
+                if (!err) {
+                    observer.next(doc);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
+        });
+    }
+
+    saveAssetTypeClassLocal(assetTypeClass: AssetTypeClass): Observable<AssetTypeClass> {
+        return Observable.create(function (observer: Observer<AssetTypeClass>) {
+            assetTypeClasses.insert(assetTypeClass, function (err: any, doc: any) {
+                if (!err) {
+                    observer.next(doc);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
+        });
+    }
+
+    updateAssetTypeClassLocal(assetTypeClassId: string, assetTypeClass: AssetTypeClass): Observable<number> {
+        return Observable.create((observer: Observer<number>) => {
+            const query = {"assetTypeClassId": assetTypeClassId};
+            assetTypeClasses.update(query, assetTypeClass, {}, function (err: any, numReplaced: number) {
+                if (!err) {
+                    observer.next(numReplaced);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
+        });
+    }
+
+    deleteAssetTypeClassLocal(assetTypeClassId: string): Observable<number> {
+        return Observable.create(function (observer: Observer<number>) {
             const query = {"assetTypeClassId": assetTypeClassId};
 
             assetTypeClasses.remove(query, {}, function (err: any, numRemoved: number) {
                 if (!err) {
-                    assignedAttributes.remove(query, {multi: true}, function (err: any, numRemoved2: number) {
-                        if (!err) {
-                            observer.next(numRemoved);
-                        } else {
-                            observer.error(err);
-                        }
-                        observer.complete();
-                    });
+                    observer.next(numRemoved);
                 } else {
                     observer.error(err);
                 }
@@ -174,5 +190,4 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
             });
         });
     }
-
 }

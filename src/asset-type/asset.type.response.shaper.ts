@@ -10,11 +10,3 @@ export function shapeAssetTypesResponse(data: any, pageNumber: number, pageSize:
     sort: sort
   };
 }
-
-export function shapeAssetTypesResponse2( data: any) {
-  return {
-    assetTypes: data,
-    page: {},
-    sort: {}
-  };
-}

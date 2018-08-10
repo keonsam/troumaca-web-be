@@ -19,5 +19,4 @@ export interface AssetTypeClassRepository {
 
   deleteAssetTypeClass(assetTypeClassId: string): Observable<number>;
 
-
 }

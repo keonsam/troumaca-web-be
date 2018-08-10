@@ -5,6 +5,4 @@ export interface DataTypeRepository {
 
   getDataTypes(): Observable<DataType[]>;
 
-  getDataTypeByIds(dataTypeIds: string[]): Observable<DataType[]>;
-
 }

@@ -1,6 +1,3 @@
-import { AssetTypeClass } from "./asset-type-class/asset.type.class";
-import { UnitOfMeasure } from "../unit-of-measure/unit.of.measure";
-
 export class AssetType {
 
   private _assetTypeId: string;
@@ -10,8 +7,8 @@ export class AssetType {
   private _description: string;
   private _name: string;
   private _materialCode: string;
-  private _assetTypeClass: AssetTypeClass = new AssetTypeClass();
-  private _unitOfMeasure: UnitOfMeasure = new UnitOfMeasure();
+  private _assetTypeClassName: string;
+  private _unitOfMeasureName: string;
 
   get assetTypeId(): string {
     return this._assetTypeId;
@@ -69,19 +66,20 @@ export class AssetType {
     this._unitOfMeasureId = value;
   }
 
-  get assetTypeClass(): AssetTypeClass {
-    return this._assetTypeClass;
+  get assetTypeClassName(): string {
+    return this._assetTypeClassName;
   }
 
-  set assetTypeClass(value: AssetTypeClass) {
-    this._assetTypeClass = value;
+  set assetTypeClassName(value: string) {
+    this._assetTypeClassName = value;
   }
 
-  get unitOfMeasure(): UnitOfMeasure {
-    return this._unitOfMeasure;
+  get unitOfMeasureName(): string {
+    return this._unitOfMeasureName;
   }
 
-  set unitOfMeasure(value: UnitOfMeasure) {
-    this._unitOfMeasure = value;
+  set unitOfMeasureName(value: string) {
+    this._unitOfMeasureName = value;
   }
+
 }

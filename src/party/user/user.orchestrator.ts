@@ -7,7 +7,6 @@ import { Result } from "../../result.success";
 // import {CredentialRepository} from "../../authentication/credential/credential.repository";
 // import {createCredentialRepositoryFactory} from "../../authentication/credential/credential.repository.factory";
 import { Credential } from "../../authentication/credential/credential";
-import { CredentialStatus } from "../../authentication/credential/credential.status";
 import { generate } from "generate-password";
 import { getSortOrderOrDefault } from "../../sort.order.util";
 import { PartyAccessRole } from "../../authorization/party-access-role/party.access.role";
