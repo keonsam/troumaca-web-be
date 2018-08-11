@@ -11,8 +11,8 @@ export class PhotoOrchestrator {
     this.photoRepository = createPhotoRepository();
   }
 
-  savePhoto(partyId: string, type: string, photo: Photo): Observable<Photo> {
-    return this.photoRepository.savePhoto(partyId, type, photo);
+  savePhoto(type: string, photo: Photo): Observable<Photo> {
+    return this.photoRepository.savePhoto(type, photo);
   }
 
   getPhotoById(partyId: string, type: string): Observable<Photo> {

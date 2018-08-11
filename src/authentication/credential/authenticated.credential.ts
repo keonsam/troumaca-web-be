@@ -1,6 +1,5 @@
 export class AuthenticatedCredential {
 
-  private _authenticated: boolean;
   private _credentialId: string;
   private _username: string;
   private _authenticateStatus: string;
@@ -10,14 +9,6 @@ export class AuthenticatedCredential {
 
   constructor(credentialId?: string) {
     this._credentialId = credentialId;
-  }
-
-  get authenticated(): boolean {
-    return this._authenticated;
-  }
-
-  set authenticated(value: boolean) {
-    this._authenticated = value;
   }
 
   get username(): string {
@@ -71,6 +62,7 @@ export class AuthenticatedCredential {
   toJson() {
     return {
         "authenticateStatus": this.authenticateStatus,
+        "username": this.username,
         "credentialId": this.credentialId,
         "confirmationId": this.confirmationId,
         "partyId": this.partyId,

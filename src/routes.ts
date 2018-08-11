@@ -143,7 +143,7 @@ router.delete("/organizations/:partyId", organizationController.deleteOrganizati
 
 // photos
 router.get("/photos/:type/:partyId", photoController.getPhotoById);
-router.post("/photos/:type/:partyId", photoController.savePhoto);
+router.post("/photos/:type", photoController.savePhoto);
 router.put("/photos/:type/:partyId", photoController.updatePhoto);
 
 // accounts

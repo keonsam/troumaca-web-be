@@ -33,7 +33,7 @@ const corsOptions = {
   credentials: true
 };
 app.use(cors(corsOptions));
-// app.use(checkAccess);
+app.use(checkAccess);
 
 // routes
 app.use(router);

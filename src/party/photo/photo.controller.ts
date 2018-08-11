@@ -27,7 +27,7 @@ export let savePhoto = (req: Request, res: Response) => {
             message: "Photo can not be empty"
         });
     }
-  orchestrator.savePhoto(req.params.partyId, req.params.type, req.body)
+  orchestrator.savePhoto(req.params.type, req.body)
     .subscribe(photo => {
         res.status(201);
         res.send(JSON.stringify(photo));

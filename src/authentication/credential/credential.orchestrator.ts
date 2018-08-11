@@ -48,6 +48,7 @@ export class CredentialOrchestrator {
                   const session: Session = new Session();
                   session.partyId = authenticatedCredential.partyId;
                   session.credentialId = authenticatedCredential.credentialId;
+                  session.username = authenticatedCredential.username;
 
                   if (authenticatedCredential.authenticateStatus) {
                       session.data.set("authenticateStatus", authenticatedCredential.authenticateStatus);
@@ -86,14 +87,6 @@ export class CredentialOrchestrator {
   //     }
   //   });
   // };
-
-  // isValidEditUsername (partyId:string, username: string) {
-  //   return this.credentialRepository
-  //     .isValidEditUsername(partyId, username)
-  //     .map(valid => {
-  //       return new ValidateResponse(valid);
-  //     });
-  // }
   //
   //
   // updateCredential (partyId:string, credential:Credential){

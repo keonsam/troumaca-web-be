@@ -48,10 +48,6 @@ export let addCredential = (req: Request, res: Response) => {
 
     const correlationId = req.headers.correlationid;
 
-    console.log(correlationId);
-    console.log(req.headers);
-    console.log(req.body);
-
     if (!correlationId) {
         res.status(400);
         res.setHeader("content-type", "application/json");
@@ -128,7 +124,7 @@ export let authenticate = (req: Request, res: Response) => {
             if (authenticatedCredential.sessionId) {
                 res.cookie("sessionId", authenticatedCredential.sessionId, {path: "/", maxAge: 20 * 60 * 1000, httpOnly: true });
             }
-            const body = JSON.stringify(authenticatedCredential);
+            const body = JSON.stringify(authenticatedCredential.toJson());
             res.status(200);
             res.send(body);
         }, error => {

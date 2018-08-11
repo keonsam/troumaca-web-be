@@ -53,51 +53,6 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
     }
   }
 
-  // isValidEditUsername(partyId: string,username:string):Observable<boolean> {
-  //   if (!username) {
-  //     return Observable.of(false);
-  //   }
-  //
-  //
-  //   // the user name is valid if:
-  //   let validUsername:boolean = false;
-  //   // 1. is username and email
-  //   let validEmail:boolean = validator.isEmail(username);
-  //
-  //   if (validEmail) {
-  //     validUsername = true;
-  //   } else {
-  //     let parsedObj:any = libphonenumberjs.parse(username, 'US');
-  //     if (parsedObj && parsedObj.phone) {
-  //       // 2. or username is a phone number
-  //       validUsername = libphonenumberjs.isValidNumber(parsedObj);
-  //     }
-  //   }
-  //
-  //   if (!validUsername) {
-  //     // 3. and is not taken
-  //     return Observable.of(false);
-  //   } else {
-  //     return this.checkUsernameValid(partyId, username)
-  //       .switchMap(value => {
-  //         if (value) {
-  //           return Observable.of(true);
-  //         } else {
-  //           return this.getCredentialByUsername(username)
-  //             .map(credential => {
-  //               if (!credential) {
-  //                 return true;
-  //               } else if (!credential.username) {
-  //                 return true;
-  //               } else {
-  //                 return false;
-  //               }
-  //             });
-  //         }
-  //       });
-  //   }
-  // };
-
   isValidPassword(password: string): Observable<boolean> {
     if (!password) {
 
@@ -143,9 +98,11 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
       if (!credential) {
         return Observable.of(undefined);
       } else {
-          const authenticatedCredential = new AuthenticatedCredential().toJson();
+          const authenticatedCredential: AuthenticatedCredential = new AuthenticatedCredential();
           const credentialId = credential.credentialId;
+          authenticatedCredential.username = credential.username;
           authenticatedCredential.credentialId = credentialId;
+          authenticatedCredential.partyId = credential.partyId;
           if (credential.status === "Active") {
               authenticatedCredential.authenticateStatus = "AccountActive";
               return Observable.of(authenticatedCredential);
@@ -356,6 +313,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
 
   addCredentialLocal(credential: Credential): Observable<Credential> {
       credential.credentialId = generateUUID();
+      credential.partyId = generateUUID();
       if (!credential.status) {
           credential.status = "New";
       }

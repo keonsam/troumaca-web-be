@@ -7,6 +7,7 @@ export class Session {
   private _expirationTime: Date;
   private _createdOn: Date;
   private _modifiedOn: Date;
+  private _username: string;
   private _data: Map<String, Object>;
 
 
@@ -88,7 +89,15 @@ export class Session {
     this._data = value;
   }
 
-  toJson() {
+  get username(): string {
+    return this._username;
+  }
+
+  set username(value: string) {
+    this._username = value;
+  }
+
+    toJson() {
     return {
       sessionId: this.sessionId,
       partyId: this.partyId,
