@@ -1,21 +1,2 @@
-{"purpose":"test","name":"test1","description":"","partyId":"316e54c4-2004-495e-b602-250b99d86698","_id":"41EY9Z9AzuV0L6I3"}
-{"purpose":"Asset Management","name":"Troumaca","description":"","partyId":"80fc827c-093a-42c1-9c59-e9da8d9e4285","_id":"5k5arpSgslQuBkms"}
-{"purpose":"","name":"","description":"","partyId":"6d90c59a-6ccf-4d3a-9dc3-9fe3b3baa096","_id":"7Rn958ogjxfD3csP"}
-{"purpose":"Programmers","name":"Troumaca2","description":"","partyId":"da1075fb-4cd1-4e7a-a980-65e17ba33543","_id":"9fY7wI6CKABsjQMP"}
-{"purpose":"Asset Management","name":"Troumaca","description":"","partyId":"176a8771-e92a-4c63-8830-4716feddec37","_id":"BgX3UCmwN7wYuShc"}
-{"purpose":"Asset Management","name":"Troumaca","description":"","partyId":"8ae864ef-fdff-479d-b8d4-cce641a7af7f","_id":"BtxBdy7xdld1Cw9m"}
-{"purpose":"","name":"","description":"","partyId":"862059e0-ab38-4022-8ab6-b4534a37c0a2","_id":"DL4A8bgLxPKgKtte"}
-{"partyId":"cd552207-326e-4207-80c1-091de95b0128","purpose":"Programmer","name":"Troumoca","description":"","_id":"DdiMg5I68NArVJEe"}
-{"purpose":"Asset Management","name":"Troumaca","description":"","partyId":"46bf37eb-2626-4a7f-9fa7-d9e491d0d3b1","_id":"EInyk75H5UzNzNBu"}
-{"purpose":"Asset Management","name":"Troumaca","description":"","partyId":"fa58d96a-ad78-4cfc-a063-4429aaa6034d","_id":"HbxhNMvbIwklcUa2"}
-{"purpose":"Cloud Asset Management","name":"Troumaca","description":"","partyId":"3501ca69-65b7-44e1-bf9b-0b6d9bb7a9b8","_id":"JYskdBME5D2Eyz3e"}
-{"purpose":"test","name":"test2","description":"","partyId":"7e1a8f8d-c542-46c1-9e84-3f7158316a03","_id":"JdcjnnajHhW32Bmn"}
-{"purpose":"Asset Management","name":"Trouamca","description":"","partyId":"432c26b0-9d14-402d-a827-6b1b2000451a","_id":"Zb4W2CV1qEJN7Vgb"}
-{"purpose":"Asset Management","name":"Troumaca","description":"","partyId":"18629467-57c0-4cae-a813-fbdee9eaa86e","_id":"coCDB3038g4b8B7Z"}
-{"partyId":"83e51087-cc18-4a91-93dd-62fc41f5d513","purpose":"Tech","name":"Microsoft","_id":"gR7lYXDcJe2EtsyJ"}
-{"purpose":"testing","name":"Tester","description":"","partyId":"7a1a0dd1-99bc-48ee-a84e-387d8883e8e3","_id":"hDQ0s5kavvikMNVt"}
-{"purpose":"","name":"","description":"","partyId":"95651d30-10dd-4556-891e-ffd75b22e363","_id":"hQsLDzOoj0aGtxj4"}
-{"purpose":"","name":"","description":"","partyId":"69508a13-e082-483d-ad68-8fb15540c1ac","_id":"mBBe5kEDuYrbVk5X"}
-{"purpose":"SAAS","name":"Troumaca","description":"","partyId":"b2f6ba51-6efc-4e4d-82b1-59fcfd6d2aa0","_id":"v10bbTCmAzK8bxHq"}
+{"purpose":"","name":"throw4 Away","description":"","partyId":"3b43a146-c98e-4733-8691-ce98ca93046f","_id":"4sdb4ZsLIXyrJYZQ"}
 {"$$indexCreated":{"fieldName":"partyId","unique":true,"sparse":false}}
-{"purpose":"","name":"throw3 away","description":"","partyId":"9b9e1343-10f5-4f19-9cba-f711f03f11c6","_id":"DPoq1v2rpPh5Hlx9"}

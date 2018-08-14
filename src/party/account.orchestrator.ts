@@ -10,17 +10,21 @@ import { Session } from "../session/session";
 import { SessionRepository } from "../session/session.repository";
 import { Organization } from "./organization/organization";
 import { AccountResponse } from "./account.response";
+import { CredentialRepository } from "../authentication/credential/credential.repository";
+import { createCredentialRepositoryFactory } from "../authentication/credential/credential.repository.factory";
 
 export class AccountOrchestrator {
 
   private userRepository: UserRepository;
   private organizationRepository: OrganizationRepository;
   private sessionRepository: SessionRepository;
+  private credentialRepository: CredentialRepository;
 
   constructor() {
     this.userRepository = createUserRepository();
     this.organizationRepository = createOrganizationRepository();
     this.sessionRepository = createSessionRepositoryFactory();
+    this.credentialRepository = createCredentialRepositoryFactory();
   }
 
   saveAccount (user: User, organization: Organization, sessionId: string): Observable<AccountResponse> {
@@ -37,9 +41,13 @@ export class AccountOrchestrator {
                       }
                       organization.partyId = session.partyId;
                       return this.organizationRepository.saveOrganization(organization)
-                          .map(newOrganization => {
-                              if (!newOrganization) return new AccountResponse(false);
-                              return new AccountResponse(true, newUser, newOrganization);
+                          .switchMap(newOrganization => {
+                              if (!newOrganization) return Observable.of(new AccountResponse(false));
+                              return this.credentialRepository.updateCredentialStatusById(session.credentialId, "Active")
+                                  .map( num => {
+                                      if (!num) return new AccountResponse(false);
+                                      return new AccountResponse(true, newUser, newOrganization);
+                                  });
                           });
                   });
           });

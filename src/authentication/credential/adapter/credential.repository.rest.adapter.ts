@@ -1,18 +1,14 @@
-import Rx from "rxjs";
 import { Credential } from "../credential";
 import { Observable } from "rxjs/Observable";
 import { Observer } from "rxjs/Observer";
 import { CredentialRepository } from "../credential.repository";
-// import {Result} from "../../../result.success";
 import request from "request";
-import { classToPlain, plainToClass } from "class-transformer";
+import { classToPlain} from "class-transformer";
 import { jsonRequestHeaderMap, postJsonOptions } from "../../../request.helpers";
 import { properties } from "../../../properties.helpers";
 import { CredentialConfirmation } from "../confirmation/credential.confirmation";
-// import {ValidatedPassword} from "../confirmation/validated.password";
 import { AuthenticatedCredential } from "../authenticated.credential";
-// import {ValidatedUsername} from "../confirmation/validated.username";
-import { Confirmation } from "../confirmation/confirmation";
+import { CreatedCredential } from "../created.credential";
 
 export class CredentialRepositoryRestAdapter implements CredentialRepository {
 
@@ -33,7 +29,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
 
       const requestOptions: any = postJsonOptions(uri, headerMap, json);
 
-      return Rx.Observable.create(function (observer: Observer<boolean>) {
+      return Observable.create(function (observer: Observer<boolean>) {
           request(requestOptions, function (error: any, response: any, body: any) {
               try {
                   if (response && response.statusCode != 200) {
@@ -51,7 +47,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
       });
   }
 
-  isValidUsername(username: string, options?: any): Observable<boolean> {
+  isValidUsername(username: string, partyId: string, options?: any): Observable<boolean> {
       let uri: string = properties.get("credential.host.port") as string;
 
 
@@ -83,7 +79,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
       });
   }
 
-  addCredential(credential: Credential, options?: any): Observable<Confirmation> {
+  addCredential(credential: Credential, options?: any): Observable<CreatedCredential> {
     const uri: string = properties.get("credential.host.port") as string;
 
     const headerMap = jsonRequestHeaderMap(options ? options : {});
@@ -94,7 +90,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
 
     const requestOptions: any = postJsonOptions(uriAndPath, headerMap, credentialJson);
 
-    return Rx.Observable.create(function (observer: Observer<CredentialConfirmation>) {
+    return Observable.create(function (observer: Observer<CredentialConfirmation>) {
       request(requestOptions, function (error: any, response: any, body: any) {
         if (error) {
           observer.error(error);
@@ -102,10 +98,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
           if (response && response.statusCode != 200) {
             observer.error(body);
           } else {
-            // let credentialObj = plainToClass(Credential, body);
-            const credentialObject = plainToClass(Confirmation, body["confirmation"] as Object);
-            console.log(body["confirmation"]);
-            observer.next(body["confirmation"]);
+            observer.next(body);
           }
         }
         observer.complete();
@@ -150,6 +143,10 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
       });
   }
 
+  updateCredentialStatusById(credentialId: string, status: string): Observable<number> {
+      return undefined;
+  }
+
   // addUserCredential(credential:Credential):Observable<Credential> {
   //   return undefined;
   // }
@@ -180,9 +177,6 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
   //   return null;
   // }
   //
-  // updateCredentialStatusById(credentialId: string, status: string): Observable<number> {
-  //   return undefined;
-  // }
   //
   // updateCredentialPartyId(credentialId: string, partyId: string): Observable<number> {
   //   return undefined;

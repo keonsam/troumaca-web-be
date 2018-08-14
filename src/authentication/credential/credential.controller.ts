@@ -9,11 +9,14 @@ const credentialOrchestrator: CredentialOrchestrator = new CredentialOrchestrato
 // TODO: Consider removing
 // router.post("/validate-username", function (req, res, next) {
 export let isValidUsername = (req: Request, res: Response) => {
-  if (!req.body) {
+    const username = req.body.username;
+    const partyId = req.body.partyId;
+
+  if (!username) {
     return res.status(400).send({message: "Username can not be empty"});
   }
 
-  credentialOrchestrator.isValidUsername(req.body)
+  credentialOrchestrator.isValidUsername(username, partyId)
     .subscribe((next: boolean) => {
       res.status(200);
       const resp = {valid: next};
@@ -84,10 +87,10 @@ export let addCredential = (req: Request, res: Response) => {
     };
 
     credentialOrchestrator.addCredential(credential, headerOptions)
-        .subscribe(credentialConfirmation => {
+        .subscribe(createdCredential => {
             res.status(201);
             res.setHeader("content-type", "application/json");
-            res.send(JSON.stringify(credentialConfirmation));
+            res.send(JSON.stringify(createdCredential.confirmation));
         }, error => {
             res.status(500);
             res.setHeader("content-type", "application/json");

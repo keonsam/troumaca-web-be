@@ -32,4 +32,5 @@ export class UserResponse {
       partyAccessRoles: this.partyAccessRoles
     };
   }
+
 }

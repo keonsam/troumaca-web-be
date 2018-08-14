@@ -14,26 +14,16 @@ class AccessRoleDBRepository implements AccessRoleRepository {
 
   findAccessRoles(searchStr: string, pageSize: number): Observable<AccessRole[]> {
     const searchStrLocal = new RegExp(searchStr);
+    const query = searchStr ? {name: {$regex: searchStrLocal}} : {};
     return Rx.Observable.create(function(observer: Observer<AccessRole[]>) {
-      if (!searchStr) {
-        accessRoles.find({}).limit(100).exec(function (err: any, doc: any) {
-          if (!err) {
-            observer.next(doc);
-          } else {
-            observer.error(err);
-          }
-          observer.complete();
+        accessRoles.find(query).limit(100).exec(function (err: any, doc: any) {
+            if (!err) {
+                observer.next(doc);
+            } else {
+                observer.error(err);
+            }
+            observer.complete();
         });
-      } else {
-        accessRoles.find({name: {$regex: searchStrLocal}}).limit(pageSize).exec(function (err: any, doc: any) {
-          if (!err) {
-            observer.next(doc);
-          } else {
-            observer.error(err);
-          }
-          observer.complete();
-        });
-      }
     });
   }
 

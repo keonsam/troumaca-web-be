@@ -9,6 +9,7 @@ import { SessionRepository } from "../../session/session.repository";
 import "rxjs/add/operator/map";
 import { AuthenticatedCredential } from "./authenticated.credential";
 import { Confirmation } from "./confirmation/confirmation";
+import { CreatedCredential } from "./created.credential";
 
 export class CredentialOrchestrator {
 
@@ -20,8 +21,8 @@ export class CredentialOrchestrator {
     this.credentialRepository = createCredentialRepositoryFactory();
   }
 
-  isValidUsername(credential: Credential): Observable<boolean> {
-    return this.credentialRepository.isValidUsername(credential.username);
+  isValidUsername(username: string, partyId: string): Observable<boolean> {
+    return this.credentialRepository.isValidUsername(username, partyId);
   }
 
   isValidPassword(credential: Credential): Observable<boolean> {
@@ -29,7 +30,7 @@ export class CredentialOrchestrator {
     .isValidPassword(credential.password);
   }
 
-  addCredential(credential: Credential, options?: any): Observable<Confirmation> {
+  addCredential(credential: Credential, options?: any): Observable<CreatedCredential> {
       return this.credentialRepository.addCredential(credential, options);
   }
 
@@ -76,7 +77,11 @@ export class CredentialOrchestrator {
           });
     }
 
-  // forgotPassword(username:string):Observable<ValidateResponse> {
+    updateCredentialStatusById(credentialId: string, status: string): Observable<number> {
+      return this.credentialRepository.updateCredentialStatusById(credentialId, status);
+    }
+
+        // forgotPassword(username:string):Observable<ValidateResponse> {
   //   return this.credentialRepository
   //   .getCredentialByUsername(username)
   //   .map(credential => {

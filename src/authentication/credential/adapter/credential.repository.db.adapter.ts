@@ -11,22 +11,21 @@ import { AuthenticatedCredential } from "../authenticated.credential";
 import "rxjs/add/observable/of";
 import { Confirmation } from "../confirmation/confirmation";
 import { ConfirmationRepositoryNeDbAdapter } from "../confirmation/adapter/confirmation.repository.db.adapter";
+import { CreatedCredential } from "../created.credential";
 
 export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
 
   private confirmationRepositoryNeDbAdapter: ConfirmationRepositoryNeDbAdapter = new ConfirmationRepositoryNeDbAdapter();
 
-  isValidUsername(username: string): Observable<boolean> {
+  isValidUsername(username: string, partyId: string): Observable<boolean> {
     if (!username) {
       return Observable.of(false);
     }
-
 
     // the user name is valid if:
     let validUsername: boolean = false;
     // 1. is username and email
     const validEmail: boolean = validator.isEmail(username);
-    console.log(validEmail);
 
     if (validEmail) {
       validUsername = true;
@@ -46,8 +45,10 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
         .map(credential => {
           if (!credential) {
             return true;
+          } else if (credential.partyId === partyId) {
+            return true;
           } else {
-            return false;
+              return false;
           }
         });
     }
@@ -77,7 +78,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
 
   }
 
-  addCredential(credential: Credential, options?: any): Observable<Confirmation> {
+  addCredential(credential: Credential, options?: any): Observable<CreatedCredential> {
       return this.addCredentialLocal(credential)
           .switchMap(credential => {
               const confirmation: Confirmation = new Confirmation();
@@ -86,8 +87,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
 
               return this.confirmationRepositoryNeDbAdapter.addConfirmation(confirmation)
                   .map(confirmation => {
-                     console.log(confirmation);
-                     return confirmation;
+                     return {credential, confirmation};
                   });
           });
   }
@@ -120,6 +120,23 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
           }
       }
     });
+  }
+
+  updateCredentialStatusById(credentialId: string, status: string): Observable<number> {
+      return Observable.create(function (observer: Observer<number>) {
+          const query = {
+              "credentialId": credentialId
+          };
+
+          credentials.update(query, {$set: {status: status}}, {}, function (err: any, numReplaced: number) {
+              if (!err) {
+                  observer.next(numReplaced);
+              } else {
+                  observer.error(err);
+              }
+              observer.complete();
+          });
+      });
   }
 
   // checkUsernameValid(partyId:string, username:string):Observable<Credential> {
@@ -166,83 +183,26 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
 
   // USED BY OTHER REPO
 
-  getCredentialByCredentialId(credentialId: string): Observable<Credential> {
-      return Observable.create(function (observer: Observer<Credential>) {
-          const query = {
-              "credentialId": credentialId
-          };
-
-          credentials.findOne(query, function (err: any, doc: any) {
+    getCredentialByPartyIds(partyIds: string[]): Observable<Credential[]> {
+      return Observable.create( (observer: Observer<Credential[]>) => {
+          const query = {partyId: {$in: partyIds} };
+          credentials.find(query, (err: any, docs: any) => {
               if (!err) {
-                  observer.next(doc);
+                  observer.next(docs);
               } else {
                   observer.error(err);
               }
               observer.complete();
           });
       });
-  }
+    }
 
-  addUserCredential(credential: Credential): Observable<Credential> {
-      // done for the toJson().
-      credential.credentialId = generateUUID();
-      return Observable.create(function (observer: Observer<Credential>) {
-          credentials.insert(credential.toJson(), function (err: any, doc: any) {
-              if (!err) {
-                  observer.next(credential);
-              } else {
-                  observer.error(err);
-              }
-              observer.complete();
-          });
-      });
-  }
-
-  updateCredential(partyId: string, credential: Credential): Observable<number> {
-      return Observable.create(function (observer: Observer<number>) {
-          if (!credential.password) {
-              delete credential.password;
-          }
-          const query: any = {
-              "partyId": partyId
-          };
-
-          credentials.update(query, {$set : credential}, {}, function (err, numReplaced) {
-              if (!err) {
-                  observer.next(numReplaced);
-              } else {
-                  observer.error(err);
-              }
-              observer.complete();
-          });
-      });
-  }
-
-  updateCredentialStatusById(credentialId: string, status: string): Observable<number> {
-      return Observable.create(function (observer: Observer<number>) {
-          const query = {
-              "credentialId": credentialId
-          };
-
-          credentials.update(query, {$set: {status: status}}, {}, function (err: any, numReplaced: number) {
-              if (!err) {
-                  observer.next(numReplaced);
-              } else {
-                  observer.error(err);
-              }
-              observer.complete();
-          });
-      });
-  }
-
-  updateCredentialPartyId(credentialId: string, partyId: string): Observable<number> {
-        return Observable.create(function (observer: Observer<number>) {
-            const query = {
-                "credentialId": credentialId
-            };
-            credentials.update(query, {$set : {partyId}}, {}, function (err: any, numReplaced: number) {
+    getCredentialByPartyId(partyId: string): Observable<Credential> {
+        return Observable.create( (observer: Observer<Credential>) => {
+            const query = {partyId: partyId };
+            credentials.findOne(query, (err: any, doc: any) => {
                 if (!err) {
-                    observer.next(numReplaced);
+                    observer.next(doc);
                 } else {
                     observer.error(err);
                 }
@@ -251,29 +211,97 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
         });
     }
 
-  deleteCredentialByPartyId(partyId: string): Observable<number> {
-        return Observable.create(function (observer: Observer<number>) {
-            const query = {
-                partyId
-            };
+  // getCredentialByCredentialId(credentialId: string): Observable<Credential> {
+  //     return Observable.create(function (observer: Observer<Credential>) {
+  //         const query = {
+  //             "credentialId": credentialId
+  //         };
+  //
+  //         credentials.findOne(query, function (err: any, doc: any) {
+  //             if (!err) {
+  //                 observer.next(doc);
+  //             } else {
+  //                 observer.error(err);
+  //             }
+  //             observer.complete();
+  //         });
+  //     });
+  // }
+  //
+  // addUserCredential(credential: Credential): Observable<Credential> {
+  //     // done for the toJson().
+  //     credential.credentialId = generateUUID();
+  //     return Observable.create(function (observer: Observer<Credential>) {
+  //         credentials.insert(credential.toJson(), function (err: any, doc: any) {
+  //             if (!err) {
+  //                 observer.next(credential);
+  //             } else {
+  //                 observer.error(err);
+  //             }
+  //             observer.complete();
+  //         });
+  //     });
+  // }
 
-            credentials.remove(query, {multi: true}, function (err: any, numRemoved: number) {
-                if (!err) {
-                    observer.next(numRemoved);
-                } else {
-                    observer.error(err);
-                }
-                observer.complete();
-            });
-        });
-    }
+  // updateCredential(partyId: string, credential: Credential): Observable<number> {
+  //     return Observable.create(function (observer: Observer<number>) {
+  //         if (!credential.password) {
+  //             delete credential.password;
+  //         }
+  //         const query: any = {
+  //             "partyId": partyId
+  //         };
+  //
+  //         credentials.update(query, {$set : credential}, {}, function (err, numReplaced) {
+  //             if (!err) {
+  //                 observer.next(numReplaced);
+  //             } else {
+  //                 observer.error(err);
+  //             }
+  //             observer.complete();
+  //         });
+  //     });
+  // }
 
-  deleteCredentialById(credentialId: string, options?: any): Observable<number> {
-        return Observable.create(function (observer: Observer<AuthenticatedCredential>) {
-            observer.error(new Error(""));
-            observer.complete();
-        });
-    }
+  // updateCredentialPartyId(credentialId: string, partyId: string): Observable<number> {
+  //       return Observable.create(function (observer: Observer<number>) {
+  //           const query = {
+  //               "credentialId": credentialId
+  //           };
+  //           credentials.update(query, {$set : {partyId}}, {}, function (err: any, numReplaced: number) {
+  //               if (!err) {
+  //                   observer.next(numReplaced);
+  //               } else {
+  //                   observer.error(err);
+  //               }
+  //               observer.complete();
+  //           });
+  //       });
+  //   }
+  //
+  // deleteCredentialByPartyId(partyId: string): Observable<number> {
+  //       return Observable.create(function (observer: Observer<number>) {
+  //           const query = {
+  //               partyId
+  //           };
+  //
+  //           credentials.remove(query, {multi: true}, function (err: any, numRemoved: number) {
+  //               if (!err) {
+  //                   observer.next(numRemoved);
+  //               } else {
+  //                   observer.error(err);
+  //               }
+  //               observer.complete();
+  //           });
+  //       });
+  //   }
+  //
+  // deleteCredentialById(credentialId: string, options?: any): Observable<number> {
+  //       return Observable.create(function (observer: Observer<AuthenticatedCredential>) {
+  //           observer.error(new Error(""));
+  //           observer.complete();
+  //       });
+  //   }
 
   // HELPERS
 
