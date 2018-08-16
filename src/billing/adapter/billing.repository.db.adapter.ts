@@ -76,4 +76,21 @@ export class BillingRepositoryNeDbAdapter implements BillingRepository {
         });
     }
 
+    // CREDIT CARD
+
+    public cardName(value: string): Observable<boolean> {
+        return Observable.of(true);
+    }
+
+    public cardNumber(value: string): Observable<boolean> {
+        return Observable.of(true);
+    }
+
+    public cardExpDate(value: Date): Observable<boolean> {
+        return Observable.of(true);
+    }
+
+    public cardCVV(value: string): Observable<boolean> {
+        return Observable.of(true);
+    }
 }

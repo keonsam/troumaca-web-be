@@ -21,4 +21,21 @@ export class  BillingOrchestrator {
         return this.billingRepository.updateBilling(billingId, billing, method);
     }
 
+    // CREDIT CARD
+
+    public cardName(value: string): Observable<boolean> {
+        return this.billingRepository.cardName(value);
+    }
+
+    public cardNumber(value: string): Observable<boolean> {
+        return this.billingRepository.cardNumber(value);
+    }
+
+    public cardExpDate(value: Date): Observable<boolean> {
+        return this.billingRepository.cardExpDate(value);
+    }
+
+    public cardCVV(value: string): Observable<boolean> {
+        return this.billingRepository.cardName(value);
+    }
 }

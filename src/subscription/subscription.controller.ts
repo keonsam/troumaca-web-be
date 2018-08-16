@@ -3,6 +3,19 @@ import { SubscriptionOrchestrator } from "./subscription.orchestrator";
 
 const subscriptionOrchestrator: SubscriptionOrchestrator = new SubscriptionOrchestrator();
 
+export const getSubscriptionInformation = (req: Request, res: Response) => {
+
+    subscriptionOrchestrator.getSubscriptionInformation()
+        .subscribe( subscription => {
+            const body = JSON.stringify(subscription);
+            res.status(200).send(body);
+        }, error => {
+            console.log(error);
+            res.status(500);
+            res.send(JSON.stringify({message: "Server Error, please try again"}));
+        });
+};
+
 export const getSubscription = (req: Request, res: Response) => {
 
     subscriptionOrchestrator.getSubscription(req.params.type)

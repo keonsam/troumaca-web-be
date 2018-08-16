@@ -4,6 +4,10 @@ import { Subscription } from "../subscription";
 
 export class SubscriptionRepositoryRestAdapter implements SubscriptionRepository {
 
+    public getSubscriptionInformation(): Observable<any> {
+        return undefined;
+    }
+
     public getSubscription(type: string): Observable<Subscription> {
         return undefined;
     }

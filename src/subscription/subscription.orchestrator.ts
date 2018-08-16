@@ -9,6 +9,10 @@ export class  SubscriptionOrchestrator {
         this.subscriptionRepository = createSubscriptionRepositoryFactory();
     }
 
+    public getSubscriptionInformation(): Observable<any> {
+        return this.subscriptionRepository.getSubscriptionInformation();
+    }
+
     public getSubscription(type: string): Observable<Subscription> {
         return this.subscriptionRepository.getSubscription(type);
     }

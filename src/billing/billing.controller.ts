@@ -71,3 +71,90 @@ export const updateBilling = (req: Request, res: Response) => {
         });
 };
 
+// CREDIT CARD
+
+export const cardName = (req: Request, res: Response) => {
+  const name: string = req.body;
+
+  if (!name) {
+      res.status(400);
+      res.send(JSON.stringify({message: "card name is required"}));
+  }
+
+  billingOrchestrator.cardName(name)
+      .subscribe( valid => {
+          const body = JSON.stringify({valid});
+          res.status(201);
+          res.setHeader("content-type", "application/json");
+          res.send(body);
+      }, error => {
+          console.log(error);
+          res.status(500);
+          res.send(JSON.stringify({message: "Server Error, please try again"}));
+      });
+};
+
+export const cardNumber = (req: Request, res: Response) => {
+    const number: string = req.body;
+
+    if (!number) {
+        res.status(400);
+        res.send(JSON.stringify({message: "card number is required"}));
+    }
+
+    billingOrchestrator.cardNumber(number)
+        .subscribe( valid => {
+            const body = JSON.stringify({valid});
+            res.status(201);
+            res.setHeader("content-type", "application/json");
+            res.send(body);
+        }, error => {
+            console.log(error);
+            res.status(500);
+            res.send(JSON.stringify({message: "Server Error, please try again"}));
+        });
+};
+
+export const cardExpDate = (req: Request, res: Response) => {
+    const date: Date = req.body;
+
+    if (!date) {
+        res.status(400);
+        res.send(JSON.stringify({message: "card expire date is required"}));
+    }
+
+    billingOrchestrator.cardExpDate(date)
+        .subscribe( valid => {
+            const body = JSON.stringify({valid});
+            res.status(201);
+            res.setHeader("content-type", "application/json");
+            res.send(body);
+        }, error => {
+            console.log(error);
+            res.status(500);
+            res.send(JSON.stringify({message: "Server Error, please try again"}));
+        });
+};
+
+export const cardCVV = (req: Request, res: Response) => {
+    const cvv: string = req.body;
+
+    if (!cvv) {
+        res.status(400);
+        res.send(JSON.stringify({message: "card cvv is required"}));
+    }
+
+    billingOrchestrator.cardCVV(cvv)
+        .subscribe( valid => {
+            const body = JSON.stringify({valid});
+            res.status(201);
+            res.setHeader("content-type", "application/json");
+            res.send(body);
+        }, error => {
+            console.log(error);
+            res.status(500);
+            res.send(JSON.stringify({message: "Server Error, please try again"}));
+        });
+};
+
+

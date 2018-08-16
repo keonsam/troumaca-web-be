@@ -221,6 +221,7 @@ router.put("/access-role-types/:accessRoleTypeId", accessRoleTypeController.upda
 router.delete("/access-role-types/:accessRoleTypeId", accessRoleTypeController.deleteAccessRoleType);
 
 // SUBSCRIPTION
+router.get("/subscription/information", subscriptionController.getSubscriptionInformation);
 router.get("/subscriptions/:type", subscriptionController.getSubscription);
 router.post("/subscriptions", subscriptionController.addSubscription);
 
@@ -228,10 +229,15 @@ router.post("/subscriptions", subscriptionController.addSubscription);
 router.get("/billings", billingController.getBilling);
 router.post("/billings", billingController.addBilling);
 router.put("/billings/:billingId", billingController.updateBilling);
+router.post( "/validate-credit-card/name", billingController.cardName);
+router.post( "/validate-credit-card/number", billingController.cardNumber);
+router.post( "/validate-credit-card/exp-date", billingController.cardExpDate);
+router.post( "/validate-credit-card/cvv", billingController.cardCVV);
 
 // DEPRECIATION
+router.get("/depreciation-methods", depreciationController.getDepreciationMethod)
 router.get("/depreciation/assets/find", depreciationController.getDepreciableAssets);
-router.get("/depreciation", depreciationController.getDepreciationArr);
+router.get("/book-depreciation", depreciationController.getBookDepreciationArr);
 router.get("/depreciation/:depreciationId", depreciationController.getDepreciationById);
 router.post("/depreciation", depreciationController.saveDepreciation);
 router.put("/depreciation/:depreciationId", depreciationController.updateDepreciation);

@@ -55,7 +55,10 @@ const billingDb = path.resolve(__dirname, "..") + "/nedb/lobby/billings.db";
 const methodDb = path.resolve(__dirname, "..") + "/nedb/lobby/methods.db";
 
 // depreciation
-const depreciationDb = path.resolve(__dirname, "..") + "/nedb/depreciation.db";
+const bookDepreciationDb = path.resolve(__dirname, "..") + "/nedb/depreciation/book.db";
+const taxDepreciationDb = path.resolve(__dirname, "..") + "/nedb/depreciation/tax.db";
+const depreciationMethodDb = path.resolve(__dirname, "..") + "/nedb/depreciation/methods.db";
+
 // Todo: Fix remove
 
 export let userPhotos = new Datastore(theUserPhotosDb);
@@ -209,9 +212,17 @@ payMethods.ensureIndex({ fieldName: "methodId", unique: true }, handleError);
 
 // depreciation
 
-export const depreciations = new Datastore(depreciationDb);
-depreciations.loadDatabase(handleError);
-depreciations.ensureIndex({ fieldName: "depreciationId", unique: true }, handleError);
+export const bookDepreciation = new Datastore(bookDepreciationDb);
+bookDepreciation.loadDatabase(handleError);
+bookDepreciation.ensureIndex({ fieldName: "depreciationId", unique: true }, handleError);
+
+export const taxDepreciation = new Datastore(taxDepreciationDb);
+taxDepreciation.loadDatabase(handleError);
+taxDepreciation.ensureIndex({ fieldName: "depreciationId", unique: true }, handleError);
+
+export const depreciationMethod = new Datastore(depreciationMethodDb);
+depreciationMethod.loadDatabase(handleError);
+depreciationMethod.ensureIndex({ fieldName: "methodId", unique: true }, handleError);
 
 
 function handleError( err: any ) {

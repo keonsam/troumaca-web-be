@@ -6,6 +6,7 @@ import { Observable } from "rxjs/Observable";
 import { Depreciation } from "./depreciation";
 import { Result } from "../result.success";
 import { Asset } from "../asset-type/asset/asset";
+import { DepreciationMethod } from "./depreciation.method";
 
 export class DepreciationOrchestrator {
 
@@ -19,10 +20,10 @@ export class DepreciationOrchestrator {
       return this.depreciationRepository.getDepreciableAssets(searchStr, pageSize);
     }
 
-   getDepreciationArr(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
+    getBookDepreciationArr(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
        const sort: string = getSortOrderOrDefault(field, direction);
        return this.depreciationRepository
-           .getDepreciationArr(number, size, sort)
+           .getBookDepreciationArr(number, size, sort)
            .switchMap((depreciationArr: Depreciation[]) => {
                return this.depreciationRepository
                    .getDepreciationCount()
@@ -37,8 +38,8 @@ export class DepreciationOrchestrator {
         return this.depreciationRepository.getDepreciationById(depreciationId);
     }
 
-    saveDepreciation(depreciation: Depreciation): Observable<Depreciation> {
-        return this.depreciationRepository.saveDepreciation(depreciation);
+    saveDepreciation(depreciation: Depreciation, type: string): Observable<Depreciation> {
+        return this.depreciationRepository.saveDepreciation(depreciation, type);
     }
 
     updateDepreciation(depreciationId: string, depreciation: Depreciation): Observable<number> {
@@ -47,6 +48,10 @@ export class DepreciationOrchestrator {
 
     deleteDepreciation(depreciationId: string): Observable<number> {
         return this.depreciationRepository.deleteDepreciation(depreciationId);
+    }
+
+    getDepreciationMethod(): Observable<DepreciationMethod[]> {
+      return this.depreciationRepository.getDepreciationMethod();
     }
 
 }
