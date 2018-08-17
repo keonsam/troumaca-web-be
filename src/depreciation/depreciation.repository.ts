@@ -2,6 +2,8 @@ import { Depreciation } from "./depreciation";
 import { Observable } from "rxjs/Observable";
 import { Asset } from "../asset-type/asset/asset";
 import { DepreciationMethod } from "./depreciation.method";
+import { DepreciationSystem } from "./depreciation.system";
+import { PropertyClass } from "./property.class";
 
 export interface DepreciationRepository {
 
@@ -9,16 +11,24 @@ export interface DepreciationRepository {
 
   getBookDepreciationArr(pageNumber: number, pageSize: number, order: string): Observable<Depreciation[]>;
 
+  getTaxDepreciationArr(pageNumber: number, pageSize: number, order: string): Observable<Depreciation[]>;
+
   getDepreciationCount(): Observable<number>;
 
-  getDepreciationById(depreciationId: string): Observable<Depreciation>;
+  getTaxDepreciationCount(): Observable<number>;
+
+  getDepreciationById(depreciationId: string, type: string): Observable<Depreciation>;
 
   saveDepreciation(depreciation: Depreciation, type: string): Observable<Depreciation>;
 
-  updateDepreciation(depreciationId: string, depreciation: Depreciation): Observable<number>;
+  updateDepreciation(depreciationId: string, depreciation: Depreciation, type: string): Observable<number>;
 
-  deleteDepreciation(depreciationId: string): Observable<number>;
+  deleteDepreciation(depreciationId: string, type: string): Observable<number>;
 
-  getDepreciationMethod(): Observable<DepreciationMethod[]>;
+  getDepreciationMethod(type: string, system?: string): Observable<DepreciationMethod[]>;
+
+  getDepreciationSystems(): Observable<DepreciationSystem[]>;
+
+  getPropertyClasses(system?: string): Observable<PropertyClass[]>;
 
 }

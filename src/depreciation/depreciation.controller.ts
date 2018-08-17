@@ -36,8 +36,25 @@ export const getBookDepreciationArr = (req: Request, res: Response) => {
     });
 };
 
+export const getTaxDepreciationArr = (req: Request, res: Response) => {
+    const number = getNumericValueOrDefault(req.query.pageNumber, 1);
+    const size = getNumericValueOrDefault(req.query.pageSize, 10);
+    const field = getStringValueOrDefault(req.query.sortField, "");
+    const direction = getStringValueOrDefault(req.query.sortOrder, "");
+
+    orchestrator.getTaxDepreciationArr(number, size, field, direction)
+        .subscribe(result => {
+            res.status(200);
+            res.send(JSON.stringify(result.data));
+        }, error => {
+            res.status(500);
+            res.send(JSON.stringify({message: "Error Occurred"}));
+            console.log(error);
+        });
+};
+
 export const getDepreciationById = (req: Request, res: Response) => {
-  orchestrator.getDepreciationById(req.params.depreciationId)
+  orchestrator.getDepreciationById(req.params.depreciationId, req.params.type)
     .subscribe(depreciation => {
         if (depreciation) {
             res.status(200);
@@ -73,12 +90,15 @@ export const saveDepreciation = (req: Request, res: Response) => {
 };
 
 export const updateDepreciation = (req: Request, res: Response) => {
-    if (!req.body) {
+    const depreciation = req.body.depreciation;
+    const type = req.body.type;
+
+    if (!depreciation) {
         return res.status(400).send({
             message: "Depreciation content can not be empty"
         });
     }
-    orchestrator.updateDepreciation(req.params.depreciationId, req.body)
+    orchestrator.updateDepreciation(req.params.depreciationId, depreciation, type)
     .subscribe(affected => {
         if (affected > 0) {
             res.status(200);
@@ -95,7 +115,7 @@ export const updateDepreciation = (req: Request, res: Response) => {
 };
 
 export const deleteDepreciation = (req: Request, res: Response) => {
-  orchestrator.deleteDepreciation(req.params.depreciationId)
+  orchestrator.deleteDepreciation(req.params.depreciationId, req.params.type)
     .subscribe(affected => {
         if (affected > 0) {
             res.status(200);
@@ -112,7 +132,9 @@ export const deleteDepreciation = (req: Request, res: Response) => {
 };
 
 export const getDepreciationMethod = (req: Request, res: Response) => {
-  orchestrator.getDepreciationMethod()
+    const type = req.params.type;
+    const system = req.params.system;
+  orchestrator.getDepreciationMethod(type, system)
       .subscribe( methods => {
           res.status(200);
           res.send(JSON.stringify(methods));
@@ -122,3 +144,30 @@ export const getDepreciationMethod = (req: Request, res: Response) => {
           console.log(error);
       });
 };
+
+export const getDepreciationSystems = (req: Request, res: Response) => {
+    orchestrator.getDepreciationSystems()
+        .subscribe( methods => {
+            res.status(200);
+            res.send(JSON.stringify(methods));
+        }, error => {
+            res.status(500);
+            res.send(JSON.stringify({message: "Error Occurred"}));
+            console.log(error);
+        });
+};
+
+export const getPropertyClasses = (req: Request, res: Response) => {
+    const system = req.params.system;
+    orchestrator.getPropertyClasses(system)
+        .subscribe( methods => {
+            res.status(200);
+            res.send(JSON.stringify(methods));
+        }, error => {
+            res.status(500);
+            res.send(JSON.stringify({message: "Error Occurred"}));
+            console.log(error);
+        });
+};
+
+

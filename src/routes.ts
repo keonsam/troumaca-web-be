@@ -235,13 +235,17 @@ router.post( "/validate-credit-card/exp-date", billingController.cardExpDate);
 router.post( "/validate-credit-card/cvv", billingController.cardCVV);
 
 // DEPRECIATION
-router.get("/depreciation-methods", depreciationController.getDepreciationMethod)
+router.get("/depreciation-methods/:type/:system", depreciationController.getDepreciationMethod);
+router.get("/depreciation-systems", depreciationController.getDepreciationSystems);
+router.get("/depreciation-property-classes/:system", depreciationController.getPropertyClasses);
+
 router.get("/depreciation/assets/find", depreciationController.getDepreciableAssets);
 router.get("/book-depreciation", depreciationController.getBookDepreciationArr);
-router.get("/depreciation/:depreciationId", depreciationController.getDepreciationById);
+router.get("/tax-depreciation", depreciationController.getTaxDepreciationArr);
+router.get("/depreciation/:depreciationId/:type", depreciationController.getDepreciationById);
 router.post("/depreciation", depreciationController.saveDepreciation);
 router.put("/depreciation/:depreciationId", depreciationController.updateDepreciation);
-router.delete("/depreciation/:depreciationId", depreciationController.deleteDepreciation);
+router.delete("/depreciation/:depreciationId/:type", depreciationController.deleteDepreciation);
 
 
 export default router;

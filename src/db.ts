@@ -58,6 +58,8 @@ const methodDb = path.resolve(__dirname, "..") + "/nedb/lobby/methods.db";
 const bookDepreciationDb = path.resolve(__dirname, "..") + "/nedb/depreciation/book.db";
 const taxDepreciationDb = path.resolve(__dirname, "..") + "/nedb/depreciation/tax.db";
 const depreciationMethodDb = path.resolve(__dirname, "..") + "/nedb/depreciation/methods.db";
+const depreciationSystemDb = path.resolve(__dirname, "..") + "/nedb/depreciation/systems.db";
+const propertyClassesDb = path.resolve(__dirname, "..") + "/nedb/depreciation/propertyClasses.db";
 
 // Todo: Fix remove
 
@@ -223,6 +225,14 @@ taxDepreciation.ensureIndex({ fieldName: "depreciationId", unique: true }, handl
 export const depreciationMethod = new Datastore(depreciationMethodDb);
 depreciationMethod.loadDatabase(handleError);
 depreciationMethod.ensureIndex({ fieldName: "methodId", unique: true }, handleError);
+
+export const depreciationSystem = new Datastore(depreciationSystemDb);
+depreciationSystem.loadDatabase(handleError);
+depreciationSystem.ensureIndex({ fieldName: "systemId", unique: true }, handleError);
+
+export const propertyClasses = new Datastore(propertyClassesDb);
+propertyClasses.loadDatabase(handleError);
+propertyClasses.ensureIndex({ fieldName: "propertyClassId", unique: true }, handleError);
 
 
 function handleError( err: any ) {
