@@ -1,18 +1,20 @@
-import {Asset} from "./asset";
-import {Observable} from "rxjs/Observable";
+import { Asset } from "./asset";
+import { Observable } from "rxjs/Observable";
 
 export interface AssetRepository {
 
-  saveAsset(asset:Asset):Observable<Asset>;
+  findAssets(searchStr: string, pageSize: number): Observable<Asset[]>;
 
-  getAssets(pageNumber:number, pageSize:number, order:string):Observable<Asset[]>;
+  getAssets(pageNumber: number, pageSize: number, order: string): Observable<Asset[]>;
 
-  getAssetCount():Observable<number>;
+  getAssetCount(): Observable<number>;
 
-  getAssetById(assetId:string):Observable<Asset>;
+  getAssetById(assetId: string): Observable<Asset>;
 
-  updateAsset(assetId:string, asset:Asset):Observable<number>;
+  saveAsset(asset: Asset): Observable<Asset>;
 
-  deleteAsset(assetId:string):Observable<number>;
+  updateAsset(assetId: string, asset: Asset): Observable<number>;
+
+  deleteAsset(assetId: string): Observable<number>;
 
 }

@@ -1,9 +1,9 @@
-import {Party} from "../party";
+import { Party } from "../party";
 
 export class Organization extends Party {
 
-  private _purpose:string;
-  private _description:string;
+  private _purpose: string;
+  private _description: string;
 
   get purpose(): string {
     return this._purpose;

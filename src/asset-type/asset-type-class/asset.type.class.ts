@@ -1,12 +1,12 @@
 
 export class AssetTypeClass {
 
-  private _assetTypeClassId:string;
+  private _assetTypeClassId: string;
   private _tenantId: string;
-  private _name:string;
-  private _description:string;
-  private _createdOn:Date;
-  private _modifiedOn:Date;
+  private _name: string;
+  private _description: string;
+  private _createdOn: Date;
+  private _modifiedOn: Date;
 
   get assetTypeClassId(): string {
     return this._assetTypeClassId;
@@ -45,7 +45,7 @@ export class AssetTypeClass {
   }
 
   set createdOn(value: Date) {
-    this._createdOn = value
+    this._createdOn = value;
   }
 
   get modifiedOn(): Date {

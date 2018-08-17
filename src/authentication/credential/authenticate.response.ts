@@ -1,22 +1,22 @@
-import {Session} from "../../session/session";
-import {Credential} from "./credential";
-
 export class AuthenticateResponse {
 
-  private _authenticated:boolean;
-  private _usernameConfirmed:boolean;
-  private _credentialConfirmationId: string;
-  private _accountExists:boolean;
-  private _credential:Credential;
-  private _session:Session;
+  private _authenticated: boolean;
+  private _authenticatedStatus: string;
+  private _confirmationId: string;
+  private _credentialId: string;
+  private _username: string;
+  private _sessionId: string;
+  private _partyId: string;
 
-  constructor(authenticated?: boolean, usernameConfirmed?:boolean, credentialConfirmationId?: string, accountExists?:boolean, credential?: Credential, session?: Session) {
+  constructor(authenticated?: boolean, authenticatedStatus?: string, confirmationId?: string,
+              username?: string, credentialId?: string, sessionId?: string, partyId?: string) {
     this._authenticated = authenticated;
-    this._usernameConfirmed = usernameConfirmed;
-    this._credentialConfirmationId = credentialConfirmationId;
-    this._accountExists = accountExists;
-    this._credential = credential;
-    this._session = session;
+    this._authenticatedStatus = authenticatedStatus;
+    this._confirmationId = confirmationId;
+    this._credentialId = credentialId;
+    this._username = username;
+    this._sessionId = sessionId;
+    this._partyId = partyId;
   }
 
   get authenticated(): boolean {
@@ -27,56 +27,64 @@ export class AuthenticateResponse {
     this._authenticated = value;
   }
 
-  get usernameConfirmed(): boolean {
-    return this._usernameConfirmed;
+  get authenticatedStatus(): string {
+    return this._authenticatedStatus;
   }
 
-  set usernameConfirmed(value: boolean) {
-    this._usernameConfirmed = value;
+  set authenticatedStatus(value: string) {
+    this._authenticatedStatus = value;
   }
 
-
-  get credentialConfirmationId(): string {
-    return this._credentialConfirmationId;
+  get username(): string {
+    return this._username;
   }
 
-  set credentialConfirmationId(value: string) {
-    this._credentialConfirmationId = value;
+  set username(value: string) {
+    this._username = value;
   }
 
-  get accountExists(): boolean {
-    return this._accountExists;
+  get credentialId(): string {
+    return this._credentialId;
   }
 
-  set accountExists(value: boolean) {
-    this._accountExists = value;
+  set credentialId(value: string) {
+    this._credentialId = value;
   }
 
-  get credential(): Credential {
-    return this._credential;
+  get confirmationId(): string {
+    return this._confirmationId;
   }
 
-  set credential(value: Credential) {
-    this._credential = value;
+  set confirmationId(value: string) {
+    this._confirmationId = value;
   }
 
-  get session(): Session {
-    return this._session;
+  get sessionId(): string {
+    return this._sessionId;
   }
 
-  set session(value: Session) {
-    this._session = value;
+  set sessionId(value: string) {
+    this._sessionId = value;
+  }
+
+  get partyId(): string {
+    return this._partyId;
+  }
+
+  set partyId(value: string) {
+    this._partyId = value;
   }
 
   toJson() {
     return {
       authenticated: this.authenticated,
-      usernameConfirmed: this.usernameConfirmed,
-      credentialConfirmationId: this.credentialConfirmationId,
-      accountExists: this.accountExists,
-      credential: this.credential,
-      session: this.session
-    }
+      authenticatedStatus: this.authenticatedStatus,
+      confirmationId: this.confirmationId,
+      username: this.username,
+      credentialId: this.credentialId,
+      sessionId: this.sessionId
+    };
   }
+
 }
 

@@ -1,15 +1,30 @@
-import {Request, Response} from "express";
-import {getNumericValueOrDefault} from '../../number.util';
-import {getStringValueOrDefault} from '../../string.util';
-import {AssetOrchestrator} from "./asset.orchestrator";
+import { Request, Response } from "express";
+import { getNumericValueOrDefault } from "../../number.util";
+import { getStringValueOrDefault } from "../../string.util";
+import { AssetOrchestrator } from "./asset.orchestrator";
 
-let assetOrchestrator:AssetOrchestrator = new AssetOrchestrator();
+const assetOrchestrator: AssetOrchestrator = new AssetOrchestrator();
+
+export  let findAssets = (req: Request, res: Response) => {
+    const searchStr: string =  req.query.q;
+    const pageSize: number = req.query.pageSize;
+
+    assetOrchestrator.findAssets(searchStr, pageSize)
+        .subscribe(assets => {
+            res.status(200);
+            res.send(JSON.stringify(assets));
+        }, error => {
+            res.status(500);
+            res.send(JSON.stringify({message: "Error Occurred"}));
+            console.log(error);
+        });
+};
 
 export let getAssets = (req: Request, res: Response) => {
-  let number = getNumericValueOrDefault(req.query.pageNumber, 1);
-  let size = getNumericValueOrDefault(req.query.pageSize, 10);
-  let field = getStringValueOrDefault(req.query.sortField, "");
-  let direction = getStringValueOrDefault(req.query.sortOrder, "");
+  const number = getNumericValueOrDefault(req.query.pageNumber, 1);
+  const size = getNumericValueOrDefault(req.query.pageSize, 10);
+  const field = getStringValueOrDefault(req.query.sortField, "");
+  const direction = getStringValueOrDefault(req.query.sortOrder, "");
 
   assetOrchestrator.getAssets(number, size, field, direction)
     .subscribe(result => {
@@ -17,7 +32,7 @@ export let getAssets = (req: Request, res: Response) => {
         res.send(JSON.stringify(result.data));
     }, error => {
         res.status(500);
-        res.send(JSON.stringify({message: 'Error Occurred'}));
+        res.send(JSON.stringify({message: "Error Occurred"}));
         console.log(error);
     });
 };
@@ -25,12 +40,12 @@ export let getAssets = (req: Request, res: Response) => {
 export let getAssetById = (req: Request, res: Response) => {
   assetOrchestrator.getAssetById(req.params.assetId)
     .subscribe(assets => {
-        if(assets) {
+        if (assets) {
             res.status(200);
             res.send(JSON.stringify(assets));
-        }else {
+        } else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found For ' + req.params.assetId}));
+            res.send(JSON.stringify({message: "No Data Found For " + req.params.assetId}));
         }
     }, error => {
         res.status(500);
@@ -51,7 +66,7 @@ export let saveAsset = (req: Request, res: Response) => {
             res.send(JSON.stringify(assets));
         }, error => {
             res.status(400);
-            res.send(JSON.stringify({message: 'Error Occurred'}));
+            res.send(JSON.stringify({message: "Error Occurred"}));
             console.log(error);
         });
 };
@@ -64,16 +79,16 @@ export let updateAsset = (req: Request, res: Response) => {
     }
     assetOrchestrator.updateAsset(req.params.assetId, req.body)
     .subscribe(affected => {
-        if(affected > 0) {
+        if (affected > 0) {
             res.status(200);
             res.send(JSON.stringify(affected));
-        }else {
+        } else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found For ' + req.params.assetId}));
+            res.send(JSON.stringify({message: "No Data Found For " + req.params.assetId}));
         }
     }, error => {
         res.status(500);
-        res.send(JSON.stringify({message: 'Error Occurred'}));
+        res.send(JSON.stringify({message: "Error Occurred"}));
         console.log(error);
     });
 };
@@ -84,13 +99,13 @@ export let deleteAsset = (req: Request, res: Response) => {
         if (affected > 0) {
             res.status(200);
             res.send(JSON.stringify(affected));
-        }else {
+        } else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found For ' + req.params.assetId}));
+            res.send(JSON.stringify({message: "No Data Found For " + req.params.assetId}));
         }
     }, error => {
         res.status(500);
-        res.send(JSON.stringify({message: 'Error Occurred'}));
+        res.send(JSON.stringify({message: "Error Occurred"}));
         console.log(error);
     });
 };

@@ -1,90 +1,19 @@
-import * as Rx from 'rxjs';
-import {Observable} from "rxjs/Observable";
-import {UnitOfMeasure} from "./unit.of.measure";
-import {UnitOfMeasureRepository} from "./unit.of.measure.repository";
-import {RepositoryKind} from "../repository.kind";
-import {unitOfMeasures} from "../db";
-import {Observer} from "rxjs/Observer";
+import { UnitOfMeasureRepository } from "./unit.of.measure.repository";
+import { RepositoryKind } from "../repository.kind";
+import { properties } from "../properties.helpers";
+import { UnitOfMeasureRepositoryNeDbAdapter } from "./adapter/unit.of.measure.repository.db.adapter";
+import { UnitOfMeasureRepositoryRestAdapter } from "./adapter/unit.of.measure.repository.rest.adapter";
 
-class UnitOfMeasureDBRepository implements UnitOfMeasureRepository {
-  findUnitOfMeasure(searchStr: string, pageSize: number): Observable<UnitOfMeasure[]> {
-    let searchStrLocal = new RegExp(searchStr);
-    return Rx.Observable.create(function (observer: Observer<UnitOfMeasure[]>) {
-      if (!searchStr) {
-        unitOfMeasures.find({}).limit(100).exec(function (err: any, doc: any) {
-          if (!err) {
-            observer.next(doc);
-          } else {
-            observer.error(err);
-          }
-          observer.complete();
-        });
-      } else {
-        unitOfMeasures.find({name: {$regex: searchStrLocal}}).limit(pageSize).exec(function (err: any, doc: any) {
-          if (!err) {
-            observer.next(doc);
-          } else {
-            observer.error(err);
-          }
-          observer.complete();
-        });
-      }
-    });
-  }
+export function createUnitOfMeasureRepository(kind?: RepositoryKind): UnitOfMeasureRepository {
+  const type: number = properties.get("unit.of.measure.repository.type") as number;
 
-  getUnitOfMeasureById(unitOfMeasureId: string): Observable<UnitOfMeasure> {
-    let query = {
-      "unitOfMeasureId": unitOfMeasureId
-    }
-    return Rx.Observable.create(function (observer: Observer<UnitOfMeasure>) {
-      unitOfMeasures.findOne(query, function (err: any, doc:any) {
-        if (!err) {
-          observer.next(doc);
-        } else {
-          observer.error(err);
-        }
-        observer.complete();
-      });
-    });
-  }
-
-  getUnitOfMeasureByIds(unitOfMeasureIds: string[]): Observable<UnitOfMeasure[]> {
-
-    return Rx.Observable.create(function (observer: Observer<UnitOfMeasure[]>) {
-      unitOfMeasures.find({unitOfMeasureId: { $in: unitOfMeasureIds}}, function (err: any, docs:any) {
-        if (!err) {
-          observer.next(docs);
-        } else {
-          observer.error(err);
-        }
-        observer.complete();
-      });
-    });
-  }
-
-}
-
-class UnitOfMeasureRestRepository implements UnitOfMeasureRepository {
-  findUnitOfMeasure(searchStr: string, pageSize:number): Observable<UnitOfMeasure[]> {
-    return null;
-  }
-
-  getUnitOfMeasureById(unitOfMeasureId: string): Observable<UnitOfMeasure> {
-    return null;
-  }
-
-  getUnitOfMeasureByIds(unitOfMeasureIds: string[]): Observable<UnitOfMeasure[]> {
-    return null;
-  }
-}
-
-export function createUnitOfMeasureRepository(kind?:RepositoryKind):UnitOfMeasureRepository {
-  switch (kind) {
+  const k: RepositoryKind = (kind) ? kind : (type === 2) ? RepositoryKind.Rest : RepositoryKind.Nedb;
+  switch (k) {
     case RepositoryKind.Nedb:
-      return new UnitOfMeasureDBRepository();
+      return new UnitOfMeasureRepositoryNeDbAdapter();
     case RepositoryKind.Rest:
-      return new UnitOfMeasureRestRepository();
+      return new UnitOfMeasureRepositoryRestAdapter();
     default:
-      return new UnitOfMeasureDBRepository();
+        throw new Error(`Unknown Unit Of Measure Repository Type ${k}`);
   }
 }

@@ -1,19 +1,19 @@
 import Rx from "rxjs";
-import {accessRoleTypes} from "../../db";
-import {AccessRoleTypeRepository} from "./access.role.type.repository";
-import {AccessRoleType} from "./access.role.type";
-import {Observable} from "rxjs/Observable";
-import {RepositoryKind} from "../../repository.kind";
-import {Observer} from "rxjs/Observer";
-import {generateUUID} from "../../uuid.generator";
-import {calcSkip} from "../../db.util";
+import { accessRoleTypes } from "../../db";
+import { AccessRoleTypeRepository } from "./access.role.type.repository";
+import { AccessRoleType } from "./access.role.type";
+import { Observable } from "rxjs/Observable";
+import { RepositoryKind } from "../../repository.kind";
+import { Observer } from "rxjs/Observer";
+import { generateUUID } from "../../uuid.generator";
+import { calcSkip } from "../../db.util";
 
 class AccessRoleTypeDBRepository implements AccessRoleTypeRepository {
 
-  private defaultPageSize:number = 10;
+  private defaultPageSize: number = 10;
 
   findAccessRoleTypes(searchStr: string, pageSize: number): Observable<AccessRoleType[]> {
-    let searchStrLocal = new RegExp(searchStr);
+    const searchStrLocal = new RegExp(searchStr);
     return Rx.Observable.create(function (observer: Observer<AccessRoleType[]>) {
       if (!searchStr) {
         accessRoleTypes.find({}).limit(100).exec(function (err: any, doc: any) {
@@ -33,15 +33,15 @@ class AccessRoleTypeDBRepository implements AccessRoleTypeRepository {
           }
           observer.complete();
         });
-      };
+      }
     });
   }
 
-  getAccessRoleTypes(pageNumber:number, pageSize:number, order:string):Observable<AccessRoleType[]> {
-    let localDefaultPageSize = this.defaultPageSize;
-    return Rx.Observable.create(function (observer:Observer<AccessRoleType[]>) {
-      let skip = calcSkip(pageNumber, pageSize, localDefaultPageSize);
-      accessRoleTypes.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err:any, doc:any) {
+  getAccessRoleTypes(pageNumber: number, pageSize: number, order: string): Observable<AccessRoleType[]> {
+    const localDefaultPageSize = this.defaultPageSize;
+    return Rx.Observable.create(function (observer: Observer<AccessRoleType[]>) {
+      const skip = calcSkip(pageNumber, pageSize, localDefaultPageSize);
+      accessRoleTypes.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -50,11 +50,11 @@ class AccessRoleTypeDBRepository implements AccessRoleTypeRepository {
         observer.complete();
       });
     });
-  };
+  }
 
-  getAccessRoleTypeCount():Observable<number> {
-    return Rx.Observable.create(function (observer:Observer<number>) {
-      accessRoleTypes.count({}, function (err:any, count:number) {
+  getAccessRoleTypeCount(): Observable<number> {
+    return Rx.Observable.create(function (observer: Observer<number>) {
+      accessRoleTypes.count({}, function (err: any, count: number) {
         if (!err) {
           observer.next(count);
         } else {
@@ -63,12 +63,12 @@ class AccessRoleTypeDBRepository implements AccessRoleTypeRepository {
         observer.complete();
       });
     });
-  };
+  }
 
   addAccessRoleType(accessRoleType: AccessRoleType): Observable<AccessRoleType> {
     accessRoleType.accessRoleTypeId = generateUUID();
-    return Rx.Observable.create(function(observer:Observer<AccessRoleType>) {
-      accessRoleTypes.insert(accessRoleType, function(err:any, doc:any) {
+    return Rx.Observable.create(function(observer: Observer<AccessRoleType>) {
+      accessRoleTypes.insert(accessRoleType, function(err: any, doc: any) {
         if (err) {
           observer.error(err);
         } else {
@@ -80,27 +80,27 @@ class AccessRoleTypeDBRepository implements AccessRoleTypeRepository {
   }
 
   deleteAccessRoleType(accessRoleTypeId: string): Observable<number> {
-    return Rx.Observable.create(function (observer:Observer<number>) {
-      let query = {
-        "accessRoleTypeId":accessRoleTypeId
+    return Rx.Observable.create(function (observer: Observer<number>) {
+      const query = {
+        "accessRoleTypeId": accessRoleTypeId
       };
-      accessRoleTypes.remove(query, {}, function (err:any, numRemoved:number) {
+      accessRoleTypes.remove(query, {}, function (err: any, numRemoved: number) {
         if (!err) {
           observer.next(numRemoved);
         } else {
           observer.error(err);
         }
         observer.complete();
-      })
+      });
     });
   }
 
   getAccessRoleTypeById(accessRoleTypeId: string): Observable<AccessRoleType> {
-    return Rx.Observable.create(function (observer:Observer<AccessRoleType>) {
-      let query = {
-        "accessRoleTypeId":accessRoleTypeId
+    return Rx.Observable.create(function (observer: Observer<AccessRoleType>) {
+      const query = {
+        "accessRoleTypeId": accessRoleTypeId
       };
-      accessRoleTypes.findOne(query, function (err:any, doc:any) {
+      accessRoleTypes.findOne(query, function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -112,11 +112,11 @@ class AccessRoleTypeDBRepository implements AccessRoleTypeRepository {
   }
 
   getAccessRoleTypeByIds(accessRoleTypeIds: string[]): Observable<AccessRoleType[]> {
-    return Rx.Observable.create(function (observer:Observer<AccessRoleType[]>) {
+    return Rx.Observable.create(function (observer: Observer<AccessRoleType[]>) {
       // let query = {
       //   "accessRoleTypeId":accessRoleTypeId
       // };
-      accessRoleTypes.find({accessRoleTypeId:{$in: accessRoleTypeIds}}, function (err:any, doc:any) {
+      accessRoleTypes.find({accessRoleTypeId: {$in: accessRoleTypeIds}}, function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -128,18 +128,18 @@ class AccessRoleTypeDBRepository implements AccessRoleTypeRepository {
   }
 
   updateAccessRoleType(accessRoleTypeId: string, accessRoleType: AccessRoleType): Observable<number> {
-    return Rx.Observable.create(function (observer:Observer<number>) {
-      let query = {
-        "accessRoleTypeId":accessRoleTypeId
+    return Rx.Observable.create(function (observer: Observer<number>) {
+      const query = {
+        "accessRoleTypeId": accessRoleTypeId
       };
-      accessRoleTypes.update(query, accessRoleType, {}, function (err:any, numReplaced:number) {
+      accessRoleTypes.update(query, accessRoleType, {}, function (err: any, numReplaced: number) {
         if (!err) {
           observer.next(numReplaced);
         } else {
           observer.error(err);
         }
         observer.complete();
-      })
+      });
     });
   }
 
@@ -150,13 +150,13 @@ class AccessRoleTypeRestRepository implements AccessRoleTypeRepository {
 
   findAccessRoleTypes(searchStr: string, pageSize: number): Observable<AccessRoleType[]> {
     return undefined;
-  };
+  }
 
-  getAccessRoleTypes(pageNumber:number, pageSize:number, order:string):Observable<AccessRoleType[]> {
+  getAccessRoleTypes(pageNumber: number, pageSize: number, order: string): Observable<AccessRoleType[]> {
     return undefined;
   }
 
-  getAccessRoleTypeCount():Observable<number> {
+  getAccessRoleTypeCount(): Observable<number> {
     return undefined;
   }
 
@@ -182,7 +182,7 @@ class AccessRoleTypeRestRepository implements AccessRoleTypeRepository {
 
 }
 
-export function createAccessRoleTypeRepositoryFactory(kind?:RepositoryKind):AccessRoleTypeRepository {
+export function createAccessRoleTypeRepositoryFactory(kind?: RepositoryKind): AccessRoleTypeRepository {
   switch (kind) {
     case RepositoryKind.Nedb:
       return new AccessRoleTypeDBRepository();

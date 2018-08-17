@@ -1,94 +1,22 @@
-import * as Rx from 'rxjs';
-import {SiteRepository} from "./site.repository";
-import {Observable} from "rxjs/Observable";
-import {Observer} from "rxjs/Observer";
-import {RepositoryKind} from "../repository.kind";
-import {sites} from "../db";
-import {UnionOfPhysicalSite} from "./union.of.physical.site";
-import {Site} from "./site";
+import { SiteRepository } from "./site.repository";
+import { RepositoryKind } from "../repository.kind";
+import { SiteRepositoryNeDbAdapter } from "./adapter/site.repository.db.adapter";
+import { SiteRepositoryRestAdapter } from "./adapter/site.repository.rest.adapter";
+import { properties } from "../properties.helpers";
 
-class SiteDBRepository implements SiteRepository {
-  findSite(searchStr: string, pageSize: number): Observable<UnionOfPhysicalSite[]> {
-    let searchStrLocal = new RegExp(searchStr);
-    return Rx.Observable.create(function (observer: Observer<UnionOfPhysicalSite[]>) {
-      if (!searchStr) {
-        sites.find({}).limit(100).exec(function (err: any, doc: any) {
-          if (!err) {
-            observer.next(doc);
-          } else {
-            observer.error(err);
-          }
-          observer.complete();
-        });
-      } else {
-        sites.find({name: {$regex: searchStrLocal}}).limit(pageSize).exec(function (err: any, doc: any) {
-          if (!err) {
-            observer.next(doc);
-          } else {
-            observer.error(err);
-          }
-          observer.complete();
-        });
-      };
-    });
-  }
 
-  getSiteById(siteId: string): Observable<Site> {
-    let query = {
-      "siteId": siteId
-    };
-    return Rx.Observable.create(function (observer: Observer<Site>) {
-      sites.findOne(query, function (err: any, doc: any) {
-        if (!err) {
-          observer.next(doc);
-        } else {
-          observer.error(err);
-        }
-        observer.complete();
-      });
-    });
-  }
 
-  getSiteByIds(siteIds: string[]): Observable<Site[]> {
-    // let query = {
-    //   "siteId": siteId
-    // };
-    return Rx.Observable.create(function (observer: Observer<Site[]>) {
-      sites.find({siteId:{$in:siteIds}}, function (err: any, doc: any) {
-        if (!err) {
-          observer.next(doc);
-        } else {
-          observer.error(err);
-        }
-        observer.complete();
-      });
-    });
-  }
+export function createSiteRepository(kind?: RepositoryKind): SiteRepository {
+  const type: number = properties.get("site.repository.type") as number;
+  const k: RepositoryKind = (kind) ? kind : (type === 2) ? RepositoryKind.Rest : RepositoryKind.Nedb;
 
-}
-
-class SiteRestRepository implements SiteRepository {
-  findSite(searchStr: string, pageSize: number): Observable<UnionOfPhysicalSite[]> {
-    return undefined;
-  }
-
-  getSiteById(siteId: string): Observable<Site> {
-    return undefined;
-  }
-
-  getSiteByIds(siteIds: string[]): Observable<Site[]> {
-    return undefined;
-  }
-
-}
-
-export function createSiteRepository(kind?:RepositoryKind):SiteRepository {
-  switch (kind) {
+  switch (k) {
     case RepositoryKind.Nedb:
-      return new SiteDBRepository();
+      return new SiteRepositoryNeDbAdapter();
     case RepositoryKind.Rest:
-      return new SiteRestRepository();
+      return new SiteRepositoryRestAdapter();
     default:
-      return new SiteDBRepository();
+        throw new Error(`Unknown Site Repository Type ${k}`);
+
   }
 }

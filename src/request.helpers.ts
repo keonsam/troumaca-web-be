@@ -1,4 +1,4 @@
-import {CoreOptions} from "request";
+import { CoreOptions } from "request";
 
 export function jsonRequestHeaderMap(options: any) {
   // let headerMap = new Map();
@@ -13,7 +13,12 @@ export function jsonRequestHeaderMap(options: any) {
   // }
   return {
     "Content-Type": "application/json",
-    "correlationId": options.correlationId
+    "correlationId": options.correlationId,
+    "sourceHostName": "",
+    "sourceHostAddress": "",
+    "sourcePartyId" : "",
+    "sourceSystemHost": options.sourceSystemHost,
+    "sourceSystemName": "Troumaca"
   };
 }
 
@@ -23,7 +28,7 @@ export function postJsonOptions(uri: any, headers: any, json: any) {
     throw new Error('A \"uri\" is required to make a post request');
   }
 
-  let headerMap = new Map();
+  const headerMap = new Map();
   headerMap.set("uri", uri);
   headerMap.set("method", "POST");
   if (headers) {
@@ -35,19 +40,19 @@ export function postJsonOptions(uri: any, headers: any, json: any) {
   }
 
   return {
-    uri:uri,
+    uri: uri,
     method: "POST",
     headers: headers,
     json: json
   };
 
   // if (headers) {
-    //headerMap.set("headers", headers);
+    // headerMap.set("headers", headers);
     // options.headers = headers;
   // }
 
   // if (headers) {
-    //headerMap.set("json", json);
+    // headerMap.set("json", json);
     // options.json = json;
   // }
 

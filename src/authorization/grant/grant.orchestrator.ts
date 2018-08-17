@@ -1,11 +1,11 @@
-import {GrantRepository} from "./grant.repository";
-import {createGrantRepositoryFactory} from "./grant.repository.factory";
-import {Observable} from "rxjs/Observable";
-import {Grant} from "./grant";
+import { GrantRepository } from "./grant.repository";
+import { createGrantRepositoryFactory } from "./grant.repository.factory";
+import { Observable } from "rxjs/Observable";
+import { Grant } from "./grant";
 
 export class GrantOrchestrator {
 
-  private grantRepository:GrantRepository;
+  private grantRepository: GrantRepository;
 
   constructor() {
     this.grantRepository = createGrantRepositoryFactory();
@@ -15,21 +15,21 @@ export class GrantOrchestrator {
     return this.grantRepository.getGrantsByAccessRoleId(accessRoleId);
   }
 
-  addGrant(grants:Grant[]):Observable<Grant[]> {
+  addGrant(grants: Grant[]): Observable<Grant[]> {
     return this.grantRepository.addGrant(grants);
-  };
+  }
 
-  getGrantById(grantId:string, ownerPartyId:string):Observable<Grant> {
+  getGrantById(grantId: string, ownerPartyId: string): Observable<Grant> {
     return this.grantRepository.getGrantById(grantId, ownerPartyId);
-  };
+  }
 
-  updateGrant(grantId:string, grant:Grant):Observable<number> {
+  updateGrant(grantId: string, grant: Grant): Observable<number> {
     return this.grantRepository.updateGrant(grantId, grant);
-  };
+  }
 
-  deleteGrant(accessRoleId:string):Observable<number>{
+  deleteGrant(accessRoleId: string): Observable<number> {
     return this.grantRepository.deleteGrant(accessRoleId);
-  };
+  }
 
 }
 

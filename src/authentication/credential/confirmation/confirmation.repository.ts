@@ -1,18 +1,22 @@
-import {Observable} from "rxjs/Observable";
-import {CredentialConfirmation} from "./credential.confirmation";
+import { Observable } from "rxjs/Observable";
+import { Confirmation } from "./confirmation";
 
 export interface ConfirmationRepository {
 
-  addCredentialConfirmation(credentialConfirmation:CredentialConfirmation):Observable<CredentialConfirmation>;
+  confirmCode(confirmationId: string, credentialId: string, confirmation: Confirmation, options?: any): Observable<Confirmation>;
 
-  getConfirmedConfirmation(credentialId:string):Observable<CredentialConfirmation>;
+  resendConfirmCode(confirmationId: string, credentialId: string, options?: any): Observable<Confirmation>;
 
-  getCredentialConfirmationByCode(credentialConfirmationId:string, confirmationCode:string):Observable<CredentialConfirmation>;
-
-  getCredentialConfirmationById(credentialConfirmationId:string):Observable<CredentialConfirmation>;
-
-  updateCredentialConfirmation(credentialConfirmation:CredentialConfirmation):Observable<number>
-
-  getCredentialConfirmationByCredentialId(credentialId:string):Observable<CredentialConfirmation>;
+  // addCredentialConfirmation(credentialConfirmation:CredentialConfirmation):Observable<CredentialConfirmation>;
+  //
+  // getConfirmedConfirmation(credentialId:string):Observable<CredentialConfirmation>;
+  //
+  // getCredentialConfirmationByCode(credentialConfirmationId:string, confirmationCode:string):Observable<CredentialConfirmation>;
+  //
+  // getCredentialConfirmationById(credentialConfirmationId:string):Observable<CredentialConfirmation>;
+  //
+  // updateCredentialConfirmation(credentialConfirmation:CredentialConfirmation):Observable<number>
+  //
+  // getCredentialConfirmationByCredentialId(credentialId:string):Observable<CredentialConfirmation>;
 
 }

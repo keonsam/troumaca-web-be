@@ -1,38 +1,43 @@
-import {Observable} from "rxjs/Observable";
-import {Credential} from './credential';
-import {Result} from "../../result.success";
-import {CredentialConfirmation} from "./confirmation/credential.confirmation";
+import { Observable } from "rxjs/Observable";
+import { Credential } from "./credential";
+import { AuthenticatedCredential } from "./authenticated.credential";
+import { CreatedCredential } from "./created.credential";
 
 export interface CredentialRepository {
 
-  isValidUsername(username:string):Observable<boolean>;
+  isValidUsername(username: string, partyId: string): Observable<boolean>;
 
-  isValidEditUsername(partyId:string, username:string):Observable<boolean>;
+  isValidPassword(password: string): Observable<boolean>;
 
-  isValidPassword(password:string):Observable<boolean>;
+  addCredential(credential: Credential, options?: any): Observable<CreatedCredential>;
 
-  getCredentialByUsername(username:string):Observable<Credential>;
+  authenticate(credential: Credential, options: any): Observable<AuthenticatedCredential>;
 
-  getCredentialByCredentialId(credentialId:string):Observable<Credential>;
+  updateCredentialStatusById(credentialId: string, status: string): Observable<number>;
 
-  getSanitizeCredentialByUsername(credentialId:string):Observable<Credential>;
+  // isValidEditUsername(partyId:string, username:string):Observable<boolean>;
 
-  authenticate(credential:Credential):Observable<Result<Credential>>;
-
-  checkUsernameValid(partyId:string, username:string):Observable<Credential>;
-
-  addCredential(credential:Credential, options?:any):Observable<CredentialConfirmation>;
-
-  addUserCredential(credential:Credential):Observable<Credential>;
-
-  authenticateCredential(credential:Credential):Observable<Credential>;
-
-  updateCredential(partyId: string, credential: Credential): Observable<number>;
-
-  updateCredentialStatusById(credentialId:string, status:string):Observable<number>;
-
-  updateCredentialPartyId(credentialId: string, partyId: string): Observable<number>;
-
-  deleteCredentialByPartyId(partyId:string): Observable<number>;
+  // getCredentialByUsername(username:string):Observable<Credential>;
+  //
+  // getCredentialByCredentialId(credentialId:string):Observable<Credential>;
+  //
+  // getSanitizeCredentialByUsername(credentialId:string):Observable<Credential>;
+  //
+  // //authenticate(credential:Credential, options:any):Observable<Result<AuthenticatedCredential>>;
+  //
+  // checkUsernameValid(partyId:string, username:string):Observable<Credential>;
+  //
+  // addUserCredential(credential:Credential):Observable<Credential>;
+  //
+  // authenticateCredential(credential:Credential):Observable<Credential>;
+  //
+  // updateCredential(partyId: string, credential: Credential): Observable<number>;
+  //
+  //
+  // updateCredentialPartyId(credentialId: string, partyId: string): Observable<number>;
+  //
+  // deleteCredentialByPartyId(partyId:string): Observable<number>;
+  //
+  // deleteCredentialById(credentialId:string, options?:any): Observable<number>;
 
 }

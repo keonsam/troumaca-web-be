@@ -1,20 +1,20 @@
 import Rx from "rxjs";
-import {grants} from "../../db";
-import {GrantRepository} from "./grant.repository";
-import {Grant} from "./grant";
-import {Observable} from "rxjs/Observable";
-import {RepositoryKind} from "../../repository.kind";
-import {Observer} from "rxjs/Observer";
-import {generateUUID} from "../../uuid.generator";
+import { grants } from "../../db";
+import { GrantRepository } from "./grant.repository";
+import { Grant } from "./grant";
+import { Observable } from "rxjs/Observable";
+import { RepositoryKind } from "../../repository.kind";
+import { Observer } from "rxjs/Observer";
+import { generateUUID } from "../../uuid.generator";
 
 class GrantDBRepository implements GrantRepository {
 
-  getGrantsByAccessRoleId(accessRoleId: string): Observable<Grant[]>{
-    let query = {
-      "accessRoleId":accessRoleId
+  getGrantsByAccessRoleId(accessRoleId: string): Observable<Grant[]> {
+    const query = {
+      "accessRoleId": accessRoleId
     };
-    return Rx.Observable.create(function(observer:Observer<Grant[]>) {
-      grants.find(query, function (err:any, docs:any[]) {
+    return Rx.Observable.create(function(observer: Observer<Grant[]>) {
+      grants.find(query, function (err: any, docs: any[]) {
         if (!err) {
           observer.next(docs);
         } else {
@@ -27,12 +27,12 @@ class GrantDBRepository implements GrantRepository {
 
   addGrant(grant: Grant[]): Observable<Grant[]> {
     grant.forEach(value => {
-      if(!value.grantId){
+      if (!value.grantId) {
         value.grantId = generateUUID();
       }
     });
-    return Rx.Observable.create(function(observer:Observer<Grant[]>) {
-      grants.insert(grant, function(err:any, docs:any) {
+    return Rx.Observable.create(function(observer: Observer<Grant[]>) {
+      grants.insert(grant, function(err: any, docs: any) {
         if (err) {
           observer.error(err);
         } else {
@@ -44,27 +44,27 @@ class GrantDBRepository implements GrantRepository {
   }
 
   deleteGrant(accessRoleId: string): Observable<number> {
-    return Rx.Observable.create(function (observer:Observer<number>) {
-      let query = {
-        "accessRoleId":accessRoleId
+    return Rx.Observable.create(function (observer: Observer<number>) {
+      const query = {
+        "accessRoleId": accessRoleId
       };
-      grants.remove(query, {multi: true}, function (err:any, numRemoved:number) {
+      grants.remove(query, {multi: true}, function (err: any, numRemoved: number) {
         if (!err) {
           observer.next(numRemoved);
         } else {
           observer.error(err);
         }
         observer.complete();
-      })
+      });
     });
   }
 
   getGrantById(grantId: string, ownerParyId: string): Observable<Grant> {
-    return Rx.Observable.create(function (observer:Observer<Grant>) {
-      let query = {
-        "grantId":grantId
+    return Rx.Observable.create(function (observer: Observer<Grant>) {
+      const query = {
+        "grantId": grantId
       };
-      grants.findOne(query, function (err:any, doc:any) {
+      grants.findOne(query, function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -76,18 +76,18 @@ class GrantDBRepository implements GrantRepository {
   }
 
   updateGrant(grantId: string, grant: Grant): Observable<number> {
-    return Rx.Observable.create(function (observer:Observer<number>) {
-      let query = {
-        "grantId":grantId
+    return Rx.Observable.create(function (observer: Observer<number>) {
+      const query = {
+        "grantId": grantId
       };
-      grants.update(query, grant, {}, function (err:any, numReplaced:number) {
+      grants.update(query, grant, {}, function (err: any, numReplaced: number) {
         if (!err) {
           observer.next(numReplaced);
         } else {
           observer.error(err);
         }
         observer.complete();
-      })
+      });
     });
   }
 
@@ -118,7 +118,7 @@ class GrantRestRepository implements GrantRepository {
 
 }
 
-export function createGrantRepositoryFactory(kind?:RepositoryKind):GrantRepository {
+export function createGrantRepositoryFactory(kind?: RepositoryKind): GrantRepository {
   switch (kind) {
     case RepositoryKind.Nedb:
       return new GrantDBRepository();

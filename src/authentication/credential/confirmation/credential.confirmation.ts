@@ -1,13 +1,13 @@
-import {CredentialStatus} from "../credential.status";
+import { CredentialStatus } from "../credential.status";
 
 export class CredentialConfirmation {
 
-  private _credentialConfirmationId:string;
-  private _credentialId:string;
-  private _confirmationCode:string;
-  private _credentialStatus:CredentialStatus;
-  private _modifiedOn:Date;
-  private _createdOn:Date;
+  private _credentialConfirmationId: string;
+  private _credentialId: string;
+  private _confirmationCode: string;
+  private _credentialStatus: CredentialStatus;
+  private _modifiedOn: Date;
+  private _createdOn: Date;
 
   get credentialConfirmationId(): string {
     return this._credentialConfirmationId;
@@ -65,6 +65,6 @@ export class CredentialConfirmation {
       credentialStatus: this.credentialStatus,
       createdOn: this.createdOn,
       modifiedOn: this.modifiedOn
-    }
+    };
   }
 }

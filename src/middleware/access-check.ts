@@ -1,7 +1,7 @@
-import {NextFunction, Request, Response} from "express";
-import {SessionOrchestrator} from "../session/session.orchestrator";
+import { NextFunction, Request, Response } from "express";
+import { SessionOrchestrator } from "../session/session.orchestrator";
 
-let checkAccess = (req: Request, res: Response, next: NextFunction) => {
+const checkAccess = (req: Request, res: Response, next: NextFunction) => {
 
   const sessionOrchestrator = new SessionOrchestrator();
 
@@ -10,20 +10,20 @@ let checkAccess = (req: Request, res: Response, next: NextFunction) => {
   // console.log(req.baseUrl); // '/admin'
   // console.log(req.path); // '/new'
 
-  const dev:boolean = true;
+  const dev: boolean = true;
   // TODO: move this to its own file
-  const openPaths:Array<string> = [
+  const openPaths: Array<string> = [
       "/",
-      '/sessions/is-valid-session',
-      '/send-confirmation-codes',
-      '/get-confirmations-username',
-      '/verify-credentials-confirmations',
-      '/forgot-password',
-      '/authenticate',
-      '/validate-edit-username',
-      '/validate-username',
-      '/validate-password',
-      '/credentials',
+      "/sessions/is-valid-session",
+      "/send-confirmation-codes",
+      "/get-confirmations-username",
+      "/verify-credentials-confirmations",
+      "/forgot-password",
+      "/authenticate",
+      "/validate-edit-username",
+      "/validate-username",
+      "/validate-password",
+      "/authentication/credentials",
   ];
 
   // dev mode > no session id > view open page
@@ -36,7 +36,7 @@ let checkAccess = (req: Request, res: Response, next: NextFunction) => {
   // production mode > session id > view open page
   // production mode > session id > view close page
 
-  function isNotSecureEndPoint(originalPath:string) {
+  function isNotSecureEndPoint(originalPath: string) {
     // if (dev) {
     //   return true;
     // }
@@ -44,13 +44,13 @@ let checkAccess = (req: Request, res: Response, next: NextFunction) => {
     // let testRegex = /\/[a-z-]*\/[a-z-]*\/[a-z-]*/gi; // test the string not a pro
     // let matchRegex = /\/[a-z-]*\/[a-z-]*\//gi; // not good with regex if you can fix this that will be great
     const matchRegex = /\/[a-z-]*\//gi;
-    if (originalPath.indexOf("send-confirmation-codes") !== -1 || originalPath.indexOf("get-confirmations-username") !== -1 ) {
+    if (originalPath.indexOf("send-confirmation-codes") !== -1 || originalPath.indexOf("get-confirmations-username") !== -1) {
       originalPath = originalPath.match(matchRegex)[0].slice(0, -1);
     }
 
     if (openPaths.indexOf(originalPath) !== -1) {
       return true;
-    }else {
+    } else {
       return false;
     }
   }
@@ -60,9 +60,9 @@ let checkAccess = (req: Request, res: Response, next: NextFunction) => {
   // }
    // probably because the this is invoke or it don't have req, res, and next
   // return function(/*req:Request, res:Response, next:NextFunction*/) {
-    let cookies:any = req.cookies;
-    let sessionId:string = cookies["sessionId"];
-    let originalUrl = req.originalUrl;
+    const cookies: any = req.cookies;
+    const sessionId: string = cookies["sessionId"];
+    const originalUrl = req.originalUrl;
     // if requesting an open page do nothing
     if (isNotSecureEndPoint(originalUrl)) {
       next();

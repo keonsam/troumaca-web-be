@@ -1,7 +1,9 @@
-import {Router} from "express";
+import { Router } from "express";
+import bodyParser from "body-parser";
 
 import * as assetController from "./asset-type/asset/asset.controller";
 import * as attributeController from "./asset-type/attribute/attribute.controller";
+import * as assignedAttributeController from "./asset-type/attribute/assigned-attributes/assigned.attribute.controller"
 import * as confirmationController from "./authentication/credential/confirmation/confirmation.controller";
 import * as assetKindController from "./asset-type/kind/asset.kind.controller";
 import * as phoneController from "./site/phone/phone.controller";
@@ -26,8 +28,13 @@ import * as assetTypeClassController from "./asset-type/asset-type-class/asset.t
 import * as credentialController from "./authentication/credential/credential.controller";
 import * as assetTypeController from "./asset-type/asset.type.controller";
 import * as organizationController from "./party/organization/organization.controller";
+import * as subscriptionController from "./subscription/subscription.controller";
+import * as billingController from "./billing/billing.controller";
+import * as depreciationController from "./depreciation/depreciation.controller";
 
-const router:Router = Router();
+const router: Router = Router();
+const jsonParser = bodyParser.json({ type: "application/json"});
+// const jsonParser = bodyParser.json();
 
 router.get("/", (req, res) => {
     res.json({
@@ -44,6 +51,7 @@ router.get("/unit-of-measures/find", unitOfMeasureController.findUnitOfMeasure);
 router.get("/data-types", dataTypeController.getDataTypes);
 
 // asset
+router.get("/assets/find", assetController.findAssets);
 router.get("/assets", assetController.getAssets);
 router.get("/assets/:assetId", assetController.getAssetById);
 router.post("/assets", assetController.saveAsset);
@@ -74,9 +82,9 @@ router.put("/attributes/:attributeId", attributeController.updateAttribute);
 router.delete("/attributes/:attributeId", attributeController.deleteAttribute);
 
 // assigned-attributes
-router.get("/available-attributes", attributeController.getAvailableAttributes);
-router.get("/assigned-attributes", attributeController.getAssignedAttributes);
-router.get("/assigned-attributes/:assetTypeClassId", attributeController.getAssignedAttributesByClassId);
+// router.get("/available-attributes", attributeController.getAvailableAttributes);
+router.get("/assignable-attributes/:type", assignedAttributeController.getAssignableAttributes);
+router.get("/assigned-attributes/:assetTypeClassId", assignedAttributeController.getAssignedAttributesByClassId);
 
 // site
 router.get("/sites/find", siteController.findSite);
@@ -135,25 +143,33 @@ router.delete("/organizations/:partyId", organizationController.deleteOrganizati
 
 // photos
 router.get("/photos/:type/:partyId", photoController.getPhotoById);
-router.post("/photos/:type/:partyId", photoController.savePhoto);
+router.post("/photos/:type", photoController.savePhoto);
 router.put("/photos/:type/:partyId", photoController.updatePhoto);
 
 // accounts
 router.post("/accounts", accountController.saveAccount);
 
-// authentication
-router.post("/validate-password", credentialController.isValidPassword);
-router.post("/validate-username", credentialController.isValidUsername);
-// Todo: Check into why this is needed
-router.post("/validate-edit-username", credentialController.isValidEditUsername);
+// AUTHENTICATION
+router.post("/validate-password", jsonParser, credentialController.isValidPassword);
+router.post("/validate-username", jsonParser, credentialController.isValidUsername);
+router.post("/authentication/credentials", credentialController.addCredential);
 router.post("/authenticate", credentialController.authenticate);
-router.post("/forgot-password", credentialController.forgotPassword);
-router.post("/credentials", credentialController.addCredential);
-router.put("/credentials/:partyId", credentialController.updateCredential);
-router.post("/verify-credentials-confirmations", confirmationController.verifyCredentialConfirmation);
-router.get("/send-confirmation-codes/:confirmationId", confirmationController.sendPhoneVerificationCode);
-router.get("/get-confirmations-username/:credentialConfirmationId", confirmationController.getConfirmationsUsername);
-// session
+
+// CONFIRMATION
+router.get("/send-confirmation-codes/:credentialId/:confirmationId", confirmationController.resendConfirmCode);
+router.post("/verify-credentials-confirmations", confirmationController.confirmCode);
+
+// Todo: Check into why this is needed
+// router.post("/validate-edit-username", credentialController.isValidEditUsername);
+// router.post("/authenticate", credentialController.authenticate);
+// router.post("/forgot-password", credentialController.forgotPassword);
+// router.post("/credentials", credentialController.addCredential);
+// router.put("/credentials/:partyId", credentialController.updateCredential);
+// router.delete("/credentials/:credentialId", credentialController.deleteCredential);
+// router.get("/send-confirmation-codes/:confirmationId", confirmationController.sendPhoneVerificationCode);
+// router.get("/get-confirmations-username/:credentialConfirmationId", confirmationController.getConfirmationsUsername);
+
+// SESSION
 router.get("/sessions/is-valid-session", sessionController.isValidSession);
 router.get("/partyId", sessionController.getPartyId);
 router.get("/sessions/log-out-user", sessionController.handleSessionLogOut);
@@ -203,5 +219,33 @@ router.get("/access-role-types/:accessRoleTypeId", accessRoleTypeController.getA
 router.post("/access-role-types", accessRoleTypeController.saveAccessRoleType);
 router.put("/access-role-types/:accessRoleTypeId", accessRoleTypeController.updateAccessRoleType);
 router.delete("/access-role-types/:accessRoleTypeId", accessRoleTypeController.deleteAccessRoleType);
+
+// SUBSCRIPTION
+router.get("/subscription/information", subscriptionController.getSubscriptionInformation);
+router.get("/subscriptions/:type", subscriptionController.getSubscription);
+router.post("/subscriptions", subscriptionController.addSubscription);
+
+// BILLING
+router.get("/billings", billingController.getBilling);
+router.post("/billings", billingController.addBilling);
+router.put("/billings/:billingId", billingController.updateBilling);
+router.post( "/validate-credit-card/name", billingController.cardName);
+router.post( "/validate-credit-card/number", billingController.cardNumber);
+router.post( "/validate-credit-card/exp-date", billingController.cardExpDate);
+router.post( "/validate-credit-card/cvv", billingController.cardCVV);
+
+// DEPRECIATION
+router.get("/depreciation-methods/:type/:system", depreciationController.getDepreciationMethod);
+router.get("/depreciation-systems", depreciationController.getDepreciationSystems);
+router.get("/depreciation-property-classes/:system", depreciationController.getPropertyClasses);
+
+router.get("/depreciation/assets/find", depreciationController.getDepreciableAssets);
+router.get("/book-depreciation", depreciationController.getBookDepreciationArr);
+router.get("/tax-depreciation", depreciationController.getTaxDepreciationArr);
+router.get("/depreciation/:depreciationId/:type", depreciationController.getDepreciationById);
+router.post("/depreciation", depreciationController.saveDepreciation);
+router.put("/depreciation/:depreciationId", depreciationController.updateDepreciation);
+router.delete("/depreciation/:depreciationId/:type", depreciationController.deleteDepreciation);
+
 
 export default router;

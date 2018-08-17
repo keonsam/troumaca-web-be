@@ -1,12 +1,12 @@
-import {VirtualSite} from "../virtual.site";
+import { VirtualSite } from "../virtual.site";
 
 export class Phone extends VirtualSite {
 
-  private _countryCode:string;
-  private _areaCode:string;
-  private _exchange:string;
-  private _telephoneNumber:string;
-  private _extension:string;
+  private _countryCode: string;
+  private _areaCode: string;
+  private _exchange: string;
+  private _telephoneNumber: string;
+  private _extension: string;
 
   get countryCode(): string {
     return this._countryCode;

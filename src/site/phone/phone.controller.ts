@@ -1,15 +1,15 @@
-import {Request, Response} from "express";
-import {PhoneOrchestrator} from "./phone.orchestrator";
-import {getNumericValueOrDefault} from '../../number.util';
-import {getStringValueOrDefault} from '../../string.util';
+import { Request, Response } from "express";
+import { PhoneOrchestrator } from "./phone.orchestrator";
+import { getNumericValueOrDefault } from "../../number.util";
+import { getStringValueOrDefault } from "../../string.util";
 
-let orchestrator:PhoneOrchestrator = new PhoneOrchestrator();
+const orchestrator: PhoneOrchestrator = new PhoneOrchestrator();
 
 export let getPhones = (req: Request, res: Response) => {
-  let number = getNumericValueOrDefault(req.query.pageNumber, 1);
-  let size = getNumericValueOrDefault(req.query.pageSize, 10);
-  let field = getStringValueOrDefault(req.query.sortField, "");
-  let direction = getStringValueOrDefault(req.query.sortOrder, "");
+  const number = getNumericValueOrDefault(req.query.pageNumber, 1);
+  const size = getNumericValueOrDefault(req.query.pageSize, 10);
+  const field = getStringValueOrDefault(req.query.sortField, "");
+  const direction = getStringValueOrDefault(req.query.sortOrder, "");
 
   orchestrator
     .getPhones(number, size, field, direction)
@@ -18,26 +18,26 @@ export let getPhones = (req: Request, res: Response) => {
         res.send(JSON.stringify(result.data));
     }, error => {
         res.status(500);
-        res.send(JSON.stringify({message: 'Error Occurred'}));
+        res.send(JSON.stringify({message: "Error Occurred"}));
         console.log(error);
     });
 };
 
 export let getPhoneById = (req: Request, res: Response) => {
-  let siteId = req.params.siteId;
+  const siteId = req.params.siteId;
   orchestrator
     .getPhoneById(siteId)
     .subscribe(phone => {
-        if(phone) {
+        if (phone) {
             res.status(200);
             res.send(JSON.stringify(phone));
-        }else {
+        } else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found For ' + req.params.siteId}));
+            res.send(JSON.stringify({message: "No Data Found For " + req.params.siteId}));
         }
     }, error => {
         res.status(500);
-        res.send(JSON.stringify({message: 'Error Occurred'}));
+        res.send(JSON.stringify({message: "Error Occurred"}));
         console.log(error);
     });
 
@@ -55,14 +55,14 @@ export let savePhone = (req: Request, res: Response) => {
         res.send(JSON.stringify(phone));
     }, error => {
         res.status(500);
-        res.send(JSON.stringify({message: 'Error Occurred'}));
+        res.send(JSON.stringify({message: "Error Occurred"}));
         console.log(error);
     });
 };
 
 export let updatePhone = (req: Request, res: Response) => {
-  let siteId = req.params.siteId;
-  let phone = req.body;
+  const siteId = req.params.siteId;
+  const phone = req.body;
     if (!req.body) {
         return res.status(400).send({
             message: "Phone can not be empty"
@@ -71,35 +71,35 @@ export let updatePhone = (req: Request, res: Response) => {
   orchestrator
     .updatePhone(siteId, phone)
     .subscribe(affected => {
-        if(affected > 0) {
+        if (affected > 0) {
             res.status(200);
             res.send(JSON.stringify(affected));
-        }else {
+        } else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found For ' + req.params.siteId}));
+            res.send(JSON.stringify({message: "No Data Found For " + req.params.siteId}));
         }
     }, error => {
         res.status(500);
-        res.send(JSON.stringify({message: 'Error Occurred'}));
+        res.send(JSON.stringify({message: "Error Occurred"}));
         console.log(error);
     });
 };
 
 export let deletePhone = (req: Request, res: Response) => {
-  let siteId = req.params.siteId;
+  const siteId = req.params.siteId;
   orchestrator
     .deletePhone(siteId)
     .subscribe(affected => {
-        if(affected > 0) {
+        if (affected > 0) {
             res.status(200);
             res.send(JSON.stringify(affected));
-        }else {
+        } else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found For ' + req.params.siteId}));
+            res.send(JSON.stringify({message: "No Data Found For " + req.params.siteId}));
         }
     }, error => {
         res.status(500);
-        res.send(JSON.stringify({message: 'Error Occurred'}));
+        res.send(JSON.stringify({message: "Error Occurred"}));
         console.log(error);
     });
 };

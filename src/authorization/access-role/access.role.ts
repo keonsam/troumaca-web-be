@@ -1,18 +1,18 @@
-import {AccessRoleType} from "../access-role-type/access.role.type";
+import { AccessRoleType } from "../access-role-type/access.role.type";
 
 export class AccessRole {
 
-  private _accessRoleId:string;
-  private _name:string;
+  private _accessRoleId: string;
+  private _name: string;
   private _accessRoleTypeId: string;
   private _accessRoleType: AccessRoleType;
   private _prohibitionIndicator: boolean;
   private _effectiveDate: Date;
   private _untilDate: Date;
-  private _description:string;
-  private _ownerPartyId:string;
-  private _createdOn:Date;
-  private _modifiedOn:Date;
+  private _description: string;
+  private _ownerPartyId: string;
+  private _createdOn: Date;
+  private _modifiedOn: Date;
 
   get accessRoleId(): string {
     return this._accessRoleId;

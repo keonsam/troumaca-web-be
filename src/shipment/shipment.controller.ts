@@ -1,15 +1,15 @@
-import {Request, Response} from "express";
-import {ShipmentOrchestrator} from "./shipment.orchestrator";
-import {getNumericValueOrDefault} from '../number.util';
-import {getStringValueOrDefault} from '../string.util';
+import { Request, Response } from "express";
+import { ShipmentOrchestrator } from "./shipment.orchestrator";
+import { getNumericValueOrDefault } from "../number.util";
+import { getStringValueOrDefault } from "../string.util";
 
-let orchestrator:ShipmentOrchestrator = new ShipmentOrchestrator();
+const orchestrator: ShipmentOrchestrator = new ShipmentOrchestrator();
 
 export let getShipments = (req: Request, res: Response) => {
-  let number = getNumericValueOrDefault(req.query.pageNumber, 1);
-  let size = getNumericValueOrDefault(req.query.pageSize, 10);
-  let field = getStringValueOrDefault(req.query.sortField, "");
-  let direction = getStringValueOrDefault(req.query.sortOrder, "");
+  const number = getNumericValueOrDefault(req.query.pageNumber, 1);
+  const size = getNumericValueOrDefault(req.query.pageSize, 10);
+  const field = getStringValueOrDefault(req.query.sortField, "");
+  const direction = getStringValueOrDefault(req.query.sortOrder, "");
 
   orchestrator
     .getShipments(number, size, field, direction)
@@ -19,19 +19,19 @@ export let getShipments = (req: Request, res: Response) => {
 };
 
 export let getShipmentById = (req: Request, res: Response) => {
-  let shipmentId = req.params.shipmentId;
+  const shipmentId = req.params.shipmentId;
   orchestrator
     .getShipmentById(shipmentId)
     .subscribe(shipment => {
-      let body = JSON.stringify(shipment);
+      const body = JSON.stringify(shipment);
       res.send(body);
     });
 
 };
 
 export let updateShipments = (req: Request, res: Response) => {
-  let shipmentId = req.params.shipmentId;
-  let shipment = req.body;
+  const shipmentId = req.params.shipmentId;
+  const shipment = req.body;
   orchestrator
     .updateShipment(shipmentId, shipment)
     .subscribe(shipment => {
@@ -41,7 +41,7 @@ export let updateShipments = (req: Request, res: Response) => {
 };
 
 export let deleteShipments = (req: Request, res: Response) => {
-  let shipmentId = req.params.shipmentId;
+  const shipmentId = req.params.shipmentId;
   orchestrator
     .deleteShipment(shipmentId)
     .subscribe(numRemoved => {

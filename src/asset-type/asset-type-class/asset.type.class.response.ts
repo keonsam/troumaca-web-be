@@ -1,9 +1,9 @@
-import {AssetTypeClass} from "./asset.type.class";
-import {AssignedAttribute} from "../attribute/assigned.attribute";
+import { AssetTypeClass } from "./asset.type.class";
+import { AssignedAttribute } from "../attribute/assigned.attribute";
 
 export class AssetTypeClassResponse {
 
-  private _created:boolean;
+  private _created: boolean;
   private _assetTypeClass: AssetTypeClass;
   private _assignedAttributes: AssignedAttribute[];
 
@@ -44,6 +44,6 @@ export class AssetTypeClassResponse {
       created: this.created,
       assetTypeClass: this.assetTypeClass,
       assignedAttributes: this.assignedAttributes
-    }
+    };
   }
 }

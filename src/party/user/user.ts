@@ -1,12 +1,12 @@
-import {Party} from "../party";
+import { Party } from "../party";
 
 export class User extends Party {
 
-  private _firstName:string;
-  private _middleName:string;
-  private _lastName:string;
+  private _firstName: string;
+  private _middleName: string;
+  private _lastName: string;
   private _username: string;
-  private _dateOfBirth:Date;
+  private _dateOfBirth: Date;
 
   get name(): string {
     return `${this.lastName}, ${this.firstName}`;

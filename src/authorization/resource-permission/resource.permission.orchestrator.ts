@@ -1,11 +1,11 @@
-import {ResourcePermissionRepository} from "./resource.permission.repository";
-import {createResourcePermissionRepositoryFactory} from "./resource.permission.repository.factory";
-import {Observable} from "rxjs/Observable";
-import {ResourcePermission} from "./resource.permission";
+import { ResourcePermissionRepository } from "./resource.permission.repository";
+import { createResourcePermissionRepositoryFactory } from "./resource.permission.repository.factory";
+import { Observable } from "rxjs/Observable";
+import { ResourcePermission } from "./resource.permission";
 
 export class ResourcePermissionOrchestrator {
 
-  private resourcePermissionRepository:ResourcePermissionRepository;
+  private resourcePermissionRepository: ResourcePermissionRepository;
 
   constructor() {
     this.resourcePermissionRepository = createResourcePermissionRepositoryFactory();
@@ -15,7 +15,7 @@ export class ResourcePermissionOrchestrator {
     return this.resourcePermissionRepository.getAllResourcePermissions();
   }
 
-  getResourcePermissionsByResourceId(resourceId:string):Observable<ResourcePermission[]> {
+  getResourcePermissionsByResourceId(resourceId: string): Observable<ResourcePermission[]> {
     return this.resourcePermissionRepository.getResourcePermissionsByResourceId(resourceId);
   }
 

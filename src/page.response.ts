@@ -1,10 +1,10 @@
 export class PageResponse<T> {
 
-  private _items:T;
-  private _pageNumber:number;
-  private _pageSize:number;
-  private _totalPageItems:number;
-  private _sortOrder:string;
+  private _items: T;
+  private _pageNumber: number;
+  private _pageSize: number;
+  private _totalPageItems: number;
+  private _sortOrder: string;
 
 
   constructor(items?: T, pageNumber?: number, pageSize?: number, totalPageItems?: number, sortOrder?: string) {

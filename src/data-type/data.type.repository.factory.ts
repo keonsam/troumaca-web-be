@@ -1,57 +1,18 @@
-import Rx from "rxjs";
-import {dataTypes} from "../db";
-import {DataTypeRepository} from "./data.type.repository";
-import {DataType} from "./data.type";
-import {Observable} from "rxjs/Observable";
-import {RepositoryKind} from "../repository.kind";
-import {Observer} from "rxjs/Observer";
+import { RepositoryKind } from "../repository.kind";
+import { properties } from "../properties.helpers";
+import { DataTypeRepositoryNeDbAdapter } from "./adapter/data.type.repository.db.adapter";
+import { DataTypeRepositoryRestAdapter } from "./adapter/data.type.repository.rest.adapter";
 
-class DataTypeDBRepository implements DataTypeRepository {
-  getDataTypes():Observable<DataType[]> {
-    return Rx.Observable.create(function (observer:Observer<DataType[]>) {
-      dataTypes.find({}, function (err:any, doc:any) {
-        if (!err) {
-          observer.next(doc);
-        } else {
-          observer.error(err);
-        }
-        observer.complete();
-      });
-    });
-  };
+export function createDataTypeRepository(kind?: RepositoryKind) {
+  const type: number = properties.get("data.type.repository.type") as number;
 
-  getDataTypeByIds(dataTypeIds: string[]): Observable<DataType[]> {
-    return Rx.Observable.create(function (observer:Observer<DataType[]>) {
-      dataTypes.find({dataTypeId: { $in: dataTypeIds}}, function (err:any, docs:any) {
-        if (!err) {
-          observer.next(docs);
-        } else {
-          observer.error(err);
-        }
-        observer.complete();
-      });
-    });
-  }
-
-}
-
-class DataTypeRestRepository implements DataTypeRepository {
-  getDataTypes(): Observable<DataType[]> {
-    return undefined;
-  }
-
-  getDataTypeByIds(dataTypeIds: string[]): Observable<DataType[]> {
-    return undefined;
-  }
-}
-
-export function createDataTypeRepository(kind?:RepositoryKind) {
-  switch (kind) {
+  const k: RepositoryKind = (kind) ? kind : (type === 2) ? RepositoryKind.Rest : RepositoryKind.Nedb;
+  switch (k) {
     case RepositoryKind.Nedb:
-      return new DataTypeDBRepository();
+      return new DataTypeRepositoryNeDbAdapter();
     case RepositoryKind.Rest:
-      return new DataTypeRestRepository();
+      return new DataTypeRepositoryRestAdapter();
     default:
-      return new DataTypeDBRepository();
+        throw new Error(`Unknown Data Type Repository Type ${k}`);
   }
 }

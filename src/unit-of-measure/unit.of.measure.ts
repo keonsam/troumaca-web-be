@@ -1,6 +1,6 @@
 export class UnitOfMeasure {
 
-  private _unitOfMeasureId:string;
+  private _unitOfMeasureId: string;
   private _quantity: string;
   private _name: string;
   private _symbol: string;
@@ -8,7 +8,7 @@ export class UnitOfMeasure {
   private _otherSiBaseUnitsExpression: string;
   private _siBaseUnitsExpression: string;
 
-  constructor(unitOfMeasureId?:string, quantity?: string, name?: string, symbol?: string, factor?: string, otherSiBaseUnitsExpression?: string, siBaseUnitsExpression?: string) {
+  constructor(unitOfMeasureId?: string, quantity?: string, name?: string, symbol?: string, factor?: string, otherSiBaseUnitsExpression?: string, siBaseUnitsExpression?: string) {
     this._unitOfMeasureId = unitOfMeasureId;
     this._quantity = quantity;
     this._name = name;

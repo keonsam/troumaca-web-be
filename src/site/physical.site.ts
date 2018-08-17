@@ -1,11 +1,11 @@
-import {Site} from "./site";
+import { Site } from "./site";
 
 export class PhysicalSite extends Site {
 
-  private _city:string;
-  private _stateOrProvince:string;
-  private _postalCode:string;
-  private _country:string;
+  private _city: string;
+  private _stateOrProvince: string;
+  private _postalCode: string;
+  private _country: string;
   private _createdOn: Date;
   private _modifiedOn: Date;
 

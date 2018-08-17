@@ -1,8 +1,8 @@
 export class Party {
 
-  private _partyId:string;
-  private _name:string;
-  private _createdOn:Date;
+  private _partyId: string;
+  private _name: string;
+  private _createdOn: Date;
   private _modifiedOn: string;
 
   get partyId(): string {

@@ -1,4 +1,4 @@
-export function getStringValueOrDefault(strValue:string, defaultValue:string) {
+export function getStringValueOrDefault(strValue: string, defaultValue: string) {
   if (!strValue && !defaultValue) {
     return "";
   }

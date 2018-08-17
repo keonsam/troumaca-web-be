@@ -1,9 +1,9 @@
-import {Request, Response} from "express";
-import {GrantOrchestrator} from "./grant.orchestrator";
-import {getNumericValueOrDefault} from '../../number.util';
-import {getStringValueOrDefault} from '../../string.util';
+import { Request, Response } from "express";
+import { GrantOrchestrator } from "./grant.orchestrator";
+import { getNumericValueOrDefault } from "../../number.util";
+import { getStringValueOrDefault } from "../../string.util";
 
-let orchestrator:GrantOrchestrator = new GrantOrchestrator();
+const orchestrator: GrantOrchestrator = new GrantOrchestrator();
 
 
 // export let getGrantsByAccessRoleId = (req: Request, res: Response) => {

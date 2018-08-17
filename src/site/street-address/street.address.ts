@@ -1,12 +1,12 @@
-import {PhysicalSite} from "../physical.site";
+import { PhysicalSite } from "../physical.site";
 
 export class StreetAddress extends PhysicalSite {
 
   private _suiteOrApartment: string;
   private _floor: string;
   private _suiteOrApartmentNumber: string;
-  private _streetNumber:string;
-  private _street:string;
+  private _streetNumber: string;
+  private _street: string;
 
 
   get suiteOrApartment(): string {

@@ -1,7 +1,7 @@
-export function getSortOrderOrDefault(field:string, direction:string):any {
+export function getSortOrderOrDefault(field: string, direction: string): any {
   if (field && direction) {
     return {
-      field:direction
+      field: direction
     };
   } else {
     return {};

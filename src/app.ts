@@ -13,21 +13,20 @@ import checkAccess from "./middleware/access-check";
 import router from "./routes";
 
 const app = express();
-//const checkAccess = new CheckAccess();
 
 app.use(logger("dev"));
 app.use(cookieParser());
-app.use(bodyParser.json({limit: '50mb'}));
-app.use(bodyParser.urlencoded({limit: '50mb',extended: false}));
+app.use(bodyParser.json({limit: "50mb"}));
+app.use(bodyParser.urlencoded({limit: "50mb", extended: false}));
 app.use(express.static(path.join(__dirname, "dist")));
 const whitelist = ["http://localhost:4200", "http://ec2-18-207-220-164.compute-1.amazonaws.com:4200", "http://dev.troumaca.com"];
 
-var corsOptions = {
+const corsOptions = {
   origin: function (origin: any, callback: any) {
       if (origin === undefined || whitelist.indexOf(origin) !== -1) {
-          callback(null, true);
+          callback(undefined, true);
       } else {
-          callback(new Error('Not allowed by CORS'));
+          callback(new Error("Not allowed by CORS"));
       }
   },
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204

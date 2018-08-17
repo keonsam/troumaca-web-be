@@ -1,16 +1,16 @@
 import Rx from "rxjs";
-import {partyAccessRoles} from "../../db";
-import {PartyAccessRoleRepository} from "./party.access.role.repository";
-import {PartyAccessRole} from "./party.access.role";
-import {Observable} from "rxjs/Observable";
-import {RepositoryKind} from "../../repository.kind";
-import {Observer} from "rxjs/Observer";
-import {generateUUID} from "../../uuid.generator";
-//import {calcSkip} from "../../db.util";
+import { partyAccessRoles } from "../../db";
+import { PartyAccessRoleRepository } from "./party.access.role.repository";
+import { PartyAccessRole } from "./party.access.role";
+import { Observable } from "rxjs/Observable";
+import { RepositoryKind } from "../../repository.kind";
+import { Observer } from "rxjs/Observer";
+import { generateUUID } from "../../uuid.generator";
+// import {calcSkip} from "../../db.util";
 
 class PartyAccessRoleDBRepository implements PartyAccessRoleRepository {
 
-  private defaultPageSize:number = 10;
+  private defaultPageSize: number = 10;
 
   // findPartyAccessRoles(searchStr: string, pageSize: number): Observable<PartyAccessRole[]> {
   //   let searchStrLocal = new RegExp(searchStr);
@@ -26,9 +26,9 @@ class PartyAccessRoleDBRepository implements PartyAccessRoleRepository {
   //   });
   // };
 
-  getPartyAccessRoles():Observable<PartyAccessRole[]> {
-    return Rx.Observable.create(function (observer:Observer<PartyAccessRole[]>) {
-      partyAccessRoles.find({},function (err:any, doc:any) {
+  getPartyAccessRoles(): Observable<PartyAccessRole[]> {
+    return Rx.Observable.create(function (observer: Observer<PartyAccessRole[]>) {
+      partyAccessRoles.find({}, function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -37,7 +37,7 @@ class PartyAccessRoleDBRepository implements PartyAccessRoleRepository {
         observer.complete();
       });
     });
-  };
+  }
 
   // getPartyAccessRoleCount():Observable<number> {
   //   return Rx.Observable.create(function (observer:Observer<number>) {
@@ -54,12 +54,12 @@ class PartyAccessRoleDBRepository implements PartyAccessRoleRepository {
 
   addPartyAccessRole(partyAccessRole: PartyAccessRole[]): Observable<PartyAccessRole[]> {
     partyAccessRole.forEach( value => {
-      if(!value.partyAccessRoleId){
+      if (!value.partyAccessRoleId) {
         value.partyAccessRoleId = generateUUID();
       }
     });
-    return Rx.Observable.create(function(observer:Observer<PartyAccessRole[]>) {
-      partyAccessRoles.insert(partyAccessRole, function(err:any, docs:any) {
+    return Rx.Observable.create(function(observer: Observer<PartyAccessRole[]>) {
+      partyAccessRoles.insert(partyAccessRole, function(err: any, docs: any) {
         if (err) {
           observer.error(err);
         } else {
@@ -71,27 +71,27 @@ class PartyAccessRoleDBRepository implements PartyAccessRoleRepository {
   }
 
   deletePartyAccessRole(partyId: string): Observable<number> {
-    return Rx.Observable.create(function (observer:Observer<number>) {
-      let query = {
-        "partyId":partyId
+    return Rx.Observable.create(function (observer: Observer<number>) {
+      const query = {
+        "partyId": partyId
       };
-      partyAccessRoles.remove(query, {multi:true}, function (err:any, numRemoved:number) {
+      partyAccessRoles.remove(query, {multi: true}, function (err: any, numRemoved: number) {
         if (!err) {
           observer.next(numRemoved);
         } else {
           observer.error(err);
         }
         observer.complete();
-      })
+      });
     });
   }
 
   deletePartyAccessRoleByAccessRoleId(accessRoleId: string): Observable<number> {
-    return Rx.Observable.create(function (observer:Observer<number>) {
-      let query = {
-        "accessRole.accessRoleId":accessRoleId
+    return Rx.Observable.create(function (observer: Observer<number>) {
+      const query = {
+        "accessRole.accessRoleId": accessRoleId
       };
-      partyAccessRoles.remove(query, {multi:true}, function (err:any, numRemoved:number) {
+      partyAccessRoles.remove(query, {multi: true}, function (err: any, numRemoved: number) {
         if (!err) {
           console.log(numRemoved);
           observer.next(numRemoved);
@@ -99,16 +99,16 @@ class PartyAccessRoleDBRepository implements PartyAccessRoleRepository {
           observer.error(err);
         }
         observer.complete();
-      })
+      });
     });
   }
 
   getPartyAccessRoleById(partyId: string): Observable<PartyAccessRole[]> {
-    return Rx.Observable.create(function (observer:Observer<PartyAccessRole[]>) {
-      let query = {
-        "partyId":partyId
+    return Rx.Observable.create(function (observer: Observer<PartyAccessRole[]>) {
+      const query = {
+        "partyId": partyId
       };
-      partyAccessRoles.find(query, function (err:any, docs:any) {
+      partyAccessRoles.find(query, function (err: any, docs: any) {
         if (!err) {
           observer.next(docs);
         } else {
@@ -120,18 +120,18 @@ class PartyAccessRoleDBRepository implements PartyAccessRoleRepository {
   }
 
   updatePartyAccessRole(partyAccessRoleId: string, partyAccessRole: PartyAccessRole): Observable<number> {
-    return Rx.Observable.create(function (observer:Observer<number>) {
-      let query = {
-        "partyAccessRoleId":partyAccessRoleId
+    return Rx.Observable.create(function (observer: Observer<number>) {
+      const query = {
+        "partyAccessRoleId": partyAccessRoleId
       };
-      partyAccessRoles.update(query, partyAccessRole, {}, function (err:any, numReplaced:number) {
+      partyAccessRoles.update(query, partyAccessRole, {}, function (err: any, numReplaced: number) {
         if (!err) {
           observer.next(numReplaced);
         } else {
           observer.error(err);
         }
         observer.complete();
-      })
+      });
     });
   }
 
@@ -145,7 +145,7 @@ class PartyAccessRoleRestRepository implements PartyAccessRoleRepository {
   // };
   //
 
-  getPartyAccessRoles():Observable<PartyAccessRole[]> {
+  getPartyAccessRoles(): Observable<PartyAccessRole[]> {
     return undefined;
   }
   //
@@ -175,7 +175,7 @@ class PartyAccessRoleRestRepository implements PartyAccessRoleRepository {
 
 }
 
-export function createPartyAccessRoleRepositoryFactory(kind?:RepositoryKind):PartyAccessRoleRepository {
+export function createPartyAccessRoleRepositoryFactory(kind?: RepositoryKind): PartyAccessRoleRepository {
   switch (kind) {
     case RepositoryKind.Nedb:
       return new PartyAccessRoleDBRepository();

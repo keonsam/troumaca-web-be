@@ -1,8 +1,8 @@
 export class Result<T> {
 
-  private _fail:boolean;
-  private _data:T;
-  private _message:string;
+  private _fail: boolean;
+  private _data: T;
+  private _message: string;
 
   constructor(fail?: boolean, message?: string, data?: T) {
     this._fail = fail;

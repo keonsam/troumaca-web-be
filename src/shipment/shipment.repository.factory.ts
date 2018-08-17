@@ -1,21 +1,21 @@
-import * as Rx from 'rxjs';
-import {ShipmentRepository} from "./shipment.repository";
-import {Observable} from "rxjs/Observable";
-import {Observer} from "rxjs/Observer";
-import {RepositoryKind} from "../repository.kind";
-import {shipments} from "../db";
-import {Shipment} from "./shipment";
-import {calcSkip} from "../db.util";
-import {generateUUID} from "../uuid.generator";
+import * as Rx from "rxjs";
+import { ShipmentRepository } from "./shipment.repository";
+import { Observable } from "rxjs/Observable";
+import { Observer } from "rxjs/Observer";
+import { RepositoryKind } from "../repository.kind";
+import { shipments } from "../db";
+import { Shipment } from "./shipment";
+import { calcSkip } from "../db.util";
+import { generateUUID } from "../uuid.generator";
 
 class ShipmentDBRepository implements ShipmentRepository {
 
-  private defaultPageSize:number = 10;
+  private defaultPageSize: number = 10;
 
-  saveShipment(shipment:Shipment):Observable<Shipment> {
+  saveShipment(shipment: Shipment): Observable<Shipment> {
     shipment.shipmentId = generateUUID();
-    return Rx.Observable.create(function(observer:Observer<Shipment>) {
-      shipments.insert(shipment, function(err:any, doc:any) {
+    return Rx.Observable.create(function(observer: Observer<Shipment>) {
+      shipments.insert(shipment, function(err: any, doc: any) {
         if (err) {
           observer.error(err);
         } else {
@@ -26,11 +26,11 @@ class ShipmentDBRepository implements ShipmentRepository {
     });
   }
 
-  getShipments(pageNumber:number, pageSize:number, order:string):Observable<Shipment[]> {
-    let localDefaultPageSize = this.defaultPageSize;
-    return Rx.Observable.create(function (observer:Observer<Shipment[]>) {
-      let skip = calcSkip(pageNumber, pageSize, localDefaultPageSize);
-      shipments.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err:any, doc:any) {
+  getShipments(pageNumber: number, pageSize: number, order: string): Observable<Shipment[]> {
+    const localDefaultPageSize = this.defaultPageSize;
+    return Rx.Observable.create(function (observer: Observer<Shipment[]>) {
+      const skip = calcSkip(pageNumber, pageSize, localDefaultPageSize);
+      shipments.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -41,9 +41,9 @@ class ShipmentDBRepository implements ShipmentRepository {
     });
   }
 
-  getShipmentCount():Observable<number> {
-    return Rx.Observable.create(function (observer:Observer<number>) {
-      shipments.count({}, function (err:any, count:number) {
+  getShipmentCount(): Observable<number> {
+    return Rx.Observable.create(function (observer: Observer<number>) {
+      shipments.count({}, function (err: any, count: number) {
         if (!err) {
           observer.next(count);
         } else {
@@ -52,14 +52,14 @@ class ShipmentDBRepository implements ShipmentRepository {
         observer.complete();
       });
     });
-  };
+  }
 
-  getShipmentById(shipmentId:string):Observable<Shipment> {
-    return Rx.Observable.create(function (observer:Observer<Shipment>) {
-      let query = {
-        "shipmentId":shipmentId
+  getShipmentById(shipmentId: string): Observable<Shipment> {
+    return Rx.Observable.create(function (observer: Observer<Shipment>) {
+      const query = {
+        "shipmentId": shipmentId
       };
-      shipments.findOne(query, function (err:any, doc:any) {
+      shipments.findOne(query, function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -68,49 +68,49 @@ class ShipmentDBRepository implements ShipmentRepository {
         observer.complete();
       });
     });
-  };
+  }
 
-  updateShipment(shipmentId:string, shipment:Shipment):Observable<number> {
-    return Rx.Observable.create(function (observer:Observer<number>) {
-      let query = {
-        "shipmentId":shipmentId
+  updateShipment(shipmentId: string, shipment: Shipment): Observable<number> {
+    return Rx.Observable.create(function (observer: Observer<number>) {
+      const query = {
+        "shipmentId": shipmentId
       };
-      shipments.update(query, shipment, {}, function (err:any, numReplaced:number) {
+      shipments.update(query, shipment, {}, function (err: any, numReplaced: number) {
         if (!err) {
           observer.next(numReplaced);
         } else {
           observer.error(err);
         }
         observer.complete();
-      })
+      });
     });
-  };
+  }
 
-  deleteShipment(shipmentId:string):Observable<number> {
-    return Rx.Observable.create(function (observer:Observer<number>) {
-      let query = {
-        "shipmentId":shipmentId
+  deleteShipment(shipmentId: string): Observable<number> {
+    return Rx.Observable.create(function (observer: Observer<number>) {
+      const query = {
+        "shipmentId": shipmentId
       };
-      shipments.remove(query, {}, function (err:any, numRemoved:number) {
+      shipments.remove(query, {}, function (err: any, numRemoved: number) {
         if (!err) {
           observer.next(numRemoved);
         } else {
           observer.error(err);
         }
         observer.complete();
-      })
+      });
     });
-  };
+  }
 
 }
 
 class ShipmentRestRepository implements ShipmentRepository {
 
-  deleteShipment(shipmentId:string): Observable<number> {
+  deleteShipment(shipmentId: string): Observable<number> {
     return undefined;
   }
 
-  getShipmentById(shipmentId:string): Observable<Shipment> {
+  getShipmentById(shipmentId: string): Observable<Shipment> {
     return undefined;
   }
 
@@ -126,12 +126,12 @@ class ShipmentRestRepository implements ShipmentRepository {
     return undefined;
   }
 
-  updateShipment(shipmentId:string, shipment:Shipment): Observable<number> {
+  updateShipment(shipmentId: string, shipment: Shipment): Observable<number> {
     return undefined;
   }
 }
 
-export function createShipmentRepository(kind?:RepositoryKind):ShipmentRepository {
+export function createShipmentRepository(kind?: RepositoryKind): ShipmentRepository {
   switch (kind) {
     case RepositoryKind.Nedb:
       return new ShipmentDBRepository();

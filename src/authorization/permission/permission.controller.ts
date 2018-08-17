@@ -1,17 +1,17 @@
-import {Request, Response} from "express";
-import {PermissionOrchestrator} from "./permission.orchestrator";
-import {getNumericValueOrDefault} from '../../number.util';
-import {getStringValueOrDefault} from '../../string.util';
+import { Request, Response } from "express";
+import { PermissionOrchestrator } from "./permission.orchestrator";
+import { getNumericValueOrDefault } from "../../number.util";
+import { getStringValueOrDefault } from "../../string.util";
 
-let orchestrator:PermissionOrchestrator = new PermissionOrchestrator();
+const orchestrator: PermissionOrchestrator = new PermissionOrchestrator();
 
 
 export let getPermissions = (req: Request, res: Response) => {
     console.log(req.query);
-    let number = getNumericValueOrDefault(req.query.pageNumber, 1);
-    let size = getNumericValueOrDefault(req.query.pageSize, 10);
-    let field = getStringValueOrDefault(req.query.sortField, "");
-    let direction = getStringValueOrDefault(req.query.sortOrder, "");
+    const number = getNumericValueOrDefault(req.query.pageNumber, 1);
+    const size = getNumericValueOrDefault(req.query.pageSize, 10);
+    const field = getStringValueOrDefault(req.query.sortField, "");
+    const direction = getStringValueOrDefault(req.query.sortOrder, "");
 
     orchestrator
         .getPermissions(number, size, field, direction)
@@ -20,18 +20,18 @@ export let getPermissions = (req: Request, res: Response) => {
             res.send(JSON.stringify(result.data));
         }, error => {
             res.status(500);
-            res.send(JSON.stringify({message: 'Error Occurred'}));
+            res.send(JSON.stringify({message: "Error Occurred"}));
 
         });
 };
 
 export let getPermissionsByArray = (req: Request, res: Response) => {
 
-  let number = getNumericValueOrDefault(req.query.pageNumber, 1);
-  let size = getNumericValueOrDefault(req.query.pageSize, 10);
-  let field = getStringValueOrDefault(req.query.sortField, "");
-  let direction = getStringValueOrDefault(req.query.sortOrder, "");
-  let assignedArray = req.query.assignedArray ? req.query.assignedArray.split(","): [];
+  const number = getNumericValueOrDefault(req.query.pageNumber, 1);
+  const size = getNumericValueOrDefault(req.query.pageSize, 10);
+  const field = getStringValueOrDefault(req.query.sortField, "");
+  const direction = getStringValueOrDefault(req.query.sortOrder, "");
+  const assignedArray = req.query.assignedArray ? req.query.assignedArray.split(",") : [];
 
   orchestrator.getPermissionsByArray(number, size, field, direction, assignedArray)
     .subscribe(result => {
@@ -39,18 +39,18 @@ export let getPermissionsByArray = (req: Request, res: Response) => {
         res.send(JSON.stringify(result.data));
     }, error => {
         res.status(500);
-        res.send(JSON.stringify({message: 'Error Occurred'}));
+        res.send(JSON.stringify({message: "Error Occurred"}));
 
     });
 };
 
 export let getResourcePermissionsByArray = (req: Request, res: Response) => {
 
-  let number = getNumericValueOrDefault(req.query.pageNumber, 1);
-  let size = getNumericValueOrDefault(req.query.pageSize, 10);
-  let field = getStringValueOrDefault(req.query.sortField, "");
-  let direction = getStringValueOrDefault(req.query.sortOrder, "");
-  let assignedArray = req.query.assignedArray ? req.query.assignedArray.split(","): [];
+  const number = getNumericValueOrDefault(req.query.pageNumber, 1);
+  const size = getNumericValueOrDefault(req.query.pageSize, 10);
+  const field = getStringValueOrDefault(req.query.sortField, "");
+  const direction = getStringValueOrDefault(req.query.sortOrder, "");
+  const assignedArray = req.query.assignedArray ? req.query.assignedArray.split(",") : [];
 
   orchestrator.getResourcePermissionsByArray(number, size, field, direction, assignedArray)
     .subscribe(result => {
@@ -58,27 +58,27 @@ export let getResourcePermissionsByArray = (req: Request, res: Response) => {
         res.send(JSON.stringify(result.data));
     }, error => {
         res.status(500);
-        res.send(JSON.stringify({message: 'Error Occurred'}));
+        res.send(JSON.stringify({message: "Error Occurred"}));
 
     });
 
 };
 
 export let getPermissionById = (req: Request, res: Response) => {
-  let permissionId = req.params.permissionId;
+  const permissionId = req.params.permissionId;
   orchestrator
     .getPermissionById(permissionId)
     .subscribe(permission => {
-        if(permission) {
+        if (permission) {
             res.status(200);
             res.send(JSON.stringify(permission));
-        }else {
+        } else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found For ' + req.params.permissionId}));
+            res.send(JSON.stringify({message: "No Data Found For " + req.params.permissionId}));
         }
     }, error => {
         res.status(500);
-        res.send(JSON.stringify({message: 'Error Occurred'}));
+        res.send(JSON.stringify({message: "Error Occurred"}));
         console.log(error);
     });
 };
@@ -95,14 +95,14 @@ export let savePermission = (req: Request, res: Response) => {
         res.send(JSON.stringify(permission));
     }, error => {
         res.status(500);
-        res.send(JSON.stringify({message: 'Error Occurred'}));
+        res.send(JSON.stringify({message: "Error Occurred"}));
         console.log(error);
     });
 };
 
 export let updatePermission = (req: Request, res: Response) => {
-  let permissionId = req.params.permissionId;
-  let permission = req.body;
+  const permissionId = req.params.permissionId;
+  const permission = req.body;
     if (!req.body) {
         return res.status(400).send({
             message: "Permission can not be empty"
@@ -111,35 +111,35 @@ export let updatePermission = (req: Request, res: Response) => {
   orchestrator
     .updatePermission(permissionId, permission)
     .subscribe(affected => {
-        if(affected > 0) {
+        if (affected > 0) {
             res.status(200);
             res.send(JSON.stringify(affected));
-        }else {
+        } else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found For ' + req.params.permissionId}))
+            res.send(JSON.stringify({message: "No Data Found For " + req.params.permissionId}));
         }
     }, error => {
         res.status(500);
-        res.send(JSON.stringify({message: 'Error Occurred'}));
+        res.send(JSON.stringify({message: "Error Occurred"}));
         console.log(error);
     });
 };
 
 export let deletePermission = (req: Request, res: Response) => {
-  let permissionId = req.params.permissionId;
+  const permissionId = req.params.permissionId;
   orchestrator
     .deletePermission(permissionId)
     .subscribe(affected => {
-        if(affected > 0) {
+        if (affected > 0) {
             res.status(200);
             res.send(JSON.stringify(affected));
-        }else {
+        } else {
             res.status(404);
-            res.send(JSON.stringify({message: 'No Data Found For ' + req.params.permissionId}));
+            res.send(JSON.stringify({message: "No Data Found For " + req.params.permissionId}));
         }
     }, error => {
         res.status(500);
-        res.send(JSON.stringify({message: 'Error Occurred'}));
+        res.send(JSON.stringify({message: "Error Occurred"}));
         console.log(error);
     });
 };
