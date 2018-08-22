@@ -1,4 +1,4 @@
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { UnionOfPhysicalSite } from "./union.of.physical.site";
 import { Site } from "./site";
 

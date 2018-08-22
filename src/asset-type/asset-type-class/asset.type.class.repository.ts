@@ -1,4 +1,4 @@
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { AssetTypeClass } from "./asset.type.class";
 import { AssetTypeClassResponse } from "./asset.type.class.response";
 import { AssignedAttribute } from "../attribute/assigned.attribute";

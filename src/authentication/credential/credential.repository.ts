@@ -1,4 +1,4 @@
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { Credential } from "./credential";
 import { AuthenticatedCredential } from "./authenticated.credential";
 import { CreatedCredential } from "./created.credential";

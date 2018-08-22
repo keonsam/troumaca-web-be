@@ -1,7 +1,6 @@
 import { AttributeRepository } from "../attribute.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { Attribute } from "../attribute";
-import { AssignedAttribute } from "../assigned.attribute";
 
 export class AttributeRepositoryRestAdapter implements AttributeRepository {
 

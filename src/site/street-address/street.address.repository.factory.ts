@@ -1,7 +1,5 @@
-import * as Rx from "rxjs";
 import { StreetAddressRepository } from "./street.address.repository";
-import { Observable } from "rxjs/Observable";
-import { Observer } from "rxjs/Observer";
+import { Observable ,  Observer } from "rxjs";
 import { RepositoryKind } from "../../repository.kind";
 import { streetAddresses } from "../../db";
 import { StreetAddress } from "./street.address";
@@ -14,7 +12,7 @@ class StreetAddressDBRepository implements StreetAddressRepository {
 
   saveStreetAddress(streetAddress: StreetAddress): Observable<StreetAddress> {
     streetAddress.siteId = generateUUID();
-    return Rx.Observable.create(function(observer: Observer<StreetAddress>) {
+    return Observable.create(function(observer: Observer<StreetAddress>) {
       streetAddresses.insert(streetAddress, function(err: any, doc: any) {
         if (err) {
           observer.error(err);
@@ -28,7 +26,7 @@ class StreetAddressDBRepository implements StreetAddressRepository {
 
   getStreetAddresses(pageNumber: number, pageSize: number, order: string): Observable<StreetAddress[]> {
     const localDefaultPageSize = this.defaultPageSize;
-    return Rx.Observable.create(function (observer: Observer<StreetAddress[]>) {
+    return Observable.create(function (observer: Observer<StreetAddress[]>) {
       const skip = calcSkip(pageNumber, pageSize, localDefaultPageSize);
       streetAddresses.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
         if (!err) {
@@ -42,7 +40,7 @@ class StreetAddressDBRepository implements StreetAddressRepository {
   }
 
   getStreetAddressCount(): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       streetAddresses.count({}, function (err: any, count: number) {
         if (!err) {
           observer.next(count);
@@ -55,7 +53,7 @@ class StreetAddressDBRepository implements StreetAddressRepository {
   }
 
   getStreetAddressById(siteId: string): Observable<StreetAddress> {
-    return Rx.Observable.create(function (observer: Observer<StreetAddress>) {
+    return Observable.create(function (observer: Observer<StreetAddress>) {
       const query = {
         "siteId": siteId
       };
@@ -71,7 +69,7 @@ class StreetAddressDBRepository implements StreetAddressRepository {
   }
 
   updateStreetAddress(siteId: string, streetAddress: StreetAddress): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       const query = {
         "siteId": siteId
       };
@@ -87,7 +85,7 @@ class StreetAddressDBRepository implements StreetAddressRepository {
   }
 
   deleteStreetAddress(siteId: string): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       const query = {
         "siteId": siteId
       };

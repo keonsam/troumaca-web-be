@@ -1,7 +1,6 @@
 import { AssetKindRepository } from "../asset.kind.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable ,  Observer } from "rxjs";
 import { AssetKind } from "../asset.kind";
-import { Observer } from "rxjs/Observer";
 import { assetKinds } from "../../../db";
 
 export class AssetKindRepositoryNeDbAdapter implements AssetKindRepository {

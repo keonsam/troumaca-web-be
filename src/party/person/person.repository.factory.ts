@@ -1,8 +1,7 @@
 import * as Rx from "rxjs";
 import { PersonRepository } from "./person.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable ,  Observer } from "rxjs";
 import { Person } from "./person";
-import { Observer } from "rxjs/Observer";
 import { RepositoryKind } from "../../repository.kind";
 import { persons } from "../../db";
 import { generateUUID } from "../../uuid.generator";

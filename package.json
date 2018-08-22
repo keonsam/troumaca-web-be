@@ -50,7 +50,7 @@
     "properties-reader": "0.0.16",
     "reflect-metadata": "^0.1.12",
     "request": "^2.85.0",
-    "rxjs": "^5.5.11",
+    "rxjs": "^6.2.2",
     "to": "^0.2.9",
     "underscore": "^1.9.1",
     "update": "^0.7.4",
@@ -69,6 +69,6 @@
     "@types/source-map": "^0.5.7",
     "@types/validator": "^9.4.0",
     "tslint": "^5.9.1",
-    "typescript": "^2.7.2"
+    "typescript": "^3.0.1"
   }
 }

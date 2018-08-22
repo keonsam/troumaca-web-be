@@ -1,5 +1,5 @@
 import { AssetTypeRepository } from "../asset.type.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { AssetType } from "../asset.type";
 import { Value } from "../value/value";
 import { AssetTypeResponse } from "../asset.type.response";

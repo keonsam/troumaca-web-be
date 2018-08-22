@@ -1,4 +1,4 @@
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { AssetTypeClassRepository } from "../asset.type.class.repository";
 import { AssetTypeClass } from "../asset.type.class";
 import { AssetTypeClassResponse } from "../asset.type.class.response";

@@ -1,4 +1,4 @@
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { Phone } from "./phone";
 
 export interface PhoneRepository {

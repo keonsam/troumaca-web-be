@@ -2,9 +2,8 @@ import Rx from "rxjs";
 import { permissions } from "../../db";
 import { PermissionRepository } from "./permission.repository";
 import { Permission } from "./permission";
-import { Observable } from "rxjs/Observable";
+import { Observable ,  Observer } from "rxjs";
 import { RepositoryKind } from "../../repository.kind";
-import { Observer } from "rxjs/Observer";
 import { generateUUID } from "../../uuid.generator";
 import { calcSkip } from "../../db.util";
 

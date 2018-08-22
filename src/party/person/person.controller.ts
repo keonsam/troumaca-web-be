@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { PersonOrchestrator } from "./person.orchestrator";
 import { shapePersonResponse2 } from "./person.response.shaper";
+import { map } from "rxjs/operators";
 
 const personOrchestrator: PersonOrchestrator = new PersonOrchestrator();
 
@@ -9,9 +10,9 @@ export let findPerson = (req: Request, res: Response) => {
   const pageSize: number = req.query.pageSize;
 
   personOrchestrator.findPerson(searchStr, pageSize)
-    .map(value => {
+    .pipe(map(value => {
       return shapePersonResponse2("persons", value); // TODO: change to new method
-    }).subscribe(persons => {
+    })).subscribe(persons => {
     const body = JSON.stringify(persons);
     res.send(body);
   }, error => {

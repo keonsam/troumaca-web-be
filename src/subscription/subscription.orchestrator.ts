@@ -1,4 +1,4 @@
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { Subscription } from "./subscription";
 import { createSubscriptionRepositoryFactory } from "./subscription.repository.factory";
 import { SubscriptionRepository } from "./subscription.repository";

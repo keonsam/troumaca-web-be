@@ -1,4 +1,4 @@
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { AssignedAttributeRepository } from "../assigned.attribute.repository";
 import { Attribute } from "../../attribute";
 import { AssignedAttribute } from "../../assigned.attribute";

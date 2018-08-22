@@ -1,5 +1,5 @@
 import { SubscriptionRepository } from "../subscription.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { Subscription } from "../subscription";
 
 export class SubscriptionRepositoryRestAdapter implements SubscriptionRepository {

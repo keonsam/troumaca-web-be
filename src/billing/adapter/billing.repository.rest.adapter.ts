@@ -1,5 +1,5 @@
 import { BillingRepository } from "../billing.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { Billing } from "../billing";
 
 export class BillingRepositoryRestAdapter implements BillingRepository {

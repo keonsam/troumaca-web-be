@@ -1,5 +1,5 @@
 import { Depreciation } from "./depreciation";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { Asset } from "../asset-type/asset/asset";
 import { DepreciationMethod } from "./depreciation.method";
 import { DepreciationSystem } from "./depreciation.system";

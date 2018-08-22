@@ -1,6 +1,7 @@
 import { createPostOfficeBoxRepository } from "./post.office.box.repository.factory";
 import { PostOfficeBoxRepository } from "./post.office.box.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
+import { flatMap, map} from "rxjs/operators";
 import { getSortOrderOrDefault } from "../../sort.order.util";
 import { shapePostOfficeBoxesResponse } from "./post.office.box.response.shaper";
 import { PostOfficeBox } from "./post.office.box";
@@ -18,14 +19,14 @@ export class PostOfficeBoxOrchestrator {
     const sort: string = getSortOrderOrDefault(field, direction);
     return this.postOfficeBoxRepository
       .getPostOfficeBoxes(number, size, sort)
-      .flatMap(value => {
+      .pipe(flatMap(value => {
         return this.postOfficeBoxRepository
           .getPostOfficeBoxCount()
-          .map(count => {
+          .pipe(map(count => {
             const shapePostOfficeBoxesResp: any = shapePostOfficeBoxesResponse(value, number, size, value.length, count, sort);
             return new Result<any>(false, "postOfficeBoxes", shapePostOfficeBoxesResp);
-          });
-      });
+          }));
+      }));
   }
 
   getPostOfficeBoxById(siteId: string): Observable<PostOfficeBox> {

@@ -1,4 +1,4 @@
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { ResourcePermission } from "./resource.permission";
 
 export interface ResourcePermissionRepository {

@@ -1,8 +1,7 @@
 import { PhotoRepository } from "../photo.repository";
 import { Photo } from "../photo";
-import { Observable } from "rxjs/Observable";
+import { Observable ,  Observer } from "rxjs";
 import { organizationPhotos, userPhotos } from "../../../db";
-import { Observer } from "rxjs/Observer";
 
 export class PhotoRepositoryNeDbAdapter implements PhotoRepository {
 
@@ -27,25 +26,15 @@ export class PhotoRepositoryNeDbAdapter implements PhotoRepository {
             const query = {
                 "partyId": partyId
             };
-            if (type === "user") {
-                userPhotos.findOne(query, function (err: any, doc: any) {
-                    if (!err) {
-                        observer.next(doc);
-                    } else {
-                        observer.error(err);
-                    }
-                    observer.complete();
-                });
-            } else {
-                organizationPhotos.findOne(query, function (err: any, doc: any) {
-                    if (!err) {
-                        observer.next(doc);
-                    } else {
-                        observer.error(err);
-                    }
-                    observer.complete();
-                });
-            }
+            const db = type === "user" ? userPhotos : organizationPhotos;
+            db.findOne(query, function (err: any, doc: any) {
+                if (!err) {
+                    observer.next(doc);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
         });
     }
 
@@ -54,36 +43,10 @@ export class PhotoRepositoryNeDbAdapter implements PhotoRepository {
             const query = {
                 "partyId": partyId
             };
-            if (type === "user") {
-                userPhotos.update(query, photo, {}, function (err: any, numReplaced: number) {
-                    if (!err) {
-                        observer.next(numReplaced);
-                    } else {
-                        observer.error(err);
-                    }
-                    observer.complete();
-                });
-            } else {
-                organizationPhotos.update(query, photo, {}, function (err: any, numReplaced: number) {
-                    if (!err) {
-                        observer.next(numReplaced);
-                    } else {
-                        observer.error(err);
-                    }
-                    observer.complete();
-                });
-            }
-        });
-    }
-
-    deletePhoto(partyId: string): Observable<number> {
-        return Observable.create(function (observer: Observer<number>) {
-            const query = {
-                "partyId": partyId
-            };
-            userPhotos.remove(query, {}, function (err: any, numRemoved: number) {
+            const db = type === "user" ? userPhotos : organizationPhotos;
+            db.update(query, photo, {}, function (err: any, numReplaced: number) {
                 if (!err) {
-                    observer.next(numRemoved);
+                    observer.next(numReplaced);
                 } else {
                     observer.error(err);
                 }
@@ -91,5 +54,21 @@ export class PhotoRepositoryNeDbAdapter implements PhotoRepository {
             });
         });
     }
+
+    // deletePhoto(partyId: string): Observable<number> {
+    //     return Observable.create(function (observer: Observer<number>) {
+    //         const query = {
+    //             "partyId": partyId
+    //         };
+    //         userPhotos.remove(query, {}, function (err: any, numRemoved: number) {
+    //             if (!err) {
+    //                 observer.next(numRemoved);
+    //             } else {
+    //                 observer.error(err);
+    //             }
+    //             observer.complete();
+    //         });
+    //     });
+    // }
 
 }

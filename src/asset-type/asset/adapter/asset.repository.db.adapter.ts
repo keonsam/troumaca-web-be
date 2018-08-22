@@ -1,9 +1,9 @@
 import { AssetRepository } from "../asset.repository";
 import { Asset } from "../asset";
-import { Observable } from "rxjs/Observable";
+import { Observable ,  Observer, of } from "rxjs";
+import { switchMap, map } from "rxjs/operators";
 import { generateUUID } from "../../../uuid.generator";
-import { Observer } from "rxjs/Observer";
-import { assets, assetTypes } from "../../../db";
+import { assets } from "../../../db";
 import { calcSkip } from "../../../db.util";
 import { AssetKind } from "../../kind/asset.kind";
 import { AssetType } from "../../asset.type";
@@ -30,28 +30,28 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
 
     findAssets(searchStr: string, pageSize: number): Observable<Asset[]> {
         return this.findAssetsLocal(searchStr, pageSize)
-            .switchMap(assets => {
+            .pipe(switchMap(assets => {
                 if (assets.length < 1) {
-                    return Observable.of(assets);
+                    return of(assets);
                 } else  {
                     const assetTypeIds: string[] = assets.map(x => x.assetTypeId);
                     return this.assetTypeRepositoryNeDbAdapter.getAssetTypesByIds(assetTypeIds)
-                        .map( assetTypes => {
+                        .pipe(map( assetTypes => {
                             assets.forEach( value => {
                                 const index = assetTypes.findIndex((x: AssetType) => x.assetTypeId === value.assetTypeId);
                                 value.assetTypeName = index !== -1 ? assetTypes[index].name : "";
                             });
                             return assets;
-                        });
+                        }));
                 }
-            });
+            }));
     }
 
     getAssets(pageNumber: number, pageSize: number, order: string): Observable<Asset[]> {
         return this.getAssetsLocal(pageNumber, pageSize, order)
-            .switchMap(assets => {
+            .pipe(switchMap(assets => {
                if (assets.length < 1) {
-                   return Observable.of(assets);
+                   return of(assets);
                } else {
                    const assetKindIds: string[] = [];
                    const assetTypeIds: string[] = [];
@@ -66,15 +66,15 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
                        if (x.siteId) siteIds.push(x.siteId);
                    });
                    return this.assetKindRepositoryNeDbAdapter.getAssetKindByIds(assetKindIds)
-                       .switchMap(assetKinds => {
+                       .pipe(switchMap(assetKinds => {
                            return this.assetTypeRepositoryNeDbAdapter.getAssetTypesByIds(assetTypeIds)
-                               .switchMap(assetTypes => {
+                               .pipe(switchMap(assetTypes => {
                                    return this.unitOfMeasureRepositoryNeDbAdapter.getUnitOfMeasuresByIds(unitOfMeasureIds)
-                                       .switchMap( unitOfMeasures => {
+                                       .pipe(switchMap( unitOfMeasures => {
                                           return this.userRepositoryNeDbAdapter.getUsersByIds(partyIds)
-                                              .switchMap(users => {
+                                              .pipe(switchMap(users => {
                                                   return this.siteRepositoryNeDbAdapter.getSitesByIds(siteIds)
-                                                      .map(sites => {
+                                                      .pipe(map(sites => {
                                                           assets.forEach((value: Asset) => {
                                                               const index = assetKinds.findIndex((x: AssetKind) => x.assetKindId === value.assetKindId);
                                                               const index2 = assetTypes.findIndex((x: AssetType) => x.assetTypeId === value.assetTypeId);
@@ -88,13 +88,13 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
                                                               value.siteName = index5 !== -1 ? sites[index5].name : "";
                                                           });
                                                           return assets;
-                                                      });
-                                              });
-                                       });
-                               });
-                       });
+                                                      }));
+                                              }));
+                                       }));
+                               }));
+                       }));
                }
-            });
+            }));
     }
 
     getAssetCount(): Observable<number> {
@@ -112,33 +112,33 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
 
     getAssetById(assetId: string): Observable<Asset> {
         return this.getAssetByIdLocal(assetId)
-            .switchMap((asset: Asset) => {
+            .pipe(switchMap((asset: Asset) => {
                if (!asset) {
-                   return Observable.of(asset);
+                   return of(asset);
                } else {
                    return this.assetKindRepositoryNeDbAdapter.getAssetKindById(asset.assetKindId)
-                       .switchMap(assetKind => {
+                       .pipe(switchMap(assetKind => {
                           return this.assetTypeRepositoryNeDbAdapter.getAssetTypeByIdLocal(asset.assetTypeId)
-                              .switchMap( assetType => {
+                              .pipe(switchMap( assetType => {
                                  return this.unitOfMeasureRepositoryNeDbAdapter.getUnitOfMeasureById(asset.unitOfMeasureId)
-                                     .switchMap( unitOfMeasure => {
+                                     .pipe(switchMap( unitOfMeasure => {
                                         return this.userRepositoryNeDbAdapter.getUser(asset.personId)
-                                            .switchMap( user => {
+                                            .pipe(switchMap( user => {
                                                 return this.siteRepositoryNeDbAdapter.getSiteById(asset.siteId)
-                                                    .map( site => {
+                                                    .pipe(map( site => {
                                                         asset.assetKindName = assetKind ? assetKind.name : "";
                                                         asset.assetTypeName = assetType ? assetType.name : "";
                                                         asset.unitOfMeasureName = unitOfMeasure ? unitOfMeasure.name : "";
                                                         asset.personName = user ? user.firstName : "";
                                                         asset.siteName = site ? site.name : "";
                                                         return asset;
-                                                    });
-                                            });
-                                     });
-                              });
-                       });
+                                                    }));
+                                            }));
+                                     }));
+                              }));
+                       }));
                }
-            });
+            }));
     }
 
     saveAsset(asset: Asset): Observable<Asset> {
@@ -196,21 +196,21 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
     // USED BY OTHER REPOS
     getAssetsByIds(assetIds: string[]): Observable<Asset[]> {
         return this.getAssetsByIdsLocal(assetIds)
-            .switchMap(assets => {
+            .pipe(switchMap(assets => {
                if (!assets) {
-                   return Observable.of(assets);
+                   return of(assets);
                } else {
                    const assetTypeIds: string[] = assets.map(x => x.assetTypeId);
                    return this.assetTypeRepositoryNeDbAdapter.getAssetTypesByIds(assetTypeIds)
-                       .map( assetTypes => {
+                       .pipe(map( assetTypes => {
                            assets.forEach( value => {
                                const index = assetTypes.findIndex((x: AssetType) => x.assetTypeId === value.assetTypeId);
                                value.assetTypeName = index !== -1 ? assetTypes[index].name : "";
                            });
                            return assets;
-                       });
+                       }));
                }
-            });
+            }));
     }
 
     // HELPS

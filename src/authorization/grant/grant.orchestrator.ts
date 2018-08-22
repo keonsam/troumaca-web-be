@@ -1,6 +1,6 @@
 import { GrantRepository } from "./grant.repository";
 import { createGrantRepositoryFactory } from "./grant.repository.factory";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { Grant } from "./grant";
 
 export class GrantOrchestrator {

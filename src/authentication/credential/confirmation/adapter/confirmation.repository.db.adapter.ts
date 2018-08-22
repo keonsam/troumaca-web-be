@@ -2,8 +2,8 @@ import { ConfirmationRepository } from "../confirmation.repository";
 import { generateUUID } from "../../../../uuid.generator";
 import phoneToken from "generate-sms-verification-code";
 import { credentialConfirmations, credentials } from "../../../../db";
-import { Observable } from "rxjs/Observable";
-import { Observer } from "rxjs/Observer";
+import { Observable ,  Observer, of } from "rxjs";
+import { switchMap, map } from "rxjs/operators";
 import { Confirmation } from "../confirmation";
 
 export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository {
@@ -13,50 +13,50 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
 
   resendConfirmCode(confirmationId: string, credentialId: string, options?: any): Observable<Confirmation> {
       return this.getConfirmationByCredentialId(credentialId, "Confirmed")
-          .switchMap( confirmation => {
+          .pipe(switchMap( confirmation => {
              if (confirmation) {
-                 return Observable.of(undefined);
+                 return of(undefined);
              } else {
                  return this.updateConfirmationStatus(credentialId, "Expired")
-                     .switchMap( numReplaced => {
+                     .pipe(switchMap( numReplaced => {
                          if (!numReplaced) {
-                             return Observable.of(undefined);
+                             return of(undefined);
                          } else {
                              const confirmation: Confirmation = new Confirmation();
                              confirmation.credentialId = credentialId;
                              return this.addConfirmation(confirmation);
                          }
-                     });
+                     }));
              }
-          });
+          }));
   }
 
   confirmCode(confirmationId: string, credentialId: string, confirmation: Confirmation , options?: any): Observable<Confirmation> {
       return this.verifyCode(confirmationId, confirmation.code)
-          .switchMap(confirmation => {
+          .pipe(switchMap(confirmation => {
               console.log(confirmation);
               if (!confirmation) {
-                  return Observable.of(confirmation);
+                  return of(confirmation);
               } else {
                   return this.updateConfirmationStatus(credentialId, "Confirmed")
-                      .switchMap( numReplaced => {
+                      .pipe(switchMap( numReplaced => {
                           console.log(numReplaced);
                          if (!numReplaced) {
-                             return Observable.of(undefined);
+                             return of(undefined);
                          } else {
                              return this.updateCredentialStatusById(credentialId, "Confirmed")
-                                 .map( numReplaced1 => {
+                                 .pipe(map( numReplaced1 => {
                                      console.log(numReplaced1);
                                      if (!numReplaced1) {
                                        return undefined;
                                      } else {
                                        return confirmation;
                                      }
-                                 });
+                                 }));
                          }
-                      });
+                      }));
               }
-          });
+          }));
   }
 
   // getCredentialConfirmationById(credentialConfirmationId:string):Observable<CredentialConfirmation> {

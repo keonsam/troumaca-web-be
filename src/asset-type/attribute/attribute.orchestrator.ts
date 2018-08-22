@@ -1,7 +1,7 @@
-import { Observable } from "rxjs/Observable";
+import { Observable, of } from "rxjs";
 import { getSortOrderOrDefault } from "../../sort.order.util";
 import { Attribute } from "./attribute";
-
+import { switchMap, map } from "rxjs/operators";
 import { createAttributeRepositoryFactory } from "./attribute.repository.factory";
 import { AttributeRepository } from "./attribute.repository";
 import { Result } from "../../result.success";
@@ -19,18 +19,18 @@ export class AttributeOrchestrator {
     const sort: string = getSortOrderOrDefault(field, direction);
     return this.attributeClassRepository
       .getAttributes(number, size, sort)
-      .switchMap((attributes: Attribute[]) => {
+      .pipe(switchMap((attributes: Attribute[]) => {
         if (attributes.length < 1) {
           const shapeAttributesResp: any = shapeAttributesResponse(attributes, 0, 0, 0, 0, sort);
-          return Observable.of(new Result<any>(false, "No entry in database", shapeAttributesResp));
+          return of(new Result<any>(false, "No entry in database", shapeAttributesResp));
         }
         return this.attributeClassRepository
           .getAttributeCount()
-          .map(count => {
+          .pipe(map(count => {
               const shapeAttributesResp: any = shapeAttributesResponse(attributes, number, size, attributes.length, count, sort);
               return new Result<any>(false, "attributes", shapeAttributesResp);
-              });
-          });
+              }));
+          }));
   }
 
     getAttributeById(attributeId: string): Observable<Attribute> {
@@ -81,9 +81,9 @@ export class AttributeOrchestrator {
     //
     // getAssignedAttributesByClassId(assetTypeClassId: string): Observable<AssignedAttribute[]> {
     //     return this.attributeClassRepository.getAssignedAttributesById(assetTypeClassId)
-    //         .switchMap((assignedAttributes: AssignedAttribute[]) => {
+    //         .pipe(switchMap((assignedAttributes: AssignedAttribute[]) => {
     //             if (assignedAttributes.length === 0) {
-    //                 return Observable.of(assignedAttributes);
+    //                 return of(assignedAttributes);
     //             } else {
     //                 const assignedArray: string[] = assignedAttributes.map((x: AssignedAttribute) => x.attributeId);
     //                 return this.getAttributesForAssigned(assignedArray)
@@ -97,32 +97,5 @@ export class AttributeOrchestrator {
     //             }
     //         });
     // }
-
-  getAttributesForAssigned(assignedArray: string[]): Observable<Attribute[]> {
-      return null;
-    // return this.attributeClassRepository.getAttributeByArray(assignedArray)
-    //   .switchMap((attributes: Attribute[]) => {
-    //     if(attributes.length === 0) return Observable.of(attributes);
-    //     let unitOfMeasureIds: string[] = [];
-    //     let dataTypeIds: string[] = [];
-    //     attributes.forEach(value => {
-    //       if (value.unitOfMeasureId)  unitOfMeasureIds.push(value.unitOfMeasureId);
-    //       if (value.dataTypeId) dataTypeIds.push(value.dataTypeId);
-    //     });
-    //     return this.unitOfMeasureRepository.getUnitOfMeasureByIds(unitOfMeasureIds)
-    //       .switchMap((unitOfMeasures: UnitOfMeasure[]) => {
-    //         return this.dataTypeRepository.getDataTypeByIds(dataTypeIds)
-    //           .map((dataTypes: DataType[]) => {
-    //             attributes.forEach(value => {
-    //               let index = unitOfMeasures.findIndex(x => x.unitOfMeasureId === value.unitOfMeasureId);
-    //               let index2 = dataTypes.findIndex(x => x.dataTypeId === value.dataTypeId);
-    //                 value.unitOfMeasure = index !== -1 ? unitOfMeasures[index] : new UnitOfMeasure();
-    //                 value.dataType = index2 !== -1 ? dataTypes[index2] : new DataType();
-    //             });
-    //             return attributes;
-    //           });
-    //       });
-    //   });
-  }
 
 }

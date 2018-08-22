@@ -2,9 +2,8 @@ import Rx from "rxjs";
 import { resources } from "../../db";
 import { ResourceRepository } from "./resource.repository";
 import { Resource } from "./resource";
-import { Observable } from "rxjs/Observable";
+import { Observable ,  Observer } from "rxjs";
 import { RepositoryKind } from "../../repository.kind";
-import { Observer } from "rxjs/Observer";
 import { generateUUID } from "../../uuid.generator";
 import { calcSkip } from "../../db.util";
 

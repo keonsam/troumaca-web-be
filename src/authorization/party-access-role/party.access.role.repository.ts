@@ -1,5 +1,5 @@
 import { PartyAccessRole } from "./party.access.role";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 
 export interface PartyAccessRoleRepository {
 

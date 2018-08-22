@@ -1,5 +1,5 @@
-import { Observable } from "rxjs/Observable";
-import { Observer } from "rxjs/Observer";
+import { Observable ,  Observer, of } from "rxjs";
+import { switchMap, map } from "rxjs/operators";
 import { calcSkip } from "../../../../db.util";
 import { Attribute } from "../../attribute";
 import { assignedAttributes, attributes } from "../../../../db";
@@ -44,17 +44,17 @@ export class AssignedAttributeRepositoryNeDbAdapter implements AssignedAttribute
 
     getAssignedAttributesByClassId(assetTypeClassId: string): Observable<AssignedAttribute[]> {
         return this.getAssignedAttributesById(assetTypeClassId)
-            .switchMap(assignedAttributes => {
+            .pipe(switchMap(assignedAttributes => {
                 const assignedArray: string[] = assignedAttributes.map((x: AssignedAttribute) => x.attributeId);
                 return this.attributeRepositoryNeDbAdapter.getAttributesByIds(assignedArray)
-                    .map( attributes => {
+                    .pipe(map( attributes => {
                         assignedAttributes.forEach(value => {
                             const index = attributes.findIndex(x => x.attributeId === value.attributeId);
                             value.attributeName = index !== -1 ? attributes[index].name : "";
                         });
                         return assignedAttributes;
-                    });
-            });
+                    }));
+            }));
     }
 
     // USED BY OTHER REPOS

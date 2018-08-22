@@ -1,8 +1,7 @@
 import { CredentialConfirmation } from "../credential.confirmation";
 import { ConfirmationRepository } from "../confirmation.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable ,  Observer } from "rxjs";
 import { properties } from "../../../../properties.helpers";
-import { Observer } from "rxjs/Observer";
 import { jsonRequestHeaderMap, postJsonOptions } from "../../../../request.helpers";
 import request from "request";
 import { Confirmation } from "../confirmation";

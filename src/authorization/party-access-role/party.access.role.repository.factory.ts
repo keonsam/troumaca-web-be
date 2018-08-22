@@ -2,9 +2,8 @@ import Rx from "rxjs";
 import { partyAccessRoles } from "../../db";
 import { PartyAccessRoleRepository } from "./party.access.role.repository";
 import { PartyAccessRole } from "./party.access.role";
-import { Observable } from "rxjs/Observable";
+import { Observable ,  Observer } from "rxjs";
 import { RepositoryKind } from "../../repository.kind";
-import { Observer } from "rxjs/Observer";
 import { generateUUID } from "../../uuid.generator";
 // import {calcSkip} from "../../db.util";
 

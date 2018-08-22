@@ -1,14 +1,12 @@
-import { ValidateResponse } from "./validate.response";
 import { Credential } from "./credential";
 import { createCredentialRepositoryFactory } from "./credential.repository.factory";
 import { CredentialRepository } from "./credential.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable, of } from "rxjs";
+import { switchMap, map } from "rxjs/operators";
 import { Session } from "../../session/session";
 import { createSessionRepositoryFactory } from "../../session/session.repository.factory";
 import { SessionRepository } from "../../session/session.repository";
-import "rxjs/add/operator/map";
 import { AuthenticatedCredential } from "./authenticated.credential";
-import { Confirmation } from "./confirmation/confirmation";
 import { CreatedCredential } from "./created.credential";
 
 export class CredentialOrchestrator {
@@ -42,9 +40,9 @@ export class CredentialOrchestrator {
 
       return this.credentialRepository
           .authenticate(credential, options)
-          .switchMap((authenticatedCredential: AuthenticatedCredential) =>  {
+          .pipe(switchMap((authenticatedCredential: AuthenticatedCredential) =>  {
               if (!authenticatedCredential) {
-                  return Observable.of(new AuthenticatedCredential());
+                  return of(new AuthenticatedCredential());
               } else if (authenticatedCredential.authenticateStatus === "AccountConfirmed" || authenticatedCredential.authenticateStatus === "AccountActive") {
                   const session: Session = new Session();
                   session.partyId = authenticatedCredential.partyId;
@@ -63,18 +61,18 @@ export class CredentialOrchestrator {
                       session.data.set("confirmationId", authenticatedCredential.confirmationId);
                   }
                   return this.sessionRepository.addSession(session, options)
-                      .map(session => {
+                      .pipe(map(session => {
                           console.log(session);
                           if (!session) {
                               return new AuthenticatedCredential();
                           }
                           authenticatedCredential.sessionId = session.sessionId;
                           return authenticatedCredential;
-                      });
+                      }));
               } else {
-                  return Observable.of(authenticatedCredential);
+                  return of(authenticatedCredential);
               }
-          });
+          }));
     }
 
     updateCredentialStatusById(credentialId: string, status: string): Observable<number> {

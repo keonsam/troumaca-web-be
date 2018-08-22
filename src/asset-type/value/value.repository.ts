@@ -1,5 +1,4 @@
-import { Observable } from "rxjs/Observable";
-import { Value } from "./value";
+
 
 export interface ValueRepository {
 

@@ -1,12 +1,12 @@
 import { PhotoRepository } from "../photo.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { Photo } from "../photo";
 
 export class PhotoRepositoryRestAdapter implements PhotoRepository {
 
-    deletePhoto(partyId: string): Observable<number> {
-        return undefined;
-    }
+    // deletePhoto(partyId: string): Observable<number> {
+    //     return undefined;
+    // }
 
     getPhotoById(partyId: string, type: string): Observable<Photo> {
         return undefined;

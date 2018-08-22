@@ -1,6 +1,7 @@
 import { createUserRepository } from "./user.repository.factory";
 import { UserRepository } from "./user.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable, of } from "rxjs";
+import { switchMap, map, flatMap } from "rxjs/operators";
 import { User } from "./user";
 import { shapeUsersResponse } from "./user.response.shaper";
 import { Result } from "../../result.success";
@@ -39,36 +40,36 @@ export class UserOrchestrator {
   getUsers (number: number, size: number, field: string, direction: string): Observable<Result<any>> {
       const sort = getSortOrderOrDefault(field, direction);
       return this.userRepository.getUsers(number, size, sort)
-        .flatMap(value => {
+        .pipe(flatMap(value => {
           return this.userRepository
             .getUserCount()
-            .map(count => {
+            .pipe(map(count => {
               const shapeUsersResp: any = shapeUsersResponse(value, number, size, value.length, count, sort);
               return new Result<any>(false, "users", shapeUsersResp);
-            });
-        });
+            }));
+        }));
     }
 
   getUser (partyId: string): Observable<UserResponse> {
       return this.userRepository.getUser(partyId)
-          .switchMap(user => {
-              if (!user) return Observable.of(undefined);
+          .pipe(switchMap(user => {
+              if (!user) return of(undefined);
               return this.partyAccessRoleRepository.getPartyAccessRoleById(partyId)
-                  .switchMap((partyAccessRoles: PartyAccessRole[]) => {
-                      if (partyAccessRoles.length < 1) return Observable.of(new UserResponse(user));
+                  .pipe(switchMap((partyAccessRoles: PartyAccessRole[]) => {
+                      if (partyAccessRoles.length < 1) return of(new UserResponse(user));
                       const accessRoleIds: string[] = partyAccessRoles.map(x => { if (x.accessRoleId) return x.accessRoleId; });
-                      if (accessRoleIds.length < 1)  return Observable.of(new UserResponse(user, partyAccessRoles));
+                      if (accessRoleIds.length < 1)  return of(new UserResponse(user, partyAccessRoles));
                       return this.accessRoleRepository.getAccessRoleByIds(accessRoleIds)
-                          .map( accessRoles => {
+                          .pipe(map( accessRoles => {
                              if (accessRoles.length < 1) return new UserResponse(user, partyAccessRoles);
                               partyAccessRoles.forEach( value => {
                                   const index = accessRoles.findIndex(x => x.accessRoleId === value.accessRoleId);
                                   value.accessRole = index !== -1 ? accessRoles[index] : new AccessRole();
                               });
                               return new UserResponse(user, partyAccessRoles);
-                          });
-                  });
-          });
+                          }));
+                  }));
+          }));
     }
 
   saveUser (user: User, partyAccessRoles: PartyAccessRole[]): Observable<User> {
@@ -79,65 +80,65 @@ export class UserOrchestrator {
           numbers: true
       });
       return this.credentialRepository.addCredential(credential)
-          .switchMap( credentialRes => {
-             if (!credentialRes) return Observable.of(undefined);
+          .pipe(switchMap( credentialRes => {
+             if (!credentialRes) return of(undefined);
              user.username = undefined;
              user.partyId = credentialRes.credential.partyId;
               return this.userRepository.saveUser(user)
-                  .switchMap( userRes => {
-                      if (!userRes) return Observable.of(undefined);
+                  .pipe(switchMap( userRes => {
+                      if (!userRes) return of(undefined);
                       partyAccessRoles.forEach( value => {
                          value.partyId = userRes.partyId;
                       });
                       return this.partyAccessRoleRepository.addPartyAccessRole(partyAccessRoles)
-                          .map( partyAccessRolesRes => {
+                          .pipe(map( partyAccessRolesRes => {
                              if (!partyAccessRolesRes) return undefined;
                              return userRes;
-                          });
-                  });
-          });
+                          }));
+                  }));
+          }));
   }
 
   deleteUser (partyId: string): Observable<number> {
        return this.userRepository.deleteUser(partyId)
-         .switchMap(value => {
+         .pipe(switchMap(value => {
            if (!value) {
-             return Observable.of(value);
+             return of(value);
            } else {
              return this.partyAccessRoleRepository.deletePartyAccessRole(partyId);
-               // .switchMap(numRemoved => {
+               // .pipe(switchMap(numRemoved => {
                //   return this.credentialRepository.deleteCredentialByPartyId(partyId);
                // });
            }
-         });
+         }));
     }
 
   updateUser (partyId: string, user: User, partyAccessRoles: PartyAccessRole[]): Observable<number> {
       user.username = undefined;
        return this.userRepository.updateUser(partyId, user)
-         .switchMap(numUpdated => {
-           if (!numUpdated) return Observable.of(undefined);
+         .pipe(switchMap(numUpdated => {
+           if (!numUpdated) return of(undefined);
            return this.partyAccessRoleRepository.deletePartyAccessRole(partyId)
-              .switchMap(numRemoved => {
-                  if (!numRemoved) return Observable.of(undefined);
+              .pipe(switchMap(numRemoved => {
+                  if (!numRemoved) return of(undefined);
                   return this.partyAccessRoleRepository.addPartyAccessRole(partyAccessRoles)
-                      .map(next => {
+                      .pipe(map(next => {
                           if (!next) return undefined;
                           return numUpdated;
-                      });
-             });
-         });
+                      }));
+             }));
+         }));
     }
 
   updateUserMe (partyId: string, user: User, credential: Credential): Observable<number> {
     return this.userRepository.updateUser(partyId, user)
-      .switchMap(numUpdated => {
+      .pipe(switchMap(numUpdated => {
         // if (numUpdated) {
         //   return this.credentialRepository.updateCredential(partyId, credential);
         // }else {
-          return Observable.of(0);
+          return of(0);
         // }
-      });
+      }));
   }
 
 }

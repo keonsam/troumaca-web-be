@@ -1,12 +1,13 @@
 import { createAssetTypeRepository } from "./asset.type.repository.factory";
 import { AssetTypeRepository } from "./asset.type.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { AssetType } from "./asset.type";
 import { Result } from "../result.success";
 import { getSortOrderOrDefault } from "../sort.order.util";
 import { shapeAssetTypesResponse } from "./asset.type.response.shaper";
 import { Value } from "./value/value";
 import { AssetTypeResponse } from "./asset.type.response";
+import { switchMap, map } from "rxjs/operators";
 
 export class AssetTypeOrchestrator {
 
@@ -24,14 +25,14 @@ export class AssetTypeOrchestrator {
     const sort: string = getSortOrderOrDefault(field, direction);
     return this.assetTypeRepository
       .getAssetTypes(number, size, sort)
-      .switchMap(assetTypes => {
+      .pipe(switchMap(assetTypes => {
         return this.assetTypeRepository
             .getAssetTypeCount()
-            .map(count => {
+            .pipe(map(count => {
               const shapeAssetTypesResp: any = shapeAssetTypesResponse(assetTypes, number, size, assetTypes.length, count, sort);
               return new Result<any>(false, "assetTypes", shapeAssetTypesResp);
-            });
-      });
+            }));
+      }));
   }
 
   getAssetTypeById(assetTypeId: string): Observable<AssetTypeResponse> {

@@ -2,9 +2,8 @@ import Rx from "rxjs";
 import { grants } from "../../db";
 import { GrantRepository } from "./grant.repository";
 import { Grant } from "./grant";
-import { Observable } from "rxjs/Observable";
+import { Observable ,  Observer } from "rxjs";
 import { RepositoryKind } from "../../repository.kind";
-import { Observer } from "rxjs/Observer";
 import { generateUUID } from "../../uuid.generator";
 
 class GrantDBRepository implements GrantRepository {

@@ -1,4 +1,4 @@
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { WebSite } from "./web.site";
 
 export interface WebSiteRepository {

@@ -1,6 +1,6 @@
 import { createCredentialConfirmationRepositoryFactory } from "./confirmation.repository.factory";
 import { ConfirmationRepository } from "./confirmation.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { Confirmation } from "./confirmation";
 
 export class ConfirmationOrchestrator {

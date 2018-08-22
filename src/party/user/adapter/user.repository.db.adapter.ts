@@ -1,7 +1,7 @@
 import { UserRepository } from "../user.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable ,  Observer, of } from "rxjs";
+import { switchMap, map } from "rxjs/operators";
 import { User } from "../user";
-import { Observer } from "rxjs/Observer";
 import { users } from "../../../db";
 import { calcSkip } from "../../../db.util";
 import { Person } from "../../person/person";
@@ -29,17 +29,17 @@ export class UserRepositoryNeDbAdapter implements UserRepository {
 
     getUsers(pageNumber: number, pageSize: number, order: string): Observable<User[]> {
         return this.getUsersLocal(pageNumber, pageSize, order)
-            .switchMap( users => {
-                if (users.length < 1) return Observable.of(users);
+            .pipe(switchMap( users => {
+                if (users.length < 1) return of(users);
                const partyIds: string[] = users.map(x => x.partyId);
                return this.credentialRepositoryNeDbAdapter.getCredentialByPartyIds(partyIds)
-                   .map( credentials => {
+                   .pipe(map( credentials => {
                        users.forEach( val => {
                            val.username = credentials.find(x => x.partyId === val.partyId).username;
                        });
                        return users;
-                   });
-            });
+                   }));
+            }));
     }
 
     getUserCount(): Observable<number> {
@@ -57,14 +57,14 @@ export class UserRepositoryNeDbAdapter implements UserRepository {
 
     getUser(partyId: string): Observable<User> {
         return this.getUserLocal(partyId)
-            .switchMap(user => {
-               if (!user) return Observable.of(user);
+            .pipe(switchMap(user => {
+               if (!user) return of(user);
                return this.credentialRepositoryNeDbAdapter.getCredentialByPartyId(partyId)
-                   .map(credential => {
+                   .pipe(map(credential => {
                       user.username = credential.username;
                       return user;
-                   });
-            });
+                   }));
+            }));
     }
 
     getPerson(partyId: string): Observable<Person> {

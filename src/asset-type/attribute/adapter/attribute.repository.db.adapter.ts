@@ -1,7 +1,7 @@
 import { AttributeRepository } from "../attribute.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable ,  Observer, of } from "rxjs";
+import { switchMap, map} from "rxjs/operators";
 import { Attribute } from "../attribute";
-import { Observer } from "rxjs/Observer";
 import { calcSkip } from "../../../db.util";
 import { attributes } from "../../../db";
 import { generateUUID } from "../../../uuid.generator";
@@ -16,9 +16,9 @@ export class AttributeRepositoryNeDbAdapter implements AttributeRepository {
 
     getAttributes(pageNumber: number, pageSize: number, order: string): Observable<Attribute[]> {
        return this.getAttributesLocal(pageNumber, pageSize, order)
-            .switchMap(attributes => {
+            .pipe(switchMap(attributes => {
                if (!attributes) {
-                   return Observable.of(attributes);
+                   return of(attributes);
                } else {
                    const unitOfMeasureIds: string[] = [];
                    const dataTypeIds: string[] = [];
@@ -27,9 +27,9 @@ export class AttributeRepositoryNeDbAdapter implements AttributeRepository {
                        if (value.dataTypeId) dataTypeIds.push(value.dataTypeId);
                    });
                    return this.unitOfMeasureRepositoryNeDbAdapter.getUnitOfMeasuresByIds(unitOfMeasureIds)
-                       .switchMap(unitOfMeasures => {
+                       .pipe(switchMap(unitOfMeasures => {
                           return this.dataTypeRepositoryNeDbAdapter.getDataTypeByIds(dataTypeIds)
-                              .map( dataTypes => {
+                              .pipe(map( dataTypes => {
                                   attributes.forEach(value => {
                                       const index = unitOfMeasures.findIndex(x => x.unitOfMeasureId === value.unitOfMeasureId);
                                       const index2 = dataTypes.findIndex(x => x.dataTypeId === value.dataTypeId);
@@ -37,10 +37,10 @@ export class AttributeRepositoryNeDbAdapter implements AttributeRepository {
                                       value.dataTypeName = index2 !== -1 ? dataTypes[index2].name : "";
                                   });
                                   return attributes;
-                              });
-                       });
+                              }));
+                       }));
                }
-            });
+            }));
     }
 
     getAttributeCount(): Observable<number> {
@@ -58,17 +58,17 @@ export class AttributeRepositoryNeDbAdapter implements AttributeRepository {
 
     getAttributeById(attributeId: string): Observable<Attribute> {
         return this.getAttributeByIdLocal(attributeId)
-            .switchMap(attribute => {
+            .pipe(switchMap(attribute => {
                 if (!attribute) {
-                    return Observable.of(attribute);
+                    return of(attribute);
                 } else {
                     return this.unitOfMeasureRepositoryNeDbAdapter.getUnitOfMeasureById(attribute.unitOfMeasureId)
-                        .map( unitOfMeasure => {
+                        .pipe(map( unitOfMeasure => {
                             attribute.unitOfMeasureName = unitOfMeasure.name;
                             return attribute;
-                        });
+                        }));
                 }
-            });
+            }));
     }
 
     addAttribute(attribute: Attribute): Observable<Attribute> {

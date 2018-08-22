@@ -2,7 +2,8 @@ import { createDepreciationRepositoryFactory } from "./depreciation.repository.f
 import { shapeDepreciationResponse } from "./depreciation.response.shaper";
 import { getSortOrderOrDefault } from "../sort.order.util";
 import { DepreciationRepository } from "./depreciation.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
+import { switchMap, map } from "rxjs/operators";
 import { Depreciation } from "./depreciation";
 import { Result } from "../result.success";
 import { Asset } from "../asset-type/asset/asset";
@@ -26,28 +27,28 @@ export class DepreciationOrchestrator {
        const sort: string = getSortOrderOrDefault(field, direction);
        return this.depreciationRepository
            .getBookDepreciationArr(number, size, sort)
-           .switchMap((depreciationArr: Depreciation[]) => {
+           .pipe(switchMap((depreciationArr: Depreciation[]) => {
                return this.depreciationRepository
                    .getDepreciationCount()
-                   .map(count => {
+                   .pipe(map(count => {
                        const shapeDepreciationResp: any = shapeDepreciationResponse(depreciationArr, number, size, depreciationArr.length, count, sort);
                        return new Result<any>(false, "depreciation", shapeDepreciationResp);
-                   });
-           });
+                   }));
+           }));
    }
 
     getTaxDepreciationArr(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
         const sort: string = getSortOrderOrDefault(field, direction);
         return this.depreciationRepository
             .getTaxDepreciationArr(number, size, sort)
-            .switchMap((depreciationArr: Depreciation[]) => {
+            .pipe(switchMap((depreciationArr: Depreciation[]) => {
                 return this.depreciationRepository
                     .getTaxDepreciationCount()
-                    .map(count => {
+                    .pipe(map(count => {
                         const shapeDepreciationResp: any = shapeDepreciationResponse(depreciationArr, number, size, depreciationArr.length, count, sort);
                         return new Result<any>(false, "depreciation", shapeDepreciationResp);
-                    });
-            });
+                    }));
+            }));
     }
 
     getDepreciationById(depreciationId: string, type: string): Observable<Depreciation> {

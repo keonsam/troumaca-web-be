@@ -1,5 +1,5 @@
 import { AssetKindRepository } from "../asset.kind.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { AssetKind } from "../asset.kind";
 
 export class AssetKindRepositoryRestAdapter implements AssetKindRepository {

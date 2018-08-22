@@ -1,6 +1,7 @@
 import { AccessRoleRepository } from "./access.role.repository";
 import { createAccessRoleRepositoryFactory } from "./access.role.repository.factory";
-import { Observable } from "rxjs/Observable";
+import { Observable, of } from "rxjs";
+import { switchMap, map } from "rxjs/operators";
 import { AccessRole } from "./access.role";
 import { shapeAccessRolesResponse } from "./access.role.response.shaper";
 import { Result } from "../../result.success";
@@ -36,89 +37,89 @@ export class AccessRoleOrchestrator {
   getAccessRoles(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
     const sort: string = getSortOrderOrDefault(field, direction);
     return this.accessRoleRepository.getAccessRoles(number, size, sort)
-      .switchMap((accessRoles: AccessRole[]) => {
+      .pipe(switchMap((accessRoles: AccessRole[]) => {
         if (accessRoles.length === 0) {
           const shapeAccessRolesResp: any = shapeAccessRolesResponse(accessRoles, 0, 0, 0, 0, sort);
-          return Observable.of(new Result<any>(false, "no data found", shapeAccessRolesResp));
+          return of(new Result<any>(false, "no data found", shapeAccessRolesResp));
         } else {
           const accessRoleTypeIds: string[] = accessRoles.map(x => {if (x.accessRoleTypeId) return x.accessRoleTypeId; });
           return this.accessRoleTypeRepository.getAccessRoleTypeByIds(accessRoleTypeIds)
-            .switchMap((accessRoleTypes: AccessRoleType[]) => {
+            .pipe(switchMap((accessRoleTypes: AccessRoleType[]) => {
               accessRoles.forEach(value => {
                 const index = accessRoleTypes.findIndex(x => x.accessRoleTypeId === value.accessRoleTypeId);
                 value.accessRoleType = index !== -1 ? accessRoleTypes[index] : new AccessRoleType();
               });
               return this.accessRoleRepository
                 .getAccessRoleCount()
-                .map(count => {
+                .pipe(map(count => {
                   const shapeAccessRolesResp: any = shapeAccessRolesResponse(accessRoles, number, size, accessRoles.length, count, sort);
                   return new Result<any>(false, "accessRoles", shapeAccessRolesResp);
-                });
-            });
+                }));
+            }));
         }
-      });
+      }));
   }
 
     getAccessRoleById(accessRoleId: string): Observable<AccessRoleResponse> {
         return this.accessRoleRepository.getAccessRoleById(accessRoleId)
-            .switchMap((accessRole: AccessRole) => {
-                if (!accessRole) return Observable.of(undefined);
+            .pipe(switchMap((accessRole: AccessRole) => {
+                if (!accessRole) return of(undefined);
                 return this.accessRoleTypeRepository.getAccessRoleTypeById(accessRole.accessRoleTypeId)
-                    .switchMap(accessRoleType => {
+                    .pipe(switchMap(accessRoleType => {
                         accessRole.accessRoleType = new AccessRoleType();
                         if (accessRoleType) accessRole.accessRoleType = accessRoleType;
                         return this.grantRepository.getGrantsByAccessRoleId(accessRoleId)
-                            .map(grants => {
+                            .pipe(map(grants => {
                               return  new AccessRoleResponse(accessRole, grants);
-                            });
-                    });
-            });
+                            }));
+                    }));
+            }));
     }
 
   addAccessRole(accessRole: AccessRole, grants: Grant[]): Observable<AccessRole> {
     return this.accessRoleRepository.addAccessRole(accessRole)
-      .switchMap(accessRole => {
-          if (!accessRole || grants.length == 0) return Observable.of(accessRole);
+      .pipe(switchMap(accessRole => {
+          if (!accessRole || grants.length == 0) return of(accessRole);
           const accessRoleId = accessRole.accessRoleId;
           grants.forEach(value => {
             value.accessRoleId = accessRoleId;
           });
           return this.grantRepository.addGrant(grants)
-            .map(grants => {
+            .pipe(map(grants => {
               if ( !grants) return new AccessRole();
               return accessRole;
-            });
-      });
+            }));
+      }));
   }
 
   updateAccessRole(accessRoleId: string, accessRole: AccessRole, grants: Grant[]): Observable<number> {
     return this.accessRoleRepository.updateAccessRole(accessRoleId, accessRole)
-      .switchMap(numUpdated => {
-          if (!numUpdated || grants.length === 0) return Observable.of(numUpdated);
+      .pipe(switchMap(numUpdated => {
+          if (!numUpdated || grants.length === 0) return of(numUpdated);
           return this.grantRepository.deleteGrant(accessRoleId)
-            .switchMap(numReplaced => {
+            .pipe(switchMap(numReplaced => {
                 return this.grantRepository.addGrant(grants)
-                  .map(grants => {
+                  .pipe(map(grants => {
                     if (!grants) return 0;
                     return numUpdated;
-                  });
-            });
-      });
+                  }));
+            }));
+      }));
   }
 
   deleteAccessRole(accessRoleId: string): Observable<number> {
     return this.accessRoleRepository.deleteAccessRole(accessRoleId)
-      .switchMap(numReplaced => {
+      .pipe(switchMap(numReplaced => {
         if (numReplaced) {
           return this.grantRepository.deleteGrant(accessRoleId)
-            .switchMap(numReplaced2 => {
+            .pipe(switchMap(numReplaced2 => {
                 return this.partyAccessRoleRepository.deletePartyAccessRoleByAccessRoleId(accessRoleId)
-                  .map( numReplaced3 => {
+                  .pipe(map( numReplaced3 => {
                     return numReplaced;
-                  });
-            });
+                  }));
+            }));
         }
-        });
+        }));
   }
 
 }

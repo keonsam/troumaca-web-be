@@ -1,32 +1,21 @@
 import { UnitOfMeasureRepository } from "../unit.of.measure.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable ,  Observer } from "rxjs";
 import { UnitOfMeasure } from "../unit.of.measure";
-import { Observer } from "rxjs/Observer";
 import { unitOfMeasures } from "../../db";
 
 export class UnitOfMeasureRepositoryNeDbAdapter implements UnitOfMeasureRepository {
     findUnitOfMeasure(searchStr: string, pageSize: number): Observable<UnitOfMeasure[]> {
         const searchStrLocal = new RegExp(searchStr);
+        const query = searchStr ? {name: {$regex: searchStrLocal}} : {};
         return Observable.create(function (observer: Observer<UnitOfMeasure[]>) {
-            if (!searchStr) {
-                unitOfMeasures.find({}).limit(100).exec(function (err: any, doc: any) {
-                    if (!err) {
-                        observer.next(doc);
-                    } else {
-                        observer.error(err);
-                    }
-                    observer.complete();
-                });
-            } else {
-                unitOfMeasures.find({name: {$regex: searchStrLocal}}).limit(pageSize).exec(function (err: any, doc: any) {
-                    if (!err) {
-                        observer.next(doc);
-                    } else {
-                        observer.error(err);
-                    }
-                    observer.complete();
-                });
-            }
+            unitOfMeasures.find(query).limit(100).exec(function (err: any, doc: any) {
+                if (!err) {
+                    observer.next(doc);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
         });
     }
 

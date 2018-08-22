@@ -1,4 +1,4 @@
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { StreetAddress } from "./street.address";
 
 export interface StreetAddressRepository {

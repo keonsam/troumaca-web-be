@@ -1,4 +1,4 @@
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { PostOfficeBox } from "./post.office.box";
 
 export interface PostOfficeBoxRepository {

@@ -1,4 +1,4 @@
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { Billing } from "./billing";
 
 export interface BillingRepository {

@@ -3,12 +3,11 @@ import libphonenumberjs from "libphonenumber-js";
 import PasswordValidator from "password-validator";
 import { generateUUID } from "../../../uuid.generator";
 import { Credential } from "../credential";
-import { Observable } from "rxjs/Observable";
-import { Observer } from "rxjs/Observer";
+import { Observable ,  Observer, of } from "rxjs";
+import { switchMap, map } from "rxjs/operators";
 import { credentials } from "../../../db";
 import { CredentialRepository } from "../credential.repository";
 import { AuthenticatedCredential } from "../authenticated.credential";
-import "rxjs/add/observable/of";
 import { Confirmation } from "../confirmation/confirmation";
 import { ConfirmationRepositoryNeDbAdapter } from "../confirmation/adapter/confirmation.repository.db.adapter";
 import { CreatedCredential } from "../created.credential";
@@ -19,7 +18,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
 
   isValidUsername(username: string, partyId: string): Observable<boolean> {
     if (!username) {
-      return Observable.of(false);
+      return of(false);
     }
 
     // the user name is valid if:
@@ -39,10 +38,10 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
 
     if (!validUsername) {
       // 3. and is not taken
-      return Observable.of(false);
+      return of(false);
     } else {
       return this.getCredentialByUsername(username)
-        .map(credential => {
+        .pipe(map(credential => {
           if (!credential) {
             return true;
           } else if (credential.partyId === partyId) {
@@ -50,14 +49,14 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
           } else {
               return false;
           }
-        });
+        }));
     }
   }
 
   isValidPassword(password: string): Observable<boolean> {
     if (!password) {
 
-      return Observable.of(false);
+      return of(false);
 
     } else {
       // Create a schema
@@ -73,30 +72,30 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
         .has().not().spaces()                           // Should not have spaces
         .is().not().oneOf(["Passw0rd", "Password123"]); // Blacklist these values
 
-      return Observable.of(schema.validate(password));
+      return of(schema.validate(password));
     }
 
   }
 
   addCredential(credential: Credential, options?: any): Observable<CreatedCredential> {
       return this.addCredentialLocal(credential)
-          .switchMap(credential => {
+          .pipe(switchMap(credential => {
               const confirmation: Confirmation = new Confirmation();
 
               confirmation.credentialId = credential.credentialId;
 
               return this.confirmationRepositoryNeDbAdapter.addConfirmation(confirmation)
-                  .map(confirmation => {
+                  .pipe(map(confirmation => {
                      return {credential, confirmation};
-                  });
-          });
+                  }));
+          }));
   }
 
   authenticate(credential: Credential, options?: any): Observable<AuthenticatedCredential> {
     return this.verifyCredential(credential.username, credential.password)
-    .switchMap((credential: Credential) => {
+    .pipe(switchMap((credential: Credential) => {
       if (!credential) {
-        return Observable.of(undefined);
+        return of(undefined);
       } else {
           const authenticatedCredential: AuthenticatedCredential = new AuthenticatedCredential();
           const credentialId = credential.credentialId;
@@ -105,21 +104,21 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
           authenticatedCredential.partyId = credential.partyId;
           if (credential.status === "Active") {
               authenticatedCredential.authenticateStatus = "AccountActive";
-              return Observable.of(authenticatedCredential);
+              return of(authenticatedCredential);
           } else if (credential.status === "Confirmed") {
               authenticatedCredential.authenticateStatus = "AccountConfirmed";
-              return Observable.of(authenticatedCredential);
+              return of(authenticatedCredential);
           } else if (credential.status === "New") {
               return this.confirmationRepositoryNeDbAdapter.getConfirmationByCredentialId(credentialId, "New")
-                  .map((confirmation: Confirmation) => {
+                  .pipe(map((confirmation: Confirmation) => {
                       // TODO: ADD ERROR HANDLING THIS SHOULD TEST AND GENERATE A NEW CONFIRMATION IF NECESSARY
                       authenticatedCredential.confirmationId = confirmation.confirmationId;
                       authenticatedCredential.authenticateStatus = "AccountUsernameNotConfirmed";
                       return authenticatedCredential;
-                  });
+                  }));
           }
       }
-    });
+    }));
   }
 
   updateCredentialStatusById(credentialId: string, status: string): Observable<number> {

@@ -1,5 +1,5 @@
 import { UserRepository } from "../user.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { User } from "../user";
 import { Person } from "../../person/person";
 

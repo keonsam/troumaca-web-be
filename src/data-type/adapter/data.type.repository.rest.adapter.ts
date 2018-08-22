@@ -1,5 +1,5 @@
 import { DataTypeRepository } from "../data.type.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { DataType } from "../data.type";
 
 export class DataTypeRepositoryRestAdapter implements DataTypeRepository {

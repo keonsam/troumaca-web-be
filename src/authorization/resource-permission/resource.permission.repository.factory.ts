@@ -2,9 +2,8 @@ import Rx from "rxjs";
 import { resourcePermissions } from "../../db";
 import { ResourcePermissionRepository } from "./resource.permission.repository";
 import { ResourcePermission } from "./resource.permission";
-import { Observable } from "rxjs/Observable";
+import { Observable ,  Observer } from "rxjs";
 import { RepositoryKind } from "../../repository.kind";
-import { Observer } from "rxjs/Observer";
 import { generateUUID } from "../../uuid.generator";
 
 class ResourcePermissionDBRepository implements ResourcePermissionRepository {

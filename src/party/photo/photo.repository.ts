@@ -1,4 +1,4 @@
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { Photo } from "./photo";
 
 export interface PhotoRepository {
@@ -8,5 +8,5 @@ export interface PhotoRepository {
 
   updatePhoto(partyId: string, type: string, photo: Photo): Observable<number>;
 
-  deletePhoto(partyId: string): Observable<number>;
+  // deletePhoto(partyId: string): Observable<number>;
 }

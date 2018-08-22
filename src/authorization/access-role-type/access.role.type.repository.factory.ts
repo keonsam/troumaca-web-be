@@ -2,9 +2,8 @@ import Rx from "rxjs";
 import { accessRoleTypes } from "../../db";
 import { AccessRoleTypeRepository } from "./access.role.type.repository";
 import { AccessRoleType } from "./access.role.type";
-import { Observable } from "rxjs/Observable";
+import { Observable ,  Observer } from "rxjs";
 import { RepositoryKind } from "../../repository.kind";
-import { Observer } from "rxjs/Observer";
 import { generateUUID } from "../../uuid.generator";
 import { calcSkip } from "../../db.util";
 

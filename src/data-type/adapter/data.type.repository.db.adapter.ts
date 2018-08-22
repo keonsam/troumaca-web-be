@@ -1,7 +1,6 @@
 import { DataTypeRepository } from "../data.type.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable ,  Observer } from "rxjs";
 import { DataType } from "../data.type";
-import { Observer } from "rxjs/Observer";
 import { dataTypes } from "../../db";
 
 export class DataTypeRepositoryNeDbAdapter implements DataTypeRepository {

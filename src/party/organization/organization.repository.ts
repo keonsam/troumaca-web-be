@@ -1,4 +1,4 @@
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { Organization } from "./organization";
 
 export interface OrganizationRepository {

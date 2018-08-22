@@ -1,10 +1,11 @@
 import { createWebSiteRepository } from "./web.site.repository.factory";
 import { WebSiteRepository } from "./web.site.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { getSortOrderOrDefault } from "../../sort.order.util";
 import { shapeWebSitesResponse } from "./web.site.response.shaper";
 import { WebSite } from "./web.site";
 import { Result } from "../../result.success";
+import { flatMap, map } from "rxjs/operators";
 
 export class WebSiteOrchestrator {
 
@@ -22,14 +23,14 @@ export class WebSiteOrchestrator {
     const sort: string = getSortOrderOrDefault(field, direction);
     return this.webSiteRepository
       .getWebSites(number, size, sort)
-      .flatMap(value => {
+      .pipe(flatMap(value => {
         return this.webSiteRepository
           .getWebSiteCount()
-          .map(count => {
+          .pipe(map(count => {
             const shapeWebSitesResp: any = shapeWebSitesResponse(value, number, size, value.length, count, sort);
             return new Result<any>(false, "webSites", shapeWebSitesResp);
-          });
-      });
+          }));
+      }));
   }
 
   getWebSiteById(siteId: string): Observable<WebSite> {

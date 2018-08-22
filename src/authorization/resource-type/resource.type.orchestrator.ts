@@ -1,6 +1,7 @@
 import { ResourceTypeRepository } from "./resource.type.repository";
 import { createResourceTypeRepositoryFactory } from "./resource.type.repository.factory";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
+import { flatMap, map } from "rxjs/operators";
 import { ResourceType } from "./resource.type";
 import { shapeResourceTypesResponse } from "./resource.type.response.shaper";
 import { Result } from "../../result.success";
@@ -23,14 +24,14 @@ export class ResourceTypeOrchestrator {
     const sort: string = getSortOrderOrDefault(field, direction);
     return this.resourceTypeRepository
       .getResourceTypes(number, size, sort)
-      .flatMap(value => {
+      .pipe(flatMap(value => {
         return this.resourceTypeRepository
           .getResourceTypeCount()
-          .map(count => {
+          .pipe(map(count => {
             const shapeResourceTypesResp: any = shapeResourceTypesResponse(value, number, size, value.length, count, sort);
             return new Result<any>(false, "resourceTypes", shapeResourceTypesResp);
-          });
-      });
+          }));
+      }));
   }
 
   addResourceType(resourceType: ResourceType): Observable<ResourceType> {

@@ -1,6 +1,6 @@
 import { createPersonRepository } from "./person.repository.factory";
 import { PersonRepository } from "./person.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { Person } from "./person";
 
 export class PersonOrchestrator {

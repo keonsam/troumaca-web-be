@@ -2,7 +2,8 @@ import { createAssetRepositoryFactory } from "./asset.repository.factory";
 import { shapeAssetsResponse } from "./asset.response.shaper";
 import { getSortOrderOrDefault } from "../../sort.order.util";
 import { AssetRepository } from "./asset.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
+import { switchMap, map } from "rxjs/operators";
 import { Asset } from "./asset";
 import { Result } from "../../result.success";
 
@@ -22,14 +23,14 @@ export class AssetOrchestrator {
       const sort: string = getSortOrderOrDefault(field, direction);
       return this.assetRepository
           .getAssets(number, size, sort)
-          .switchMap((assets: Asset[]) => {
+          .pipe(switchMap((assets: Asset[]) => {
               return this.assetRepository
                   .getAssetCount()
-                  .map(count => {
+                  .pipe(map(count => {
                       const shapeAssetsResp: any = shapeAssetsResponse(assets, number, size, assets.length, count, sort);
                       return new Result<any>(false, "assets", shapeAssetsResp);
-                  });
-          });
+                  }));
+          }));
   }
 
     getAssetById(assetId: string): Observable<Asset> {

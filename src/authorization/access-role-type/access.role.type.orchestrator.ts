@@ -1,6 +1,7 @@
 import { AccessRoleTypeRepository } from "./access.role.type.repository";
 import { createAccessRoleTypeRepositoryFactory } from "./access.role.type.repository.factory";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
+import { flatMap, map } from "rxjs/operators";
 import { AccessRoleType } from "./access.role.type";
 import { shapeAccessRoleTypesResponse } from "./access.role.type.response.shaper";
 import { Result } from "../../result.success";
@@ -22,14 +23,14 @@ export class AccessRoleTypeOrchestrator {
     const sort: string = getSortOrderOrDefault(field, direction);
     return this.accessRoleTypeRepository
       .getAccessRoleTypes(number, size, sort)
-      .flatMap(value => {
+      .pipe(flatMap(value => {
         return this.accessRoleTypeRepository
           .getAccessRoleTypeCount()
-          .map(count => {
+          .pipe(map(count => {
             const shapeAccessRoleTypesResp: any = shapeAccessRoleTypesResponse(value, number, size, value.length, count, sort);
             return new Result<any>(false, "accessRoleTypes", shapeAccessRoleTypesResp);
-          });
-      });
+          }));
+      }));
   }
 
   addAccessRoleType(accessRoleType: AccessRoleType): Observable<AccessRoleType> {

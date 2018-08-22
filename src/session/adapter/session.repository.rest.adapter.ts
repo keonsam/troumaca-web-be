@@ -1,9 +1,8 @@
 import { SessionRepository } from "../session.repository";
 import { Session } from "../session";
-import { Observable } from "rxjs/Observable";
+import { Observable ,  Observer } from "rxjs";
 import { properties } from "../../properties.helpers";
 import { jsonRequestHeaderMap, postJsonOptions } from "../../request.helpers";
-import { Observer } from "rxjs/Observer";
 import request from "request";
 
 export class SessionRepositoryRestAdapter implements SessionRepository {

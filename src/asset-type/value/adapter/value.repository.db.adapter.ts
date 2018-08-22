@@ -1,7 +1,6 @@
 import { ValueRepository } from "../value.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable ,  Observer } from "rxjs";
 import { Value } from "../value";
-import { Observer } from "rxjs/Observer";
 import { values } from "../../../db";
 import { generateUUID } from "../../../uuid.generator";
 

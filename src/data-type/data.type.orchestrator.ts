@@ -1,7 +1,7 @@
 import { createDataTypeRepository } from "./data.type.repository.factory";
 import { DataTypeRepository } from "./data.type.repository";
 import { DataType } from "./data.type";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 
 export class DataTypeOrchestrator {
 

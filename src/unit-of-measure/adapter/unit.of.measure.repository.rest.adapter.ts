@@ -1,5 +1,5 @@
 import { UnitOfMeasureRepository } from "../unit.of.measure.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { UnitOfMeasure } from "../unit.of.measure";
 
 export class UnitOfMeasureRepositoryRestAdapter implements UnitOfMeasureRepository {

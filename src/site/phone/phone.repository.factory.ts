@@ -1,7 +1,5 @@
-import * as Rx from "rxjs";
 import { PhoneRepository } from "./phone.repository";
-import { Observable } from "rxjs/Observable";
-import { Observer } from "rxjs/Observer";
+import { Observable ,  Observer } from "rxjs";
 import { RepositoryKind } from "../../repository.kind";
 import { telephones } from "../../db";
 import { Phone } from "./phone";
@@ -14,7 +12,7 @@ class PhoneDBRepository implements PhoneRepository {
 
   savePhone(phone: Phone): Observable<Phone> {
     phone.siteId = generateUUID();
-    return Rx.Observable.create(function(observer: Observer<Phone>) {
+    return Observable.create(function(observer: Observer<Phone>) {
       telephones.insert(phone, function(err: any, doc: any) {
         if (err) {
           observer.error(err);
@@ -28,7 +26,7 @@ class PhoneDBRepository implements PhoneRepository {
 
   getPhones(pageNumber: number, pageSize: number, order: string): Observable<Phone[]> {
     const localDefaultPageSize = this.defaultPageSize;
-    return Rx.Observable.create(function (observer: Observer<Phone[]>) {
+    return Observable.create(function (observer: Observer<Phone[]>) {
       const skip = calcSkip(pageNumber, pageSize, localDefaultPageSize);
       telephones.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
         if (!err) {
@@ -42,7 +40,7 @@ class PhoneDBRepository implements PhoneRepository {
   }
 
   getPhoneCount(): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       telephones.count({}, function (err: any, count: number) {
         if (!err) {
           observer.next(count);
@@ -55,7 +53,7 @@ class PhoneDBRepository implements PhoneRepository {
   }
 
   getPhoneById(siteId: string): Observable<Phone> {
-    return Rx.Observable.create(function (observer: Observer<Phone>) {
+    return Observable.create(function (observer: Observer<Phone>) {
       const query = {
         "siteId": siteId
       };
@@ -71,7 +69,7 @@ class PhoneDBRepository implements PhoneRepository {
   }
 
   updatePhone(siteId: string, phone: Phone): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       const query = {
         "siteId": siteId
       };
@@ -87,7 +85,7 @@ class PhoneDBRepository implements PhoneRepository {
   }
 
   deletePhone(siteId: string): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       const query = {
         "siteId": siteId
       };

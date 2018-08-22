@@ -1,7 +1,5 @@
-import * as Rx from "rxjs";
 import { EmailRepository } from "./email.repository";
-import { Observable } from "rxjs/Observable";
-import { Observer } from "rxjs/Observer";
+import { Observable ,  Observer } from "rxjs";
 import { RepositoryKind } from "../../repository.kind";
 import { emails } from "../../db";
 import { Email } from "./email";
@@ -14,7 +12,7 @@ class EmailDBRepository implements EmailRepository {
 
   saveEmail(email: Email): Observable<Email> {
     email.siteId = generateUUID();
-    return Rx.Observable.create(function(observer: Observer<Email>) {
+    return Observable.create(function(observer: Observer<Email>) {
       emails.insert(email, function(err: any, doc: any) {
         if (err) {
           observer.error(err);
@@ -28,7 +26,7 @@ class EmailDBRepository implements EmailRepository {
 
   getEmails(pageNumber: number, pageSize: number, order: string): Observable<Email[]> {
     const localDefaultPageSize = this.defaultPageSize;
-    return Rx.Observable.create(function (observer: Observer<Email[]>) {
+    return Observable.create(function (observer: Observer<Email[]>) {
       const skip = calcSkip(pageNumber, pageSize, localDefaultPageSize);
       emails.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
         if (!err) {
@@ -42,7 +40,7 @@ class EmailDBRepository implements EmailRepository {
   }
 
   getEmailCount(): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       emails.count({}, function (err: any, count: number) {
         if (!err) {
           observer.next(count);
@@ -55,7 +53,7 @@ class EmailDBRepository implements EmailRepository {
   }
 
   getEmailById(siteId: string): Observable<Email> {
-    return Rx.Observable.create(function (observer: Observer<Email>) {
+    return Observable.create(function (observer: Observer<Email>) {
       const query = {
         "siteId": siteId
       };
@@ -71,7 +69,7 @@ class EmailDBRepository implements EmailRepository {
   }
 
   updateEmail(siteId: string, email: Email): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       const query = {
         "siteId": siteId
       };
@@ -87,7 +85,7 @@ class EmailDBRepository implements EmailRepository {
   }
 
   deleteEmail(siteId: string): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       const query = {
         "siteId": siteId
       };

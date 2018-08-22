@@ -1,10 +1,11 @@
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { Result } from "../../../result.success";
 import { shapeAttributesResponse } from "../attribute.response.shaper";
 import { AssignedAttributeRepository } from "./assigned.attribute.repository";
 import { createAssignedAttributeRepositoryFactory } from "./assigned.attribute.repository.factory";
 import { getSortOrderOrDefault } from "../../../sort.order.util";
 import { AssignedAttribute } from "../assigned.attribute";
+import { flatMap, map} from "rxjs/operators";
 
 export class AssignedAttributeOrchestrator {
 
@@ -18,14 +19,14 @@ export class AssignedAttributeOrchestrator {
         const sort = getSortOrderOrDefault(field, direction);
         return this.assignedAttributeRepository
             .getAssignableAttributes(number, size, sort, assignedAttributes, type)
-            .flatMap(value => {
+            .pipe(flatMap(value => {
                 return this.assignedAttributeRepository
                     .getAssignableAttributesCount(assignedAttributes, type)
-                    .map(count => {
+                    .pipe(map(count => {
                         const shapeAttrResp = shapeAttributesResponse(value, number, size, value.length, count, sort);
                         return new Result<any>(false, "success", shapeAttrResp);
-                    });
-            });
+                    }));
+            }));
     }
 
     getAssignedAttributesByClassId(assetTypeClassId: string): Observable<AssignedAttribute[]> {
