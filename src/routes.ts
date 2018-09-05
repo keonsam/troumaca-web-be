@@ -224,7 +224,6 @@ router.put("/access-role-types/:accessRoleTypeId", accessRoleTypeController.upda
 router.delete("/access-role-types/:accessRoleTypeId", accessRoleTypeController.deleteAccessRoleType);
 
 // ##### SECURITY END #####
-
 // SUBSCRIPTION
 router.get("/subscription/information", subscriptionController.getSubscriptionInformation);
 router.get("/subscriptions/:type", subscriptionController.getSubscription);
