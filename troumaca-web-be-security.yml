@@ -1,0 +1,446 @@
+swagger: "2.0"
+info:
+  description: ""
+  version: "1.0.0"
+  title: "Shapestone Authentication API"
+  termsOfService: "http://api.shapestone.com/authentication/terms/"
+  contact:
+    email: "engineering@shapestone.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+schemes:
+- "http"
+paths:
+  /authentication/authenticate:
+    post:
+      tags:
+      - "Authenticate"
+      summary: "Authenticates a party"
+      description: "Authenticates a party credentials"
+      operationId: "authenticate"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "credential"
+        in: "body"
+        description: "Authentiction credential"
+        required: true
+        schema:
+          $ref: "#/definitions/AuthenticateCredential"
+      - name: "correlationId"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Credential authenticated"
+          schema:
+            $ref: "#/definitions/AuthenticatedCredential"
+        404:
+          description: "Invalid credential"
+        400:
+          description: "Invalid credential"
+
+  /authentication/confirmations/{confirmationId}/email:
+    post:
+      tags:
+      - "Confirmation"
+      summary: "Confirm email username"
+      description: "Confirm's the user's email address"
+      operationId: "confirmEmailUsername"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "confirm"
+        in: "body"
+        description: "Confirmation Email Username"
+        required: true
+        schema:
+          $ref: "#/definitions/ConfirmEmailUsername"
+      - name: "confirmationId"
+        in: "path"
+        description: "The confirmation identifier"
+        required: true
+        type: "string"
+      - name: "correlationId"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "The system has successfully registered that the email address has ben confirmed"
+          schema:
+            $ref: "#/definitions/ConfirmedEmailUsername"
+        404:
+          description: "Confirmation or credential not found"
+        406:
+          description: "Token has expired"
+
+  /authentication/confirmations/{confirmationId}/phone:
+    post:
+      tags:
+      - "Confirmation"
+      summary: "Confirm phone username"
+      description: "Confirm's the user's phone number"
+      operationId: "confirmPhoneUsername"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "confirm"
+        in: "body"
+        description: "Confirmation Phone Username"
+        required: true
+        schema:
+          $ref: "#/definitions/ConfirmPhoneUsername"
+      - name: "confirmationId"
+        in: "path"
+        description: "The confirmationId"
+        required: true
+        type: "string"
+      - name: "correlationId"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "The user's phone number has been succesfully confirmed"
+          schema:
+            $ref: "#/definitions/ConfirmedPhoneUsername"
+        404:
+          description: "Confirmation or credential not found"
+        405:
+          description: "Token has expired"
+
+  /authentication/credentials:
+    post:
+      tags:
+      - "Credential"
+      summary: "Create credential"
+      description: "Create party credential for authentication purposes"
+      operationId: "createCredential"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "status"
+        in: "body"
+        description: "Create credential command body"
+        required: true
+        schema:
+          $ref: "#/definitions/CreateCredential"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            $ref: "#/definitions/CreatedCredential"
+        409:
+          description: "Conflict"
+        400:
+          description: "Invalid status value"
+
+    #     404:
+    #       description: "User not found"
+securityDefinitions:
+  petstore_auth:
+    type: "oauth2"
+    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:pets: "modify pets in your account"
+      read:pets: "read your pets"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+  Confirmation:
+    type: "object"
+    properties:
+      confirmationId:
+        type: "string"
+      credentialId:
+        type: "string"
+      code:
+        type: "string"
+      status:
+        type: "string"
+      version:
+        type: "string"
+      modifiedOn:
+        type: "string"
+        format: "date-time"
+  Credential:
+    type: "object"
+    properties:
+      credentialId:
+        type: "string"
+      partyId:
+        type: "string"
+      username:
+        type: "string"
+      hashedPassword:
+        type: "string"
+      status:
+        type: "string"
+        description: "Credential Status"
+        enum:
+        - "New"
+        - "Confirmed"
+        - "Active"
+        - "Disabled"
+      version:
+        type: "string"
+      modifiedOn:
+        type: "string"
+        format: "date-time"
+  Event:
+    type: "object"
+    properties:
+      eventId:
+        type: "string"
+      eventTypeId:
+        type: "string"
+      name:
+        type: "string"
+      description:
+        type: "string"
+      sourceSystemName:
+        type: "string"
+      sourceSystemHost:
+        type: "string"
+      sourcePartyId:
+        type: "string"
+      data:
+        type: "string"
+      metadata:
+        type: "string"
+      version:
+        type: "string"
+      createdOn:
+        type: "string"
+        format: "date-time"
+  AuthenticatedCredential:
+    type: "object"
+    properties:
+      credential:
+        $ref: "#/definitions/Credential"
+  AuthenticateCredential:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+      password:
+        type: "string"
+      sourceSystemName:
+        type: "string"
+      sourceSystemHost:
+        type: "string"
+      sourcePartyId:
+        type: "string"
+  ConfirmEmailUsername:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+      sourceSystemName:
+        type: "string"
+      sourceSystemHost:
+        type: "string"
+      sourcePartyId:
+        type: "string"
+  ConfirmedEmailUsername:
+    type: "object"
+    properties:
+      confirmation:
+        $ref: "#/definitions/Confirmation"
+      credential:
+        $ref: "#/definitions/Credential"
+  ConfirmPhoneUsername:
+    type: "object"
+    properties:
+      confirmationId:
+        type: "string"
+      code:
+        type: "string"
+      sourceSystemName:
+        type: "string"
+      sourceSystemHost:
+        type: "string"
+      sourcePartyId:
+        type: "string"
+  ConfirmedPhoneUsername:
+    type: "object"
+    properties:
+      confirmation:
+        $ref: "#/definitions/Confirmation"
+      credential:
+        $ref: "#/definitions/Credential"
+  CreateCredential:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+      password:
+        type: "string"
+      sourceSystemName:
+        type: "string"
+      sourceSystemHost:
+        type: "string"
+      sourcePartyId:
+        type: "string"
+  CreatedCredential:
+    type: "object"
+    properties:
+      credential:
+        $ref: "#/definitions/Credential"
+      confirmation:
+        $ref: "#/definitions/Confirmation"
+  SendChangePasswordMessage:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+      sourceSystemName:
+        type: "string"
+      sourceSystemHost:
+        type: "string"
+      sourcePartyId:
+        type: "string"
+  SentChangePasswordMessage:
+    type: "object"
+    properties:
+      event:
+        $ref: "#/definitions/Event"
+      confirmation:
+        $ref: "#/definitions/Confirmation"
+
+  # Order:
+  #   type: "object"
+  #   properties:
+  #     id:
+  #       type: "integer"
+  #       format: "int64"
+  #     petId:
+  #       type: "integer"
+  #       format: "int64"
+  #     quantity:
+  #       type: "integer"
+  #       format: "int32"
+  #     shipDate:
+  #       type: "string"
+  #       format: "date-time"
+  #     status:
+  #       type: "string"
+  #       description: "Order Status"
+  #       enum:
+  #       - "placed"
+  #       - "approved"
+  #       - "delivered"
+  #     complete:
+  #       type: "boolean"
+  #       default: false
+  #   xml:
+  #     name: "Order"
+  # Category:
+  #   type: "object"
+  #   properties:
+  #     id:
+  #       type: "integer"
+  #       format: "int64"
+  #     name:
+  #       type: "string"
+  #   xml:
+  #     name: "Category"
+  # User:
+  #   type: "object"
+  #   properties:
+  #     id:
+  #       type: "integer"
+  #       format: "int64"
+  #     username:
+  #       type: "string"
+  #     firstName:
+  #       type: "string"
+  #     lastName:
+  #       type: "string"
+  #     email:
+  #       type: "string"
+  #     password:
+  #       type: "string"
+  #     phone:
+  #       type: "string"
+  #     userStatus:
+  #       type: "integer"
+  #       format: "int32"
+  #       description: "User Status"
+  #   xml:
+  #     name: "User"
+  # Tag:
+  #   type: "object"
+  #   properties:
+  #     id:
+  #       type: "integer"
+  #       format: "int64"
+  #     name:
+  #       type: "string"
+  #   xml:
+  #     name: "Tag"
+  # Pet:
+  #   type: "object"
+  #   required:
+  #   - "name"
+  #   - "photoUrls"
+  #   properties:
+  #     id:
+  #       type: "integer"
+  #       format: "int64"
+  #     category:
+  #       $ref: "#/definitions/Category"
+  #     name:
+  #       type: "string"
+  #       example: "doggie"
+  #     photoUrls:
+  #       type: "array"
+  #       xml:
+  #         name: "photoUrl"
+  #         wrapped: true
+  #       items:
+  #         type: "string"
+  #     tags:
+  #       type: "array"
+  #       xml:
+  #         name: "tag"
+  #         wrapped: true
+  #       items:
+  #         $ref: "#/definitions/Tag"
+  #     status:
+  #       type: "string"
+  #       description: "pet status in the store"
+  #       enum:
+  #       - "available"
+  #       - "pending"
+  #       - "sold"
+  #   xml:
+  #     name: "Pet"
+  # ApiResponse:
+  #   type: "object"
+  #   properties:
+  #     code:
+  #       type: "integer"
+  #       format: "int32"
+  #     type:
+  #       type: "string"
+  #     message:
+  #       type: "string"
+# externalDocs:
+#   description: "Find out more about Swagger"
+#   url: "http://swagger.io"

@@ -1,31 +1,33 @@
 import { Router } from "express";
 import bodyParser from "body-parser";
 
-import * as assetController from "./asset-type/asset/asset.controller";
-import * as attributeController from "./asset-type/attribute/attribute.controller";
-import * as assignedAttributeController from "./asset-type/attribute/assigned-attributes/assigned.attribute.controller"
 import * as confirmationController from "./authentication/credential/confirmation/confirmation.controller";
-import * as assetKindController from "./asset-type/kind/asset.kind.controller";
-import * as phoneController from "./site/phone/phone.controller";
+import * as credentialController from "./authentication/credential/credential.controller";
+import * as permissionController from "./authorization/permission/permission.controller";
 import * as resourceController from "./authorization/resource/resource.controller";
-import * as accountController from "./party/account.controller";
 import * as accessRoleController from "./authorization/access-role/access.role.controller";
 import * as accessRoleTypeController from "./authorization/access-role-type/access.role.type.controller";
 import * as resourcePermissionController from "./authorization/resource-permission/resource.permission.controller";
+import * as resourceTypeController from "./authorization/resource-type/resource.type.controller";
+
+
+import * as assetController from "./asset-type/asset/asset.controller";
+import * as attributeController from "./asset-type/attribute/attribute.controller";
+import * as assignedAttributeController from "./asset-type/attribute/assigned-attributes/assigned.attribute.controller"
+import * as assetKindController from "./asset-type/kind/asset.kind.controller";
+import * as phoneController from "./site/phone/phone.controller";
+import * as accountController from "./party/account.controller";
 import * as photoController from "./party/photo/photo.controller";
 import * as unitOfMeasureController from "./unit-of-measure/unit.of.measure.controller";
 import * as dataTypeController from "./data-type/data.type.controller";
 import * as emailController from "./site/email/email.controller";
 import * as siteController from "./site/site.controller";
-import * as resourceTypeController from "./authorization/resource-type/resource.type.controller";
 import * as webSiteController from "./site/web-site/web.site.controller";
 import * as postOfficeBoxController from "./site/post-office-box/post.office.box.controller";
 import * as streetAddressController from "./site/street-address/street.address.controller";
 import * as sessionController from "./session/session.controller";
-import * as permissionController from "./authorization/permission/permission.controller";
 import * as userController from "./party/user/user.controller";
 import * as assetTypeClassController from "./asset-type/asset-type-class/asset.type.class.controller";
-import * as credentialController from "./authentication/credential/credential.controller";
 import * as assetTypeController from "./asset-type/asset.type.controller";
 import * as organizationController from "./party/organization/organization.controller";
 import * as subscriptionController from "./subscription/subscription.controller";
@@ -149,6 +151,7 @@ router.put("/photos/:type/:partyId", photoController.updatePhoto);
 // accounts
 router.post("/accounts", accountController.saveAccount);
 
+// ##### SECURITY START #####
 // AUTHENTICATION
 router.post("/validate-password", jsonParser, credentialController.isValidPassword);
 router.post("/validate-username", jsonParser, credentialController.isValidUsername);
@@ -219,6 +222,8 @@ router.get("/access-role-types/:accessRoleTypeId", accessRoleTypeController.getA
 router.post("/access-role-types", accessRoleTypeController.saveAccessRoleType);
 router.put("/access-role-types/:accessRoleTypeId", accessRoleTypeController.updateAccessRoleType);
 router.delete("/access-role-types/:accessRoleTypeId", accessRoleTypeController.deleteAccessRoleType);
+
+// ##### SECURITY END #####
 
 // SUBSCRIPTION
 router.get("/subscription/information", subscriptionController.getSubscriptionInformation);
