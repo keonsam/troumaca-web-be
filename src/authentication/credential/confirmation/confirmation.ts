@@ -1,5 +1,6 @@
 
 export class  Confirmation {
+
     private _confirmationId: string;
     private _credentialId: string;
     private _code: string;

@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
 import { CredentialOrchestrator } from "./credential.orchestrator";
-import { ValidateResponse } from "./validate.response";
-import { AuthenticateResponse } from "./authenticate.response";
 import { AuthenticatedCredential } from "./authenticated.credential";
 
 const credentialOrchestrator: CredentialOrchestrator = new CredentialOrchestrator();
@@ -137,27 +135,6 @@ export let authenticate = (req: Request, res: Response) => {
         });
 };
 
-// TODO: Consider removing
-// export let isValidEditUsername = (req: Request, res: Response) => {
-//   let partyId = req.body.partyId;
-//   let username = req.body.username;
-//   if (!req.body) {
-//     return res.status(400).send({message: "Username can not be empty"});
-//   }
-//
-//   credentialOrchestrator.isValidEditUsername(partyId, username)
-//     .subscribe((next:ValidateResponse) => {
-//         res.status(200);
-//         res.send(next.valid);
-//     }, error => {
-//       res.status(500);
-//       res.send(JSON.stringify({message: 'Error Occurred'}));
-//       console.log(error);
-//     });
-// };
-
-// router.post("/validate-password", function (req, res, next) {
-
 // router.post("/forgot-password", function (req, res, next) {
 // export let forgotPassword = (req: Request, res: Response) => {
 //   let username = req.body.username;
@@ -175,8 +152,6 @@ export let authenticate = (req: Request, res: Response) => {
 //       console.log(error);
 //     });
 // };
-
-// router.post("/authenticate", function (req, res, next) {
 
 // router.post("/", function (req, res, next) {
 
