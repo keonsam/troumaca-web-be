@@ -1,0 +1,1287 @@
+swagger: "2.0"
+info:
+  description: "This is swagger document describes the troumaka application api"
+  version: "1.0.0"
+  title: "Troumaka application API"
+  termsOfService: "http://api.troumaka.shapestone.com/authentication/terms/"
+  contact:
+    email: "engineering@troumaka.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+#tags:
+#- name: "authentication"
+#  description: "Everything about authentication"
+#- name: "session"
+#  description: "Everything about session"
+#- name: "authorization"
+#  description: "Everything about authorization"
+schemes:
+- "https"
+- "http"
+paths:
+  /authentication/validate-username:
+    post:
+      tags:
+      - "Credential"
+      summary: "verifies that the username is valid"
+      description: "Validate username"
+      operationId: "validateUsername"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Validate username object"
+          required: true
+          schema:
+            $ref: '#/definitions/ValidateUsername'
+        - name: "correlationId"
+          in: "header"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            $ref: "#/definitions/ValidatedUsername"
+        500:
+          description: "server error occurred"
+
+  /authentication/validate-password:
+    post:
+      tags:
+      - "Credential"
+      summary: "verifies that the password is valid"
+      description: "Validate password"
+      operationId: "validatePassword"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Validate password object"
+          schema:
+            type: "object"
+            $ref: '#/definitions/ValidatePassword'
+        - name: "correlationId"
+          in: "header"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            $ref: "#/definitions/ValidatedPassword"
+        500:
+          description: "server error occurred"
+
+  /authentication/credentials:
+    post:
+      tags:
+      - "Credential"
+      summary: "Create credential"
+      description: "Create credential to be used by a party for authentication"
+      operationId: "createCredential"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        description: "CredentialCredential object"
+        required: true
+        schema:
+          $ref: "#/definitions/CreateCredential"
+      - name: "correlationId"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        201:
+          description: "successful operation"
+          schema:
+            type: "object"
+            $ref: "#/definitions/Confirmation"
+        400:
+          description: "failed operation"
+        500:
+          description: "server error occurred"
+    put:
+      tags:
+      - "Credential"
+      summary: "Update credential"
+      description: "Updates credential for party"
+      operationId: "updateCredential"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        description: "Credential object"
+        required: true
+        schema:
+          $ref: "#/definitions/Credential"
+      - name: "correlationId"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        201:
+          description: "successful operation"
+          schema:
+            type: "object"
+            $ref: "#/definitions/Credential"
+        500:
+          description: "server error occurred"
+
+    delete:
+      tags:
+      - "Credential"
+      summary: "Update credential"
+      description: "Delete credential to be used by a party for authentication"
+      operationId: "deleteCredential"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        description: "Delete object"
+        required: true
+        schema:
+          $ref: "#/definitions/DeleteObject"
+      - name: "correlationId"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        201:
+          description: "successful operation"
+          schema:
+            type: "object"
+            $ref: "#/definitions/DeletedObject"
+        500:
+          description: "server error occurred"
+
+  /conformation/validate-confirmation-code:
+    post:
+      tags:
+      - "Confirmation"
+      summary: "verifies confirmation code"
+      description: "Validate confirmation code"
+      operationId: "validateConfirmationCode"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Validate confirmation code object"
+        schema:
+          type: "object"
+          $ref: '#/definitions/ValidateConfirmCode'
+      - name: "correlationId"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            $ref: "#/definitions/ValidatedConfirmCode"
+        404:
+          description: "No confirmation found for credential [credentialId]"
+        500:
+          description: "server error occurred"
+
+  /organizations/profile:
+    post:
+      tags:
+      - "Profile"
+      summary: "Create organization profile"
+      description: "Creates an organization profile"
+      operationId: "createOrganizationProfile"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Organization profile object"
+        schema:
+          type: "object"
+          $ref: "#/definitions/CreateOrganizationProfile"
+      - name: "correlationId"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            $ref: "#/definitions/OrganizationProfile"
+        500:
+          description: "server error occurred"
+
+    put:
+      tags:
+      - "Profile"
+      summary: "Update organization profile"
+      description: "Updates an organization profile"
+      operationId: "updateOrganizationProfile"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Organization profile object"
+        schema:
+          type: "object"
+          $ref: "#/definitions/OrganizationProfile"
+      - name: "correlationId"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            $ref: "#/definitions/OrganizationProfile"
+        500:
+          description: "server error occurred"
+    delete:
+      tags:
+      - "Profile"
+      summary: "Delete organization profile"
+      description: "Deletes an organization profile"
+      operationId: "deleteOrganizationProfile"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Organization profile object"
+        schema:
+          type: "object"
+          $ref: "#/definitions/DeleteObject"
+      - name: "correlationId"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            $ref: "#/definitions/DeletedObject"
+        500:
+          description: "server error occurred"
+
+  /organizations/request-access:
+    post:
+      tags:
+      - "Profile"
+      summary: "Request organization access"
+      description: "Request access to an organization"
+      operationId: "requestOrganizationAccess"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Request access object"
+        schema:
+          type: "object"
+          $ref: "#/definitions/RequestAccess"
+      - name: "correlationId"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            $ref: "#/definitions/RequestedAccess"
+        500:
+          description: "server error occurred"
+
+  /persons/profile:
+    post:
+      tags:
+        - "Profile"
+      summary: "Create person profile"
+      description: "Creates a person profile"
+      operationId: "createPersonProfile"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Person profile object"
+          schema:
+            type: "object"
+            $ref: "#/definitions/CreatePersonProfile"
+        - name: "correlationId"
+          in: "header"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            $ref: "#/definitions/PersonProfile"
+        500:
+          description: "server error occurred"
+
+  /authorization/resources:
+    post:
+      tags:
+      - "Resource"
+      summary: "Create resource"
+      description: "Creates a security resource"
+      operationId: "createResource"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Resource object"
+        schema:
+          type: "object"
+          $ref: "#/definitions/CreateResource"
+      - name: "correlationId"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            $ref: "#/definitions/Resource"
+        500:
+          description: "server error occurred"
+
+  /authorization/resource-types:
+    post:
+      tags:
+      - "ResourceType"
+      summary: "Create resource type"
+      description: "Creates a security resource type"
+      operationId: "createResourceType"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Resource type object"
+        schema:
+          type: "object"
+          $ref: "#/definitions/CreateResourceType"
+      - name: "correlationId"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            $ref: "#/definitions/ResourceType"
+        500:
+          description: "server error occurred"
+
+  /authorization/resource-permissions:
+    post:
+      tags:
+      - "ResourcePermission"
+      summary: "Create resource permission"
+      description: "Creates a security resource permission"
+      operationId: "createResourcePermission"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Resource permission object"
+        schema:
+          type: "object"
+          $ref: "#/definitions/CreateResourcePermission"
+      - name: "correlationId"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            $ref: "#/definitions/ResourcePermission"
+        500:
+          description: "server error occurred"
+
+  /authorization/permissions:
+    post:
+      tags:
+      - "Permission"
+      summary: "Create permission"
+      description: "Creates a security permission"
+      operationId: "createPermission"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Permission object"
+        schema:
+          type: "object"
+          $ref: "#/definitions/CreatePermission"
+      - name: "correlationId"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            $ref: "#/definitions/Permission"
+        500:
+          description: "server error occurred"
+
+  /authorization/access-roles:
+    post:
+      tags:
+      - "AccessRole"
+      summary: "Create access role"
+      description: "Creates a security access role"
+      operationId: "createAccessRole"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Access Role object"
+        schema:
+          type: "object"
+          $ref: "#/definitions/CreateAccessRole"
+      - name: "correlationId"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            $ref: "#/definitions/AccessRole"
+        500:
+          description: "server error occurred"
+
+  /authorization/access-role-types:
+    post:
+      tags:
+      - "AccessRole"
+      summary: "Create access role type"
+      description: "Creates a security access role type"
+      operationId: "createAccessRoleType"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Access Role Type object"
+        schema:
+          type: "object"
+          $ref: "#/definitions/CreateAccessRoleType"
+      - name: "correlationId"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            $ref: "#/definitions/AccessRoleType"
+        500:
+          description: "server error occurred"
+
+  /authorization/access-role-grant:
+    post:
+      tags:
+      - "AccessRole"
+      summary: "Create access role grant"
+      description: "Creates a security access role grant"
+      operationId: "createAccessRoleGrant"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Access Role Grant object"
+        schema:
+          type: "object"
+          $ref: "#/definitions/CreateAccessRoleGrant"
+      - name: "correlationId"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            $ref: "#/definitions/AccessRoleGrant"
+        500:
+          description: "server error occurred"
+
+  /authorization/party-access-role:
+    post:
+      tags:
+      - "AccessRole"
+      summary: "Create party access role"
+      description: "Creates a security party access role"
+      operationId: "createPartyAccessRole"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Party Access Role object"
+        schema:
+          type: "object"
+          $ref: "#/definitions/CreatePartyAccessRole"
+      - name: "correlationId"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            $ref: "#/definitions/PartyAccessRole"
+        500:
+          description: "server error occurred"
+
+  /authentication/authenticate:
+    post:
+      tags:
+      - "Authenticate"
+      summary: "Authenticates a party"
+      description: "Authenticates a party credentials"
+      operationId: "authenticate"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "credential"
+        in: "body"
+        description: "Authentication credential"
+        required: true
+        schema:
+          $ref: "#/definitions/AuthenticateCredential"
+      - name: "correlationId"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Credential authenticated"
+          schema:
+            $ref: "#/definitions/AuthenticatedCredential"
+        404:
+          description: "Invalid credential"
+        400:
+          description: "Invalid credential"
+        500:
+          description: "server error occurred"
+
+securityDefinitions:
+  petstore_auth:
+    type: "oauth2"
+    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:pets: "modify pets in your account"
+      read:pets: "read your pets"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+
+definitions:
+  CreateCredential:
+    type: "object"
+    required:
+    - "username"
+    - "password"
+    properties:
+      username:
+        type: "string"
+      password:
+        type: "string"
+
+  ValidateUsername:
+    type: "object"
+    required:
+    - "username"
+    properties:
+      username:
+        type: "string"
+
+  ValidatedUsername:
+    type: "object"
+    required:
+      - "name"
+      - "valid"
+    properties:
+      name:
+        type: "string"
+      valid:
+        type: "boolean"
+
+  ValidatePassword:
+    type: "object"
+    required:
+    - "password"
+    properties:
+      password:
+        type: "string"
+
+  ValidatedPassword:
+    type: "object"
+    required:
+    - "name"
+    - "valid"
+    properties:
+      name:
+        type: "string"
+      valid:
+        type: "boolean"
+
+  Confirmation:
+    type: "object"
+    required:
+      - "confirmationId"
+      - "credentialId"
+      - "code"
+      - "status"
+      - "version"
+      - "modifiedOn"
+    properties:
+      confirmationId:
+        type: "string"
+      credentialId:
+        type: "string"
+      code:
+        type: "string"
+      status:
+        type: "string"
+      version:
+        type: "string"
+      modifiedOn:
+        type: "string"
+        format: "date-time"
+
+  ValidateConfirmCode:
+    type: "object"
+    required:
+      - "credentialId"
+      - "code"
+      - "partyId"
+    properties:
+      credentialId:
+        type: "string"
+      code:
+        type: "string"
+      partyId:
+        type: "string"
+
+  ValidatedConfirmCode:
+    type: "object"
+    required:
+      - "name"
+      - "valid"
+    properties:
+      name:
+        type: "string"
+      valid:
+        type: "boolean"
+
+  CreateOrganizationProfile:
+    type: "object"
+    required:
+    - "organization"
+    - "roles"
+    properties:
+      organization:
+        type: "object"
+        $ref: "#/definitions/Organization"
+      roles:
+        type: "array"
+        items:
+          $ref: "#/definitions/OrganizationProfile"
+
+  OrganizationProfile:
+    type: "object"
+    required:
+    - "organization"
+    - "roles"
+    properties:
+      organization:
+        type: "object"
+        $ref: '#/definitions/Organization'
+      image:
+        type: "string"
+      roles:
+        type: "array"
+        items:
+          $ref: '#/definitions/AccessRole'
+
+  Organization:
+    type: "object"
+    required:
+      - "partyId"
+      - "name"
+    properties:
+      partId:
+        type: "string"
+      name:
+        type: "string"
+      purpose:
+        type: "string"
+      image:
+        type: "string"
+      version:
+        type: "string"
+      tenantPartyId:
+        type: "string"
+      modifiedDate:
+        type: "string"
+        format: "date-time"
+
+  RequestAccess:
+    type: "object"
+    required:
+      - "partyId"
+      - "tenantPartyId"
+    properties:
+      parthId:
+        type: "string"
+      tenantPartyId:
+        type: "string"
+
+  RequestedAccess:
+    type: "object"
+    required:
+    - "name"
+    - "requestSent"
+    properties:
+      name:
+        type: "string"
+      requestSent:
+        type: "boolean"
+
+  CreatePersonProfile:
+    type: "object"
+    required:
+    - "person"
+    - "credential"
+    - "roles"
+    properties:
+      person:
+        type: "object"
+        $ref: "#/definitions/Person"
+      credential:
+        type: "object"
+        $ref: '#/definitions/Credential'
+      roles:
+        type: "array"
+        items:
+          $ref: '#/definitions/AccessRole'
+
+  PersonProfile:
+    type: "object"
+    required:
+      - "person"
+      - "credential"
+      - "roles"
+    properties:
+      person:
+        type: "object"
+        $ref: "#/definitions/Person"
+      credential:
+        type: "object"
+        $ref: "#/definitions/Credential"
+      roles:
+        type: "array"
+        items:
+          $ref: "#/definitions/AccessRole"
+      version:
+        type: "string"
+      modifiedOn:
+        type: "string"
+        format: "date-time"
+
+  CreateResource:
+    type: "object"
+    required:
+    - "resourceTypeId"
+    - "name"
+    - "description"
+    properties:
+      resourceTypeId:
+        type: "string"
+      name:
+        type: "string"
+      description:
+        type: "string"
+
+  Resource:
+    type: "object"
+    required:
+    - "resourceId"
+    - "resourceTypeId"
+    - "name"
+    - "version"
+    - "tenantPartyId"
+    - "modifiedOn"
+    properties:
+      resourceId:
+        type: "string"
+      resourceTypeId:
+        type: "string"
+      name:
+        type: "string"
+      description:
+        type: "string"
+      version:
+        type: "string"
+      tenantPartyId:
+        type: "string"
+      modifiedOn:
+        type: "string"
+        format: "date-time"
+
+  CreateResourceType:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      name:
+        type: "string"
+      description:
+        type: "string"
+
+  ResourceType:
+    type: "object"
+    required:
+    - "resourceTypeId"
+    - "name"
+    - "version"
+    - "tenantPartyId"
+    - "modifiedOn"
+    properties:
+      resourceTypeId:
+        type: "string"
+      name:
+        type: "string"
+      description:
+        type: "string"
+      version:
+        type: "string"
+      tenantPartyId:
+        type: "string"
+      modifiedOn:
+        type: "string"
+        format: "date-time"
+
+  CreateResourcePermission:
+    type: "object"
+    required:
+    - "resourceId"
+    - "permissionId"
+    properties:
+      resourceId:
+        type: "string"
+      permissionId:
+        type: "string"
+
+  ResourcePermission:
+    type: "object"
+    required:
+    - "resourcePermissionId"
+    - "resourceId"
+    - "permissionId"
+    - "version"
+    - "modifiedOn"
+    properties:
+      resourcePermissionId:
+        type: "string"
+      resourceId:
+        type: "string"
+      permissionId:
+        type: "string"
+      version:
+        type: "string"
+      modifiedOn:
+        type: "string"
+        format: "date-time"
+
+  CreatePermission:
+    type: "object"
+    required:
+      - "name"
+      - "description"
+    properties:
+      name:
+        type: "string"
+      description:
+        type: "string"
+
+  Permission:
+    type: "object"
+    required:
+    - "permissionId"
+    - "name"
+    - "description"
+    - "version"
+    - "modifiedOn"
+    properties:
+      permissionId:
+        type: "string"
+      name:
+        type: "string"
+      description:
+        type: "string"
+      version:
+        type: "string"
+      tenantPartyId:
+        type: "string"
+      modifiedOn:
+        type: "string"
+        format: "date-time"
+
+  CreateAccessRole:
+    type: "object"
+    required:
+      - "effectiveOn"
+      - "until"
+    properties:
+      accessRoleTypeId:
+        type: "string"
+      name:
+        type: "string"
+      description:
+        type: "string"
+      effectiveOn:
+        type: "string"
+        format: "date-time"
+      until:
+        type: "string"
+        format: "date-time"
+      version:
+        type: "string"
+      tenantPartyId:
+        type: "string"
+      modifiedOn:
+        type: "string"
+        format: "date-time"
+
+  AccessRole:
+    type: "object"
+    required:
+      - "accessRoleId"
+      - "name"
+      - "description"
+    properties:
+      accessRoleId:
+        type: "string"
+      name:
+        type: "string"
+      description:
+        type: "string"
+      version:
+        type: "string"
+      tenantPartyId:
+        type: "string"
+      modifiedOn:
+        type: "string"
+        format: "date-time"
+
+  CreateAccessRoleGrant:
+    type: "object"
+    required:
+      - "accessRoleId"
+      - "resourcePermissionId"
+    properties:
+      accessRoleGrantId:
+        type: "string"
+      resourcePermissionId:
+        type: "string"
+
+  AccessRoleGrant:
+    type: "object"
+    required:
+      - "accessRoleGrantId"
+      - "accessRoleId"
+      - "resourcePermissionId"
+    properties:
+      accessRoleGrantId:
+        type: "string"
+      accessRoleId:
+        type: "string"
+      resourcePermissionId:
+        type: "string"
+      version:
+        type: "string"
+      tenantPartyId:
+        type: "string"
+      modifiedOn:
+        type: "string"
+        format: "date-time"
+
+  CreatePartyAccessRole:
+    type: "object"
+    required:
+      - "partyAccessRoleId"
+      - "partyId"
+      - "accessRoleId"
+    properties:
+      partyAccessRoleId:
+        type: "string"
+      partyId:
+        type: "string"
+      accessRoleId:
+        type: "string"
+      effectiveOn:
+        type: "string"
+        format: "date-time"
+      until:
+        type: "string"
+        format: "date-time"
+      modifiedOn:
+        type: "string"
+        format: "date-time"
+
+  PartyAccessRole:
+    type: "object"
+    required:
+    - "partyAccessRoleId"
+    - "partyId"
+    - "accessRoleId"
+    properties:
+      partyAccessRoleId:
+        type: "string"
+      partyId:
+        type: "string"
+      accessRoleId:
+        type: "string"
+      effectiveOn:
+        type: "string"
+        format: "date-time"
+      until:
+        type: "string"
+        format: "date-time"
+      modifiedOn:
+        type: "string"
+        format: "date-time"
+
+  Credential:
+    type: "object"
+    properties:
+      credentialId:
+        type: "string"
+      partyId:
+        type: "string"
+      username:
+        type: "string"
+      hashedPassword:
+        type: "string"
+      status:
+        type: "string"
+        description: "Credential Status"
+        enum:
+        - "New"
+        - "Confirmed"
+        - "Active"
+        - "Disabled"
+      version:
+        type: "string"
+      modifiedOn:
+        type: "string"
+        format: "date-time"
+
+  Person:
+    type: "object"
+    required:
+      - "partyId"
+      - "lastName"
+    properties:
+      partyId:
+        type: "string"
+      firstName:
+        type: "string"
+      middleName:
+        type: "string"
+      lastName:
+        type: "string"
+      image:
+        type: "string"
+      version:
+        type: "string"
+      tenantPartyId:
+        type: "string"
+      modifiedOn:
+        type: "string"
+        format: "date-time"
+
+  CreateAccessRoleType:
+    type: "object"
+    required:
+    - "name"
+    - "description"
+    properties:
+      name:
+        type: "string"
+      description:
+        type: "string"
+
+  AccessRoleType:
+    type: "object"
+    required:
+      - "accessRoleTypeId"
+      - "name"
+      - "description"
+      - "version"
+      - "tenantPartyId"
+      - "modifiedOn"
+    properties:
+      accessRoleTypeId:
+        type: "string"
+      name:
+        type: "string"
+      description:
+        type: "string"
+      version:
+        type: "string"
+      tenantPartyId:
+        type: "string"
+      modifiedOn:
+        type: "string"
+        format: "date-time"
+
+  AuthenticateCredential:
+    type: "object"
+    required:
+      - "username"
+      - "password"
+    properties:
+      username:
+        type: "string"
+      password:
+        type: "string"
+
+  AuthenticatedCredential:
+    type: "object"
+    required:
+      - "credential"
+      - "authenticated"
+    properties:
+      credential:
+        $ref: "#/definitions/Session"
+      authenticated:
+        type: "boolean"
+
+  Session:
+    type: "object"
+    required:
+      - "sessionId"
+    properties:
+      sessionId:
+        type: "string"
+      version:
+        type: "string"
+      tenantPartyId:
+        type: "string"
+      createdOn:
+        type: "string"
+        format: "date-time"
+      modifiedOn:
+        type: "string"
+        format: "date-time"
+
+#  CreatedCredential:
+#    type: "object"
+#    properties:
+#      credential:
+#        $ref: "#/definitions/Credential"
+#      confirmation:
+#        $ref: "#/definitions/Confirmation"
+
+  DeleteObject:
+    type: "object"
+    required:
+      - "identifier"
+      - "version"
+    properties:
+      identifier:
+        type: "string"
+      version:
+        type: "string"
+
+  DeletedObject:
+    type: "object"
+    required:
+    - "name"
+    - "deleted"
+    properties:
+      name:
+        type: "string"
+      version:
+        type: "boolean"
