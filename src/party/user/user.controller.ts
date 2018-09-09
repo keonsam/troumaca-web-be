@@ -41,7 +41,8 @@ export  let getUsers = (req: Request, res: Response) => {
 
 export  let getUser = (req: Request, res: Response) => {
   const partyId = req.params.partyId;
-  userOrchestrator.getUser(partyId)
+  const sessionId = req.cookies["sessionId"];
+  userOrchestrator.getUser(partyId, sessionId)
     .subscribe(userResponse => {
         if (userResponse) {
             res.status(200);
@@ -59,13 +60,16 @@ export  let getUser = (req: Request, res: Response) => {
 
 export  let saveUser = (req: Request, res: Response) => {
   const user = req.body.user;
+  const credential = req.body.credential;
   const partyAccessRoles = req.body.partyAccessRoles;
+  const sessionId = req.cookies["sessionId"];
+
     if (!req.body) {
         return res.status(400).send({
             message: "User can not be empty"
         });
     }
-  userOrchestrator.saveUser(user, partyAccessRoles)
+  userOrchestrator.saveUser(user, credential, partyAccessRoles, sessionId)
     .subscribe(user => {
         res.status(201);
         res.send(JSON.stringify(user));
@@ -79,40 +83,15 @@ export  let saveUser = (req: Request, res: Response) => {
 export let updateUser = (req: Request, res: Response) => {
   const partyId = req.params.partyId;
   const user = req.body.user;
-  const partyAccessRoles = req.body.partyAccessRoles;
-    if (!req.body) {
-        return res.status(400).send({
-            message: "User can not be empty"
-        });
-    }
-  userOrchestrator
-    .updateUser(partyId, user, partyAccessRoles)
-    .subscribe(affected => {
-        if (affected > 0) {
-            res.status(200);
-            res.send(JSON.stringify(affected));
-        } else {
-            res.status(404);
-            res.send(JSON.stringify({message: "No Data Found For " + req.params.partyId}));
-        }
-    }, error => {
-        res.status(500);
-        res.send(JSON.stringify({message: "Error Occurred"}));
-        console.log(error);
-    });
-};
-
-export let updateUserMe = (req: Request, res: Response) => {
-  const partyId = req.params.partyId;
-  const user = req.body.user;
   const credential = req.body.credential;
-    if (!req.body) {
-        return res.status(400).send({
-            message: "User Me can not be empty"
-        });
-    }
+  const partyAccessRoles = req.body.partyAccessRoles;
+  if (!req.body) {
+      return res.status(400).send({
+          message: "User can not be empty"
+      });
+  }
   userOrchestrator
-    .updateUserMe(partyId, user, credential)
+    .updateUser(partyId, user, credential, partyAccessRoles)
     .subscribe(affected => {
         if (affected > 0) {
             res.status(200);

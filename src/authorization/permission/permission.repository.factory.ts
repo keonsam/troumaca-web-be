@@ -1,4 +1,3 @@
-import Rx from "rxjs";
 import { permissions } from "../../db";
 import { PermissionRepository } from "./permission.repository";
 import { Permission } from "./permission";
@@ -13,7 +12,7 @@ class PermissionDBRepository implements PermissionRepository {
 
 
   getPermissionsByArray(pageNumber: number, pageSize: number, order: string, assignedArray: string[]): Observable<Permission[]> {
-    return Rx.Observable.create(function (observer: Observer<Permission[]>) {
+    return Observable.create(function (observer: Observer<Permission[]>) {
       const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
       permissions.find({ permissionId: { $nin: assignedArray }}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
         if (!err) {
@@ -27,7 +26,7 @@ class PermissionDBRepository implements PermissionRepository {
   }
 
   getResourcePermissionsByArray(pageNumber: number, pageSize: number, order: string, assignedArray: string[]): Observable<Permission[]> {
-    return Rx.Observable.create(function (observer: Observer<Permission[]>) {
+    return Observable.create(function (observer: Observer<Permission[]>) {
       const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
       permissions.find({ permissionId: { $in: assignedArray }}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
         if (!err) {
@@ -42,7 +41,7 @@ class PermissionDBRepository implements PermissionRepository {
 
   getPermissions(pageNumber: number, pageSize: number, order: string): Observable<Permission[]> {
     const localDefaultPageSize = this.defaultPageSize;
-    return Rx.Observable.create(function (observer: Observer<Permission[]>) {
+    return Observable.create(function (observer: Observer<Permission[]>) {
       const skip = calcSkip(pageNumber, pageSize, localDefaultPageSize);
       permissions.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
         if (!err) {
@@ -56,7 +55,7 @@ class PermissionDBRepository implements PermissionRepository {
   }
 
   getPermissionCount(): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       permissions.count({}, function (err: any, count: number) {
         if (!err) {
           observer.next(count);
@@ -70,7 +69,7 @@ class PermissionDBRepository implements PermissionRepository {
 
   addPermission(permission: Permission): Observable<Permission> {
     permission.permissionId = generateUUID();
-    return Rx.Observable.create(function(observer: Observer<Permission>) {
+    return Observable.create(function(observer: Observer<Permission>) {
       permissions.insert(permission, function(err: any, doc: any) {
         if (err) {
           observer.error(err);
@@ -83,7 +82,7 @@ class PermissionDBRepository implements PermissionRepository {
   }
 
   deletePermission(permissionId: string): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       const query = {
         "permissionId": permissionId
       };
@@ -99,7 +98,7 @@ class PermissionDBRepository implements PermissionRepository {
   }
 
   getPermissionById(permissionId: string): Observable<Permission> {
-    return Rx.Observable.create(function (observer: Observer<Permission>) {
+    return Observable.create(function (observer: Observer<Permission>) {
       const query = {
         "permissionId": permissionId
       };
@@ -115,7 +114,7 @@ class PermissionDBRepository implements PermissionRepository {
   }
 
   updatePermission(permissionId: string, permission: Permission): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       const query = {
         "permissionId": permissionId
       };

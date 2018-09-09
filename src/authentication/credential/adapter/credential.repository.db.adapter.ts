@@ -210,6 +210,28 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
         });
     }
 
+    updateUserCredential(partyId: string, credential: Credential): Observable<number> {
+        return Observable.create(function (observer: Observer<number>) {
+            const update: any = {};
+            update.username = credential.username;
+            if (credential.password) {
+                update.password = credential.password;
+            }
+            const query: any = {
+                "partyId": partyId
+            };
+
+            credentials.update(query, {$set : update}, {}, function (err, numReplaced) {
+                if (!err) {
+                    observer.next(numReplaced);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
+        });
+    }
+
   // getCredentialByCredentialId(credentialId: string): Observable<Credential> {
   //     return Observable.create(function (observer: Observer<Credential>) {
   //         const query = {
@@ -234,26 +256,6 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
   //         credentials.insert(credential.toJson(), function (err: any, doc: any) {
   //             if (!err) {
   //                 observer.next(credential);
-  //             } else {
-  //                 observer.error(err);
-  //             }
-  //             observer.complete();
-  //         });
-  //     });
-  // }
-
-  // updateCredential(partyId: string, credential: Credential): Observable<number> {
-  //     return Observable.create(function (observer: Observer<number>) {
-  //         if (!credential.password) {
-  //             delete credential.password;
-  //         }
-  //         const query: any = {
-  //             "partyId": partyId
-  //         };
-  //
-  //         credentials.update(query, {$set : credential}, {}, function (err, numReplaced) {
-  //             if (!err) {
-  //                 observer.next(numReplaced);
   //             } else {
   //                 observer.error(err);
   //             }

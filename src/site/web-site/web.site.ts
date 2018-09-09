@@ -2,13 +2,13 @@ import { VirtualSite } from "../virtual.site";
 
 export class WebSite extends VirtualSite {
 
-  private _uniformResourceIdentifer: string;
+  private _uniformResourceIdentifier: string;
 
-  get uniformResourceIdentifer(): string {
-    return this._uniformResourceIdentifer;
+  get uniformResourceIdentifier(): string {
+    return this._uniformResourceIdentifier;
   }
 
-  set uniformResourceIdentifer(value: string) {
-    this._uniformResourceIdentifer = value;
+  set uniformResourceIdentifier(value: string) {
+    this._uniformResourceIdentifier = value;
   }
 }

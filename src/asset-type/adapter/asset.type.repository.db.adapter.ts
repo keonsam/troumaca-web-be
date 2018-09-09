@@ -121,8 +121,11 @@ export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
            } else {
                return this.valueRepositoryNeDbAdapter.deleteValuesByAssetTypeId(assetTypeId)
                    .pipe(switchMap(numRemoved => {
+                       values.forEach(val => {
+                           val.assetTypeId = assetType.assetTypeId;
+                       });
                        return this.valueRepositoryNeDbAdapter.saveValues(values)
-                           .pipe(map( values => {
+                           .pipe(map( valuesArr => {
                               return num;
                            }));
                    }));

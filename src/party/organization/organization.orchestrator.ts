@@ -1,40 +1,82 @@
 import { createOrganizationRepository } from "./organization.repository.factory";
 import { OrganizationRepository } from "./organization.repository";
-import { Observable } from "rxjs";
-import { flatMap, map } from "rxjs/operators";
+import { Observable, of } from "rxjs";
+import { flatMap, map, switchMap } from "rxjs/operators";
 import { Organization } from "./organization";
 import { shapeOrganizationsResponse } from "./organization.response.shaper";
 import { Result } from "../../result.success";
 import { getSortOrderOrDefault } from "../../sort.order.util";
+import { SessionRepository } from "../../session/session.repository";
+import { createSessionRepositoryFactory } from "../../session/session.repository.factory";
+import { JoinOrganizationRequest } from "./join.organization.request";
 
 export class OrganizationOrchestrator {
 
   private organizationRepository: OrganizationRepository;
+  private sessionRepository: SessionRepository;
 
   constructor() {
-
     this.organizationRepository = createOrganizationRepository();
+    this.sessionRepository = createSessionRepositoryFactory();
   }
 
-    getOrganizations (number: number, size: number, field: string, direction: string): Observable<Result<any>> {
+  findOrganization(searchStr: string, pageSize: number): Observable<Organization[]> {
+      return this.organizationRepository.findOrganization(searchStr, pageSize);
+  }
+
+  sendJoinRequest(request: string, sessionId?: string): Observable<JoinOrganizationRequest> {
+    // This is just basic boilerplate logic
+      return this.sessionRepository.getSessionById(sessionId)
+          .pipe( switchMap( session => {
+            if (!session) {
+              return of(undefined);
+            } else {
+              const joinRequest: JoinOrganizationRequest = new JoinOrganizationRequest(session.partyId, request);
+              joinRequest.status = "pending entry to organization";
+              return this.organizationRepository.saveOrganizationRequest(joinRequest);
+            }
+          }));
+  }
+
+  getOrganizations (number: number, size: number, field: string, direction: string): Observable<Result<any>> {
       const sort = getSortOrderOrDefault(field, direction);
       return this.organizationRepository.getOrganizations(number, size, sort)
-        .pipe(flatMap(value => {
-          return this.organizationRepository.getOrganizationCount()
-            .pipe(map(count => {
-               const shapeOrganizationsResp: any = shapeOrganizationsResponse(value, number, size, value.length, count, sort);
-               return new Result<any>(false, "organizations", shapeOrganizationsResp);
-              // return new PageResponse(value, number, size, count, direction);
-            }));
-        }));
-    }
+          .pipe(flatMap(value => {
+              return this.organizationRepository.getOrganizationCount()
+                  .pipe(map(count => {
+                      const shapeOrganizationsResp: any = shapeOrganizationsResponse(value, number, size, value.length, count, sort);
+                      return new Result<any>(false, "organizations", shapeOrganizationsResp);
+                      // return new PageResponse(value, number, size, count, direction);
+                  }));
+          }));
+  }
 
-    getOrganization (partyId: string): Observable<Organization> {
-      return this.organizationRepository.getOrganization(partyId);
-    }
+  getOrganization (partyId: string, sessionId?: string): Observable<Organization> {
+      if (partyId === "company") {
+          return this.sessionRepository.getSessionById(sessionId)
+              .pipe(switchMap(session => {
+                  if (!session) return of(undefined);
+                  return this.organizationRepository.getOrganization(session.partyId);
+              }));
+      } else {
+          return this.organizationRepository.getOrganization(partyId);
+      }
+  }
 
-    saveOrganization (organization: Organization): Observable<Organization> {
-      return this.organizationRepository.saveOrganization(organization);
+    saveOrganization (organization: Organization, sessionId: string, type: string): Observable<Organization> {
+      if (type === "company") {
+          return this.sessionRepository.getSessionById(sessionId)
+              .pipe( switchMap( session => {
+                  if (!session) {
+                      return of(undefined);
+                  } else {
+                      organization.partyId = session.partyId;
+                      return this.organizationRepository.saveOrganization(organization);
+                  }
+          }));
+      } else {
+          return this.organizationRepository.saveOrganization(organization);
+      }
     }
 
     deleteOrganization (partyId: string): Observable<number> {

@@ -1,2 +1,3 @@
-{"purpose":"","name":"throw4 Away","description":"","partyId":"3b43a146-c98e-4733-8691-ce98ca93046f","_id":"4sdb4ZsLIXyrJYZQ"}
+{"partyId":"3b43a146-c98e-4733-8691-ce98ca93046f","purpose":"Testing","name":"throw4 Co","description":"","_id":"4sdb4ZsLIXyrJYZQ"}
 {"$$indexCreated":{"fieldName":"partyId","unique":true,"sparse":false}}
+{"purpose":"Asset Management","name":"Troumaca Corp","description":"Programming test","partyId":"6c1fd0df-5ba9-4e95-99a1-5f507dc2b363","_id":"krZCTQI6W1OgXIxb"}

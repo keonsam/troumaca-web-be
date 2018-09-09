@@ -1,4 +1,3 @@
-import * as Rx from "rxjs";
 import { OrganizationRepository } from "./organization.repository";
 import { Observable ,  Observer } from "rxjs";
 import { RepositoryKind } from "../../repository.kind";
@@ -6,16 +5,33 @@ import { Organization } from "./organization";
 import { organizations } from "../../db";
 import { calcSkip } from "../../db.util";
 import { generateUUID } from "../../uuid.generator";
+import { JoinOrganizationRequest } from "./join.organization.request";
 
 class OrganizationDBRepository implements OrganizationRepository {
 
   private defaultPageSize: number = 100;
 
+  findOrganization(searchStr: string, pageSize: number): Observable<Organization[]> {
+      const searchStrLocal = new RegExp(searchStr);
+      const query = searchStr ? {name: {$regex: searchStrLocal}} : {};
+      return Observable.create(function (observer: Observer<Organization[]>) {
+        organizations.find(query).limit(100).exec(function (err: any, doc: any) {
+            if (!err) {
+              console.log(doc);
+                observer.next(doc);
+            } else {
+                observer.error(err);
+            }
+            observer.complete();
+        });
+      });
+  }
+
   saveOrganization(organization: Organization): Observable<Organization> {
     if (!organization.partyId) {
       organization.partyId = generateUUID();
     }
-    return Rx.Observable.create(function (observer: Observer<Organization>) {
+    return Observable.create(function (observer: Observer<Organization>) {
       organizations.insert(organization, function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
@@ -27,9 +43,24 @@ class OrganizationDBRepository implements OrganizationRepository {
     });
   }
 
+
+
+  saveOrganizationRequest(joinRequest: JoinOrganizationRequest): Observable<JoinOrganizationRequest> {
+      return Observable.create(function (observer: Observer<JoinOrganizationRequest>) {
+          organizations.insert(joinRequest.toJson(), function (err: any, doc: any) {
+              if (!err) {
+                  observer.next(doc);
+              } else {
+                  observer.error(err);
+              }
+              observer.complete();
+          });
+      });
+  }
+
   getOrganizations(pageNumber: number, pageSize: number, order: string): Observable<Organization[]> {
     const localDefaultPageSize = this.defaultPageSize;
-    return Rx.Observable.create(function (observer: Observer<Organization[]>) {
+    return Observable.create(function (observer: Observer<Organization[]>) {
       const skip = calcSkip(pageNumber, pageSize, localDefaultPageSize);
       organizations.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
         if (!err) {
@@ -43,7 +74,7 @@ class OrganizationDBRepository implements OrganizationRepository {
   }
 
   getOrganizationCount(): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       organizations.count({}, function (err: any, count: number) {
         if (!err) {
           observer.next(count);
@@ -56,7 +87,7 @@ class OrganizationDBRepository implements OrganizationRepository {
   }
 
   getOrganization(partyId: string): Observable<Organization> {
-    return Rx.Observable.create(function (observer: Observer<Organization>) {
+    return Observable.create(function (observer: Observer<Organization>) {
       const query = {
         "partyId": partyId
       };
@@ -73,7 +104,7 @@ class OrganizationDBRepository implements OrganizationRepository {
   }
 
   deleteOrganization(partyId: string): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       const query = {
         "partyId": partyId
       };
@@ -90,7 +121,7 @@ class OrganizationDBRepository implements OrganizationRepository {
   }
 
   updateOrganization(partyId: string, organization: Organization): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       const query = {
         "partyId": partyId
       };
@@ -108,7 +139,15 @@ class OrganizationDBRepository implements OrganizationRepository {
 
 class OrganizationRestRepository implements OrganizationRepository {
 
+  findOrganization(searchStr: string, pageSize: number): Observable<Organization[]> {
+    return undefined;
+  }
+
   saveOrganization(organization: Organization): Observable<Organization> {
+    return undefined;
+  }
+
+  saveOrganizationRequest(joinRequest: JoinOrganizationRequest): Observable<JoinOrganizationRequest> {
     return undefined;
   }
 

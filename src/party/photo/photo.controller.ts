@@ -3,13 +3,14 @@ import { PhotoOrchestrator } from "./photo.orchestrator";
 
 const orchestrator: PhotoOrchestrator = new PhotoOrchestrator();
 
-export let getPhotoById = (req: Request, res: Response) => {
+export let getPhotos = (req: Request, res: Response) => {
+    const sessionId = req.cookies["sessionId"];
   orchestrator
-    .getPhotoById(req.params.partyId, req.params.type)
+    .getPhotos(sessionId)
     .subscribe(photo => {
         if (photo) {
             res.status(200);
-            res.send(JSON.stringify(photo));
+            res.send(JSON.stringify(photo.toJson()));
         } else {
             res.status(404);
             res.send(JSON.stringify({message: "No Data Found For " + req.params.partyId}));
@@ -27,7 +28,8 @@ export let savePhoto = (req: Request, res: Response) => {
             message: "Photo can not be empty"
         });
     }
-  orchestrator.savePhoto(req.params.type, req.body)
+    const sessionId = req.cookies["sessionId"];
+  orchestrator.savePhoto(req.params.type, req.body, sessionId)
     .subscribe(photo => {
         res.status(201);
         res.send(JSON.stringify(photo));

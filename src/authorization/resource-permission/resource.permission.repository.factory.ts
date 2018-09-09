@@ -1,4 +1,3 @@
-import Rx from "rxjs";
 import { resourcePermissions } from "../../db";
 import { ResourcePermissionRepository } from "./resource.permission.repository";
 import { ResourcePermission } from "./resource.permission";
@@ -9,7 +8,7 @@ import { generateUUID } from "../../uuid.generator";
 class ResourcePermissionDBRepository implements ResourcePermissionRepository {
 
   getAllResourcePermissions(): Observable<ResourcePermission[]> {
-    return Rx.Observable.create(function(observer: Observer<ResourcePermission[]>) {
+    return Observable.create(function(observer: Observer<ResourcePermission[]>) {
       resourcePermissions.find({}, function (err: any, docs: any) {
         if (err) {
           observer.error(err);
@@ -22,7 +21,7 @@ class ResourcePermissionDBRepository implements ResourcePermissionRepository {
   }
 
   getResourcePermissionsByResourceId(resourceId: string): Observable<ResourcePermission[]> {
-    return Rx.Observable.create(function(observer: Observer<ResourcePermission[]>) {
+    return Observable.create(function(observer: Observer<ResourcePermission[]>) {
       resourcePermissions.find({resourceId}, function (err: any, docs: any) {
         if (err) {
           observer.error(err);
@@ -41,7 +40,7 @@ class ResourcePermissionDBRepository implements ResourcePermissionRepository {
         value.resourcePermissionId = generateUUID();
       }
     });
-    return Rx.Observable.create(function(observer: Observer<ResourcePermission[]>) {
+    return Observable.create(function(observer: Observer<ResourcePermission[]>) {
       resourcePermissions.insert(resourcePermission, function(err: any, doc: any) {
         if (err) {
           observer.error(err);
@@ -54,7 +53,7 @@ class ResourcePermissionDBRepository implements ResourcePermissionRepository {
   }
 
   deleteResourcePermission(resourceId: string): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       const query = {
         "resourceId": resourceId
       };
@@ -70,7 +69,7 @@ class ResourcePermissionDBRepository implements ResourcePermissionRepository {
   }
 
   getResourcePermissionById(resourcePermissionId: string, ownerPartyId: string): Observable<ResourcePermission> {
-    return Rx.Observable.create(function (observer: Observer<ResourcePermission>) {
+    return Observable.create(function (observer: Observer<ResourcePermission>) {
       const query = {
         "resourcePermissionId": resourcePermissionId
       };
@@ -86,7 +85,7 @@ class ResourcePermissionDBRepository implements ResourcePermissionRepository {
   }
 
   updateResourcePermission(resourcePermissionId: string, resourcePermission: ResourcePermission): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       const query = {
         "resourcePermissionId": resourcePermissionId
       };

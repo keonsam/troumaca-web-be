@@ -2,6 +2,7 @@ import { PhotoRepository } from "../photo.repository";
 import { Photo } from "../photo";
 import { Observable ,  Observer } from "rxjs";
 import { organizationPhotos, userPhotos } from "../../../db";
+import { map, switchMap } from "rxjs/operators";
 
 export class PhotoRepositoryNeDbAdapter implements PhotoRepository {
 
@@ -21,11 +22,21 @@ export class PhotoRepositoryNeDbAdapter implements PhotoRepository {
         });
     }
 
+    getPhotos(partyId: string): Observable<Photo> {
+        const newPhoto: Photo = new Photo();
+        return this.getPhotoById(partyId, "user").pipe( switchMap(userPhoto => {
+            return this.getPhotoById(partyId, "organization").pipe(map( organizationPhoto => {
+                newPhoto.partyId = userPhoto.partyId;
+                newPhoto.userImage = userPhoto.imageStr;
+                newPhoto.organizationImage = organizationPhoto.imageStr;
+                return newPhoto;
+            }));
+        }));
+    }
+
     getPhotoById(partyId: string, type: string): Observable<Photo> {
         return Observable.create(function (observer: Observer<Photo>) {
-            const query = {
-                "partyId": partyId
-            };
+            const query = { "partyId": partyId };
             const db = type === "user" ? userPhotos : organizationPhotos;
             db.findOne(query, function (err: any, doc: any) {
                 if (!err) {

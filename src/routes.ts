@@ -132,17 +132,19 @@ router.get("/users/:partyId", userController.getUser);
 router.post("/users", userController.saveUser);
 router.put("/users/:partyId", userController.updateUser);
 // TODO : Fix this /users-me
-router.put("/users-me/:partyId", userController.updateUserMe);
+// router.put("/users-me/:partyId", userController.updateUserMe);
 router.delete("/users/:partyId", userController.deleteUser);
 // organizations
 router.get("/organizations", organizationController.getOrganizations);
 router.get("/organizations/:partyId", organizationController.getOrganization);
+router.get("/organizations-find", organizationController.findOrganizations);
 router.post("/organizations", organizationController.saveOrganization);
+router.post("/organizations-send-request", organizationController.sendJoinRequest);
 router.put("/organizations/:partyId", organizationController.updateOrganization);
 router.delete("/organizations/:partyId", organizationController.deleteOrganization);
 
-// photos
-router.get("/photos/:type/:partyId", photoController.getPhotoById);
+// PHOTOS
+router.get("/photos", photoController.getPhotos);
 router.post("/photos/:type", photoController.savePhoto);
 router.put("/photos/:type/:partyId", photoController.updatePhoto);
 

@@ -51,6 +51,7 @@ export class AssignedAttributeRepositoryNeDbAdapter implements AssignedAttribute
                         assignedAttributes.forEach(value => {
                             const index = attributes.findIndex(x => x.attributeId === value.attributeId);
                             value.attributeName = index !== -1 ? attributes[index].name : "";
+                            value.dataTypeId = attributes[index].dataTypeId;
                         });
                         return assignedAttributes;
                     }));

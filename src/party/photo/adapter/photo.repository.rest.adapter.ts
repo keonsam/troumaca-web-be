@@ -8,7 +8,7 @@ export class PhotoRepositoryRestAdapter implements PhotoRepository {
     //     return undefined;
     // }
 
-    getPhotoById(partyId: string, type: string): Observable<Photo> {
+    getPhotos(partyId: string): Observable<Photo> {
         return undefined;
     }
 

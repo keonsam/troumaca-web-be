@@ -4,7 +4,7 @@ import { Photo } from "./photo";
 export interface PhotoRepository {
   savePhoto(type: string, photo: Photo): Observable<Photo>;
 
-  getPhotoById(partyId: string, type: string): Observable<Photo>;
+  getPhotos(partyId: string): Observable<Photo>;
 
   updatePhoto(partyId: string, type: string, photo: Photo): Observable<number>;
 
