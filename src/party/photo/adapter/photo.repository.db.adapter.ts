@@ -26,9 +26,17 @@ export class PhotoRepositoryNeDbAdapter implements PhotoRepository {
         const newPhoto: Photo = new Photo();
         return this.getPhotoById(partyId, "user").pipe( switchMap(userPhoto => {
             return this.getPhotoById(partyId, "organization").pipe(map( organizationPhoto => {
-                newPhoto.partyId = userPhoto.partyId;
-                newPhoto.userImage = userPhoto.imageStr;
-                newPhoto.organizationImage = organizationPhoto.imageStr;
+                if (userPhoto) {
+                    newPhoto.userImage = userPhoto.imageStr;
+                    newPhoto.partyId = userPhoto.partyId;
+                }
+                if (organizationPhoto) {
+                    newPhoto.organizationImage = organizationPhoto.imageStr;
+                    // TODO: this will need fixing. what if it's an invited user organization photo? for now leave as is.
+                    if (!userPhoto) {
+                        newPhoto.partyId = organizationPhoto.partyId;
+                    }
+                }
                 return newPhoto;
             }));
         }));
