@@ -1,8 +1,8 @@
 import { RepositoryKind } from "../../repository.kind";
-import { CredentialRepository } from "./credential.repository";
+import { CredentialRepository } from "../../repository/credential.repository";
 import { properties } from "../../properties.helpers";
-import { CredentialRepositoryNeDbAdapter } from "./adapter/credential.repository.db.adapter";
-import { CredentialRepositoryRestAdapter } from "./adapter/credential.repository.rest.adapter";
+import { CredentialRepositoryNeDbAdapter } from "./credential.repository.db.adapter";
+import { CredentialRepositoryRestAdapter } from "./credential.repository.rest.adapter";
 
 
 

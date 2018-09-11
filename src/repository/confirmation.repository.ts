@@ -1,5 +1,5 @@
 import { Observable } from "rxjs/Observable";
-import { Confirmation } from "./confirmation";
+import { Confirmation } from "../data/confirmation";
 
 export interface ConfirmationRepository {
 

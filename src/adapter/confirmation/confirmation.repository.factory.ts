@@ -1,8 +1,8 @@
-import { ConfirmationRepository } from "./confirmation.repository";
-import { RepositoryKind } from "../../../repository.kind";
-import { ConfirmationRepositoryNeDbAdapter } from "./adapter/confirmation.repository.db.adapter";
-import { ConfirmationRepositoryRestAdapter } from "./adapter/confirmation.repository.rest.adapter";
-import { properties } from "../../../properties.helpers";
+import { ConfirmationRepository } from "../../repository/confirmation.repository";
+import { RepositoryKind } from "../../repository.kind";
+import { ConfirmationRepositoryNeDbAdapter } from "./confirmation.repository.db.adapter";
+import { ConfirmationRepositoryRestAdapter } from "./confirmation.repository.rest.adapter";
+import { properties } from "../../properties.helpers";
 
 export function createCredentialConfirmationRepositoryFactory(kind?: RepositoryKind): ConfirmationRepository {
 

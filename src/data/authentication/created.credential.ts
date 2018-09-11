@@ -1,5 +1,5 @@
 import { Credential } from "./credential";
-import { Confirmation } from "./confirmation/confirmation";
+import { Confirmation } from "./confirmation";
 
 export interface CreatedCredential {
     credential: Credential;

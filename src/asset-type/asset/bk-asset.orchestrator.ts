@@ -8,7 +8,7 @@ import { Asset } from "./asset";
 import { AssetKind } from "../kind/asset.kind";
 import { AssetType } from "../asset.type";
 import { UnitOfMeasure } from "../../unit-of-measure/unit.of.measure";
-import { Person } from "../../party/person/person";
+// import { Person } from "../../party/person/person";
 import { Site } from "../../site/site";
 import { Result } from "../../result.success";
 

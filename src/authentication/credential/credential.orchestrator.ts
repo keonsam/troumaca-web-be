@@ -1,15 +1,13 @@
-import { ValidateResponse } from "./validate.response";
-import { Credential } from "./credential";
-import { createCredentialRepositoryFactory } from "./credential.repository.factory";
-import { CredentialRepository } from "./credential.repository";
+import { Credential } from "../../data/credential";
+import { createCredentialRepositoryFactory } from "../../adapter/credential/credential.repository.factory";
+import { CredentialRepository } from "../../repository/credential.repository";
 import { Observable } from "rxjs/Observable";
 import { Session } from "../../session/session";
 import { createSessionRepositoryFactory } from "../../session/session.repository.factory";
 import { SessionRepository } from "../../session/session.repository";
 import "rxjs/add/operator/map";
-import { AuthenticatedCredential } from "./authenticated.credential";
-import { Confirmation } from "./confirmation/confirmation";
-import { CreatedCredential } from "./created.credential";
+import { AuthenticatedCredential } from "../../data/authenticated.credential";
+import { CreatedCredential } from "../../data/created.credential";
 
 export class CredentialOrchestrator {
 
