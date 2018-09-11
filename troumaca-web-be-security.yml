@@ -174,7 +174,7 @@ paths:
         500:
           description: "server error occurred"
 
-  /conformation/validate-confirmation-code:
+  /conformation/confirmation-code:
     post:
       tags:
       - "Confirmation"
@@ -207,7 +207,7 @@ paths:
         500:
           description: "server error occurred"
 
-  /organizations/profile:
+  /organizations/profiles:
     post:
       tags:
       - "Profile"
@@ -328,7 +328,7 @@ paths:
         500:
           description: "server error occurred"
 
-  /persons/profile:
+  /persons/profiles:
     post:
       tags:
         - "Profile"
@@ -545,7 +545,7 @@ paths:
         500:
           description: "server error occurred"
 
-  /authorization/access-role-grant:
+  /authorization/access-role-grants:
     post:
       tags:
       - "AccessRole"
@@ -576,7 +576,7 @@ paths:
         500:
           description: "server error occurred"
 
-  /authorization/party-access-role:
+  /authorization/party-access-roles:
     post:
       tags:
       - "AccessRole"
@@ -640,6 +640,8 @@ paths:
           description: "Invalid credential"
         500:
           description: "server error occurred"
+
+  /sessions/get-or-create:
 
 securityDefinitions:
   petstore_auth:
