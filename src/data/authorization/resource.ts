@@ -1,4 +1,4 @@
-import { ResourceType } from "../resource-type/resource.type";
+import { ResourceType } from "./resource.type";
 
 export class Resource {
 

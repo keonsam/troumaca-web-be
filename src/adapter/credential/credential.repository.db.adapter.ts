@@ -2,16 +2,16 @@ import validator from "validator";
 import libphonenumberjs from "libphonenumber-js";
 import PasswordValidator from "password-validator";
 import { generateUUID } from "../../uuid.generator";
-import { Credential } from "../../data/credential";
+import { Credential } from "../../data/authentication/credential";
 import { Observable } from "rxjs/Observable";
 import { Observer } from "rxjs/Observer";
 import { credentials } from "../../db";
 import { CredentialRepository } from "../../repository/credential.repository";
-import { AuthenticatedCredential } from "../../data/authenticated.credential";
+import { AuthenticatedCredential } from "../../data/authentication/authenticated.credential";
 import "rxjs/add/observable/of";
-import { Confirmation } from "../../data/confirmation";
+import { Confirmation } from "../../data/authentication/confirmation";
 import { ConfirmationRepositoryNeDbAdapter } from "../confirmation/confirmation.repository.db.adapter";
-import { CreatedCredential } from "../../data/created.credential";
+import { CreatedCredential } from "../../data/authentication/created.credential";
 
 export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
 

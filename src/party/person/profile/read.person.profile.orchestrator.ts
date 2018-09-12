@@ -1,9 +1,10 @@
-import { createPersonRepository } from "./person.profile.repository.factory";
-import { PersonRepository } from "./person.profile.repository";
+import { createPersonRepository } from "../../../adapter/party/person.repository.factory";
+import { PersonRepository } from "../../../repository/person.repository";
 import { Observable } from "rxjs/Observable";
-import { PersonProfile } from "./person.profile";
+import { PersonProfile } from "../../../data/party/person.profile";
+import {Person} from "../../../data/party/person";
 
-export class PersonProfileOrchestrator {
+export class ReadPersonProfileOrchestrator {
 
   private personRepository: PersonRepository;
 
@@ -11,7 +12,7 @@ export class PersonProfileOrchestrator {
     this.personRepository = createPersonRepository();
   }
 
-  findPerson(searchStr: string, pageSize: number): Observable<PersonProfile[]> {
+  findPerson(searchStr: string, pageSize: number): Observable<Person[]> {
     return this.personRepository.findPerson(searchStr, pageSize);
   }
 

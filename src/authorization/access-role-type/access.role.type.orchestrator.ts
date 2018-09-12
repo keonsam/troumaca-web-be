@@ -1,7 +1,7 @@
-import { AccessRoleTypeRepository } from "./access.role.type.repository";
-import { createAccessRoleTypeRepositoryFactory } from "./access.role.type.repository.factory";
+import { AccessRoleTypeRepository } from "../../repository/access.role.type.repository";
+import { createAccessRoleTypeRepositoryFactory } from "../../adapter/access-role-type/access.role.type.repository.factory";
 import { Observable } from "rxjs/Observable";
-import { AccessRoleType } from "./access.role.type";
+import { AccessRoleType } from "../../data/authorization/access.role.type";
 import { shapeAccessRoleTypesResponse } from "./access.role.type.response.shaper";
 import { Result } from "../../result.success";
 import { getSortOrderOrDefault } from "../../sort.order.util";

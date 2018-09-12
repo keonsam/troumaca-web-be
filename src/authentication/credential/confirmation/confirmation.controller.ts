@@ -1,6 +1,6 @@
 import { Response, Request } from "express";
 import { ConfirmationOrchestrator } from "./confirmation.orchestrator";
-import { Confirmation } from "../../../data/confirmation";
+import { Confirmation } from "../../../data/authentication/confirmation";
 
 const confirmationOrchestrator: ConfirmationOrchestrator = new ConfirmationOrchestrator();
 

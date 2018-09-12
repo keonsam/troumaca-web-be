@@ -1,7 +1,7 @@
 import { Observable } from "rxjs/Observable";
-import { Credential } from "./credential";
-import { AuthenticatedCredential } from "./authenticated.credential";
-import { CreatedCredential } from "./created.credential";
+import { Credential } from "../data/authentication/credential";
+import { AuthenticatedCredential } from "../data/authentication/authenticated.credential";
+import { CreatedCredential } from "../data/authentication/created.credential";
 
 export interface CredentialRepository {
 

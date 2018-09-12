@@ -1,5 +1,5 @@
 import { Observable } from "rxjs/Observable";
-import { Permission } from "./permission";
+import { Permission } from "../data/authorization/permission";
 
 export interface PermissionRepository {
 

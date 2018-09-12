@@ -1,4 +1,4 @@
-import { AccessRoleType } from "./access.role.type";
+import { AccessRoleType } from "../data/authorization/access.role.type";
 import { Observable } from "rxjs/Observable";
 
 export interface AccessRoleTypeRepository {

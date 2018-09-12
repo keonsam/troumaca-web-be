@@ -1,7 +1,7 @@
 import Rx from "rxjs";
 import { resourceTypes } from "../../db";
-import { ResourceTypeRepository } from "./resource.type.repository";
-import { ResourceType } from "./resource.type";
+import { ResourceTypeRepository } from "../../repository/resource.type.repository";
+import { ResourceType } from "../../data/authorization/resource.type";
 import { Observable } from "rxjs/Observable";
 import { RepositoryKind } from "../../repository.kind";
 import { Observer } from "rxjs/Observer";

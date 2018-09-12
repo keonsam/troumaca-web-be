@@ -1,4 +1,4 @@
-import { Permission } from "../permission/permission";
+import { Permission } from "./permission";
 
 export class ResourcePermission {
 

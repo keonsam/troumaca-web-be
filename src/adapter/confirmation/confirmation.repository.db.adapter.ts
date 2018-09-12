@@ -4,7 +4,7 @@ import phoneToken from "generate-sms-verification-code";
 import { credentialConfirmations, credentials } from "../../db";
 import { Observable } from "rxjs/Observable";
 import { Observer } from "rxjs/Observer";
-import { Confirmation } from "../../data/confirmation";
+import { Confirmation } from "../../data/authentication/confirmation";
 
 export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository {
 

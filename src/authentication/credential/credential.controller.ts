@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { CredentialOrchestrator } from "./credential.orchestrator";
-import { AuthenticatedCredential } from "../../data/authenticated.credential";
+import { AuthenticatedCredential } from "../../data/authentication/authenticated.credential";
 
 const credentialOrchestrator: CredentialOrchestrator = new CredentialOrchestrator();
 

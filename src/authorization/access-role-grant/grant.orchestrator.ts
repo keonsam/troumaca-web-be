@@ -1,7 +1,7 @@
-import { GrantRepository } from "./grant.repository";
-import { createGrantRepositoryFactory } from "./grant.repository.factory";
+import { GrantRepository } from "../../repository/grant.repository";
+import { createGrantRepositoryFactory } from "../../adapter/access-role-grant/grant.repository.factory";
 import { Observable } from "rxjs/Observable";
-import { Grant } from "./grant";
+import { Grant } from "../../data/authorization/grant";
 
 export class GrantOrchestrator {
 

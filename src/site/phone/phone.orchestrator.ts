@@ -1,9 +1,9 @@
-import { createPhoneRepository } from "./phone.repository.factory";
-import { PhoneRepository } from "./phone.repository";
+import { createPhoneRepository } from "../../adapter/site/phone.repository.factory";
+import { PhoneRepository } from "../../repository/phone.repository";
 import { Observable } from "rxjs/Observable";
 import { getSortOrderOrDefault } from "../../sort.order.util";
 import { shapePhonesResponse } from "./phone.response.shaper";
-import { Phone } from "./phone";
+import { Phone } from "../../data/site/phone";
 import { Result } from "../../result.success";
 
 export class PhoneOrchestrator {

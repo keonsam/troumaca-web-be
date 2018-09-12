@@ -1,4 +1,4 @@
-import { AccessRoleType } from "../access-role-type/access.role.type";
+import { AccessRoleType } from "./access.role.type";
 
 export class AccessRole {
 

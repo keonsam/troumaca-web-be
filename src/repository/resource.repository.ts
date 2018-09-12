@@ -1,5 +1,5 @@
 import { Observable } from "rxjs/Observable";
-import { Resource } from "./resource";
+import { Resource } from "../data/authorization/resource";
 
 export interface ResourceRepository {
 

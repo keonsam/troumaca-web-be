@@ -1,7 +1,7 @@
 import Rx from "rxjs";
 import { partyAccessRoles } from "../../db";
-import { PartyAccessRoleRepository } from "./party.access.role.repository";
-import { PartyAccessRole } from "./party.access.role";
+import { PartyAccessRoleRepository } from "../../repository/party.access.role.repository";
+import { PartyAccessRole } from "../../data/authorization/party.access.role";
 import { Observable } from "rxjs/Observable";
 import { RepositoryKind } from "../../repository.kind";
 import { Observer } from "rxjs/Observer";

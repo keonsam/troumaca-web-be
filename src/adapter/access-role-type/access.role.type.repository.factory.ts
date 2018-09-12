@@ -1,7 +1,7 @@
 import Rx from "rxjs";
 import { accessRoleTypes } from "../../db";
-import { AccessRoleTypeRepository } from "./access.role.type.repository";
-import { AccessRoleType } from "./access.role.type";
+import { AccessRoleTypeRepository } from "../../repository/access.role.type.repository";
+import { AccessRoleType } from "../../data/authorization/access.role.type";
 import { Observable } from "rxjs/Observable";
 import { RepositoryKind } from "../../repository.kind";
 import { Observer } from "rxjs/Observer";

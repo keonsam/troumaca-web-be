@@ -1,8 +1,8 @@
 import { Observable } from "rxjs/Observable";
-import {CredentialRepository} from "../../../authentication/credential/credential.repository";
-import {createPersonRepository} from "../../../adapter/person/person.repository.factory";
+import {CredentialRepository} from "../../../repository/credential.repository";
+import {createPersonRepository} from "../../../adapter/party/person.repository.factory";
 import {PersonRepository} from "../../../repository/person.repository";
-import {Person} from "../../../data/person";
+import {Person} from "../../../data/party/person";
 
 export class CreatePersonProfileOrchestrator {
 

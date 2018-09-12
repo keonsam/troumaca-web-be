@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { UpdatePersonProfileOrchestrator } from "./person.profile.orchestrator";
+import { UpdatePersonProfileOrchestrator } from "./update.person.profile.orchestrator";
 import { shapePersonResponse2 } from "./person.profile.response.shaper";
 
 const personProfileOrchestrator: UpdatePersonProfileOrchestrator = new UpdatePersonProfileOrchestrator();

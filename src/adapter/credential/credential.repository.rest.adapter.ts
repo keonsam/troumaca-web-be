@@ -1,4 +1,4 @@
-import { Credential } from "../../data/credential";
+import { Credential } from "../../data/authentication/credential";
 import { Observable } from "rxjs/Observable";
 import { Observer } from "rxjs/Observer";
 import { CredentialRepository } from "../../repository/credential.repository";
@@ -6,9 +6,9 @@ import request from "request";
 import { classToPlain} from "class-transformer";
 import { jsonRequestHeaderMap, postJsonOptions } from "../../request.helpers";
 import { properties } from "../../properties.helpers";
-import { CredentialConfirmation } from "../../data/credential.confirmation";
-import { AuthenticatedCredential } from "../../data/authenticated.credential";
-import { CreatedCredential } from "../../data/created.credential";
+import { CredentialConfirmation } from "../../data/authentication/credential.confirmation";
+import { AuthenticatedCredential } from "../../data/authentication/authenticated.credential";
+import { CreatedCredential } from "../../data/authentication/created.credential";
 
 export class CredentialRepositoryRestAdapter implements CredentialRepository {
 

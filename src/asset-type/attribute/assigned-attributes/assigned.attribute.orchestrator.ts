@@ -1,10 +1,10 @@
 import { Observable } from "rxjs/Observable";
 import { Result } from "../../../result.success";
 import { shapeAttributesResponse } from "../attribute.response.shaper";
-import { AssignedAttributeRepository } from "./assigned.attribute.repository";
-import { createAssignedAttributeRepositoryFactory } from "./assigned.attribute.repository.factory";
+import { AssignedAttributeRepository } from "../../../repository/assigned.attribute.repository";
+import { createAssignedAttributeRepositoryFactory } from "../../../adapter/asset/assigned.attribute.repository.factory";
 import { getSortOrderOrDefault } from "../../../sort.order.util";
-import { AssignedAttribute } from "../assigned.attribute";
+import { AssignedAttribute } from "../../../data/asset/assigned.attribute";
 
 export class AssignedAttributeOrchestrator {
 

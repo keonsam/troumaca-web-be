@@ -1,9 +1,9 @@
-import { createAssetRepositoryFactory } from "./asset.repository.factory";
+import { createAssetRepositoryFactory } from "../../adapter/asset/asset.repository.factory";
 import { shapeAssetsResponse } from "./asset.response.shaper";
 import { getSortOrderOrDefault } from "../../sort.order.util";
-import { AssetRepository } from "./asset.repository";
+import { AssetRepository } from "../../repository/asset.repository";
 import { Observable } from "rxjs/Observable";
-import { Asset } from "./asset";
+import { Asset } from "../../data/asset/asset";
 import { Result } from "../../result.success";
 
 export class AssetOrchestrator {

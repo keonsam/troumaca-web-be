@@ -1,5 +1,5 @@
 import { AccessRole } from "./access.role";
-import { Grant } from "../grant/grant";
+import { Grant } from "./grant";
 
 export class AccessRoleResponse {
   private _accessRole: AccessRole;

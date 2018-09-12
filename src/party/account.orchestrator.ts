@@ -1,17 +1,17 @@
 import Rx from "rxjs";
 import { Observable } from "rxjs/Observable";
-import { createUserRepository } from "./user/user.repository.factory";
-import { createOrganizationRepository } from "./organization/organization.repository.factory";
-import { createSessionRepositoryFactory } from "../session/session.repository.factory";
-import { UserRepository } from "./user/user.repository";
-import { OrganizationRepository } from "./organization/organization.repository";
-import { User } from "./user/user";
-import { Session } from "../session/session";
-import { SessionRepository } from "../session/session.repository";
-import { Organization } from "./organization/organization";
-import { AccountResponse } from "./account.response";
-import { CredentialRepository } from "../authentication/credential/credential.repository";
-import { createCredentialRepositoryFactory } from "../authentication/credential/credential.repository.factory";
+import { createUserRepository } from "../adapter/party/user.repository.factory";
+import { createOrganizationRepository } from "../adapter/party/organization.repository.factory";
+import { createSessionRepositoryFactory } from "../adapter/session/session.repository.factory";
+import { UserRepository } from "../repository/user.repository";
+import { OrganizationRepository } from "../repository/organization.repository";
+import { User } from "../data/party/user";
+import { Session } from "../data/session/session";
+import { SessionRepository } from "../repository/session.repository";
+import { Organization } from "../data/party/organization";
+import { AccountResponse } from "../data/party/account.response";
+import { CredentialRepository } from "../repository/credential.repository";
+import { createCredentialRepositoryFactory } from "../adapter/credential/credential.repository.factory";
 
 export class AccountOrchestrator {
 
