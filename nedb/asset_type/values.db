@@ -41,3 +41,15 @@
 {"valueId":"f731def1-6402-40d7-944f-8c1965ba117d","assetTypeId":"6a1a8e3f-dda2-4980-b265-952679bca719","attributeId":"07d29445-974d-4540-8af0-d1699d745b04","text":"","_id":"vlbCZMAWOgQvuDw5"}
 {"valueId":"d52a50ca-11ac-4002-a01b-62adfe6053c1","assetTypeId":"888ddeda-561d-45ef-94ff-a6286ea79b9b","attributeId":"e8125ca8-dc7c-4392-a93e-a055a8712a4b","text":true,"_id":"xVE6msdiCLDIOBjM"}
 {"$$indexCreated":{"fieldName":"valueId","unique":true,"sparse":false}}
+{"attributeId":"ca7794cd-9ad0-490c-bb62-fc3882653130","text":"2","assetTypeId":"930b9c6a-e28c-4e38-8172-373363e62efb","valueId":"05bc95a0-d836-4877-a41a-5b11900bb912","_id":"Hi8iLYCs5nN3g1QE"}
+{"attributeId":"e8125ca8-dc7c-4392-a93e-a055a8712a4b","text":"2","assetTypeId":"930b9c6a-e28c-4e38-8172-373363e62efb","valueId":"5cae1e93-0228-4a51-b1c6-b7589750dbae","_id":"SG532aUrbnvXHOsL"}
+{"attributeId":"f1d3bb0b-e91d-4cdf-a999-461e81d56d13","text":"1","assetTypeId":"930b9c6a-e28c-4e38-8172-373363e62efb","valueId":"ef9ab122-8c7d-4e89-9277-6fc760fcaf54","_id":"gsfegCH7K50bxJkC"}
+{"attributeId":"a21ced4b-5327-405c-97e7-241bfa4aff42","text":"23","assetTypeId":"930b9c6a-e28c-4e38-8172-373363e62efb","valueId":"5c3e2e9b-5e66-4ac1-b5f0-41410207b7f8","_id":"T2opkEJu4xj2mFq1"}
+{"$$deleted":true,"_id":"Hi8iLYCs5nN3g1QE"}
+{"$$deleted":true,"_id":"SG532aUrbnvXHOsL"}
+{"$$deleted":true,"_id":"T2opkEJu4xj2mFq1"}
+{"$$deleted":true,"_id":"gsfegCH7K50bxJkC"}
+{"valueId":"05bc95a0-d836-4877-a41a-5b11900bb912","assetTypeId":"930b9c6a-e28c-4e38-8172-373363e62efb","attributeId":"ca7794cd-9ad0-490c-bb62-fc3882653130","text":"22","_id":"xE5B0Ul6AY2F6hKf"}
+{"valueId":"5cae1e93-0228-4a51-b1c6-b7589750dbae","assetTypeId":"930b9c6a-e28c-4e38-8172-373363e62efb","attributeId":"e8125ca8-dc7c-4392-a93e-a055a8712a4b","text":"22","_id":"Wgks0BUL3WaXr7by"}
+{"valueId":"5c3e2e9b-5e66-4ac1-b5f0-41410207b7f8","assetTypeId":"930b9c6a-e28c-4e38-8172-373363e62efb","attributeId":"a21ced4b-5327-405c-97e7-241bfa4aff42","text":"232","_id":"JngXX8GGesKVkyMh"}
+{"valueId":"ef9ab122-8c7d-4e89-9277-6fc760fcaf54","assetTypeId":"930b9c6a-e28c-4e38-8172-373363e62efb","attributeId":"f1d3bb0b-e91d-4cdf-a999-461e81d56d13","text":"11","_id":"6vPbAw1AgMHNvrM9"}

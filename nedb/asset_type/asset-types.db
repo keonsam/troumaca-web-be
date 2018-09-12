@@ -9,3 +9,5 @@
 {"assetTypeClassId":"904be34e-ec10-49a6-830a-b51f681918d8","name":"testbeta","description":"","modelNumber":"","materialCode":"","assetTypeId":"2fdce808-4669-4008-ae8b-56fcf4ece73e","_id":"x70rCHTRVB5zJnsM"}
 {"assetTypeId":"f60872dd-8d8a-4b21-a983-7072a8978603","assetTypeClassId":"904be34e-ec10-49a6-830a-b51f681918d8","name":"test5","description":"","modelNumber":"","materialCode":"","_id":"zDpFGzNhJJClvgO7"}
 {"$$indexCreated":{"fieldName":"assetTypeId","unique":true,"sparse":false}}
+{"assetTypeClassId":"7f80a5b5-09e4-405d-a23c-d7a5f4b85e74","unitOfMeasureId":"d1acfefe-d7fe-11e7-9296-cec278b6b50a","name":"Profile15 1","description":"Profile15 1","modelNumber":"12","materialCode":"321","assetTypeId":"930b9c6a-e28c-4e38-8172-373363e62efb","_id":"BIIZNO8vAp1Dw1G8"}
+{"assetTypeId":"930b9c6a-e28c-4e38-8172-373363e62efb","assetTypeClassId":"7f80a5b5-09e4-405d-a23c-d7a5f4b85e74","unitOfMeasureId":"d1acfefe-d7fe-11e7-9296-cec278b6b50a","name":"Profile15 1 edit","description":"Profile15 1","modelNumber":"12","materialCode":"321","_id":"BIIZNO8vAp1Dw1G8"}
