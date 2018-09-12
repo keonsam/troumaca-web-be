@@ -4,6 +4,14 @@ import { Attribute } from "../attribute";
 
 export class AttributeRepositoryRestAdapter implements AttributeRepository {
 
+    getAvailableAttributes(pageNumber: number, pageSize: number, order: string, availableAttributes: string[]): Observable<Attribute[]> {
+        return undefined;
+    }
+
+    getAvailableAttributeCount(): Observable<number> {
+        return undefined;
+    }
+
     getAttributes(pageNumber: number, pageSize: number, order: string): Observable<Attribute[]> {
         return undefined;
     }
@@ -29,14 +37,6 @@ export class AttributeRepositoryRestAdapter implements AttributeRepository {
     }
 
     // getAssignedAttributes(pageNumber: number, pageSize: number, order: string, assignedAttributes: string[]): Observable<Attribute[]> {
-    //     return undefined;
-    // }
-
-    // getAvailableAttributeCount(): Observable<number> {
-    //     return undefined;
-    // }
-
-    // getAvailableAttributes(pageNumber: number, pageSize: number, order: string, availableAttributes: string[]): Observable<Attribute[]> {
     //     return undefined;
     // }
 

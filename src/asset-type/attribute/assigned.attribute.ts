@@ -5,6 +5,7 @@ export class AssignedAttribute {
   private _assetTypeClassId: string;
   private _attributeId: string;
   private _attributeName: string;
+  private _dataTypeName: string;
   private _required: boolean;
   private _createdOn: string;
   private _modifiedOn: string;
@@ -66,9 +67,16 @@ export class AssignedAttribute {
     this._attributeName = value;
   }
 
+  get dataTypeName(): string {
+      return this._dataTypeName;
+  }
+
+  set dataTypeName(value: string) {
+      this._dataTypeName = value;
+  }
 
   get dataTypeId(): string {
-    return this._dataTypeId;
+      return this._dataTypeId;
   }
 
   set dataTypeId(value: string) {

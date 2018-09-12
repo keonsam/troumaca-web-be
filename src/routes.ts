@@ -82,9 +82,9 @@ router.put("/attributes/:attributeId", attributeController.updateAttribute);
 router.delete("/attributes/:attributeId", attributeController.deleteAttribute);
 
 // assigned-attributes
-// router.get("/available-attributes", attributeController.getAvailableAttributes);
-router.get("/assignable-attributes/:type", assignedAttributeController.getAssignableAttributes);
+router.post("/available-attributes", attributeController.getAvailableAttributes);
 router.get("/assigned-attributes/:assetTypeClassId", assignedAttributeController.getAssignedAttributesByClassId);
+// router.get("/assignable-attributes/:type", assignedAttributeController.getAssignableAttributes);
 
 // site
 router.get("/sites/find", siteController.findSite);

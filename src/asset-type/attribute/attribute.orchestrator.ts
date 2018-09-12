@@ -1,4 +1,5 @@
 import { Observable, of } from "rxjs";
+import { flatMap } from "rxjs/operators";
 import { getSortOrderOrDefault } from "../../sort.order.util";
 import { Attribute } from "./attribute";
 import { switchMap, map } from "rxjs/operators";
@@ -14,6 +15,22 @@ export class AttributeOrchestrator {
   constructor() {
     this.attributeClassRepository = createAttributeRepositoryFactory();
   }
+
+
+    getAvailableAttributes(number: number, size: number, field: string, direction: string, assignedAttributes: string[]): Observable<Result<any>> {
+        const sort = getSortOrderOrDefault(field, direction);
+        return this.attributeClassRepository
+            .getAvailableAttributes(number, size, sort, assignedAttributes)
+            .pipe(flatMap(value => {
+                return this.attributeClassRepository
+                    .getAvailableAttributeCount(assignedAttributes)
+                    .pipe(map(count => {
+                        const shapeAttrResp = shapeAttributesResponse( value, number, size, value.length, count, sort);
+                        return new Result<any>(false, "success", shapeAttrResp);
+                        // return new PageResponse<Attribute[]>(value, number, size, count, sort);
+                    }));
+            }));
+    }
 
   getAttributes(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
     const sort: string = getSortOrderOrDefault(field, direction);
@@ -49,20 +66,6 @@ export class AttributeOrchestrator {
         return this.attributeClassRepository.deleteAttribute(attributeId);
     }
 
-    // getAvailableAttributes(number: number, size: number, field: string, direction: string, availableAttributes: string[]): Observable<Result<any>> {
-    //     const sort = getSortOrderOrDefault(field, direction);
-    //     return this.attributeClassRepository
-    //         .getAvailableAttributes(number, size, sort, availableAttributes)
-    //         .flatMap(value => {
-    //             return this.attributeClassRepository
-    //                 .getAvailableAttributeCount()
-    //                 .map(count => {
-    //                     const shapeAttrResp = shapeAttributesResponse( value, number, size, value.length, count, sort);
-    //                     return new Result<any>(false, "success", shapeAttrResp);
-    //                     // return new PageResponse<Attribute[]>(value, number, size, count, sort);
-    //                 });
-    //         });
-    // }
     //
     // getAssignedAttributes(number: number, size: number, field: string, direction: string, assignedAttributes: string[]): Observable<Result<any>> {
     //     const sort = getSortOrderOrDefault(field, direction);

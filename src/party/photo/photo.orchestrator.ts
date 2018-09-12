@@ -28,12 +28,12 @@ export class PhotoOrchestrator {
       }));
   }
 
-  getPhotos(sessionId: string): Observable<Photo> {
+  getPhotos(sessionId: string, type?: string): Observable<Photo> {
     return this.sessionRepository.getSessionById(sessionId).pipe( switchMap( session => {
       if (!session) {
         return of(undefined);
       } else {
-        return this.photoRepository.getPhotos(session.partyId);
+        return this.photoRepository.getPhotos(session.partyId, type);
       }
     }));
   }

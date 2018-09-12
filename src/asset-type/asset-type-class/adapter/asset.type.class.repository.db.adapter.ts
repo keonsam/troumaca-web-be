@@ -64,7 +64,7 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
     getAssetTypeClassById(assetTypeClassId: string): Observable<AssetTypeClassResponse> {
         return this.getAssetTypeClassByIdLocal(assetTypeClassId)
             .pipe(switchMap(assetTypeClass => {
-                return this.assignedAttributeRepositoryNeDbAdapter.getAssignedAttributesById(assetTypeClassId)
+                return this.assignedAttributeRepositoryNeDbAdapter.getAssignedAttributesByClassId(assetTypeClassId)
                     .pipe(map(assignedAttributes => {
                         return new AssetTypeClassResponse(true, assetTypeClass, assignedAttributes);
                     }));

@@ -5,8 +5,9 @@ const orchestrator: PhotoOrchestrator = new PhotoOrchestrator();
 
 export let getPhotos = (req: Request, res: Response) => {
     const sessionId = req.cookies["sessionId"];
+    const type: string = req.params.type;
   orchestrator
-    .getPhotos(sessionId)
+    .getPhotos(sessionId, type)
     .subscribe(photo => {
         if (photo) {
             res.status(200);

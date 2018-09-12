@@ -22,24 +22,36 @@ export class PhotoRepositoryNeDbAdapter implements PhotoRepository {
         });
     }
 
-    getPhotos(partyId: string): Observable<Photo> {
+    getPhotos(partyId: string, type?: string): Observable<Photo> {
         const newPhoto: Photo = new Photo();
-        return this.getPhotoById(partyId, "user").pipe( switchMap(userPhoto => {
-            return this.getPhotoById(partyId, "organization").pipe(map( organizationPhoto => {
-                if (userPhoto) {
-                    newPhoto.userImage = userPhoto.imageStr;
-                    newPhoto.partyId = userPhoto.partyId;
-                }
-                if (organizationPhoto) {
-                    newPhoto.organizationImage = organizationPhoto.imageStr;
-                    // TODO: this will need fixing. what if it's an invited user organization photo? for now leave as is.
-                    if (!userPhoto) {
-                        newPhoto.partyId = organizationPhoto.partyId;
+        if (!type) {
+            return this.getPhotoById(partyId, "user").pipe( switchMap(userPhoto => {
+                return this.getPhotoById(partyId, "organization").pipe(map( organizationPhoto => {
+                    if (userPhoto) {
+                        newPhoto.userImage = userPhoto.imageStr;
+                        newPhoto.partyId = userPhoto.partyId;
                     }
-                }
-                return newPhoto;
+                    if (organizationPhoto) {
+                        newPhoto.organizationImage = organizationPhoto.imageStr;
+                        // TODO: this will need fixing. what if it's an invited user organization photo? for now leave as is.
+                        if (!userPhoto) {
+                            newPhoto.partyId = organizationPhoto.partyId;
+                        }
+                    }
+                    return newPhoto;
+                }));
             }));
-        }));
+        } else {
+            return this.getPhotoById(partyId, type)
+                .pipe( map( photo => {
+                    if (type == "user") {
+                        newPhoto.userImage = photo.imageStr;
+                    } else {
+                        newPhoto.organizationImage = photo.imageStr;
+                    }
+                    return newPhoto;
+            }));
+        }
     }
 
     getPhotoById(partyId: string, type: string): Observable<Photo> {
