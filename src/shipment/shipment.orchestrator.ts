@@ -1,9 +1,9 @@
-import { createShipmentRepository } from "./shipment.repository.factory";
-import { ShipmentRepository } from "./shipment.repository";
+import { createShipmentRepository } from "../adapter/shipment/shipment.repository.factory";
+import { ShipmentRepository } from "../repository/shipment.repository";
 import { Observable } from "rxjs/Observable";
 import { getSortOrderOrDefault } from "../sort.order.util";
 import { shapeShipmentsResponse } from "./shipment.response.shaper";
-import { Shipment } from "./shipment";
+import { Shipment } from "../data/shipment/shipment";
 import { Result } from "../result.success";
 
 export class ShipmentOrchestrator {

@@ -1,21 +1,21 @@
-import { createUserRepository } from "./user.repository.factory";
-import { UserRepository } from "./user.repository";
+import { createUserRepository } from "../../adapter/party/user.repository.factory";
+import { UserRepository } from "../../repository/user.repository";
 import { Observable } from "rxjs/Observable";
-import { User } from "./user";
+import { User } from "../../data/party/user";
 import { shapeUsersResponse } from "./user.response.shaper";
 import { Result } from "../../result.success";
-import { Credential } from "../../authentication/credential/credential";
+import { Credential } from "../../data/authentication/credential";
 import { generate } from "generate-password";
 import { getSortOrderOrDefault } from "../../sort.order.util";
-import { PartyAccessRole } from "../../authorization/party-access-role/party.access.role";
-import { PartyAccessRoleRepository } from "../../authorization/party-access-role/party.access.role.repository";
-import { createPartyAccessRoleRepositoryFactory } from "../../authorization/party-access-role/party.access.role.repository.factory";
-import { UserResponse } from "./user.response";
-import { AccessRoleRepository } from "../../authorization/access-role/access.role.repository";
-import { createAccessRoleRepositoryFactory } from "../../authorization/access-role/access.role.repository.factory";
-import { AccessRole } from "../../authorization/access-role/access.role";
-import { CredentialRepository} from "../../authentication/credential/credential.repository";
-import { createCredentialRepositoryFactory } from "../../authentication/credential/credential.repository.factory";
+import { PartyAccessRole } from "../../data/authorization/party.access.role";
+import { PartyAccessRoleRepository } from "../../repository/party.access.role.repository";
+import { createPartyAccessRoleRepositoryFactory } from "../../adapter/party-access-role/party.access.role.repository.factory";
+import { UserResponse } from "../../data/party/user.response";
+import { AccessRoleRepository } from "../../repository/access.role.repository";
+import { createAccessRoleRepositoryFactory } from "../../adapter/access-role/access.role.repository.factory";
+import { AccessRole } from "../../data/authorization/access.role";
+import { CredentialRepository} from "../../repository/credential.repository";
+import { createCredentialRepositoryFactory } from "../../adapter/credential/credential.repository.factory";
 
 export class UserOrchestrator {
 

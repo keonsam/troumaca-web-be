@@ -1,7 +1,7 @@
-import { createValueRepository } from "./value.repository.factory";
-import { ValueRepository } from "./value.repository";
+import { createValueRepository } from "../../adapter/asset/value.repository.factory";
+import { ValueRepository } from "../../repository/value.repository";
 import { Observable } from "rxjs/Observable";
-import { Value } from "./value";
+import { Value } from "../../data/asset/value";
 import { shapeValuesResponse } from "./value.response.shaper";
 import { shapeValuesResponse2 } from "./value.response.shaper";
 import { Result } from "../../result.success";

@@ -1,7 +1,7 @@
 import Rx from "rxjs";
 import { permissions } from "../../db";
-import { PermissionRepository } from "./permission.repository";
-import { Permission } from "./permission";
+import { PermissionRepository } from "../../repository/permission.repository";
+import { Permission } from "../../data/authorization/permission";
 import { Observable } from "rxjs/Observable";
 import { RepositoryKind } from "../../repository.kind";
 import { Observer } from "rxjs/Observer";

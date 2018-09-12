@@ -1,9 +1,9 @@
 import { Observable } from "rxjs/Observable";
 import { getSortOrderOrDefault } from "../../sort.order.util";
-import { Attribute } from "./attribute";
+import { Attribute } from "../../data/asset/attribute";
 
-import { createAttributeRepositoryFactory } from "./attribute.repository.factory";
-import { AttributeRepository } from "./attribute.repository";
+import { createAttributeRepositoryFactory } from "../../adapter/asset/attribute.repository.factory";
+import { AttributeRepository } from "../../repository/attribute.repository";
 import { Result } from "../../result.success";
 import { shapeAttributesResponse } from "./attribute.response.shaper";
 

@@ -1,7 +1,7 @@
-import { ResourceTypeRepository } from "./resource.type.repository";
-import { createResourceTypeRepositoryFactory } from "./resource.type.repository.factory";
+import { ResourceTypeRepository } from "../../repository/resource.type.repository";
+import { createResourceTypeRepositoryFactory } from "../../adapter/resource-type/resource.type.repository.factory";
 import { Observable } from "rxjs/Observable";
-import { ResourceType } from "./resource.type";
+import { ResourceType } from "../../data/authorization/resource.type";
 import { shapeResourceTypesResponse } from "./resource.type.response.shaper";
 import { Result } from "../../result.success";
 import { getSortOrderOrDefault } from "../../sort.order.util";

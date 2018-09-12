@@ -1,7 +1,7 @@
-import { createPhotoRepository } from "./photo.repository.factory";
-import { PhotoRepository } from "./photo.repository";
+import { createPhotoRepository } from "../../adapter/photo/photo.repository.factory";
+import { PhotoRepository } from "../../repository/photo.repository";
 import { Observable } from "rxjs/Observable";
-import { Photo } from "./photo";
+import { Photo } from "../../data/photo/photo";
 
 export class PhotoOrchestrator {
 

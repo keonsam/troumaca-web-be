@@ -1,7 +1,7 @@
-import { createUnitOfMeasureRepository } from "./unit.of.measure.repository.factory";
-import { UnitOfMeasureRepository } from "./unit.of.measure.repository";
+import { createUnitOfMeasureRepository } from "../adapter/unit-of-measure/unit.of.measure.repository.factory";
+import { UnitOfMeasureRepository } from "../repository/unit.of.measure.repository";
 import { Observable } from "rxjs/Observable";
-import { UnitOfMeasure } from "./unit.of.measure";
+import { UnitOfMeasure } from "../data/unit-of-measure/unit.of.measure";
 
 export class UnitOfMeasureOrchestrator {
 

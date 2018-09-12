@@ -1,7 +1,7 @@
-import { createOrganizationRepository } from "./organization.repository.factory";
-import { OrganizationRepository } from "./organization.repository";
+import { createOrganizationRepository } from "../../adapter/party/organization.repository.factory";
+import { OrganizationRepository } from "../../repository/organization.repository";
 import { Observable } from "rxjs/Observable";
-import { Organization } from "./organization";
+import { Organization } from "../../data/party/organization";
 import { shapeOrganizationsResponse } from "./organization.response.shaper";
 import { Result } from "../../result.success";
 import { getSortOrderOrDefault } from "../../sort.order.util";

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { BillingOrchestrator } from "./billing.orchestrator";
-import { Billing } from "./billing";
+import { Billing } from "../data/party/billing";
 
 const billingOrchestrator: BillingOrchestrator = new BillingOrchestrator();
 

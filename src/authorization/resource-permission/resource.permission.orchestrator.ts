@@ -1,7 +1,7 @@
-import { ResourcePermissionRepository } from "./resource.permission.repository";
-import { createResourcePermissionRepositoryFactory } from "./resource.permission.repository.factory";
+import { ResourcePermissionRepository } from "../../repository/resource.permission.repository";
+import { createResourcePermissionRepositoryFactory } from "../../adapter/resource-permission/resource.permission.repository.factory";
 import { Observable } from "rxjs/Observable";
-import { ResourcePermission } from "./resource.permission";
+import { ResourcePermission } from "../../data/authorization/resource.permission";
 
 export class ResourcePermissionOrchestrator {
 

@@ -1,7 +1,7 @@
-import { createSessionRepositoryFactory } from "./session.repository.factory";
-import { SessionRepository } from "./session.repository";
+import { createSessionRepositoryFactory } from "../adapter/session/session.repository.factory";
+import { SessionRepository } from "../repository/session.repository";
 import { Observable } from "rxjs/Observable";
-import { Session } from "./session";
+import { Session } from "../data/session/session";
 
 export class SessionOrchestrator {
 

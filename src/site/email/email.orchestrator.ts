@@ -1,9 +1,9 @@
-import { createEmailRepository } from "./email.repository.factory";
-import { EmailRepository } from "./email.repository";
+import { createEmailRepository } from "../../adapter/site/email.repository.factory";
+import { EmailRepository } from "../../repository/email.repository";
 import { Observable } from "rxjs/Observable";
 import { getSortOrderOrDefault } from "../../sort.order.util";
 import { shapeEmailsResponse } from "./email.response.shaper";
-import { Email } from "./email";
+import { Email } from "../../data/site/email";
 import { Result } from "../../result.success";
 
 export class EmailOrchestrator {

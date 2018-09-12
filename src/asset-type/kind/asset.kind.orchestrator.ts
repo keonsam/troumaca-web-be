@@ -1,7 +1,7 @@
-import { createAssetKindRepository } from "./asset.kind.repository.factory";
-import { AssetKindRepository } from "./asset.kind.repository";
+import { createAssetKindRepository } from "../../adapter/asset/asset.kind.repository.factory";
+import { AssetKindRepository } from "../../repository/asset.kind.repository";
 import { Observable } from "rxjs/Observable";
-import { AssetKind } from "./asset.kind";
+import { AssetKind } from "../../data/asset/asset.kind";
 import { RepositoryKind } from "../../repository.kind";
 
 export class AssetOrchestrator {

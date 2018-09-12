@@ -1,19 +1,19 @@
-import { AccessRoleRepository } from "./access.role.repository";
-import { createAccessRoleRepositoryFactory } from "./access.role.repository.factory";
+import { AccessRoleRepository } from "../../repository/access.role.repository";
+import { createAccessRoleRepositoryFactory } from "../../adapter/access-role/access.role.repository.factory";
 import { Observable } from "rxjs/Observable";
-import { AccessRole } from "./access.role";
+import { AccessRole } from "../../data/authorization/access.role";
 import { shapeAccessRolesResponse } from "./access.role.response.shaper";
 import { Result } from "../../result.success";
 import { getSortOrderOrDefault } from "../../sort.order.util";
-import { Grant } from "../grant/grant";
-import { GrantRepository } from "../grant/grant.repository";
-import { createGrantRepositoryFactory } from "../grant/grant.repository.factory";
-import { PartyAccessRoleRepository } from "../party-access-role/party.access.role.repository";
-import { createPartyAccessRoleRepositoryFactory } from "../party-access-role/party.access.role.repository.factory";
-import { AccessRoleTypeRepository } from "../access-role-type/access.role.type.repository";
-import { createAccessRoleTypeRepositoryFactory } from "../access-role-type/access.role.type.repository.factory";
-import { AccessRoleType } from "../access-role-type/access.role.type";
-import { AccessRoleResponse } from "./access.role.response";
+import { Grant } from "../../data/authorization/grant";
+import { GrantRepository } from "../../repository/grant.repository";
+import { createGrantRepositoryFactory } from "../../adapter/access-role-grant/grant.repository.factory";
+import { PartyAccessRoleRepository } from "../../repository/party.access.role.repository";
+import { createPartyAccessRoleRepositoryFactory } from "../../adapter/party-access-role/party.access.role.repository.factory";
+import { AccessRoleTypeRepository } from "../../repository/access.role.type.repository";
+import { createAccessRoleTypeRepositoryFactory } from "../../adapter/access-role-type/access.role.type.repository.factory";
+import { AccessRoleType } from "../../data/authorization/access.role.type";
+import { AccessRoleResponse } from "../../data/authorization/access.role.response";
 
 export class AccessRoleOrchestrator {
 

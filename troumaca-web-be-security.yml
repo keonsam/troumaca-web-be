@@ -32,16 +32,16 @@ paths:
       produces:
       - "application/json"
       parameters:
-        - in: "body"
-          name: "body"
-          description: "Validate username object"
-          required: true
-          schema:
-            $ref: '#/definitions/ValidateUsername'
-        - name: "correlationId"
-          in: "header"
-          required: true
-          type: "string"
+      - in: "body"
+        name: "body"
+        description: "Validate username object"
+        required: true
+        schema:
+          $ref: '#/definitions/ValidateUsername'
+      - name: "correlationId"
+        in: "header"
+        required: true
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -59,20 +59,20 @@ paths:
       description: "Validate password"
       operationId: "validatePassword"
       consumes:
-        - "application/json"
+      - "application/json"
       produces:
-        - "application/json"
+      - "application/json"
       parameters:
-        - in: "body"
-          name: "body"
-          description: "Validate password object"
-          schema:
-            type: "object"
-            $ref: '#/definitions/ValidatePassword'
-        - name: "correlationId"
-          in: "header"
-          required: true
-          type: "string"
+      - in: "body"
+        name: "body"
+        description: "Validate password object"
+        schema:
+          type: "object"
+          $ref: '#/definitions/ValidatePassword'
+      - name: "correlationId"
+        in: "header"
+        required: true
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -174,7 +174,7 @@ paths:
         500:
           description: "server error occurred"
 
-  /conformation/confirmation-code:
+  /authentication/conformation/confirmation-code:
     post:
       tags:
       - "Confirmation"
@@ -207,7 +207,7 @@ paths:
         500:
           description: "server error occurred"
 
-  /organizations/profiles:
+  /parties/organizations/profiles:
     post:
       tags:
       - "Profile"
@@ -297,7 +297,7 @@ paths:
         500:
           description: "server error occurred"
 
-  /organizations/request-access:
+  /parties/organizations/request-access:
     post:
       tags:
       - "Profile"
@@ -328,28 +328,28 @@ paths:
         500:
           description: "server error occurred"
 
-  /persons/profiles:
+  /parties/persons/profiles:
     post:
       tags:
-        - "Profile"
+      - "Profile"
       summary: "Create person profile"
       description: "Creates a person profile"
       operationId: "createPersonProfile"
       consumes:
-        - "application/json"
+      - "application/json"
       produces:
-        - "application/json"
+      - "application/json"
       parameters:
-        - in: "body"
-          name: "body"
-          description: "Person profile object"
-          schema:
-            type: "object"
-            $ref: "#/definitions/CreatePersonProfile"
-        - name: "correlationId"
-          in: "header"
-          required: true
-          type: "string"
+      - in: "body"
+        name: "body"
+        description: "Person profile object"
+        schema:
+          type: "object"
+          $ref: "#/definitions/CreatePersonProfile"
+      - name: "correlationId"
+        in: "header"
+        required: true
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -641,7 +641,42 @@ paths:
         500:
           description: "server error occurred"
 
-  /sessions/get-or-create:
+  /sessions/parties/{partyId}/get-or-create:
+    post:
+      tags:
+        - "Session"
+      summary: "Creates or get a session for a party"
+      description: "Create or get a session"
+      operationId: "getOrCreate"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+        - name: "partyId"
+          in: "path"
+          description: "Id of the party"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "Access Role object"
+          schema:
+            type: "object"
+            $ref: "#/definitions/CreateOrGetSession"
+        - name: "correlationId"
+          in: "header"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/CreatedOrGetSession"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Pet not found"
 
 securityDefinitions:
   petstore_auth:
@@ -679,8 +714,8 @@ definitions:
   ValidatedUsername:
     type: "object"
     required:
-      - "name"
-      - "valid"
+    - "name"
+    - "valid"
     properties:
       name:
         type: "string"
@@ -709,12 +744,12 @@ definitions:
   Confirmation:
     type: "object"
     required:
-      - "confirmationId"
-      - "credentialId"
-      - "code"
-      - "status"
-      - "version"
-      - "modifiedOn"
+    - "confirmationId"
+    - "credentialId"
+    - "code"
+    - "status"
+    - "version"
+    - "modifiedOn"
     properties:
       confirmationId:
         type: "string"
@@ -733,9 +768,9 @@ definitions:
   ValidateConfirmCode:
     type: "object"
     required:
-      - "credentialId"
-      - "code"
-      - "partyId"
+    - "credentialId"
+    - "code"
+    - "partyId"
     properties:
       credentialId:
         type: "string"
@@ -747,8 +782,8 @@ definitions:
   ValidatedConfirmCode:
     type: "object"
     required:
-      - "name"
-      - "valid"
+    - "name"
+    - "valid"
     properties:
       name:
         type: "string"
@@ -788,8 +823,8 @@ definitions:
   Organization:
     type: "object"
     required:
-      - "partyId"
-      - "name"
+    - "partyId"
+    - "name"
     properties:
       partId:
         type: "string"
@@ -810,8 +845,8 @@ definitions:
   RequestAccess:
     type: "object"
     required:
-      - "partyId"
-      - "tenantPartyId"
+    - "partyId"
+    - "tenantPartyId"
     properties:
       parthId:
         type: "string"
@@ -850,9 +885,9 @@ definitions:
   PersonProfile:
     type: "object"
     required:
-      - "person"
-      - "credential"
-      - "roles"
+    - "person"
+    - "credential"
+    - "roles"
     properties:
       person:
         type: "object"
@@ -978,8 +1013,8 @@ definitions:
   CreatePermission:
     type: "object"
     required:
-      - "name"
-      - "description"
+    - "name"
+    - "description"
     properties:
       name:
         type: "string"
@@ -1012,8 +1047,8 @@ definitions:
   CreateAccessRole:
     type: "object"
     required:
-      - "effectiveOn"
-      - "until"
+    - "effectiveOn"
+    - "until"
     properties:
       accessRoleTypeId:
         type: "string"
@@ -1038,9 +1073,9 @@ definitions:
   AccessRole:
     type: "object"
     required:
-      - "accessRoleId"
-      - "name"
-      - "description"
+    - "accessRoleId"
+    - "name"
+    - "description"
     properties:
       accessRoleId:
         type: "string"
@@ -1059,8 +1094,8 @@ definitions:
   CreateAccessRoleGrant:
     type: "object"
     required:
-      - "accessRoleId"
-      - "resourcePermissionId"
+    - "accessRoleId"
+    - "resourcePermissionId"
     properties:
       accessRoleGrantId:
         type: "string"
@@ -1070,9 +1105,9 @@ definitions:
   AccessRoleGrant:
     type: "object"
     required:
-      - "accessRoleGrantId"
-      - "accessRoleId"
-      - "resourcePermissionId"
+    - "accessRoleGrantId"
+    - "accessRoleId"
+    - "resourcePermissionId"
     properties:
       accessRoleGrantId:
         type: "string"
@@ -1091,9 +1126,9 @@ definitions:
   CreatePartyAccessRole:
     type: "object"
     required:
-      - "partyAccessRoleId"
-      - "partyId"
-      - "accessRoleId"
+    - "partyAccessRoleId"
+    - "partyId"
+    - "accessRoleId"
     properties:
       partyAccessRoleId:
         type: "string"
@@ -1162,8 +1197,8 @@ definitions:
   Person:
     type: "object"
     required:
-      - "partyId"
-      - "lastName"
+    - "partyId"
+    - "lastName"
     properties:
       partyId:
         type: "string"
@@ -1197,12 +1232,12 @@ definitions:
   AccessRoleType:
     type: "object"
     required:
-      - "accessRoleTypeId"
-      - "name"
-      - "description"
-      - "version"
-      - "tenantPartyId"
-      - "modifiedOn"
+    - "accessRoleTypeId"
+    - "name"
+    - "description"
+    - "version"
+    - "tenantPartyId"
+    - "modifiedOn"
     properties:
       accessRoleTypeId:
         type: "string"
@@ -1221,8 +1256,8 @@ definitions:
   AuthenticateCredential:
     type: "object"
     required:
-      - "username"
-      - "password"
+    - "username"
+    - "password"
     properties:
       username:
         type: "string"
@@ -1232,8 +1267,8 @@ definitions:
   AuthenticatedCredential:
     type: "object"
     required:
-      - "credential"
-      - "authenticated"
+    - "credential"
+    - "authenticated"
     properties:
       credential:
         $ref: "#/definitions/Session"
@@ -1243,7 +1278,7 @@ definitions:
   Session:
     type: "object"
     required:
-      - "sessionId"
+    - "sessionId"
     properties:
       sessionId:
         type: "string"
@@ -1258,19 +1293,19 @@ definitions:
         type: "string"
         format: "date-time"
 
-#  CreatedCredential:
-#    type: "object"
-#    properties:
-#      credential:
-#        $ref: "#/definitions/Credential"
-#      confirmation:
-#        $ref: "#/definitions/Confirmation"
+  #  CreatedCredential:
+  #    type: "object"
+  #    properties:
+  #      credential:
+  #        $ref: "#/definitions/Credential"
+  #      confirmation:
+  #        $ref: "#/definitions/Confirmation"
 
   DeleteObject:
     type: "object"
     required:
-      - "identifier"
-      - "version"
+    - "identifier"
+    - "version"
     properties:
       identifier:
         type: "string"
@@ -1287,3 +1322,9 @@ definitions:
         type: "string"
       version:
         type: "boolean"
+
+  CreateOrGetSession:
+    type: "object"
+
+  CreatedOrGetSession:
+    type: "object"

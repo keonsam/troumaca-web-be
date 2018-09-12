@@ -1,14 +1,14 @@
-import { createDepreciationRepositoryFactory } from "./depreciation.repository.factory";
+import { createDepreciationRepositoryFactory } from "../adapter/asset/depreciation.repository.factory";
 import { shapeDepreciationResponse } from "./depreciation.response.shaper";
 import { getSortOrderOrDefault } from "../sort.order.util";
-import { DepreciationRepository } from "./depreciation.repository";
+import { DepreciationRepository } from "../repository/depreciation.repository";
 import { Observable } from "rxjs/Observable";
-import { Depreciation } from "./depreciation";
+import { Depreciation } from "../data/asset/depreciation";
 import { Result } from "../result.success";
-import { Asset } from "../asset-type/asset/asset";
-import { DepreciationMethod } from "./depreciation.method";
-import { DepreciationSystem } from "./depreciation.system";
-import { PropertyClass } from "./property.class";
+import { Asset } from "../data/asset/asset";
+import { DepreciationMethod } from "../adapter/asset/depreciation.method";
+import { DepreciationSystem } from "../data/asset/depreciation.system";
+import { PropertyClass } from "../data/asset/property.class";
 
 export class DepreciationOrchestrator {
 

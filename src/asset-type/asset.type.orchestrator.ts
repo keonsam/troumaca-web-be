@@ -1,12 +1,12 @@
-import { createAssetTypeRepository } from "./asset.type.repository.factory";
-import { AssetTypeRepository } from "./asset.type.repository";
+import { createAssetTypeRepository } from "../adapter/asset/asset.type.repository.factory";
+import { AssetTypeRepository } from "../repository/asset.type.repository";
 import { Observable } from "rxjs/Observable";
-import { AssetType } from "./asset.type";
+import { AssetType } from "../data/asset/asset.type";
 import { Result } from "../result.success";
 import { getSortOrderOrDefault } from "../sort.order.util";
 import { shapeAssetTypesResponse } from "./asset.type.response.shaper";
-import { Value } from "./value/value";
-import { AssetTypeResponse } from "./asset.type.response";
+import { Value } from "../data/asset/value";
+import { AssetTypeResponse } from "../data/asset/asset.type.response";
 
 export class AssetTypeOrchestrator {
 
