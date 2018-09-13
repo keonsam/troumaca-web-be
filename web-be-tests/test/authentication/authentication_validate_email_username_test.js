@@ -11,8 +11,13 @@ describe('validate-username-email', function () {
       .send({username: "kevin@example.com"})
       .expect(200)
       .end(function (err, res) {
-        expect(res.body.valid).to.equal(true);
-        done();
+        if (err) {
+          console.log(err);
+        } else {
+          expect(res.body.valid).to.equal(true);
+        }
+
+        done(err);
       });
   });
 

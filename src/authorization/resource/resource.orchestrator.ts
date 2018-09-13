@@ -1,5 +1,5 @@
 import { ResourceRepository } from "../../repository/resource.repository";
-import { createResourceRepositoryFactory } from "../../adapter/resource/resource.repository.factory";
+import { createResourceRepositoryFactory } from "../../adapter/authorization/resource.repository.factory";
 import { Observable } from "rxjs/Observable";
 import { Resource } from "../../data/authorization/resource";
 import { shapeResourcesResponse } from "./resource.response.shaper";
@@ -7,9 +7,9 @@ import { Result } from "../../result.success";
 import { getSortOrderOrDefault } from "../../sort.order.util";
 import { ResourcePermission } from "../../data/authorization/resource.permission";
 import { ResourcePermissionRepository } from "../../repository/resource.permission.repository";
-import { createResourcePermissionRepositoryFactory } from "../../adapter/resource-permission/resource.permission.repository.factory";
+import { createResourcePermissionRepositoryFactory } from "../../adapter/authorization/resource.permission.repository.factory";
 import { ResourceTypeRepository } from "../../repository/resource.type.repository";
-import { createResourceTypeRepositoryFactory } from "../../adapter/resource-type/resource.type.repository.factory";
+import { createResourceTypeRepositoryFactory } from "../../adapter/authorization/resource.type.repository.factory";
 import { ResourceType } from "../../data/authorization/resource.type";
 
 export class ResourceOrchestrator {

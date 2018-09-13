@@ -1,9 +1,9 @@
 import { PartyAccessRoleRepository } from "../../repository/party.access.role.repository";
-import { createPartyAccessRoleRepositoryFactory } from "../../adapter/party-access-role/party.access.role.repository.factory";
+import { createPartyAccessRoleRepositoryFactory } from "../../adapter/authorization/party.access.role.repository.factory";
 import { Observable } from "rxjs/Observable";
 import { PartyAccessRole } from "../../data/authorization/party.access.role";
 import { AccessRoleRepository } from "../../repository/access.role.repository";
-import { createAccessRoleRepositoryFactory } from "../../adapter/access-role/access.role.repository.factory";
+import { createAccessRoleRepositoryFactory } from "../../adapter/authorization/access.role.repository.factory";
 import { accessRoles } from "../../db";
 // import {shapePartyAccessRolesResponse} from "./party.access.role.response.shaper";
 // import {Result} from "../../result.success";

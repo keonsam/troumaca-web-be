@@ -3,7 +3,7 @@ var should = require('chai').should(),
     supertest = require('supertest'),
     api = supertest('http://localhost:3000');
 
-describe('session-isValid', function () {
+describe('session-is-valid', function () {
 
     it('should be an authenticated credential', function (done) {
         api.get('/sessions/is-valid-session')

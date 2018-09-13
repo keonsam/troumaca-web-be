@@ -1,5 +1,5 @@
 import { ResourceTypeRepository } from "../../repository/resource.type.repository";
-import { createResourceTypeRepositoryFactory } from "../../adapter/resource-type/resource.type.repository.factory";
+import { createResourceTypeRepositoryFactory } from "../../adapter/authorization/resource.type.repository.factory";
 import { Observable } from "rxjs/Observable";
 import { ResourceType } from "../../data/authorization/resource.type";
 import { shapeResourceTypesResponse } from "./resource.type.response.shaper";

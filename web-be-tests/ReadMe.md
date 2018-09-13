@@ -19,4 +19,6 @@ JUNIT_REPORT_PATH=test-result/result.xml JUNIT_REPORT_STACK=1 mocha --timeout 25
 # un specific test:
 mocha --grep create-credential
 mocha --grep validate-username-email
+mocha --recursive --grep who-create
+mocha --recursive --grep validate-email-username
  

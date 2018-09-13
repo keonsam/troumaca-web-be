@@ -10,7 +10,7 @@ import { CredentialRepository } from "../../repository/credential.repository";
 import { AuthenticatedCredential } from "../../data/authentication/authenticated.credential";
 import "rxjs/add/observable/of";
 import { Confirmation } from "../../data/authentication/confirmation";
-import { ConfirmationRepositoryNeDbAdapter } from "../confirmation/confirmation.repository.db.adapter";
+import { ConfirmationRepositoryNeDbAdapter } from "../authentication/confirmation.repository.db.adapter";
 import { CreatedCredential } from "../../data/authentication/created.credential";
 
 export class CredentialRepositoryNeDbAdapter implements CredentialRepository {

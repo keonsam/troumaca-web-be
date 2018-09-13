@@ -1,7 +1,6 @@
 import { createPersonRepository } from "../../../adapter/party/person.repository.factory";
 import { PersonRepository } from "../../../repository/person.repository";
 import { Observable } from "rxjs/Observable";
-import { PersonProfile } from "../../../data/party/person.profile";
 import {Person} from "../../../data/party/person";
 
 export class ReadPersonProfileOrchestrator {

@@ -5,12 +5,12 @@ var should = require('chai').should(),
 
 describe('create-credential', function () {
 
+  var time = new Date().getTime();
+
   var credential = {
-    username: "tester1@shapestone.com",
+    username: "tester1" +time+ "@shapestone.com",
     password: "Tester2@user"
   };
-
-  var created = false;
 
   it('create credential', function (done) {
     api.post("/authentication/credentials")
@@ -18,16 +18,14 @@ describe('create-credential', function () {
       .set('correlationId', 1234567890)
       .send(credential)
       .expect('Content-Type', /json/)
-      .expect(200)
+      .expect(201)
       .end(function (err, res) {
-        console.log(res.body);
-
-        if (err) {
-        } else {
-          created = true
+        //console.log(res.body);
+        if (!err) {
+          expect(res.body.status).to.equal("New")
         }
 
-        done();
+        done(err);
       });
   });
 

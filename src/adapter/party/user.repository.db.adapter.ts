@@ -5,7 +5,7 @@ import { Observer } from "rxjs/Observer";
 import { users } from "../../db";
 import { calcSkip } from "../../db.util";
 import { Person } from "../../data/party/person";
-import { CredentialRepositoryNeDbAdapter } from "../credential/credential.repository.db.adapter";
+import { CredentialRepositoryNeDbAdapter } from "../authentication/credential.repository.db.adapter";
 
 export class UserRepositoryNeDbAdapter implements UserRepository {
 

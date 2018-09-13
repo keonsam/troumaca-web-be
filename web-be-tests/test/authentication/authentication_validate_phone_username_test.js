@@ -3,10 +3,11 @@ var should = require('chai').should(),
     supertest = require('supertest'),
     api = supertest('http://localhost:3000');
 
-describe('validate-username-phone', function () {
+describe('validate-phone-username', function () {
 
   it('should be a invalid phone username', function (done) {
-    api.post('/validate-username')
+    // api.post('/validate-username')
+    api.post('/authentication/validate-username')
       .set('Accept', 'application/json')
       .send({username: "19998887777"})
       .expect(200)
@@ -17,7 +18,8 @@ describe('validate-username-phone', function () {
   });
 
   it('should be a valid phone username', function (done) {
-    api.post('/validate-username')
+    // api.post('/validate-username')
+    api.post('/authentication/validate-username')
       .set('Accept', 'application/json')
       .send({username: "13104335751"})
       .expect(200)

@@ -1,5 +1,5 @@
 import { GrantRepository } from "../../repository/grant.repository";
-import { createGrantRepositoryFactory } from "../../adapter/access-role-grant/grant.repository.factory";
+import { createGrantRepositoryFactory } from "../../adapter/authorization/grant.repository.factory";
 import { Observable } from "rxjs/Observable";
 import { Grant } from "../../data/authorization/grant";
 
