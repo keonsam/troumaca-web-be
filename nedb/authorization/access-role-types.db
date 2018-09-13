@@ -1,2 +1,3 @@
+{"accessRoleTypeId":"03f6567b-3225-4912-b79a-667419cf7f18","name":"Profile15 1 edit","description":"Profile15 1","_id":"cOEl21onKFR3ZD5H"}
 {"accessRoleTypeId":"4b164b02-fa8c-470e-98c3-fdcf71897740","name":"Permission Role","description":"Granting the person, position, and so on permission to have access to something. (The attribute \"Prohibition indicator\", if \"True indicates that the role is in fact a prohibition of the Party, and so on, from having access.","_id":"oFTK108VEUGNvGiE"}
 {"$$indexCreated":{"fieldName":"accessRoleTypeId","unique":true,"sparse":false}}

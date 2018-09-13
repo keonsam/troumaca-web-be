@@ -12,6 +12,7 @@ import { createResourcePermissionRepositoryFactory } from "../resource-permissio
 import { ResourceTypeRepository } from "../resource-type/resource.type.repository";
 import { createResourceTypeRepositoryFactory } from "../resource-type/resource.type.repository.factory";
 import { ResourceType } from "../resource-type/resource.type";
+import { resourcePermissions } from "../../db";
 
 export class ResourceOrchestrator {
 
@@ -52,7 +53,7 @@ export class ResourceOrchestrator {
           }));
       }));
   }
-  
+
   getResources(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
     const sort: string = getSortOrderOrDefault(field, direction);
     return this.resourceRepository.getResources(number, size, sort)
@@ -61,19 +62,35 @@ export class ResourceOrchestrator {
           const shapeResourcesResp: any = shapeResourcesResponse(resources, 0, 0, 0, 0, sort);
           return of(new Result<any>(false, "no data found", shapeResourcesResp));
         } else {
-          const resourceTypeIds: string[] = resources.map(x => { if (x.resourceTypeId) return x.resourceTypeId; });
+          const resourceTypeIds: string[] = [];
+          const resourceIds: string [] = [];
+          resources.forEach( x => {
+             if (resourceTypeIds.indexOf(x.resourceTypeId) === -1) {
+                 resourceTypeIds.push(x.resourceTypeId);
+             }
+             resourceIds.push(x.resourceId);
+          });
           return this.resourceTypeRepository.getResourceTypeByIds(resourceTypeIds)
             .pipe(switchMap((resourceTypes: ResourceType[]) => {
-              resources.forEach(value => {
-                const index = resourceTypes.findIndex(x => x.resourceTypeId === value.resourceTypeId);
-                value.resourceType = index !== -1 ? resourceTypes[index] : new ResourceType();
-              });
-              return this.resourceRepository
-                .getResourceCount()
-                .pipe(map(count => {
-                  const shapeResourcesResp: any = shapeResourcesResponse(resources, number, size, resources.length, count, sort);
-                  return new Result<any>(false, "resources", shapeResourcesResp);
-                }));
+              return this.resourcePermissionRepository.getResourcePermissionsByResourceIds(resourceIds)
+                  .pipe( switchMap( resourcePermissions => {
+                      resources.forEach(value => {
+                          const index = resourceTypes.findIndex(x => x.resourceTypeId === value.resourceTypeId);
+                          value.resourceTypeName = index !== -1 ? resourceTypes[index].name : "";
+                          value.resourcePermissions = [];
+                          resourcePermissions.forEach( x => {
+                             if (x.resourceId === value.resourceId) {
+                                 value.resourcePermissions.push(x);
+                             }
+                          });
+                      });
+                      return this.resourceRepository
+                          .getResourceCount()
+                          .pipe(map(count => {
+                              const shapeResourcesResp: any = shapeResourcesResponse(resources, number, size, resources.length, count, sort);
+                              return new Result<any>(false, "resources", shapeResourcesResp);
+                          }));
+                  }));
           }));
         }
       }));
@@ -100,7 +117,7 @@ export class ResourceOrchestrator {
       .pipe(switchMap((resource: Resource) => {
         return this.resourceTypeRepository.getResourceTypeById(resource.resourceTypeId)
           .pipe(map(resourceType => {
-              resource.resourceType = resourceType ? resourceType : new ResourceType();
+              resource.resourceTypeName = resourceType ? resourceType.name : "";
               return resource;
         }));
       }));

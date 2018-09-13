@@ -7,11 +7,11 @@ const orchestrator: ResourceOrchestrator = new ResourceOrchestrator();
 
 export let getResourcesByArray = (req: Request, res: Response) => {
 
-  const number = getNumericValueOrDefault(req.query.pageNumber, 1);
-  const size = getNumericValueOrDefault(req.query.pageSize, 10);
-  const field = getStringValueOrDefault(req.query.sortField, "");
-  const direction = getStringValueOrDefault(req.query.sortOrder, "");
-  const assignedArray = req.query.assignedArray ? req.query.assignedArray.split(",") : [];
+  const number = getNumericValueOrDefault(req.body.pageNumber, 1);
+  const size = getNumericValueOrDefault(req.body.pageSize, 10);
+  const field = getStringValueOrDefault(req.body.sortField, "");
+  const direction = getStringValueOrDefault(req.body.sortOrder, "");
+  const assignedArray = req.body.assignedArray;
 
   orchestrator.getResourcesByArray(number, size, field, direction, assignedArray)
     .subscribe(result => {

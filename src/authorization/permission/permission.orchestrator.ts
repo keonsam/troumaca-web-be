@@ -21,21 +21,7 @@ export class PermissionOrchestrator {
       .getPermissionsByArray(number, size, sort, assignedArray)
       .pipe(flatMap(value => {
         return this.permissionRepository
-          .getPermissionCount()
-          .pipe(map(count => {
-            const shapePermissionsResp = shapePermissionsResponse( value, number, size, value.length, count, sort);
-            return new Result<any>(false, "", shapePermissionsResp);
-          }));
-      }));
-  }
-
-  getResourcePermissionsByArray(number: number, size: number, field: string, direction: string, assignedArray: string[]): Observable<Result<any>> {
-    const sort = getSortOrderOrDefault(field, direction);
-    return this.permissionRepository
-      .getResourcePermissionsByArray(number, size, sort, assignedArray)
-      .pipe(flatMap(value => {
-        return this.permissionRepository
-          .getPermissionCount()
+          .getPermissionCount(assignedArray)
           .pipe(map(count => {
             const shapePermissionsResp = shapePermissionsResponse( value, number, size, value.length, count, sort);
             return new Result<any>(false, "", shapePermissionsResp);

@@ -5,7 +5,6 @@ import { getStringValueOrDefault } from "../../string.util";
 
 const orchestrator: PermissionOrchestrator = new PermissionOrchestrator();
 
-
 export let getPermissions = (req: Request, res: Response) => {
     console.log(req.query);
     const number = getNumericValueOrDefault(req.query.pageNumber, 1);
@@ -27,11 +26,11 @@ export let getPermissions = (req: Request, res: Response) => {
 
 export let getPermissionsByArray = (req: Request, res: Response) => {
 
-  const number = getNumericValueOrDefault(req.query.pageNumber, 1);
-  const size = getNumericValueOrDefault(req.query.pageSize, 10);
-  const field = getStringValueOrDefault(req.query.sortField, "");
-  const direction = getStringValueOrDefault(req.query.sortOrder, "");
-  const assignedArray = req.query.assignedArray ? req.query.assignedArray.split(",") : [];
+  const number = getNumericValueOrDefault(req.body.pageNumber, 1);
+  const size = getNumericValueOrDefault(req.body.pageSize, 10);
+  const field = getStringValueOrDefault(req.body.sortField, "");
+  const direction = getStringValueOrDefault(req.body.sortOrder, "");
+  const assignedArray = req.body.assignedArray;
 
   orchestrator.getPermissionsByArray(number, size, field, direction, assignedArray)
     .subscribe(result => {
@@ -42,26 +41,6 @@ export let getPermissionsByArray = (req: Request, res: Response) => {
         res.send(JSON.stringify({message: "Error Occurred"}));
 
     });
-};
-
-export let getResourcePermissionsByArray = (req: Request, res: Response) => {
-
-  const number = getNumericValueOrDefault(req.query.pageNumber, 1);
-  const size = getNumericValueOrDefault(req.query.pageSize, 10);
-  const field = getStringValueOrDefault(req.query.sortField, "");
-  const direction = getStringValueOrDefault(req.query.sortOrder, "");
-  const assignedArray = req.query.assignedArray ? req.query.assignedArray.split(",") : [];
-
-  orchestrator.getResourcePermissionsByArray(number, size, field, direction, assignedArray)
-    .subscribe(result => {
-        res.status(200);
-        res.send(JSON.stringify(result.data));
-    }, error => {
-        res.status(500);
-        res.send(JSON.stringify({message: "Error Occurred"}));
-
-    });
-
 };
 
 export let getPermissionById = (req: Request, res: Response) => {

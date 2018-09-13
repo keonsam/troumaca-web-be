@@ -7,6 +7,8 @@ export interface ResourcePermissionRepository {
 
   getResourcePermissionsByResourceId(resourceId: string): Observable<ResourcePermission[]>;
 
+  getResourcePermissionsByResourceIds(resourceIds: string[]): Observable<ResourcePermission[]>;
+
   addResourcePermission(resourcePermissions: ResourcePermission[]): Observable<ResourcePermission[]>;
 
   getResourcePermissionById(resourcePermissionId: string, ownerPartyId: string): Observable<ResourcePermission>;

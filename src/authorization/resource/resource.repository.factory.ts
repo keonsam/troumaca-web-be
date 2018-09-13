@@ -40,16 +40,16 @@ class ResourceDBRepository implements ResourceRepository {
 
   getResources(pageNumber: number, pageSize: number, order: string): Observable<Resource[]> {
     const localDefaultPageSize = this.defaultPageSize;
+    const skip = calcSkip(pageNumber, pageSize, localDefaultPageSize);
     return Observable.create(function (observer: Observer<Resource[]>) {
-      const skip = calcSkip(pageNumber, pageSize, localDefaultPageSize);
-      resources.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
-        if (!err) {
-          observer.next(doc);
-        } else {
-          observer.error(err);
-        }
-        observer.complete();
-      });
+        resources.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
+            if (!err) {
+                observer.next(doc);
+            } else {
+                observer.error(err);
+            }
+            observer.complete();
+        });
     });
   }
 

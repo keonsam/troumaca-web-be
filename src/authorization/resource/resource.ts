@@ -1,13 +1,13 @@
-import { ResourceType } from "../resource-type/resource.type";
+import { ResourcePermission } from "../resource-permission/resource.permission";
 
 export class Resource {
 
   private _resourceId: string;
   private _resourceTypeId: string;
-  private _resourceType: ResourceType;
+  private _resourceTypeName: string;
+  private _resourcePermissions: ResourcePermission[];
   private _name: string;
   private _description: string;
-  // private _ownerPartyId:string;
   private _createdOn: Date;
   private _modifiedOn: Date;
 
@@ -27,12 +27,20 @@ export class Resource {
     this._resourceTypeId = value;
   }
 
-  get resourceType(): ResourceType {
-    return this._resourceType;
+  get resourceTypeName(): string {
+      return this._resourceTypeName;
   }
 
-  set resourceType(value: ResourceType) {
-    this._resourceType = value;
+  set resourceTypeName(value: string) {
+      this._resourceTypeName = value;
+  }
+
+  get resourcePermissions(): ResourcePermission[] {
+      return this._resourcePermissions;
+  }
+
+  set resourcePermissions(value: ResourcePermission[]) {
+      this._resourcePermissions = value;
   }
 
   get name(): string {

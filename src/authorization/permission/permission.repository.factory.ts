@@ -10,25 +10,10 @@ class PermissionDBRepository implements PermissionRepository {
 
   private defaultPageSize: number = 10;
 
-
   getPermissionsByArray(pageNumber: number, pageSize: number, order: string, assignedArray: string[]): Observable<Permission[]> {
     return Observable.create(function (observer: Observer<Permission[]>) {
       const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
       permissions.find({ permissionId: { $nin: assignedArray }}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
-        if (!err) {
-          observer.next(doc);
-        } else {
-          observer.error(err);
-        }
-        observer.complete();
-      });
-    });
-  }
-
-  getResourcePermissionsByArray(pageNumber: number, pageSize: number, order: string, assignedArray: string[]): Observable<Permission[]> {
-    return Observable.create(function (observer: Observer<Permission[]>) {
-      const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
-      permissions.find({ permissionId: { $in: assignedArray }}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -54,9 +39,10 @@ class PermissionDBRepository implements PermissionRepository {
     });
   }
 
-  getPermissionCount(): Observable<number> {
+  getPermissionCount(assignedArray?: string[]): Observable<number> {
+    const query = assignedArray ? { permissionId: { $nin: assignedArray } } : {};
     return Observable.create(function (observer: Observer<number>) {
-      permissions.count({}, function (err: any, count: number) {
+      permissions.count(query, function (err: any, count: number) {
         if (!err) {
           observer.next(count);
         } else {
@@ -138,10 +124,6 @@ class PermissionRestRepository implements PermissionRepository {
     return undefined;
   }
 
-  getResourcePermissionsByArray(pageNumber: number, pageSize: number, order: string, assignedArray: string[]): Observable<Permission[]> {
-    return undefined;
-  }
-
   getAllPermissions(): Observable<Permission[]> {
     return undefined;
   }
@@ -150,7 +132,7 @@ class PermissionRestRepository implements PermissionRepository {
     return undefined;
   }
 
-  getPermissionCount(): Observable<number> {
+  getPermissionCount(assignedArray?: string[]): Observable<number> {
     return undefined;
   }
 

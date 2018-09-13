@@ -5,11 +5,9 @@ export interface PermissionRepository {
 
   getPermissionsByArray(pageNumber: number, pageSize: number, order: string, assignedArray: string[]): Observable<Permission[]>;
 
-  getResourcePermissionsByArray(pageNumber: number, pageSize: number, order: string, assignedArray: string[]): Observable<Permission[]>;
-
   getPermissions(number: number, size: number, sort: string): Observable<Permission[]>;
 
-  getPermissionCount(): Observable<number>;
+  getPermissionCount(assignedArray?: string[]): Observable<number>;
 
   addPermission(permission: Permission): Observable<Permission>;
 

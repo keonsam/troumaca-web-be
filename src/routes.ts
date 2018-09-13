@@ -178,8 +178,7 @@ router.get("/sessions/log-out-user", sessionController.handleSessionLogOut);
 
 // permissions
 router.get("/permissions", permissionController.getPermissions);
-router.get("/permissions/permissions", permissionController.getPermissionsByArray);
-router.get("/permissions/resource-permissions", permissionController.getResourcePermissionsByArray);
+router.post("/available-permissions", permissionController.getPermissionsByArray);
 router.get("/permissions/:permissionId", permissionController.getPermissionById);
 router.post("/permissions", permissionController.savePermission);
 router.put("/permissions/:permissionId", permissionController.updatePermission);
@@ -187,8 +186,7 @@ router.delete("/permissions/:permissionId", permissionController.deletePermissio
 
 // resources
 router.get("/resources", resourceController.getResources);
-router.get("/resources/resources", resourceController.getResourcesByArray);
-router.get("/resources/assigned-resources", resourceController.getAssignedResourcesByArray);
+router.post("/available-resources", resourceController.getResourcesByArray);
 router.get("/resources/:resourceId", resourceController.getResourceById);
 router.post("/resources", resourceController.saveResource);
 router.put("/resources/:resourceId", resourceController.updateResource);
