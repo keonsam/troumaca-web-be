@@ -6,7 +6,7 @@ var should = require('chai').should(),
 describe('confirm-credential', function () {
 
   it('confirm credential', function (done) {
-    api.post("/authentication/credentials")
+    api.post("/authentication/confirmations/{confirmationId}/credentials/{credentialId}")
     .set('Accept', 'application/json')
     .set('correlationId', 1234567890)
     .send(credential)

@@ -21,6 +21,7 @@ const checkAccess = (req: Request, res: Response, next: NextFunction) => {
       "/get-confirmations-username",
       "/authentication/verify-credentials-confirmations",
       "/verify-credentials-confirmations",
+      "/authentication/confirmations/{confirmationId}/credentials/{credentialId}",
       "/authentication/forgot-password",
       "/forgot-password",
       "/authentication/authenticate",
