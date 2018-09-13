@@ -1,5 +1,5 @@
 import { AccessRoleRepository } from "../../repository/access.role.repository";
-import { createAccessRoleRepositoryFactory } from "../../adapter/access-role/access.role.repository.factory";
+import { createAccessRoleRepositoryFactory } from "../../adapter/authorization/access.role.repository.factory";
 import { Observable } from "rxjs/Observable";
 import { AccessRole } from "../../data/authorization/access.role";
 import { shapeAccessRolesResponse } from "./access.role.response.shaper";
@@ -7,11 +7,11 @@ import { Result } from "../../result.success";
 import { getSortOrderOrDefault } from "../../sort.order.util";
 import { Grant } from "../../data/authorization/grant";
 import { GrantRepository } from "../../repository/grant.repository";
-import { createGrantRepositoryFactory } from "../../adapter/access-role-grant/grant.repository.factory";
+import { createGrantRepositoryFactory } from "../../adapter/authorization/grant.repository.factory";
 import { PartyAccessRoleRepository } from "../../repository/party.access.role.repository";
-import { createPartyAccessRoleRepositoryFactory } from "../../adapter/party-access-role/party.access.role.repository.factory";
+import { createPartyAccessRoleRepositoryFactory } from "../../adapter/authorization/party.access.role.repository.factory";
 import { AccessRoleTypeRepository } from "../../repository/access.role.type.repository";
-import { createAccessRoleTypeRepositoryFactory } from "../../adapter/access-role-type/access.role.type.repository.factory";
+import { createAccessRoleTypeRepositoryFactory } from "../../adapter/authorization/access.role.type.repository.factory";
 import { AccessRoleType } from "../../data/authorization/access.role.type";
 import { AccessRoleResponse } from "../../data/authorization/access.role.response";
 

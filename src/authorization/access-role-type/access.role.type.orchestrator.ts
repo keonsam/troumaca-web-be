@@ -1,5 +1,5 @@
 import { AccessRoleTypeRepository } from "../../repository/access.role.type.repository";
-import { createAccessRoleTypeRepositoryFactory } from "../../adapter/access-role-type/access.role.type.repository.factory";
+import { createAccessRoleTypeRepositoryFactory } from "../../adapter/authorization/access.role.type.repository.factory";
 import { Observable } from "rxjs/Observable";
 import { AccessRoleType } from "../../data/authorization/access.role.type";
 import { shapeAccessRoleTypesResponse } from "./access.role.type.response.shaper";

@@ -1,5 +1,5 @@
 import { Credential } from "../../data/authentication/credential";
-import { createCredentialRepositoryFactory } from "../../adapter/credential/credential.repository.factory";
+import { createCredentialRepositoryFactory } from "../../adapter/authentication/credential.repository.factory";
 import { CredentialRepository } from "../../repository/credential.repository";
 import { Observable } from "rxjs/Observable";
 import { Session } from "../../data/session/session";

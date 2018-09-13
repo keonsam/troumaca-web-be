@@ -153,14 +153,21 @@ router.post("/accounts", accountController.saveAccount);
 
 // ##### SECURITY START #####
 // AUTHENTICATION
-router.post("/validate-password", jsonParser, credentialController.isValidPassword);
+//Todo: Delete after front end is upgraded
 router.post("/validate-username", jsonParser, credentialController.isValidUsername);
-router.post("/authentication/credentials", credentialController.addCredential);
+router.post("/validate-password", jsonParser, credentialController.isValidPassword);
 router.post("/authenticate", credentialController.authenticate);
+
+router.post("/authentication/validate-password", jsonParser, credentialController.isValidPassword);
+router.post("/authentication/validate-username", jsonParser, credentialController.isValidUsername);
+router.post("/authentication/credentials", credentialController.addCredential);
+router.post("/authentication/authenticate", credentialController.authenticate);
 
 // CONFIRMATION
 router.get("/send-confirmation-codes/:credentialId/:confirmationId", confirmationController.resendConfirmCode);
 router.post("/verify-credentials-confirmations", confirmationController.confirmCode);
+router.post("/authentication/confirmations/{confirmationId}/credentials/{credentialId}", confirmationController.confirmCode);
+
 
 // Todo: Check into why this is needed
 // router.post("/validate-edit-username", credentialController.isValidEditUsername);

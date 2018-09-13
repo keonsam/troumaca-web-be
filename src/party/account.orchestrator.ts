@@ -11,7 +11,7 @@ import { SessionRepository } from "../repository/session.repository";
 import { Organization } from "../data/party/organization";
 import { AccountResponse } from "../data/party/account.response";
 import { CredentialRepository } from "../repository/credential.repository";
-import { createCredentialRepositoryFactory } from "../adapter/credential/credential.repository.factory";
+import { createCredentialRepositoryFactory } from "../adapter/authentication/credential.repository.factory";
 
 export class AccountOrchestrator {
 
