@@ -1,4 +1,4 @@
-import { Party } from "../party";
+import {Party} from "../../data/party/party";
 
 export class JoinOrganizationRequest extends Party {
     private _organizationId: string;

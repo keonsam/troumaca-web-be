@@ -1,13 +1,13 @@
 import { Observable } from "rxjs";
 import { flatMap, map} from "rxjs/operators";
 import { getSortOrderOrDefault } from "../../sort.order.util";
-import { AssetTypeClass } from "./asset.type.class";
-import { AssignedAttribute } from "../attribute/assigned.attribute";
-import { createAssetTypeClassRepositoryFactory } from "./asset.type.class.repository.factory";
-import { AssetTypeClassRepository } from "./asset.type.class.repository";
+import { AssetTypeClass } from "../../data/asset/asset.type.class";
+import { AssignedAttribute } from "../../data/asset/assigned.attribute";
+import { createAssetTypeClassRepositoryFactory } from "../../adapter/asset/asset.type.class.repository.factory";
+import { AssetTypeClassRepository } from "../../repository/asset.type.class.repository";
 import { shapeAssetTypeClassesResponse } from "./asset.type.class.response.shaper";
 import { Result } from "../../result.success";
-import { AssetTypeClassResponse } from "./asset.type.class.response";
+import { AssetTypeClassResponse } from "../../data/asset/asset.type.class.response";
 
 export class AssetTypeClassOrchestrator {
 

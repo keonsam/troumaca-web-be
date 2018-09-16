@@ -1,8 +1,8 @@
-import { AccessRoleTypeRepository } from "./access.role.type.repository";
-import { createAccessRoleTypeRepositoryFactory } from "./access.role.type.repository.factory";
+import { AccessRoleTypeRepository } from "../../repository/access.role.type.repository";
+import { createAccessRoleTypeRepositoryFactory } from "../../adapter/authorization/access.role.type.repository.factory";
+import { AccessRoleType } from "../../data/authorization/access.role.type";
 import { Observable } from "rxjs";
 import { flatMap, map } from "rxjs/operators";
-import { AccessRoleType } from "./access.role.type";
 import { shapeAccessRoleTypesResponse } from "./access.role.type.response.shaper";
 import { Result } from "../../result.success";
 import { getSortOrderOrDefault } from "../../sort.order.util";
@@ -21,16 +21,17 @@ export class AccessRoleTypeOrchestrator {
 
   getAccessRoleTypes(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
     const sort: string = getSortOrderOrDefault(field, direction);
-    return this.accessRoleTypeRepository
-      .getAccessRoleTypes(number, size, sort)
-      .pipe(flatMap(value => {
-        return this.accessRoleTypeRepository
-          .getAccessRoleTypeCount()
-          .pipe(map(count => {
-            const shapeAccessRoleTypesResp: any = shapeAccessRoleTypesResponse(value, number, size, value.length, count, sort);
-            return new Result<any>(false, "accessRoleTypes", shapeAccessRoleTypesResp);
-          }));
-      }));
+    // return this.accessRoleTypeRepository
+    //   .getAccessRoleTypes(number, size, sort)
+    //   .pipe(flatMap(value => {
+    //     return this.accessRoleTypeRepository
+    //       .getAccessRoleTypeCount()
+    //       .pipe(map(count => {
+    //         // const shapeAccessRoleTypesResp: any = shapeAccessRoleTypesResponse(value, number, size, value.length, count, sort);
+    //         // return new Result<any>(false, "accessRoleTypes", shapeAccessRoleTypesResp);
+    //       }));
+    //   }));
+    return null;
   }
 
   addAccessRoleType(accessRoleType: AccessRoleType): Observable<AccessRoleType> {

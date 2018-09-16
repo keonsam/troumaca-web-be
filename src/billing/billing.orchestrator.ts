@@ -1,7 +1,7 @@
+import { Billing } from "../data/party/billing";
+import { createBillingRepositoryFactory } from "../adapter/party/billing.repository.factory";
+import { BillingRepository } from "../repository/billing.repository";
 import { Observable } from "rxjs";
-import { Billing } from "./billing";
-import { createBillingRepositoryFactory } from "./billing.repository.factory";
-import { BillingRepository } from "./billing.repository";
 
 export class  BillingOrchestrator {
     private billingRepository: BillingRepository;

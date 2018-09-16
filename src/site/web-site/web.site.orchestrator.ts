@@ -1,9 +1,9 @@
-import { createWebSiteRepository } from "./web.site.repository.factory";
-import { WebSiteRepository } from "./web.site.repository";
+import { createWebSiteRepository } from "../../adapter/site/web.site.repository.factory";
+import { WebSiteRepository } from "../../repository/web.site.repository";
 import { Observable } from "rxjs";
 import { getSortOrderOrDefault } from "../../sort.order.util";
 import { shapeWebSitesResponse } from "./web.site.response.shaper";
-import { WebSite } from "./web.site";
+import { WebSite } from "../../data/site/web.site";
 import { Result } from "../../result.success";
 import { flatMap, map } from "rxjs/operators";
 

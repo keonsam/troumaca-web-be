@@ -1,6 +1,6 @@
 import { permissions } from "../../db";
-import { PermissionRepository } from "./permission.repository";
-import { Permission } from "./permission";
+import { PermissionRepository } from "../../repository/permission.repository";
+import { Permission } from "../../data/authorization/permission";
 import { Observable ,  Observer } from "rxjs";
 import { RepositoryKind } from "../../repository.kind";
 import { generateUUID } from "../../uuid.generator";

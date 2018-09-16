@@ -1,162 +1,145 @@
 import { Request, Response } from "express";
 import { CredentialOrchestrator } from "./credential.orchestrator";
-import { ValidateResponse } from "./validate.response";
-import { AuthenticateResponse } from "./authenticate.response";
-import { AuthenticatedCredential } from "./authenticated.credential";
+import { AuthenticatedCredential } from "../../data/authentication/authenticated.credential";
 
 const credentialOrchestrator: CredentialOrchestrator = new CredentialOrchestrator();
 
 // TODO: Consider removing
 // router.post("/validate-username", function (req, res, next) {
 export let isValidUsername = (req: Request, res: Response) => {
-    const username = req.body.username;
-    const partyId = req.body.partyId;
+
+  const username = req.body.username;
+  const partyId = req.body.partyId;
 
   if (!username) {
     return res.status(400).send({message: "Username can not be empty"});
   }
 
   credentialOrchestrator.isValidUsername(username, partyId)
-    .subscribe((next: boolean) => {
+  .subscribe((next: boolean) => {
+    res.status(200);
+    const resp = {valid: next};
+    res.setHeader("content-type", "application/json");
+    res.send(JSON.stringify(resp));
+  }, error => {
+    res.status(500);
+    res.send(JSON.stringify({message: "Error Occurred"}));
+    console.log(error);
+  });
+
+};
+
+export let isValidPassword = (req: Request, res: Response) => {
+
+  if (!req.body) {
+      return res.status(400).send({message: "Password can not be empty"});
+  }
+
+  credentialOrchestrator.isValidPassword(req.body)
+  .subscribe((next: boolean) => {
       res.status(200);
       const resp = {valid: next};
       res.setHeader("content-type", "application/json");
       res.send(JSON.stringify(resp));
-    }, error => {
+  }, error => {
       res.status(500);
       res.send(JSON.stringify({message: "Error Occurred"}));
       console.log(error);
-    });
-};
+  });
 
-export let isValidPassword = (req: Request, res: Response) => {
-    if (!req.body) {
-        return res.status(400).send({message: "Password can not be empty"});
-    }
-
-    credentialOrchestrator.isValidPassword(req.body)
-        .subscribe((next: boolean) => {
-            res.status(200);
-            const resp = {valid: next};
-            res.setHeader("content-type", "application/json");
-            res.send(JSON.stringify(resp));
-        }, error => {
-            res.status(500);
-            res.send(JSON.stringify({message: "Error Occurred"}));
-            console.log(error);
-        });
 };
 
 export let addCredential = (req: Request, res: Response) => {
 
-    const correlationId = req.headers.correlationid;
+  const correlationId = req.headers.correlationid;
 
-    if (!correlationId) {
-        res.status(400);
-        res.setHeader("content-type", "application/json");
-        res.send(JSON.stringify({message: "A \"correlationId\" is required."}));
-        return;
-    }
+  if (!correlationId) {
+      res.status(400);
+      res.setHeader("content-type", "application/json");
+      res.send(JSON.stringify({message: "A \"correlationId\" is required."}));
+      return;
+  }
 
-    const credential = req.body;
-    if (!credential) {
-        res.status(400);
-        res.setHeader("content-type", "application/json");
-        res.send(JSON.stringify({message: "No \"credential\" exists. Credential can not be empty."}));
-        return;
-    }
+  const credential = req.body;
+  if (!credential) {
+      res.status(400);
+      res.setHeader("content-type", "application/json");
+      res.send(JSON.stringify({message: "No \"credential\" exists. Credential can not be empty."}));
+      return;
+  }
 
-    if (!credential.username || credential.username.length <= 0) {
-        res.status(400);
-        res.setHeader("content-type", "application/json");
-        res.send(JSON.stringify({message: "A \"username\" is required."}));
-        return;
-    }
+  if (!credential.username || credential.username.length <= 0) {
+      res.status(400);
+      res.setHeader("content-type", "application/json");
+      res.send(JSON.stringify({message: "A \"username\" is required."}));
+      return;
+  }
 
-    if (!credential.password || credential.password.length <= 0) {
-        res.status(400);
-        res.setHeader("content-type", "application/json");
-        res.send(JSON.stringify({message: "A \"password\" is required."}));
-        return;
-    }
+  if (!credential.password || credential.password.length <= 0) {
+      res.status(400);
+      res.setHeader("content-type", "application/json");
+      res.send(JSON.stringify({message: "A \"password\" is required."}));
+      return;
+  }
 
-    const headerOptions = {
-        correlationId: correlationId,
-        sourceSystemHost: req.headers.host,
-        sourceSystemName: ""
-    };
+  const headerOptions = {
+      correlationId: correlationId,
+      sourceSystemHost: req.headers.host,
+      sourceSystemName: ""
+  };
 
-    credentialOrchestrator.addCredential(credential, headerOptions)
-        .subscribe(createdCredential => {
-            res.status(201);
-            res.setHeader("content-type", "application/json");
-            res.send(JSON.stringify(createdCredential.confirmation));
-        }, error => {
-            res.status(500);
-            res.setHeader("content-type", "application/json");
-            res.send(JSON.stringify({message: "Error Occurred"}));
-            console.log(error);
-        });
+  credentialOrchestrator.addCredential(credential, headerOptions)
+  .subscribe(createdCredential => {
+      res.status(201);
+      res.setHeader("content-type", "application/json");
+      res.send(JSON.stringify(createdCredential.confirmation));
+  }, error => {
+      res.status(500);
+      res.setHeader("content-type", "application/json");
+      res.send(JSON.stringify({message: "Error Occurred"}));
+      console.log(error);
+  });
 
 };
 
 export let authenticate = (req: Request, res: Response) => {
-    const credential = req.body;
 
-    if (!req.body) {
-        return res.status(400).send({message: "Authenticate can not be empty"});
-    }
+  const credential = req.body;
 
-    const correlationId = req.headers.correlationid;
+  if (!req.body) {
+      return res.status(400).send({message: "Authenticate can not be empty"});
+  }
 
-    if (!correlationId) {
-        res.status(400);
-        res.setHeader("content-type", "application/json");
-        res.send(JSON.stringify({message: "A \"correlationId\" is required."}));
-        return;
-    }
+  const correlationId = req.headers.correlationid;
 
-    const headerOptions = {
-        correlationId: correlationId,
-        sourceSystemHost: req.headers.host,
-        sourceSystemName: ""
-    };
+  if (!correlationId) {
+      res.status(400);
+      res.setHeader("content-type", "application/json");
+      res.send(JSON.stringify({message: "A \"correlationId\" is required."}));
+      return;
+  }
 
-    credentialOrchestrator.authenticate(credential, headerOptions)
-        .subscribe((authenticatedCredential: AuthenticatedCredential) => {
-            if (authenticatedCredential.sessionId) {
-                res.cookie("sessionId", authenticatedCredential.sessionId, {path: "/", maxAge: 20 * 60 * 1000, httpOnly: true });
-            }
-            const body = JSON.stringify(authenticatedCredential.toJson());
-            res.status(200);
-            res.send(body);
-        }, error => {
-            res.status(500);
-            res.send(JSON.stringify({message: "Error Occurred"}));
-            console.log(error);
-        });
+  const headerOptions = {
+      correlationId: correlationId,
+      sourceSystemHost: req.headers.host,
+      sourceSystemName: ""
+  };
+
+  credentialOrchestrator.authenticate(credential, headerOptions)
+  .subscribe((authenticatedCredential: AuthenticatedCredential) => {
+      if (authenticatedCredential.sessionId) {
+          res.cookie("sessionId", authenticatedCredential.sessionId, {path: "/", maxAge: 20 * 60 * 1000, httpOnly: true });
+      }
+      const body = JSON.stringify(authenticatedCredential.toJson());
+      res.status(200);
+      res.send(body);
+  }, error => {
+      res.status(500);
+      res.send(JSON.stringify({message: "Error Occurred"}));
+      console.log(error);
+  });
+
 };
-
-// TODO: Consider removing
-// export let isValidEditUsername = (req: Request, res: Response) => {
-//   let partyId = req.body.partyId;
-//   let username = req.body.username;
-//   if (!req.body) {
-//     return res.status(400).send({message: "Username can not be empty"});
-//   }
-//
-//   credentialOrchestrator.isValidEditUsername(partyId, username)
-//     .subscribe((next:ValidateResponse) => {
-//         res.status(200);
-//         res.send(next.valid);
-//     }, error => {
-//       res.status(500);
-//       res.send(JSON.stringify({message: 'Error Occurred'}));
-//       console.log(error);
-//     });
-// };
-
-// router.post("/validate-password", function (req, res, next) {
 
 // router.post("/forgot-password", function (req, res, next) {
 // export let forgotPassword = (req: Request, res: Response) => {
@@ -175,8 +158,6 @@ export let authenticate = (req: Request, res: Response) => {
 //       console.log(error);
 //     });
 // };
-
-// router.post("/authenticate", function (req, res, next) {
 
 // router.post("/", function (req, res, next) {
 

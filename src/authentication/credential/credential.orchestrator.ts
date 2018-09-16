@@ -1,13 +1,14 @@
-import { Credential } from "./credential";
-import { createCredentialRepositoryFactory } from "./credential.repository.factory";
-import { CredentialRepository } from "./credential.repository";
+import { Credential } from "../../data/authentication/credential";
+import { createCredentialRepositoryFactory } from "../../adapter/authentication/credential.repository.factory";
+import { CredentialRepository } from "../../repository/credential.repository";
+import { Session } from "../../data/session/session";
+import { createSessionRepositoryFactory } from "../../adapter/session/session.repository.factory";
+import { SessionRepository } from "../../repository/session.repository";
+import "rxjs/add/operator/map";
+import { AuthenticatedCredential } from "../../data/authentication/authenticated.credential";
+import { CreatedCredential } from "../../data/authentication/created.credential";
 import { Observable, of } from "rxjs";
 import { switchMap, map } from "rxjs/operators";
-import { Session } from "../../session/session";
-import { createSessionRepositoryFactory } from "../../session/session.repository.factory";
-import { SessionRepository } from "../../session/session.repository";
-import { AuthenticatedCredential } from "./authenticated.credential";
-import { CreatedCredential } from "./created.credential";
 
 export class CredentialOrchestrator {
 
@@ -66,7 +67,7 @@ export class CredentialOrchestrator {
                           if (!session) {
                               return new AuthenticatedCredential();
                           }
-                          authenticatedCredential.sessionId = session.sessionId;
+                          // authenticatedCredential.sessionId = session.sessionId;
                           return authenticatedCredential;
                       }));
               } else {

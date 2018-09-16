@@ -3,7 +3,7 @@ var should = require('chai').should(),
     supertest = require('supertest'),
     api = supertest('http://localhost:3000');
 
-describe('create-credential', function () {
+describe('who-create', function () {
 
   // var location1;
   // var location2;
@@ -11,7 +11,7 @@ describe('create-credential', function () {
   // var locations = [location1, location2, location3];
 
   before(function (done) {
-
+    console.log("example")
     // api.post('/locations')
     //   .set('Accept', 'application/x-www-form-urlencoded')
     //   .send({

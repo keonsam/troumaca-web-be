@@ -1,10 +1,14 @@
-import { PartyAccessRoleRepository } from "./party.access.role.repository";
-import { createPartyAccessRoleRepositoryFactory } from "./party.access.role.repository.factory";
+import { PartyAccessRoleRepository } from "../../repository/party.access.role.repository";
+import { createPartyAccessRoleRepositoryFactory } from "../../adapter/authorization/party.access.role.repository.factory";
+import { PartyAccessRole } from "../../data/authorization/party.access.role";
+import { AccessRoleRepository } from "../../repository/access.role.repository";
+import { accessRoles } from "../../db";
+// import {shapePartyAccessRolesResponse} from "./party.access.role.response.shaper";
+// import {Result} from "../../result.success";
+// import {getSortOrderOrDefault} from "../../sort.order.util";
 import { Observable, of } from "rxjs";
-import { PartyAccessRole } from "./party.access.role";
-import { AccessRoleRepository } from "../access-role/access.role.repository";
-import { createAccessRoleRepositoryFactory } from "../access-role/access.role.repository.factory";
 import { switchMap, map } from "rxjs/operators";
+import {createAccessRoleRepositoryFactory} from "../../adapter/authorization/access.role.repository.factory";
 
 export class PartyAccessRoleOrchestrator {
 
@@ -15,7 +19,7 @@ export class PartyAccessRoleOrchestrator {
     this.partyPartyAccessRoleRepository = createPartyAccessRoleRepositoryFactory();
     this.accessRoleRepository = createAccessRoleRepositoryFactory();
   }
-  
+
 
   getPartyAccessRoles(): Observable<PartyAccessRole[]> {
     return this.partyPartyAccessRoleRepository.getPartyAccessRoles()

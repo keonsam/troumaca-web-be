@@ -1,8 +1,8 @@
-import { PermissionRepository } from "./permission.repository";
+import { PermissionRepository } from "../../repository/permission.repository";
 import { createPermissionRepositoryFactory } from "./permission.repository.factory";
+import { Permission } from "../../data/authorization/permission";
 import { Observable } from "rxjs";
 import { flatMap, map} from "rxjs/operators";
-import { Permission } from "./permission";
 import { getSortOrderOrDefault } from "../../sort.order.util";
 import { Result } from "../../result.success";
 import { shapePermissionsResponse } from "./permission.response.shaper";
