@@ -1,7 +1,7 @@
-import { Observable } from "rxjs/Observable";
 import { AssetTypeClass } from "../data/asset/asset.type.class";
 import { AssetTypeClassResponse } from "../data/asset/asset.type.class.response";
 import { AssignedAttribute } from "../data/asset/assigned.attribute";
+import { Observable } from "rxjs";
 
 export interface AssetTypeClassRepository {
 

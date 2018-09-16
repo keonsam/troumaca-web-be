@@ -1,10 +1,8 @@
-import Rx from "rxjs";
 import { resources } from "../../db";
 import { ResourceRepository } from "../../repository/resource.repository";
 import { Resource } from "../../data/authorization/resource";
-import { Observable } from "rxjs/Observable";
+import { Observable ,  Observer } from "rxjs";
 import { RepositoryKind } from "../../repository.kind";
-import { Observer } from "rxjs/Observer";
 import { generateUUID } from "../../uuid.generator";
 import { calcSkip } from "../../db.util";
 
@@ -13,7 +11,7 @@ class ResourceDBRepository implements ResourceRepository {
   private defaultPageSize: number = 10;
 
   getResourcesByArray(pageNumber: number, pageSize: number, order: string, assignedArray: string[]): Observable<Resource[]> {
-    return Rx.Observable.create(function (observer: Observer<Resource[]>) {
+    return Observable.create(function (observer: Observer<Resource[]>) {
       const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
       resources.find({ resourceId: { $nin: assignedArray }}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
         if (!err) {
@@ -27,7 +25,7 @@ class ResourceDBRepository implements ResourceRepository {
   }
 
   getAssignedResourcesByArray(pageNumber: number, pageSize: number, order: string, assignedArray: string[]): Observable<Resource[]> {
-    return Rx.Observable.create(function (observer: Observer<Resource[]>) {
+    return Observable.create(function (observer: Observer<Resource[]>) {
       const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
       resources.find({ resourceId: { $in: assignedArray }}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
         if (!err) {
@@ -42,21 +40,21 @@ class ResourceDBRepository implements ResourceRepository {
 
   getResources(pageNumber: number, pageSize: number, order: string): Observable<Resource[]> {
     const localDefaultPageSize = this.defaultPageSize;
-    return Rx.Observable.create(function (observer: Observer<Resource[]>) {
-      const skip = calcSkip(pageNumber, pageSize, localDefaultPageSize);
-      resources.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
-        if (!err) {
-          observer.next(doc);
-        } else {
-          observer.error(err);
-        }
-        observer.complete();
-      });
+    const skip = calcSkip(pageNumber, pageSize, localDefaultPageSize);
+    return Observable.create(function (observer: Observer<Resource[]>) {
+        resources.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
+            if (!err) {
+                observer.next(doc);
+            } else {
+                observer.error(err);
+            }
+            observer.complete();
+        });
     });
   }
 
   getResourceCount(): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       resources.count({}, function (err: any, count: number) {
         if (!err) {
           observer.next(count);
@@ -70,7 +68,7 @@ class ResourceDBRepository implements ResourceRepository {
 
   addResource(resource: Resource): Observable<Resource> {
     resource.resourceId = generateUUID();
-    return Rx.Observable.create(function(observer: Observer<Resource>) {
+    return Observable.create(function(observer: Observer<Resource>) {
       resources.insert(resource, function(err: any, doc: any) {
         if (err) {
           observer.error(err);
@@ -83,7 +81,7 @@ class ResourceDBRepository implements ResourceRepository {
   }
 
   deleteResource(resourceId: string): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       const query = {
         "resourceId": resourceId
       };
@@ -99,7 +97,7 @@ class ResourceDBRepository implements ResourceRepository {
   }
 
   getResourceById(resourceId: string): Observable<Resource> {
-    return Rx.Observable.create(function (observer: Observer<Resource>) {
+    return Observable.create(function (observer: Observer<Resource>) {
       const query = {
         "resourceId": resourceId
       };
@@ -115,7 +113,7 @@ class ResourceDBRepository implements ResourceRepository {
   }
 
   updateResource(resourceId: string, resource: Resource): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       const query = {
         "resourceId": resourceId
       };

@@ -1,7 +1,7 @@
-import { Observable } from "rxjs/Observable";
 import { Credential } from "../data/authentication/credential";
 import { AuthenticatedCredential } from "../data/authentication/authenticated.credential";
 import { CreatedCredential } from "../data/authentication/created.credential";
+import { Observable } from "rxjs";
 
 export interface CredentialRepository {
 
@@ -14,6 +14,9 @@ export interface CredentialRepository {
   authenticate(credential: Credential, options: any): Observable<AuthenticatedCredential>;
 
   updateCredentialStatusById(credentialId: string, status: string): Observable<number>;
+
+  // USED BY OTHER REPOS
+  updateUserCredential(partyId: string, credential: Credential): Observable<number>;
 
   // isValidEditUsername(partyId:string, username:string):Observable<boolean>;
 

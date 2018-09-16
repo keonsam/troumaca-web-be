@@ -1,6 +1,7 @@
 import { createPhoneRepository } from "../../adapter/site/phone.repository.factory";
 import { PhoneRepository } from "../../repository/phone.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
+import { flatMap, map} from "rxjs/operators";
 import { getSortOrderOrDefault } from "../../sort.order.util";
 import { shapePhonesResponse } from "./phone.response.shaper";
 import { Phone } from "../../data/site/phone";
@@ -22,14 +23,14 @@ export class PhoneOrchestrator {
     const sort: string = getSortOrderOrDefault(field, direction);
     return this.phoneRepository
       .getPhones(number, size, sort)
-      .flatMap(value => {
+      .pipe(flatMap(value => {
         return this.phoneRepository
           .getPhoneCount()
-          .map(count => {
+          .pipe(map(count => {
             const shapePhonesResp: any = shapePhonesResponse(value, number, size, value.length, count, sort);
             return new Result<any>(false, "phones", shapePhonesResp);
-          });
-      });
+          }));
+      }));
   }
 
   getPhoneById(siteId: string): Observable<Phone> {

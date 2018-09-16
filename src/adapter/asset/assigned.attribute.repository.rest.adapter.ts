@@ -1,17 +1,17 @@
-import { Observable } from "rxjs/Observable";
 import { AssignedAttributeRepository } from "../../repository/assigned.attribute.repository";
 import { Attribute } from "../../data/asset/attribute";
 import { AssignedAttribute } from "../../data/asset/assigned.attribute";
+import { Observable } from "rxjs";
 
 export class AssignedAttributeRepositoryRestAdapter implements AssignedAttributeRepository {
 
-    getAssignableAttributes(pageNumber: number, pageSize: number, order: string, assignedAttributes: string[], type: string): Observable<Attribute[]> {
-        return undefined;
-    }
-
-    getAssignableAttributesCount(assignedAttributes: string[], type: string): Observable<number> {
-        return undefined;
-    }
+    // getAssignableAttributes(pageNumber: number, pageSize: number, order: string, assignedAttributes: string[], type: string): Observable<Attribute[]> {
+    //     return undefined;
+    // }
+    //
+    // getAssignableAttributesCount(assignedAttributes: string[], type: string): Observable<number> {
+    //     return undefined;
+    // }
 
     getAssignedAttributesByClassId(assetTypeClassId: string): Observable<AssignedAttribute[]> {
         return undefined;

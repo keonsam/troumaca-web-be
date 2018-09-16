@@ -1,10 +1,11 @@
 export class AssignedAttribute {
 
   private _assignedAttributeId: string;
+  private _dataTypeId: string;
   private _assetTypeClassId: string;
   private _attributeId: string;
   private _attributeName: string;
-  private _dataTypeNamae: string;
+  private _dataTypeName: string;
   private _required: boolean;
   private _createdOn: string;
   private _modifiedOn: string;
@@ -66,11 +67,19 @@ export class AssignedAttribute {
     this._attributeName = value;
   }
 
-  get dataTypeNamae(): string {
-    return this._dataTypeNamae;
+  get dataTypeName(): string {
+      return this._dataTypeName;
   }
 
-  set dataTypeNamae(value: string) {
-    this._dataTypeNamae = value;
+  set dataTypeName(value: string) {
+      this._dataTypeName = value;
+  }
+
+  get dataTypeId(): string {
+      return this._dataTypeId;
+  }
+
+  set dataTypeId(value: string) {
+    this._dataTypeId = value;
   }
 }

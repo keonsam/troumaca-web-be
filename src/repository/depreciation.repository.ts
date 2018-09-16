@@ -1,9 +1,9 @@
 import { Depreciation } from "../data/asset/depreciation";
-import { Observable } from "rxjs/Observable";
 import { Asset } from "../data/asset/asset";
 import { DepreciationMethod } from "../adapter/asset/depreciation.method";
 import { DepreciationSystem } from "../data/asset/depreciation.system";
 import { PropertyClass } from "../data/asset/property.class";
+import { Observable } from "rxjs";
 
 export interface DepreciationRepository {
 

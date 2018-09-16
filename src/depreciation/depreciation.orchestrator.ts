@@ -2,8 +2,9 @@ import { createDepreciationRepositoryFactory } from "../adapter/asset/depreciati
 import { shapeDepreciationResponse } from "./depreciation.response.shaper";
 import { getSortOrderOrDefault } from "../sort.order.util";
 import { DepreciationRepository } from "../repository/depreciation.repository";
-import { Observable } from "rxjs/Observable";
 import { Depreciation } from "../data/asset/depreciation";
+import { Observable } from "rxjs";
+import { switchMap, map } from "rxjs/operators";
 import { Result } from "../result.success";
 import { Asset } from "../data/asset/asset";
 import { DepreciationMethod } from "../adapter/asset/depreciation.method";
@@ -24,30 +25,32 @@ export class DepreciationOrchestrator {
 
     getBookDepreciationArr(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
        const sort: string = getSortOrderOrDefault(field, direction);
-       return this.depreciationRepository
-           .getBookDepreciationArr(number, size, sort)
-           .switchMap((depreciationArr: Depreciation[]) => {
-               return this.depreciationRepository
-                   .getDepreciationCount()
-                   .map(count => {
-                       const shapeDepreciationResp: any = shapeDepreciationResponse(depreciationArr, number, size, depreciationArr.length, count, sort);
-                       return new Result<any>(false, "depreciation", shapeDepreciationResp);
-                   });
-           });
+       // return this.depreciationRepository
+       //     .getBookDepreciationArr(number, size, sort)
+       //     .pipe(switchMap((depreciationArr: Depreciation[]) => {
+       //         return this.depreciationRepository
+       //             .getDepreciationCount()
+       //             .pipe(map(count => {
+       //                 // const shapeDepreciationResp: any = shapeDepreciationResponse(depreciationArr, number, size, depreciationArr.length, count, sort);
+       //                 // return new Result<any>(false, "depreciation", shapeDepreciationResp);
+       //             }));
+       //     }));
+      return null;
    }
 
     getTaxDepreciationArr(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
         const sort: string = getSortOrderOrDefault(field, direction);
-        return this.depreciationRepository
-            .getTaxDepreciationArr(number, size, sort)
-            .switchMap((depreciationArr: Depreciation[]) => {
-                return this.depreciationRepository
-                    .getTaxDepreciationCount()
-                    .map(count => {
-                        const shapeDepreciationResp: any = shapeDepreciationResponse(depreciationArr, number, size, depreciationArr.length, count, sort);
-                        return new Result<any>(false, "depreciation", shapeDepreciationResp);
-                    });
-            });
+        // return this.depreciationRepository
+        //     .getTaxDepreciationArr(number, size, sort)
+        //     .pipe(switchMap((depreciationArr: Depreciation[]) => {
+        //         return this.depreciationRepository
+        //             .getTaxDepreciationCount()
+        //             .pipe(map(count => {
+        //                 // const shapeDepreciationResp: any = shapeDepreciationResponse(depreciationArr, number, size, depreciationArr.length, count, sort);
+        //                 // return new Result<any>(false, "depreciation", shapeDepreciationResp);
+        //             }));
+        //     }));
+      return null;
     }
 
     getDepreciationById(depreciationId: string, type: string): Observable<Depreciation> {

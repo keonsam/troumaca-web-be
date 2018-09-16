@@ -1,6 +1,7 @@
 import { createStreetAddressRepository } from "../../adapter/site/street.address.repository.factory";
 import { StreetAddressRepository } from "../../repository/street.address.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
+import { flatMap, map } from "rxjs/operators";
 import { getSortOrderOrDefault } from "../../sort.order.util";
 import { shapeStreetAddressesResponse } from "./street.address.response.shaper";
 import { StreetAddress } from "../../data/site/street.address";
@@ -18,14 +19,14 @@ export class StreetAddressOrchestrator {
     const sort: string = getSortOrderOrDefault(field, direction);
     return this.streetAddressRepository
       .getStreetAddresses(number, size, sort)
-      .flatMap(value => {
+      .pipe(flatMap(value => {
         return this.streetAddressRepository
           .getStreetAddressCount()
-          .map(count => {
+          .pipe(map(count => {
             const shapeStreetAddressesResp: any = shapeStreetAddressesResponse(value, number, size, value.length, count, sort);
             return new Result<any>(false, "streetAddresses", shapeStreetAddressesResp);
-          });
-      });
+          }));
+      }));
   }
 
   getStreetAddressById(siteId: string): Observable<StreetAddress> {

@@ -1,7 +1,6 @@
 import { SubscriptionRepository } from "../../repository/subscription.repository";
-import { Observable } from "rxjs/Observable";
 import { Subscription } from "../../data/party/subscription";
-import { Observer } from "rxjs/Observer";
+import { Observable ,  Observer, of } from "rxjs";
 import { subscriptions } from "../../db";
 import { generateUUID } from "../../uuid.generator";
 
@@ -38,7 +37,7 @@ export class SubscriptionRepositoryNeDbAdapter implements SubscriptionRepository
                 "subscribed": false
             }
         };
-        return Observable.of(information);
+        return of(information);
     }
 
     public getSubscription(type: string): Observable<Subscription> {

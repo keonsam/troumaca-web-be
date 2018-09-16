@@ -1,7 +1,7 @@
 import { SiteRepository } from "../../repository/site.repository";
-import { Observable } from "rxjs/Observable";
 import { UnionOfPhysicalSite } from "../../data/site/union.of.physical.site";
 import { Site } from "../../data/site/site";
+import { Observable } from "rxjs";
 
 export class SiteRepositoryRestAdapter implements SiteRepository {
 

@@ -2,7 +2,6 @@
 import { shapeAssetsResponse } from "./asset.response.shaper";
 import { getSortOrderOrDefault } from "../../sort.order.util";
 import { AssetRepository } from "../../repository/asset.repository";
-import { Observable } from "rxjs/Observable";
 // import { forkJoin } from "rxjs/observable/forkJoin";
 import { Asset } from "../../data/asset/asset";
 import { AssetKind } from "../../data/asset/asset.kind";

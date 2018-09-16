@@ -1,16 +1,17 @@
-import { Observable } from "rxjs/Observable";
 import { Attribute } from "../data/asset/attribute";
 import { AssignedAttribute } from "../data/asset/assigned.attribute";
+import { Observable } from "rxjs";
 
 export interface AttributeRepository {
 
-  // getAvailableAttributes(pageNumber: number, pageSize: number, order: string, availableAttributes: string[]): Observable<Attribute[]>;
-  //
   // getAssignedAttributes(pageNumber: number, pageSize: number, order: string, assignedAttributes: string[]): Observable<Attribute[]>;
   //
-  // getAvailableAttributeCount(): Observable<number>;
   //
   // getAssignedAttributesById(assetTypeClassId: string): Observable<AssignedAttribute[]>;
+
+  getAvailableAttributes(pageNumber: number, pageSize: number, order: string, assignedAttributes: string[]): Observable<Attribute[]>;
+
+  getAvailableAttributeCount(assignedAttributes: string[]): Observable<number>;
 
   getAttributes(pageNumber: number, pageSize: number, order: string): Observable<Attribute[]>;
 

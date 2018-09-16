@@ -1,8 +1,8 @@
 import { DepreciationRepository } from "../../repository/depreciation.repository";
 import { Depreciation } from "../../data/asset/depreciation";
-import { Observable } from "rxjs/Observable";
+import { Observable ,  Observer, of } from "rxjs";
+import { switchMap, map } from "rxjs/operators";
 import { generateUUID } from "../../uuid.generator";
-import { Observer } from "rxjs/Observer";
 import { bookDepreciation, depreciationMethod, depreciationSystem, propertyClasses, taxDepreciation } from "../../db";
 import { calcSkip } from "../../db.util";
 import { Asset } from "../../data/asset/asset";
@@ -22,20 +22,21 @@ export class DepreciationRepositoryNeDbAdapter implements DepreciationRepository
     }
 
     getDepreciableAssets(searchStr: string, pageSize: number): Observable<Asset[]> {
-       return this.getDepreciatableArrSearch()
-           .switchMap( depreciation => {
-               return this.assetRepositoryNeDbAdapter.findAssets(searchStr, pageSize)
-                   .map( assets => {
-                       const assetIds = depreciation.map(x => x.assetId);
-                       return assets.filter((x: Asset) => assetIds.indexOf(x.assetId) === -1);
-                   });
-           });
+       // return this.getDepreciatableArrSearch()
+       //     .pipe(switchMap( depreciation => {
+       //         return this.assetRepositoryNeDbAdapter.findAssets(searchStr, pageSize)
+       //             .pipe(map( assets => {
+       //                 const assetIds = depreciation.map(x => x.assetId);
+       //                 // return assets.filter((x: Asset) => assetIds.indexOf(x.assetId) === -1);
+       //             }));
+       //     }));
+      return null;
     }
 
     getBookDepreciationArr(pageNumber: number, pageSize: number, order: string): Observable<Depreciation[]> {
         const depreciationFormula: DepreciationFormula = new DepreciationFormula();
         return this.getDepreciationArrList(pageNumber, pageSize, order)
-            .switchMap(depreciationArr => {
+            .pipe(switchMap(depreciationArr => {
                 const assetIds: string[] = [];
                 const methodIds: string[] = [];
                 depreciationArr.forEach( value => {
@@ -45,12 +46,12 @@ export class DepreciationRepositoryNeDbAdapter implements DepreciationRepository
                     }
                 });
                 return this.assetRepositoryNeDbAdapter.getAssetsByIds(assetIds)
-                    .switchMap(assets => {
+                    .pipe(switchMap(assets => {
                         return this.getDepreciationMethodsByIds(methodIds)
-                            .map( methods => {
+                            .pipe(map( methods => {
                                 depreciationArr.forEach( value => {
-                                    const index = assets.findIndex(x => x.assetId === value.assetId);
-                                    value.assetName = index !== -1 ? assets[index].assetTypeName : "";
+                                    // const index = assets.findIndex(x => x.assetId === value.assetId);
+                                    // value.assetName = index !== -1 ? assets[index].assetTypeName : "";
                                     value.methodName = methods.find(x => x.methodId == value.methodId).name;
                                     const currentDepreciation = depreciationFormula.getCurrentDepreciation(value);
                                     value.currentDepreciation = currentDepreciation.toString();
@@ -60,14 +61,14 @@ export class DepreciationRepositoryNeDbAdapter implements DepreciationRepository
                                     value.bookValue = bookValue.toString();
                                 });
                                 return depreciationArr;
-                            });
-                    });
-            });
+                            }));
+                    }));
+            }));
     }
 
     getTaxDepreciationArr(pageNumber: number, pageSize: number, order: string): Observable<Depreciation[]> {
         return this.getTaxDepreciationArrList(pageNumber, pageSize, order)
-            .switchMap(depreciationArr => {
+            .pipe(switchMap(depreciationArr => {
                 const assetIds: string[] = [];
                 const methodIds: string[] = [];
                 const systemIds: string[] = [];
@@ -85,26 +86,26 @@ export class DepreciationRepositoryNeDbAdapter implements DepreciationRepository
                     }
                 });
                 return this.assetRepositoryNeDbAdapter.getAssetsByIds(assetIds)
-                    .switchMap(assets => {
+                    .pipe(switchMap(assets => {
                         return this.getDepreciationMethodsByIds(methodIds)
-                            .switchMap( methods => {
+                            .pipe(switchMap( methods => {
                                 return this.getDepreciationSystemsByIds(systemIds)
-                                    .switchMap( systems => {
+                                    .pipe(switchMap( systems => {
                                        return this.getPropertyClassesByIds(propertyClassIds)
-                                           .map( propertyClassArr => {
+                                           .pipe(map( propertyClassArr => {
                                                depreciationArr.forEach( x => {
                                                   x.methodName = methods.find( i => i.methodId === x.methodId).name;
                                                   x.depreciationSystemName = systems.find( i => i.systemId === x.systemId).name;
                                                   x.propertyClassName = propertyClassArr.find( i => i.propertyClassId === x.propertyClassId).name;
-                                                  const index = assets.findIndex(i => i.assetId === x.assetId);
-                                                  x.assetName = index !== -1 ? assets[index].assetTypeName : "";
+                                                  // const index = assets.findIndex(i => i.assetId === x.assetId);
+                                                  // x.assetName = index !== -1 ? assets[index].assetTypeName : "";
                                                });
                                               return depreciationArr;
-                                           });
-                                    });
-                            });
-                    });
-            });
+                                           }));
+                                    }));
+                            }));
+                    }));
+            }));
     }
 
     getDepreciationCount(): Observable<number> {
@@ -135,17 +136,17 @@ export class DepreciationRepositoryNeDbAdapter implements DepreciationRepository
 
     getDepreciationById(depreciationId: string, type: string): Observable<Depreciation> {
         return this.getDepreciationByIdLocal(depreciationId, type)
-            .switchMap(depreciation => {
+            .pipe(switchMap(depreciation => {
                 if (!depreciation) {
-                    return Observable.of(depreciation);
+                    return of(depreciation);
                 } else {
                     return this.assetRepositoryNeDbAdapter.getAssetById(depreciation.assetId)
-                        .map( asset => {
-                            depreciation.assetName = asset.assetTypeName;
+                        .pipe(map( asset => {
+                            // depreciation.assetName = asset.assetTypeName;
                             return depreciation;
-                        });
+                        }));
                 }
-            });
+            }));
     }
 
     saveDepreciation(depreciation: Depreciation, type: string): Observable<Depreciation> {

@@ -1,6 +1,7 @@
 import { createEmailRepository } from "../../adapter/site/email.repository.factory";
 import { EmailRepository } from "../../repository/email.repository";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
+import { flatMap, map } from "rxjs/operators";
 import { getSortOrderOrDefault } from "../../sort.order.util";
 import { shapeEmailsResponse } from "./email.response.shaper";
 import { Email } from "../../data/site/email";
@@ -22,14 +23,14 @@ export class EmailOrchestrator {
     const sort: string = getSortOrderOrDefault(field, direction);
     return this.emailRepository
       .getEmails(number, size, sort)
-      .flatMap(value => {
+      .pipe(flatMap(value => {
         return this.emailRepository
           .getEmailCount()
-          .map(count => {
+          .pipe(map(count => {
             const shapeEmailsResp: any = shapeEmailsResponse(value, number, size, value.length, count, sort);
             return new Result<any>(false, "emails", shapeEmailsResp);
-          });
-      });
+          }));
+      }));
   }
 
   getEmailById(siteId: string): Observable<Email> {

@@ -1,5 +1,3 @@
-import { Observable } from "rxjs/Observable";
-import { Observer } from "rxjs/Observer";
 import { calcSkip } from "../../db.util";
 import { Attribute } from "../../data/asset/attribute";
 import { assignedAttributes, attributes } from "../../db";
@@ -7,54 +5,57 @@ import { AssignedAttributeRepository } from "../../repository/assigned.attribute
 import { AssignedAttribute } from "../../data/asset/assigned.attribute";
 import { AttributeRepositoryNeDbAdapter } from "./attribute.repository.db.adapter";
 import { generateUUID } from "../../uuid.generator";
+import { Observable ,  Observer, of } from "rxjs";
+import { switchMap, map } from "rxjs/operators";
 
 export class AssignedAttributeRepositoryNeDbAdapter implements AssignedAttributeRepository {
     
     private defaultPageSize: number = 10;
     private attributeRepositoryNeDbAdapter: AttributeRepositoryNeDbAdapter = new AttributeRepositoryNeDbAdapter();
 
-    getAssignableAttributes(pageNumber: number, pageSize: number, order: string, assignedAttributes: string[], type: string): Observable<Attribute[]> {
-        const query = type === "available" ? { attributeId: { $nin: assignedAttributes}} : { attributeId: { $in: assignedAttributes }};
-        return Observable.create( (observer: Observer<Attribute[]>) => {
-            const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
-            attributes.find(query).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
-                if (!err) {
-                    observer.next(doc);
-                } else {
-                    observer.error(err);
-                }
-                observer.complete();
-            });
-        });
-    }
+    // getAssignableAttributes(pageNumber: number, pageSize: number, order: string, assignedAttributes: string[], type: string): Observable<Attribute[]> {
+    //     const query = type === "available" ? { attributeId: { $nin: assignedAttributes}} : { attributeId: { $in: assignedAttributes }};
+    //     return Observable.create( (observer: Observer<Attribute[]>) => {
+    //         const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
+    //         attributes.find(query).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
+    //             if (!err) {
+    //                 observer.next(doc);
+    //             } else {
+    //                 observer.error(err);
+    //             }
+    //             observer.complete();
+    //         });
+    //     });
+    // }
 
-    getAssignableAttributesCount(assignedAttributes: string[], type: string): Observable<number> {
-        const query = type === "available" ? { attributeId: { $nin: assignedAttributes}} : { attributeId: { $in: assignedAttributes }};
-        return Observable.create(function (observer: Observer<number>) {
-            attributes.count(query, function (err: any, count: number) {
-                if (!err) {
-                    observer.next(count);
-                } else {
-                    observer.error(err);
-                }
-                observer.complete();
-            });
-        });
-    }
+    // getAssignableAttributesCount(assignedAttributes: string[], type: string): Observable<number> {
+    //     const query = type === "available" ? { attributeId: { $nin: assignedAttributes}} : { attributeId: { $in: assignedAttributes }};
+    //     return Observable.create(function (observer: Observer<number>) {
+    //         attributes.count(query, function (err: any, count: number) {
+    //             if (!err) {
+    //                 observer.next(count);
+    //             } else {
+    //                 observer.error(err);
+    //             }
+    //             observer.complete();
+    //         });
+    //     });
+    // }
 
     getAssignedAttributesByClassId(assetTypeClassId: string): Observable<AssignedAttribute[]> {
         return this.getAssignedAttributesById(assetTypeClassId)
-            .switchMap(assignedAttributes => {
+            .pipe(switchMap(assignedAttributes => {
                 const assignedArray: string[] = assignedAttributes.map((x: AssignedAttribute) => x.attributeId);
                 return this.attributeRepositoryNeDbAdapter.getAttributesByIds(assignedArray)
-                    .map( attributes => {
+                    .pipe(map( attributes => {
                         assignedAttributes.forEach(value => {
                             const index = attributes.findIndex(x => x.attributeId === value.attributeId);
                             value.attributeName = index !== -1 ? attributes[index].name : "";
+                            value.dataTypeName = attributes[index].dataTypeName;
                         });
                         return assignedAttributes;
-                    });
-            });
+                    }));
+            }));
     }
 
     // USED BY OTHER REPOS

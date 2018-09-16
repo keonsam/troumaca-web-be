@@ -1,12 +1,13 @@
 import { Party } from "../party/party";
 
 export class Photo extends Party {
-  private _imageStr: string;
 
-  constructor(partyId?: string, imageStr?: string) {
-    super();
-    this.partyId = partyId;
-    this._imageStr = imageStr;
+  private _imageStr: string;
+  private _userImage: string;
+  private _organizationImage: string;
+
+  get userImage(): string {
+    return this._userImage;
   }
 
   get imageStr(): string {
@@ -17,4 +18,23 @@ export class Photo extends Party {
     this._imageStr = value;
   }
 
+  set userImage(value: string) {
+    this._userImage = value;
+  }
+
+  get organizationImage(): string {
+    return this._organizationImage;
+  }
+
+  set organizationImage(value: string) {
+    this._organizationImage = value;
+  }
+
+  toJson() {
+    return {
+        partyId: this.partyId,
+        userImage: this.userImage,
+        organizationImage: this.organizationImage
+    };
+  }
 }

@@ -1,10 +1,10 @@
 import { DepreciationRepository } from "../../repository/depreciation.repository";
-import { Observable } from "rxjs/Observable";
 import { Depreciation } from "../../data/asset/depreciation";
 import { Asset } from "../../data/asset/asset";
 import { DepreciationMethod } from "./depreciation.method";
 import { DepreciationSystem } from "../../data/asset/depreciation.system";
 import { PropertyClass } from "../../data/asset/property.class";
+import { Observable } from "rxjs";
 
 
 export class DepreciationRepositoryRestAdapter implements DepreciationRepository {

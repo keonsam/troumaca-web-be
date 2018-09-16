@@ -1,8 +1,8 @@
 import { AssetTypeRepository } from "../../repository/asset.type.repository";
-import { Observable } from "rxjs/Observable";
 import { AssetType } from "../../data/asset/asset.type";
 import { Value } from "../../data/asset/value";
 import { AssetTypeResponse } from "../../data/asset/asset.type.response";
+import { Observable } from "rxjs";
 
 export  class AssetTypeRepositoryRestAdapter implements AssetTypeRepository {
     findAssetTypes(searchStr: string, pageSize: number): Observable<AssetType[]> {

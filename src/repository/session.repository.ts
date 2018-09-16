@@ -1,5 +1,5 @@
-import { Observable } from "rxjs/Observable";
 import { Session } from "../data/session/session";
+import { Observable } from "rxjs";
 
 export interface SessionRepository {
 
@@ -13,7 +13,7 @@ export interface SessionRepository {
   //
   // getSessionByPartyId(partyId: string): Observable<Session>;
   //
-  // // getOrCreate(session:Session):Observable<Session>;
+  // getOrCreate(session:Session):Observable<Session>;
   //
   // updateSession(sessionId: string, session: Session): Observable<number>;
   //

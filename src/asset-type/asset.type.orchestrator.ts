@@ -1,12 +1,13 @@
 import { createAssetTypeRepository } from "../adapter/asset/asset.type.repository.factory";
 import { AssetTypeRepository } from "../repository/asset.type.repository";
-import { Observable } from "rxjs/Observable";
 import { AssetType } from "../data/asset/asset.type";
+import { Observable } from "rxjs";
 import { Result } from "../result.success";
 import { getSortOrderOrDefault } from "../sort.order.util";
 import { shapeAssetTypesResponse } from "./asset.type.response.shaper";
 import { Value } from "../data/asset/value";
 import { AssetTypeResponse } from "../data/asset/asset.type.response";
+import { switchMap, map } from "rxjs/operators";
 
 export class AssetTypeOrchestrator {
 
@@ -21,17 +22,18 @@ export class AssetTypeOrchestrator {
   }
 
   getAssetTypes(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
-    const sort: string = getSortOrderOrDefault(field, direction);
-    return this.assetTypeRepository
-      .getAssetTypes(number, size, sort)
-      .switchMap(assetTypes => {
-        return this.assetTypeRepository
-            .getAssetTypeCount()
-            .map(count => {
-              const shapeAssetTypesResp: any = shapeAssetTypesResponse(assetTypes, number, size, assetTypes.length, count, sort);
-              return new Result<any>(false, "assetTypes", shapeAssetTypesResp);
-            });
-      });
+    // const sort: string = getSortOrderOrDefault(field, direction);
+    // return this.assetTypeRepository
+    //   .getAssetTypes(number, size, sort)
+    //   .pipe(switchMap(assetTypes => {
+    //     return this.assetTypeRepository
+    //         .getAssetTypeCount()
+    //         .pipe(map(count => {
+    //           // const shapeAssetTypesResp: any = shapeAssetTypesResponse(assetTypes, number, size, assetTypes.length, count, sort);
+    //           // return new Result<any>(false, "assetTypes", shapeAssetTypesResp);
+    //         }));
+    //   }));
+    return null;
   }
 
   getAssetTypeById(assetTypeId: string): Observable<AssetTypeResponse> {

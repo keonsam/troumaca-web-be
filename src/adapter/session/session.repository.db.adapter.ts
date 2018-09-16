@@ -1,8 +1,7 @@
 import { SessionRepository } from "../../repository/session.repository";
-import { Observable } from "rxjs/Observable";
 import { Session } from "../../data/session/session";
-import Rx from "rxjs";
-import { Observer } from "rxjs/Observer";
+import { Observable ,  Observer, of } from "rxjs";
+import { map } from "rxjs/operators";
 import { sessions } from "../../db";
 import { generateUUID } from "../../uuid.generator";
 
@@ -11,9 +10,10 @@ export class SessionRepositoryNeDbAdapter implements SessionRepository {
 
     isValidSession(sessionId: string): Observable<boolean> {
         if (!sessionId) {
-            return Observable.of(false);
+            return of(false);
         }
-        return this.getSessionById(sessionId).map(session => {
+        return this.getSessionById(sessionId)
+            .pipe(map(session => {
             if (!session) {
                 // the method below might throw an undefined error
                 return false;
@@ -31,11 +31,11 @@ export class SessionRepositoryNeDbAdapter implements SessionRepository {
             const now = new Date();
 
             return readExpirationDate  > now;
-        });
+        }));
     }
 
     getSessionById(sessionId: string): Observable<Session> {
-        return Rx.Observable.create(function (observer: Observer<Session>) {
+        return Observable.create(function (observer: Observer<Session>) {
             const query = {
                 "sessionId": sessionId
             };
@@ -52,7 +52,7 @@ export class SessionRepositoryNeDbAdapter implements SessionRepository {
     }
 
     expireSession(sessionId: string): Observable<number> {
-        return Rx.Observable.create(function (observer: Observer<number>) {
+        return Observable.create(function (observer: Observer<number>) {
             const query = {
                 sessionId
             };
@@ -70,7 +70,7 @@ export class SessionRepositoryNeDbAdapter implements SessionRepository {
     }
 
     // getSessionByCredentialId(credentialId: string): Observable<Session> {
-    //     return Rx.Observable.create(function (observer: Observer<Session>) {
+    //     return .Observable.create(function (observer: Observer<Session>) {
     //         const query = {
     //             "credentialId": credentialId
     //         };
@@ -87,7 +87,7 @@ export class SessionRepositoryNeDbAdapter implements SessionRepository {
     // }
     //
     // getSessionByPartyId(partyId: string): Observable<Session> {
-    //     return Rx.Observable.create(function (observer: Observer<Session>) {
+    //     return .Observable.create(function (observer: Observer<Session>) {
     //         const query = {
     //             "partyId": partyId
     //         };
@@ -104,7 +104,7 @@ export class SessionRepositoryNeDbAdapter implements SessionRepository {
     // }
     //
     // updateSession(sessionId: string, session: Session): Observable<number> {
-    //     return Rx.Observable.create(function (observer: Observer<number>) {
+    //     return .Observable.create(function (observer: Observer<number>) {
     //         const query = {
     //             "sessionId": sessionId
     //         };
@@ -120,7 +120,7 @@ export class SessionRepositoryNeDbAdapter implements SessionRepository {
     // }
     //
     // updateSessionPartyId(sessionId: string, partyId: string): Observable<number> {
-    //     return Rx.Observable.create(function (observer: Observer<number>) {
+    //     return .Observable.create(function (observer: Observer<number>) {
     //         const query = {
     //             sessionId
     //         };
@@ -147,7 +147,7 @@ export class SessionRepositoryNeDbAdapter implements SessionRepository {
             session.data = new Map();
         }
 
-        return Rx.Observable.create(function (observer: Observer<Session>) {
+        return Observable.create(function (observer: Observer<Session>) {
             sessions.insert(session.toJson(), function (err: any, doc: any) {
                 if (!err) {
                     observer.next(doc);

@@ -1,5 +1,5 @@
 import { Asset } from "../data/asset/asset";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 
 export interface AssetRepository {
 

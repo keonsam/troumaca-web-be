@@ -1,7 +1,7 @@
 import { createSiteRepository } from "../adapter/site/site.repository.factory";
 import { SiteRepository } from "../repository/site.repository";
-import { Observable } from "rxjs/Observable";
 import { UnionOfPhysicalSite } from "../data/site/union.of.physical.site";
+import { Observable } from "rxjs";
 
 export class SiteOrchestrator {
 

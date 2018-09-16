@@ -1,7 +1,5 @@
-import * as Rx from "rxjs";
 import { WebSiteRepository } from "../../repository/web.site.repository";
-import { Observable } from "rxjs/Observable";
-import { Observer } from "rxjs/Observer";
+import { Observable ,  Observer } from "rxjs";
 import { RepositoryKind } from "../../repository.kind";
 import { webSites } from "../../db";
 import { WebSite } from "../../data/site/web.site";
@@ -14,7 +12,7 @@ class WebSiteDBRepository implements WebSiteRepository {
 
   saveWebSite(webSite: WebSite): Observable<WebSite> {
     webSite.siteId = generateUUID();
-    return Rx.Observable.create(function(observer: Observer<WebSite>) {
+    return Observable.create(function(observer: Observer<WebSite>) {
       webSites.insert(webSite, function(err: any, doc: any) {
         if (err) {
           observer.error(err);
@@ -28,7 +26,7 @@ class WebSiteDBRepository implements WebSiteRepository {
 
   getWebSites(pageNumber: number, pageSize: number, order: string): Observable<WebSite[]> {
     const localDefaultPageSize = this.defaultPageSize;
-    return Rx.Observable.create(function (observer: Observer<WebSite[]>) {
+    return Observable.create(function (observer: Observer<WebSite[]>) {
       const skip = calcSkip(pageNumber, pageSize, localDefaultPageSize);
       webSites.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
         if (!err) {
@@ -42,7 +40,7 @@ class WebSiteDBRepository implements WebSiteRepository {
   }
 
   getWebSiteCount(): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       webSites.count({}, function (err: any, count: number) {
         if (!err) {
           observer.next(count);
@@ -55,7 +53,7 @@ class WebSiteDBRepository implements WebSiteRepository {
   }
 
   getWebSiteById(siteId: string): Observable<WebSite> {
-    return Rx.Observable.create(function (observer: Observer<WebSite>) {
+    return Observable.create(function (observer: Observer<WebSite>) {
       const query = {
         "siteId": siteId
       };
@@ -71,7 +69,7 @@ class WebSiteDBRepository implements WebSiteRepository {
   }
 
   updateWebSite(siteId: string, webSite: WebSite): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       const query = {
         "siteId": siteId
       };
@@ -87,7 +85,7 @@ class WebSiteDBRepository implements WebSiteRepository {
   }
 
   deleteWebSite(siteId: string): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       const query = {
         "siteId": siteId
       };

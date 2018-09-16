@@ -5,6 +5,25 @@ import { AttributeOrchestrator } from "./attribute.orchestrator";
 
 const orchestrator: AttributeOrchestrator = new AttributeOrchestrator();
 
+export let getAvailableAttributes = (req: Request, res: Response) => {
+
+    const number = getNumericValueOrDefault(req.body.pageNumber, 1);
+    const size = getNumericValueOrDefault(req.body.pageSize, 10);
+    const field = getStringValueOrDefault(req.body.sortField, "");
+    const direction = getStringValueOrDefault(req.body.sortOrder, "");
+    const assignedArray = req.body.assignedArray;
+
+    orchestrator.getAvailableAttributes(number, size, field, direction, assignedArray)
+        .subscribe(result => {
+            res.status(200);
+            res.send(JSON.stringify(result.data));
+        }, error => {
+            res.status(500);
+            res.send(JSON.stringify({message: "Error Occurred"}));
+            console.log(error);
+        });
+};
+
 export let getAttributes = (req: Request, res: Response) => {
   const number = getNumericValueOrDefault(req.query.pageNumber, 1);
   const size = getNumericValueOrDefault(req.query.pageSize, 10);
@@ -95,24 +114,6 @@ export let deleteAttribute = (req: Request, res: Response) => {
     });
 };
 
-// export let getAvailableAttributes = (req: Request, res: Response) => {
-//
-//     const number = getNumericValueOrDefault(req.query.pageNumber, 1);
-//     const size = getNumericValueOrDefault(req.query.pageSize, 10);
-//     const field = getStringValueOrDefault(req.query.sortField, "");
-//     const direction = getStringValueOrDefault(req.query.sortOrder, "");
-//     const assignedArray = req.query.assignedArray ? req.query.assignedArray.split(",") : [];
-//
-//     orchestrator.getAvailableAttributes(number, size, field, direction, assignedArray)
-//         .subscribe(result => {
-//             res.status(200);
-//             res.send(JSON.stringify(result.data));
-//         }, error => {
-//             res.status(500);
-//             res.send(JSON.stringify({message: "Error Occurred"}));
-//             console.log(error);
-//         });
-// };
 //
 // export let getAssignedAttributes = (req: Request, res: Response) => {
 //

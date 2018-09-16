@@ -1,10 +1,8 @@
-import Rx from "rxjs";
 import { partyAccessRoles } from "../../db";
 import { PartyAccessRoleRepository } from "../../repository/party.access.role.repository";
 import { PartyAccessRole } from "../../data/authorization/party.access.role";
-import { Observable } from "rxjs/Observable";
+import { Observable ,  Observer } from "rxjs";
 import { RepositoryKind } from "../../repository.kind";
-import { Observer } from "rxjs/Observer";
 import { generateUUID } from "../../uuid.generator";
 // import {calcSkip} from "../../db.util";
 
@@ -14,7 +12,7 @@ class PartyAccessRoleDBRepository implements PartyAccessRoleRepository {
 
   // findPartyAccessRoles(searchStr: string, pageSize: number): Observable<PartyAccessRole[]> {
   //   let searchStrLocal = new RegExp(searchStr);
-  //   return Rx.Observable.create(function(observer:Observer<PartyAccessRole[]>) {
+  //   return Observable.create(function(observer:Observer<PartyAccessRole[]>) {
   //     partyAccessRoles.find({name: {$regex: searchStrLocal}}).limit(pageSize).exec(function (err: any, doc: any) {
   //       if (!err) {
   //         observer.next(doc);
@@ -27,7 +25,7 @@ class PartyAccessRoleDBRepository implements PartyAccessRoleRepository {
   // };
 
   getPartyAccessRoles(): Observable<PartyAccessRole[]> {
-    return Rx.Observable.create(function (observer: Observer<PartyAccessRole[]>) {
+    return Observable.create(function (observer: Observer<PartyAccessRole[]>) {
       partyAccessRoles.find({}, function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
@@ -40,7 +38,7 @@ class PartyAccessRoleDBRepository implements PartyAccessRoleRepository {
   }
 
   // getPartyAccessRoleCount():Observable<number> {
-  //   return Rx.Observable.create(function (observer:Observer<number>) {
+  //   return Observable.create(function (observer:Observer<number>) {
   //     partyAccessRoles.count({}, function (err:any, count:number) {
   //       if (!err) {
   //         observer.next(count);
@@ -58,7 +56,7 @@ class PartyAccessRoleDBRepository implements PartyAccessRoleRepository {
         value.partyAccessRoleId = generateUUID();
       }
     });
-    return Rx.Observable.create(function(observer: Observer<PartyAccessRole[]>) {
+    return Observable.create(function(observer: Observer<PartyAccessRole[]>) {
       partyAccessRoles.insert(partyAccessRole, function(err: any, docs: any) {
         if (err) {
           observer.error(err);
@@ -71,7 +69,7 @@ class PartyAccessRoleDBRepository implements PartyAccessRoleRepository {
   }
 
   deletePartyAccessRole(partyId: string): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       const query = {
         "partyId": partyId
       };
@@ -87,7 +85,7 @@ class PartyAccessRoleDBRepository implements PartyAccessRoleRepository {
   }
 
   deletePartyAccessRoleByAccessRoleId(accessRoleId: string): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       const query = {
         "accessRole.accessRoleId": accessRoleId
       };
@@ -104,7 +102,7 @@ class PartyAccessRoleDBRepository implements PartyAccessRoleRepository {
   }
 
   getPartyAccessRoleById(partyId: string): Observable<PartyAccessRole[]> {
-    return Rx.Observable.create(function (observer: Observer<PartyAccessRole[]>) {
+    return Observable.create(function (observer: Observer<PartyAccessRole[]>) {
       const query = {
         "partyId": partyId
       };
@@ -120,7 +118,7 @@ class PartyAccessRoleDBRepository implements PartyAccessRoleRepository {
   }
 
   updatePartyAccessRole(partyAccessRoleId: string, partyAccessRole: PartyAccessRole): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       const query = {
         "partyAccessRoleId": partyAccessRoleId
       };

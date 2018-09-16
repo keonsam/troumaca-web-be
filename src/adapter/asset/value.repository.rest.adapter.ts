@@ -1,6 +1,6 @@
 import { ValueRepository } from "../../repository/value.repository";
-import { Observable } from "rxjs/Observable";
 import { Value } from "../../data/asset/value";
+import { Observable } from "rxjs";
 
 export class ValueRepositoryRestAdapter implements ValueRepository {
 

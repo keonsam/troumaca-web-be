@@ -83,8 +83,11 @@ router.delete("/attributes/:attributeId", checkSession, attributeController.dele
 
 // assigned-attributes
 // router.get("/available-attributes", attributeController.getAvailableAttributes);
-router.get("/assignable-attributes/:type", checkSession, assignedAttributeController.getAssignableAttributes);
+// router.get("/assignable-attributes/:type", checkSession, assignedAttributeController.getAssignableAttributes);
 router.get("/assigned-attributes/:assetTypeClassId", checkSession, assignedAttributeController.getAssignedAttributesByClassId);
+router.post("/available-attributes", attributeController.getAvailableAttributes);
+router.get("/assigned-attributes/:assetTypeClassId", assignedAttributeController.getAssignedAttributesByClassId);
+// router.get("/assignable-attributes/:type", assignedAttributeController.getAssignableAttributes);
 
 // site
 router.get("/sites/find", checkSession, siteController.findSite);
@@ -132,7 +135,9 @@ router.get("/users/:partyId", checkSession, userController.getUser);
 router.post("/users", checkSession, userController.saveUser);
 router.put("/users/:partyId", userController.updateUser);
 // TODO : Fix this /users-me
-router.put("/users-me/:partyId", checkSession, userController.updateUserMe);
+// router.put("/users-me/:partyId", userController.updateUserMe);
+router.delete("/users/:partyId", userController.deleteUser);
+// router.put("/users-me/:partyId", checkSession, userController.updateUserMe);
 router.delete("/users/:partyId", checkSession, userController.deleteUser);
 // organizations
 router.get("/organizations", checkSession, organizationController.getOrganizations);
@@ -140,11 +145,22 @@ router.get("/organizations/:partyId", checkSession, organizationController.getOr
 router.post("/organizations", checkSession, organizationController.saveOrganization);
 router.put("/organizations/:partyId", checkSession, organizationController.updateOrganization);
 router.delete("/organizations/:partyId", checkSession, organizationController.deleteOrganization);
+router.get("/organizations", organizationController.getOrganizations);
+router.get("/organizations/:partyId", organizationController.getOrganization);
+router.get("/organizations-find", organizationController.findOrganizations);
+router.post("/organizations", organizationController.saveOrganization);
+router.post("/organizations-send-request", organizationController.sendJoinRequest);
+router.put("/organizations/:partyId", organizationController.updateOrganization);
+router.delete("/organizations/:partyId", organizationController.deleteOrganization);
 
 // photos
-router.get("/photos/:type/:partyId", checkSession, photoController.getPhotoById);
+// router.get("/photos/:type/:partyId", checkSession, photoController.getPhotoById);
 router.post("/photos/:type", checkSession, photoController.savePhoto);
 router.put("/photos/:type/:partyId", checkSession, photoController.updatePhoto);
+// PHOTOS
+router.get("/photos", photoController.getPhotos);
+router.post("/photos/:type", photoController.savePhoto);
+router.put("/photos/:type/:partyId", photoController.updatePhoto);
 
 // accounts
 router.post("/accounts", checkSession, accountController.saveAccount);
@@ -185,11 +201,17 @@ router.get("/sessions/log-out-user", checkSession, sessionController.handleSessi
 // permissions
 router.get("/permissions", checkSession, permissionController.getPermissions);
 router.get("/permissions/permissions", checkSession, permissionController.getPermissionsByArray);
-router.get("/permissions/resource-permissions", checkSession, permissionController.getResourcePermissionsByArray);
+// router.get("/permissions/resource-permissions", checkSession, permissionController.getResourcePermissionsByArray);
 router.get("/permissions/:permissionId", checkSession, permissionController.getPermissionById);
 router.post("/permissions", checkSession, permissionController.savePermission);
 router.put("/permissions/:permissionId", checkSession, permissionController.updatePermission);
 router.delete("/permissions/:permissionId", checkSession, permissionController.deletePermission);
+router.get("/permissions", permissionController.getPermissions);
+router.post("/available-permissions", permissionController.getPermissionsByArray);
+router.get("/permissions/:permissionId", permissionController.getPermissionById);
+router.post("/permissions", permissionController.savePermission);
+// router.put("/permissions/:permissionId", street.address.orchestrator.tspermissionController.updatePermission);
+router.delete("/permissions/:permissionId", permissionController.deletePermission);
 
 // resources
 router.get("/resources", checkSession, resourceController.getResources);
@@ -199,6 +221,12 @@ router.get("/resources/:resourceId", checkSession, resourceController.getResourc
 router.post("/resources", checkSession, resourceController.saveResource);
 router.put("/resources/:resourceId", checkSession, resourceController.updateResource);
 router.delete("/resources/:resourceId", checkSession, resourceController.deleteResource);
+router.get("/resources", resourceController.getResources);
+router.post("/available-resources", resourceController.getResourcesByArray);
+router.get("/resources/:resourceId", resourceController.getResourceById);
+router.post("/resources", resourceController.saveResource);
+router.put("/resources/:resourceId", resourceController.updateResource);
+router.delete("/resources/:resourceId", resourceController.deleteResource);
 
 // resource-types
 router.get("/resource-types/find", checkSession, resourceTypeController.findResourceTypes);

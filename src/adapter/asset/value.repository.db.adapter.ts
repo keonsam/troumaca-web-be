@@ -1,9 +1,8 @@
 import { ValueRepository } from "../../repository/value.repository";
-import { Observable } from "rxjs/Observable";
 import { Value } from "../../data/asset/value";
-import { Observer } from "rxjs/Observer";
 import { values } from "../../db";
 import { generateUUID } from "../../uuid.generator";
+import { Observable ,  Observer } from "rxjs";
 
 export class ValueRepositoryNeDbAdapter implements ValueRepository {
 

@@ -1,10 +1,8 @@
-import Rx from "rxjs";
 import { grants } from "../../db";
 import { GrantRepository } from "../../repository/grant.repository";
 import { Grant } from "../../data/authorization/grant";
-import { Observable } from "rxjs/Observable";
+import { Observable ,  Observer } from "rxjs";
 import { RepositoryKind } from "../../repository.kind";
-import { Observer } from "rxjs/Observer";
 import { generateUUID } from "../../uuid.generator";
 
 class GrantDBRepository implements GrantRepository {
@@ -13,7 +11,7 @@ class GrantDBRepository implements GrantRepository {
     const query = {
       "accessRoleId": accessRoleId
     };
-    return Rx.Observable.create(function(observer: Observer<Grant[]>) {
+    return Observable.create(function(observer: Observer<Grant[]>) {
       grants.find(query, function (err: any, docs: any[]) {
         if (!err) {
           observer.next(docs);
@@ -31,7 +29,7 @@ class GrantDBRepository implements GrantRepository {
         value.grantId = generateUUID();
       }
     });
-    return Rx.Observable.create(function(observer: Observer<Grant[]>) {
+    return Observable.create(function(observer: Observer<Grant[]>) {
       grants.insert(grant, function(err: any, docs: any) {
         if (err) {
           observer.error(err);
@@ -44,7 +42,7 @@ class GrantDBRepository implements GrantRepository {
   }
 
   deleteGrant(accessRoleId: string): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       const query = {
         "accessRoleId": accessRoleId
       };
@@ -60,7 +58,7 @@ class GrantDBRepository implements GrantRepository {
   }
 
   getGrantById(grantId: string, ownerParyId: string): Observable<Grant> {
-    return Rx.Observable.create(function (observer: Observer<Grant>) {
+    return Observable.create(function (observer: Observer<Grant>) {
       const query = {
         "grantId": grantId
       };
@@ -76,7 +74,7 @@ class GrantDBRepository implements GrantRepository {
   }
 
   updateGrant(grantId: string, grant: Grant): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       const query = {
         "grantId": grantId
       };

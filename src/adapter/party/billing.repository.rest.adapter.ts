@@ -1,6 +1,6 @@
 import { BillingRepository } from "../../repository/billing.repository";
-import { Observable } from "rxjs/Observable";
 import { Billing } from "../../data/party/billing";
+import { Observable } from "rxjs";
 
 export class BillingRepositoryRestAdapter implements BillingRepository {
     public getBilling(): Observable<Billing> {

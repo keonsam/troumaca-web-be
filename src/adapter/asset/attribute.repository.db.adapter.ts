@@ -1,12 +1,12 @@
 import { AttributeRepository } from "../../repository/attribute.repository";
-import { Observable } from "rxjs/Observable";
 import { Attribute } from "../../data/asset/attribute";
-import { Observer } from "rxjs/Observer";
 import { calcSkip } from "../../db.util";
 import { attributes } from "../../db";
 import { generateUUID } from "../../uuid.generator";
 import { UnitOfMeasureRepositoryNeDbAdapter } from "../unit-of-measure/unit.of.measure.repository.db.adapter";
 import { DataTypeRepositoryNeDbAdapter } from "../data-type/data.type.repository.db.adapter";
+import { Observable ,  Observer, of } from "rxjs";
+import { switchMap, map} from "rxjs/operators";
 
 export class AttributeRepositoryNeDbAdapter implements AttributeRepository {
 
@@ -14,11 +14,39 @@ export class AttributeRepositoryNeDbAdapter implements AttributeRepository {
     private unitOfMeasureRepositoryNeDbAdapter: UnitOfMeasureRepositoryNeDbAdapter = new UnitOfMeasureRepositoryNeDbAdapter();
     private dataTypeRepositoryNeDbAdapter: DataTypeRepositoryNeDbAdapter = new DataTypeRepositoryNeDbAdapter();
 
+    getAvailableAttributes(pageNumber: number, pageSize: number, order: string, assignedAttributes: string[]): Observable<Attribute[]> {
+        return this.getAvailableAttributesHelper(pageNumber, pageSize, order, assignedAttributes)
+            .pipe( switchMap( attributes => {
+                const dataTypeIds: string[] = attributes.map(x => x.dataTypeId);
+                return this.dataTypeRepositoryNeDbAdapter.getDataTypeByIds(dataTypeIds)
+                    .pipe( map( dataTypes => {
+                        attributes.forEach(x => {
+                           // x.dataTypeName = dataTypes.find(x => x.dataTypeId === x.dataTypeId).name || "";
+                        });
+                        return attributes;
+                    }));
+            }));
+    }
+
+    getAvailableAttributeCount(assignedAttributes: string[]): Observable<number> {
+        const query = { attributeId: { $nin: assignedAttributes}};
+        return Observable.create(function (observer: Observer<number>) {
+            attributes.count(query, function (err: any, count: number) {
+                if (!err) {
+                    observer.next(count);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
+        });
+    }
+
     getAttributes(pageNumber: number, pageSize: number, order: string): Observable<Attribute[]> {
        return this.getAttributesLocal(pageNumber, pageSize, order)
-            .switchMap(attributes => {
+            .pipe(switchMap(attributes => {
                if (!attributes) {
-                   return Observable.of(attributes);
+                   return of(attributes);
                } else {
                    const unitOfMeasureIds: string[] = [];
                    const dataTypeIds: string[] = [];
@@ -27,20 +55,20 @@ export class AttributeRepositoryNeDbAdapter implements AttributeRepository {
                        if (value.dataTypeId) dataTypeIds.push(value.dataTypeId);
                    });
                    return this.unitOfMeasureRepositoryNeDbAdapter.getUnitOfMeasuresByIds(unitOfMeasureIds)
-                       .switchMap(unitOfMeasures => {
+                       .pipe(switchMap(unitOfMeasures => {
                           return this.dataTypeRepositoryNeDbAdapter.getDataTypeByIds(dataTypeIds)
-                              .map( dataTypes => {
+                              .pipe(map( dataTypes => {
                                   attributes.forEach(value => {
-                                      const index = unitOfMeasures.findIndex(x => x.unitOfMeasureId === value.unitOfMeasureId);
-                                      const index2 = dataTypes.findIndex(x => x.dataTypeId === value.dataTypeId);
-                                      value.unitOfMeasureName = index !== -1 ? unitOfMeasures[index].name : "";
-                                      value.dataTypeName = index2 !== -1 ? dataTypes[index2].name : "";
+                                      // const index = unitOfMeasures.findIndex(x => x.unitOfMeasureId === value.unitOfMeasureId);
+                                      // const index2 = dataTypes.findIndex(x => x.dataTypeId === value.dataTypeId);
+                                      // value.unitOfMeasureName = index !== -1 ? unitOfMeasures[index].name : "";
+                                      // value.dataTypeName = index2 !== -1 ? dataTypes[index2].name : "";
                                   });
                                   return attributes;
-                              });
-                       });
+                              }));
+                       }));
                }
-            });
+            }));
     }
 
     getAttributeCount(): Observable<number> {
@@ -57,18 +85,19 @@ export class AttributeRepositoryNeDbAdapter implements AttributeRepository {
     }
 
     getAttributeById(attributeId: string): Observable<Attribute> {
-        return this.getAttributeByIdLocal(attributeId)
-            .switchMap(attribute => {
-                if (!attribute) {
-                    return Observable.of(attribute);
-                } else {
-                    return this.unitOfMeasureRepositoryNeDbAdapter.getUnitOfMeasureById(attribute.unitOfMeasureId)
-                        .map( unitOfMeasure => {
-                            attribute.unitOfMeasureName = unitOfMeasure.name;
-                            return attribute;
-                        });
-                }
-            });
+        // return this.getAttributeByIdLocal(attributeId)
+        //     .pipe(switchMap(attribute => {
+        //         if (!attribute) {
+        //             return of(attribute);
+        //         } else {
+        //             return this.unitOfMeasureRepositoryNeDbAdapter.getUnitOfMeasureById(attribute.unitOfMeasureId)
+        //                 .pipe(map( unitOfMeasure => {
+        //                     // attribute.unitOfMeasureName = unitOfMeasure.name;
+        //                     // return attribute;
+        //                 }));
+        //         }
+        //     }));
+      return null;
     }
 
     addAttribute(attribute: Attribute): Observable<Attribute> {
@@ -122,6 +151,19 @@ export class AttributeRepositoryNeDbAdapter implements AttributeRepository {
     // USED BY OTHER REPOS
 
     getAttributesByIds(attributeIds: string[]): Observable<Attribute[]> {
+        return this.getAttributesByIdsHelper(attributeIds)
+            .pipe( switchMap( attributes => {
+                return this.dataTypeRepositoryNeDbAdapter.getDataTypeByIds(attributes.map(x => x.dataTypeId))
+                    .pipe( map( dataTypes => {
+                        attributes.forEach(x => {
+                           // x.dataTypeName = dataTypes.find(v => v.dataTypeId === x.dataTypeId).name;
+                        });
+                        return attributes;
+                    }));
+            }));
+    }
+
+    private getAttributesByIdsHelper(attributeIds: string[]): Observable<Attribute[]> {
         return Observable.create(function (observer: Observer<Attribute[]>) {
             const query = { attributeId: {$in: attributeIds}};
 
@@ -137,6 +179,21 @@ export class AttributeRepositoryNeDbAdapter implements AttributeRepository {
     }
 
     // HELPS
+
+    private getAvailableAttributesHelper(pageNumber: number, pageSize: number, order: string, assignedAttributes: string[]): Observable<Attribute[]> {
+        const query = { attributeId: { $nin: assignedAttributes}} ;
+        return Observable.create( (observer: Observer<Attribute[]>) => {
+            const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
+            attributes.find(query).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
+                if (!err) {
+                    observer.next(doc);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
+        });
+    }
 
     getAttributesLocal(pageNumber: number, pageSize: number, order: string): Observable<Attribute[]> {
         const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);

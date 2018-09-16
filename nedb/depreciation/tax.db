@@ -1,2 +1,4 @@
 {"depreciationId":"bbf38fef-f807-4c98-8817-0d41e47ea27f","assetId":"5286089a-d3bc-4143-82c0-5e160c03b020","systemId":"9f549eef-2af4-4d6b-8a52-cae98e7cbf50","methodId":"457b0ac1-b68b-4cbe-a341-b2a9e0c70c3e","propertyClassId":"d90c774b-88ea-4365-9157-7e00eab3698d","serviceDate":"2018-08-16","cost":30000,"unitProduced":[],"_id":"xG0TIW7MF4kpDWwm"}
 {"$$indexCreated":{"fieldName":"depreciationId","unique":true,"sparse":false}}
+{"$$indexCreated":{"fieldName":"depreciationId","unique":true,"sparse":false}}
+{"depreciationId":"bbf38fef-f807-4c98-8817-0d41e47ea27f","assetId":"5286089a-d3bc-4143-82c0-5e160c03b020","systemId":"9f549eef-2af4-4d6b-8a52-cae98e7cbf50","methodId":"457b0ac1-b68b-4cbe-a341-b2a9e0c70c3e","propertyClassId":"d90c774b-88ea-4365-9157-7e00eab3698d","serviceDate":"2018-08-16","cost":300000,"unitProduced":[],"_id":"xG0TIW7MF4kpDWwm"}

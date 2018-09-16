@@ -1,6 +1,4 @@
-import { Observable } from "rxjs/Observable";
 import { generateUUID } from "../../uuid.generator";
-import { Observer } from "rxjs/Observer";
 import { assetTypeClasses, assignedAttributes } from "../../db";
 import { calcSkip } from "../../db.util";
 import { AssetTypeClassRepository } from "../../repository/asset.type.class.repository";
@@ -8,7 +6,8 @@ import { AssetTypeClass } from "../../data/asset/asset.type.class";
 import { AssetTypeClassResponse } from "../../data/asset/asset.type.class.response";
 import { AssignedAttribute } from "../../data/asset/assigned.attribute";
 import { AssignedAttributeRepositoryNeDbAdapter } from "./assigned.attribute.repository.db.adapter";
-import { observable } from "rxjs/symbol/observable";
+import { Observable ,  Observer, of } from "rxjs";
+import { switchMap, map } from "rxjs/operators";
 
 export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassRepository {
 
@@ -36,8 +35,8 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
     }
 
     getAssetTypeClasses(pageNumber: number, pageSize: number, order: string): Observable<AssetTypeClass[]> {
+        const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
         return Observable.create(function (observer: Observer<AssetTypeClass[]>) {
-            const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
             assetTypeClasses.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
                 if (!err) {
                     observer.next(doc);
@@ -63,13 +62,14 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
     }
 
     getAssetTypeClassById(assetTypeClassId: string): Observable<AssetTypeClassResponse> {
-        return this.getAssetTypeClassByIdLocal(assetTypeClassId)
-            .switchMap(assetTypeClass => {
-                return this.assignedAttributeRepositoryNeDbAdapter.getAssignedAttributesById(assetTypeClassId)
-                    .map(assignedAttributes => {
-                        return new AssetTypeClassResponse(true, assetTypeClass, assignedAttributes);
-                    });
-            });
+        // return this.getAssetTypeClassByIdLocal(assetTypeClassId)
+        //     .pipe(switchMap(assetTypeClass => {
+        //         return this.assignedAttributeRepositoryNeDbAdapter.getAssignedAttributesByClassId(assetTypeClassId)
+        //             .pipe(map(assignedAttributes => {
+        //                 // return new AssetTypeClassResponse(true, assetTypeClass, assignedAttributes);
+        //             }));
+        //     }));
+      return null;
     }
 
     saveAssetTypeClass(assetTypeClass: AssetTypeClass, assignedAttributeArr: AssignedAttribute[]): Observable<AssetTypeClass> {
@@ -79,44 +79,44 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
             value.assignedAttributeId = generateUUID();
         });
         return this.saveAssetTypeClassLocal(assetTypeClass)
-            .switchMap(doc => {
+            .pipe(switchMap(doc => {
                 if (!doc) {
-                    return Observable.of(doc);
+                    return of(doc);
                 } else {
                     return this.assignedAttributeRepositoryNeDbAdapter.saveAssignedAttributes(assignedAttributeArr)
-                        .map(assignedAttributes => {
+                        .pipe(map(assignedAttributes => {
                             return doc;
-                        });
+                        }));
                 }
-            });
+            }));
     }
 
     updateAssetTypeClass(assetTypeClassId: string, assetTypeClass: AssetTypeClass, assignedAttributeArr: AssignedAttribute[]): Observable<number> {
         return this.updateAssetTypeClassLocal(assetTypeClassId, assetTypeClass)
-            .switchMap(numReplaced => {
+            .pipe(switchMap(numReplaced => {
                 if (!numReplaced) {
-                    return Observable.of(numReplaced);
+                    return of(numReplaced);
                 } else {
                     return this.assignedAttributeRepositoryNeDbAdapter.deleteAssignedAttributes(assetTypeClassId)
-                        .switchMap( num => {
+                        .pipe(switchMap( num => {
                             return this.assignedAttributeRepositoryNeDbAdapter.saveAssignedAttributes(assignedAttributeArr)
-                                .map( assignedAttributeArr => {
+                                .pipe(map( assignedAttributeArr => {
                                     return numReplaced;
-                                });
-                        });
+                                }));
+                        }));
                 }
-            });
+            }));
     }
 
     deleteAssetTypeClass(assetTypeClassId: string): Observable<number> {
         return this.deleteAssetTypeClassLocal(assetTypeClassId)
-            .switchMap(num => {
+            .pipe(switchMap(num => {
                 if (!num) {
-                    return Observable.of(num);
+                    return of(num);
                 } else {
                     return this.assignedAttributeRepositoryNeDbAdapter.deleteAssignedAttributes(assetTypeClassId);
                 }
-            });
+            }));
     }
 
     // USED BY OTHER REPOS

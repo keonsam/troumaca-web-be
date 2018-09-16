@@ -1,7 +1,6 @@
 import { Credential } from "../../data/authentication/credential";
-import { Observable } from "rxjs/Observable";
-import { Observer } from "rxjs/Observer";
 import { CredentialRepository } from "../../repository/credential.repository";
+import { Observable ,  Observer } from "rxjs";
 import request from "request";
 import { classToPlain} from "class-transformer";
 import { jsonRequestHeaderMap, postJsonOptions } from "../../request.helpers";
@@ -147,7 +146,11 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
       return undefined;
   }
 
-  // addUserCredential(credential:Credential):Observable<Credential> {
+  updateUserCredential(partyId: string, credential: Credential): Observable<number> {
+      return undefined;
+  }
+
+    // addUserCredential(credential:Credential):Observable<Credential> {
   //   return undefined;
   // }
   //

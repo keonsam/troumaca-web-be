@@ -1,7 +1,7 @@
 import { UserRepository } from "../../repository/user.repository";
-import { Observable } from "rxjs/Observable";
 import { User } from "../../data/party/user";
 import { Person } from "../../data/party/person";
+import { Observable } from "rxjs";
 
 export class UserRepositoryRestAdapter implements UserRepository {
 

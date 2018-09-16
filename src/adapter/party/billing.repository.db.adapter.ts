@@ -1,7 +1,6 @@
 import { BillingRepository } from "../../repository/billing.repository";
-import { Observable } from "rxjs/Observable";
 import { Billing } from "../../data/party/billing";
-import { Observer } from "rxjs/Observer";
+import { Observable ,  Observer, of } from "rxjs";
 import { billings, payMethods } from "../../db";
 import { generateUUID } from "../../uuid.generator";
 
@@ -79,18 +78,18 @@ export class BillingRepositoryNeDbAdapter implements BillingRepository {
     // CREDIT CARD
 
     public cardName(value: string): Observable<boolean> {
-        return Observable.of(true);
+        return of(true);
     }
 
     public cardNumber(value: string): Observable<boolean> {
-        return Observable.of(true);
+        return of(true);
     }
 
     public cardExpDate(value: Date): Observable<boolean> {
-        return Observable.of(true);
+        return of(true);
     }
 
     public cardCVV(value: string): Observable<boolean> {
-        return Observable.of(true);
+        return of(true);
     }
 }

@@ -4,8 +4,9 @@ export class ResourcePermission {
 
   private _resourcePermissionId: string;
   private _resourceId: string;
-  private _permission: Permission;
-  // private _ownerPartyId:string;
+  private _permissionName: string;
+  private _permissionId: string;
+  private _description: string;
   private _createdOn: Date;
   private _modifiedOn: Date;
 
@@ -25,24 +26,32 @@ export class ResourcePermission {
     this._resourceId = value;
   }
 
-  get permission(): Permission {
-    return this._permission;
+  get permissionName(): string {
+      return this._permissionName;
   }
 
-  set permission(value: Permission) {
-    this._permission = value;
+  set permissionName(value: string) {
+      this._permissionName = value;
   }
 
-// get ownerPartyId(): string {
-  //   return this._ownerPartyId;
-  // }
-  //
-  // set ownerPartyId(value: string) {
-  //   this._ownerPartyId = value;
-  // }
+  get permissionId(): string {
+      return this._permissionId;
+  }
+
+  set permissionId(value: string) {
+      this._permissionId = value;
+  }
+
+  get description(): string {
+      return this._description;
+  }
+
+  set description(value: string) {
+      this._description = value;
+  }
 
   get createdOn(): Date {
-    return this._createdOn;
+      return this._createdOn;
   }
 
   set createdOn(value: Date) {

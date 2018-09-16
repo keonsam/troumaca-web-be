@@ -1,7 +1,8 @@
 import { ResourceTypeRepository } from "../../repository/resource.type.repository";
 import { createResourceTypeRepositoryFactory } from "../../adapter/authorization/resource.type.repository.factory";
-import { Observable } from "rxjs/Observable";
 import { ResourceType } from "../../data/authorization/resource.type";
+import { Observable } from "rxjs";
+import { flatMap, map } from "rxjs/operators";
 import { shapeResourceTypesResponse } from "./resource.type.response.shaper";
 import { Result } from "../../result.success";
 import { getSortOrderOrDefault } from "../../sort.order.util";
@@ -21,16 +22,17 @@ export class ResourceTypeOrchestrator {
 
   getResourceTypes(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
     const sort: string = getSortOrderOrDefault(field, direction);
-    return this.resourceTypeRepository
-      .getResourceTypes(number, size, sort)
-      .flatMap(value => {
-        return this.resourceTypeRepository
-          .getResourceTypeCount()
-          .map(count => {
-            const shapeResourceTypesResp: any = shapeResourceTypesResponse(value, number, size, value.length, count, sort);
-            return new Result<any>(false, "resourceTypes", shapeResourceTypesResp);
-          });
-      });
+    // return this.resourceTypeRepository
+    //   .getResourceTypes(number, size, sort)
+    //   .pipe(flatMap(value => {
+    //     return this.resourceTypeRepository
+    //       .getResourceTypeCount()
+    //       .pipe(map(count => {
+    //         // const shapeResourceTypesResp: any = shapeResourceTypesResponse(value, number, size, value.length, count, sort);
+    //         // return new Result<any>(false, "resourceTypes", shapeResourceTypesResp);
+    //       }));
+    //   }));
+    return null;
   }
 
   addResourceType(resourceType: ResourceType): Observable<ResourceType> {

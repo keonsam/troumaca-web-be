@@ -1,10 +1,8 @@
-import Rx from "rxjs";
 import { resourceTypes } from "../../db";
 import { ResourceTypeRepository } from "../../repository/resource.type.repository";
 import { ResourceType } from "../../data/authorization/resource.type";
-import { Observable } from "rxjs/Observable";
+import { Observable ,  Observer } from "rxjs";
 import { RepositoryKind } from "../../repository.kind";
-import { Observer } from "rxjs/Observer";
 import { generateUUID } from "../../uuid.generator";
 import { calcSkip } from "../../db.util";
 
@@ -14,7 +12,7 @@ class ResourceTypeDBRepository implements ResourceTypeRepository {
 
   findResourceTypes(searchStr: string, pageSize: number): Observable<ResourceType[]> {
     const searchStrLocal = new RegExp(searchStr);
-    return Rx.Observable.create(function (observer: Observer<ResourceType[]>) {
+    return Observable.create(function (observer: Observer<ResourceType[]>) {
       if (!searchStr) {
         resourceTypes.find({}).limit(100).exec(function (err: any, doc: any) {
           if (!err) {
@@ -40,7 +38,7 @@ class ResourceTypeDBRepository implements ResourceTypeRepository {
 
   getResourceTypes(pageNumber: number, pageSize: number, order: string): Observable<ResourceType[]> {
     const localDefaultPageSize = this.defaultPageSize;
-    return Rx.Observable.create(function (observer: Observer<ResourceType[]>) {
+    return Observable.create(function (observer: Observer<ResourceType[]>) {
       const skip = calcSkip(pageNumber, pageSize, localDefaultPageSize);
       resourceTypes.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
         if (!err) {
@@ -54,7 +52,7 @@ class ResourceTypeDBRepository implements ResourceTypeRepository {
   }
 
   getResourceTypeCount(): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       resourceTypes.count({}, function (err: any, count: number) {
         if (!err) {
           observer.next(count);
@@ -68,7 +66,7 @@ class ResourceTypeDBRepository implements ResourceTypeRepository {
 
   addResourceType(resourceType: ResourceType): Observable<ResourceType> {
     resourceType.resourceTypeId = generateUUID();
-    return Rx.Observable.create(function(observer: Observer<ResourceType>) {
+    return Observable.create(function(observer: Observer<ResourceType>) {
       resourceTypes.insert(resourceType, function(err: any, doc: any) {
         if (err) {
           observer.error(err);
@@ -81,7 +79,7 @@ class ResourceTypeDBRepository implements ResourceTypeRepository {
   }
 
   deleteResourceType(resourceTypeId: string): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       const query = {
         "resourceTypeId": resourceTypeId
       };
@@ -97,7 +95,7 @@ class ResourceTypeDBRepository implements ResourceTypeRepository {
   }
 
   getResourceTypeById(resourceTypeId: string): Observable<ResourceType> {
-    return Rx.Observable.create(function (observer: Observer<ResourceType>) {
+    return Observable.create(function (observer: Observer<ResourceType>) {
       const query = {
         "resourceTypeId": resourceTypeId
       };
@@ -113,7 +111,7 @@ class ResourceTypeDBRepository implements ResourceTypeRepository {
   }
 
   getResourceTypeByIds(resourceTypeIds: string[]): Observable<ResourceType[]> {
-    return Rx.Observable.create(function (observer: Observer<ResourceType[]>) {
+    return Observable.create(function (observer: Observer<ResourceType[]>) {
       // let query = {
       //   "resourceTypeId":resourceTypeId
       // };
@@ -129,7 +127,7 @@ class ResourceTypeDBRepository implements ResourceTypeRepository {
   }
 
   updateResourceType(resourceTypeId: string, resourceType: ResourceType): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       const query = {
         "resourceTypeId": resourceTypeId
       };

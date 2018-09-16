@@ -1,7 +1,5 @@
-import * as Rx from "rxjs";
 import { PostOfficeBoxRepository } from "../../repository/post.office.box.repository";
-import { Observable } from "rxjs/Observable";
-import { Observer } from "rxjs/Observer";
+import { Observable ,  Observer } from "rxjs";
 import { RepositoryKind } from "../../repository.kind";
 import { postOfficeBoxes } from "../../db";
 import { PostOfficeBox } from "../../data/site/post.office.box";
@@ -14,7 +12,7 @@ class PostOfficeBoxDBRepository implements PostOfficeBoxRepository {
 
   savePostOfficeBox(postOfficeBox: PostOfficeBox): Observable<PostOfficeBox> {
     postOfficeBox.siteId = generateUUID();
-    return Rx.Observable.create(function(observer: Observer<PostOfficeBox>) {
+    return Observable.create(function(observer: Observer<PostOfficeBox>) {
       postOfficeBoxes.insert(postOfficeBox, function(err: any, doc: any) {
         if (err) {
           observer.error(err);
@@ -28,7 +26,7 @@ class PostOfficeBoxDBRepository implements PostOfficeBoxRepository {
 
   getPostOfficeBoxes(pageNumber: number, pageSize: number, order: string): Observable<PostOfficeBox[]> {
     const localDefaultPageSize = this.defaultPageSize;
-    return Rx.Observable.create(function (observer: Observer<PostOfficeBox[]>) {
+    return Observable.create(function (observer: Observer<PostOfficeBox[]>) {
       const skip = calcSkip(pageNumber, pageSize, localDefaultPageSize);
       postOfficeBoxes.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
         if (!err) {
@@ -42,7 +40,7 @@ class PostOfficeBoxDBRepository implements PostOfficeBoxRepository {
   }
 
   getPostOfficeBoxCount(): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       postOfficeBoxes.count({}, function (err: any, count: number) {
         if (!err) {
           observer.next(count);
@@ -55,7 +53,7 @@ class PostOfficeBoxDBRepository implements PostOfficeBoxRepository {
   }
 
   getPostOfficeBoxById(siteId: string): Observable<PostOfficeBox> {
-    return Rx.Observable.create(function (observer: Observer<PostOfficeBox>) {
+    return Observable.create(function (observer: Observer<PostOfficeBox>) {
       const query = {
         "siteId": siteId
       };
@@ -71,7 +69,7 @@ class PostOfficeBoxDBRepository implements PostOfficeBoxRepository {
   }
 
   updatePostOfficeBox(siteId: string, postOfficeBox: PostOfficeBox): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       const query = {
         "siteId": siteId
       };
@@ -87,7 +85,7 @@ class PostOfficeBoxDBRepository implements PostOfficeBoxRepository {
   }
 
   deletePostOfficeBox(siteId: string): Observable<number> {
-    return Rx.Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<number>) {
       const query = {
         "siteId": siteId
       };
