@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { SessionOrchestrator } from "../session/session.orchestrator";
+import {MiddlewareError} from "./middleware-error";
 
 const checkSession = (req: Request, res: Response, next: NextFunction) => {
 
   const sessionOrchestrator = new SessionOrchestrator();
 
-  checkSession(req, function (err: Error, validSession: boolean) {
+  checkSessionValidity(req, function (err: Error, validSession: boolean) {
     if (err || !validSession) {
       res.status(440);
       res.send("Invalid session...");
@@ -14,7 +15,7 @@ const checkSession = (req: Request, res: Response, next: NextFunction) => {
     next();
   });
 
-  function checkSession(req: Request, callback: (err:Error, validSession:boolean) => void) {
+  function checkSessionValidity(req: Request, callback: (err:Error, validSession:boolean) => void) {
     const cookies: any = req.cookies;
     const sessionId: string = cookies["sessionId"];
     sessionOrchestrator
@@ -23,7 +24,7 @@ const checkSession = (req: Request, res: Response, next: NextFunction) => {
         if (isValid) {
           callback(null, true);
         } else {
-          var e:Error = new Error("Invalid session...");
+          var e:Error = new MiddlewareError("Invalid session...");
           callback(e, false);
         }
       });
