@@ -3,16 +3,28 @@
 [credential]
 host = localhost
 port = 8080
-#host.port = http://localhost:8888
+host.port = http://localhost:8888
 #host.port = http://ec2-107-21-60-104.compute-1.amazonaws.com:8080
-host.port = http://ec2-54-145-159-234.compute-1.amazonaws.com:8080
+#host.port = http://ec2-54-145-159-234.compute-1.amazonaws.com:8080
 repository.type = 1
 
 [confirmation]
 host = localhost
 port = 8080
-#host.port = http://localhost:8888
-host.port = http://ec2-54-145-159-234.compute-1.amazonaws.com:8080
+host.port = http://localhost:8888
+#host.port = http://ec2-54-145-159-234.compute-1.amazonaws.com:8080
+repository.type = 1
+
+[authorization]
+host = localhost
+port = 8080
+host.port = http://localhost:8888
+repository.type = 1
+
+[party]
+host = localhost
+port = 8080
+host.port = http://localhost:8888
 repository.type = 1
 
 [asset]

@@ -1,38 +1,38 @@
 export class Billing {
-  private _billingId: string;
-  private _methodId: string;
-  private _confirmed: boolean;
-  private _type: string;
+  private _name: string;
+  private _date: Date;
+  private _description: string;
+  private _amount: string;
 
-  get billingId(): string {
-    return this._billingId;
+  get name(): string {
+    return this._name;
   }
 
-  set billingId(value: string) {
-    this._billingId = value;
+  set name(value: string) {
+    this._name = value;
   }
 
-  get methodId(): string {
-    return this._methodId;
+  get date(): Date {
+    return this._date;
   }
 
-  set methodId(value: string) {
-    this._methodId = value;
+  set date(value: Date) {
+    this._date = value;
   }
 
-  get confirmed(): boolean {
-    return this._confirmed;
+  get description(): string {
+    return this._description;
   }
 
-  set confirmed(value: boolean) {
-    this._confirmed = value;
+  set description(value: string) {
+    this._description = value;
   }
 
-  get type(): string {
-    return this._type;
+  get amount(): string {
+    return this._amount;
   }
 
-  set type(value: string) {
-    this._type = value;
+  set amount(value: string) {
+    this._amount = value;
   }
 }

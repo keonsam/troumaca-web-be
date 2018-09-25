@@ -1,14 +1,14 @@
-import { createOrganizationRepository } from "./organization.repository.factory";
-import { OrganizationRepository } from "./organization.repository";
+import { createOrganizationRepository } from "../../adapter/party/organization.repository.factory";
+import { OrganizationRepository } from "../../repository/organization.repository";
+import { Organization } from "../../data/party/organization";
 import { Observable, of } from "rxjs";
 import { flatMap, map, switchMap } from "rxjs/operators";
-import { Organization } from "./organization";
 import { shapeOrganizationsResponse } from "./organization.response.shaper";
 import { Result } from "../../result.success";
 import { getSortOrderOrDefault } from "../../sort.order.util";
-import { SessionRepository } from "../../session/session.repository";
-import { createSessionRepositoryFactory } from "../../session/session.repository.factory";
 import { JoinOrganizationRequest } from "./join.organization.request";
+import {SessionRepository} from "../../repository/session.repository";
+import {createSessionRepositoryFactory} from "../../adapter/session/session.repository.factory";
 
 export class OrganizationOrchestrator {
 
@@ -26,29 +26,31 @@ export class OrganizationOrchestrator {
 
   sendJoinRequest(request: string, sessionId?: string): Observable<JoinOrganizationRequest> {
     // This is just basic boilerplate logic
-      return this.sessionRepository.getSessionById(sessionId)
-          .pipe( switchMap( session => {
-            if (!session) {
-              return of(undefined);
-            } else {
-              const joinRequest: JoinOrganizationRequest = new JoinOrganizationRequest(session.partyId, request);
-              joinRequest.status = "pending entry to organization";
-              return this.organizationRepository.saveOrganizationRequest(joinRequest);
-            }
-          }));
+    //   return this.sessionRepository.getSessionById(sessionId)
+    //       .pipe( switchMap( session => {
+    //         if (!session) {
+    //           return of(undefined);
+    //         } else {
+    //           // const joinRequest: JoinOrganizationRequest = new JoinOrganizationRequest(session.partyId, request);
+    //           // joinRequest.status = "pending entry to organization";
+    //           // return this.organizationRepository.saveOrganizationRequest(joinRequest);
+    //         }
+    //       }));
+    return null;
   }
 
   getOrganizations (number: number, size: number, field: string, direction: string): Observable<Result<any>> {
       const sort = getSortOrderOrDefault(field, direction);
-      return this.organizationRepository.getOrganizations(number, size, sort)
-          .pipe(flatMap(value => {
-              return this.organizationRepository.getOrganizationCount()
-                  .pipe(map(count => {
-                      const shapeOrganizationsResp: any = shapeOrganizationsResponse(value, number, size, value.length, count, sort);
-                      return new Result<any>(false, "organizations", shapeOrganizationsResp);
-                      // return new PageResponse(value, number, size, count, direction);
-                  }));
-          }));
+      // return this.organizationRepository.getOrganizations(number, size, sort)
+      //     .pipe(flatMap(value => {
+      //         return this.organizationRepository.getOrganizationCount()
+      //             .pipe(map(count => {
+      //                 // const shapeOrganizationsResp: any = shapeOrganizationsResponse(value, number, size, value.length, count, sort);
+      //                 // return new Result<any>(false, "organizations", shapeOrganizationsResp);
+      //                 // return new PageResponse(value, number, size, count, direction);
+      //             }));
+      //     }));
+    return null;
   }
 
   getOrganization (partyId: string, sessionId?: string): Observable<Organization> {
@@ -56,7 +58,7 @@ export class OrganizationOrchestrator {
           return this.sessionRepository.getSessionById(sessionId)
               .pipe(switchMap(session => {
                   if (!session) return of(undefined);
-                  return this.organizationRepository.getOrganization(session.partyId);
+                  // return this.organizationRepository.getOrganization(session.partyId);
               }));
       } else {
           return this.organizationRepository.getOrganization(partyId);
@@ -70,8 +72,8 @@ export class OrganizationOrchestrator {
                   if (!session) {
                       return of(undefined);
                   } else {
-                      organization.partyId = session.partyId;
-                      return this.organizationRepository.saveOrganization(organization);
+                      // organization.partyId = session.partyId;
+                      // return this.organizationRepository.saveOrganization(organization);
                   }
           }));
       } else {

@@ -1,6 +1,6 @@
-import { Response, Request, NextFunction } from "express";
+import { Response, Request } from "express";
 import { ConfirmationOrchestrator } from "./confirmation.orchestrator";
-import { Confirmation } from "./confirmation";
+import { Confirmation } from "../../../data/authentication/confirmation";
 
 const confirmationOrchestrator: ConfirmationOrchestrator = new ConfirmationOrchestrator();
 
@@ -10,9 +10,18 @@ export let confirmCode = (req: Request, res: Response) => {
     return res.status(400).send({message: "Confirmation can not be empty"});
   }
 
+
   const confirmation: Confirmation = req.body;
-  const confirmationId: string = confirmation.confirmationId;
-  const credentialId: string = confirmation.credentialId;
+  var confirmationId: string = confirmation.confirmationId;
+  var credentialId: string = confirmation.credentialId;
+
+  if (!confirmationId && req.params.confirmationId) {
+    confirmationId = req.params.confirmationId;
+  }
+
+  if (!credentialId && req.params.credentialId) {
+    credentialId = req.params.credentialId;
+  }
 
   if (!confirmationId || !credentialId) {
       return res.status(400).send({message: "confirmationId & credentialId must be sent can not be empty"});

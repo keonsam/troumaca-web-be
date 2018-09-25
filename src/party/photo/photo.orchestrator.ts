@@ -1,10 +1,10 @@
-import { createPhotoRepository } from "./photo.repository.factory";
-import { PhotoRepository } from "./photo.repository";
+import { createPhotoRepository } from "../../adapter/photo/photo.repository.factory";
+import { PhotoRepository } from "../../repository/photo.repository";
+import { Photo } from "../../data/photo/photo";
 import { Observable, of} from "rxjs";
-import { Photo } from "./photo";
-import { SessionRepository} from "../../session/session.repository";
-import { createSessionRepositoryFactory } from "../../session/session.repository.factory";
 import { switchMap, } from "rxjs/operators";
+import {SessionRepository} from "../../repository/session.repository";
+import {createSessionRepositoryFactory} from "../../adapter/session/session.repository.factory";
 
 export class PhotoOrchestrator {
 
@@ -22,8 +22,8 @@ export class PhotoOrchestrator {
           if (!session) {
               return of(undefined);
           } else {
-              photo.partyId = session.partyId;
-              return this.photoRepository.savePhoto(type, photo);
+              // photo.partyId = session.partyId;
+              // return this.photoRepository.savePhoto(type, photo);
           }
       }));
   }
@@ -33,7 +33,7 @@ export class PhotoOrchestrator {
       if (!session) {
         return of(undefined);
       } else {
-        return this.photoRepository.getPhotos(session.partyId, type);
+        // return this.photoRepository.getPhotos(session.partyId, type);
       }
     }));
   }

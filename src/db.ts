@@ -54,6 +54,10 @@ const subscriptionDb = path.resolve(__dirname, "..") + "/nedb/lobby/subscription
 const billingDb = path.resolve(__dirname, "..") + "/nedb/lobby/billings.db";
 const methodDb = path.resolve(__dirname, "..") + "/nedb/lobby/methods.db";
 
+// Billing
+const paymentMethodDb = path.resolve(__dirname, "..") + "/nedb/billing/payment-methods.db";
+const creditCardDb = path.resolve(__dirname, "..") + "/nedb/billing/credit-cards.db";
+
 // depreciation
 const bookDepreciationDb = path.resolve(__dirname, "..") + "/nedb/depreciation/book.db";
 const taxDepreciationDb = path.resolve(__dirname, "..") + "/nedb/depreciation/tax.db";
@@ -234,6 +238,15 @@ export const propertyClasses = new Datastore(propertyClassesDb);
 propertyClasses.loadDatabase(handleError);
 propertyClasses.ensureIndex({ fieldName: "propertyClassId", unique: true }, handleError);
 
+// billings
+
+export const paymentMethods = new Datastore(paymentMethodDb);
+paymentMethods.loadDatabase(handleError);
+paymentMethods.ensureIndex( {fieldName: "paymentMethodId", unique: true}, handleError);
+
+export const creditCards = new Datastore(creditCardDb);
+creditCards.loadDatabase(handleError);
+creditCards.ensureIndex( {fieldName: "creditCardId", unique: true}, handleError);
 
 function handleError( err: any ) {
   if (err) {

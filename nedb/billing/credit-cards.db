@@ -1,0 +1,4 @@
+{"creditCardId":"23ec7689-712b-47c2-ac1b-066e6aeb4cd1","paymentMethodId":"9f9e5106-1235-4f61-9609-b8fea945e066","cardName":"test8","cardNumber":"1111-55353-875","cardExpDate":"2018-09-28","cardCVV":53421,"status":"inactive","_id":"W5LB8qDLGIy1oidZ"}
+{"creditCardId":"b193a9c3-6cb1-49d4-8e9e-814f168492d3","paymentMethodId":"9f9e5106-1235-4f61-9609-b8fea945e066","cardName":"test3","cardNumber":"1343","cardExpDate":"2018-09-12","cardCVV":321,"status":"inactive","_id":"gP49gwYoTjtpgKKV"}
+{"creditCardId":"4866a3c7-94ed-4d49-85d9-d4c37d375885","paymentMethodId":"9f9e5106-1235-4f61-9609-b8fea945e066","cardName":"test7","cardNumber":"434224242414442","cardExpDate":"2018-09-14","cardCVV":4332,"status":"primary","_id":"yeNgEtQj09h8crII"}
+{"$$indexCreated":{"fieldName":"creditCardId","unique":true,"sparse":false}}

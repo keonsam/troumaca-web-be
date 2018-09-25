@@ -3,6 +3,18 @@ import { SubscriptionOrchestrator } from "./subscription.orchestrator";
 
 const subscriptionOrchestrator: SubscriptionOrchestrator = new SubscriptionOrchestrator();
 
+
+export  const getSubscriptions = (req: Request, res: Response) => {
+  subscriptionOrchestrator.getSubscriptions()
+      .subscribe(subscriptions => {
+          res.status(200).send(JSON.stringify(subscriptions));
+      }, error => {
+          res.status(500);
+          res.send(JSON.stringify({message: "An Error has Occurred"}));
+          console.log(error);
+      });
+};
+// TODO: DELETE BELOW AFTER CHANGING TO ABOVE
 export const getSubscriptionInformation = (req: Request, res: Response) => {
 
     subscriptionOrchestrator.getSubscriptionInformation()

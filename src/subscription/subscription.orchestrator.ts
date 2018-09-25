@@ -1,12 +1,16 @@
+import { Subscription } from "../data/party/subscription";
+import { createSubscriptionRepositoryFactory } from "../adapter/party/subscription.repository.factory";
+import { SubscriptionRepository } from "../repository/subscription.repository";
 import { Observable } from "rxjs";
-import { Subscription } from "./subscription";
-import { createSubscriptionRepositoryFactory } from "./subscription.repository.factory";
-import { SubscriptionRepository } from "./subscription.repository";
 
 export class  SubscriptionOrchestrator {
     private subscriptionRepository: SubscriptionRepository;
     constructor() {
         this.subscriptionRepository = createSubscriptionRepositoryFactory();
+    }
+
+    getSubscriptions(): Observable<Subscription[]> {
+        return this.subscriptionRepository.getSubscriptions();
     }
 
     public getSubscriptionInformation(): Observable<any> {

@@ -1,10 +1,11 @@
 import { Observable, of } from "rxjs";
 import { flatMap } from "rxjs/operators";
 import { getSortOrderOrDefault } from "../../sort.order.util";
-import { Attribute } from "./attribute";
+import { Attribute } from "../../data/asset/attribute";
+
+import { createAttributeRepositoryFactory } from "../../adapter/asset/attribute.repository.factory";
+import { AttributeRepository } from "../../repository/attribute.repository";
 import { switchMap, map } from "rxjs/operators";
-import { createAttributeRepositoryFactory } from "./attribute.repository.factory";
-import { AttributeRepository } from "./attribute.repository";
 import { Result } from "../../result.success";
 import { shapeAttributesResponse } from "./attribute.response.shaper";
 
@@ -19,17 +20,18 @@ export class AttributeOrchestrator {
 
     getAvailableAttributes(number: number, size: number, field: string, direction: string, assignedAttributes: string[]): Observable<Result<any>> {
         const sort = getSortOrderOrDefault(field, direction);
-        return this.attributeClassRepository
-            .getAvailableAttributes(number, size, sort, assignedAttributes)
-            .pipe(flatMap(value => {
-                return this.attributeClassRepository
-                    .getAvailableAttributeCount(assignedAttributes)
-                    .pipe(map(count => {
-                        const shapeAttrResp = shapeAttributesResponse( value, number, size, value.length, count, sort);
-                        return new Result<any>(false, "success", shapeAttrResp);
-                        // return new PageResponse<Attribute[]>(value, number, size, count, sort);
-                    }));
-            }));
+        // return this.attributeClassRepository
+        //     .getAvailableAttributes(number, size, sort, assignedAttributes)
+        //     .pipe(flatMap(value => {
+        //         return this.attributeClassRepository
+        //             .getAvailableAttributeCount(assignedAttributes)
+        //             .pipe(map(count => {
+        //                 // const shapeAttrResp = shapeAttributesResponse( value, number, size, value.length, count, sort);
+        //                 // return new Result<any>(false, "success", shapeAttrResp);
+        //                 // return new PageResponse<Attribute[]>(value, number, size, count, sort);
+        //             }));
+        //     }));
+      return null;
     }
 
   getAttributes(number: number, size: number, field: string, direction: string): Observable<Result<any>> {

@@ -1,7 +1,1 @@
-{"partyId":"3b43a146-c98e-4733-8691-ce98ca93046f","purpose":"Testing","name":"throw4 Co","description":"","_id":"4sdb4ZsLIXyrJYZQ"}
-{"purpose":"testing","name":"profile15","description":"","partyId":"c0703a0f-3c54-47d5-841a-dbb73038049b","_id":"8QRCj9xuIUpGCejk"}
-{"partyId":"4beb1e18-8e3f-410f-94bc-6d59800164d8","organizationId":"230b6f2d-eb6a-43f7-b2bf-a14cf94ca17a","status":"pending entry to organization","_id":"bpmBqae3PUXwnUwJ"}
-{"partyId":"230b6f2d-eb6a-43f7-b2bf-a14cf94ca17a","purpose":"testing","name":"Test2 Org","description":"","_id":"cLtV0fU5jnjLs5SJ"}
-{"purpose":"testing","name":"profile14","description":"","partyId":"23892fcd-80c0-43ed-8239-cabfe32a7a7a","_id":"hNgWv6MvLlAp9iga"}
-{"purpose":"Asset Management","name":"Troumaca Corp","description":"Programming test","partyId":"6c1fd0df-5ba9-4e95-99a1-5f507dc2b363","_id":"krZCTQI6W1OgXIxb"}
 {"$$indexCreated":{"fieldName":"partyId","unique":true,"sparse":false}}

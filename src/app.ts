@@ -7,9 +7,6 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 
-// middleware
-import checkAccess from "./middleware/access-check";
-
 import router from "./routes";
 
 const app = express();
@@ -19,7 +16,15 @@ app.use(cookieParser());
 app.use(bodyParser.json({limit: "50mb"}));
 app.use(bodyParser.urlencoded({limit: "50mb", extended: false}));
 app.use(express.static(path.join(__dirname, "dist")));
-const whitelist = ["http://localhost:4200", "http://ec2-18-207-220-164.compute-1.amazonaws.com:4200", "http://dev.troumaca.com"];
+const whitelist = [
+  "http://localhost:4200",
+  "http://ec2-18-207-220-164.compute-1.amazonaws.com:4200",
+  "http://dev.troumaca.com",
+  "troumaca.com",
+  "troumaka.com",
+  /\.troumaca\.com$/,
+  /\.troumaka\.com$/
+];
 
 const corsOptions = {
   origin: function (origin: any, callback: any) {
@@ -33,7 +38,6 @@ const corsOptions = {
   credentials: true
 };
 app.use(cors(corsOptions));
-app.use(checkAccess);
 
 // routes
 app.use(router);
