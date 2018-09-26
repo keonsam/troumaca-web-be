@@ -1,30 +1,28 @@
 import { NextFunction, Request, Response } from "express";
 import { SessionOrchestrator } from "../session/session.orchestrator";
-import {MiddlewareError} from "./middleware-error";
 
 const checkSession = (req: Request, res: Response, next: NextFunction) => {
 
   const sessionOrchestrator = new SessionOrchestrator();
 
-  checkSessionValidity(req, function (err: Error, validSession: boolean) {
+    checkSession(req, function (err: Error, validSession: boolean) {
     if (err || !validSession) {
-      res.status(440);
-      res.send("Invalid session...");
+        res.status(440);
+        res.send("Invalid session...");
+    } else {
+        next();
     }
-
-    next();
   });
 
-  function checkSessionValidity(req: Request, callback: (err:Error, validSession:boolean) => void) {
-    const cookies: any = req.cookies;
-    const sessionId: string = cookies["sessionId"];
+  function checkSession(req: Request, callback: (err: Error, validSession: boolean) => void) {
+    const sessionId: string =  req.cookies["sessionId"];
     sessionOrchestrator
       .isValidSession(sessionId)
       .subscribe(isValid => {
         if (isValid) {
-          callback(null, true);
+          callback(undefined, true);
         } else {
-          var e:Error = new MiddlewareError("Invalid session...");
+          const e: Error = new Error("Invalid session...");
           callback(e, false);
         }
       });

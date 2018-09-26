@@ -4,6 +4,10 @@ import { Observable } from "rxjs";
 
 export class SubscriptionRepositoryRestAdapter implements SubscriptionRepository {
 
+    getSubscriptions(): Observable<Subscription[]> {
+        return undefined;
+    }
+
     public getSubscriptionInformation(): Observable<any> {
         return undefined;
     }

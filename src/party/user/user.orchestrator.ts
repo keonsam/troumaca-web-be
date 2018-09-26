@@ -15,10 +15,10 @@ import { UserResponse } from "../../data/party/user.response";
 import { AccessRoleRepository } from "../../repository/access.role.repository";
 import { createAccessRoleRepositoryFactory } from "../../adapter/authorization/access.role.repository.factory";
 import { AccessRole } from "../../data/authorization/access.role";
-import { CredentialRepository} from "../../repository/credential.repository";
+import { CredentialRepository } from "../../repository/credential.repository";
 import { createCredentialRepositoryFactory } from "../../adapter/authentication/credential.repository.factory";
-import {SessionRepository} from "../../repository/session.repository";
-import {createSessionRepositoryFactory} from "../../adapter/session/session.repository.factory";
+import { SessionRepository } from "../../repository/session.repository";
+import { createSessionRepositoryFactory } from "../../adapter/session/session.repository.factory";
 
 export class UserOrchestrator {
 
@@ -43,16 +43,15 @@ export class UserOrchestrator {
 
   getUsers (number: number, size: number, field: string, direction: string): Observable<Result<any>> {
       const sort = getSortOrderOrDefault(field, direction);
-      // return this.userRepository.getUsers(number, size, sort)
-      //   .pipe(flatMap(value => {
-      //     return this.userRepository
-      //       .getUserCount()
-      //       .pipe(map(count => {
-      //         // const shapeUsersResp: any = shapeUsersResponse(value, number, size, value.length, count, sort);
-      //         // return new Result<any>(false, "users", shapeUsersResp);
-      //       }));
-      //   }));
-      return null;
+      return this.userRepository.getUsers(number, size, sort)
+        .pipe(flatMap(value => {
+          return this.userRepository
+            .getUserCount()
+            .pipe(map(count => {
+              const shapeUsersResp: any = shapeUsersResponse(value, number, size, value.length, count, sort);
+              return new Result<any>(false, "users", shapeUsersResp);
+            }));
+        }));
     }
 
   getUser (partyId: string, sessionId?: string): Observable<UserResponse> {
@@ -62,7 +61,7 @@ export class UserOrchestrator {
                   if (!session) {
                       return of(undefined);
                   } else {
-                      // return this.getUserLocal(session.partyId);
+                      return this.getUserLocal(session.partyId);
                   }
               }));
       } else {
@@ -71,35 +70,52 @@ export class UserOrchestrator {
   }
 
   getUserLocal(partyId: string): Observable<UserResponse> {
-      console.log(partyId);
       return this.userRepository.getUser(partyId)
           .pipe(switchMap(user => {
-              if (!user) return of(undefined);
-              return this.partyAccessRoleRepository.getPartyAccessRoleById(partyId)
-                  .pipe(switchMap((partyAccessRoles: PartyAccessRole[]) => {
-                      // if (partyAccessRoles.length < 1) return of(new UserResponse(user));
-                      const accessRoleIds: string[] = partyAccessRoles.map(x => { if (x.accessRoleId) return x.accessRoleId; });
-                      // if (accessRoleIds.length < 1)  return of(new UserResponse(user, partyAccessRoles));
-                      return this.accessRoleRepository.getAccessRoleByIds(accessRoleIds)
-                          .pipe(map( accessRoles => {
-                              // if (accessRoles.length < 1) return new UserResponse(user, partyAccessRoles);
-                              // partyAccessRoles.forEach( value => {
-                              //     const index = accessRoles.findIndex(x => x.accessRoleId === value.accessRoleId);
-                              //     value.accessRole = index !== -1 ? accessRoles[index] : new AccessRole();
-                              // });
-                              // return new UserResponse(user, partyAccessRoles);
-                          }));
-                  }));
+              if (!user) {
+                  return of(new UserResponse());
+              } else {
+                  return this.partyAccessRoleRepository.getPartyAccessRoleById(partyId)
+                      .pipe(switchMap((partyAccessRoles: PartyAccessRole[]) => {
+                          if (partyAccessRoles.length < 1) return of(new UserResponse(user));
+                          const accessRoleIds: string[] = partyAccessRoles.map(x => { if (x.accessRoleId) return x.accessRoleId; });
+                          if (accessRoleIds.length < 1)  return of(new UserResponse(user, partyAccessRoles));
+                          return this.accessRoleRepository.getAccessRoleByIds(accessRoleIds)
+                              .pipe(map( accessRoles => {
+                                  if (accessRoles.length < 1) return new UserResponse(user, partyAccessRoles);
+                                  partyAccessRoles.forEach( value => {
+                                      const index = accessRoles.findIndex(x => x.accessRoleId === value.accessRoleId);
+                                      value.accessRole = index !== -1 ? accessRoles[index] : new AccessRole();
+                                  });
+                                  return new UserResponse(user, partyAccessRoles);
+                              }));
+                      }));
+              }
           }));
   }
 
   saveUser (user: User, credential: Credential, partyAccessRoles: PartyAccessRole[], sessionId: string): Observable<User> {
       if (!credential) {
-          // return this.sessionRepository.getSessionById(sessionId)
-          //     .pipe(switchMap(session => {
-                  // user.partyId = session.partyId;
-                  // return this.userRepository.saveUser(user);
-              // }));
+          return this.sessionRepository.getSessionById(sessionId)
+              .pipe(switchMap(session => {
+                  user.partyId = session.partyId;
+                  const credentialId: string = session.credentialId;
+                  return this.userRepository.saveUser(user)
+                      .pipe( switchMap(user => {
+                          if (!user) {
+                              return of(undefined);
+                          } else {
+                              return this.credentialRepository.updateCredentialStatusById(credentialId, "Confirmed")
+                                  .pipe( map(numUpdated => {
+                                      if (!numUpdated) {
+                                          return undefined;
+                                      } else {
+                                          return user;
+                                      }
+                                  }));
+                          }
+                      }));
+              }));
       } else {
           credential.password = generate({
               length: 10,
@@ -108,14 +124,14 @@ export class UserOrchestrator {
           return this.credentialRepository.addCredential(credential)
               .pipe(switchMap(credentialRes => {
                   if (!credentialRes) return of(undefined);
-                  // user.partyId = credentialRes.credential.partyId;
+                  user.partyId = credentialRes.credential.partyId;
                   return this.userRepository.saveUser(user)
                       .pipe(switchMap(userRes => {
                           if (!userRes) return of(undefined);
                           if (!partyAccessRoles || partyAccessRoles.length < 1) return of(userRes);
-                          // partyAccessRoles.forEach(value => {
-                          //     value.partyId = userRes.partyId;
-                          // });
+                          partyAccessRoles.forEach(value => {
+                              value.partyId = userRes.partyId;
+                          });
                           return this.partyAccessRoleRepository.addPartyAccessRole(partyAccessRoles)
                               .pipe(map(partyAccessRolesRes => {
                                   if (!partyAccessRolesRes) return undefined;
@@ -159,16 +175,5 @@ export class UserOrchestrator {
                }));
          }));
     }
-
-  // updateUserMe (partyId: string, user: User, credential: Credential): Observable<number> {
-  //   return this.userRepository.updateUser(partyId, user)
-  //     .pipe(switchMap(numUpdated => {
-  //       // if (numUpdated) {
-  //       //   return this.credentialRepository.updateCredential(partyId, credential);
-  //       // }else {
-  //         return of(0);
-  //       // }
-  //     }));
-  // }
 
 }

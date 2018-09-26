@@ -1,19 +1,46 @@
 import { BillingRepository } from "../../repository/billing.repository";
-import { Billing } from "../../data/party/billing";
 import { Observable } from "rxjs";
+import { PaymentMethod } from "../../billing/payment.method";
+import { CreditCard } from "../../billing/credit.card";
+import { Billing } from "../../billing/billing";
 
 export class BillingRepositoryRestAdapter implements BillingRepository {
-    public getBilling(): Observable<Billing> {
+
+    getPaymentMethods(): Observable<PaymentMethod[]> {
         return undefined;
     }
 
-    public addBilling(billing: Billing, method: any): Observable<Billing> {
+    addCreditCard(creditCard: CreditCard): Observable<CreditCard> {
         return undefined;
     }
 
-    public updateBilling(billingId: string, billing: Billing, method: any): Observable<number> {
+    getBillings(): Observable<Billing[]> {
         return undefined;
     }
+
+    getCreditCards(): Observable<CreditCard[]> {
+        return undefined;
+    }
+
+    updateCreditCard(creditCard: CreditCard, creditCardId: string): Observable<number> {
+        return undefined;
+    }
+
+    deleteCreditCard(creditCardId: string): Observable<number> {
+        return undefined;
+    }
+
+    // public getBilling(): Observable<Billing> {
+    //     return undefined;
+    // }
+    //
+    // public addBilling(billing: Billing, method: any): Observable<Billing> {
+    //     return undefined;
+    // }
+    //
+    // public updateBilling(billingId: string, billing: Billing, method: any): Observable<number> {
+    //     return undefined;
+    // }
 
     // CREDIT CARD
 

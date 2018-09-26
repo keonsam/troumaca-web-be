@@ -127,6 +127,7 @@ export let authenticate = (req: Request, res: Response) => {
 
   credentialOrchestrator.authenticate(credential, headerOptions)
   .subscribe((authenticatedCredential: AuthenticatedCredential) => {
+      console.log(authenticatedCredential);
       if (authenticatedCredential.sessionId) {
           res.cookie("sessionId", authenticatedCredential.sessionId, {path: "/", maxAge: 20 * 60 * 1000, httpOnly: true });
       }
