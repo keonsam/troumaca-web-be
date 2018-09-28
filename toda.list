@@ -1,2 +1,2 @@
-- Upgrade RxJS 6
 - Upgrade typescript 3
+- Track all request and response, exclude sensitive data (password)

@@ -2,8 +2,17 @@ import { Party } from "./party";
 
 export class Organization extends Party {
 
+  private _name: string;
   private _purpose: string;
   private _description: string;
+
+  get  name(): string {
+    return this._name;
+  }
+
+  set name(value: string) {
+    this._name = value;
+  }
 
   get purpose(): string {
     return this._purpose;

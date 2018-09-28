@@ -11,6 +11,8 @@ export interface AccessRoleRepository {
 
   addAccessRole(accessRole: AccessRole): Observable<AccessRole>;
 
+  addAccessRoles(accessRoles: AccessRole[]): Observable<AccessRole[]>;
+
   getAccessRoleById(accessRoleId: string): Observable<AccessRole>;
 
   getAccessRoleByIds(accessRoleIds: string[]): Observable<AccessRole[]>;

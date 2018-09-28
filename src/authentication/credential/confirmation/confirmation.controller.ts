@@ -10,10 +10,9 @@ export let confirmCode = (req: Request, res: Response) => {
     return res.status(400).send({message: "Confirmation can not be empty"});
   }
 
-
   const confirmation: Confirmation = req.body;
-  var confirmationId: string = confirmation.confirmationId;
-  var credentialId: string = confirmation.credentialId;
+  let confirmationId: string = confirmation.confirmationId;
+  let credentialId: string = confirmation.credentialId;
 
   if (!confirmationId && req.params.confirmationId) {
     confirmationId = req.params.confirmationId;
@@ -37,20 +36,20 @@ export let confirmCode = (req: Request, res: Response) => {
   }
 
   const headerOptions = {
-    correlationId: correlationId,
-    sourceSystemHost: req.headers.host,
-    sourceSystemName: ""
+    correlationId: correlationId
   };
 
   confirmationOrchestrator
     .confirmCode(confirmationId, credentialId, confirmation, headerOptions)
     .subscribe(next => {
       const body = JSON.stringify(next);
+      res.setHeader("content-type", "application/json");
       res.status(200);
       res.send(body);
     }, error => {
-      res.status(500);
-      res.send(JSON.stringify({message: "Error Occurred"}));
+      res.status(!error.code ? 500 : error.code);
+      let msg = !error.message ? "Internal Server Error" : error.message;
+      res.send(JSON.stringify(msg));
       console.log(error);
     });
 

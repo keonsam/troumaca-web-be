@@ -30,6 +30,9 @@ import * as organizationController from "./party/organization/organization.contr
 import * as subscriptionController from "./subscription/subscription.controller";
 import * as billingController from "./billing/billing.controller";
 import * as depreciationController from "./depreciation/depreciation.controller";
+import * as organizationProfileController from "./profile/organization/create/organization.profile.controller";
+import * as personProfileController from "./profile/person/create/person.profile.controller";
+
 
 import checkSession from "./middleware/check-session";
 

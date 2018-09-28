@@ -1,9 +1,9 @@
 export class Party {
 
   private _partyId: string;
-  private _name: string;
-  private _createdOn: Date;
-  private _modifiedOn: string;
+  private _version: string;
+  private _tenantPartyId: string;
+  private _modifiedOn: Date;
 
   get partyId(): string {
     return this._partyId;
@@ -13,27 +13,27 @@ export class Party {
     this._partyId = value;
   }
 
-  get  name(): string {
-    return this._name;
+  get version(): string {
+    return this._version;
   }
 
-  set name(value: string) {
-    this._name = value;
+  set version(value: string) {
+    this._version = value;
   }
 
-  get createdOn(): Date {
-    return this._createdOn;
+  get tenantPartyId(): string {
+    return this._tenantPartyId;
   }
 
-  set createdOn(value: Date) {
-    this._createdOn = value;
+  set tenantPartyId(value: string) {
+    this._tenantPartyId = value;
   }
 
-  get modifiedOn(): string {
+  get modifiedOn(): Date {
     return this._modifiedOn;
   }
 
-  set modifiedOn(value: string) {
+  set modifiedOn(value: Date) {
     this._modifiedOn = value;
   }
 

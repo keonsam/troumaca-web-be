@@ -8,7 +8,7 @@ import { accessRoles } from "../../db";
 // import {getSortOrderOrDefault} from "../../sort.order.util";
 import { Observable, of } from "rxjs";
 import { switchMap, map } from "rxjs/operators";
-import {createAccessRoleRepositoryFactory} from "../../adapter/authorization/access.role.repository.factory";
+import {createAccessRoleRepository} from "../../adapter/authorization/access.role.repository.factory";
 
 export class PartyAccessRoleOrchestrator {
 
@@ -17,7 +17,7 @@ export class PartyAccessRoleOrchestrator {
 
   constructor() {
     this.partyPartyAccessRoleRepository = createPartyAccessRoleRepositoryFactory();
-    this.accessRoleRepository = createAccessRoleRepositoryFactory();
+    this.accessRoleRepository = createAccessRoleRepository();
   }
 
 

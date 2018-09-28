@@ -1,17 +1,20 @@
-import {CredentialRepository} from "../../../repository/credential.repository";
+// import {CredentialRepository} from "../../../repository/credential.repository";
 import {createPersonRepository} from "../../../adapter/party/person.repository.factory";
 import {PersonRepository} from "../../../repository/person.repository";
 import {Person} from "../../../data/party/person";
 import {Observable} from "rxjs";
+import {PersonProfile} from "../../../data/profile/person.profile";
 
-export class CreatePersonProfileOrchestrator {
+export class PersonProfileOrchestrator {
 
   private personRepository: PersonRepository;
-  private credentialRepository: CredentialRepository;
 
   constructor() {
     this.personRepository = createPersonRepository();
-    //this.credentialRepository =
+  }
+
+  createProfilePerson(profile:PersonProfile, options?: any): Observable<Person> {
+    return this.personRepository.addPerson(profile.person, options);
   }
 
   findPerson(searchStr: string, pageSize: number): Observable<Person[]> {

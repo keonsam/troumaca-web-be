@@ -6,7 +6,7 @@ var should = require('chai').should(),
 describe('validate-username-email', function () {
 
   it('should be a valid email username', function (done) {
-    api.post('/validate-username')
+    api.post('/authentication/credentials/validate-username')
       .set('Accept', 'application/json')
       .send({username: "kevin@example.com"})
       .expect(200)
@@ -16,7 +16,6 @@ describe('validate-username-email', function () {
         } else {
           expect(res.body.valid).to.equal(true);
         }
-
         done(err);
       });
   });

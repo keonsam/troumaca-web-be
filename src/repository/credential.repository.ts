@@ -19,7 +19,7 @@ export interface CredentialRepository {
   updateUserCredential(partyId: string, credential: Credential): Observable<number>;
 
   // isValidEditUsername(partyId:string, username:string):Observable<boolean>;
-
+  //
   // getCredentialByUsername(username:string):Observable<Credential>;
   //
   // getCredentialByCredentialId(credentialId:string):Observable<Credential>;
@@ -35,7 +35,6 @@ export interface CredentialRepository {
   // authenticateCredential(credential:Credential):Observable<Credential>;
   //
   // updateCredential(partyId: string, credential: Credential): Observable<number>;
-  //
   //
   // updateCredentialPartyId(credentialId: string, partyId: string): Observable<number>;
   //

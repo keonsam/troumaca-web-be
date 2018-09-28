@@ -1,6 +1,7 @@
 import {Party} from "../../data/party/party";
 
 export class JoinOrganizationRequest extends Party {
+
     private _organizationId: string;
     private _status: string;
 

@@ -23,7 +23,7 @@ export let isValidUsername = (req: Request, res: Response) => {
     res.send(JSON.stringify(resp));
   }, error => {
     res.status(500);
-    res.send(JSON.stringify({message: "Error Occurred"}));
+    res.send(JSON.stringify({message: "Internal Server Error"}));
     console.log(error);
   });
 
@@ -43,7 +43,7 @@ export let isValidPassword = (req: Request, res: Response) => {
       res.send(JSON.stringify(resp));
   }, error => {
       res.status(500);
-      res.send(JSON.stringify({message: "Error Occurred"}));
+      res.send(JSON.stringify({message: "Internal Server Error"}));
       console.log(error);
   });
 
@@ -83,9 +83,7 @@ export let addCredential = (req: Request, res: Response) => {
   }
 
   const headerOptions = {
-      correlationId: correlationId,
-      sourceSystemHost: req.headers.host,
-      sourceSystemName: ""
+      correlationId: correlationId
   };
 
   credentialOrchestrator.addCredential(credential, headerOptions)
@@ -94,10 +92,10 @@ export let addCredential = (req: Request, res: Response) => {
       res.setHeader("content-type", "application/json");
       res.send(JSON.stringify(createdCredential.confirmation));
   }, error => {
-      res.status(500);
-      res.setHeader("content-type", "application/json");
-      res.send(JSON.stringify({message: "Error Occurred"}));
-      console.log(error);
+    res.status(!error.code ? 500 : error.code);
+    let msg = !error.message ? "Internal Server Error" : error.message;
+    res.send(JSON.stringify(msg));
+    console.log(error);
   });
 
 };

@@ -6,7 +6,7 @@ import {Person} from "../../data/party/person";
 
 export class PersonDbRepositoryAdapter implements PersonRepository {
 
-  addPerson(person: Person): Observable<Person> {
+  addPerson(person: Person, options?: any): Observable<Person> {
     return Observable.create(function (observer: Observer<Person>) {
       person.partyId = generateUUID();
       persons.insert(person, function (err: any, doc: any) {
