@@ -1,8 +1,8 @@
 import { createOrganizationRepository } from "../../adapter/party/organization.repository.factory";
 import { OrganizationRepository } from "../../repository/organization.repository";
 import { Organization } from "../../data/party/organization";
-import { Observable, of } from "rxjs";
-import { flatMap, map, switchMap } from "rxjs/operators";
+import { Observable, of, throwError } from "rxjs";
+import { flatMap, map, switchMap, } from "rxjs/operators";
 import { shapeOrganizationsResponse } from "./organization.response.shaper";
 import { Result } from "../../result.success";
 import { getSortOrderOrDefault } from "../../sort.order.util";
@@ -57,8 +57,8 @@ export class OrganizationOrchestrator {
       if (partyId === "company") {
           return this.sessionRepository.getSessionById(sessionId)
               .pipe(switchMap(session => {
-                  if (!session) return of(undefined);
-                  // return this.organizationRepository.getOrganization(session.partyId);
+                  if (!session) return throwError(session);
+                  return this.organizationRepository.getOrganization(session.partyId);
               }));
       } else {
           return this.organizationRepository.getOrganization(partyId);
@@ -70,10 +70,10 @@ export class OrganizationOrchestrator {
           return this.sessionRepository.getSessionById(sessionId)
               .pipe( switchMap( session => {
                   if (!session) {
-                      return of(undefined);
+                      return throwError(session);
                   } else {
-                      // organization.partyId = session.partyId;
-                      // return this.organizationRepository.saveOrganization(organization);
+                      organization.partyId = session.partyId;
+                      return this.organizationRepository.saveOrganization(organization);
                   }
           }));
       } else {

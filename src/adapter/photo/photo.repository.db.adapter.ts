@@ -8,7 +8,6 @@ export class PhotoRepositoryNeDbAdapter implements PhotoRepository {
 
 
     savePhoto(type: string, photo: Photo): Observable<Photo> {
-
         const db = type === "user" ? userPhotos : organizationPhotos;
         return Observable.create(function(observer: Observer<Photo>) {
             db.insert(photo, function(err: any, doc: any) {
