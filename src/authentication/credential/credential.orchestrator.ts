@@ -63,11 +63,10 @@ export class CredentialOrchestrator {
                   }
                   return this.sessionRepository.addSession(session, options)
                       .pipe(map(session => {
-                          console.log(session);
                           if (!session) {
                               return new AuthenticatedCredential();
                           }
-                          // authenticatedCredential.sessionId = session.sessionId;
+                          authenticatedCredential.sessionId = session.sessionId;
                           return authenticatedCredential;
                       }));
               } else {

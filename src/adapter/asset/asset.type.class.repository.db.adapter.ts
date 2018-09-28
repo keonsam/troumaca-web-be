@@ -1,5 +1,5 @@
 import { generateUUID } from "../../uuid.generator";
-import { assetTypeClasses, assignedAttributes } from "../../db";
+import { assetTypeClasses } from "../../db";
 import { calcSkip } from "../../db.util";
 import { AssetTypeClassRepository } from "../../repository/asset.type.class.repository";
 import { AssetTypeClass } from "../../data/asset/asset.type.class";

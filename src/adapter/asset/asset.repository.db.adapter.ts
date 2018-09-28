@@ -1,7 +1,7 @@
 import { AssetRepository } from "../../repository/asset.repository";
 import { Asset } from "../../data/asset/asset";
 import { generateUUID } from "../../uuid.generator";
-import { assets, assetTypes } from "../../db";
+import { assets } from "../../db";
 import { calcSkip } from "../../db.util";
 import { AssetKind } from "../../data/asset/asset.kind";
 import { AssetType } from "../../data/asset/asset.type";

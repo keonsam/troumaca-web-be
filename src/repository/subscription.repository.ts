@@ -3,6 +3,8 @@ import { Observable } from "rxjs";
 
 export interface SubscriptionRepository {
 
+    getSubscriptions(): Observable<Subscription[]>;
+
     getSubscriptionInformation(): Observable<any>;
 
     getSubscription(type: string): Observable<Subscription>;

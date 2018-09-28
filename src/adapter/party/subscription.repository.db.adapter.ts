@@ -40,6 +40,19 @@ export class SubscriptionRepositoryNeDbAdapter implements SubscriptionRepository
         return of(information);
     }
 
+    getSubscriptions(): Observable<Subscription[]> {
+        return Observable.create( (observer: Observer<Subscription[]>) => {
+            subscriptions.find({}, (err: any, doc: any) => {
+                if (!err) {
+                    observer.next(doc);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
+        });
+    }
+
     public getSubscription(type: string): Observable<Subscription> {
         return Observable.create(function (observer: Observer<Subscription>) {
             const query = {

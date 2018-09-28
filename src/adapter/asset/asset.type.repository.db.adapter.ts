@@ -1,5 +1,5 @@
 import { AssetTypeRepository } from "../../repository/asset.type.repository";
-import {Observable, Observer, of} from "rxjs";
+import { Observable, Observer, of} from "rxjs";
 import { AssetType } from "../../data/asset/asset.type";
 import { switchMap, map } from "rxjs/operators";
 import { assetTypes } from "../../db";

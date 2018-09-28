@@ -1,13 +1,27 @@
-import { Billing } from "../data/party/billing";
 import { Observable } from "rxjs";
+import { PaymentMethod } from "../billing/payment.method";
+import { CreditCard } from "../billing/credit.card";
+import { Billing } from "../billing/billing";
 
 export interface BillingRepository {
 
-    getBilling(): Observable<Billing>;
+    getPaymentMethods(): Observable<PaymentMethod[]>;
 
-    addBilling(billing: Billing, method: any): Observable<Billing>;
+    addCreditCard(creditCard: CreditCard): Observable<CreditCard>;
 
-    updateBilling(billingId: string, billing: Billing, method: any): Observable<number>;
+    getBillings(): Observable<Billing[]>;
+
+    getCreditCards(): Observable<CreditCard[]>;
+
+    updateCreditCard(creditCard: CreditCard, creditCardId: string): Observable<number>;
+
+    deleteCreditCard(creditCardId: string): Observable<number>;
+
+    // getBilling(): Observable<Billing>;
+    //
+    // addBilling(billing: Billing, method: any): Observable<Billing>;
+    //
+    // updateBilling(billingId: string, billing: Billing, method: any): Observable<number>;
 
     // CREDIT CARD
 

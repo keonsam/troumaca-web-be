@@ -11,10 +11,9 @@ import * as resourceTypeController from "./authorization/resource-type/resource.
 
 import * as assetController from "./asset-type/asset/asset.controller";
 import * as attributeController from "./asset-type/attribute/attribute.controller";
-import * as assignedAttributeController from "./asset-type/attribute/assigned-attributes/assigned.attribute.controller"
+import * as assignedAttributeController from "./asset-type/attribute/assigned-attributes/assigned.attribute.controller";
 import * as assetKindController from "./asset-type/kind/asset.kind.controller";
 import * as phoneController from "./site/phone/phone.controller";
-import * as accountController from "./party/account.controller";
 import * as photoController from "./party/photo/photo.controller";
 import * as unitOfMeasureController from "./unit-of-measure/unit.of.measure.controller";
 import * as dataTypeController from "./data-type/data.type.controller";
@@ -41,9 +40,82 @@ const router: Router = Router();
 
 router.get("/", (req, res) => {
     res.json({
-        message: "Welcome to Troumaca API"
+        message: "Welcome to Troumaka API"
     });
 });
+
+
+// ##### SECURITY START #####
+// authentication
+router.post("/authentication/validate-password", credentialController.isValidPassword);
+router.post("/authentication/validate-username", credentialController.isValidUsername);
+router.post("/authentication/credentials", credentialController.addCredential);
+router.post("/authentication/authenticate", credentialController.authenticate);
+// confirmation
+router.get("/send-confirmation-codes/:credentialId/:confirmationId", confirmationController.resendConfirmCode);
+router.post("/verify-credentials-confirmations", confirmationController.confirmCode);
+router.post("/authentication/confirmations/{confirmationId}/credentials/{credentialId}", confirmationController.confirmCode);
+// session
+router.get("/sessions/is-valid-session", sessionController.isValidSession);
+router.get("/partyId", checkSession, sessionController.getPartyId);
+router.get("/sessions/log-out-user", checkSession, sessionController.handleSessionLogOut);
+// permissions
+router.get("/permissions", checkSession, permissionController.getPermissions);
+router.get("/permissions/permissions", checkSession, permissionController.getPermissionsByArray);
+router.get("/permissions/:permissionId", checkSession, permissionController.getPermissionById);
+router.post("/permissions", checkSession, permissionController.savePermission);
+router.put("/permissions/:permissionId", checkSession, permissionController.updatePermission);
+router.delete("/permissions/:permissionId", checkSession, permissionController.deletePermission);
+router.get("/permissions", permissionController.getPermissions);
+router.post("/available-permissions", permissionController.getPermissionsByArray);
+router.get("/permissions/:permissionId", permissionController.getPermissionById);
+router.post("/permissions", permissionController.savePermission);
+router.delete("/permissions/:permissionId", permissionController.deletePermission);
+// resources
+router.get("/resources", checkSession, resourceController.getResources);
+router.get("/resources/resources", checkSession, resourceController.getResourcesByArray);
+router.get("/resources/assigned-resources", checkSession, resourceController.getAssignedResourcesByArray);
+router.get("/resources/:resourceId", checkSession, resourceController.getResourceById);
+router.post("/resources", checkSession, resourceController.saveResource);
+router.put("/resources/:resourceId", checkSession, resourceController.updateResource);
+router.delete("/resources/:resourceId", checkSession, resourceController.deleteResource);
+router.get("/resources", checkSession, resourceController.getResources);
+router.post("/available-resources", checkSession, resourceController.getResourcesByArray);
+router.get("/resources/:resourceId", checkSession, resourceController.getResourceById);
+router.post("/resources", checkSession, resourceController.saveResource);
+router.put("/resources/:resourceId", checkSession, resourceController.updateResource);
+router.delete("/resources/:resourceId", checkSession, resourceController.deleteResource);
+// resource-types
+router.get("/resource-types/find", checkSession, resourceTypeController.findResourceTypes);
+router.get("/resource-types", checkSession, resourceTypeController.getResourceTypes);
+router.get("/resource-types/:resourceTypeId", checkSession, resourceTypeController.getResourceTypeById);
+router.post("/resource-types", checkSession, resourceTypeController.saveResourceType);
+router.put("/resource-types/:resourceTypeId", checkSession, resourceTypeController.updateResourceType);
+router.delete("/resource-types/:resourceTypeId", checkSession, resourceTypeController.deleteResourceType);
+// resource-permissions
+router.get("/resource-permissions", checkSession, resourcePermissionController.getAllResourcePermissions);
+router.get("/resource-permissions/:resourceId", checkSession, resourcePermissionController.getResourcePermissionsByResourceId);
+// access-roles
+router.get("/access-roles/find", checkSession, accessRoleController.findAccessRoles);
+router.get("/access-roles", checkSession, accessRoleController.getAccessRoles);
+router.get("/access-roles/:accessRoleId", checkSession, accessRoleController.getAccessRoleById);
+router.post("/access-roles", checkSession, accessRoleController.saveAccessRole);
+router.put("/access-roles/:accessRoleId", checkSession, accessRoleController.updateAccessRole);
+router.delete("/access-roles/:accessRoleId", checkSession, accessRoleController.deleteAccessRole);
+// access-role-types
+router.get("/access-role-types/find", checkSession, accessRoleTypeController.findAccessRoleTypes);
+router.get("/access-role-types", checkSession, accessRoleTypeController.getAccessRoleTypes);
+router.get("/access-role-types/:accessRoleTypeId", checkSession, accessRoleTypeController.getAccessRoleTypeById);
+router.post("/access-role-types", checkSession, accessRoleTypeController.saveAccessRoleType);
+router.put("/access-role-types/:accessRoleTypeId", checkSession, accessRoleTypeController.updateAccessRoleType);
+router.delete("/access-role-types/:accessRoleTypeId", checkSession, accessRoleTypeController.deleteAccessRoleType);
+
+// ##### SECURITY END #####
+
+
+
+// Asset Type
+
 // asset-kind
 router.get("/asset-kinds", checkSession, assetKindController.getAssetKinds);
 
@@ -130,7 +202,8 @@ router.post("/phones", checkSession, phoneController.savePhone);
 router.put("/phones/:siteId", checkSession, phoneController.updatePhone);
 router.delete("/phones/:siteId", checkSession, phoneController.deletePhone);
 
-// party
+// PARTY
+
 // user
 router.get("/users/find", checkSession, userController.findUser);
 router.get("/users", checkSession, userController.getUsers);
@@ -148,16 +221,15 @@ router.get("/organizations/:partyId", checkSession, organizationController.getOr
 router.post("/organizations", checkSession, organizationController.saveOrganization);
 router.put("/organizations/:partyId", checkSession, organizationController.updateOrganization);
 router.delete("/organizations/:partyId", checkSession, organizationController.deleteOrganization);
-router.get("/organizations", organizationController.getOrganizations);
-router.get("/organizations/:partyId", organizationController.getOrganization);
-router.get("/organizations-find", organizationController.findOrganizations);
-router.post("/organizations", organizationController.saveOrganization);
-router.post("/organizations-send-request", organizationController.sendJoinRequest);
-router.put("/organizations/:partyId", organizationController.updateOrganization);
-router.delete("/organizations/:partyId", organizationController.deleteOrganization);
-
+router.get("/organizations", checkSession, organizationController.getOrganizations);
+router.get("/organizations/:partyId", checkSession, organizationController.getOrganization);
+router.get("/organizations-find", checkSession, organizationController.findOrganizations);
+router.post("/organizations", checkSession, organizationController.saveOrganization);
+router.post("/organizations-send-request", checkSession, organizationController.sendJoinRequest);
+router.put("/organizations/:partyId", checkSession, organizationController.updateOrganization);
+router.delete("/organizations/:partyId", checkSession, organizationController.deleteOrganization);
 // photos
-// router.get("/photos/:type/:partyId", checkSession, photoController.getPhotoById);
+router.get("/photos", checkSession, photoController.getPhotos);
 router.post("/photos/:type", checkSession, photoController.savePhoto);
 router.put("/photos/:type/:partyId", checkSession, photoController.updatePhoto);
 // PHOTOS
@@ -166,7 +238,7 @@ router.post("/photos/:type", photoController.savePhoto);
 router.put("/photos/:type/:partyId", photoController.updatePhoto);
 
 // accounts
-router.post("/accounts", checkSession, accountController.saveAccount);
+// router.post("/accounts", checkSession, accountController.saveAccount);
 
 // ##### SECURITY START #####
 // AUTHENTICATION
@@ -208,20 +280,6 @@ router.get("/sessions/is-valid-session", checkSession, sessionController.isValid
 router.get("/partyId", checkSession, sessionController.getPartyId);
 router.get("/sessions/log-out-user", checkSession, sessionController.handleSessionLogOut);
 
-// permissions
-router.get("/permissions", checkSession, permissionController.getPermissions);
-router.get("/permissions/permissions", checkSession, permissionController.getPermissionsByArray);
-// router.get("/permissions/resource-permissions", checkSession, permissionController.getResourcePermissionsByArray);
-router.get("/permissions/:permissionId", checkSession, permissionController.getPermissionById);
-router.post("/permissions", checkSession, permissionController.savePermission);
-router.put("/permissions/:permissionId", checkSession, permissionController.updatePermission);
-router.delete("/permissions/:permissionId", checkSession, permissionController.deletePermission);
-router.get("/permissions", permissionController.getPermissions);
-router.post("/available-permissions", permissionController.getPermissionsByArray);
-router.get("/permissions/:permissionId", permissionController.getPermissionById);
-router.post("/permissions", permissionController.savePermission);
-// router.put("/permissions/:permissionId", street.address.orchestrator.tspermissionController.updatePermission);
-router.delete("/permissions/:permissionId", permissionController.deletePermission);
 
 // resources
 router.get("/resources", checkSession, resourceController.getResources);
@@ -271,17 +329,22 @@ router.delete("/access-role-types/:accessRoleTypeId", checkSession, accessRoleTy
 router.get("/subscription/information", checkSession, subscriptionController.getSubscriptionInformation);
 router.get("/subscriptions/:type", checkSession, subscriptionController.getSubscription);
 router.post("/subscriptions", checkSession, subscriptionController.addSubscription);
+// billing
+router.get("/billings/payment-methods", checkSession, billingController.getPaymentMethods);
+router.get("/billings", checkSession, billingController.getBillings);
+router.get( "/billings/credit-cards", checkSession, billingController.getCreditCards);
+router.post( "/billings/credit-cards", checkSession, billingController.addCreditCard);
+router.post( "/billings/validate/card-name", checkSession, billingController.cardName);
+router.post( "/billings/validate/card-number", checkSession, billingController.cardNumber);
+router.post( "/billings/validate/card-exp-date", checkSession, billingController.cardExpDate);
+router.post( "/billings/validate/card-cvv", checkSession, billingController.cardCVV);
+router.put( "/billings/credit-cards/:creditCardId", checkSession, billingController.updateCreditCard);
+router.delete( "/billings/credit-cards/:creditCardId", checkSession, billingController.deleteCreditCard);
 
-// BILLING
-router.get("/billings", checkSession, billingController.getBilling);
-router.post("/billings", checkSession, billingController.addBilling);
-router.put("/billings/:billingId", checkSession, billingController.updateBilling);
-router.post( "/validate-credit-card/name", checkSession, billingController.cardName);
-router.post( "/validate-credit-card/number", checkSession, billingController.cardNumber);
-router.post( "/validate-credit-card/exp-date", checkSession, billingController.cardExpDate);
-router.post( "/validate-credit-card/cvv", checkSession, billingController.cardCVV);
+
 
 // DEPRECIATION
+
 router.get("/depreciation-methods/:type/:system", checkSession, depreciationController.getDepreciationMethod);
 router.get("/depreciation-systems", checkSession, depreciationController.getDepreciationSystems);
 router.get("/depreciation-property-classes/:system", checkSession, depreciationController.getPropertyClasses);
