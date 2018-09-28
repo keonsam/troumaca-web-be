@@ -190,7 +190,7 @@ router.delete("/phones/:siteId", checkSession, phoneController.deletePhone);
 // user
 router.get("/users/find", checkSession, userController.findUser);
 router.get("/users", checkSession, userController.getUsers);
-router.get("/users/:partyId", userController.getUser);
+router.get("/users/:partyId", checkSession, userController.getUser);
 router.post("/users", checkSession, userController.saveUser);
 router.put("/users/:partyId", checkSession, userController.updateUser);
 router.delete("/users/:partyId", checkSession, userController.deleteUser);
@@ -217,10 +217,9 @@ router.put("/photos/:type/:partyId", checkSession, photoController.updatePhoto);
 
 // SUBSCRIPTION && BILLING
 
-router.get("/subscriptions", subscriptionController.getSubscriptions);
-router.get("/subscription/information", checkSession, subscriptionController.getSubscriptionInformation);
-router.get("/subscriptions/:type", checkSession, subscriptionController.getSubscription);
+router.get("/subscriptions/modules", checkSession, subscriptionController.getSubscriptionModules);
 router.post("/subscriptions", checkSession, subscriptionController.addSubscription);
+
 // billing
 router.get("/billings/payment-methods", checkSession, billingController.getPaymentMethods);
 router.get("/billings", checkSession, billingController.getBillings);

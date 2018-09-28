@@ -20,10 +20,10 @@ export class PhotoOrchestrator {
   savePhoto(type: string, photo: Photo, sessionId: string): Observable<Photo> {
       return this.sessionRepository.getSessionById(sessionId).pipe( switchMap( session => {
           if (!session) {
-              return of(undefined);
+              return of(new Photo());
           } else {
-              // photo.partyId = session.partyId;
-              // return this.photoRepository.savePhoto(type, photo);
+              photo.partyId = session.partyId;
+              return this.photoRepository.savePhoto(type, photo);
           }
       }));
   }
@@ -31,9 +31,9 @@ export class PhotoOrchestrator {
   getPhotos(sessionId: string, type?: string): Observable<Photo> {
     return this.sessionRepository.getSessionById(sessionId).pipe( switchMap( session => {
       if (!session) {
-        return of(undefined);
+        return of(new Photo());
       } else {
-        // return this.photoRepository.getPhotos(session.partyId, type);
+        return this.photoRepository.getPhotos(session.partyId, type);
       }
     }));
   }
@@ -41,9 +41,4 @@ export class PhotoOrchestrator {
   updatePhoto(partyId: string, type: string, photo: Photo): Observable<number> {
     return this.photoRepository.updatePhoto(partyId, type, photo);
   }
-
-  // deletePhoto(partyId:string):Observable<number> {
-  //   return this.photoRepository.deletePhoto(partyId);
-  // };
-
 }

@@ -1,14 +1,11 @@
 import { Subscription } from "../data/party/subscription";
 import { Observable } from "rxjs";
+import { Module } from "../data/party/module";
 
 export interface SubscriptionRepository {
 
-    getSubscriptions(): Observable<Subscription[]>;
-
-    getSubscriptionInformation(): Observable<any>;
-
-    getSubscription(type: string): Observable<Subscription>;
-
+    getSubscriptionModules(): Observable<Module[]>;
     addSubscription(subscription: Subscription): Observable<Subscription>;
+
 
 }
