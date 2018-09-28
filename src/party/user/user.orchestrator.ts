@@ -13,7 +13,7 @@ import { PartyAccessRoleRepository } from "../../repository/party.access.role.re
 import { createPartyAccessRoleRepositoryFactory } from "../../adapter/authorization/party.access.role.repository.factory";
 import { UserResponse } from "../../data/party/user.response";
 import { AccessRoleRepository } from "../../repository/access.role.repository";
-import { createAccessRoleRepositoryFactory } from "../../adapter/authorization/access.role.repository.factory";
+import { createAccessRoleRepository } from "../../adapter/authorization/access.role.repository.factory";
 import { AccessRole } from "../../data/authorization/access.role";
 import { CredentialRepository } from "../../repository/credential.repository";
 import { createCredentialRepositoryFactory } from "../../adapter/authentication/credential.repository.factory";
@@ -32,7 +32,7 @@ export class UserOrchestrator {
     this.userRepository = createUserRepository();
     this.credentialRepository = createCredentialRepositoryFactory();
     this.partyAccessRoleRepository = createPartyAccessRoleRepositoryFactory();
-    this.accessRoleRepository = createAccessRoleRepositoryFactory();
+    this.accessRoleRepository = createAccessRoleRepository();
     this.sessionRepository = createSessionRepositoryFactory();
   }
 

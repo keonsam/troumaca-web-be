@@ -5,6 +5,9 @@ import { credentialConfirmations, credentials } from "../../db";
 import { Confirmation } from "../../data/authentication/confirmation";
 import { Observable ,  Observer, of } from "rxjs";
 import { switchMap, map } from "rxjs/operators";
+import {factory} from "../../ConfigLog4j";
+
+const log = factory.getLogger("authentication.ConfirmationRepositoryNeDbAdapter");
 
 export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository {
 
@@ -32,31 +35,31 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
   }
 
   confirmCode(confirmationId: string, credentialId: string, confirmation: Confirmation , options?: any): Observable<Confirmation> {
-      return this.verifyCode(confirmationId, confirmation.code)
-          .pipe(switchMap(confirmation => {
-              console.log(confirmation);
-              if (!confirmation) {
-                  return of(confirmation);
+    return this.verifyCode(confirmationId, confirmation.code)
+      .pipe(switchMap(confirmation => {
+        log.debug("Confirmation: " + confirmation);
+        if (!confirmation) {
+          return of(confirmation);
+        } else {
+          return this.updateConfirmationStatus(credentialId, "Confirmed")
+            .pipe(switchMap( numReplaced => {
+              log.debug("Number update: " + numReplaced);
+              if (!numReplaced) {
+                return of(undefined);
               } else {
-                  return this.updateConfirmationStatus(credentialId, "Confirmed")
-                      .pipe(switchMap( numReplaced => {
-                          console.log(numReplaced);
-                         if (!numReplaced) {
-                             return of(undefined);
-                         } else {
-                             return this.updateCredentialStatusById(credentialId, "Confirmed")
-                                 .pipe(map( numReplaced1 => {
-                                     console.log(numReplaced1);
-                                     if (!numReplaced1) {
-                                       return undefined;
-                                     } else {
-                                       return confirmation;
-                                     }
-                                 }));
-                         }
-                      }));
+                return this.updateCredentialStatusById(credentialId, "Confirmed")
+                .pipe(map( numReplaced1 => {
+                 log.debug("Number update: " + numReplaced);
+                   if (!numReplaced1) {
+                     return undefined;
+                   } else {
+                     return confirmation;
+                   }
+                }));
               }
-          }));
+            }));
+        }
+      }));
   }
 
   // getCredentialConfirmationById(credentialConfirmationId:string):Observable<CredentialConfirmation> {
@@ -125,7 +128,6 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
         return Observable.create(function (observer: Observer<Confirmation>) {
             credentialConfirmations.insert(confirmation.toJson(), function (err: any, doc: any) {
                 if (!err) {
-                    console.log(doc);
                     observer.next(doc);
                 } else {
                     observer.error(err);

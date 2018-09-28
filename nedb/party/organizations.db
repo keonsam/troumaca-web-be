@@ -1,1 +1,20 @@
+{"partyId":"3b43a146-c98e-4733-8691-ce98ca93046f","purpose":"Testing","name":"throw4 Co","description":"","_id":"4sdb4ZsLIXyrJYZQ"}
+{"purpose":"testing","name":"profile15","description":"","partyId":"c0703a0f-3c54-47d5-841a-dbb73038049b","_id":"8QRCj9xuIUpGCejk"}
+{"name":"My Company","purpose":"The Big Bad Company","description":"In LA","partyId":"1207702b-fa59-442a-bc63-8552fcb1f979","version":"7c61bd84-744b-4822-9c54-101354c4c0f4","tenantPartyId":"034f05b8-a5c6-4e2d-b9a6-5a7cacf087b8","modifiedOn":{"$$date":1538027585622},"_id":"GHj9NnAyJgwjOrK9"}
+{"name":"My Company","purpose":"The Big Bad Company","description":"In LA","partyId":"2dada2c8-7d4f-40cd-b21b-f35f22c972d1","_id":"KgcH2RFD2ErkaD2B"}
+{"name":"My Company","purpose":"The Big Bad Company","description":"In LA","partyId":"f455d3ee-e11d-48bd-a507-8bdcecf8f1e3","version":"80467aa0-79b6-4fe9-8916-045893c9f327","tenantPartyId":"798cce25-120d-4d04-b5eb-80f793fa1b82","modifiedOn":{"$$date":1538027429040},"_id":"RT8y7HtaURwbyoK9"}
+{"name":"My Company","purpose":"The Big Bad Company","description":"In LA","partyId":"3bbe4745-e5e7-48b8-89e4-3ca382bf5250","version":"496d4f90-96db-4c7f-a006-3efee698b3ef","tenantPartyId":"51d47559-c4ce-43f5-bce4-efb1ba146fe1","modifiedOn":{"$$date":1538027850594},"_id":"XhqQXw2qnFwT2sKN"}
+{"name":"My Company","purpose":"The Big Bad Company","description":"In LA","partyId":"6565b088-492c-4d7d-8610-18c79549fffb","_id":"ZaJiwDVs4KycASuj"}
+{"partyId":"4beb1e18-8e3f-410f-94bc-6d59800164d8","organizationId":"230b6f2d-eb6a-43f7-b2bf-a14cf94ca17a","status":"pending entry to organization","_id":"bpmBqae3PUXwnUwJ"}
+{"partyId":"230b6f2d-eb6a-43f7-b2bf-a14cf94ca17a","purpose":"testing","name":"Test2 Org","description":"","_id":"cLtV0fU5jnjLs5SJ"}
+{"name":"My Company","purpose":"The Big Bad Company","description":"In LA","partyId":"c011ff7c-df17-489e-906c-39419340965e","version":"139b4538-87df-4f18-99a0-a61da022c8d3","tenantPartyId":"cf598079-73f3-4d1f-8c8b-6cbe64b546a6","modifiedOn":{"$$date":1538027861097},"_id":"gzXK1Fhi66VjvGMS"}
+{"purpose":"testing","name":"profile14","description":"","partyId":"23892fcd-80c0-43ed-8239-cabfe32a7a7a","_id":"hNgWv6MvLlAp9iga"}
+{"purpose":"Asset Management","name":"Troumaca Corp","description":"Programming test","partyId":"6c1fd0df-5ba9-4e95-99a1-5f507dc2b363","_id":"krZCTQI6W1OgXIxb"}
+{"name":"My Company","purpose":"The Big Bad Company","description":"In LA","partyId":"9a251161-1f71-47fa-82dd-ebaa272e4cfd","version":"968a122f-6c63-4497-9407-f4e1ea5e3182","tenantPartyId":"85e129ca-6be6-4784-b89e-4fae5f8135b4","modifiedOn":{"$$date":1538027893865},"_id":"kxTTrzBNDBCnUvsa"}
+{"name":"My Company","purpose":"The Big Bad Company","description":"In LA","partyId":"6f6756c6-dd3f-4623-bb6a-d10b3aaa2f06","version":"bd5d43bd-5ae0-46d3-bad9-052b1c27bf3c","tenantPartyId":"72830b06-8fee-4607-9125-ffce53db37d0","modifiedOn":{"$$date":1538027366468},"_id":"lxVxZp64NnLLUN7A"}
+{"name":"My Company","purpose":"The Big Bad Company","description":"In LA","partyId":"d82227d4-51cd-4c22-9ea0-05f75297b5d0","_id":"nCunHNUV7msCU82f"}
+{"name":"My Company","purpose":"The Big Bad Company","description":"In LA","partyId":"02e9f05a-c137-4f44-814a-3b3126283c5a","_id":"oQ3rZ4S69sqEwWYu"}
+{"name":"My Company","purpose":"The Big Bad Company","description":"In LA","partyId":"73c39559-cf24-42dc-8191-387a16cdd904","version":"d160ebf7-c0c6-4661-bc75-8d6af32ea5de","tenantPartyId":"403c3343-6d34-4eab-ab46-a1022633f1c7","modifiedOn":{"$$date":1538028131114},"_id":"pcrsmSIR0RpIHKer"}
+{"name":"My Company","purpose":"The Big Bad Company","description":"In LA","partyId":"172e529b-faca-4f25-95f4-d7f47f92f273","version":"35ad8778-7ac1-4239-a9a0-7b49d7e5a126","tenantPartyId":"ac657f5c-657a-4a4d-b10b-709760d9a60b","modifiedOn":{"$$date":1538027830703},"_id":"pyMu8sOixXeeS53d"}
+{"name":"My Company","purpose":"The Big Bad Company","description":"In LA","partyId":"6d46f5c0-7267-45d8-a244-d507c1e32b52","_id":"vV4cEncCpZI38hiz"}
 {"$$indexCreated":{"fieldName":"partyId","unique":true,"sparse":false}}

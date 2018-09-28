@@ -15,67 +15,64 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
   }
 
   isValidPassword(password: string, options?: any): Observable<boolean> {
-      let uri: string = properties.get("credential.host.port") as string;
+    let uri: string = properties.get("credential.host.port") as string;
 
-      const headerMap = jsonRequestHeaderMap(options ? options : {});
+    const headerMap = jsonRequestHeaderMap(options ? options : {});
 
-      // let headers:any = strMapToJson(headerMap);
-      const json = {
-          password: password
-      };
+    // let headers:any = strMapToJson(headerMap);
+    const json = {
+        password: password
+    };
 
-      uri = uri + "/authentication/credentials/validate-password";
+    uri = uri + "/authentication/credentials/validate-password";
 
-      const requestOptions: any = postJsonOptions(uri, headerMap, json);
+    const requestOptions: any = postJsonOptions(uri, headerMap, json);
 
-      return Observable.create(function (observer: Observer<boolean>) {
-          request(requestOptions, function (error: any, response: any, body: any) {
-              try {
-                  if (response && response.statusCode != 200) {
-                      observer.error(error);
-                      observer.complete();
-                  } else {
-                      observer.next(body["valid"]);
-                      observer.complete();
-                  }
-              } catch (e) {
-                  observer.error(new Error(e.message));
-                  observer.complete();
-              }
-          });
+    return Observable.create(function (observer: Observer<boolean>) {
+      request(requestOptions, function (error: any, response: any, body: any) {
+        try {
+          if (response && response.statusCode != 200) {
+            observer.error(error);
+          } else {
+            observer.next(body["valid"]);
+          }
+          observer.complete();
+        } catch (e) {
+          observer.error(new Error(e.message));
+          observer.complete();
+        }
       });
+    });
   }
 
   isValidUsername(username: string, partyId: string, options?: any): Observable<boolean> {
-      let uri: string = properties.get("credential.host.port") as string;
+    let uri: string = properties.get("credential.host.port") as string;
 
+    const headerMap = jsonRequestHeaderMap(options ? options : {});
 
-      const headerMap = jsonRequestHeaderMap(options ? options : {});
+    // let headers:any = strMapToJson(headerMap);
+    const json = {username: username};
 
-      // let headers:any = strMapToJson(headerMap);
-      const json = {username: username};
+    uri = uri + "/authentication/credentials/validate-username";
 
-      uri = uri + "/authentication/credentials/validate-username";
+    const requestOptions: any = postJsonOptions(uri, headerMap, json);
 
-      const requestOptions: any = postJsonOptions(uri, headerMap, json);
-
-      return Observable.create(function (observer: Observer<boolean>) {
-          request(requestOptions, function (error: any, response: any, body: any) {
-              try {
-                  if (response && response.statusCode != 200) {
-                      observer.error(body);
-                      observer.complete();
-                  } else {
-                      // let vp:boolean = plainToClass(Boolean, body["valid"] as Object);
-                      observer.next(body["valid"]);
-                      observer.complete();
-                  }
-              } catch (e) {
-                  observer.error(new Error(e.message));
-                  observer.complete();
-              }
-          });
+    return Observable.create(function (observer: Observer<boolean>) {
+      request(requestOptions, function (error: any, response: any, body: any) {
+        try {
+          if (response && response.statusCode != 200) {
+            observer.error(error);
+          } else {
+            // let vp:boolean = plainToClass(Boolean, body["valid"] as Object);
+            observer.next(body["valid"]);
+          }
+          observer.complete();
+        } catch (e) {
+          observer.error(new Error(e.message));
+          observer.complete();
+        }
       });
+    });
   }
 
   addCredential(credential: Credential, options?: any): Observable<CreatedCredential> {
@@ -106,40 +103,40 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
   }
 
   authenticate(credential: Credential, options: any): Observable<AuthenticatedCredential> {
-      const uri: string = properties.get("credential.host.port") as string;
+    const uri: string = properties.get("credential.host.port") as string;
 
-      const headerMap = jsonRequestHeaderMap(options ? options : {});
+    const headerMap = jsonRequestHeaderMap(options ? options : {});
 
-      // let headers:any = strMapToJson(headerMap);
-      const json = {
-          username: credential.username,
-          password: credential.password
-      };
+    // let headers:any = strMapToJson(headerMap);
+    const json = {
+        username: credential.username,
+        password: credential.password
+    };
 
-      const uriAndPath: string = uri + "/authentication/authenticate";
+    const uriAndPath: string = uri + "/authentication/authenticate";
 
-      const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
+    const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
 
-      return Observable.create(function (observer: Observer<number>) {
-          request(requestOptions, function (error: any, response: any, body: any) {
-              try {
-                  if (error) {
-                      observer.error(error);
-                      observer.complete();
-                  } else if (response && response.statusCode != 200) {
-                      observer.error(body);
-                      observer.complete();
-                  } else {
-                      // let vp:boolean = plainToClass(Boolean, body["valid"] as Object);
-                      observer.next(body);
-                      observer.complete();
-                  }
-              } catch (e) {
-                  observer.error(new Error(e.message));
-                  observer.complete();
-              }
-          });
+    return Observable.create(function (observer: Observer<number>) {
+      request(requestOptions, function (error: any, response: any, body: any) {
+        try {
+            if (error) {
+              observer.error(error);
+              observer.complete();
+            } else if (response && response.statusCode != 200) {
+              observer.error(body);
+              observer.complete();
+            } else {
+              // let vp:boolean = plainToClass(Boolean, body["valid"] as Object);
+              observer.next(body);
+              observer.complete();
+            }
+        } catch (e) {
+          observer.error(new Error(e.message));
+          observer.complete();
+        }
       });
+    });
   }
 
   updateCredentialStatusById(credentialId: string, status: string): Observable<number> {

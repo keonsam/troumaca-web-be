@@ -18,7 +18,6 @@ export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository
 
     const headerMap = jsonRequestHeaderMap(options ? options : {});
 
-    // let headers:any = strMapToJson(headerMap);
     const json = confirmation;
 
     const uriAndPath: string = uri + "/authentication/confirmations/" + confirmationId + "/credentials/" + credentialId;
@@ -27,16 +26,13 @@ export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository
 
     return Observable.create(function (observer: Observer<Confirmation>) {
       request(requestOptions, function (error: any, response: any, body: any) {
-        console.log(body);
         try {
           if (response && response.statusCode != 200) {
             observer.error(body);
-            observer.complete();
           } else {
-            // let vp:boolean = plainToClass(Boolean, body["valid"] as Object);
             observer.next(body["confirmation"]);
-            observer.complete();
           }
+          observer.complete();
         } catch (e) {
           observer.error(new Error(e.message));
           observer.complete();

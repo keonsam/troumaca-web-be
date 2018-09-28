@@ -1,5 +1,5 @@
 import { AccessRoleRepository } from "../../repository/access.role.repository";
-import { createAccessRoleRepositoryFactory } from "../../adapter/authorization/access.role.repository.factory";
+import { createAccessRoleRepository} from "../../adapter/authorization/access.role.repository.factory";
 import { Observable, of } from "rxjs";
 import { switchMap, map } from "rxjs/operators";
 import { shapeAccessRolesResponse } from "./access.role.response.shaper";
@@ -24,7 +24,7 @@ export class AccessRoleOrchestrator {
   private accessRoleTypeRepository: AccessRoleTypeRepository;
 
   constructor() {
-    this.accessRoleRepository = createAccessRoleRepositoryFactory();
+    this.accessRoleRepository = createAccessRoleRepository();
     this.grantRepository = createGrantRepositoryFactory();
     this.partyAccessRoleRepository = createPartyAccessRoleRepositoryFactory();
     this.accessRoleTypeRepository = createAccessRoleTypeRepositoryFactory();

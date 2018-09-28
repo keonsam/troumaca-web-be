@@ -48,6 +48,11 @@ paths:
           schema:
             type: "object"
             $ref: "#/definitions/ValidatedUsername"
+        400:
+          description: "Username can not be empty"
+          schema:
+            type: "object"
+            $ref: '#/definitions/Message'
         500:
           description: "server error occurred"
 
@@ -79,6 +84,11 @@ paths:
           schema:
             type: "object"
             $ref: "#/definitions/ValidatedPassword"
+        400:
+          description: "Password can not be empty"
+          schema:
+            type: "object"
+            $ref: '#/definitions/Message'
         500:
           description: "server error occurred"
 
@@ -111,10 +121,13 @@ paths:
             type: "object"
             $ref: "#/definitions/Confirmation"
         400:
-          description: "failed operation"
+          description: "Bad Request"
+        409:
+          description: "Conflict"
         500:
-          description: "server error occurred"
-    put:
+          description: "Internal Server Error"
+
+    put: # Todo: Verify
       tags:
       - "Credential"
       summary: "Update credential"
@@ -142,9 +155,9 @@ paths:
             type: "object"
             $ref: "#/definitions/Credential"
         500:
-          description: "server error occurred"
+          description: "Internal Server Error"
 
-    delete:
+    delete: # Todo: Verify
       tags:
       - "Credential"
       summary: "Update credential"
@@ -172,9 +185,9 @@ paths:
             type: "object"
             $ref: "#/definitions/DeletedObject"
         500:
-          description: "server error occurred"
+          description: "Internal Server Error"
 
-  /authentication/conformation/confirmation-code:
+  /authentication/credentials/confirmations/confirm-username:
     post:
       tags:
       - "Confirmation"
@@ -201,13 +214,13 @@ paths:
           description: "successful operation"
           schema:
             type: "object"
-            $ref: "#/definitions/ValidatedConfirmCode"
+            $ref: "#/definitions/Confirmation"
         404:
           description: "No confirmation found for credential [credentialId]"
         500:
           description: "server error occurred"
 
-  /parties/organizations/profiles:
+  /profiles/organizations:
     post:
       tags:
       - "Profile"
@@ -224,19 +237,19 @@ paths:
         description: "Organization profile object"
         schema:
           type: "object"
-          $ref: "#/definitions/CreateOrganizationProfile"
+          $ref: "#/definitions/OrganizationProfile"
       - name: "correlationId"
         in: "header"
         required: true
         type: "string"
       responses:
         200:
-          description: "successful operation"
+          description: "Successful operation"
           schema:
             type: "object"
             $ref: "#/definitions/OrganizationProfile"
         500:
-          description: "server error occurred"
+          description: "Internal Server Error"
 
     put:
       tags:
@@ -328,7 +341,7 @@ paths:
         500:
           description: "server error occurred"
 
-  /parties/persons/profiles:
+  /profiles/persons:
     post:
       tags:
       - "Profile"
@@ -692,6 +705,14 @@ securityDefinitions:
     in: "header"
 
 definitions:
+  Message:
+    type: "object"
+    required:
+      - "nessage"
+    properties:
+      message:
+        type: "string"
+
   CreateCredential:
     type: "object"
     required:
@@ -768,41 +789,30 @@ definitions:
   ValidateConfirmCode:
     type: "object"
     required:
-    - "credentialId"
     - "code"
-    - "partyId"
+    - "confirmationId"
+    - "credentialId"
     properties:
-      credentialId:
-        type: "string"
       code:
         type: "string"
-      partyId:
+      confirmationId:
+        type: "string"
+      credentialId:
         type: "string"
 
-  ValidatedConfirmCode:
-    type: "object"
-    required:
-    - "name"
-    - "valid"
-    properties:
-      name:
-        type: "string"
-      valid:
-        type: "boolean"
-
-  CreateOrganizationProfile:
-    type: "object"
-    required:
-    - "organization"
-    - "roles"
-    properties:
-      organization:
-        type: "object"
-        $ref: "#/definitions/Organization"
-      roles:
-        type: "array"
-        items:
-          $ref: "#/definitions/OrganizationProfile"
+#  CreateOrganizationProfile:
+#    type: "object"
+#    required:
+#    - "organization"
+#    - "roles"
+#    properties:
+#      organization:
+#        type: "object"
+#        $ref: "#/definitions/Organization"
+#      roles:
+#        type: "array"
+#        items:
+#          $ref: "#/definitions/OrganizationProfile"
 
   OrganizationProfile:
     type: "object"
