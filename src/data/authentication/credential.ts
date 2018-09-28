@@ -1,11 +1,26 @@
+import {JsonProperty} from "json-typescript-mapper";
+
 export class Credential {
 
+  @JsonProperty('partyId')
   private _partyId: string;
+
+  @JsonProperty('credentialId')
   private _credentialId: string;
+
+  @JsonProperty('username')
   private _username: string;
+
+  @JsonProperty('password')
   private _password: string;
+
+  @JsonProperty('status')
   private _status: string;
+
+  @JsonProperty('modifiedOn')
   private _modifiedOn: Date;
+
+  @JsonProperty('createdOn')
   private _createdOn: Date;
 
   get partyId(): string {

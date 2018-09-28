@@ -21,4 +21,5 @@ mocha --grep create-credential
 mocha --grep validate-username-email
 mocha --recursive --grep who-create
 mocha --recursive --grep validate-email-username
+mocha --timeout 5000 --recursive --grep create-credential
  

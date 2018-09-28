@@ -3,7 +3,7 @@ import { PersonRepository } from "../../../repository/person.repository";
 import {Person} from "../../../data/party/person";
 import {Observable} from "rxjs";
 
-export class ReadPersonProfileOrchestrator {
+export class PersonProfileOrchestrator {
 
   private personRepository: PersonRepository;
 

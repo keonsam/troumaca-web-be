@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { CreatePersonProfileOrchestrator } from "./create.person.profile.orchestrator";
-import { shapePersonResponse2 } from "./person.profile.response.shaper";
+import { PersonProfileOrchestrator } from "./person.profile.orchestrator";
+import { shapePersonResponse2 } from "../person.profile.response.shaper";
 
-const personProfileOrchestrator: CreatePersonProfileOrchestrator = new CreatePersonProfileOrchestrator();
+const personProfileOrchestrator: PersonProfileOrchestrator = new PersonProfileOrchestrator();
 
 export let findPerson = (req: Request, res: Response) => {
   const searchStr: string =  req.query.q;

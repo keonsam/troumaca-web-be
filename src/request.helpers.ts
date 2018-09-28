@@ -1,25 +1,20 @@
-import { CoreOptions } from "request";
+// import { CoreOptions } from "request";
 
 export function jsonRequestHeaderMap(options: any) {
-  // let headerMap = new Map();
-  // headerMap.set("Content-Type", "application/json");
-  // if (!options) {
-  //   return headerMap;
-  // }
-  // if (options.correlationId) {
-  //   headerMap.set("correlationId", options.correlationId);
-  // } else if (options.correlationid) {
-  //   headerMap.set("correlationId", options.correlationid);
-  // }
+
+  let correlationId = "";
+  if (options.correlationId) {
+    correlationId = options.correlationId
+  } else if (options.correlationid) {
+    correlationId = options.correlationid
+  }
+
   return {
     "Content-Type": "application/json",
-    "correlationId": options.correlationId,
-    "sourceHostName": "",
-    "sourceHostAddress": "",
+    "correlationId": correlationId,
     "sourcePartyId" : "",
-    "sourceSystemHost": options.sourceSystemHost,
-    "sourceSystemName": "Troumaca"
   };
+
 }
 
 export function postJsonOptions(uri: any, headers: any, json: any) {

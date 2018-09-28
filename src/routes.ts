@@ -31,6 +31,9 @@ import * as organizationController from "./party/organization/organization.contr
 import * as subscriptionController from "./subscription/subscription.controller";
 import * as billingController from "./billing/billing.controller";
 import * as depreciationController from "./depreciation/depreciation.controller";
+import * as organizationProfileController from "./profile/organization/create/organization.profile.controller";
+import * as personProfileController from "./profile/person/create/person.profile.controller";
+
 
 import checkSession from "./middleware/check-session";
 
@@ -172,15 +175,17 @@ router.post("/validate-username", credentialController.isValidUsername);
 router.post("/validate-password", credentialController.isValidPassword);
 router.post("/authenticate", credentialController.authenticate);
 
-router.post("/authentication/validate-password", credentialController.isValidPassword);
-router.post("/authentication/validate-username", credentialController.isValidUsername);
+router.post("/authentication/credentials/validate-password", credentialController.isValidPassword);
+router.post("/authentication/credentials/validate-username", credentialController.isValidUsername);
 router.post("/authentication/credentials", credentialController.addCredential);
 router.post("/authentication/authenticate", credentialController.authenticate);
 
 // CONFIRMATION
 router.get("/send-confirmation-codes/:credentialId/:confirmationId", confirmationController.resendConfirmCode);
 router.post("/verify-credentials-confirmations", confirmationController.confirmCode);
-router.post("/authentication/confirmations/{confirmationId}/credentials/{credentialId}", confirmationController.confirmCode);
+
+router.post("/authentication/credentials/confirmations/confirm-username", confirmationController.confirmCode);
+router.post("/authentication/credentials/{credentialId}/confirmations/{confirmationId}/confirm-username", confirmationController.confirmCode);
 
 
 // Todo: Check into why this is needed
@@ -192,6 +197,11 @@ router.post("/authentication/confirmations/{confirmationId}/credentials/{credent
 // router.delete("/credentials/:credentialId", credentialController.deleteCredential);
 // router.get("/send-confirmation-codes/:confirmationId", confirmationController.sendPhoneVerificationCode);
 // router.get("/get-confirmations-username/:credentialConfirmationId", confirmationController.getConfirmationsUsername);
+
+// PROFILES
+router.post("/profiles/organizations", organizationProfileController.createProfileOrganization);
+router.post("/profiles/persons", personProfileController.createPersonProfile);
+
 
 // SESSION
 router.get("/sessions/is-valid-session", checkSession, sessionController.isValidSession);
