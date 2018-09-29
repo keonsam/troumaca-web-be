@@ -4,7 +4,7 @@ import {createAccessRoleRepository} from "../../../adapter/authorization/access.
 import {OrganizationRepository} from "../../../repository/organization.repository";
 import {Organization} from "../../../data/party/organization";
 import {Observable, zip, forkJoin} from "rxjs";
-// import {map} from "rxjs/operators";
+import {map} from "rxjs/operators";
 import {OrganizationProfile} from "../../../data/profile/organization.profile";
 import {AccessRoleRepository} from "../../../repository/access.role.repository";
 import {Photo} from "../../../data/photo/photo";
@@ -37,10 +37,10 @@ export class OrganizationProfileOrchestrator {
 
 
     //forkJoin([organizationObservable, addAccessRolesObservable, personObservable]).map(results => {
-    forkJoin([organizationObservable, addAccessRolesObservable]).map(results => {
+    forkJoin([organizationObservable, addAccessRolesObservable]).pipe(map(results => {
       let length1 = results.length;
       console.log(length1);
-    });
+    }));
 
     //let observable = zip(organizationObservable, addAccessRolesObservable, personObservable);
 
