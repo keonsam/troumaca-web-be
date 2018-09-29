@@ -236,6 +236,9 @@ router.put( "/billings/credit-cards/:creditCardId", checkSession, billingControl
 router.delete( "/billings/credit-cards/:creditCardId", checkSession, billingController.deleteCreditCard);
 
 
+// PROFILES
+router.post("/profiles/organizations", organizationProfileController.createProfileOrganization);
+router.post("/profiles/persons", personProfileController.createPersonProfile);
 
 // DEPRECIATION
 

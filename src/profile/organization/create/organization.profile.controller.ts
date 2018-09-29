@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { OrganizationProfileOrchestrator } from "./organization.profile.orchestrator";
 // import { shapeOrganizationResponse2 } from "../organization.profile.response.shaper";
+import { map } from "rxjs/operators";
 
 const organizationProfileOrchestrator: OrganizationProfileOrchestrator = new OrganizationProfileOrchestrator();
 
@@ -9,16 +10,16 @@ export let createProfileOrganization = (req: Request, res: Response) => {
   const headers = req.headers;
   const correlationId = headers.correlationid;
 
-  let options = {
+  const options = {
     correlationId: correlationId
   };
 
   organizationProfileOrchestrator.createProfileOrganization(organizationProfile, options)
-  .map(value => {
+  .pipe( map(value => {
     // TODO: change to new method
     // shapeOrganizationResponse2("organizations", value);
-    return value
-  }).subscribe(org => {
+    return value;
+  })).subscribe(org => {
     const body = JSON.stringify(org);
     res.setHeader("content-type", "application/json");
     res.status(200);
@@ -39,17 +40,17 @@ export let createProfileOrganization = (req: Request, res: Response) => {
 };
 
 export let createProfilePhoto = (req: Request, res: Response) => {
-  let organizationProfile = req.body;
+  const organizationProfile = req.body;
 
-  let options = {
-    correlationId:req.headers.correlationId
+  const options = {
+    correlationId: req.headers.correlationId
   };
 
   organizationProfileOrchestrator.createProfilePhoto(organizationProfile, options)
-  .map(value => {
+  .pipe( map(value => {
       // shapeOrganizationResponse2("organizations", value); // TODO: change to new method
-      return null
-  }).subscribe(organizations => {
+      return null;
+  })).subscribe(organizations => {
     const body = JSON.stringify(organizations);
     res.status(200);
     res.send(body);
@@ -62,13 +63,13 @@ export let createProfilePhoto = (req: Request, res: Response) => {
 
 export let createProfile = (req: Request, res: Response) => {
 
-  let organizationProfile = req.body;
+  const organizationProfile = req.body;
 
   organizationProfileOrchestrator.createProfile(organizationProfile)
-    .map(value => {
+    .pipe(map(value => {
       // shapeOrganizationResponse2("organizations", value); // TODO: change to new method
       return null
-    }).subscribe(organizations => {
+    })).subscribe(organizations => {
       const body = JSON.stringify(organizations);
       res.send(body);
     }, error => {
