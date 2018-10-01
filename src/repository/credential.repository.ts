@@ -2,6 +2,7 @@ import { Credential } from "../data/authentication/credential";
 import { AuthenticatedCredential } from "../data/authentication/authenticated.credential";
 import { CreatedCredential } from "../data/authentication/created.credential";
 import { Observable } from "rxjs";
+import {CreateCredential} from "../data/authentication/create.credential";
 
 export interface CredentialRepository {
 
@@ -9,7 +10,7 @@ export interface CredentialRepository {
 
   isValidPassword(password: string): Observable<boolean>;
 
-  addCredential(credential: Credential, options?: any): Observable<CreatedCredential>;
+  addCredential(createCredential: CreateCredential, options?: any): Observable<CreatedCredential>;
 
   authenticate(credential: Credential, options: any): Observable<AuthenticatedCredential>;
 
