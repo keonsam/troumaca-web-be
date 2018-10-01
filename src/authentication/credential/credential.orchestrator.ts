@@ -9,15 +9,21 @@ import { AuthenticatedCredential } from "../../data/authentication/authenticated
 import { CreatedCredential } from "../../data/authentication/created.credential";
 import { Observable, of } from "rxjs";
 import { switchMap, map } from "rxjs/operators";
+import {PersonRepository} from "../../repository/person.repository";
+import {createPersonRepository} from "../../adapter/party/person.repository.factory";
+import {Person} from "../../data/party/person";
+import {CreateCredential} from "../../data/authentication/create.credential";
 
 export class CredentialOrchestrator {
 
   private credentialRepository: CredentialRepository;
   private sessionRepository: SessionRepository;
+  private personRepository: PersonRepository;
 
   constructor() {
     this.sessionRepository = createSessionRepositoryFactory();
     this.credentialRepository = createCredentialRepositoryFactory();
+    this.personRepository = createPersonRepository()
   }
 
   isValidUsername(username: string, partyId: string): Observable<boolean> {
@@ -29,8 +35,20 @@ export class CredentialOrchestrator {
     .isValidPassword(credential.password);
   }
 
-  addCredential(credential: Credential, options?: any): Observable<CreatedCredential> {
-      return this.credentialRepository.addCredential(credential, options);
+  addCredential(createCredential: CreateCredential, options?: any): Observable<CreatedCredential> {
+    return this.credentialRepository
+    .addCredential(createCredential, options)
+    .pipe(switchMap((createdCredential:CreatedCredential) => {
+      let person:Person = new Person();
+      person.partyId = createdCredential.credential.partyId;
+      person.firstName = createdCredential.firstName;
+      person.lastName = createdCredential.lastName;
+      return this.personRepository
+        .addPerson(person, options)
+        .pipe(map((value => {
+          return createdCredential;
+        })));
+    }));
   }
 
   authenticate(credential: Credential, options?: any): Observable<AuthenticatedCredential> {

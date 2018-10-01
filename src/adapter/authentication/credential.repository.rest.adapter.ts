@@ -8,6 +8,7 @@ import { properties } from "../../properties.helpers";
 import { CredentialConfirmation } from "../../data/authentication/credential.confirmation";
 import { AuthenticatedCredential } from "../../data/authentication/authenticated.credential";
 import { CreatedCredential } from "../../data/authentication/created.credential";
+import {CreateCredential} from "../../data/authentication/create.credential";
 
 export class CredentialRepositoryRestAdapter implements CredentialRepository {
 
@@ -75,18 +76,18 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
     });
   }
 
-  addCredential(credential: Credential, options?: any): Observable<CreatedCredential> {
+  addCredential(createCredential: CreateCredential, options?: any): Observable<CreatedCredential> {
     const uri: string = properties.get("credential.host.port") as string;
 
     const headerMap = jsonRequestHeaderMap(options ? options : {});
     // let headers:any = strMapToJson(headerMap);
-    const credentialJson = classToPlain(credential);
+    const credentialJson = classToPlain(createCredential);
 
     const uriAndPath: string = uri + "/authentication/credentials";
 
     const requestOptions: any = postJsonOptions(uriAndPath, headerMap, credentialJson);
 
-    return Observable.create(function (observer: Observer<CredentialConfirmation>) {
+    return Observable.create(function (observer: Observer<CreatedCredential>) {
       request(requestOptions, function (error: any, response: any, body: any) {
         if (error) {
           observer.error(error);

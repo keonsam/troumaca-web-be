@@ -60,22 +60,22 @@ export let addCredential = (req: Request, res: Response) => {
       return;
   }
 
-  const credential = req.body;
-  if (!credential) {
+  const createCredential = req.body;
+  if (!createCredential) {
       res.status(400);
       res.setHeader("content-type", "application/json");
       res.send(JSON.stringify({message: "No \"credential\" exists. Credential can not be empty."}));
       return;
   }
 
-  if (!credential.username || credential.username.length <= 0) {
+  if (!createCredential.username || createCredential.username.length <= 0) {
       res.status(400);
       res.setHeader("content-type", "application/json");
       res.send(JSON.stringify({message: "A \"username\" is required."}));
       return;
   }
 
-  if (!credential.password || credential.password.length <= 0) {
+  if (!createCredential.password || createCredential.password.length <= 0) {
       res.status(400);
       res.setHeader("content-type", "application/json");
       res.send(JSON.stringify({message: "A \"password\" is required."}));
@@ -86,7 +86,7 @@ export let addCredential = (req: Request, res: Response) => {
       correlationId: correlationId
   };
 
-  credentialOrchestrator.addCredential(credential, headerOptions)
+  credentialOrchestrator.addCredential(createCredential, headerOptions)
   .subscribe(createdCredential => {
       res.status(201);
       res.setHeader("content-type", "application/json");
