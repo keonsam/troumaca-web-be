@@ -12,16 +12,34 @@ export class PersonRestRepositoryAdapter implements PersonRepository {
 
     const headerMap = jsonRequestHeaderMap(options ? options : {});
 
-    const json = person;
+    const json = person.toJson();
 
     const uriAndPath: string = uri + "/parties/persons";
 
     const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
 
+    let isFailedRequest = function (response:any):boolean {
+      if (!response) {
+        return true;
+      }
+
+      if (!response.statusCode) {
+        return true;
+      }
+
+      return !response.statusCode.toString().trim().startsWith("2");
+    };
+
     return Observable.create(function (observer: Observer<Person>) {
       request(requestOptions, function (error: any, response: any, body: any) {
         try {
-          if (response && response.statusCode != 200) {
+          if (error) {
+            let errObj = new Error("Failure");
+            if (error.code) {
+              errObj.name = error.code;
+            }
+            observer.error(errObj);
+          } else if (isFailedRequest(response)) {
             observer.error(body);
           } else {
             observer.next(body);

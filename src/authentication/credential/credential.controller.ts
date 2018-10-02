@@ -92,10 +92,10 @@ export let addCredential = (req: Request, res: Response) => {
       res.setHeader("content-type", "application/json");
       res.send(JSON.stringify(createdCredential.confirmation));
   }, error => {
+    //console.log(error);
     res.status(!error.code ? 500 : error.code);
     let msg = !error.message ? "Internal Server Error" : error.message;
     res.send(JSON.stringify(msg));
-    console.log(error);
   });
 
 };
