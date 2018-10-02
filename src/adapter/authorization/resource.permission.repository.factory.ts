@@ -5,7 +5,7 @@ import { Observable ,  Observer, of } from "rxjs";
 import { RepositoryKind } from "../../repository.kind";
 import { generateUUID } from "../../uuid.generator";
 import { map, switchMap } from "rxjs/operators";
-import {Permission} from "../../data/authorization/permission";
+import { Permission } from "../../data/authorization/permission";
 
 class ResourcePermissionDBRepository implements ResourcePermissionRepository {
 

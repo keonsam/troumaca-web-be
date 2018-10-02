@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { PersonProfileOrchestrator } from "./person.profile.orchestrator";
 // import { shapePersonResponse2 } from "../person.profile.response.shaper";
+import { map } from "rxjs/operators";
 
 const personProfileOrchestrator: PersonProfileOrchestrator = new PersonProfileOrchestrator();
 
@@ -15,11 +16,11 @@ export let createPersonProfile = (req: Request, res: Response) => {
   };
 
   personProfileOrchestrator.createProfilePerson(personProfile, options)
-  .map(value => {
+  .pipe(map(value => {
     // TODO: change to new method
     // return shapePersonResponse2("persons", value);
     return value;
-  }).subscribe(persons => {
+  })).subscribe(persons => {
     const body = JSON.stringify(persons);
     res.setHeader("content-type", "application/json");
     res.status(200);
@@ -44,11 +45,11 @@ export let findPerson = (req: Request, res: Response) => {
   const pageSize: number = req.query.pageSize;
 
   personProfileOrchestrator.findPerson(searchStr, pageSize)
-  .map(value => {
+  .pipe(map(value => {
     // TODO: change to new method
     // return shapePersonResponse2("persons", value);
     return value;
-  }).subscribe(persons => {
+  })).subscribe(persons => {
     const body = JSON.stringify(persons);
     res.send(body);
   }, error => {

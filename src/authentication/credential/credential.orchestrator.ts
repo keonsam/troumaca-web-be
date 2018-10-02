@@ -4,7 +4,6 @@ import { CredentialRepository } from "../../repository/credential.repository";
 import { Session } from "../../data/session/session";
 import { createSessionRepositoryFactory } from "../../adapter/session/session.repository.factory";
 import { SessionRepository } from "../../repository/session.repository";
-import "rxjs/add/operator/map";
 import { AuthenticatedCredential } from "../../data/authentication/authenticated.credential";
 import { CreatedCredential } from "../../data/authentication/created.credential";
 import { Observable, of } from "rxjs";

@@ -45,7 +45,7 @@ export  let getUser = (req: Request, res: Response) => {
   const sessionId = req.cookies["sessionId"];
   userOrchestrator.getUser(partyId, sessionId)
     .subscribe(userResponse => {
-        if (userResponse) {
+        if (userResponse.user) {
             res.status(200);
             res.send(JSON.stringify(userResponse.toJson()));
         } else {

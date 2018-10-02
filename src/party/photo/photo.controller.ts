@@ -9,7 +9,7 @@ export let getPhotos = (req: Request, res: Response) => {
   orchestrator
     .getPhotos(sessionId, type)
     .subscribe(photo => {
-        if (photo) {
+        if (photo.partyId) {
             res.status(200);
             res.send(JSON.stringify(photo.toJson()));
         } else {
@@ -63,13 +63,4 @@ export let updatePhoto = (req: Request, res: Response) => {
         console.log(error);
     });
 };
-
-// export let deletePhoto = (req: Request, res: Response) => {
-//   let partyId = req.params.partyId;
-//   orchestrator
-//     .deletePhoto(partyId)
-//     .subscribe(numRemoved => {
-//       res.send(JSON.stringify(numRemoved));
-//     });
-// };
 

@@ -60,7 +60,7 @@ export class UserOrchestrator {
           return this.sessionRepository.getSessionById(sessionId)
               .pipe(switchMap(session => {
                   if (!session) {
-                      return of(undefined);
+                      return of(new UserResponse());
                   } else {
                       return this.getUserLocal(session.partyId);
                   }
@@ -104,12 +104,12 @@ export class UserOrchestrator {
                   return this.userRepository.saveUser(user)
                       .pipe( switchMap(user => {
                           if (!user) {
-                              return of(undefined);
+                              return of(new User());
                           } else {
                               return this.credentialRepository.updateCredentialStatusById(credentialId, "Confirmed")
                                   .pipe( map(numUpdated => {
                                       if (!numUpdated) {
-                                          return undefined;
+                                          return new User();
                                       } else {
                                           return user;
                                       }
@@ -124,18 +124,18 @@ export class UserOrchestrator {
           });
           return this.credentialRepository.addCredential(credential)
               .pipe(switchMap(credentialRes => {
-                  if (!credentialRes) return of(undefined);
+                  if (!credentialRes) return of(new User());
                   user.partyId = credentialRes.credential.partyId;
                   return this.userRepository.saveUser(user)
                       .pipe(switchMap(userRes => {
-                          if (!userRes) return of(undefined);
+                          if (!userRes) return of(new User());
                           if (!partyAccessRoles || partyAccessRoles.length < 1) return of(userRes);
                           partyAccessRoles.forEach(value => {
                               value.partyId = userRes.partyId;
                           });
                           return this.partyAccessRoleRepository.addPartyAccessRole(partyAccessRoles)
                               .pipe(map(partyAccessRolesRes => {
-                                  if (!partyAccessRolesRes) return undefined;
+                                  if (!partyAccessRolesRes) return new User();
                                   return userRes;
                               }));
                       }));
@@ -161,10 +161,10 @@ export class UserOrchestrator {
       user.username = undefined;
        return this.userRepository.updateUser(partyId, user)
          .pipe(switchMap(numUpdated => {
-           if (!numUpdated) return of(undefined);
+           if (!numUpdated) return of(0);
            return this.credentialRepository.updateUserCredential(partyId, credential)
                .pipe( switchMap( numUpdated2 => {
-                   if (!numUpdated2) return of(undefined);
+                   if (!numUpdated2) return of(0);
                    if (!partyAccessRoles || partyAccessRoles.length < 1) return of(1);
                        return this.partyAccessRoleRepository.deletePartyAccessRole(partyId)
                            .pipe(switchMap(numRemoved => {

@@ -1,4 +1,3 @@
-// import * as Rx from "rxjs";
 // import { ShipmentRepository } from "./shipment.repository";
 // import { Observable ,  Observer } from "rxjs";
 // import { RepositoryKind } from "../repository.kind";
@@ -13,7 +12,7 @@
 //
 //   saveShipment(shipment: Shipment): Observable<Shipment> {
 //     shipment.shipmentId = generateUUID();
-//     return Rx.Observable.create(function(observer: Observer<Shipment>) {
+//     return Observable.create(function(observer: Observer<Shipment>) {
 //       shipments.insert(shipment, function(err: any, doc: any) {
 //         if (err) {
 //           observer.error(err);
@@ -27,7 +26,7 @@
 //
 //   getShipments(pageNumber: number, pageSize: number, order: string): Observable<Shipment[]> {
 //     const localDefaultPageSize = this.defaultPageSize;
-//     return Rx.Observable.create(function (observer: Observer<Shipment[]>) {
+//     return Observable.create(function (observer: Observer<Shipment[]>) {
 //       const skip = calcSkip(pageNumber, pageSize, localDefaultPageSize);
 //       shipments.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
 //         if (!err) {
@@ -41,7 +40,7 @@
 //   }
 //
 //   getShipmentCount(): Observable<number> {
-//     return Rx.Observable.create(function (observer: Observer<number>) {
+//     return Observable.create(function (observer: Observer<number>) {
 //       shipments.count({}, function (err: any, count: number) {
 //         if (!err) {
 //           observer.next(count);
@@ -54,7 +53,7 @@
 //   }
 //
 //   getShipmentById(shipmentId: string): Observable<Shipment> {
-//     return Rx.Observable.create(function (observer: Observer<Shipment>) {
+//     return Observable.create(function (observer: Observer<Shipment>) {
 //       const query = {
 //         "shipmentId": shipmentId
 //       };
@@ -70,7 +69,7 @@
 //   }
 //
 //   updateShipment(shipmentId: string, shipment: Shipment): Observable<number> {
-//     return Rx.Observable.create(function (observer: Observer<number>) {
+//     return Observable.create(function (observer: Observer<number>) {
 //       const query = {
 //         "shipmentId": shipmentId
 //       };
@@ -86,7 +85,7 @@
 //   }
 //
 //   deleteShipment(shipmentId: string): Observable<number> {
-//     return Rx.Observable.create(function (observer: Observer<number>) {
+//     return Observable.create(function (observer: Observer<number>) {
 //       const query = {
 //         "shipmentId": shipmentId
 //       };
