@@ -39,7 +39,7 @@ export class CredentialOrchestrator {
     return this.credentialRepository
     .addCredential(createCredential, options)
     .pipe(switchMap((createdCredential:CreatedCredential) => {
-      let person:Person = new Person();
+      let person = new Person();
       person.partyId = createdCredential.credential.partyId;
       person.firstName = createdCredential.firstName;
       person.lastName = createdCredential.lastName;
