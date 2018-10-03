@@ -4,8 +4,6 @@ import { AuthenticatedCredential } from "../../data/authentication/authenticated
 
 const credentialOrchestrator: CredentialOrchestrator = new CredentialOrchestrator();
 
-// TODO: Consider removing
-// router.post("/validate-username", function (req, res, next) {
 export let isValidUsername = (req: Request, res: Response) => {
 
   const username = req.body.username;
@@ -60,22 +58,31 @@ export let addCredential = (req: Request, res: Response) => {
       return;
   }
 
-  const createCredential = req.body;
-  if (!createCredential) {
+  const credential = req.body.credential;
+  const user = req.body.user;
+
+  if (!credential) {
       res.status(400);
       res.setHeader("content-type", "application/json");
       res.send(JSON.stringify({message: "No \"credential\" exists. Credential can not be empty."}));
       return;
-  }
+  };
 
-  if (!createCredential.username || createCredential.username.length <= 0) {
+  if (!user) {
+      res.status(400);
+      res.setHeader("content-type", "application/json");
+      res.send(JSON.stringify({message: "No \"user\" exists. User can not be empty."}));
+      return;
+  };
+
+  if (!credential.username || credential.username.length <= 0) {
       res.status(400);
       res.setHeader("content-type", "application/json");
       res.send(JSON.stringify({message: "A \"username\" is required."}));
       return;
   }
 
-  if (!createCredential.password || createCredential.password.length <= 0) {
+  if (!credential.password || credential.password.length <= 0) {
       res.status(400);
       res.setHeader("content-type", "application/json");
       res.send(JSON.stringify({message: "A \"password\" is required."}));
@@ -86,16 +93,16 @@ export let addCredential = (req: Request, res: Response) => {
       correlationId: correlationId
   };
 
-  credentialOrchestrator.addCredential(createCredential, headerOptions)
-  .subscribe(createdCredential => {
+  credentialOrchestrator.addCredential(credential, user, headerOptions)
+  .subscribe(confirmation => {
       res.status(201);
       res.setHeader("content-type", "application/json");
-      res.send(JSON.stringify(createdCredential.confirmation));
+      res.send(JSON.stringify(confirmation));
   }, error => {
-    //console.log(error);
     res.status(!error.code ? 500 : error.code);
     let msg = !error.message ? "Internal Server Error" : error.message;
     res.send(JSON.stringify(msg));
+    console.log(error);
   });
 
 };

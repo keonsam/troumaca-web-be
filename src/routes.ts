@@ -52,12 +52,12 @@ router.post("/authentication/validate-username", credentialController.isValidUse
 router.post("/authentication/credentials", credentialController.addCredential);
 router.post("/authentication/authenticate", credentialController.authenticate);
 // confirmation
-router.get("/send-confirmation-codes/:credentialId/:confirmationId", confirmationController.resendConfirmCode);
-router.post("/verify-credentials-confirmations", confirmationController.confirmCode);
+router.get("/authentication/confirmations/send/:credentialId/:confirmationId", confirmationController.resendConfirmCode);
+router.post("/authentication/confirmations/verify", confirmationController.confirmCode);
 router.post("/authentication/confirmations/{confirmationId}/credentials/{credentialId}", confirmationController.confirmCode);
 // session
 router.get("/sessions/is-valid-session", sessionController.isValidSession);
-router.get("/partyId", checkSession, sessionController.getPartyId);
+router.get("/sessions/partyId", checkSession, sessionController.getPartyId);
 router.get("/sessions/log-out-user", checkSession, sessionController.handleSessionLogOut);
 // permissions
 router.get("/permissions", checkSession, permissionController.getPermissions);
@@ -202,13 +202,14 @@ router.delete("/users/:partyId", checkSession, userController.deleteUser);
 router.get("/organizations", checkSession, organizationController.getOrganizations);
 router.get("/organizations/:partyId", checkSession, organizationController.getOrganization);
 router.post("/organizations", checkSession, organizationController.saveOrganization);
+router.post("/organizations/profile", checkSession, organizationController.saveOrganizationCompany);
 router.put("/organizations/:partyId", checkSession, organizationController.updateOrganization);
 router.delete("/organizations/:partyId", checkSession, organizationController.deleteOrganization);
 router.get("/organizations", checkSession, organizationController.getOrganizations);
 router.get("/organizations/:partyId", checkSession, organizationController.getOrganization);
 router.get("/organizations-find", checkSession, organizationController.findOrganizations);
 router.post("/organizations", checkSession, organizationController.saveOrganization);
-router.post("/organizations-send-request", checkSession, organizationController.sendJoinRequest);
+router.post("/organizations/access-requests", checkSession, organizationController.saveAccessRequest);
 router.put("/organizations/:partyId", checkSession, organizationController.updateOrganization);
 router.delete("/organizations/:partyId", checkSession, organizationController.deleteOrganization);
 // photos

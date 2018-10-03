@@ -28,14 +28,14 @@ repository.type = 1
 host = localhost
 port = 8686
 host.port = http://localhost:8686
-repository.type = 2
+repository.type = 1
 
 
 [asset]
 host = localhost
 port = 8080
 host.port = http://localhost:8080
-repository.type = 2
+repository.type = 1
 
 
 [session]

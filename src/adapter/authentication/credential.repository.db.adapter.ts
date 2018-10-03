@@ -9,9 +9,8 @@ import { AuthenticatedCredential } from "../../data/authentication/authenticated
 import { Confirmation } from "../../data/authentication/confirmation";
 import { ConfirmationRepositoryNeDbAdapter } from "./confirmation.repository.db.adapter";
 import { CreatedCredential } from "../../data/authentication/created.credential";
-import { Observable ,  Observer, of } from "rxjs";
+import { Observable, Observer, of, throwError } from "rxjs";
 import { switchMap, map } from "rxjs/operators";
-import {CreateCredential} from "../../data/authentication/create.credential";
 
 export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
 
@@ -78,21 +77,24 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
 
   }
 
-  addCredential(createCredential: CreateCredential, options?: any): Observable<CreatedCredential> {
-    return this.addCredentialLocal(createCredential)
-      .pipe(switchMap((credential:Credential) => {
-        const confirmation: Confirmation = new Confirmation();
-
-        confirmation.credentialId = createCredential.credentialId;
-
-        return this.confirmationRepositoryNeDbAdapter.addConfirmation(confirmation)
-          .pipe(map((confirmation:Confirmation) => {
-            let createdCredential = new CreatedCredential();
-            createdCredential.credential = credential;
-            createdCredential.confirmation = confirmation;
-            return createdCredential
+  addCredential(credential: Credential, options?: any): Observable<CreatedCredential> {
+      return this.addCredentialLocal(credential)
+          .pipe(switchMap(credential => {
+              if (!credential) {
+                  return throwError(credential);
+              } else {
+                  const confirmation: Confirmation = new Confirmation();
+                  confirmation.credentialId = credential.credentialId;
+                  return this.confirmationRepositoryNeDbAdapter.addConfirmation(confirmation)
+                      .pipe(map(confirmation => {
+                          if (!confirmation) {
+                              throw confirmation;
+                          } else {
+                              return new CreatedCredential(credential, confirmation);
+                          }
+                      }));
+              }
           }));
-      }));
   }
 
   authenticate(credential: Credential, options?: any): Observable<AuthenticatedCredential> {
@@ -344,16 +346,16 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
       });
   }
 
-  addCredentialLocal(createCredential: CreateCredential): Observable<Credential> {
-    createCredential.credentialId = generateUUID();
-    createCredential.partyId = generateUUID();
-      if (!createCredential.status) {
-        createCredential.status = "New";
+  addCredentialLocal(credential: Credential): Observable<Credential> {
+      credential.credentialId = generateUUID();
+      credential.partyId = generateUUID();
+      if (!credential.status) {
+          credential.status = "New";
       }
       return Observable.create(function (observer: Observer<Credential>) {
-          credentials.insert(createCredential, function (err: any, doc: any) {
+          credentials.insert(credential, function (err: any, doc: any) {
               if (!err) {
-                  observer.next(doc);
+                  observer.next(credential);
               } else {
                   observer.error(err);
               }

@@ -5,24 +5,24 @@ import { Session } from "../../data/session/session";
 import { createSessionRepositoryFactory } from "../../adapter/session/session.repository.factory";
 import { SessionRepository } from "../../repository/session.repository";
 import { AuthenticatedCredential } from "../../data/authentication/authenticated.credential";
-import { CreatedCredential } from "../../data/authentication/created.credential";
-import { Observable, of } from "rxjs";
+import { Observable, of, throwError } from "rxjs";
 import { switchMap, map } from "rxjs/operators";
-import {PersonRepository} from "../../repository/person.repository";
-import {createPersonRepository} from "../../adapter/party/person.repository.factory";
-import {Person} from "../../data/party/person";
-import {CreateCredential} from "../../data/authentication/create.credential";
+import { User } from "../../data/party/user";
+import { UserRepository } from "../../repository/user.repository";
+import { createUserRepository } from "../../adapter/party/user.repository.factory";
+import { Confirmation } from "../../data/authentication/confirmation";
 
 export class CredentialOrchestrator {
 
   private credentialRepository: CredentialRepository;
   private sessionRepository: SessionRepository;
-  private personRepository: PersonRepository;
+  private userRepository: UserRepository;
+
 
   constructor() {
     this.sessionRepository = createSessionRepositoryFactory();
     this.credentialRepository = createCredentialRepositoryFactory();
-    this.personRepository = createPersonRepository()
+    this.userRepository = createUserRepository();
   }
 
   isValidUsername(username: string, partyId: string): Observable<boolean> {
@@ -34,20 +34,23 @@ export class CredentialOrchestrator {
     .isValidPassword(credential.password);
   }
 
-  addCredential(createCredential: CreateCredential, options?: any): Observable<CreatedCredential> {
-    return this.credentialRepository
-    .addCredential(createCredential, options)
-    .pipe(switchMap((createdCredential:CreatedCredential) => {
-      let person = new Person();
-      person.partyId = createdCredential.credential.partyId;
-      person.firstName = createdCredential.firstName;
-      person.lastName = createdCredential.lastName;
-      return this.personRepository
-        .addPerson(person, options)
-        .pipe(map((value => {
-          return createdCredential;
-        })));
-    }));
+  addCredential(credential: Credential, user: User, options?: any): Observable<Confirmation> {
+      return this.credentialRepository.addCredential(credential, options)
+          .pipe(switchMap(createdCredential => {
+              if (!createdCredential) {
+                  return throwError(createdCredential);
+              } else {
+                  user.partyId = createdCredential.credential.partyId;
+                  return this.userRepository.saveUser(user)
+                      .pipe(map( user => {
+                          if (!user) {
+                              throw user;
+                          } else {
+                              return createdCredential.confirmation;
+                          }
+                      }));
+              }
+          }));
   }
 
   authenticate(credential: Credential, options?: any): Observable<AuthenticatedCredential> {
@@ -92,29 +95,8 @@ export class CredentialOrchestrator {
           }));
     }
 
-    updateCredentialStatusById(credentialId: string, status: string): Observable<number> {
+  updateCredentialStatusById(credentialId: string, status: string): Observable<number> {
       return this.credentialRepository.updateCredentialStatusById(credentialId, status);
-    }
-
-        // forgotPassword(username:string):Observable<ValidateResponse> {
-  //   return this.credentialRepository
-  //   .getCredentialByUsername(username)
-  //   .map(credential => {
-  //     if(!credential) {
-  //       return new ValidateResponse(false);
-  //     } else {
-  //       return new ValidateResponse(true);
-  //     }
-  //   });
-  // };
-  //
-  //
-  // updateCredential (partyId:string, credential:Credential){
-  //   return this.credentialRepository.updateCredential(partyId, credential);
-  // }
-  //
-  // deleteCredential (credentialId:string, options?:any):Observable<number> {
-  //   return this.credentialRepository.deleteCredentialById(credentialId, options);
-  // }
+  }
 
 }
