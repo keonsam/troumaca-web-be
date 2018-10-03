@@ -10,6 +10,8 @@ describe('create-credential', function () {
   var time = new Date().getTime();
 
   var credential = {
+    firstName: "Bom",
+    lastName: "Bam",
     username: "tester1" +time+ "@shapestone.com",
     password: "Tester2@user"
   };

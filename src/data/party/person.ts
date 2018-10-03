@@ -60,4 +60,18 @@ export class Person extends Party {
     this._dateOfBirth = value;
   }
 
+  toJson() {
+    return {
+      partyId: this.partyId,
+      version: this.version,
+      tenantPartyId: this.tenantPartyId,
+      modifiedOn: this.modifiedOn,
+      partyType: this.partyType,
+      firstName: this.firstName,
+      middleName: this.middleName,
+      lastName: this.lastName,
+      dateOfBirth: this.dateOfBirth
+    }
+  }
+
 }
