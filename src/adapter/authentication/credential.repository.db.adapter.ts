@@ -9,7 +9,7 @@ import { AuthenticatedCredential } from "../../data/authentication/authenticated
 import { Confirmation } from "../../data/authentication/confirmation";
 import { ConfirmationRepositoryNeDbAdapter } from "./confirmation.repository.db.adapter";
 import { CreatedCredential } from "../../data/authentication/created.credential";
-import { Observable ,  Observer, of } from "rxjs";
+import { Observable, Observer, of, throwError } from "rxjs";
 import { switchMap, map } from "rxjs/operators";
 
 export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
@@ -80,14 +80,20 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
   addCredential(credential: Credential, options?: any): Observable<CreatedCredential> {
       return this.addCredentialLocal(credential)
           .pipe(switchMap(credential => {
-              const confirmation: Confirmation = new Confirmation();
-
-              confirmation.credentialId = credential.credentialId;
-
-              return this.confirmationRepositoryNeDbAdapter.addConfirmation(confirmation)
-                  .pipe(map(confirmation => {
-                     return {credential, confirmation};
-                  }));
+              if (!credential) {
+                  return throwError(credential);
+              } else {
+                  const confirmation: Confirmation = new Confirmation();
+                  confirmation.credentialId = credential.credentialId;
+                  return this.confirmationRepositoryNeDbAdapter.addConfirmation(confirmation)
+                      .pipe(map(confirmation => {
+                          if (!confirmation) {
+                              throw confirmation;
+                          } else {
+                              return new CreatedCredential(credential, confirmation);
+                          }
+                      }));
+              }
           }));
   }
 

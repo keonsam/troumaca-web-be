@@ -59,7 +59,6 @@ export let getPartyId = (req: Request, res: Response) => {
 
     sessionOrchestrator.getSession(sessionId, headerOptions)
         .subscribe(next => {
-            console.log(next);
             res.status(200);
             res.send(JSON.stringify(next.partyId));
         }, error => {

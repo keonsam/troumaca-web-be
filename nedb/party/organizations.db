@@ -19,3 +19,4 @@
 {"name":"My Company","purpose":"The Big Bad Company","description":"In LA","partyId":"172e529b-faca-4f25-95f4-d7f47f92f273","version":"35ad8778-7ac1-4239-a9a0-7b49d7e5a126","tenantPartyId":"ac657f5c-657a-4a4d-b10b-709760d9a60b","modifiedOn":{"$$date":1538027830703},"_id":"pyMu8sOixXeeS53d"}
 {"name":"My Company","purpose":"The Big Bad Company","description":"In LA","partyId":"6d46f5c0-7267-45d8-a244-d507c1e32b52","_id":"vV4cEncCpZI38hiz"}
 {"$$indexCreated":{"fieldName":"partyId","unique":true,"sparse":false}}
+{"purpose":"testing","name":"Organizationtest","description":"","partyId":"df073a14-a31a-4680-b7b1-8c92b2b4fdce","version":"40a74a16-4c5d-46e6-ab89-4ef3ae340117","tenantPartyId":"c11fef5d-c3e0-4630-a14b-48a7647c4b0a","modifiedOn":{"$$date":1538532844570},"_id":"BEm0iD5wRoeYIEtS"}

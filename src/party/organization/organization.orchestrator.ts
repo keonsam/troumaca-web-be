@@ -6,9 +6,9 @@ import { flatMap, map, switchMap, } from "rxjs/operators";
 import { shapeOrganizationsResponse } from "./organization.response.shaper";
 import { Result } from "../../result.success";
 import { getSortOrderOrDefault } from "../../sort.order.util";
-import { JoinOrganizationRequest } from "./join.organization.request";
 import {SessionRepository} from "../../repository/session.repository";
 import {createSessionRepositoryFactory} from "../../adapter/session/session.repository.factory";
+import { JoinOrganization } from "../../data/party/join.organization";
 
 export class OrganizationOrchestrator {
 
@@ -22,21 +22,6 @@ export class OrganizationOrchestrator {
 
   findOrganization(searchStr: string, pageSize: number): Observable<Organization[]> {
       return this.organizationRepository.findOrganization(searchStr, pageSize);
-  }
-
-  sendJoinRequest(request: string, sessionId?: string): Observable<JoinOrganizationRequest> {
-    // This is just basic boilerplate logic
-    //   return this.sessionRepository.getSessionById(sessionId)
-    //       .pipe( switchMap( session => {
-    //         if (!session) {
-    //           return of(undefined);
-    //         } else {
-    //           // const joinRequest: JoinOrganizationRequest = new JoinOrganizationRequest(session.partyId, request);
-    //           // joinRequest.status = "pending entry to organization";
-    //           // return this.organizationRepository.saveOrganizationRequest(joinRequest);
-    //         }
-    //       }));
-    return null;
   }
 
   getOrganizations (number: number, size: number, field: string, direction: string): Observable<Result<any>> {
@@ -53,32 +38,16 @@ export class OrganizationOrchestrator {
     return null;
   }
 
-  getOrganization (partyId: string, sessionId?: string): Observable<Organization> {
-      if (partyId === "company") {
-          return this.sessionRepository.getSessionById(sessionId)
-              .pipe(switchMap(session => {
-                  if (!session) return throwError(session);
-                  return this.organizationRepository.getOrganization(session.partyId);
-              }));
-      } else {
-          return this.organizationRepository.getOrganization(partyId);
-      }
+  getOrganization (partyId: string): Observable<Organization> {
+      return this.organizationRepository.getOrganization(partyId);
   }
 
-    saveOrganization (organization: Organization, sessionId: string, type: string): Observable<Organization> {
-      if (type === "company") {
-          return this.sessionRepository.getSessionById(sessionId)
-              .pipe( switchMap( session => {
-                  if (!session) {
-                      return throwError(session);
-                  } else {
-                      organization.partyId = session.partyId;
-                      return this.organizationRepository.saveOrganization(organization);
-                  }
-          }));
-      } else {
-          return this.organizationRepository.saveOrganization(organization);
-      }
+  saveOrganization (organization: Organization): Observable<Organization> {
+      return this.organizationRepository.saveOrganization(organization);
+  }
+
+    saveAccessRequest(request: JoinOrganization): Observable<JoinOrganization> {
+        return this.organizationRepository.saveAccessRequest(request);
     }
 
     deleteOrganization (partyId: string): Observable<number> {

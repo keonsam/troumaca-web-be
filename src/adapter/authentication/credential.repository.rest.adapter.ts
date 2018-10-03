@@ -1,6 +1,6 @@
 import { Credential } from "../../data/authentication/credential";
 import { CredentialRepository } from "../../repository/credential.repository";
-import { Observable ,  Observer } from "rxjs";
+import { Observable, Observer, throwError } from "rxjs";
 import request from "request";
 import { classToPlain} from "class-transformer";
 import { jsonRequestHeaderMap, postJsonOptions } from "../../request.helpers";

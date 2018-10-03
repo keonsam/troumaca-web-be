@@ -20,6 +20,7 @@ const checkSession = (req: Request, res: Response, next: NextFunction) => {
       .isValidSession(sessionId)
       .subscribe(isValid => {
         if (isValid) {
+            res.locals.partyId = isValid.partyId;
           callback(undefined, true);
         } else {
           const e: Error = new Error("Invalid session...");
