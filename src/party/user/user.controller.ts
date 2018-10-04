@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { UserOrchestrator } from "./user.orchestrator";
 import { getNumericValueOrDefault } from "../../number.util";
 import { getStringValueOrDefault } from "../../string.util";
-import {CreateCredential} from "../../data/authentication/create.credential";
+import { Credential } from "../../data/authentication/credential";
 
 const userOrchestrator: UserOrchestrator = new UserOrchestrator();
 
@@ -64,20 +64,13 @@ export  let saveUser = (req: Request, res: Response) => {
   const credential = req.body.credential;
   const partyAccessRoles = req.body.partyAccessRoles;
   const sessionId = req.cookies["sessionId"];
-  const createCredential:CreateCredential = new CreateCredential();
-  createCredential.partyId = credential.partyId;
-  createCredential.password = credential.password;
-  createCredential.credentialId = credential.credentialId;
-  createCredential.username = credential.username;
-  createCredential.status = credential.status;
-  createCredential.modifiedOn = credential.modifiedOn;
 
     if (!req.body) {
         return res.status(400).send({
             message: "User can not be empty"
         });
     }
-  userOrchestrator.saveUser(user, createCredential, partyAccessRoles, sessionId)
+  userOrchestrator.saveUser(user, credential, partyAccessRoles, sessionId)
     .subscribe(user => {
         res.status(201);
         res.send(JSON.stringify(user));

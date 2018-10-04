@@ -19,7 +19,6 @@ import { CredentialRepository } from "../../repository/credential.repository";
 import { createCredentialRepositoryFactory } from "../../adapter/authentication/credential.repository.factory";
 import { SessionRepository } from "../../repository/session.repository";
 import { createSessionRepositoryFactory } from "../../adapter/session/session.repository.factory";
-import {CreateCredential} from "../../data/authentication/create.credential";
 
 export class UserOrchestrator {
 
@@ -95,7 +94,7 @@ export class UserOrchestrator {
           }));
   }
 
-  saveUser (user: User, credential: CreateCredential, partyAccessRoles: PartyAccessRole[], sessionId: string): Observable<User> {
+  saveUser (user: User, credential: Credential, partyAccessRoles: PartyAccessRole[], sessionId: string): Observable<User> {
       if (!credential) {
           return this.sessionRepository.getSessionById(sessionId)
               .pipe(switchMap(session => {

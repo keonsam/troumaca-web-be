@@ -39,7 +39,7 @@ import checkSession from "./middleware/check-session";
 const router: Router = Router();
 
 router.get("/", (req, res) => {
-    res.json({
+    res.status(200).json({
         message: "Welcome to Troumaka API"
     });
 });
@@ -54,7 +54,6 @@ router.post("/authentication/authenticate", credentialController.authenticate);
 // confirmation
 router.get("/authentication/confirmations/send/:credentialId/:confirmationId", confirmationController.resendConfirmCode);
 router.post("/authentication/confirmations/verify", confirmationController.confirmCode);
-router.post("/authentication/confirmations/{confirmationId}/credentials/{credentialId}", confirmationController.confirmCode);
 // session
 router.get("/sessions/is-valid-session", sessionController.isValidSession);
 router.get("/sessions/partyId", checkSession, sessionController.getPartyId);

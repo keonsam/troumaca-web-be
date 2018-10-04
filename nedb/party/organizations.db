@@ -1,5 +1,6 @@
 {"partyId":"3b43a146-c98e-4733-8691-ce98ca93046f","purpose":"Testing","name":"throw4 Co","description":"","_id":"4sdb4ZsLIXyrJYZQ"}
 {"purpose":"testing","name":"profile15","description":"","partyId":"c0703a0f-3c54-47d5-841a-dbb73038049b","_id":"8QRCj9xuIUpGCejk"}
+{"purpose":"testing","name":"Organizationtest","description":"","partyId":"df073a14-a31a-4680-b7b1-8c92b2b4fdce","version":"40a74a16-4c5d-46e6-ab89-4ef3ae340117","tenantPartyId":"c11fef5d-c3e0-4630-a14b-48a7647c4b0a","modifiedOn":{"$$date":1538532844570},"_id":"BEm0iD5wRoeYIEtS"}
 {"name":"My Company","purpose":"The Big Bad Company","description":"In LA","partyId":"1207702b-fa59-442a-bc63-8552fcb1f979","version":"7c61bd84-744b-4822-9c54-101354c4c0f4","tenantPartyId":"034f05b8-a5c6-4e2d-b9a6-5a7cacf087b8","modifiedOn":{"$$date":1538027585622},"_id":"GHj9NnAyJgwjOrK9"}
 {"name":"My Company","purpose":"The Big Bad Company","description":"In LA","partyId":"2dada2c8-7d4f-40cd-b21b-f35f22c972d1","_id":"KgcH2RFD2ErkaD2B"}
 {"name":"My Company","purpose":"The Big Bad Company","description":"In LA","partyId":"f455d3ee-e11d-48bd-a507-8bdcecf8f1e3","version":"80467aa0-79b6-4fe9-8916-045893c9f327","tenantPartyId":"798cce25-120d-4d04-b5eb-80f793fa1b82","modifiedOn":{"$$date":1538027429040},"_id":"RT8y7HtaURwbyoK9"}
@@ -19,4 +20,3 @@
 {"name":"My Company","purpose":"The Big Bad Company","description":"In LA","partyId":"172e529b-faca-4f25-95f4-d7f47f92f273","version":"35ad8778-7ac1-4239-a9a0-7b49d7e5a126","tenantPartyId":"ac657f5c-657a-4a4d-b10b-709760d9a60b","modifiedOn":{"$$date":1538027830703},"_id":"pyMu8sOixXeeS53d"}
 {"name":"My Company","purpose":"The Big Bad Company","description":"In LA","partyId":"6d46f5c0-7267-45d8-a244-d507c1e32b52","_id":"vV4cEncCpZI38hiz"}
 {"$$indexCreated":{"fieldName":"partyId","unique":true,"sparse":false}}
-{"purpose":"testing","name":"Organizationtest","description":"","partyId":"df073a14-a31a-4680-b7b1-8c92b2b4fdce","version":"40a74a16-4c5d-46e6-ab89-4ef3ae340117","tenantPartyId":"c11fef5d-c3e0-4630-a14b-48a7647c4b0a","modifiedOn":{"$$date":1538532844570},"_id":"BEm0iD5wRoeYIEtS"}

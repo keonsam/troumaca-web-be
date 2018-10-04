@@ -29,9 +29,9 @@ export class CredentialOrchestrator {
     return this.credentialRepository.isValidUsername(username, partyId);
   }
 
-  isValidPassword(credential: Credential): Observable<boolean> {
+  isValidPassword(password: string): Observable<boolean> {
     return this.credentialRepository
-    .isValidPassword(credential.password);
+    .isValidPassword(password);
   }
 
   addCredential(credential: Credential, user: User, options?: any): Observable<Confirmation> {

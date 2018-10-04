@@ -3,7 +3,7 @@ import { generateUUID } from "../../uuid.generator";
 import phoneToken from "generate-sms-verification-code";
 import { credentialConfirmations, credentials } from "../../db";
 import { Confirmation } from "../../data/authentication/confirmation";
-import { Observable ,  Observer, of } from "rxjs";
+import { Observable, Observer, of, throwError } from "rxjs";
 import { switchMap, map } from "rxjs/operators";
 import {factory} from "../../ConfigLog4j";
 
@@ -23,7 +23,7 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
                  return this.updateConfirmationStatus(credentialId, "Expired")
                      .pipe(switchMap( numReplaced => {
                          if (!numReplaced) {
-                             return of(undefined);
+                             return throwError(undefined);
                          } else {
                              const confirmation: Confirmation = new Confirmation();
                              confirmation.credentialId = credentialId;
@@ -39,20 +39,21 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
       .pipe(switchMap(confirmation => {
         log.debug("Confirmation: " + confirmation);
         if (!confirmation) {
-          return of(confirmation);
+          return throwError(confirmation);
         } else {
           return this.updateConfirmationStatus(credentialId, "Confirmed")
             .pipe(switchMap( numReplaced => {
               log.debug("Number update: " + numReplaced);
               if (!numReplaced) {
-                return of(undefined);
+                return throwError(undefined);
               } else {
                 return this.updateCredentialStatusById(credentialId, "Confirmed")
                 .pipe(map( numReplaced1 => {
                  log.debug("Number update: " + numReplaced);
                    if (!numReplaced1) {
-                     return undefined;
+                     throw new Error("credential not updated");
                    } else {
+                       confirmation.status = "Confirmed";
                      return confirmation;
                    }
                 }));
