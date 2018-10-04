@@ -7,14 +7,19 @@ describe('confirm-credential', function () {
 
   this.timeout(5000);
 
-  var time = new Date().getTime();
+  const time = new Date().getTime();
 
-  var credential = {
+  const credential = {
     username: "tester1" +time+ "@shapestone.com",
     password: "Tester2@user"
   };
 
-  var confirm = {
+  const user = {
+      firstName: "Bom",
+      lastName: "Bam",
+  };
+
+  const confirm = {
     confirmationId: "",
     credentialId: "",
     code: ""
@@ -24,7 +29,7 @@ describe('confirm-credential', function () {
     api.post("/authentication/credentials")
       .set('Accept', 'application/json')
       .set('correlationId', 1234567890)
-      .send(credential)
+      .send({credential, user})
       .expect('Content-Type', /json/)
       .expect(201)
       .end(function (err, res) {
@@ -45,19 +50,16 @@ describe('confirm-credential', function () {
 
     console.log("Completed 2.");
 
-    console.log(confirm);
-
-    api.post("/authentication/credentials/confirmations/confirm-username")
+    api.post("/authentication/confirmations/verify")
       .set('Accept', 'application/json')
       .set('correlationId', 1234567890)
       .send(confirm)
-      // .expect('Content-Type', /json/)
-      .expect(201)
+      .expect('Content-Type', /json/)
+      .expect(200)
       .end(function (err, res) {
-        console.log("What");
         console.log(err);
         if (!err) {
-          expect(res.body.status).to.equal("New")
+          expect(res.body.status).to.equal("Confirmed")
         }
         done(err);
       });

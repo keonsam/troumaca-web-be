@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { CredentialOrchestrator } from "./credential.orchestrator";
 import { AuthenticatedCredential } from "../../data/authentication/authenticated.credential";
+import { Credential } from "../../data/authentication/credential";
 
 const credentialOrchestrator: CredentialOrchestrator = new CredentialOrchestrator();
 
@@ -29,11 +30,13 @@ export let isValidUsername = (req: Request, res: Response) => {
 
 export let isValidPassword = (req: Request, res: Response) => {
 
-  if (!req.body) {
-      return res.status(400).send({message: "Password can not be empty"});
+    const password: string = req.body.password;
+
+  if (!password) {
+      return res.status(400).send({message: "A password must exist."});
   }
 
-  credentialOrchestrator.isValidPassword(req.body)
+  credentialOrchestrator.isValidPassword(password)
   .subscribe((next: boolean) => {
       res.status(200);
       const resp = {valid: next};
@@ -50,6 +53,8 @@ export let isValidPassword = (req: Request, res: Response) => {
 export let addCredential = (req: Request, res: Response) => {
 
   const correlationId = req.headers.correlationid;
+  const credential = req.body.credential;
+  const user = req.body.user;
 
   if (!correlationId) {
       res.status(400);
@@ -58,34 +63,17 @@ export let addCredential = (req: Request, res: Response) => {
       return;
   }
 
-  const credential = req.body.credential;
-  const user = req.body.user;
-
-  if (!credential) {
+  if (!credential || !credential.username || !credential.password) {
       res.status(400);
       res.setHeader("content-type", "application/json");
-      res.send(JSON.stringify({message: "No \"credential\" exists. Credential can not be empty."}));
-      return;
-  };
-
-  if (!user) {
-      res.status(400);
-      res.setHeader("content-type", "application/json");
-      res.send(JSON.stringify({message: "No \"user\" exists. User can not be empty."}));
-      return;
-  };
-
-  if (!credential.username || credential.username.length <= 0) {
-      res.status(400);
-      res.setHeader("content-type", "application/json");
-      res.send(JSON.stringify({message: "A \"username\" is required."}));
+      res.send(JSON.stringify({message: "'Credential' must be sent, and must contain username and password."}));
       return;
   }
 
-  if (!credential.password || credential.password.length <= 0) {
+  if (!user || !user.firstName || !user.lastName) {
       res.status(400);
       res.setHeader("content-type", "application/json");
-      res.send(JSON.stringify({message: "A \"password\" is required."}));
+      res.send(JSON.stringify({message: "'User' must be sent, and contain first and last name."}));
       return;
   }
 
@@ -100,7 +88,7 @@ export let addCredential = (req: Request, res: Response) => {
       res.send(JSON.stringify(confirmation));
   }, error => {
     res.status(!error.code ? 500 : error.code);
-    let msg = !error.message ? "Internal Server Error" : error.message;
+    const msg = !error.message ? "Internal Server Error" : error.message;
     res.send(JSON.stringify(msg));
     console.log(error);
   });
@@ -109,10 +97,13 @@ export let addCredential = (req: Request, res: Response) => {
 
 export let authenticate = (req: Request, res: Response) => {
 
-  const credential = req.body;
+  const credential: Credential = req.body;
 
-  if (!req.body) {
-      return res.status(400).send({message: "Authenticate can not be empty"});
+  if (!credential || credential.username || credential.password) {
+      res.status(400);
+      res.setHeader("content-type", "application/json");
+      res.send(JSON.stringify({message: "'Credential' must be sent, and must contain username and password."}));
+      return;
   }
 
   const correlationId = req.headers.correlationid;
@@ -133,7 +124,8 @@ export let authenticate = (req: Request, res: Response) => {
   credentialOrchestrator.authenticate(credential, headerOptions)
   .subscribe((authenticatedCredential: AuthenticatedCredential) => {
       if (authenticatedCredential.sessionId) {
-          res.cookie("sessionId", authenticatedCredential.sessionId, {path: "/", maxAge: 20 * 60 * 1000, httpOnly: true });
+          const sessionExpireTime = 20 * 60000;
+          res.cookie("sessionId", authenticatedCredential.sessionId, {path: "/", maxAge: sessionExpireTime, httpOnly: true });
       }
       const body = JSON.stringify(authenticatedCredential.toJson());
       res.status(200);

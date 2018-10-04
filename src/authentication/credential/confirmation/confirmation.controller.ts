@@ -4,26 +4,50 @@ import { Confirmation } from "../../../data/authentication/confirmation";
 
 const confirmationOrchestrator: ConfirmationOrchestrator = new ConfirmationOrchestrator();
 
+export let resendConfirmCode = (req: Request, res: Response) => {
+
+    const correlationId = req.headers.correlationid;
+
+    if (!correlationId) {
+        res.status(400);
+        res.setHeader("content-type", "application/json");
+        res.send(JSON.stringify({message: "A \"correlationId\" is required."}));
+        return;
+    }
+
+    const confirmationId = req.params.confirmationId;
+    const credentialId = req.params.credentialId;
+
+    const headerOptions = {
+        correlationId: correlationId,
+        sourceSystemHost: req.headers.host,
+        sourceSystemName: ""
+    };
+
+    confirmationOrchestrator
+        .resendConfirmCode(confirmationId, credentialId, headerOptions)
+        .subscribe(next => {
+            const body = JSON.stringify(next);
+            res.status(201);
+            res.setHeader("content-type", "application/json");
+            res.send(body);
+        }, error => {
+            res.status(500);
+            res.send(JSON.stringify({message: "Error Occurred"}));
+            console.log(error);
+        });
+
+};
+
 export let confirmCode = (req: Request, res: Response) => {
 
-  if (!req.body) {
-    return res.status(400).send({message: "Confirmation can not be empty"});
-  }
-
   const confirmation: Confirmation = req.body;
-  let confirmationId: string = confirmation.confirmationId;
-  let credentialId: string = confirmation.credentialId;
 
-  if (!confirmationId && req.params.confirmationId) {
-    confirmationId = req.params.confirmationId;
-  }
-
-  if (!credentialId && req.params.credentialId) {
-    credentialId = req.params.credentialId;
-  }
-
-  if (!confirmationId || !credentialId) {
-      return res.status(400).send({message: "confirmationId & credentialId must be sent can not be empty"});
+  if (!confirmation || !confirmation.code || !confirmation.confirmationId ||  !confirmation.credentialId) {
+      res.status(400);
+      res.setHeader("content-type", "application/json");
+      res.send(JSON.stringify({message: "'Confirmation' must be sent and have confirmation code, confirmationId and credentialId."}));
+      return;
   }
 
   const correlationId = req.headers.correlationid;
@@ -40,7 +64,7 @@ export let confirmCode = (req: Request, res: Response) => {
   };
 
   confirmationOrchestrator
-    .confirmCode(confirmationId, credentialId, confirmation, headerOptions)
+    .confirmCode(confirmation.confirmationId, confirmation.credentialId, confirmation, headerOptions)
     .subscribe(next => {
       const body = JSON.stringify(next);
       res.setHeader("content-type", "application/json");
@@ -48,42 +72,8 @@ export let confirmCode = (req: Request, res: Response) => {
       res.send(body);
     }, error => {
       res.status(!error.code ? 500 : error.code);
-      let msg = !error.message ? "Internal Server Error" : error.message;
+      const msg = !error.message ? "Internal Server Error" : error.message;
       res.send(JSON.stringify(msg));
-      console.log(error);
-    });
-
-};
-
-export let resendConfirmCode = (req: Request, res: Response) => {
-
-  const correlationId = req.headers.correlationid;
-
-  if (!correlationId) {
-    res.status(400);
-    res.setHeader("content-type", "application/json");
-    res.send(JSON.stringify({message: "A \"correlationId\" is required."}));
-    return;
-  }
-
-  const confirmationId = req.params.confirmationId;
-  const credentialId = req.params.credentialId;
-
-  const headerOptions = {
-    correlationId: correlationId,
-    sourceSystemHost: req.headers.host,
-    sourceSystemName: ""
-  };
-
-  confirmationOrchestrator
-    .resendConfirmCode(confirmationId, credentialId, headerOptions)
-    .subscribe(next => {
-        const body = JSON.stringify(next);
-        res.status(200);
-        res.send(body);
-    }, error => {
-      res.status(500);
-      res.send(JSON.stringify({message: "Error Occurred"}));
       console.log(error);
     });
 

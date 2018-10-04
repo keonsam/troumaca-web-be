@@ -5,10 +5,8 @@ import request from "request";
 import { classToPlain} from "class-transformer";
 import { jsonRequestHeaderMap, postJsonOptions } from "../../request.helpers";
 import { properties } from "../../properties.helpers";
-import { CredentialConfirmation } from "../../data/authentication/credential.confirmation";
 import { AuthenticatedCredential } from "../../data/authentication/authenticated.credential";
 import { CreatedCredential } from "../../data/authentication/created.credential";
-import {CreateCredential} from "../../data/authentication/create.credential";
 
 export class CredentialRepositoryRestAdapter implements CredentialRepository {
 
@@ -76,12 +74,12 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
     });
   }
 
-  addCredential(createCredential: CreateCredential, options?: any): Observable<CreatedCredential> {
+  addCredential(credential: Credential, options?: any): Observable<CreatedCredential> {
     const uri: string = properties.get("credential.host.port") as string;
 
     const headerMap = jsonRequestHeaderMap(options ? options : {});
     // let headers:any = strMapToJson(headerMap);
-    const credentialJson = classToPlain(createCredential);
+    const credentialJson = classToPlain(credential);
 
     const uriAndPath: string = uri + "/authentication/credentials";
 
