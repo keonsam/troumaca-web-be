@@ -115,12 +115,17 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
               authenticatedCredential.authenticateStatus = "AccountConfirmed";
               return of(authenticatedCredential);
           } else if (credential.status === "New") {
-              return this.confirmationRepositoryNeDbAdapter.getConfirmationByCredentialId(credentialId, "New")
-                  .pipe(map((confirmation: Confirmation) => {
-                      // TODO: ADD ERROR HANDLING THIS SHOULD TEST AND GENERATE A NEW CONFIRMATION IF NECESSARY
-                      authenticatedCredential.confirmationId = confirmation.confirmationId;
-                      authenticatedCredential.authenticateStatus = "AccountUsernameNotConfirmed";
-                      return authenticatedCredential;
+              const confirmation: Confirmation = new Confirmation();
+              confirmation.credentialId = credentialId;
+              return this.confirmationRepositoryNeDbAdapter.addConfirmation(confirmation)
+                  .pipe(map(confirmationRes => {
+                     if (!confirmationRes) {
+                         throw new Error("confirmation did not get created");
+                     } else {
+                         authenticatedCredential.confirmationId = confirmation.confirmationId;
+                         authenticatedCredential.authenticateStatus = "AccountUsernameNotConfirmed";
+                         return authenticatedCredential;
+                     }
                   }));
           }
       }

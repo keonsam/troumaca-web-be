@@ -200,17 +200,13 @@ router.delete("/users/:partyId", checkSession, userController.deleteUser);
 // organizations
 router.get("/organizations", checkSession, organizationController.getOrganizations);
 router.get("/organizations/:partyId", checkSession, organizationController.getOrganization);
-router.post("/organizations", checkSession, organizationController.saveOrganization);
-router.post("/organizations/profile", checkSession, organizationController.saveOrganizationCompany);
-router.put("/organizations/:partyId", checkSession, organizationController.updateOrganization);
-router.delete("/organizations/:partyId", checkSession, organizationController.deleteOrganization);
-router.get("/organizations", checkSession, organizationController.getOrganizations);
-router.get("/organizations/:partyId", checkSession, organizationController.getOrganization);
 router.get("/organizations-find", checkSession, organizationController.findOrganizations);
 router.post("/organizations", checkSession, organizationController.saveOrganization);
+router.post("/organizations/profiles", checkSession, organizationController.saveOrganizationCompany);
 router.post("/organizations/access-requests", checkSession, organizationController.saveAccessRequest);
 router.put("/organizations/:partyId", checkSession, organizationController.updateOrganization);
 router.delete("/organizations/:partyId", checkSession, organizationController.deleteOrganization);
+
 // photos
 router.get("/photos", checkSession, photoController.getPhotos);
 router.post("/photos/:type", checkSession, photoController.savePhoto);

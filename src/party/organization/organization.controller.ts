@@ -3,6 +3,7 @@ import { OrganizationOrchestrator } from "./organization.orchestrator";
 import { getNumericValueOrDefault } from "../../number.util";
 import { getStringValueOrDefault } from "../../string.util";
 import { JoinOrganization } from "../../data/party/join.organization";
+import { Organization } from "../../data/party/organization";
 
 const organizationOrchestrator: OrganizationOrchestrator = new OrganizationOrchestrator();
 
@@ -74,13 +75,23 @@ export  let saveOrganization = (req: Request, res: Response) => {
 };
 
 export  let saveOrganizationCompany = (req: Request, res: Response) => {
-    const organization = req.body;
+    const organization: Organization = req.body;
+
+    if (!organization || !organization.name || !organization.purpose) {
+        res.status(400);
+        res.setHeader("content-type", "application/json");
+        res.send(JSON.stringify({message: "'Organization' must be sent, and must contain name and purpose."}));
+        return;
+    }
+
     organization.partyId = res.locals.partyId;
+
     organizationOrchestrator
         .saveOrganization(organization)
-        .subscribe(organization => {
+        .subscribe(organizationRes => {
             res.status(201);
-            res.send(JSON.stringify(organization));
+            res.setHeader("content-type", "application/json");
+            res.send(JSON.stringify(organizationRes));
         }, error => {
             res.status(500);
             res.send(JSON.stringify({message: "Error Occurred"}));
@@ -91,20 +102,27 @@ export  let saveOrganizationCompany = (req: Request, res: Response) => {
 export let saveAccessRequest = (req: Request, res: Response) => {
 
     const request: JoinOrganization = req.body;
-    if (!request) {
-        return res.status(400).send({
-            message: "'Access Request' must exist"
-        });
+    if (!request || !request.organizationId) {
+        res.status(400);
+        res.setHeader("content-type", "application/json");
+        res.send(JSON.stringify({
+            message: "'Access Request' must exist and contains organizationId"
+        }));
+        return;
     }
+
+    request.partyId = res.locals.partyId;
 
     organizationOrchestrator
         .saveAccessRequest(request)
         .subscribe( accessRequest => {
             if (accessRequest) {
-                res.status(200);
+                res.status(201);
+                res.setHeader("content-type", "application/json");
                 res.send(JSON.stringify(accessRequest));
             } else {
                 res.status(404);
+                res.setHeader("content-type", "application/json");
                 res.send(JSON.stringify("Error"));
             }
         }, error => {

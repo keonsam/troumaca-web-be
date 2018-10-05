@@ -63,7 +63,7 @@ export class CredentialOrchestrator {
           .authenticate(credential, options)
           .pipe(switchMap((authenticatedCredential: AuthenticatedCredential) =>  {
               if (!authenticatedCredential) {
-                  return of(new AuthenticatedCredential());
+                  return of(undefined);
               } else if (authenticatedCredential.authenticateStatus === "AccountConfirmed" || authenticatedCredential.authenticateStatus === "AccountActive") {
                   const session: Session = new Session();
                   session.partyId = authenticatedCredential.partyId;
