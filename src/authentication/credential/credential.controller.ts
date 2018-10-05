@@ -99,7 +99,7 @@ export let authenticate = (req: Request, res: Response) => {
 
   const credential: Credential = req.body;
 
-  if (!credential || credential.username || credential.password) {
+  if (!credential || !credential.username || !credential.password) {
       res.status(400);
       res.setHeader("content-type", "application/json");
       res.send(JSON.stringify({message: "'Credential' must be sent, and must contain username and password."}));
@@ -123,16 +123,24 @@ export let authenticate = (req: Request, res: Response) => {
 
   credentialOrchestrator.authenticate(credential, headerOptions)
   .subscribe((authenticatedCredential: AuthenticatedCredential) => {
-      if (authenticatedCredential.sessionId) {
-          const sessionExpireTime = 20 * 60000;
-          res.cookie("sessionId", authenticatedCredential.sessionId, {path: "/", maxAge: sessionExpireTime, httpOnly: true });
+      if (authenticatedCredential) {
+          if (authenticatedCredential.sessionId) {
+              const sessionExpireTime = 20 * 60000;
+              res.cookie("sessionId", authenticatedCredential.sessionId, {path: "/", maxAge: sessionExpireTime, httpOnly: true });
+          }
+          const body = JSON.stringify(authenticatedCredential.toJson());
+          res.status(200);
+          res.setHeader("content-type", "application/json");
+          res.send(body);
+      } else {
+          const body = JSON.stringify(authenticatedCredential);
+          res.status(404);
+          res.setHeader("content-type", "application/json");
+          res.send(body);
       }
-      const body = JSON.stringify(authenticatedCredential.toJson());
-      res.status(200);
-      res.send(body);
   }, error => {
       res.status(500);
-      res.send(JSON.stringify({message: "Error Occurred"}));
+      res.send(JSON.stringify({message: "Internal Occurred"}));
       console.log(error);
   });
 
