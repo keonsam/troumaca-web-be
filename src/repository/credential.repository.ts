@@ -15,7 +15,9 @@ export interface CredentialRepository {
 
   updateCredentialStatusById(credentialId: string, status: string): Observable<number>;
 
-  // USED BY OTHER REPOS
+  updateCredentialStatusByPartyId(partyId: string, status: string): Observable<number>;
+
+    // USED BY OTHER REPOS
   updateUserCredential(partyId: string, credential: Credential): Observable<number>;
 
   // isValidEditUsername(partyId:string, username:string):Observable<boolean>;

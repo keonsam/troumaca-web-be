@@ -128,10 +128,10 @@ describe('join-organization', function () {
             .end(function (err, res) {
                 if (err) {
                     console.log(err);
+                } else {
+                    expect(res.body.accessRequestId).to.be.a('string');
+                    expect(res.body.partyId).to.be.a('string');
                 }
-                console.log(res.body);
-                expect(res.body.accessRequestId).to.be.a('string');
-                expect(res.body.partyId).to.be.a('string');
                 done(err);
             });
     });

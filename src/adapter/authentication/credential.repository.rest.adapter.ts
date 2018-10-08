@@ -142,6 +142,11 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
       return undefined;
   }
 
+  updateCredentialStatusByPartyId(partyId: string, status: string): Observable<number> {
+    return undefined;
+  }
+
+
   updateUserCredential(partyId: string, credential: Credential): Observable<number> {
       return undefined;
   }

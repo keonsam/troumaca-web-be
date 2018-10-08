@@ -84,7 +84,7 @@ export class CredentialOrchestrator {
                   return this.sessionRepository.addSession(session, options)
                       .pipe(map(session => {
                           if (!session) {
-                              return new AuthenticatedCredential();
+                              return throwError(session);
                           }
                           authenticatedCredential.sessionId = session.sessionId;
                           return authenticatedCredential;

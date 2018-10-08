@@ -110,10 +110,10 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
           authenticatedCredential.partyId = credential.partyId;
           if (credential.status === "Active") {
               authenticatedCredential.authenticateStatus = "AccountActive";
-              return of(authenticatedCredential);
+              return of(authenticatedCredential.toJson());
           } else if (credential.status === "Confirmed") {
               authenticatedCredential.authenticateStatus = "AccountConfirmed";
-              return of(authenticatedCredential);
+              return of(authenticatedCredential.toJson());
           } else if (credential.status === "New") {
               const confirmation: Confirmation = new Confirmation();
               confirmation.credentialId = credentialId;
@@ -124,7 +124,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
                      } else {
                          authenticatedCredential.confirmationId = confirmation.confirmationId;
                          authenticatedCredential.authenticateStatus = "AccountUsernameNotConfirmed";
-                         return authenticatedCredential;
+                         return authenticatedCredential.toJson();
                      }
                   }));
           }
@@ -136,6 +136,23 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
       return Observable.create(function (observer: Observer<number>) {
           const query = {
               "credentialId": credentialId
+          };
+
+          credentials.update(query, {$set: {status: status}}, {}, function (err: any, numReplaced: number) {
+              if (!err) {
+                  observer.next(numReplaced);
+              } else {
+                  observer.error(err);
+              }
+              observer.complete();
+          });
+      });
+  }
+
+  updateCredentialStatusByPartyId(partyId: string, status: string): Observable<number> {
+      return Observable.create(function (observer: Observer<number>) {
+          const query = {
+              "partyId": partyId
           };
 
           credentials.update(query, {$set: {status: status}}, {}, function (err: any, numReplaced: number) {

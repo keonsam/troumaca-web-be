@@ -13,7 +13,7 @@ export class SessionRepositoryNeDbAdapter implements SessionRepository {
         const validSession: ValidSession = new ValidSession();
         if (!sessionId) {
             validSession.valid = false;
-            return throwError(validSession);
+            return of(validSession);
         }
         return this.getSessionById(sessionId)
             .pipe(map(session => {
@@ -137,7 +137,7 @@ export class SessionRepositoryNeDbAdapter implements SessionRepository {
     addSession(session: Session): Observable<Session> {
 
         session.sessionId = generateUUID();
-        session.expirationTime = new Date(new Date().getTime() + (20 * 60 * 1000));
+        session.expirationTime = new Date(new Date().getTime() + (20 * 60000));
         session.createdOn = new Date();
         session.modifiedOn = new Date();
         if (!session.data) {

@@ -49,6 +49,7 @@ describe('create-profile-organization', function () {
                   confirm.credentialId = res.body.credentialId;
                   confirm.code = res.body.code;
               } else {
+                  console.log(err);
               }
               done(err);
           });
@@ -66,9 +67,10 @@ describe('create-profile-organization', function () {
           .expect('Content-Type', /json/)
           .expect(200)
           .end(function (err, res) {
-              console.log(err);
               if (!err) {
                   expect(res.body.status).to.equal("Confirmed")
+              } else {
+                  console.log(err);
               }
               done(err);
           });
@@ -84,13 +86,13 @@ describe('create-profile-organization', function () {
           .end(function (err, res) {
               if (err) {
                   console.log(err);
+              }else {
+                  expect(res.body.credentialId).to.be.a('string');
+                  expect(res.body.sessionId).to.be.a('string');
+                  cookie = `sessionId=${res.body.sessionId}`;
+                  expect(res.body.partyId).to.be.a('string');
+                  expect(res.body.authenticateStatus).to.equal('AccountConfirmed');
               }
-              console.log(res.body);
-              expect(res.body.credentialId).to.be.a('string');
-              expect(res.body.sessionId).to.be.a('string');
-              cookie = `sessionId=${res.body.sessionId}`;
-              expect(res.body.partyId).to.be.a('string');
-              expect(res.body.authenticateStatus).to.equal('AccountConfirmed');
               done();
           });
   });
@@ -106,10 +108,11 @@ describe('create-profile-organization', function () {
           .end(function (err, res) {
               if (err) {
                   console.log(err);
+              }else {
+                  expect(res.body.partyId).to.be.a('string');
+                  expect(res.body.name).to.be.a('string');
+                  expect(res.body.purpose).to.be.a('string');
               }
-              expect(res.body.partyId).to.be.a('string');
-              expect(res.body.name).to.be.a('string');
-              expect(res.body.purpose).to.be.a('string');
               done(err);
           });
   });
