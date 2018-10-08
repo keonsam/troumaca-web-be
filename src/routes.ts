@@ -52,7 +52,7 @@ router.post("/authentication/validate-username", credentialController.isValidUse
 router.post("/authentication/credentials", credentialController.addCredential);
 router.post("/authentication/authenticate", credentialController.authenticate);
 // confirmation
-router.get("/authentication/confirmations/send/:credentialId/:confirmationId", confirmationController.resendConfirmCode);
+router.post("/authentication/confirmations/resend", confirmationController.resendConfirmCode);
 router.post("/authentication/confirmations/verify", confirmationController.confirmCode);
 // session
 router.get("/sessions/is-valid-session", sessionController.isValidSession);

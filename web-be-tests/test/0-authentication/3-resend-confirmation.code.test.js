@@ -50,9 +50,10 @@ describe('resend-confirmation', function () {
 
         console.log("Completed 2.");
 
-        api.get(`/authentication/confirmations/send/${confirm.credentialId}/${confirm.confirmationId}`)
+        api.post('/authentication/confirmations/resend')
             .set('Accept', 'application/json')
             .set('correlationId', 1234567890)
+            .send(confirm)
             .expect('Content-Type', /json/)
             .expect(201)
             .end(function (err, res) {

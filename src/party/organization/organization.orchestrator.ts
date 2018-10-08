@@ -6,18 +6,22 @@ import { flatMap, map, switchMap, } from "rxjs/operators";
 import { shapeOrganizationsResponse } from "./organization.response.shaper";
 import { Result } from "../../result.success";
 import { getSortOrderOrDefault } from "../../sort.order.util";
-import {SessionRepository} from "../../repository/session.repository";
-import {createSessionRepositoryFactory} from "../../adapter/session/session.repository.factory";
+import { SessionRepository } from "../../repository/session.repository";
+import { createSessionRepositoryFactory } from "../../adapter/session/session.repository.factory";
 import { JoinOrganization } from "../../data/party/join.organization";
+import { CredentialRepository } from "../../repository/credential.repository";
+import { createCredentialRepositoryFactory } from "../../adapter/authentication/credential.repository.factory";
 
 export class OrganizationOrchestrator {
 
   private organizationRepository: OrganizationRepository;
   private sessionRepository: SessionRepository;
+  private credentialRepository: CredentialRepository;
 
   constructor() {
     this.organizationRepository = createOrganizationRepository();
     this.sessionRepository = createSessionRepositoryFactory();
+    this.credentialRepository = createCredentialRepositoryFactory();
   }
 
   findOrganization(searchStr: string, pageSize: number): Observable<Organization[]> {
@@ -46,16 +50,48 @@ export class OrganizationOrchestrator {
       return this.organizationRepository.saveOrganization(organization);
   }
 
-    saveAccessRequest(request: JoinOrganization): Observable<JoinOrganization> {
-        return this.organizationRepository.saveAccessRequest(request);
-    }
+  saveOrganizationCompany(organization: Organization): Observable<Organization> {
+      return this.organizationRepository.saveOrganization(organization)
+          .pipe(switchMap(organizationRes => {
+            if (!organizationRes) {
+              return throwError(organizationRes);
+            } else {
+              return this.credentialRepository.updateCredentialStatusByPartyId(organization.partyId, "Confirmed")
+                  .pipe( map(numUpdated => {
+                    if (!numUpdated) {
+                      throw new Error("credential status was not updated.");
+                    } else {
+                      return organizationRes;
+                    }
+                  }));
+            }
+          }));
+  }
 
-    deleteOrganization (partyId: string): Observable<number> {
+  saveAccessRequest(request: JoinOrganization): Observable<JoinOrganization> {
+      return this.organizationRepository.saveAccessRequest(request)
+          .pipe( switchMap( requestRes => {
+              if (!requestRes) {
+                  return throwError(requestRes);
+              } else {
+                  return this.credentialRepository.updateCredentialStatusByPartyId(request.partyId, "Confirmed")
+                      .pipe( map(numUpdated => {
+                          if (!numUpdated) {
+                              throw new Error("credential status was not updated.");
+                          } else {
+                              return requestRes;
+                          }
+                      }));
+              }
+          }));
+  }
+
+  deleteOrganization (partyId: string): Observable<number> {
       return this.organizationRepository.deleteOrganization(partyId);
-    }
+  }
 
-    updateOrganization (partyId: string, organization: Organization): Observable<number> {
+  updateOrganization (partyId: string, organization: Organization): Observable<number> {
       return this.organizationRepository.updateOrganization(partyId, organization);
-    }
+  }
 
 }

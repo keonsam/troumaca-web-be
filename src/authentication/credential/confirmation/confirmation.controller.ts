@@ -7,6 +7,7 @@ const confirmationOrchestrator: ConfirmationOrchestrator = new ConfirmationOrche
 export let resendConfirmCode = (req: Request, res: Response) => {
 
     const correlationId = req.headers.correlationid;
+    const confirmation = req.body;
 
     if (!correlationId) {
         res.status(400);
@@ -15,8 +16,12 @@ export let resendConfirmCode = (req: Request, res: Response) => {
         return;
     }
 
-    const confirmationId = req.params.confirmationId;
-    const credentialId = req.params.credentialId;
+    if (!confirmation.confirmationId || !confirmation.credentialId) {
+        res.status(400);
+        res.setHeader("content-type", "application/json");
+        res.send(JSON.stringify({message: "'Confirmation' is required containing confirmationId and credentialId."}));
+        return;
+    }
 
     const headerOptions = {
         correlationId: correlationId,
@@ -25,7 +30,7 @@ export let resendConfirmCode = (req: Request, res: Response) => {
     };
 
     confirmationOrchestrator
-        .resendConfirmCode(confirmationId, credentialId, headerOptions)
+        .resendConfirmCode(confirmation.confirmationId, confirmation.credentialId, headerOptions)
         .subscribe(next => {
             const body = JSON.stringify(next);
             res.status(201);

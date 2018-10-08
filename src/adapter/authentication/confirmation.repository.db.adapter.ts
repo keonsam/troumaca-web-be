@@ -18,7 +18,7 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
       return this.getConfirmationByCredentialId(credentialId, "Confirmed")
           .pipe(switchMap( confirmation => {
              if (confirmation) {
-                 return of(undefined);
+                 return throwError(new Error("Username has been confirmed."));
              } else {
                  return this.updateConfirmationStatus(credentialId, "Expired")
                      .pipe(switchMap( numReplaced => {
@@ -35,32 +35,32 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
   }
 
   confirmCode(confirmationId: string, credentialId: string, confirmation: Confirmation , options?: any): Observable<Confirmation> {
-    return this.verifyCode(confirmationId, confirmation.code)
-      .pipe(switchMap(confirmation => {
-        log.debug("Confirmation: " + confirmation);
-        if (!confirmation) {
-          return throwError(confirmation);
-        } else {
-          return this.updateConfirmationStatus(credentialId, "Confirmed")
-            .pipe(switchMap( numReplaced => {
-              log.debug("Number update: " + numReplaced);
-              if (!numReplaced) {
-                return throwError(undefined);
+      return this.verifyCode(confirmationId, confirmation.code)
+          .pipe(switchMap(confirmation => {
+              log.debug("Confirmation: " + confirmation);
+              if (!confirmation) {
+                  return of(confirmation);
               } else {
-                return this.updateCredentialStatusById(credentialId, "Confirmed")
-                .pipe(map( numReplaced1 => {
-                 log.debug("Number update: " + numReplaced);
-                   if (!numReplaced1) {
-                     throw new Error("credential not updated");
-                   } else {
-                       confirmation.status = "Confirmed";
-                     return confirmation;
-                   }
-                }));
+                  return this.updateConfirmationStatus(credentialId, "Confirmed")
+                      .pipe(switchMap(numReplaced => {
+                          log.debug("Number update: " + numReplaced);
+                          if (!numReplaced) {
+                              return throwError(undefined);
+                          } else {
+                              return this.updateCredentialStatusById(credentialId, "Confirmed")
+                                  .pipe(map(numReplaced1 => {
+                                      log.debug("Number update: " + numReplaced);
+                                      if (!numReplaced1) {
+                                          throw new Error("credential not updated");
+                                      } else {
+                                          confirmation.status = "Confirmed";
+                                          return confirmation;
+                                      }
+                                  }));
+                          }
+                      }));
               }
-            }));
-        }
-      }));
+          }));
   }
 
   // getCredentialConfirmationById(credentialConfirmationId:string):Observable<CredentialConfirmation> {

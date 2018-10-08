@@ -87,7 +87,7 @@ export  let saveOrganizationCompany = (req: Request, res: Response) => {
     organization.partyId = res.locals.partyId;
 
     organizationOrchestrator
-        .saveOrganization(organization)
+        .saveOrganizationCompany(organization)
         .subscribe(organizationRes => {
             res.status(201);
             res.setHeader("content-type", "application/json");
