@@ -11,6 +11,7 @@ import { ConfirmationRepositoryNeDbAdapter } from "./confirmation.repository.db.
 import { CreatedCredential } from "../../data/authentication/created.credential";
 import { Observable, Observer, of, throwError } from "rxjs";
 import { switchMap, map } from "rxjs/operators";
+import { generate } from "generate-password";
 
 export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
 
@@ -239,16 +240,43 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
     }
 
     updateUserCredential(partyId: string, credential: Credential): Observable<number> {
+      return this.getCredentialByUsername(credential.username)
+          .pipe(switchMap(credential => {
+              if (!credential) {
+                  return throwError(`No credential found ${credential}`);
+              } else {
+                  return this.updateUserCredentialLocal(partyId, credential)
+                      .pipe(switchMap( numReplaced => {
+                          if (!numReplaced) {
+                              return throwError(`Failed to update credential ${numReplaced}`);
+                          } else {
+                              const confirmation: Confirmation = new Confirmation();
+                              confirmation.credentialId = credential.credentialId;
+                              return this.confirmationRepositoryNeDbAdapter.addConfirmation(confirmation)
+                                  .pipe(map(confirmationRes => {
+                                      if (!confirmationRes) {
+                                          throw new Error(`AddConfirmation Failed ${confirmationRes}`);
+                                      } else {
+                                          return numReplaced;
+                                      }
+                                  }));
+                          }
+                  }));
+              }
+          }));
+    }
+
+
+
+    private updateUserCredentialLocal(partyId: string, credential: Credential): Observable<number> {
         return Observable.create(function (observer: Observer<number>) {
             const update: any = {};
             update.username = credential.username;
-            if (credential.password) {
-                update.password = credential.password;
-            }
+            update.status = "suspended";
+            update.password = credential.password || generate({length: 10, numbers: true });
             const query: any = {
                 "partyId": partyId
             };
-
             credentials.update(query, {$set : update}, {}, function (err, numReplaced) {
                 if (!err) {
                     observer.next(numReplaced);
@@ -260,7 +288,8 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
         });
     }
 
-  // getCredentialByCredentialId(credentialId: string): Observable<Credential> {
+
+        // getCredentialByCredentialId(credentialId: string): Observable<Credential> {
   //     return Observable.create(function (observer: Observer<Credential>) {
   //         const query = {
   //             "credentialId": credentialId

@@ -30,15 +30,22 @@ export class UserRepositoryNeDbAdapter implements UserRepository {
     getUsers(pageNumber: number, pageSize: number, order: string): Observable<User[]> {
         return this.getUsersLocal(pageNumber, pageSize, order)
             .pipe(switchMap( users => {
-                if (users.length < 1) return of(users);
-               const partyIds: string[] = users.map(x => x.partyId);
-               return this.credentialRepositoryNeDbAdapter.getCredentialByPartyIds(partyIds)
-                   .pipe(map( credentials => {
-                       users.forEach( val => {
-                           val.username = credentials.find(x => x.partyId === val.partyId).username;
-                       });
-                       return users;
-                   }));
+                if (!users || users.length < 1) {
+                    return of(users);
+                } else {
+                    const partyIds: string[] = users.map(x => x.partyId);
+                    return this.credentialRepositoryNeDbAdapter.getCredentialByPartyIds(partyIds)
+                        .pipe(map( credentials => {
+                            if (!credentials || credentials.length < 1) {
+                                throw new Error(`getCredentialByPartyIds Failed ${credentials}`);
+                            } else {
+                                users.forEach( val => {
+                                    val.username = credentials.find(x => x.partyId === val.partyId).username;
+                                });
+                                return users;
+                            }
+                        }));
+                }
             }));
     }
 

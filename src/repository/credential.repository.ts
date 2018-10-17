@@ -20,7 +20,7 @@ export interface CredentialRepository {
     // USED BY OTHER REPOS
   updateUserCredential(partyId: string, credential: Credential): Observable<number>;
 
-  // isValidEditUsername(partyId:string, username:string):Observable<boolean>;
+    // isValidEditUsername(partyId:string, username:string):Observable<boolean>;
   //
   // getCredentialByUsername(username:string):Observable<Credential>;
   //
