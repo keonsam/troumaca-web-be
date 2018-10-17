@@ -117,7 +117,7 @@ export class SessionRepositoryRestAdapter implements SessionRepository {
 
         // let headers:any = strMapToJson(headerMap);
         const json = {
-            "session": session.toJson()
+            "session": session
         };
 
         const uriAndPath: string = uri + `/sessions`;

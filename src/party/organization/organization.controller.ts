@@ -94,6 +94,7 @@ export  let saveOrganizationCompany = (req: Request, res: Response) => {
             res.send(JSON.stringify(organizationRes));
         }, error => {
             res.status(500);
+            res.setHeader("content-type", "application/json");
             res.send(JSON.stringify({message: "Error Occurred"}));
             console.log(error);
         });
@@ -101,7 +102,8 @@ export  let saveOrganizationCompany = (req: Request, res: Response) => {
 
 export let saveAccessRequest = (req: Request, res: Response) => {
 
-    const request: JoinOrganization = req.body;
+    const request = req.body;
+
     if (!request || !request.organizationId) {
         res.status(400);
         res.setHeader("content-type", "application/json");

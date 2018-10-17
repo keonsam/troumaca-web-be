@@ -44,7 +44,7 @@ export class CredentialOrchestrator {
                   return this.userRepository.saveUser(user)
                       .pipe(map( user => {
                           if (!user) {
-                              throw user;
+                              throw new Error( "user was not created.");
                           } else {
                               return createdCredential.confirmation;
                           }
@@ -61,9 +61,9 @@ export class CredentialOrchestrator {
 
       return this.credentialRepository
           .authenticate(credential, options)
-          .pipe(switchMap((authenticatedCredential: AuthenticatedCredential) =>  {
+          .pipe(switchMap(authenticatedCredential =>  {
               if (!authenticatedCredential) {
-                  return of(undefined);
+                  return throwError(authenticatedCredential);
               } else if (authenticatedCredential.authenticateStatus === "AccountConfirmed" || authenticatedCredential.authenticateStatus === "AccountActive") {
                   const session: Session = new Session();
                   session.partyId = authenticatedCredential.partyId;
@@ -84,10 +84,11 @@ export class CredentialOrchestrator {
                   return this.sessionRepository.addSession(session, options)
                       .pipe(map(session => {
                           if (!session) {
-                              return throwError(session);
+                              throw new Error("Session was not created.");
+                          } else {
+                              authenticatedCredential.sessionId = session.sessionId;
+                              return authenticatedCredential;
                           }
-                          authenticatedCredential.sessionId = session.sessionId;
-                          return authenticatedCredential;
                       }));
               } else {
                   return of(authenticatedCredential);

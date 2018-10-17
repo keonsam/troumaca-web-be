@@ -32,7 +32,9 @@ describe('join-organization', function () {
         code: ""
     };
 
-    let cookie = '';
+    let cookie;
+
+    let partyId;
 
     it('join organization 1 credential', function (done) {
         api.post("/authentication/credentials")
@@ -85,7 +87,6 @@ describe('join-organization', function () {
                 if (err) {
                     console.log(err);
                 }
-                console.log(res.body);
                 expect(res.body.credentialId).to.be.a('string');
                 expect(res.body.sessionId).to.be.a('string');
                 cookie = `sessionId=${res.body.sessionId}`;
@@ -108,7 +109,7 @@ describe('join-organization', function () {
                     console.log(err);
                 }
                 expect(res.body.partyId).to.be.a('string');
-                organization.partyId = res.body.partyId;
+                partyId = res.body.partyId;
                 expect(res.body.name).to.be.a('string');
                 expect(res.body.purpose).to.be.a('string');
                 done(err);
@@ -116,12 +117,14 @@ describe('join-organization', function () {
     });
 
     it('join profile organization', function (done) {
-        api.post("/organizations/access-requests")
+        api.post("/organizations/request-access")
             .set('Accept', 'application/json')
             .set('correlationId', 1234567890)
             .set('Cookie', [cookie])
             .send({
-                organizationId: organization.partyId
+                accessRequestId: '',
+                partyId: '',
+                organizationId: partyId
             })
             .expect('Content-Type', /json/)
             .expect(201)
@@ -131,6 +134,7 @@ describe('join-organization', function () {
                 } else {
                     expect(res.body.accessRequestId).to.be.a('string');
                     expect(res.body.partyId).to.be.a('string');
+                    expect(res.body.organizationId).to.be.a('string');
                 }
                 done(err);
             });

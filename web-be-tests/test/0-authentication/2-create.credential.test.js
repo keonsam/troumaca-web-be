@@ -28,7 +28,7 @@ describe('create-credential', function () {
       .expect(201)
       .end(function (err, res) {
         if (!err) {
-            expect(res.body.confirmationId).to.be.a('string'); //TODO : MAKE THIS BETTER;
+            expect(res.body.confirmationId).to.be.a('string');
             expect(res.body.credentialId).to.be.a('string');
             expect(res.body.code).to.have.lengthOf(6);
             expect(res.body.status).to.equal("New");

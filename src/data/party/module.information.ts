@@ -3,4 +3,5 @@ export class ModuleInformation {
     features: string[];
     route: string;
     price: string;
+    iconClass: string;
 }

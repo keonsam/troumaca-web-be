@@ -98,7 +98,7 @@ describe('authenticate-credential', function () {
               password: "Tester3@user"
           })
           .expect('Content-Type', /json/)
-          .expect(404)
+          .expect(200)
           .end(function (err, res) {
               if (err) {
                   console.log(err);

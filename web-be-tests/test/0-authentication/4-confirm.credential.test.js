@@ -25,7 +25,7 @@ describe('confirm-credential', function () {
     code: ""
   };
 
-  it('confirm create credential', function (done) {
+  it('create credential', function (done) {
     api.post("/authentication/credentials")
       .set('Accept', 'application/json')
       .set('correlationId', 1234567890)
@@ -35,20 +35,18 @@ describe('confirm-credential', function () {
       .end(function (err, res) {
         if (!err) {
           expect(res.body.status).to.equal("New");
-          console.log("Completed B.");
           confirm.confirmationId = res.body.confirmationId;
           confirm.credentialId = res.body.credentialId;
           confirm.code = res.body.code;
         } else {
+            console.log(err);
         }
         done(err);
       });
   });
 
 
-  it('confirm create credential 2', function (done) {
-
-    console.log("Completed 2.");
+  it('confirm credential', function (done) {
 
     api.post("/authentication/confirmations/verify")
       .set('Accept', 'application/json')
@@ -57,9 +55,10 @@ describe('confirm-credential', function () {
       .expect('Content-Type', /json/)
       .expect(200)
       .end(function (err, res) {
-        console.log(err);
         if (!err) {
           expect(res.body.status).to.equal("Confirmed")
+        } else {
+            console.log(err);
         }
         done(err);
       });

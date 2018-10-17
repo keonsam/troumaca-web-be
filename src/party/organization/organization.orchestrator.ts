@@ -54,9 +54,9 @@ export class OrganizationOrchestrator {
       return this.organizationRepository.saveOrganization(organization)
           .pipe(switchMap(organizationRes => {
             if (!organizationRes) {
-              return throwError(organizationRes);
+              return throwError("Failed to save organization.");
             } else {
-              return this.credentialRepository.updateCredentialStatusByPartyId(organization.partyId, "Confirmed")
+              return this.credentialRepository.updateCredentialStatusByPartyId(organization.partyId, "Active")
                   .pipe( map(numUpdated => {
                     if (!numUpdated) {
                       throw new Error("credential status was not updated.");
@@ -72,9 +72,9 @@ export class OrganizationOrchestrator {
       return this.organizationRepository.saveAccessRequest(request)
           .pipe( switchMap( requestRes => {
               if (!requestRes) {
-                  return throwError(requestRes);
+                  return throwError("Failed to save organization access request.");
               } else {
-                  return this.credentialRepository.updateCredentialStatusByPartyId(request.partyId, "Confirmed")
+                  return this.credentialRepository.updateCredentialStatusByPartyId(request.partyId, "Active")
                       .pipe( map(numUpdated => {
                           if (!numUpdated) {
                               throw new Error("credential status was not updated.");
