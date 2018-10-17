@@ -19,6 +19,7 @@
     "chai": "^3.5.0",
     "mocha": "^3.5.3",
     "mocha-jenkins-reporter": "^0.3.12",
+    "node-mocks-http": "^1.7.2",
     "supertest": "^3.3.0"
   }
 }

@@ -81,14 +81,14 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
       return this.addCredentialLocal(credential)
           .pipe(switchMap(credential => {
               if (!credential) {
-                  return throwError(credential);
+                  return throwError("Credential was not created.");
               } else {
                   const confirmation: Confirmation = new Confirmation();
                   confirmation.credentialId = credential.credentialId;
                   return this.confirmationRepositoryNeDbAdapter.addConfirmation(confirmation)
                       .pipe(map(confirmation => {
                           if (!confirmation) {
-                              throw confirmation;
+                              throw new Error("Confirmation failed to be created.");
                           } else {
                               return new CreatedCredential(credential, confirmation);
                           }
@@ -101,7 +101,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
     return this.verifyCredential(credential.username, credential.password)
     .pipe(switchMap((credential: Credential) => {
       if (!credential) {
-        return of(undefined);
+        return of("Failed to verify Credential");
       } else {
           const authenticatedCredential: AuthenticatedCredential = new AuthenticatedCredential();
           const credentialId = credential.credentialId;
@@ -110,21 +110,21 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
           authenticatedCredential.partyId = credential.partyId;
           if (credential.status === "Active") {
               authenticatedCredential.authenticateStatus = "AccountActive";
-              return of(authenticatedCredential.toJson());
+              return of(authenticatedCredential);
           } else if (credential.status === "Confirmed") {
               authenticatedCredential.authenticateStatus = "AccountConfirmed";
-              return of(authenticatedCredential.toJson());
+              return of(authenticatedCredential);
           } else if (credential.status === "New") {
               const confirmation: Confirmation = new Confirmation();
               confirmation.credentialId = credentialId;
               return this.confirmationRepositoryNeDbAdapter.addConfirmation(confirmation)
                   .pipe(map(confirmationRes => {
                      if (!confirmationRes) {
-                         throw new Error("confirmation did not get created");
+                         throw new Error("Confirmation was not created");
                      } else {
                          authenticatedCredential.confirmationId = confirmation.confirmationId;
                          authenticatedCredential.authenticateStatus = "AccountUsernameNotConfirmed";
-                         return authenticatedCredential.toJson();
+                         return authenticatedCredential;
                      }
                   }));
           }
@@ -371,6 +371,8 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
   addCredentialLocal(credential: Credential): Observable<Credential> {
       credential.credentialId = generateUUID();
       credential.partyId = generateUUID();
+      credential.createdOn = new Date();
+      credential.modifiedOn = new Date();
       if (!credential.status) {
           credential.status = "New";
       }

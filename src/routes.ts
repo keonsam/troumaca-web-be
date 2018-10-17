@@ -56,8 +56,8 @@ router.post("/authentication/confirmations/resend", confirmationController.resen
 router.post("/authentication/confirmations/verify", confirmationController.confirmCode);
 // session
 router.get("/sessions/is-valid-session", sessionController.isValidSession);
-router.get("/sessions/partyId", checkSession, sessionController.getPartyId);
-router.get("/sessions/log-out-user", checkSession, sessionController.handleSessionLogOut);
+// router.get("/sessions/partyId", checkSession, sessionController.getPartyId);
+// router.get("/sessions/log-out-user", checkSession, sessionController.handleSessionLogOut);
 // permissions
 router.get("/permissions", checkSession, permissionController.getPermissions);
 router.get("/permissions/permissions", checkSession, permissionController.getPermissionsByArray);
@@ -203,7 +203,7 @@ router.get("/organizations/:partyId", checkSession, organizationController.getOr
 router.get("/organizations-find", checkSession, organizationController.findOrganizations);
 router.post("/organizations", checkSession, organizationController.saveOrganization);
 router.post("/organizations/profiles", checkSession, organizationController.saveOrganizationCompany);
-router.post("/organizations/access-requests", checkSession, organizationController.saveAccessRequest);
+router.post("/organizations/request-access", checkSession, organizationController.saveAccessRequest);
 router.put("/organizations/:partyId", checkSession, organizationController.updateOrganization);
 router.delete("/organizations/:partyId", checkSession, organizationController.deleteOrganization);
 

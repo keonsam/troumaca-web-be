@@ -144,6 +144,7 @@ export let authenticate = (req: Request, res: Response) => {
             res.send(body);
         }, error => {
             res.status(500);
+            res.setHeader("content-type", "application/json");
             res.send(JSON.stringify({message: "Internal Occurred"}));
             console.log(error);
         });

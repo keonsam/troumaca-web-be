@@ -25,7 +25,7 @@ describe('resend-confirmation', function () {
         code: ""
     };
 
-    it('confirm create credential', function (done) {
+    it('resent create credential', function (done) {
         api.post("/authentication/credentials")
             .set('Accept', 'application/json')
             .set('correlationId', 1234567890)
@@ -34,12 +34,15 @@ describe('resend-confirmation', function () {
             .expect(201)
             .end(function (err, res) {
                 if (!err) {
+                    expect(res.body.confirmationId).to.be.a('string');
+                    expect(res.body.credentialId).to.be.a('string');
+                    expect(res.body.code).to.have.lengthOf(6);
                     expect(res.body.status).to.equal("New");
-                    console.log("Completed B.");
                     confirm.confirmationId = res.body.confirmationId;
                     confirm.credentialId = res.body.credentialId;
                     confirm.code = res.body.code;
                 } else {
+                    console.log(err);
                 }
                 done(err);
             });
@@ -47,9 +50,6 @@ describe('resend-confirmation', function () {
 
 
     it('should send a new confirmation', function (done) {
-
-        console.log("Completed 2.");
-
         api.post('/authentication/confirmations/resend')
             .set('Accept', 'application/json')
             .set('correlationId', 1234567890)
@@ -57,13 +57,14 @@ describe('resend-confirmation', function () {
             .expect('Content-Type', /json/)
             .expect(201)
             .end(function (err, res) {
-                console.log(err);
                 if (!err) {
                     expect(res.body.confirmationId).to.not.equal(confirm.confirmationId);
-                    expect(res.body.confirmationId).to.be.a('string'); //TODO : MAKE THIS BETTER;
+                    expect(res.body.confirmationId).to.be.a('string');
                     expect(res.body.credentialId).to.be.a('string');
                     expect(res.body.code).to.have.lengthOf(6);
                     expect(res.body.status).to.equal("New");
+                }else {
+                    console.log(err);
                 }
                 done(err);
             });

@@ -17,9 +17,8 @@ export class SessionRepositoryNeDbAdapter implements SessionRepository {
         }
         return this.getSessionById(sessionId)
             .pipe(map(session => {
-            if (!session || !session.sessionId) {
-                validSession.valid = false;
-                return validSession;
+            if (!session) {
+                throw new Error("Session can not be found.");
             } else if (session.expirationTime > new Date()) {
                 validSession.valid = true;
                 validSession.partyId = session.partyId;
@@ -145,7 +144,7 @@ export class SessionRepositoryNeDbAdapter implements SessionRepository {
         }
 
         return Observable.create(function (observer: Observer<Session>) {
-            sessions.insert(session.toJson(), function (err: any, doc: any) {
+            sessions.insert(session, function (err: any, doc: any) {
                 if (!err) {
                     observer.next(doc);
                 } else {
