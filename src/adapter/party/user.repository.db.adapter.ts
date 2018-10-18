@@ -111,6 +111,7 @@ export class UserRepositoryNeDbAdapter implements UserRepository {
             const query = {
                 "partyId": partyId
             };
+            user.modifiedOn = new Date();
             users.update(query, user, {}, function (err: any, numReplaced: number) {
                 if (!err) {
                     observer.next(numReplaced);

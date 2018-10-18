@@ -63,7 +63,11 @@ export class UserOrchestrator {
                     return this.partyAccessRoleRepository.getPartyAccessRolesByPartyId(partyId)
                         .pipe(switchMap((partyAccessRoles: PartyAccessRole[]) => {
                             if (partyAccessRoles.length < 1) {
-                                return throwError(`No PartyAccessRoles found ${partyAccessRoles}`);
+                                // error below should return an error if no party access role/s is found but,
+                                // un-invited user which request join access can't automatically have the role of admin
+                                // skip for now
+                                // return throwError(`No PartyAccessRoles found ${partyAccessRoles}`);
+                                return of(new UserResponse(user));
                             } else {
                                 const accessRoleIds: string[] = partyAccessRoles.map(x => {
                                     if (x.accessRoleId) return x.accessRoleId;
@@ -131,8 +135,10 @@ export class UserOrchestrator {
     }
 
     updateUser(partyId: string, user: User, credential: Credential, partyAccessRoles: PartyAccessRole[]): Observable<number> {
-        const updateUser = user.username !== credential.username;
-        user.username = undefined;
+        if (credential && credential.username === user.name) {
+            delete credential.username;
+        }
+        delete user.username;
         return this.userRepository.updateUser(partyId, user)
             .pipe(switchMap(numUpdated => {
                 if (!numUpdated) {
@@ -142,7 +148,7 @@ export class UserOrchestrator {
                         .pipe(switchMap(partyAccessRolesRes => {
                             if (!partyAccessRolesRes) {
                                 return throwError(`updatePartyAccessRoles Failed ${partyAccessRolesRes}`);
-                            } else if (!updateUser) {
+                            } else if (!credential) {
                                 return of(numUpdated);
                             } else {
                                 return this.credentialRepository.updateUserCredential(partyId, credential)
@@ -160,13 +166,15 @@ export class UserOrchestrator {
     }
 
     updateUserMe(partyId: string, user: User, credential: Credential): Observable<number> {
-        const updateUser = user.username !== credential.username || credential.password;
-        user.username = undefined;
+        if (credential && credential.username === user.name) {
+            delete credential.username;
+        }
+        delete user.username;
         return this.userRepository.updateUser(partyId, user)
             .pipe(switchMap(numUpdated => {
                 if (!numUpdated) {
                     return throwError(`No Profile found to update ${numUpdated}`);
-                } else if (!updateUser) {
+                } else if (!credential) {
                     return of(numUpdated);
                 } else {
                     // TODO : separate this in the future if needed

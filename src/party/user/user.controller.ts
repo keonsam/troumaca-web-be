@@ -15,9 +15,11 @@ export let findUser = (req: Request, res: Response) => {
   userOrchestrator.findUser(searchStr, pageSize)
     .subscribe(users => {
         res.status(200);
+        res.setHeader("content-type", "application/json");
         res.send(JSON.stringify(users));
     }, error => {
         res.status(500);
+        res.setHeader("content-type", "application/json");
         res.send(JSON.stringify({message: "Error Occurred"}));
         console.log(error);
     });
@@ -34,9 +36,11 @@ export  let getUsers = (req: Request, res: Response) => {
   userOrchestrator.getUsers(number, size, field, direction)
     .subscribe(result => {
         res.status(200);
+        res.setHeader("content-type", "application/json");
         res.send(JSON.stringify(result.data));
     }, error => {
         res.status(500);
+        res.setHeader("content-type", "application/json");
         res.send(JSON.stringify({message: "Error Occurred"}));
         console.log(error);
     });
@@ -48,13 +52,16 @@ export  let getUser = (req: Request, res: Response) => {
     .subscribe(userResponse => {
         if (userResponse.user) {
             res.status(200);
+            res.setHeader("content-type", "application/json");
             res.send(JSON.stringify(userResponse));
         } else {
             res.status(404);
+            res.setHeader("content-type", "application/json");
             res.send(JSON.stringify({message: "No Data Found For " + req.params.partyId}));
         }
     }, error => {
         res.status(500);
+        res.setHeader("content-type", "application/json");
         res.send(JSON.stringify({message: "Error Occurred"}));
         console.log(error);
     });
@@ -66,13 +73,16 @@ export  let getUserMe = (req: Request, res: Response) => {
         .subscribe(userResponse => {
             if (userResponse.user) {
                 res.status(200);
+                res.setHeader("content-type", "application/json");
                 res.send(JSON.stringify(userResponse));
             } else {
                 res.status(404);
+                res.setHeader("content-type", "application/json");
                 res.send(JSON.stringify({message: "No Profile Found."}));
             }
         }, error => {
             res.status(500);
+            res.setHeader("content-type", "application/json");
             res.send(JSON.stringify({message: "Error Occurred"}));
             console.log(error);
         });
@@ -107,9 +117,11 @@ export  let saveUser = (req: Request, res: Response) => {
   userOrchestrator.saveUser(user, credential, partyAccessRoles)
     .subscribe(user => {
         res.status(201);
+        res.setHeader("content-type", "application/json");
         res.send(JSON.stringify(user));
     }, error => {
         res.status(500);
+        res.setHeader("content-type", "application/json");
         res.send(JSON.stringify({message: "Error Occurred"}));
         console.log(error);
     });
@@ -128,13 +140,6 @@ export let updateUser = (req: Request, res: Response) => {
         return;
     }
 
-    if (!credential || !credential.username ) {
-        res.status(400);
-        res.setHeader("content-type", "application/json");
-        res.send({message: "'Credential' must exist, and contain username."});
-        return;
-    }
-
     if (partyAccessRoles.length < 1) {
         res.status(400);
         res.setHeader("content-type", "application/json");
@@ -147,13 +152,16 @@ export let updateUser = (req: Request, res: Response) => {
     .subscribe(affected => {
         if (affected > 0) {
             res.status(200);
+            res.setHeader("content-type", "application/json");
             res.send(JSON.stringify(affected));
         } else {
             res.status(404);
+            res.setHeader("content-type", "application/json");
             res.send(JSON.stringify({message: "No Data Found For " + req.params.partyId}));
         }
     }, error => {
         res.status(500);
+        res.setHeader("content-type", "application/json");
         res.send(JSON.stringify({message: "Error Occurred"}));
         console.log(error);
     });
@@ -171,25 +179,21 @@ export let updateUserMe = (req: Request, res: Response) => {
         return;
     }
 
-    if (!credential || !credential.username ) {
-        res.status(400);
-        res.setHeader("content-type", "application/json");
-        res.send({message: "'Credential' must exist, and contain username."});
-        return;
-    }
-
     userOrchestrator
         .updateUserMe(partyId, user, credential)
         .subscribe(affected => {
             if (affected > 0) {
                 res.status(200);
+                res.setHeader("content-type", "application/json");
                 res.send(JSON.stringify(affected));
             } else {
                 res.status(404);
+                res.setHeader("content-type", "application/json");
                 res.send(JSON.stringify({message: "Could not update profile."}));
             }
         }, error => {
             res.status(500);
+            res.setHeader("content-type", "application/json");
             res.send(JSON.stringify({message: "Error Occurred"}));
             console.log(error);
         });
@@ -202,13 +206,16 @@ export let deleteUser = (req: Request, res: Response) => {
         .subscribe(affected => {
             if (affected > 0) {
                 res.status(200);
+                res.setHeader("content-type", "application/json");
                 res.send(JSON.stringify(affected));
             } else {
                 res.status(404);
+                res.setHeader("content-type", "application/json");
                 res.send(JSON.stringify({message: "No Data Found For " + req.params.partyId}));
             }
         }, error => {
             res.status(500);
+            res.setHeader("content-type", "application/json");
             res.send(JSON.stringify({message: "Error Occurred"}));
             console.log(error);
         });

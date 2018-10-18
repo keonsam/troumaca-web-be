@@ -191,14 +191,14 @@ router.delete("/phones/:siteId", checkSession, phoneController.deletePhone);
 
 // user
 router.get("/users/find", checkSession, userController.findUser);
-router.get("/users", checkSession, userController.getUsers);
 router.get("/users/profile", checkSession, userController.getUserMe);
 router.get("/users/:partyId", checkSession, userController.getUser);
+router.get("/users", checkSession, userController.getUsers);
 router.post("/users", checkSession, userController.saveUser);
 router.put("/users/profile", checkSession, userController.updateUserMe);
 router.put("/users/:partyId", checkSession, userController.updateUser);
 router.delete("/users/:partyId", checkSession, userController.deleteUser);
-router.delete("/users/:partyId", checkSession, userController.deleteUser);
+
 // organizations
 router.get("/organizations", checkSession, organizationController.getOrganizations);
 router.get("/organizations/:partyId", checkSession, organizationController.getOrganization);
