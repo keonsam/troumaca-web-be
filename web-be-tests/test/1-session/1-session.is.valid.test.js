@@ -7,7 +7,7 @@ let cookie = '';
 
 describe('session-is-valid', function () {
 
-    this.timeout(60000 * 25);
+    this.timeout(1000);
 
     it('should be an authenticated credential with status of "AccountActive"', function (done) {
         api.post('/authentication/authenticate')
