@@ -23,7 +23,7 @@ export class OrganizationProfileOrchestrator {
   }
 
   createProfileOrganization(profile:OrganizationProfile, options?: any): Observable<Organization> {
-    return this.organizationRepository.saveOrganization(profile.organization, options);
+    return this.organizationRepository.saveCustomerOrganization(profile.organization, options);
   }
 
   createProfilePhoto(profile:OrganizationProfile, options?: any):Observable<Photo> {

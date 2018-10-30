@@ -13,6 +13,33 @@ export class OrganizationRestRepository implements OrganizationRepository {
     return undefined;
   }
 
+  saveCustomerOrganization(organization: Organization, options?: any): Observable<Organization> {
+    const uri: string = properties.get("party.host.port") as string;
+
+    const headerMap = jsonRequestHeaderMap(options ? options : {});
+
+    const json = organization;
+
+    const uriAndPath: string = uri + "/parties/organizations/customer";
+
+    const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
+
+    return Observable.create(function (observer: Observer<Organization>) {
+      request(requestOptions, function (error: any, response: any, body: any) {
+        try {
+          if (response && response.statusCode != 200) {
+            observer.error(body);
+          } else {
+            observer.next(body);
+          }
+        } catch (e) {
+          observer.error(new Error(e.message));
+        }
+        observer.complete();
+      });
+    });
+  }
+
   saveOrganization(organization: Organization, options?: any): Observable<Organization> {
     const uri: string = properties.get("party.host.port") as string;
 
