@@ -26,6 +26,10 @@ export class OrganizationDBRepository implements OrganizationRepository {
     });
   }
 
+  saveCustomerOrganization(organization: Organization, options?: any): Observable<Organization> {
+    return this.saveOrganization(organization, options)
+  }
+
   saveOrganization(organization: Organization, options?: any): Observable<Organization> {
     if (!organization.partyId) { organization.partyId = generateUUID(); }
     if (!organization.version) { organization.version = generateUUID(); }
