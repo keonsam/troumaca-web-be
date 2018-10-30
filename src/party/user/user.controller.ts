@@ -2,7 +2,9 @@ import { Request, Response } from "express";
 import { UserOrchestrator } from "./user.orchestrator";
 import { getNumericValueOrDefault } from "../../number.util";
 import { getStringValueOrDefault } from "../../string.util";
-import {CreateCredential} from "../../data/authentication/create.credential";
+import { User } from "../../data/party/user";
+import { Credential } from "../../data/authentication/credential";
+import { PartyAccessRole } from "../../data/authorization/party.access.role";
 
 const userOrchestrator: UserOrchestrator = new UserOrchestrator();
 
@@ -13,9 +15,11 @@ export let findUser = (req: Request, res: Response) => {
   userOrchestrator.findUser(searchStr, pageSize)
     .subscribe(users => {
         res.status(200);
+        res.setHeader("content-type", "application/json");
         res.send(JSON.stringify(users));
     }, error => {
         res.status(500);
+        res.setHeader("content-type", "application/json");
         res.send(JSON.stringify({message: "Error Occurred"}));
         console.log(error);
     });
@@ -32,9 +36,11 @@ export  let getUsers = (req: Request, res: Response) => {
   userOrchestrator.getUsers(number, size, field, direction)
     .subscribe(result => {
         res.status(200);
+        res.setHeader("content-type", "application/json");
         res.send(JSON.stringify(result.data));
     }, error => {
         res.status(500);
+        res.setHeader("content-type", "application/json");
         res.send(JSON.stringify({message: "Error Occurred"}));
         console.log(error);
     });
@@ -42,47 +48,80 @@ export  let getUsers = (req: Request, res: Response) => {
 
 export  let getUser = (req: Request, res: Response) => {
   const partyId = req.params.partyId;
-  const sessionId = req.cookies["sessionId"];
-  userOrchestrator.getUser(partyId, sessionId)
+  userOrchestrator.getUser(partyId)
     .subscribe(userResponse => {
         if (userResponse.user) {
             res.status(200);
-            res.send(JSON.stringify(userResponse.toJson()));
+            res.setHeader("content-type", "application/json");
+            res.send(JSON.stringify(userResponse));
         } else {
             res.status(404);
+            res.setHeader("content-type", "application/json");
             res.send(JSON.stringify({message: "No Data Found For " + req.params.partyId}));
         }
     }, error => {
         res.status(500);
+        res.setHeader("content-type", "application/json");
         res.send(JSON.stringify({message: "Error Occurred"}));
         console.log(error);
     });
 };
 
-export  let saveUser = (req: Request, res: Response) => {
-  const user = req.body.user;
-  const credential = req.body.credential;
-  const partyAccessRoles = req.body.partyAccessRoles;
-  const sessionId = req.cookies["sessionId"];
-  const createCredential:CreateCredential = new CreateCredential();
-  createCredential.partyId = credential.partyId;
-  createCredential.password = credential.password;
-  createCredential.credentialId = credential.credentialId;
-  createCredential.username = credential.username;
-  createCredential.status = credential.status;
-  createCredential.modifiedOn = credential.modifiedOn;
-
-    if (!req.body) {
-        return res.status(400).send({
-            message: "User can not be empty"
+export  let getUserMe = (req: Request, res: Response) => {
+    const partyId = res.locals.partyId;
+    userOrchestrator.getUser(partyId)
+        .subscribe(userResponse => {
+            if (userResponse.user) {
+                res.status(200);
+                res.setHeader("content-type", "application/json");
+                res.send(JSON.stringify(userResponse));
+            } else {
+                res.status(404);
+                res.setHeader("content-type", "application/json");
+                res.send(JSON.stringify({message: "No Profile Found."}));
+            }
+        }, error => {
+            res.status(500);
+            res.setHeader("content-type", "application/json");
+            res.send(JSON.stringify({message: "Error Occurred"}));
+            console.log(error);
         });
+};
+
+export  let saveUser = (req: Request, res: Response) => {
+  const user: User = req.body.user;
+  const credential: Credential = req.body.credential;
+  const partyAccessRoles: PartyAccessRole[] = req.body.partyAccessRoles;
+
+    if (!user || !user.firstName || !user.lastName) {
+        res.status(400);
+        res.setHeader("content-type", "application/json");
+        res.send({message: "'User' must exist, and contain first and last name."});
+        return;
     }
-  userOrchestrator.saveUser(user, createCredential, partyAccessRoles, sessionId)
+
+    if (!credential || !credential.username ) {
+        res.status(400);
+        res.setHeader("content-type", "application/json");
+        res.send({message: "'Credential' must exist, and contain username."});
+        return;
+    }
+
+    if (partyAccessRoles.length < 1) {
+        res.status(400);
+        res.setHeader("content-type", "application/json");
+        res.send({message: "'PartAccessRoles' must contain at least 1 accessRole."});
+        return;
+    }
+
+  userOrchestrator.saveUser(user, credential, partyAccessRoles)
     .subscribe(user => {
         res.status(201);
+        res.setHeader("content-type", "application/json");
         res.send(JSON.stringify(user));
     }, error => {
         res.status(500);
+        res.setHeader("content-type", "application/json");
         res.send(JSON.stringify({message: "Error Occurred"}));
         console.log(error);
     });
@@ -90,29 +129,74 @@ export  let saveUser = (req: Request, res: Response) => {
 
 export let updateUser = (req: Request, res: Response) => {
   const partyId = req.params.partyId;
-  const user = req.body.user;
-  const credential = req.body.credential;
-  const partyAccessRoles = req.body.partyAccessRoles;
-  if (!req.body) {
-      return res.status(400).send({
-          message: "User can not be empty"
-      });
-  }
+  const user: User = req.body.user;
+  const credential: Credential = req.body.credential;
+  const partyAccessRoles: PartyAccessRole[] = req.body.partyAccessRoles;
+
+    if (!user || !user.firstName || !user.lastName) {
+        res.status(400);
+        res.setHeader("content-type", "application/json");
+        res.send({message: "'User' must exist, and contain first and last name."});
+        return;
+    }
+
+    if (partyAccessRoles.length < 1) {
+        res.status(400);
+        res.setHeader("content-type", "application/json");
+        res.send({message: "'PartAccessRoles' must contain at least 1 accessRole."});
+        return;
+    }
+
   userOrchestrator
     .updateUser(partyId, user, credential, partyAccessRoles)
     .subscribe(affected => {
         if (affected > 0) {
             res.status(200);
+            res.setHeader("content-type", "application/json");
             res.send(JSON.stringify(affected));
         } else {
             res.status(404);
+            res.setHeader("content-type", "application/json");
             res.send(JSON.stringify({message: "No Data Found For " + req.params.partyId}));
         }
     }, error => {
         res.status(500);
+        res.setHeader("content-type", "application/json");
         res.send(JSON.stringify({message: "Error Occurred"}));
         console.log(error);
     });
+};
+
+export let updateUserMe = (req: Request, res: Response) => {
+    const partyId = res.locals.partyId;
+    const user: User = req.body.user;
+    const credential: Credential = req.body.credential;
+
+    if (!user || !user.firstName || !user.lastName) {
+        res.status(400);
+        res.setHeader("content-type", "application/json");
+        res.send({message: "'User' must exist, and contain first and last name."});
+        return;
+    }
+
+    userOrchestrator
+        .updateUserMe(partyId, user, credential)
+        .subscribe(affected => {
+            if (affected > 0) {
+                res.status(200);
+                res.setHeader("content-type", "application/json");
+                res.send(JSON.stringify(affected));
+            } else {
+                res.status(404);
+                res.setHeader("content-type", "application/json");
+                res.send(JSON.stringify({message: "Could not update profile."}));
+            }
+        }, error => {
+            res.status(500);
+            res.setHeader("content-type", "application/json");
+            res.send(JSON.stringify({message: "Error Occurred"}));
+            console.log(error);
+        });
 };
 
 export let deleteUser = (req: Request, res: Response) => {
@@ -122,13 +206,16 @@ export let deleteUser = (req: Request, res: Response) => {
         .subscribe(affected => {
             if (affected > 0) {
                 res.status(200);
+                res.setHeader("content-type", "application/json");
                 res.send(JSON.stringify(affected));
             } else {
                 res.status(404);
+                res.setHeader("content-type", "application/json");
                 res.send(JSON.stringify({message: "No Data Found For " + req.params.partyId}));
             }
         }, error => {
             res.status(500);
+            res.setHeader("content-type", "application/json");
             res.send(JSON.stringify({message: "Error Occurred"}));
             console.log(error);
         });

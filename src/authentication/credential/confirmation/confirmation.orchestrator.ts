@@ -11,12 +11,12 @@ export class ConfirmationOrchestrator {
     this.confirmationRepository = createCredentialConfirmationRepositoryFactory();
   }
 
-  confirmCode(confirmationId: string, credentialId: string, confirmation: Confirmation, options?: any): Observable<Confirmation> {
-    return this.confirmationRepository.confirmCode(confirmationId, credentialId, confirmation, options);
+  resendConfirmCode(confirmationId: string, credentialId: string, options?: any): Observable<Confirmation> {
+      return this.confirmationRepository.resendConfirmCode(confirmationId, credentialId, options);
   }
 
-  resendConfirmCode(confirmationId: string, credentialId: string, options?: any): Observable<Confirmation> {
-    return this.confirmationRepository.resendConfirmCode(confirmationId, credentialId, options);
+  confirmCode(confirmationId: string, credentialId: string, confirmation: Confirmation, options?: any): Observable<Confirmation> {
+    return this.confirmationRepository.confirmCode(confirmationId, credentialId, confirmation, options);
   }
 
   // getConfirmationsUsername(credentialConfirmationId:string):Observable<string> {

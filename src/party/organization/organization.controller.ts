@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { OrganizationOrchestrator } from "./organization.orchestrator";
 import { getNumericValueOrDefault } from "../../number.util";
 import { getStringValueOrDefault } from "../../string.util";
+import { JoinOrganization } from "../../data/party/join.organization";
+import { Organization } from "../../data/party/organization";
 
 const organizationOrchestrator: OrganizationOrchestrator = new OrganizationOrchestrator();
 
@@ -14,29 +16,10 @@ export let findOrganizations = (req: Request, res: Response) => {
         .subscribe( organizations => {
             res.status(200);
             res.send(JSON.stringify(organizations));
-        });
-};
-
-export let sendJoinRequest = (req: Request, res: Response) => {
-
-    const request: string = req.body.request;
-    const sessionId: string = req.cookies["sessionId"];
-    if (!request) {
-        return res.status(400).send({
-            message: "A join request to an organization must be sent"
-        });
-    }
-
-    organizationOrchestrator
-        .sendJoinRequest(request, sessionId)
-        .subscribe( valid => {
-            if (valid) {
-                res.status(200);
-                res.send(JSON.stringify(true));
-            } else {
-                res.status(404);
-                res.send(JSON.stringify('error'));
-            };
+        }, error => {
+            res.status(500);
+            res.send(JSON.stringify({message: "Error Occurred"}));
+            console.log(error);
         });
 };
 
@@ -59,10 +42,9 @@ export  let getOrganizations = (req: Request, res: Response) => {
 };
 
 export  let getOrganization = (req: Request, res: Response) => {
-  const partyId = req.params.partyId;
-  const sessionId = req.cookies["sessionId"];
+  const partyId = req.params.partyId || res.locals.partyId;
   organizationOrchestrator
-    .getOrganization(partyId, sessionId)
+    .getOrganization(partyId)
     .subscribe(organization => {
         if (organization) {
             res.status(200);
@@ -80,15 +62,8 @@ export  let getOrganization = (req: Request, res: Response) => {
 
 export  let saveOrganization = (req: Request, res: Response) => {
   const organization = req.body.organization;
-  const sessionId = req.cookies["sessionId"];
-  const type = req.body.type;
-    if (!req.body) {
-        return res.status(400).send({
-            message: "Organization can not be empty"
-        });
-    }
   organizationOrchestrator
-    .saveOrganization(organization, sessionId, type)
+    .saveOrganization(organization)
     .subscribe(organization => {
         res.status(201);
         res.send(JSON.stringify(organization));
@@ -97,6 +72,66 @@ export  let saveOrganization = (req: Request, res: Response) => {
         res.send(JSON.stringify({message: "Error Occurred"}));
         console.log(error);
     });
+};
+
+export  let saveOrganizationCompany = (req: Request, res: Response) => {
+    const organization: Organization = req.body;
+
+    if (!organization || !organization.name || !organization.purpose) {
+        res.status(400);
+        res.setHeader("content-type", "application/json");
+        res.send(JSON.stringify({message: "'Organization' must be sent, and must contain name and purpose."}));
+        return;
+    }
+
+    organization.partyId = res.locals.partyId;
+
+    organizationOrchestrator
+        .saveOrganizationCompany(organization)
+        .subscribe(organizationRes => {
+            res.status(201);
+            res.setHeader("content-type", "application/json");
+            res.send(JSON.stringify(organizationRes));
+        }, error => {
+            res.status(500);
+            res.setHeader("content-type", "application/json");
+            res.send(JSON.stringify({message: "Error Occurred"}));
+            console.log(error);
+        });
+};
+
+export let saveAccessRequest = (req: Request, res: Response) => {
+
+    const request = req.body;
+
+    if (!request || !request.organizationId) {
+        res.status(400);
+        res.setHeader("content-type", "application/json");
+        res.send(JSON.stringify({
+            message: "'Access Request' must exist and contains organizationId"
+        }));
+        return;
+    }
+
+    request.partyId = res.locals.partyId;
+
+    organizationOrchestrator
+        .saveAccessRequest(request)
+        .subscribe( accessRequest => {
+            if (accessRequest) {
+                res.status(201);
+                res.setHeader("content-type", "application/json");
+                res.send(JSON.stringify(accessRequest));
+            } else {
+                res.status(404);
+                res.setHeader("content-type", "application/json");
+                res.send(JSON.stringify("Error"));
+            }
+        }, error => {
+            res.status(500);
+            res.send(JSON.stringify({message: "Internal Server Error"}));
+            console.log(error);
+        });
 };
 
 export let updateOrganization = (req: Request, res: Response) => {

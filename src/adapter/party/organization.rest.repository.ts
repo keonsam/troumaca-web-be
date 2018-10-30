@@ -1,11 +1,11 @@
 import {OrganizationRepository} from "../../repository/organization.repository";
 import {Observable, Observer} from "rxjs";
 import {Organization} from "../../data/party/organization";
-import {JoinOrganizationRequest} from "../../party/organization/join.organization.request";
 import {properties} from "../../properties.helpers";
 import {jsonRequestHeaderMap, postJsonOptions} from "../../request.helpers";
 // import {Confirmation} from "../../data/authentication/confirmation";
 import request from "request";
+import { JoinOrganization } from "../../data/party/join.organization";
 
 export class OrganizationRestRepository implements OrganizationRepository {
 
@@ -67,7 +67,7 @@ export class OrganizationRestRepository implements OrganizationRepository {
     });
   }
 
-  saveOrganizationRequest(joinRequest: JoinOrganizationRequest): Observable<JoinOrganizationRequest> {
+  saveAccessRequest(request: JoinOrganization): Observable<JoinOrganization> {
     return undefined;
   }
 

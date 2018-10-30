@@ -9,6 +9,7 @@ const checkSession = (req: Request, res: Response, next: NextFunction) => {
     if (err || !validSession) {
         res.status(440);
         res.send("Invalid session...");
+        return;
     } else {
         next();
     }
@@ -20,10 +21,12 @@ const checkSession = (req: Request, res: Response, next: NextFunction) => {
       .isValidSession(sessionId)
       .subscribe(isValid => {
         if (isValid) {
+            res.locals.partyId = isValid.partyId;
           callback(undefined, true);
         } else {
           const e: Error = new Error("Invalid session...");
           callback(e, false);
+          return;
         }
       });
   }

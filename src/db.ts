@@ -25,6 +25,7 @@ const thePostOfficeBoxDb = path.resolve(__dirname, "..") + "/nedb/site/post-offi
 // party
 const thePersonsDb = path.resolve(__dirname, "..") + "/nedb/party/persons.db";
 const theOrganizationDb = path.resolve(__dirname, "..") + "/nedb/party/organizations.db";
+const theRequestsDb = path.resolve(__dirname, "..") + "/nedb/party/requests.db";
 const theUsersDb = path.resolve(__dirname, "..") + "/nedb/party/users.db";
 
 // authentication
@@ -86,6 +87,10 @@ users.ensureIndex({ fieldName: "partyId", unique: true }, handleError);
 export let organizations = new Datastore(theOrganizationDb);
 organizations.loadDatabase(handleError);
 organizations.ensureIndex({ fieldName: "partyId", unique: true }, handleError);
+
+export let requests = new Datastore(theRequestsDb);
+requests.loadDatabase(handleError);
+requests.ensureIndex({ fieldName: "accessRequestId", unique: true }, handleError);
 
 // authentication
 export let credentials = new Datastore(theCredentialDb);

@@ -21,25 +21,25 @@ export class PartyAccessRoleOrchestrator {
   }
 
 
-  getPartyAccessRoles(): Observable<PartyAccessRole[]> {
-    return this.partyPartyAccessRoleRepository.getPartyAccessRoles()
-      .pipe(switchMap( partyAccessRoles => {
-        if (partyAccessRoles.length === 0) {
-          return of(partyAccessRoles);
-        } else {
-          const accessRoleIds = partyAccessRoles.map(x => { if (x.accessRoleId) return x.accessRoleId; });
-          if (accessRoleIds.length === 0) return of(partyAccessRoles);
-          return this.accessRoleRepository.getAccessRoleByIds(accessRoleIds)
-            .pipe(map( accessRoles => {
-              partyAccessRoles.forEach( value => {
-                const index = accessRoles.findIndex(x => x.accessRoleId === value.accessRoleId);
-                value.accessRole = accessRoles[index];
-              });
-              return partyAccessRoles;
-            }));
-        }
-      }));
-  }
+  // getPartyAccessRoles(): Observable<PartyAccessRole[]> {
+  //   return this.partyPartyAccessRoleRepository.getPartyAccessRoles()
+  //     .pipe(switchMap( partyAccessRoles => {
+  //       if (partyAccessRoles.length === 0) {
+  //         return of(partyAccessRoles);
+  //       } else {
+  //         const accessRoleIds = partyAccessRoles.map(x => { if (x.accessRoleId) return x.accessRoleId; });
+  //         if (accessRoleIds.length === 0) return of(partyAccessRoles);
+  //         return this.accessRoleRepository.getAccessRoleByIds(accessRoleIds)
+  //           .pipe(map( accessRoles => {
+  //             partyAccessRoles.forEach( value => {
+  //               const index = accessRoles.findIndex(x => x.accessRoleId === value.accessRoleId);
+  //               value.accessRole = accessRoles[index];
+  //             });
+  //             return partyAccessRoles;
+  //           }));
+  //       }
+  //     }));
+  // }
 
   //
   // addPartyAccessRole(partyPartyAccessRole:PartyAccessRole, grants: Grant[]):Observable<PartyAccessRole> {
@@ -60,25 +60,25 @@ export class PartyAccessRoleOrchestrator {
   //     });
   // };
 
-  getPartyAccessRoleById(partyPartyAccessRoleId: string): Observable<PartyAccessRole[]> {
-    return this.partyPartyAccessRoleRepository.getPartyAccessRoleById(partyPartyAccessRoleId)
-      .pipe(switchMap( partyAccessRoles => {
-        if (partyAccessRoles.length === 0) {
-          return of(partyAccessRoles);
-        } else {
-         const accessRoleIds = partyAccessRoles.map(x => { if (x.accessRoleId) return x.accessRoleId; });
-         if (accessRoleIds.length === 0) return of(partyAccessRoles);
-          return this.accessRoleRepository.getAccessRoleByIds(accessRoleIds)
-           .pipe(map( accessRoles => {
-             partyAccessRoles.forEach( value => {
-               const index = accessRoles.findIndex(x => x.accessRoleId === value.accessRoleId);
-               value.accessRole = accessRoles[index];
-             });
-             return partyAccessRoles;
-           }));
-        }
-      }));
-  }
+  // getPartyAccessRoleById(partyPartyAccessRoleId: string): Observable<PartyAccessRole[]> {
+  //   return this.partyPartyAccessRoleRepository.getPartyAccessRoleById(partyPartyAccessRoleId)
+  //     .pipe(switchMap( partyAccessRoles => {
+  //       if (partyAccessRoles.length === 0) {
+  //         return of(partyAccessRoles);
+  //       } else {
+  //        const accessRoleIds = partyAccessRoles.map(x => { if (x.accessRoleId) return x.accessRoleId; });
+  //        if (accessRoleIds.length === 0) return of(partyAccessRoles);
+  //         return this.accessRoleRepository.getAccessRoleByIds(accessRoleIds)
+  //          .pipe(map( accessRoles => {
+  //            partyAccessRoles.forEach( value => {
+  //              const index = accessRoles.findIndex(x => x.accessRoleId === value.accessRoleId);
+  //              value.accessRole = accessRoles[index];
+  //            });
+  //            return partyAccessRoles;
+  //          }));
+  //       }
+  //     }));
+  // }
 
   // updatePartyAccessRole(partyPartyAccessRoleId:string, partyPartyAccessRole:PartyAccessRole, grants: Grant[]):Observable<number> {
   //   return this.partyPartyAccessRoleRepository.updatePartyAccessRole(partyPartyAccessRoleId, partyPartyAccessRole)

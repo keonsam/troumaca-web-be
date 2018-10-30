@@ -9,9 +9,9 @@ import { AuthenticatedCredential } from "../../data/authentication/authenticated
 import { Confirmation } from "../../data/authentication/confirmation";
 import { ConfirmationRepositoryNeDbAdapter } from "./confirmation.repository.db.adapter";
 import { CreatedCredential } from "../../data/authentication/created.credential";
-import { Observable ,  Observer, of } from "rxjs";
+import { Observable, Observer, of, throwError } from "rxjs";
 import { switchMap, map } from "rxjs/operators";
-import {CreateCredential} from "../../data/authentication/create.credential";
+import { generate } from "generate-password";
 
 export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
 
@@ -78,28 +78,31 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
 
   }
 
-  addCredential(createCredential: CreateCredential, options?: any): Observable<CreatedCredential> {
-    return this.addCredentialLocal(createCredential)
-      .pipe(switchMap((credential:Credential) => {
-        const confirmation: Confirmation = new Confirmation();
-
-        confirmation.credentialId = createCredential.credentialId;
-
-        return this.confirmationRepositoryNeDbAdapter.addConfirmation(confirmation)
-          .pipe(map((confirmation:Confirmation) => {
-            let createdCredential = new CreatedCredential();
-            createdCredential.credential = credential;
-            createdCredential.confirmation = confirmation;
-            return createdCredential
+  addCredential(credential: Credential, options?: any): Observable<CreatedCredential> {
+      return this.addCredentialLocal(credential)
+          .pipe(switchMap(credential => {
+              if (!credential) {
+                  return throwError("Credential was not created.");
+              } else {
+                  const confirmation: Confirmation = new Confirmation();
+                  confirmation.credentialId = credential.credentialId;
+                  return this.confirmationRepositoryNeDbAdapter.addConfirmation(confirmation)
+                      .pipe(map(confirmation => {
+                          if (!confirmation) {
+                              throw new Error("Confirmation failed to be created.");
+                          } else {
+                              return new CreatedCredential(credential, confirmation);
+                          }
+                      }));
+              }
           }));
-      }));
   }
 
   authenticate(credential: Credential, options?: any): Observable<AuthenticatedCredential> {
     return this.verifyCredential(credential.username, credential.password)
     .pipe(switchMap((credential: Credential) => {
       if (!credential) {
-        return of(undefined);
+        return of("Failed to verify Credential");
       } else {
           const authenticatedCredential: AuthenticatedCredential = new AuthenticatedCredential();
           const credentialId = credential.credentialId;
@@ -113,12 +116,17 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
               authenticatedCredential.authenticateStatus = "AccountConfirmed";
               return of(authenticatedCredential);
           } else if (credential.status === "New") {
-              return this.confirmationRepositoryNeDbAdapter.getConfirmationByCredentialId(credentialId, "New")
-                  .pipe(map((confirmation: Confirmation) => {
-                      // TODO: ADD ERROR HANDLING THIS SHOULD TEST AND GENERATE A NEW CONFIRMATION IF NECESSARY
-                      authenticatedCredential.confirmationId = confirmation.confirmationId;
-                      authenticatedCredential.authenticateStatus = "AccountUsernameNotConfirmed";
-                      return authenticatedCredential;
+              const confirmation: Confirmation = new Confirmation();
+              confirmation.credentialId = credentialId;
+              return this.confirmationRepositoryNeDbAdapter.addConfirmation(confirmation)
+                  .pipe(map(confirmationRes => {
+                     if (!confirmationRes) {
+                         throw new Error("Confirmation was not created");
+                     } else {
+                         authenticatedCredential.confirmationId = confirmation.confirmationId;
+                         authenticatedCredential.authenticateStatus = "AccountUsernameNotConfirmed";
+                         return authenticatedCredential;
+                     }
                   }));
           }
       }
@@ -129,6 +137,23 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
       return Observable.create(function (observer: Observer<number>) {
           const query = {
               "credentialId": credentialId
+          };
+
+          credentials.update(query, {$set: {status: status}}, {}, function (err: any, numReplaced: number) {
+              if (!err) {
+                  observer.next(numReplaced);
+              } else {
+                  observer.error(err);
+              }
+              observer.complete();
+          });
+      });
+  }
+
+  updateCredentialStatusByPartyId(partyId: string, status: string): Observable<number> {
+      return Observable.create(function (observer: Observer<number>) {
+          const query = {
+              "partyId": partyId
           };
 
           credentials.update(query, {$set: {status: status}}, {}, function (err: any, numReplaced: number) {
@@ -215,17 +240,44 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
     }
 
     updateUserCredential(partyId: string, credential: Credential): Observable<number> {
-        return Observable.create(function (observer: Observer<number>) {
-            const update: any = {};
-            update.username = credential.username;
-            if (credential.password) {
-                update.password = credential.password;
-            }
-            const query: any = {
-                "partyId": partyId
-            };
+      return this.getCredentialByPartyId(partyId)
+          .pipe(switchMap(credentialRes => {
+              if (!credentialRes) {
+                  return throwError(`No credential found ${credentialRes}`);
+              } else {
+                  return this.updateUserCredentialLocal(partyId, credential)
+                      .pipe(switchMap( numReplaced => {
+                          if (!numReplaced) {
+                              return throwError(`Failed to update credential ${numReplaced}`);
+                          } else if (!credential.username) {
+                              return of(numReplaced);
+                          } else {
+                              const confirmation: Confirmation = new Confirmation();
+                              confirmation.credentialId = credentialRes.credentialId;
+                              return this.confirmationRepositoryNeDbAdapter.addConfirmation(confirmation)
+                                  .pipe(map(confirmationRes2 => {
+                                      if (!confirmationRes2) {
+                                          throw new Error(`AddConfirmation Failed ${confirmationRes2}`);
+                                      } else {
+                                          return numReplaced;
+                                      }
+                                  }));
+                          }
+                  }));
+              }
+          }));
+    }
 
-            credentials.update(query, {$set : update}, {}, function (err, numReplaced) {
+
+
+    private updateUserCredentialLocal(partyId: string, credential: Credential): Observable<number> {
+        return Observable.create(function (observer: Observer<number>) {
+            if (credential.username) {
+                credential.status = "suspended";
+            }
+            credential.modifiedOn = new Date();
+            const query = { "partyId": partyId };
+            credentials.update(query, {$set : credential}, {}, function (err, numReplaced) {
                 if (!err) {
                     observer.next(numReplaced);
                 } else {
@@ -236,7 +288,8 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
         });
     }
 
-  // getCredentialByCredentialId(credentialId: string): Observable<Credential> {
+
+        // getCredentialByCredentialId(credentialId: string): Observable<Credential> {
   //     return Observable.create(function (observer: Observer<Credential>) {
   //         const query = {
   //             "credentialId": credentialId
@@ -344,16 +397,18 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
       });
   }
 
-  addCredentialLocal(createCredential: CreateCredential): Observable<Credential> {
-    createCredential.credentialId = generateUUID();
-    createCredential.partyId = generateUUID();
-      if (!createCredential.status) {
-        createCredential.status = "New";
+  addCredentialLocal(credential: Credential): Observable<Credential> {
+      credential.credentialId = generateUUID();
+      credential.partyId = generateUUID();
+      credential.createdOn = new Date();
+      credential.modifiedOn = new Date();
+      if (!credential.status) {
+          credential.status = "New";
       }
       return Observable.create(function (observer: Observer<Credential>) {
-          credentials.insert(createCredential, function (err: any, doc: any) {
+          credentials.insert(credential, function (err: any, doc: any) {
               if (!err) {
-                  observer.next(doc);
+                  observer.next(credential);
               } else {
                   observer.error(err);
               }

@@ -39,7 +39,7 @@ import checkSession from "./middleware/check-session";
 const router: Router = Router();
 
 router.get("/", (req, res) => {
-    res.json({
+    res.status(200).json({
         message: "Welcome to Troumaka API"
     });
 });
@@ -52,13 +52,12 @@ router.post("/authentication/validate-username", credentialController.isValidUse
 router.post("/authentication/credentials", credentialController.addCredential);
 router.post("/authentication/authenticate", credentialController.authenticate);
 // confirmation
-router.get("/send-confirmation-codes/:credentialId/:confirmationId", confirmationController.resendConfirmCode);
-router.post("/verify-credentials-confirmations", confirmationController.confirmCode);
-router.post("/authentication/confirmations/{confirmationId}/credentials/{credentialId}", confirmationController.confirmCode);
+router.post("/authentication/confirmations/resend", confirmationController.resendConfirmCode);
+router.post("/authentication/confirmations/verify", confirmationController.confirmCode);
 // session
 router.get("/sessions/is-valid-session", sessionController.isValidSession);
-router.get("/partyId", checkSession, sessionController.getPartyId);
-router.get("/sessions/log-out-user", checkSession, sessionController.handleSessionLogOut);
+// router.get("/sessions/partyId", checkSession, sessionController.getPartyId);
+// router.get("/sessions/log-out-user", checkSession, sessionController.handleSessionLogOut);
 // permissions
 router.get("/permissions", checkSession, permissionController.getPermissions);
 router.get("/permissions/permissions", checkSession, permissionController.getPermissionsByArray);
@@ -192,25 +191,24 @@ router.delete("/phones/:siteId", checkSession, phoneController.deletePhone);
 
 // user
 router.get("/users/find", checkSession, userController.findUser);
-router.get("/users", checkSession, userController.getUsers);
+router.get("/users/profile", checkSession, userController.getUserMe);
 router.get("/users/:partyId", checkSession, userController.getUser);
+router.get("/users", checkSession, userController.getUsers);
 router.post("/users", checkSession, userController.saveUser);
+router.put("/users/profile", checkSession, userController.updateUserMe);
 router.put("/users/:partyId", checkSession, userController.updateUser);
 router.delete("/users/:partyId", checkSession, userController.deleteUser);
-router.delete("/users/:partyId", checkSession, userController.deleteUser);
+
 // organizations
-router.get("/organizations", checkSession, organizationController.getOrganizations);
-router.get("/organizations/:partyId", checkSession, organizationController.getOrganization);
-router.post("/organizations", checkSession, organizationController.saveOrganization);
-router.put("/organizations/:partyId", checkSession, organizationController.updateOrganization);
-router.delete("/organizations/:partyId", checkSession, organizationController.deleteOrganization);
 router.get("/organizations", checkSession, organizationController.getOrganizations);
 router.get("/organizations/:partyId", checkSession, organizationController.getOrganization);
 router.get("/organizations-find", checkSession, organizationController.findOrganizations);
 router.post("/organizations", checkSession, organizationController.saveOrganization);
-router.post("/organizations-send-request", checkSession, organizationController.sendJoinRequest);
+router.post("/organizations/profiles", checkSession, organizationController.saveOrganizationCompany);
+router.post("/organizations/request-access", checkSession, organizationController.saveAccessRequest);
 router.put("/organizations/:partyId", checkSession, organizationController.updateOrganization);
 router.delete("/organizations/:partyId", checkSession, organizationController.deleteOrganization);
+
 // photos
 router.get("/photos", checkSession, photoController.getPhotos);
 router.post("/photos/:type", checkSession, photoController.savePhoto);

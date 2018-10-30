@@ -1,36 +1,32 @@
 import { SessionRepository } from "../../repository/session.repository";
 import { Session } from "../../data/session/session";
-import { Observable ,  Observer, of } from "rxjs";
+import { Observable, Observer, of, throwError } from "rxjs";
 import { map } from "rxjs/operators";
 import { sessions } from "../../db";
 import { generateUUID } from "../../uuid.generator";
+import { ValidSession } from "../../data/session/valid.session";
 
 export class SessionRepositoryNeDbAdapter implements SessionRepository {
 
 
-    isValidSession(sessionId: string): Observable<boolean> {
+    isValidSession(sessionId: string): Observable<ValidSession> {
+        const validSession: ValidSession = new ValidSession();
         if (!sessionId) {
-            return of(false);
+            validSession.valid = false;
+            return of(validSession);
         }
         return this.getSessionById(sessionId)
             .pipe(map(session => {
             if (!session) {
-                // the method below might throw an undefined error
-                return false;
+                throw new Error("Session can not be found.");
+            } else if (session.expirationTime > new Date()) {
+                validSession.valid = true;
+                validSession.partyId = session.partyId;
+                return validSession;
+            } else {
+                validSession.valid = false;
+                return validSession;
             }
-            const readSessionId = session.sessionId;
-            if (!readSessionId) {
-                return false;
-            }
-
-            const readExpirationDate = session.expirationTime;
-            if (!readExpirationDate) {
-                return false;
-            }
-
-            const now = new Date();
-
-            return readExpirationDate  > now;
         }));
     }
 
@@ -140,7 +136,7 @@ export class SessionRepositoryNeDbAdapter implements SessionRepository {
     addSession(session: Session): Observable<Session> {
 
         session.sessionId = generateUUID();
-        session.expirationTime = new Date(new Date().getTime() + (20 * 60 * 1000));
+        session.expirationTime = new Date(new Date().getTime() + (20 * 60000));
         session.createdOn = new Date();
         session.modifiedOn = new Date();
         if (!session.data) {
@@ -148,7 +144,7 @@ export class SessionRepositoryNeDbAdapter implements SessionRepository {
         }
 
         return Observable.create(function (observer: Observer<Session>) {
-            sessions.insert(session.toJson(), function (err: any, doc: any) {
+            sessions.insert(session, function (err: any, doc: any) {
                 if (!err) {
                     observer.next(doc);
                 } else {

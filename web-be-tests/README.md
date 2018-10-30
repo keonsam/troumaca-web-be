@@ -16,6 +16,10 @@ or
 cd web-be-tests
 JUNIT_REPORT_PATH=test-result/result.xml JUNIT_REPORT_STACK=1 mocha --timeout 25000 --colors --reporter mocha-jenkins-reporter
 
+or 
+
+npm test : this works awesome, try it first
+
 # un specific test:
 mocha --grep create-credential
 mocha --grep validate-username-email

@@ -6,37 +6,26 @@ import { flatMap, map, switchMap, } from "rxjs/operators";
 import { shapeOrganizationsResponse } from "./organization.response.shaper";
 import { Result } from "../../result.success";
 import { getSortOrderOrDefault } from "../../sort.order.util";
-import { JoinOrganizationRequest } from "./join.organization.request";
-import {SessionRepository} from "../../repository/session.repository";
-import {createSessionRepositoryFactory} from "../../adapter/session/session.repository.factory";
+import { SessionRepository } from "../../repository/session.repository";
+import { createSessionRepositoryFactory } from "../../adapter/session/session.repository.factory";
+import { JoinOrganization } from "../../data/party/join.organization";
+import { CredentialRepository } from "../../repository/credential.repository";
+import { createCredentialRepositoryFactory } from "../../adapter/authentication/credential.repository.factory";
 
 export class OrganizationOrchestrator {
 
   private organizationRepository: OrganizationRepository;
   private sessionRepository: SessionRepository;
+  private credentialRepository: CredentialRepository;
 
   constructor() {
     this.organizationRepository = createOrganizationRepository();
     this.sessionRepository = createSessionRepositoryFactory();
+    this.credentialRepository = createCredentialRepositoryFactory();
   }
 
   findOrganization(searchStr: string, pageSize: number): Observable<Organization[]> {
       return this.organizationRepository.findOrganization(searchStr, pageSize);
-  }
-
-  sendJoinRequest(request: string, sessionId?: string): Observable<JoinOrganizationRequest> {
-    // This is just basic boilerplate logic
-    //   return this.sessionRepository.getSessionById(sessionId)
-    //       .pipe( switchMap( session => {
-    //         if (!session) {
-    //           return of(undefined);
-    //         } else {
-    //           // const joinRequest: JoinOrganizationRequest = new JoinOrganizationRequest(session.partyId, request);
-    //           // joinRequest.status = "pending entry to organization";
-    //           // return this.organizationRepository.saveOrganizationRequest(joinRequest);
-    //         }
-    //       }));
-    return null;
   }
 
   getOrganizations (number: number, size: number, field: string, direction: string): Observable<Result<any>> {
@@ -53,40 +42,56 @@ export class OrganizationOrchestrator {
     return null;
   }
 
-  getOrganization (partyId: string, sessionId?: string): Observable<Organization> {
-      if (partyId === "company") {
-          return this.sessionRepository.getSessionById(sessionId)
-              .pipe(switchMap(session => {
-                  if (!session) return throwError(session);
-                  return this.organizationRepository.getOrganization(session.partyId);
-              }));
-      } else {
-          return this.organizationRepository.getOrganization(partyId);
-      }
+  getOrganization (partyId: string): Observable<Organization> {
+      return this.organizationRepository.getOrganization(partyId);
   }
 
-    saveOrganization (organization: Organization, sessionId: string, type: string): Observable<Organization> {
-      if (type === "company") {
-          return this.sessionRepository.getSessionById(sessionId)
-              .pipe( switchMap( session => {
-                  if (!session) {
-                      return throwError(session);
-                  } else {
-                      organization.partyId = session.partyId;
-                      return this.organizationRepository.saveOrganization(organization);
-                  }
+  saveOrganization (organization: Organization): Observable<Organization> {
+      return this.organizationRepository.saveOrganization(organization);
+  }
+
+  saveOrganizationCompany(organization: Organization): Observable<Organization> {
+      return this.organizationRepository.saveOrganization(organization)
+          .pipe(switchMap(organizationRes => {
+            if (!organizationRes) {
+              return throwError("Failed to save organization.");
+            } else {
+              return this.credentialRepository.updateCredentialStatusByPartyId(organization.partyId, "Active")
+                  .pipe( map(numUpdated => {
+                    if (!numUpdated) {
+                      throw new Error("credential status was not updated.");
+                    } else {
+                      return organizationRes;
+                    }
+                  }));
+            }
           }));
-      } else {
-          return this.organizationRepository.saveOrganization(organization);
-      }
-    }
+  }
 
-    deleteOrganization (partyId: string): Observable<number> {
+  saveAccessRequest(request: JoinOrganization): Observable<JoinOrganization> {
+      return this.organizationRepository.saveAccessRequest(request)
+          .pipe( switchMap( requestRes => {
+              if (!requestRes) {
+                  return throwError("Failed to save organization access request.");
+              } else {
+                  return this.credentialRepository.updateCredentialStatusByPartyId(request.partyId, "Active")
+                      .pipe( map(numUpdated => {
+                          if (!numUpdated) {
+                              throw new Error("credential status was not updated.");
+                          } else {
+                              return requestRes;
+                          }
+                      }));
+              }
+          }));
+  }
+
+  deleteOrganization (partyId: string): Observable<number> {
       return this.organizationRepository.deleteOrganization(partyId);
-    }
+  }
 
-    updateOrganization (partyId: string, organization: Organization): Observable<number> {
+  updateOrganization (partyId: string, organization: Organization): Observable<number> {
       return this.organizationRepository.updateOrganization(partyId, organization);
-    }
+  }
 
 }

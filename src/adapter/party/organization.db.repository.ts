@@ -1,10 +1,10 @@
 import {OrganizationRepository} from "../../repository/organization.repository";
 import {Observable, Observer} from "rxjs";
 import {Organization} from "../../data/party/organization";
-import {organizations} from "../../db";
+import { organizations, requests } from "../../db";
 import {generateUUID} from "../../uuid.generator";
-import {JoinOrganizationRequest} from "../../party/organization/join.organization.request";
 import {calcSkip} from "../../db.util";
+import { JoinOrganization } from "../../data/party/join.organization";
 
 export class OrganizationDBRepository implements OrganizationRepository {
 
@@ -16,7 +16,6 @@ export class OrganizationDBRepository implements OrganizationRepository {
     return Observable.create(function (observer: Observer<Organization[]>) {
       organizations.find(query).limit(100).exec(function (err: any, doc: any) {
         if (!err) {
-          console.log(doc);
           observer.next(doc);
         } else {
           observer.error(err);
@@ -48,17 +47,18 @@ export class OrganizationDBRepository implements OrganizationRepository {
     });
   }
 
-  saveOrganizationRequest(joinRequest: JoinOrganizationRequest): Observable<JoinOrganizationRequest> {
-    return Observable.create(function (observer: Observer<JoinOrganizationRequest>) {
-      organizations.insert(joinRequest.toJson(), function (err: any, doc: any) {
-        if (!err) {
-          observer.next(doc);
-        } else {
-          observer.error(err);
-        }
-        observer.complete();
+  saveAccessRequest(request: JoinOrganization): Observable<JoinOrganization> {
+      request.accessRequestId = generateUUID();
+      return Observable.create(function (observer: Observer<JoinOrganization>) {
+          requests.insert(request, function (err: any, doc: any) {
+              if (!err) {
+                  observer.next(doc);
+              } else {
+                  observer.error(err);
+              }
+              observer.complete();
+          });
       });
-    });
   }
 
   getOrganizations(pageNumber: number, pageSize: number, order: string): Observable<Organization[]> {

@@ -1,18 +1,20 @@
 import { Request, Response } from "express";
 import { CredentialOrchestrator } from "./credential.orchestrator";
 import { AuthenticatedCredential } from "../../data/authentication/authenticated.credential";
+import { Credential } from "../../data/authentication/credential";
 
 const credentialOrchestrator: CredentialOrchestrator = new CredentialOrchestrator();
 
-// TODO: Consider removing
-// router.post("/validate-username", function (req, res, next) {
 export let isValidUsername = (req: Request, res: Response) => {
 
   const username = req.body.username;
   const partyId = req.body.partyId;
 
   if (!username) {
-    return res.status(400).send({message: "Username can not be empty"});
+      res.status(400);
+      res.setHeader("content-type", "application/json");
+      res.send(JSON.stringify({message: "Username can not be empty."}));
+      return;
   }
 
   credentialOrchestrator.isValidUsername(username, partyId)
@@ -23,7 +25,8 @@ export let isValidUsername = (req: Request, res: Response) => {
     res.send(JSON.stringify(resp));
   }, error => {
     res.status(500);
-    res.send(JSON.stringify({message: "Internal Server Error"}));
+      res.setHeader("content-type", "application/json");
+      res.send(JSON.stringify({message: "Internal Server Error"}));
     console.log(error);
   });
 
@@ -31,11 +34,16 @@ export let isValidUsername = (req: Request, res: Response) => {
 
 export let isValidPassword = (req: Request, res: Response) => {
 
-  if (!req.body) {
-      return res.status(400).send({message: "Password can not be empty"});
+    const password: string = req.body.password;
+
+  if (!password) {
+      res.status(400);
+      res.setHeader("content-type", "application/json");
+      res.send(JSON.stringify({message: "A password must exist."}));
+      return;
   }
 
-  credentialOrchestrator.isValidPassword(req.body)
+  credentialOrchestrator.isValidPassword(password)
   .subscribe((next: boolean) => {
       res.status(200);
       const resp = {valid: next};
@@ -43,6 +51,7 @@ export let isValidPassword = (req: Request, res: Response) => {
       res.send(JSON.stringify(resp));
   }, error => {
       res.status(500);
+      res.setHeader("content-type", "application/json");
       res.send(JSON.stringify({message: "Internal Server Error"}));
       console.log(error);
   });
@@ -52,6 +61,8 @@ export let isValidPassword = (req: Request, res: Response) => {
 export let addCredential = (req: Request, res: Response) => {
 
   const correlationId = req.headers.correlationid;
+  const credential = req.body.credential;
+  const user = req.body.user;
 
   if (!correlationId) {
       res.status(400);
@@ -60,25 +71,17 @@ export let addCredential = (req: Request, res: Response) => {
       return;
   }
 
-  const createCredential = req.body;
-  if (!createCredential) {
+  if (!credential || !credential.username || !credential.password) {
       res.status(400);
       res.setHeader("content-type", "application/json");
-      res.send(JSON.stringify({message: "No \"credential\" exists. Credential can not be empty."}));
+      res.send(JSON.stringify({message: "'Credential' must be sent, and must contain username and password."}));
       return;
   }
 
-  if (!createCredential.username || createCredential.username.length <= 0) {
+  if (!user || !user.firstName || !user.lastName) {
       res.status(400);
       res.setHeader("content-type", "application/json");
-      res.send(JSON.stringify({message: "A \"username\" is required."}));
-      return;
-  }
-
-  if (!createCredential.password || createCredential.password.length <= 0) {
-      res.status(400);
-      res.setHeader("content-type", "application/json");
-      res.send(JSON.stringify({message: "A \"password\" is required."}));
+      res.send(JSON.stringify({message: "'User' must be sent, and contain first and last name."}));
       return;
   }
 
@@ -86,56 +89,65 @@ export let addCredential = (req: Request, res: Response) => {
       correlationId: correlationId
   };
 
-  credentialOrchestrator.addCredential(createCredential, headerOptions)
-  .subscribe(createdCredential => {
+  credentialOrchestrator.addCredential(credential, user, headerOptions)
+  .subscribe(confirmation => {
       res.status(201);
       res.setHeader("content-type", "application/json");
-      res.send(JSON.stringify(createdCredential.confirmation));
+      res.send(JSON.stringify(confirmation));
   }, error => {
-    //console.log(error);
     res.status(!error.code ? 500 : error.code);
-    let msg = !error.message ? "Internal Server Error" : error.message;
+    const msg = !error.message ? "Internal Server Error" : error.message;
     res.send(JSON.stringify(msg));
+    console.log(error);
   });
 
 };
 
 export let authenticate = (req: Request, res: Response) => {
 
-  const credential = req.body;
+    const credential: Credential = req.body;
 
-  if (!req.body) {
-      return res.status(400).send({message: "Authenticate can not be empty"});
-  }
+    if (!credential || !credential.username || !credential.password) {
+        res.status(400);
+        res.setHeader("content-type", "application/json");
+        res.send(JSON.stringify({message: "'Credential' must be sent, and must contain username and password."}));
+        return;
+    }
 
-  const correlationId = req.headers.correlationid;
+    const correlationId = req.headers.correlationid;
 
-  if (!correlationId) {
-      res.status(400);
-      res.setHeader("content-type", "application/json");
-      res.send(JSON.stringify({message: "A \"correlationId\" is required."}));
-      return;
-  }
+    if (!correlationId) {
+        res.status(400);
+        res.setHeader("content-type", "application/json");
+        res.send(JSON.stringify({message: "A \"correlationId\" is required."}));
+        return;
+    }
 
-  const headerOptions = {
-      correlationId: correlationId,
-      sourceSystemHost: req.headers.host,
-      sourceSystemName: ""
-  };
+    const headerOptions = {
+        correlationId: correlationId,
+        sourceSystemHost: req.headers.host,
+        sourceSystemName: ""
+    };
 
-  credentialOrchestrator.authenticate(credential, headerOptions)
-  .subscribe((authenticatedCredential: AuthenticatedCredential) => {
-      if (authenticatedCredential.sessionId) {
-          res.cookie("sessionId", authenticatedCredential.sessionId, {path: "/", maxAge: 20 * 60 * 1000, httpOnly: true });
-      }
-      const body = JSON.stringify(authenticatedCredential.toJson());
-      res.status(200);
-      res.send(body);
-  }, error => {
-      res.status(500);
-      res.send(JSON.stringify({message: "Error Occurred"}));
-      console.log(error);
-  });
+    credentialOrchestrator.authenticate(credential, headerOptions)
+        .subscribe((authenticatedCredential: AuthenticatedCredential) => {
+            if (authenticatedCredential && authenticatedCredential.sessionId) {
+                res.cookie("sessionId", authenticatedCredential.sessionId, {
+                    path: "/",
+                    maxAge: 20 * 60000,
+                    httpOnly: true
+                });
+            }
+            const body = JSON.stringify(authenticatedCredential);
+            res.status(200);
+            res.setHeader("content-type", "application/json");
+            res.send(body);
+        }, error => {
+            res.status(500);
+            res.setHeader("content-type", "application/json");
+            res.send(JSON.stringify({message: "Internal Occurred"}));
+            console.log(error);
+        });
 
 };
 
