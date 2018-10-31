@@ -1,48 +1,65 @@
 import { BillingRepository } from "../../repository/billing.repository";
-import { Observable, Observer, of } from "rxjs";
-import { billings, creditCards, paymentMethods} from "../../db";
+import { Observable, Observer, of, throwError } from "rxjs";
+import { billings, paymentInformation, paymentMethods } from "../../db";
 import { generateUUID } from "../../uuid.generator";
-import { PaymentMethod } from "../../billing/payment.method";
+import { PaymentMethod } from "../../data/party/payment.method";
 import { error } from "util";
-import { CreditCard } from "../../billing/credit.card";
-import { Billing } from "../../billing/billing";
+import { Billing } from "../../data/party/billing";
 import { map, switchMap } from "rxjs/operators";
+import { PaymentInformation } from "../../data/party/payment.information";
 
 export class BillingRepositoryNeDbAdapter implements BillingRepository {
 
     getPaymentMethods(): Observable<PaymentMethod[]> {
-        return Observable.create( (observer: Observer<PaymentMethod[]>) => {
-           paymentMethods.find({}, (err: any, doc: any) => {
-              if (!err) {
-                  observer.next(doc);
-              } else {
-                  observer.error(error);
-              }
-              observer.complete();
-           });
+        return Observable.create((observer: Observer<PaymentMethod[]>) => {
+            paymentMethods.find({}, (err: any, doc: any) => {
+                if (!err) {
+                    observer.next(doc);
+                } else {
+                    observer.error(error);
+                }
+                observer.complete();
+            });
         });
     }
 
-    addCreditCard(creditCard: CreditCard): Observable<CreditCard> {
-        creditCard.creditCardId = generateUUID();
-        creditCard.status = "primary";
-        return this.addCreditCardLocal(creditCard)
-            .pipe( switchMap( newDoc => {
-                if (newDoc) {
-                    return this.updateCreditCardState([creditCard.creditCardId], "inactive")
-                        .pipe( map(numReplaced => {
+    getBillings(partyId: string): Observable<Billing[]> {
+        return Observable.create((observer: Observer<Billing[]>) => {
+            billings.find({partyId}, (err: any, doc: any) => {
+                if (!err) {
+                    observer.next(doc);
+                } else {
+                    observer.error(error);
+                }
+                observer.complete();
+            });
+        });
+    }
+
+    addPaymentInformation(paymentInfo: PaymentInformation, partyId: string): Observable<PaymentInformation> {
+        paymentInfo.paymentId = generateUUID();
+        paymentInfo.partyId = partyId;
+        paymentInfo.status = "primary";
+        paymentInfo.createdOn = new Date();
+        paymentInfo.modifiedOn = new Date();
+        return this.addPaymentInformationLocal(paymentInfo)
+            .pipe(switchMap(newDoc => {
+                if (!newDoc) {
+                    return throwError(`Failed to add credit Card Info ${newDoc}`);
+                } else {
+                    return this.updatePaymentInformationState(partyId, newDoc.paymentId, "inactive")
+                        .pipe(map(numReplaced => {
                             return newDoc;
                         }));
-                } else {
-                    return of( undefined);
                 }
             }));
     }
 
-    updateCreditCardState(creditCardId: string[], status: string): Observable<number> {
-        return Observable.create( (observer: Observer<number>) => {
-            const query = {creditCardId: { $nin: creditCardId}};
-            creditCards.update(query, {$set: {status: status} }, {multi: true}, (err, numReplaced) => {
+    private updatePaymentInformationState(partyId: string, paymentId: string, status: string): Observable<number> {
+        // TODO: you can update this to check to see if anything is available to update
+        return Observable.create((observer: Observer<number>) => {
+            const query = {partyId, paymentId: {$ne: paymentId}};
+            paymentInformation.update(query, {$set: {status: status, modifiedOn: new Date()}}, {multi: true}, (err, numReplaced) => {
                 if (!err) {
                     observer.next(numReplaced);
                 } else {
@@ -53,9 +70,9 @@ export class BillingRepositoryNeDbAdapter implements BillingRepository {
         });
     }
 
-    private addCreditCardLocal(creditCard: CreditCard): Observable<CreditCard> {
-        return Observable.create( (observer: Observer<CreditCard>) => {
-            creditCards.insert(creditCard, (err: any, doc: any) => {
+    private addPaymentInformationLocal(paymentInfo: PaymentInformation): Observable<PaymentInformation> {
+        return Observable.create((observer: Observer<PaymentInformation>) => {
+            paymentInformation.insert(paymentInfo, (err: any, doc: any) => {
                 if (!err) {
                     observer.next(doc);
                 } else {
@@ -66,9 +83,33 @@ export class BillingRepositoryNeDbAdapter implements BillingRepository {
         });
     }
 
-    getBillings(): Observable<Billing[]> {
-        return Observable.create((observer: Observer<Billing[]>) => {
-            billings.find({}, (err: any, doc: any) => {
+    getPaymentInformation(partyId: string): Observable<PaymentInformation[]> {
+        return this.getPaymentInformationLocal(partyId)
+            .pipe( switchMap( paymentInfo => {
+                if (!paymentInfo) {
+                    return of(paymentInfo);
+                } else {
+                    return this.getPaymentMethods()
+                        .pipe( map( methods => {
+                            if (!methods) {
+                                throw new Error(`Failed to get payment methods ${methods}`);
+                            } else {
+                                paymentInfo.forEach( x => {
+                                    x.method = methods.find(v => v.paymentMethodId === x.paymentMethodId).name;
+                                    if (x.paymentMethodId === "9f9e5106-1235-4f61-9609-b8fea945e066") {
+                                        x.ending = x.cardNumber.slice(-4);
+                                    }
+                                });
+                                return paymentInfo;
+                            }
+                        }));
+                }
+        }));
+    }
+
+    private getPaymentInformationLocal(partyId: string): Observable<PaymentInformation[]> {
+        return Observable.create((observer: Observer<PaymentInformation[]>) => {
+            paymentInformation.find({partyId}, (err: any, doc: any) => {
                 if (!err) {
                     observer.next(doc);
                 } else {
@@ -79,36 +120,10 @@ export class BillingRepositoryNeDbAdapter implements BillingRepository {
         });
     }
 
-    getCreditCards(): Observable<CreditCard[]> {
-        return Observable.create((observer: Observer<CreditCard[]>) => {
-            creditCards.find({}, (err: any, doc: any) => {
-                if (!err) {
-                    observer.next(doc);
-                } else {
-                    observer.error(error);
-                }
-                observer.complete();
-            });
-        });
-    }
-
-    updateCreditCard(creditCard: CreditCard, creditCardId: string): Observable<number> {
-        return this.updateCreditCardLocal(creditCard, creditCardId)
-            .pipe( switchMap(num => {
-                if (!num || creditCard.status !== "primary") {
-                    return of(num);
-                } else {
-                    return this.updateCreditCardState([creditCardId], "inactive");
-                }
-            }));
-    }
-
-        updateCreditCardLocal(creditCard: CreditCard, creditCardId: string): Observable<number> {
-        const query = {
-            "creditCardId": creditCardId
-        };
-        return Observable.create( (observer: Observer<number>) => {
-            creditCards.update(query, creditCard, {}, (err: any, numUpdated: any) => {
+    updatePaymentInformation(paymentInfo: PaymentInformation, paymentId: string): Observable<number> {
+        paymentInfo.modifiedOn = new Date();
+        return Observable.create((observer: Observer<number>) => {
+            paymentInformation.update(paymentId, paymentInfo, {}, (err: any, numUpdated: any) => {
                 if (!err) {
                     observer.next(numUpdated);
                 } else {
@@ -119,12 +134,12 @@ export class BillingRepositoryNeDbAdapter implements BillingRepository {
         });
     }
 
-    deleteCreditCard(creditCardId: string): Observable<number> {
+    deletePaymentInformation(paymentId: string): Observable<number> {
         const query = {
-            "creditCardId": creditCardId
+            paymentId
         };
-        return Observable.create( (observer: Observer<number>) => {
-            creditCards.remove(query, {}, (err: any, numReplaced: any) => {
+        return Observable.create((observer: Observer<number>) => {
+            paymentInformation.remove(query, {}, (err: any, numReplaced: any) => {
                 if (!err) {
                     observer.next(numReplaced);
                 } else {
@@ -134,75 +149,6 @@ export class BillingRepositoryNeDbAdapter implements BillingRepository {
             });
         });
     }
-
-    // public getBilling(): Observable<Billing> {
-    //     return Observable.create(function (observer: Observer<Billing>) {
-    //         // const query = {
-    //         //     "type": type
-    //         // };
-    //         billings.findOne({}, function (err: any, doc: any) {
-    //             if (!err) {
-    //                 observer.next(doc);
-    //             } else {
-    //                 observer.error(err);
-    //             }
-    //             observer.complete();
-    //         });
-    //     });
-    // }
-    //
-    // public addBilling(billing: Billing, method: any): Observable<Billing> {
-    //     return Observable.create(function (observer: Observer<Billing>) {
-    //
-    //         method.methodId = generateUUID();
-    //         billing.billingId = generateUUID();
-    //         billing.methodId = method.methodId;
-    //         billing.confirmed = true;
-    //         payMethods.insert(method, function (err: any, doc: any) {
-    //             if (!err) {
-    //                 billings.insert(billing, function (err: any, doc2: any) {
-    //                     if (!err) {
-    //                         observer.next(doc2);
-    //                     } else {
-    //                         observer.error(err);
-    //                     }
-    //                     observer.complete();
-    //                 });
-    //             } else {
-    //                 observer.error(err);
-    //                 observer.complete();
-    //             }
-    //         });
-    //     });
-    // }
-    //
-    // public updateBilling(billingId: string, billing: Billing, method: any): Observable<number> {
-    //     return Observable.create(function (observer: Observer<number>) {
-    //         const query = {
-    //           "billingId": billingId
-    //         };
-    //
-    //
-    //         method.methodId = generateUUID();
-    //         billing.methodId = method.methodId;
-    //         billing.confirmed = true;
-    //         payMethods.insert(method, function (err: any, doc: any) {
-    //             if (!err) {
-    //                 billings.update(query, billing, {}, function (err: any, numReplaced:any) {
-    //                     if (!err) {
-    //                         observer.next(numReplaced);
-    //                     } else {
-    //                         observer.error(err);
-    //                     }
-    //                     observer.complete();
-    //                 });
-    //             } else {
-    //                 observer.error(err);
-    //                 observer.complete();
-    //             }
-    //         });
-    //     });
-    // }
 
     // CREDIT CARD
 
@@ -220,5 +166,18 @@ export class BillingRepositoryNeDbAdapter implements BillingRepository {
 
     public cardCVV(value: string): Observable<boolean> {
         return of(true);
+    }
+
+    isValidPaymentMethod(partyId: string): Observable<boolean> {
+        return Observable.create((observer: Observer<Billing[]>) => {
+            paymentInformation.findOne({partyId}, (err: any, doc: any) => {
+                if (!err) {
+                    observer.next(doc);
+                } else {
+                    observer.error(error);
+                }
+                observer.complete();
+            });
+        });
     }
 }

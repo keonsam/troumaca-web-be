@@ -21,7 +21,7 @@ export class PartyAccessRoleRestRepository implements PartyAccessRoleRepository 
     return undefined;
   }
 
-  deletePartyAccessRole(partyId: string): Observable<number> {
+  deletePartyAccessRoles(partyId: string): Observable<number> {
     return undefined;
   }
 

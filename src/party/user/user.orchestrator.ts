@@ -120,20 +120,6 @@ export class UserOrchestrator {
             }));
     }
 
-    deleteUser(partyId: string): Observable<number> {
-        return this.userRepository.deleteUser(partyId)
-            .pipe(switchMap(value => {
-                if (!value) {
-                    return of(value);
-                } else {
-                    return this.partyAccessRoleRepository.deletePartyAccessRole(partyId);
-                    // .pipe(switchMap(numRemoved => {
-                    //   return this.credentialRepository.deleteCredentialByPartyId(partyId);
-                    // });
-                }
-            }));
-    }
-
     updateUser(partyId: string, user: User, credential: Credential, partyAccessRoles: PartyAccessRole[]): Observable<number> {
         if (credential && credential.username === user.name) {
             delete credential.username;
@@ -151,7 +137,7 @@ export class UserOrchestrator {
                             } else if (!credential) {
                                 return of(numUpdated);
                             } else {
-                                return this.credentialRepository.updateUserCredential(partyId, credential)
+                                return this.credentialRepository.updateCredential(partyId, credential)
                                     .pipe(map(numUpdated2 => {
                                         if (!numUpdated2) {
                                             throw new Error(`updateUserCredential Failed ${numUpdated2}`);
@@ -178,7 +164,7 @@ export class UserOrchestrator {
                     return of(numUpdated);
                 } else {
                     // TODO : separate this in the future if needed
-                    return this.credentialRepository.updateUserCredential(partyId, credential)
+                    return this.credentialRepository.updateCredential(partyId, credential)
                         .pipe( map( numUpdated2 => {
                             if (!numUpdated2) {
                                 throw new Error(`updateUserCredential Failed ${numUpdated2}`);
@@ -190,6 +176,28 @@ export class UserOrchestrator {
             }));
     }
 
-
-
+    deleteUser(partyId: string): Observable<number> {
+        return this.userRepository.deleteUser(partyId)
+            .pipe(switchMap(value => {
+                if (!value) {
+                    return throwError(`No User found ${value}`);
+                } else {
+                    return this.credentialRepository.deleteCredentialByPartyId(partyId)
+                        .pipe( switchMap( numRep => {
+                            if (!numRep) {
+                                return throwError( `Credential not deleted  ${numRep}`);
+                            } else {
+                                return this.partyAccessRoleRepository.deletePartyAccessRoles(partyId)
+                                    .pipe( map( numRep2 => {
+                                        if (!numRep2) {
+                                            throw new Error(`Failed to delete Party Access Roles ${numRep2}`);
+                                        } else {
+                                            return value;
+                                        }
+                                    }));
+                            }
+                        }));
+                }
+            }));
+    }
 }

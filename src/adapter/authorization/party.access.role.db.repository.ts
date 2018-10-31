@@ -74,7 +74,7 @@ export class PartyAccessRoleDBRepository implements PartyAccessRoleRepository {
   }
 
 
-  deletePartyAccessRole(partyId: string): Observable<number> {
+  deletePartyAccessRoles(partyId: string): Observable<number> {
     return Observable.create(function (observer: Observer<number>) {
       const query = {
         "partyId": partyId
@@ -140,12 +140,12 @@ export class PartyAccessRoleDBRepository implements PartyAccessRoleRepository {
   }
 
   updatePartyAccessRoles(partyAccessRoles: PartyAccessRole[], partyId: string): Observable<PartyAccessRole[]> {
-    return this.deletePartyAccessRole(partyId)
+    return this.deletePartyAccessRoles(partyId)
         .pipe(switchMap(numDel => {
           if (!numDel) {
             return throwError(`Failed to Delete partyAccessRoles ${numDel}`);
           } else {
-            return this.updatePartyAccessRolesLocal(partyAccessRoles, partyId)
+            return this.updatePartyAccessRolesLocal(partyAccessRoles, partyId);
           }
         }));
   }

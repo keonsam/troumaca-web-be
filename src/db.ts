@@ -33,8 +33,7 @@ const theCredentialDb = path.resolve(__dirname, "..") + "/nedb/authentication/cr
 const theCredentialConfirmationsDb = path.resolve(__dirname, "..") + "/nedb/authentication/credential_confirmations.db";
 
 // file
-const theUserPhotosDb = path.resolve(__dirname, "..") + "/nedb/file_meta_data/user-photos.db";
-const theOrganizationPhotosDb = path.resolve(__dirname, "..") + "/nedb/file_meta_data/organization-photos.db";
+const thePhotosDb = path.resolve(__dirname, "..") + "/nedb/file_meta_data/photos.db";
 
 const sessionDb = path.resolve(__dirname, "..", ) + "/nedb/session/sessions.db";
 
@@ -52,12 +51,11 @@ const partyAccessRolesDb = path.resolve(__dirname, "..", ) + "/nedb/authorizatio
 
 // lobby
 const subscriptionDb = path.resolve(__dirname, "..") + "/nedb/lobby/subscriptions.db";
-const billingDb = path.resolve(__dirname, "..") + "/nedb/lobby/billings.db";
-const methodDb = path.resolve(__dirname, "..") + "/nedb/lobby/methods.db";
 
 // Billing
+const billingDb = path.resolve(__dirname, "..") + "/nedb/billing/billings.db";
 const paymentMethodDb = path.resolve(__dirname, "..") + "/nedb/billing/payment-methods.db";
-const creditCardDb = path.resolve(__dirname, "..") + "/nedb/billing/credit-cards.db";
+const paymentInformationDb = path.resolve(__dirname, "..") + "/nedb/billing/payment-information.db";
 
 // depreciation
 const bookDepreciationDb = path.resolve(__dirname, "..") + "/nedb/depreciation/book.db";
@@ -68,13 +66,9 @@ const propertyClassesDb = path.resolve(__dirname, "..") + "/nedb/depreciation/pr
 
 // Todo: Fix remove
 
-export let userPhotos = new Datastore(theUserPhotosDb);
-userPhotos.loadDatabase(handleError);
-userPhotos.ensureIndex({ fieldName: "partyId", unique: true }, handleError);
-
-export let organizationPhotos = new Datastore(theOrganizationPhotosDb);
-organizationPhotos.loadDatabase(handleError);
-organizationPhotos.ensureIndex({ fieldName: "partyId", unique: true }, handleError);
+export let photos = new Datastore(thePhotosDb);
+photos.loadDatabase(handleError);
+photos.ensureIndex({ fieldName: "partyId", unique: true }, handleError);
 
 export let persons = new Datastore(thePersonsDb);
 persons.loadDatabase(handleError);
@@ -212,15 +206,6 @@ export const subscriptions = new Datastore(subscriptionDb);
 subscriptions.loadDatabase(handleError);
 subscriptions.ensureIndex({ fieldName: "subscriptionId", unique: true }, handleError);
 
-export const billings = new Datastore(billingDb);
-billings.loadDatabase(handleError);
-billings.ensureIndex({ fieldName: "billingId", unique: true }, handleError);
-
-export const payMethods = new Datastore(methodDb);
-payMethods.loadDatabase(handleError);
-payMethods.ensureIndex({ fieldName: "methodId", unique: true }, handleError);
-
-
 // depreciation
 
 export const bookDepreciation = new Datastore(bookDepreciationDb);
@@ -245,13 +230,17 @@ propertyClasses.ensureIndex({ fieldName: "propertyClassId", unique: true }, hand
 
 // billings
 
+export const billings = new Datastore(billingDb);
+billings.loadDatabase(handleError);
+billings.ensureIndex({ fieldName: "billingId", unique: true }, handleError);
+
 export const paymentMethods = new Datastore(paymentMethodDb);
 paymentMethods.loadDatabase(handleError);
 paymentMethods.ensureIndex( {fieldName: "paymentMethodId", unique: true}, handleError);
 
-export const creditCards = new Datastore(creditCardDb);
-creditCards.loadDatabase(handleError);
-creditCards.ensureIndex( {fieldName: "creditCardId", unique: true}, handleError);
+export const paymentInformation = new Datastore(paymentInformationDb);
+paymentInformation.loadDatabase(handleError);
+paymentInformation.ensureIndex( {fieldName: "paymentId", unique: true}, handleError);
 
 function handleError( err: any ) {
   if (err) {

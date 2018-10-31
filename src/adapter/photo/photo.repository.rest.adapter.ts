@@ -12,11 +12,11 @@ export class PhotoRepositoryRestAdapter implements PhotoRepository {
         return undefined;
     }
 
-    savePhoto(type: string, photo: Photo): Observable<Photo> {
+    savePhoto(type: string, photo: File, partyId: string): Observable<Photo> {
         return undefined;
     }
 
-    updatePhoto(partyId: string, type: string, photo: Photo): Observable<number> {
+    updatePhoto(partyId: string, type: string, photo: File): Observable<number> {
         return undefined;
     }
 }

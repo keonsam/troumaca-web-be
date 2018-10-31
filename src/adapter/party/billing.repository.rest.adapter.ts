@@ -1,32 +1,32 @@
 import { BillingRepository } from "../../repository/billing.repository";
 import { Observable } from "rxjs";
-import { PaymentMethod } from "../../billing/payment.method";
-import { CreditCard } from "../../billing/credit.card";
-import { Billing } from "../../billing/billing";
+import { PaymentMethod } from "../../data/party/payment.method";
+import { Billing } from "../../data/party/billing";
+import { PaymentInformation } from "../../data/party/payment.information";
 
 export class BillingRepositoryRestAdapter implements BillingRepository {
+
+    getBillings(partyId: string): Observable<Billing[]> {
+        return undefined;
+    }
 
     getPaymentMethods(): Observable<PaymentMethod[]> {
         return undefined;
     }
 
-    addCreditCard(creditCard: CreditCard): Observable<CreditCard> {
+    addPaymentInformation(paymentInfo: PaymentInformation, partyId: string): Observable<PaymentInformation> {
         return undefined;
     }
 
-    getBillings(): Observable<Billing[]> {
+    getPaymentInformation(partyId: string): Observable<PaymentInformation[]> {
         return undefined;
     }
 
-    getCreditCards(): Observable<CreditCard[]> {
+    updatePaymentInformation(paymentInfo: PaymentInformation, creditCardId: string): Observable<number> {
         return undefined;
     }
 
-    updateCreditCard(creditCard: CreditCard, creditCardId: string): Observable<number> {
-        return undefined;
-    }
-
-    deleteCreditCard(creditCardId: string): Observable<number> {
+    deletePaymentInformation(creditCardId: string): Observable<number> {
         return undefined;
     }
 
@@ -57,6 +57,10 @@ export class BillingRepositoryRestAdapter implements BillingRepository {
     }
 
     public cardCVV(value: string): Observable<boolean> {
+        return undefined;
+    }
+
+    isValidPaymentMethod(partyId: string): Observable<boolean> {
         return undefined;
     }
 }

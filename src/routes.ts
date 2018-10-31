@@ -47,10 +47,13 @@ router.get("/", (req, res) => {
 
 // ##### SECURITY START #####
 // authentication
+router.get("/authentication/credentials/:partyId", credentialController.getCredential);
 router.post("/authentication/validate-password", credentialController.isValidPassword);
 router.post("/authentication/validate-username", credentialController.isValidUsername);
 router.post("/authentication/credentials", credentialController.addCredential);
 router.post("/authentication/authenticate", credentialController.authenticate);
+router.post("/authentication/forgot-password", credentialController.forgetPassword);
+router.put("/authentication/credentials/:partyId", credentialController.updateCredential);
 // confirmation
 router.post("/authentication/confirmations/resend", confirmationController.resendConfirmCode);
 router.post("/authentication/confirmations/verify", confirmationController.confirmCode);
@@ -200,38 +203,42 @@ router.put("/users/:partyId", checkSession, userController.updateUser);
 router.delete("/users/:partyId", checkSession, userController.deleteUser);
 
 // organizations
-router.get("/organizations", checkSession, organizationController.getOrganizations);
+router.get("/organizations/find", checkSession, organizationController.findOrganizations);
+router.get("/organizations/profile", checkSession, organizationController.getOrganizationCompany);
 router.get("/organizations/:partyId", checkSession, organizationController.getOrganization);
-router.get("/organizations-find", checkSession, organizationController.findOrganizations);
+router.get("/organizations", checkSession, organizationController.getOrganizations);
 router.post("/organizations", checkSession, organizationController.saveOrganization);
 router.post("/organizations/profiles", checkSession, organizationController.saveOrganizationCompany);
 router.post("/organizations/request-access", checkSession, organizationController.saveAccessRequest);
+router.put("/organizations/profile", checkSession, organizationController.updateOrganizationCompany);
 router.put("/organizations/:partyId", checkSession, organizationController.updateOrganization);
 router.delete("/organizations/:partyId", checkSession, organizationController.deleteOrganization);
 
 // photos
 router.get("/photos", checkSession, photoController.getPhotos);
 router.post("/photos/:type", checkSession, photoController.savePhoto);
-router.put("/photos/:type/:partyId", checkSession, photoController.updatePhoto);
+router.put("/photos/:type", checkSession, photoController.updatePhoto);
 
 
 
 // SUBSCRIPTION && BILLING
 
-router.get("/subscriptions/modules", checkSession, subscriptionController.getSubscriptionModules);
+router.get("/subscriptions/apps", checkSession, subscriptionController.getApps);
+router.get("/subscriptions", checkSession, subscriptionController.getSubscriptions);
 router.post("/subscriptions", checkSession, subscriptionController.addSubscription);
 
 // billing
 router.get("/billings/payment-methods", checkSession, billingController.getPaymentMethods);
 router.get("/billings", checkSession, billingController.getBillings);
-router.get( "/billings/credit-cards", checkSession, billingController.getCreditCards);
-router.post( "/billings/credit-cards", checkSession, billingController.addCreditCard);
+router.get("/billings/payment-methods/is-valid", checkSession, billingController.isValidPaymentMethod);
+router.get( "/billings/payment-information", checkSession, billingController.getPaymentInformation);
+router.post( "/billings/payment-information", checkSession, billingController.addPaymentInformation);
 router.post( "/billings/validate/card-name", checkSession, billingController.cardName);
 router.post( "/billings/validate/card-number", checkSession, billingController.cardNumber);
 router.post( "/billings/validate/card-exp-date", checkSession, billingController.cardExpDate);
 router.post( "/billings/validate/card-cvv", checkSession, billingController.cardCVV);
-router.put( "/billings/credit-cards/:creditCardId", checkSession, billingController.updateCreditCard);
-router.delete( "/billings/credit-cards/:creditCardId", checkSession, billingController.deleteCreditCard);
+router.put( "/billings/payment-information/:paymentId", checkSession, billingController.updatePaymentInformation);
+router.delete( "/billings/payment-information/:paymentId", checkSession, billingController.deletePaymentInformation);
 
 
 // PROFILES

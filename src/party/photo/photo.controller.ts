@@ -4,17 +4,17 @@ import { PhotoOrchestrator } from "./photo.orchestrator";
 const orchestrator: PhotoOrchestrator = new PhotoOrchestrator();
 
 export let getPhotos = (req: Request, res: Response) => {
-    const sessionId = req.cookies["sessionId"];
     const type: string = req.params.type;
-  orchestrator
-    .getPhotos(sessionId, type)
+    const partyId: string = res.locals.partyId;
+    res.setHeader("content-type", "application/json");
+    orchestrator.getPhotos(partyId, type)
     .subscribe(photo => {
-        if (photo.partyId) {
+        if (photo && photo.partyId) {
             res.status(200);
-            res.send(JSON.stringify(photo.toJson()));
+            res.send(JSON.stringify(photo));
         } else {
             res.status(404);
-            res.send(JSON.stringify({message: "No Data Found For " + req.params.partyId}));
+            res.send(JSON.stringify({message: "No Images Found For" + partyId}));
         }
     }, error => {
         res.status(500);
@@ -24,43 +24,52 @@ export let getPhotos = (req: Request, res: Response) => {
 };
 
 export let savePhoto = (req: Request, res: Response) => {
-    if (!req.body) {
+    const type: string = req.params.type;
+    const image: File = req.body.image;
+    const partyId: string = res.locals.partyId;
+    res.setHeader("content-type", "application/json");
+    if (!image) {
         return res.status(400).send({
-            message: "Photo can not be empty"
+            message: "Image must exist."
         });
     }
-    const sessionId = req.cookies["sessionId"];
-  orchestrator.savePhoto(req.params.type, req.body, sessionId)
-    .subscribe(photo => {
-        res.status(201);
-        res.send(JSON.stringify(photo));
-    }, error => {
-        res.status(500);
-        res.send(JSON.stringify({message: "Error Occurred"}));
-        console.log(error);
-    });
+    orchestrator.savePhoto(type, image, partyId)
+        .subscribe(photo => {
+            res.status(201);
+            res.send(JSON.stringify(photo));
+        }, error => {
+            res.status(500);
+            res.send(JSON.stringify({message: "Error Occurred"}));
+            console.log(error);
+        });
 };
 
 export let updatePhoto = (req: Request, res: Response) => {
-    if (!req.body) {
+    const type: string = req.params.type;
+    const image: File = req.body;
+    const partyId: string = res.locals.partyId;
+    res.setHeader("content-type", "image/*");
+    if (!image) {
         return res.status(400).send({
-            message: "Photo can not be empty"
+            message: "Image must exist."
         });
     }
-  orchestrator
-    .updatePhoto(req.params.partyId, req.params.type, req.body)
-    .subscribe(affected => {
-        if (affected > 0) {
-            res.status(200);
-            res.send(JSON.stringify(affected));
-        } else {
-            res.status(404);
-            res.send(JSON.stringify({message: "No Data Found For " + req.params.partyId}));
-        }
-    }, error => {
-        res.status(500);
-        res.send(JSON.stringify({message: "Error Occurred"}));
-        console.log(error);
-    });
+    console.log(req.body);
+    console.log(image);
+    orchestrator
+        .updatePhoto(partyId, type, image)
+        .subscribe(affected => {
+            if (affected > 0) {
+                res.status(200);
+                res.send(JSON.stringify(affected));
+            } else {
+                res.status(404);
+                res.send(JSON.stringify({message: "No Data Found For " + req.params.partyId}));
+            }
+        }, error => {
+            res.status(500);
+            res.send(JSON.stringify({message: "Error Occurred"}));
+            console.log(error);
+        });
 };
 

@@ -1,15 +1,19 @@
 import { SubscriptionRepository } from "../../repository/subscription.repository";
 import { Subscription } from "../../data/party/subscription";
 import { Observable } from "rxjs";
-import { Module } from "../../data/party/module";
+import { App } from "../../data/party/app";
 
 export class SubscriptionRepositoryRestAdapter implements SubscriptionRepository {
 
-    getSubscriptionModules(): Observable<Module[]> {
+    getApps(partyId: string): Observable<App[]> {
         return undefined;
     }
 
-    public addSubscription(subscription: Subscription): Observable<Subscription> {
+    getSubscriptions(partyId: string): Observable<Subscription[]> {
+        return undefined;
+    }
+
+    public addSubscription(subscription: Subscription, partyId: string): Observable<Subscription> {
         return undefined;
     }
 }

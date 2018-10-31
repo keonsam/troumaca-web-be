@@ -1,8 +1,23 @@
 import { Request, Response } from "express";
 import { BillingOrchestrator } from "./billing.orchestrator";
-import { Billing } from "../data/party/billing";
 
 const billingOrchestrator: BillingOrchestrator = new BillingOrchestrator();
+
+export const getBillings = (req: Request, res: Response) => {
+
+    res.setHeader("content-type", "application/json");
+
+
+    billingOrchestrator.getBillings(res.locals.partyId)
+        .subscribe( billings => {
+            res.status(200);
+            res.send(JSON.stringify(billings));
+        }, error => {
+            console.log(error);
+            res.status(500);
+            res.send(JSON.stringify({message: "Server Error, please try again"}));
+        });
+};
 
 export const getPaymentMethods = (req: Request, res: Response) => {
 
@@ -23,27 +38,14 @@ export const getPaymentMethods = (req: Request, res: Response) => {
         });
 };
 
-export const getBillings = (req: Request, res: Response) => {
+export const getPaymentInformation = (req: Request, res: Response) => {
 
-    billingOrchestrator.getBillings()
-        .subscribe( billings => {
+    res.setHeader("content-type", "application/json");
+
+    billingOrchestrator.getPaymentInformation(res.locals.partyId)
+        .subscribe( paymentInformation => {
             res.status(200);
-            res.setHeader("content-type", "application/json");
-            res.send(JSON.stringify(billings));
-        }, error => {
-            console.log(error);
-            res.status(500);
-            res.send(JSON.stringify({message: "Server Error, please try again"}));
-        });
-};
-
-export const getCreditCards = (req: Request, res: Response) => {
-
-    billingOrchestrator.getCreditCards()
-        .subscribe( creditCards => {
-            res.status(200);
-            res.setHeader("content-type", "application/json");
-            res.send(JSON.stringify(creditCards));
+            res.send(JSON.stringify(paymentInformation));
         }, error => {
             console.log(error);
             res.status(500);
@@ -52,20 +54,22 @@ export const getCreditCards = (req: Request, res: Response) => {
 };
 
 
-export const addCreditCard = (req: Request, res: Response) => {
+export const addPaymentInformation = (req: Request, res: Response) => {
 
-    const creditCard = req.body;
+    const paymentInformation = req.body;
 
-    if (!creditCard) {
+    res.setHeader("content-type", "application/json");
+
+    // TODO: Fix these errors
+    if (!paymentInformation || !paymentInformation.cardName || !paymentInformation.cardNumber || !paymentInformation.cardCVV || !paymentInformation.cardExpDate) {
         res.status(400);
-        res.send(JSON.stringify({message: "Credit Card must exist"}));
+        res.send(JSON.stringify({message: "Credit Card must exist and contain card name, number, cvv and expiry date."}));
     }
 
-    billingOrchestrator.addCreditCard(creditCard)
+    billingOrchestrator.addPaymentInformation(paymentInformation, res.locals.partyId)
         .subscribe( value => {
             const body = JSON.stringify(value);
             res.status(201);
-            res.setHeader("content-type", "application/json");
             res.send(body);
         }, error => {
             console.log(error);
@@ -74,17 +78,35 @@ export const addCreditCard = (req: Request, res: Response) => {
         });
 };
 
-export const updateCreditCard = (req: Request, res: Response) => {
+export const updatePaymentInformation = (req: Request, res: Response) => {
 
-    const creditCard = req.body;
-    const creditCardId = req.params.creditCardId;
+    const paymentInfo = req.body;
+    const paymentId = req.params.paymentId;
+    res.setHeader("content-type", "application/json");
 
-    if (!creditCard) {
+    if (!paymentInfo) {
         res.status(400);
-        res.send(JSON.stringify({message: "Credit Card must exist"}));
+        res.send(JSON.stringify({message: "Payment Information is required."}));
     }
 
-    billingOrchestrator.updateCreditCard(creditCard, creditCardId)
+    billingOrchestrator.updatePaymentInformation(paymentInfo, paymentId)
+        .subscribe( num => {
+            const body = JSON.stringify(num);
+            res.status(201);
+            res.send(body);
+        }, error => {
+            console.log(error);
+            res.status(500);
+            res.send(JSON.stringify({message: "Server Error, please try again"}));
+        });
+};
+
+export const deletePaymentInformation = (req: Request, res: Response) => {
+
+    const paymentId = req.params.paymentId;
+    res.setHeader("content-type", "application/json");
+
+    billingOrchestrator.deletePaymentInformation(paymentId)
         .subscribe( num => {
             const body = JSON.stringify(num);
             res.status(201);
@@ -96,90 +118,6 @@ export const updateCreditCard = (req: Request, res: Response) => {
             res.send(JSON.stringify({message: "Server Error, please try again"}));
         });
 };
-
-export const deleteCreditCard = (req: Request, res: Response) => {
-
-    const creditCardId = req.params.creditCardId;
-
-    billingOrchestrator.deleteCreditCard(creditCardId)
-        .subscribe( num => {
-            const body = JSON.stringify(num);
-            res.status(201);
-            res.setHeader("content-type", "application/json");
-            res.send(body);
-        }, error => {
-            console.log(error);
-            res.status(500);
-            res.send(JSON.stringify({message: "Server Error, please try again"}));
-        });
-};
-
-// export const getBilling = (req: Request, res: Response) => {
-//
-//     billingOrchestrator.getBilling()
-//         .subscribe( billing => {
-//             const body = JSON.stringify(billing);
-//             res.status(200);
-//             res.setHeader("content-type", "application/json");
-//             res.send(body);
-//         }, error => {
-//             console.log(error);
-//             res.status(500);
-//             res.send(JSON.stringify({message: "Server Error, please try again"}));
-//         });
-// };
-
-// export const addBilling = (req: Request, res: Response) => {
-//
-//     const billing: Billing = req.body.billing;
-//     const method: any = req.body.method;
-//
-//     if (!billing || !method) {
-//         res.status(400);
-//         res.send(JSON.stringify({message: "Either 'billing' or 'method' cannot be empty"}));
-//     }
-//
-//     billingOrchestrator.addBilling(billing, method)
-//         .subscribe( billing => {
-//             const body = JSON.stringify(billing);
-//             res.status(201);
-//             res.setHeader("content-type", "application/json");
-//             res.send(body);
-//         }, error => {
-//             console.log(error);
-//             res.status(500);
-//             res.send(JSON.stringify({message: "Server Error, please try again"}));
-//         });
-// };
-//
-// export const updateBilling = (req: Request, res: Response) => {
-//
-//     const billing: Billing = req.body.billing;
-//     const method: any = req.body.method;
-//     const billingId: string = req.params.billingId;
-//
-//     if (!billing || !method) {
-//         res.status(400);
-//         res.send(JSON.stringify({message: "Either 'billing' or 'method' cannot be empty"}));
-//     }
-//
-//     if (!billingId) {
-//         res.status(400);
-//         res.send(JSON.stringify({message: "billingId is required"}));
-//     }
-//
-//     billingOrchestrator.updateBilling(billingId, billing, method)
-//         .subscribe( numReplaced => {
-//             const body = JSON.stringify(numReplaced);
-//             res.status(201);
-//             res.setHeader("content-type", "application/json");
-//             res.send(body);
-//         }, error => {
-//             console.log(error);
-//             res.status(500);
-//             res.send(JSON.stringify({message: "Server Error, please try again"}));
-//         });
-// };
 
 // VALIDATION
 
@@ -263,6 +201,22 @@ export const cardCVV = (req: Request, res: Response) => {
         }, error => {
             console.log(error);
             res.status(500);
+            res.send(JSON.stringify({message: "Server Error, please try again"}));
+        });
+};
+
+export const isValidPaymentMethod = (req: Request, res: Response) => {
+    const partyId: string = res.locals.partyId;
+
+    billingOrchestrator.isValidPaymentMethod(partyId)
+        .subscribe( valid => {
+            res.status(200);
+            res.setHeader("content-type", "application/json");
+            res.send(JSON.stringify({valid}));
+        }, error => {
+            console.log(error);
+            res.status(500);
+            res.setHeader("content-type", "application/json");
             res.send(JSON.stringify({message: "Server Error, please try again"}));
         });
 };

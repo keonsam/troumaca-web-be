@@ -1,10 +1,10 @@
 import { createBillingRepositoryFactory } from "../adapter/party/billing.repository.factory";
 import { BillingRepository } from "../repository/billing.repository";
 import { Observable } from "rxjs";
-import { PaymentMethod } from "./payment.method";
-import { CreditCard } from "./credit.card";
-import { Billing } from "./billing";
+import { PaymentMethod } from "../data/party/payment.method";
+import { Billing } from "../data/party/billing";
 import { map } from "rxjs/operators";
+import { PaymentInformation } from "../data/party/payment.information";
 
 export class  BillingOrchestrator {
     private billingRepository: BillingRepository;
@@ -12,36 +12,28 @@ export class  BillingOrchestrator {
         this.billingRepository = createBillingRepositoryFactory();
     }
 
+    getBillings(partyId: string): Observable<Billing[]> {
+        return this.billingRepository.getBillings(partyId);
+    }
+
     getPaymentMethods(): Observable<PaymentMethod[]> {
         return this.billingRepository.getPaymentMethods();
     }
 
-    addCreditCard(creditCard: CreditCard): Observable<CreditCard> {
-        return this.billingRepository.addCreditCard(creditCard);
+    addPaymentInformation(paymentInformation: PaymentInformation, partyId: string): Observable<PaymentInformation> {
+        return this.billingRepository.addPaymentInformation(paymentInformation, partyId);
     }
 
-    getBillings(): Observable<Billing[]> {
-        return this.billingRepository.getBillings();
+    getPaymentInformation(partyId: string): Observable<PaymentInformation[]> {
+        return this.billingRepository.getPaymentInformation(partyId);
     }
 
-    getCreditCards(): Observable<CreditCard[]> {
-        return this.billingRepository.getCreditCards()
-            .pipe( map(creditCards => {
-                if (creditCards) {
-                    creditCards.forEach(x => {
-                        x.ending = x.cardNumber.slice(-4);
-                    });
-                }
-                return creditCards;
-            }));
+    updatePaymentInformation(paymentInformation: PaymentInformation, paymentId: string): Observable<number> {
+        return this.billingRepository.updatePaymentInformation(paymentInformation, paymentId);
     }
 
-    updateCreditCard(creditCard: CreditCard, creditCardId: string): Observable<number> {
-        return this.billingRepository.updateCreditCard(creditCard, creditCardId);
-    }
-
-    deleteCreditCard(creditCardId: string): Observable<number> {
-        return this.billingRepository.deleteCreditCard(creditCardId);
+    deletePaymentInformation(paymentId: string): Observable<number> {
+        return this.billingRepository.deletePaymentInformation(paymentId);
     }
 
     // public getBilling(): Observable<Billing> {
@@ -72,5 +64,9 @@ export class  BillingOrchestrator {
 
     public cardCVV(value: string): Observable<boolean> {
         return this.billingRepository.cardName(value);
+    }
+
+    isValidPaymentMethod(partyId: string): Observable<boolean> {
+        return this.billingRepository.isValidPaymentMethod(partyId);
     }
 }

@@ -11,6 +11,7 @@ export let findOrganizations = (req: Request, res: Response) => {
     const searchStr: string =  req.query.q;
     const pageSize: number = req.query.pageSize;
 
+    res.setHeader("content-type", "application/json");
     organizationOrchestrator
         .findOrganization(searchStr, pageSize)
         .subscribe( organizations => {
@@ -29,7 +30,8 @@ export  let getOrganizations = (req: Request, res: Response) => {
   const field = getStringValueOrDefault(req.query.sortField, "");
   const direction = getStringValueOrDefault(req.query.sortOrder, "");
 
-  organizationOrchestrator
+    res.setHeader("content-type", "application/json");
+    organizationOrchestrator
     .getOrganizations(number, size, field, direction)
     .subscribe(result => {
         res.status(200);
@@ -42,8 +44,9 @@ export  let getOrganizations = (req: Request, res: Response) => {
 };
 
 export  let getOrganization = (req: Request, res: Response) => {
-  const partyId = req.params.partyId || res.locals.partyId;
-  organizationOrchestrator
+  const partyId = req.params.partyId;
+    res.setHeader("content-type", "application/json");
+    organizationOrchestrator
     .getOrganization(partyId)
     .subscribe(organization => {
         if (organization) {
@@ -60,9 +63,36 @@ export  let getOrganization = (req: Request, res: Response) => {
     });
 };
 
+export  let getOrganizationCompany = (req: Request, res: Response) => {
+    const partyId = res.locals.partyId;
+    res.setHeader("content-type", "application/json");
+    organizationOrchestrator
+        .getOrganization(partyId)
+        .subscribe(organization => {
+            if (organization) {
+                res.status(200);
+                res.send(JSON.stringify(organization));
+            } else {
+                res.status(404);
+                res.send(JSON.stringify({message: "No Data Found For " + req.params.partyId}));
+            }
+        }, error => {
+            res.status(500);
+            res.send(JSON.stringify({message: "Error Occurred"}));
+            console.log(error);
+        });
+};
+
 export  let saveOrganization = (req: Request, res: Response) => {
-  const organization = req.body.organization;
-  organizationOrchestrator
+  const organization: Organization = req.body;
+    if (!organization || !organization.name || !organization.purpose) {
+        res.status(400);
+        res.setHeader("content-type", "application/json");
+        res.send(JSON.stringify({message: "'Organization' must be sent, and must contain name and purpose."}));
+        return;
+    }
+    res.setHeader("content-type", "application/json");
+    organizationOrchestrator
     .saveOrganization(organization)
     .subscribe(organization => {
         res.status(201);
@@ -135,32 +165,59 @@ export let saveAccessRequest = (req: Request, res: Response) => {
 };
 
 export let updateOrganization = (req: Request, res: Response) => {
-  const partyId = req.params.partyId;
-  const organization = req.body;
+    const partyId = req.params.partyId;
+    const organization = req.body;
+    res.setHeader("content-type", "application/json");
     if (!req.body) {
         return res.status(400).send({
             message: "Organization can not be empty"
         });
     }
-  organizationOrchestrator
-    .updateOrganization(partyId, organization)
-    .subscribe(affected => {
-        if (affected > 0) {
-            res.status(200);
-            res.send(JSON.stringify(affected));
-        } else {
-            res.status(404);
-            res.send(JSON.stringify({message: "No Data Found For " + req.params.partyId}));
-        }
-    }, error => {
-        res.status(500);
-        res.send(JSON.stringify({message: "Error Occurred"}));
-        console.log(error);
-    });
+    organizationOrchestrator
+        .updateOrganization(partyId, organization)
+        .subscribe(affected => {
+            if (affected > 0) {
+                res.status(200);
+                res.send(JSON.stringify(affected));
+            } else {
+                res.status(404);
+                res.send(JSON.stringify({message: "No Data Found For " + req.params.partyId}));
+            }
+        }, error => {
+            res.status(500);
+            res.send(JSON.stringify({message: "Error Occurred"}));
+            console.log(error);
+        });
+};
+
+export let updateOrganizationCompany = (req: Request, res: Response) => {
+    const organization = req.body;
+    res.setHeader("content-type", "application/json");
+    if (!organization) {
+        return res.status(400).send({
+            message: "Organization can not be empty"
+        });
+    }
+    organizationOrchestrator
+        .updateOrganization(res.locals.partyId, organization)
+        .subscribe(affected => {
+            if (affected > 0) {
+                res.status(200);
+                res.send(JSON.stringify(affected));
+            } else {
+                res.status(404);
+                res.send(JSON.stringify({message: "No Data Found For " + req.params.partyId}));
+            }
+        }, error => {
+            res.status(500);
+            res.send(JSON.stringify({message: "Error Occurred"}));
+            console.log(error);
+        });
 };
 
 export let deleteOrganization = (req: Request, res: Response) => {
     const partyId = req.params.partyId;
+    res.setHeader("content-type", "application/json");
 
     organizationOrchestrator
         .deleteOrganization(partyId)
