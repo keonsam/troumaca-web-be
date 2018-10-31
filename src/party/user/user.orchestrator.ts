@@ -24,73 +24,73 @@ import {Person} from "../../data/party/person";
 
 export class UserOrchestrator {
 
-  private userRepository: UserRepository;
-  private credentialRepository: CredentialRepository;
-  private partyAccessRoleRepository: PartyAccessRoleRepository;
-  private accessRoleRepository: AccessRoleRepository;
-  private sessionRepository: SessionRepository;
+    private userRepository: UserRepository;
+    private credentialRepository: CredentialRepository;
+    private partyAccessRoleRepository: PartyAccessRoleRepository;
+    private accessRoleRepository: AccessRoleRepository;
+    private sessionRepository: SessionRepository;
 
-  constructor() {
-    this.userRepository = createUserRepository();
-    this.credentialRepository = createCredentialRepositoryFactory();
-    this.partyAccessRoleRepository = createPartyAccessRoleRepositoryFactory();
-    this.accessRoleRepository = createAccessRoleRepository();
-    this.sessionRepository = createSessionRepositoryFactory();
-  }
+    constructor() {
+        this.userRepository = createUserRepository();
+        this.credentialRepository = createCredentialRepositoryFactory();
+        this.partyAccessRoleRepository = createPartyAccessRoleRepositoryFactory();
+        this.accessRoleRepository = createAccessRoleRepository();
+        this.sessionRepository = createSessionRepositoryFactory();
+    }
 
 
-  findUser(searchStr: string, pageSize: number): Observable<User[]> {
-    return this.userRepository.findUser(searchStr, pageSize);
-  }
+    findUser(searchStr: string, pageSize: number): Observable<User[]> {
+        return this.userRepository.findUser(searchStr, pageSize);
+    }
 
-  getUsers(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
-    const sort = getSortOrderOrDefault(field, direction);
-    return this.userRepository.getUsers(number, size, sort)
-      .pipe(flatMap(value => {
-        return this.userRepository
-          .getUserCount()
-          .pipe(map(count => {
-            const shapeUsersResp: any = shapeUsersResponse(value, number, size, value.length, count, sort);
-            return new Result<any>(false, "users", shapeUsersResp);
-          }));
-      }));
-  }
-
-  getUser(partyId: string): Observable<UserResponse> {
-    return this.userRepository.getUser(partyId)
-      .pipe(switchMap(user => {
-        if (!user) {
-          return of(new UserResponse());
-        } else {
-          return this.partyAccessRoleRepository.getPartyAccessRolesByPartyId(partyId)
-            .pipe(switchMap((partyAccessRoles: PartyAccessRole[]) => {
-              if (partyAccessRoles.length < 1) {
-                // error below should return an error if no party access role/s is found but,
-                // un-invited user which request join access can't automatically have the role of admin
-                // skip for now
-                // return throwError(`No PartyAccessRoles found ${partyAccessRoles}`);
-                return of(new UserResponse(user));
-              } else {
-                const accessRoleIds: string[] = partyAccessRoles.map(x => {
-                  if (x.accessRoleId) return x.accessRoleId;
-                });
-                return this.accessRoleRepository.getAccessRoleByIds(accessRoleIds)
-                  .pipe(map(accessRoles => {
-                    if (accessRoles.length < 1) {
-                      throw new Error(`No AccessRole found ${accessRoles}`);
-                    } else {
-                      partyAccessRoles.forEach(value => {
-                        const index = accessRoles.findIndex(x => x.accessRoleId === value.accessRoleId);
-                        value.accessRole = index !== -1 ? accessRoles[index] : new AccessRole();
-                      });
-                      return new UserResponse(user, partyAccessRoles);
-                    }
-                  }));
-              }
+    getUsers(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
+        const sort = getSortOrderOrDefault(field, direction);
+        return this.userRepository.getUsers(number, size, sort)
+            .pipe(flatMap(value => {
+                return this.userRepository
+                    .getUserCount()
+                    .pipe(map(count => {
+                        const shapeUsersResp: any = shapeUsersResponse(value, number, size, value.length, count, sort);
+                        return new Result<any>(false, "users", shapeUsersResp);
+                    }));
             }));
-        }
-      }));
-  }
+    }
+
+    getUser(partyId: string): Observable<UserResponse> {
+        return this.userRepository.getUser(partyId)
+            .pipe(switchMap(user => {
+                if (!user) {
+                    return of(new UserResponse());
+                } else {
+                    return this.partyAccessRoleRepository.getPartyAccessRolesByPartyId(partyId)
+                        .pipe(switchMap((partyAccessRoles: PartyAccessRole[]) => {
+                            if (partyAccessRoles.length < 1) {
+                                // error below should return an error if no party access role/s is found but,
+                                // un-invited user which request join access can't automatically have the role of admin
+                                // skip for now
+                                // return throwError(`No PartyAccessRoles found ${partyAccessRoles}`);
+                                return of(new UserResponse(user));
+                            } else {
+                                const accessRoleIds: string[] = partyAccessRoles.map(x => {
+                                    if (x.accessRoleId) return x.accessRoleId;
+                                });
+                                return this.accessRoleRepository.getAccessRoleByIds(accessRoleIds)
+                                    .pipe(map(accessRoles => {
+                                        if (accessRoles.length < 1) {
+                                            throw new Error(`No AccessRole found ${accessRoles}`);
+                                        } else {
+                                            partyAccessRoles.forEach(value => {
+                                                const index = accessRoles.findIndex(x => x.accessRoleId === value.accessRoleId);
+                                                value.accessRole = index !== -1 ? accessRoles[index] : new AccessRole();
+                                            });
+                                            return new UserResponse(user, partyAccessRoles);
+                                        }
+                                    }));
+                            }
+                        }));
+                }
+            }));
+    }
 
   saveUser(person: Person, credential: Credential, partyAccessRoles: PartyAccessRole[]): Observable<User> {
     credential.password = generate({length: 10, numbers: true});
@@ -122,75 +122,84 @@ export class UserOrchestrator {
       }));
   }
 
-  deleteUser(partyId: string): Observable<number> {
-    return this.userRepository.deleteUser(partyId)
-      .pipe(switchMap(value => {
-        if (!value) {
-          return of(value);
-        } else {
-          return this.partyAccessRoleRepository.deletePartyAccessRole(partyId);
-          // .pipe(switchMap(numRemoved => {
-          //   return this.credentialRepository.deleteCredentialByPartyId(partyId);
-          // });
+    updateUser(partyId: string, user: User, credential: Credential, partyAccessRoles: PartyAccessRole[]): Observable<number> {
+        if (credential && credential.username === user.name) {
+            delete credential.username;
         }
-      }));
-  }
-
-  updateUser(partyId: string, user: User, credential: Credential, partyAccessRoles: PartyAccessRole[]): Observable<number> {
-    if (credential && credential.username === user.name) {
-      delete credential.username;
-    }
-    delete user.username;
-    return this.userRepository.updateUser(partyId, user)
-      .pipe(switchMap(numUpdated => {
-        if (!numUpdated) {
-          return throwError(`No User found to update ${numUpdated}`);
-        } else {
-          return this.partyAccessRoleRepository.updatePartyAccessRoles(partyAccessRoles, partyId)
-            .pipe(switchMap(partyAccessRolesRes => {
-              if (!partyAccessRolesRes) {
-                return throwError(`updatePartyAccessRoles Failed ${partyAccessRolesRes}`);
-              } else if (!credential) {
-                return of(numUpdated);
-              } else {
-                return this.credentialRepository.updateUserCredential(partyId, credential)
-                  .pipe(map(numUpdated2 => {
-                    if (!numUpdated2) {
-                      throw new Error(`updateUserCredential Failed ${numUpdated2}`);
-                    } else {
-                      return numUpdated;
-                    }
-                  }));
-              }
+        delete user.username;
+        return this.userRepository.updateUser(partyId, user)
+            .pipe(switchMap(numUpdated => {
+                if (!numUpdated) {
+                    return throwError(`No User found to update ${numUpdated}`);
+                } else {
+                    return this.partyAccessRoleRepository.updatePartyAccessRoles(partyAccessRoles, partyId)
+                        .pipe(switchMap(partyAccessRolesRes => {
+                            if (!partyAccessRolesRes) {
+                                return throwError(`updatePartyAccessRoles Failed ${partyAccessRolesRes}`);
+                            } else if (!credential) {
+                                return of(numUpdated);
+                            } else {
+                                return this.credentialRepository.updateCredential(partyId, credential)
+                                    .pipe(map(numUpdated2 => {
+                                        if (!numUpdated2) {
+                                            throw new Error(`updateUserCredential Failed ${numUpdated2}`);
+                                        } else {
+                                            return numUpdated;
+                                        }
+                                    }));
+                            }
+                        }));
+                }
             }));
-        }
-      }));
-  }
-
-  updateUserMe(partyId: string, user: User, credential: Credential): Observable<number> {
-    if (credential && credential.username === user.name) {
-      delete credential.username;
     }
-    delete user.username;
-    return this.userRepository.updateUser(partyId, user)
-      .pipe(switchMap(numUpdated => {
-        if (!numUpdated) {
-          return throwError(`No Profile found to update ${numUpdated}`);
-        } else if (!credential) {
-          return of(numUpdated);
-        } else {
-          // TODO : separate this in the future if needed
-          return this.credentialRepository.updateUserCredential(partyId, credential)
-            .pipe(map(numUpdated2 => {
-              if (!numUpdated2) {
-                throw new Error(`updateUserCredential Failed ${numUpdated2}`);
-              } else {
-                return numUpdated;
-              }
-            }));
+
+    updateUserMe(partyId: string, user: User, credential: Credential): Observable<number> {
+        if (credential && credential.username === user.name) {
+            delete credential.username;
         }
-      }));
-  }
+        delete user.username;
+        return this.userRepository.updateUser(partyId, user)
+            .pipe(switchMap(numUpdated => {
+                if (!numUpdated) {
+                    return throwError(`No Profile found to update ${numUpdated}`);
+                } else if (!credential) {
+                    return of(numUpdated);
+                } else {
+                    // TODO : separate this in the future if needed
+                    return this.credentialRepository.updateCredential(partyId, credential)
+                        .pipe( map( numUpdated2 => {
+                            if (!numUpdated2) {
+                                throw new Error(`updateUserCredential Failed ${numUpdated2}`);
+                            } else {
+                                return numUpdated;
+                            }
+                        }));
+                }
+            }));
+    }
 
-
+    deleteUser(partyId: string): Observable<number> {
+        return this.userRepository.deleteUser(partyId)
+            .pipe(switchMap(value => {
+                if (!value) {
+                    return throwError(`No User found ${value}`);
+                } else {
+                    return this.credentialRepository.deleteCredentialByPartyId(partyId)
+                        .pipe( switchMap( numRep => {
+                            if (!numRep) {
+                                return throwError( `Credential not deleted  ${numRep}`);
+                            } else {
+                                return this.partyAccessRoleRepository.deletePartyAccessRoles(partyId)
+                                    .pipe( map( numRep2 => {
+                                        if (!numRep2) {
+                                            throw new Error(`Failed to delete Party Access Roles ${numRep2}`);
+                                        } else {
+                                            return value;
+                                        }
+                                    }));
+                            }
+                        }));
+                }
+            }));
+    }
 }

@@ -17,7 +17,7 @@ export interface PartyAccessRoleRepository {
 
   updatePartyAccessRoles(partyAccessRoles: PartyAccessRole[], partyId: string): Observable<PartyAccessRole[]>;
 
-  deletePartyAccessRole(partyId: string): Observable<number>;
+  deletePartyAccessRoles(partyId: string): Observable<number>;
 
   deletePartyAccessRoleByAccessRoleId(accessRoleId: string): Observable<number>;
 

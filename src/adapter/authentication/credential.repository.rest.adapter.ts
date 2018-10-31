@@ -9,6 +9,7 @@ import {AuthenticatedCredential} from "../../data/authentication/authenticated.c
 import {CreatedCredential} from "../../data/authentication/created.credential";
 import {CreateCredential} from "../../repository/create.credential";
 import {Person} from "../../data/party/person";
+import {Confirmation} from "../../data/authentication/confirmation";
 
 export class CredentialRepositoryRestAdapter implements CredentialRepository {
 
@@ -125,15 +126,13 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
         try {
           if (error) {
             observer.error(error);
-            observer.complete();
           } else if (response && response.statusCode != 200) {
             observer.error(body);
-            observer.complete();
           } else {
             // let vp:boolean = plainToClass(Boolean, body["valid"] as Object);
             observer.next(body);
-            observer.complete();
           }
+          observer.complete();
         } catch (e) {
           observer.error(new Error(e.message));
           observer.complete();
@@ -142,92 +141,20 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
     });
   }
 
-  updateCredentialStatusById(credentialId: string, status: string): Observable<number> {
+  forgetPassword(credential: Credential, options: any): Observable<Confirmation> {
     return undefined;
   }
 
-  updateCredentialStatusByPartyId(partyId: string, status: string): Observable<number> {
+  updateCredential(partyId: string, credential: Credential): Observable<number> {
+      return undefined;
+  }
+
+  deleteCredentialByPartyId(partyId: string): Observable<number> {
     return undefined;
   }
 
-
-  updateUserCredential(partyId: string, credential: Credential): Observable<number> {
+  public updateCredentialStatusByPartyId(partyId: string, status: string): Observable<number> {
     return undefined;
   }
-
-  // addUserCredential(credential:Credential):Observable<Credential> {
-  //   return undefined;
-  // }
-  //
-  //
-  // authenticateCredential(credential:Credential): Observable<Credential> {
-  //   return undefined;
-  // }
-  //
-  // checkUsernameValid(partyId: string, username: string): Observable<Credential> {
-  //   return undefined;
-  // }
-  //
-  // getCredentialByCredentialId(credentialId: string): Observable<Credential> {
-  //   return undefined;
-  // }
-  //
-  // getCredentialByUsername(username: string): Observable<Credential> {
-  //   return undefined;
-  // }
-  //
-  //
-  // isValidEditUsername(partyId: string, username:string): Observable<boolean> {
-  //   return undefined;
-  // }
-  //
-  // updateCredential(partyId: string, credential: Credential): Observable<number> {
-  //   return null;
-  // }
-  //
-  //
-  // updateCredentialPartyId(credentialId: string, partyId: string): Observable<number> {
-  //   return undefined;
-  // }
-  //
-  // getSanitizeCredentialByUsername(credentialId: string): Observable<Credential> {
-  //   return undefined;
-  // }
-  //
-  //
-  // deleteCredentialByPartyId(partyId:string): Observable<number> {
-  //   return undefined;
-  // }
-  //
-  // deleteCredentialById(credentialId: string, options?: any): Observable<number> {
-  //   let uri:string = properties.get("credential.host.port") as string;
-  //
-  //   let headerMap = jsonRequestHeaderMap(options ? options : {});
-  //
-  //   // let headers:any = strMapToJson(headerMap);
-  //   let json = {credentialId:credentialId};
-  //
-  //   let uriAndPath:string = uri + '/authentication/credentials/' + credentialId;
-  //
-  //   let requestOptions:any = postJsonOptions(uriAndPath, headerMap, json);
-  //
-  //   return Observable.create(function (observer:Observer<number>) {
-  //     request(requestOptions, function (error:any, response:any, body:any) {
-  //       try {
-  //         if (response && response.statusCode != 200) {
-  //           observer.error(body);
-  //           observer.complete();
-  //         } else {
-  //           //let vp:boolean = plainToClass(Boolean, body["valid"] as Object);
-  //           observer.next(body["affected"]);
-  //           observer.complete();
-  //         }
-  //       } catch (e) {
-  //         observer.error(new Error(e.message));
-  //         observer.complete();
-  //       }
-  //     });
-  //   });
-  // }
 
 }

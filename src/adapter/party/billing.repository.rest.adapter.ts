@@ -1,62 +1,66 @@
-import {BillingRepository} from "../../repository/billing.repository";
-import {Observable} from "rxjs";
-import {PaymentMethod} from "../../billing/payment.method";
-import {CreditCard} from "../../billing/credit.card";
-import {Billing} from "../../billing/billing";
+import { BillingRepository } from "../../repository/billing.repository";
+import { Observable } from "rxjs";
+import { PaymentMethod } from "../../data/party/payment.method";
+import { Billing } from "../../data/party/billing";
+import { PaymentInformation } from "../../data/party/payment.information";
 
 export class BillingRepositoryRestAdapter implements BillingRepository {
 
-  getPaymentMethods(): Observable<PaymentMethod[]> {
-    return undefined;
-  }
+    getBillings(partyId: string): Observable<Billing[]> {
+        return undefined;
+    }
 
-  addCreditCard(creditCard: CreditCard): Observable<CreditCard> {
-    return undefined;
-  }
+    getPaymentMethods(): Observable<PaymentMethod[]> {
+        return undefined;
+    }
 
-  getBillings(): Observable<Billing[]> {
-    return undefined;
-  }
+    addPaymentInformation(paymentInfo: PaymentInformation, partyId: string): Observable<PaymentInformation> {
+        return undefined;
+    }
 
-  getCreditCards(): Observable<CreditCard[]> {
-    return undefined;
-  }
+    getPaymentInformation(partyId: string): Observable<PaymentInformation[]> {
+        return undefined;
+    }
 
-  updateCreditCard(creditCard: CreditCard, creditCardId: string): Observable<number> {
-    return undefined;
-  }
+    updatePaymentInformation(paymentInfo: PaymentInformation, creditCardId: string): Observable<number> {
+        return undefined;
+    }
 
-  deleteCreditCard(creditCardId: string): Observable<number> {
-    return undefined;
-  }
+    deletePaymentInformation(creditCardId: string): Observable<number> {
+        return undefined;
+    }
 
-  // public getBilling(): Observable<Billing> {
-  //     return undefined;
-  // }
-  //
-  // public addBilling(billing: Billing, method: any): Observable<Billing> {
-  //     return undefined;
-  // }
-  //
-  // public updateBilling(billingId: string, billing: Billing, method: any): Observable<number> {
-  //     return undefined;
-  // }
+    // public getBilling(): Observable<Billing> {
+    //     return undefined;
+    // }
+    //
+    // public addBilling(billing: Billing, method: any): Observable<Billing> {
+    //     return undefined;
+    // }
+    //
+    // public updateBilling(billingId: string, billing: Billing, method: any): Observable<number> {
+    //     return undefined;
+    // }
 
-  // CREDIT CARD
+    // CREDIT CARD
 
-  public cardName(value: string): Observable<boolean> {
-    return undefined;
-  }
+    public cardName(value: string): Observable<boolean> {
+        return undefined;
+    }
 
-  public cardNumber(value: string): Observable<boolean> {
-    return undefined;
-  }
+    public cardNumber(value: string): Observable<boolean> {
+        return undefined;
+    }
 
-  public cardExpDate(value: Date): Observable<boolean> {
-    return undefined;
-  }
+    public cardExpDate(value: Date): Observable<boolean> {
+        return undefined;
+    }
 
-  public cardCVV(value: string): Observable<boolean> {
-    return undefined;
-  }
+    public cardCVV(value: string): Observable<boolean> {
+        return undefined;
+    }
+
+    isValidPaymentMethod(partyId: string): Observable<boolean> {
+        return undefined;
+    }
 }

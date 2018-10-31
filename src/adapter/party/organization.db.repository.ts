@@ -8,7 +8,7 @@ import {JoinOrganization} from "../../data/party/join.organization";
 
 export class OrganizationDBRepository implements OrganizationRepository {
 
-  private defaultPageSize: number = 100;
+  private defaultPageSize: number = 10;
 
   findOrganization(searchStr: string, pageSize: number): Observable<Organization[]> {
     const searchStrLocal = new RegExp(searchStr);
@@ -70,9 +70,8 @@ export class OrganizationDBRepository implements OrganizationRepository {
   }
 
   getOrganizations(pageNumber: number, pageSize: number, order: string): Observable<Organization[]> {
-    const localDefaultPageSize = this.defaultPageSize;
-    return Observable.create(function (observer: Observer<Organization[]>) {
-      const skip = calcSkip(pageNumber, pageSize, localDefaultPageSize);
+    return Observable.create((observer: Observer<Organization[]>) => {
+      const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
       organizations.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
@@ -133,6 +132,7 @@ export class OrganizationDBRepository implements OrganizationRepository {
 
   updateOrganization(partyId: string, organization: Organization): Observable<number> {
     return Observable.create(function (observer: Observer<number>) {
+      organization.modifiedOn = new Date();
       const query = {
         "partyId": partyId
       };
