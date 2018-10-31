@@ -28,18 +28,16 @@ export class OrganizationOrchestrator {
     return this.organizationRepository.findOrganization(searchStr, pageSize);
   }
 
-  getOrganizations(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
-    const sort = getSortOrderOrDefault(field, direction);
-    // return this.organizationRepository.getOrganizations(number, size, sort)
-    //     .pipe(flatMap(value => {
-    //         return this.organizationRepository.getOrganizationCount()
-    //             .pipe(map(count => {
-    //                 // const shapeOrganizationsResp: any = shapeOrganizationsResponse(value, number, size, value.length, count, sort);
-    //                 // return new Result<any>(false, "organizations", shapeOrganizationsResp);
-    //                 // return new PageResponse(value, number, size, count, direction);
-    //             }));
-    //     }));
-    return undefined;
+  getOrganizations (number: number, size: number, field: string, direction: string): Observable<Result<any>> {
+      const sort = getSortOrderOrDefault(field, direction);
+      return this.organizationRepository.getOrganizations(number, size, sort)
+          .pipe(flatMap(value => {
+              return this.organizationRepository.getOrganizationCount()
+                  .pipe(map(count => {
+                      const shapeOrganizationsResp: any = shapeOrganizationsResponse(value, number, size, value.length, count, sort);
+                      return new Result<any>(false, "organizations", shapeOrganizationsResp);
+                  }));
+          }));
   }
 
   getOrganization(partyId: string): Observable<Organization> {

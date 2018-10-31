@@ -1,0 +1,2 @@
+{"cardName":"test12","cardNumber":"1111","cardExpDate":"2018-11-02","cardCVV":43,"paymentMethodId":"9f9e5106-1235-4f61-9609-b8fea945e066","paymentId":"bb323525-9d47-4d60-9b30-4b2b2de870e9","partyId":"46567357-acfb-45c9-86d8-0d569a8445c4","status":"primary","createdOn":{"$$date":1540937493943},"modifiedOn":{"$$date":1540937493943},"_id":"6OApH7tNbgvIQdGa"}
+{"$$indexCreated":{"fieldName":"paymentId","unique":true,"sparse":false}}

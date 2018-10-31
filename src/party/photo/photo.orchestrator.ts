@@ -1,44 +1,30 @@
-import {createPhotoRepository} from "../../adapter/photo/photo.repository.factory";
-import {PhotoRepository} from "../../repository/photo.repository";
-import {Photo} from "../../data/photo/photo";
-import {Observable, of} from "rxjs";
-import {switchMap} from "rxjs/operators";
+import { createPhotoRepository } from "../../adapter/photo/photo.repository.factory";
+import { PhotoRepository } from "../../repository/photo.repository";
+import { Photo } from "../../data/photo/photo";
+import { Observable} from "rxjs";
 import {SessionRepository} from "../../repository/session.repository";
 import {createSessionRepositoryFactory} from "../../adapter/session/session.repository.factory";
 
 export class PhotoOrchestrator {
 
-  private photoRepository: PhotoRepository;
-  private sessionRepository: SessionRepository;
+    private photoRepository: PhotoRepository;
+    private sessionRepository: SessionRepository;
 
 
-  constructor() {
-    this.photoRepository = createPhotoRepository();
-    this.sessionRepository = createSessionRepositoryFactory();
-  }
+    constructor() {
+        this.photoRepository = createPhotoRepository();
+        this.sessionRepository = createSessionRepositoryFactory();
+    }
 
-  savePhoto(type: string, photo: Photo, sessionId: string): Observable<Photo> {
-    return this.sessionRepository.getSessionById(sessionId).pipe(switchMap(session => {
-      if (!session) {
-        return of(new Photo());
-      } else {
-        photo.partyId = session.partyId;
-        return this.photoRepository.savePhoto(type, photo);
-      }
-    }));
-  }
+    getPhotos(partyId: string, type?: string): Observable<Photo> {
+        return this.photoRepository.getPhotos(partyId, type);
+    }
 
-  getPhotos(sessionId: string, type?: string): Observable<Photo> {
-    return this.sessionRepository.getSessionById(sessionId).pipe(switchMap(session => {
-      if (!session) {
-        return of(new Photo());
-      } else {
-        return this.photoRepository.getPhotos(session.partyId, type);
-      }
-    }));
-  }
+    savePhoto(type: string, photo: File, partyId: string): Observable<Photo> {
+        return this.photoRepository.savePhoto(type, photo, partyId);
+    }
 
-  updatePhoto(partyId: string, type: string, photo: Photo): Observable<number> {
-    return this.photoRepository.updatePhoto(partyId, type, photo);
-  }
+    updatePhoto(partyId: string, type: string, photo: File): Observable<number> {
+        return this.photoRepository.updatePhoto(partyId, type, photo);
+    }
 }
