@@ -5,6 +5,32 @@ import {Credential} from "../../data/authentication/credential";
 
 const credentialOrchestrator: CredentialOrchestrator = new CredentialOrchestrator();
 
+export let getCredential = (req: Request, res: Response) => {
+    res.setHeader("content-type", "application/json");
+    const correlationId = req.headers.correlationid;
+    const partyId = req.params.partyId;
+
+    const headerOptions = {
+        correlationId: correlationId
+    };
+    credentialOrchestrator.getCredentialByPartyId(partyId, headerOptions)
+        .subscribe( user => {
+            if (user) {
+                res.status(200);
+                res.send(JSON.stringify(user));
+            } else {
+                res.status(404);
+                res.setHeader("content-type", "application/json");
+                res.send(JSON.stringify({message: "No Registered Credential Found."}));
+            }
+        }, error => {
+            res.status(!error.code ? 500 : error.code);
+            const msg = !error.message ? "Internal Server Error" : error.message;
+            res.send(JSON.stringify(msg));
+            console.log(error);
+        });
+};
+
 export let isValidUsername = (req: Request, res: Response) => {
 
   const username = req.body.username;
@@ -151,80 +177,100 @@ export let authenticate = (req: Request, res: Response) => {
 
 };
 
-// router.post("/forgot-password", function (req, res, next) {
-// export let forgotPassword = (req: Request, res: Response) => {
-//   let username = req.body.username;
-//   if (!req.body) {
-//     return res.status(400).send({message: "Username can not be empty"});
-//   }
-//
-//   credentialOrchestrator.forgotPassword(username)
-//     .subscribe((next:ValidateResponse) => {
-//       res.status(200);
-//       res.send(next.valid);
-//     }, error => {
-//       res.status(500);
-//       res.send(JSON.stringify({message: 'Error Occurred'}));
-//       console.log(error);
-//     });
-// };
+export let forgetPassword = (req: Request, res: Response) => {
 
-// router.post("/", function (req, res, next) {
+    const credential: Credential = req.body;
 
-// export let updateCredential = (req: Request, res: Response) => {
-//   let partyId = req.params.partyId;
-//   let credential = req.body;
-//   if (!req.body) {
-//     return res.status(400).send({message: "Credential can not be empty"});
-//   }
-//
-//   credentialOrchestrator
-//     .updateCredential(partyId, credential)
-//     .subscribe(affected => {
-//       if (affected > 0) {
-//         res.status(200);
-//         res.send(JSON.stringify(affected));
-//       } else {
-//         res.status(404);
-//         res.send(JSON.stringify({message: 'No Data Found For ' + req.params.partyId}));
-//       }
-//     }, error => {
-//       res.status(500);
-//       res.send(JSON.stringify({message: 'Error Occurred'}));
-//       console.log(error);
-//     });
-// };
+    if (!credential || !credential.username) {
+        res.status(400);
+        res.setHeader("content-type", "application/json");
+        res.send(JSON.stringify({message: "'Credential' contain username."}));
+        return;
+    }
 
-// export let deleteCredential = (req: Request, res: Response) => {
-//   let credentialId:string = req.params.credentialId;
-//
-//   if (!credentialId) {
-//     return res.status(400).send({message: "Credential Id can not be empty"});
-//   }
-//
-//   let corId = req.headers["correlationid"];
-//
-//   if (!corId) {
-//     return res.status(400).send({message: "Correlation Id can not be empty"});
-//   }
-//
-//   let options = {correlationId:req.headers["correlationid"]};
-//
-//   credentialOrchestrator
-//   .deleteCredential(credentialId, options)
-//   .subscribe(affected => {
-//     if (affected) {
-//       res.status(200);
-//       res.send(JSON.stringify(affected));
-//     } else {
-//       res.status(404);
-//       res.send(JSON.stringify({message: 'No Data Found For ' + credentialId}));
-//     }
-//   }, error => {
-//     res.status(500);
-//     res.send(JSON.stringify({message: 'Error Occurred'}));
-//     console.log(error);
-//   });
-//
-// };
+    const correlationId = req.headers.correlationid;
 
+    if (!correlationId) {
+        res.status(400);
+        res.setHeader("content-type", "application/json");
+        res.send(JSON.stringify({message: "A \"correlationId\" is required."}));
+        return;
+    }
+
+    const headerOptions = {
+        correlationId: correlationId,
+        sourceSystemHost: req.headers.host,
+        sourceSystemName: ""
+    };
+
+    credentialOrchestrator.forgetPassword(credential, headerOptions)
+        .subscribe(confirmation => {
+            if (confirmation && confirmation.confirmationId) {
+                const body = JSON.stringify(confirmation);
+                res.status(201);
+                res.setHeader("content-type", "application/json");
+                res.send(body);
+            } else {
+                const body = JSON.stringify(confirmation);
+                res.status(404);
+                res.setHeader("content-type", "application/json");
+                res.send(body);
+            }
+        }, error => {
+            res.status(500);
+            res.setHeader("content-type", "application/json");
+            res.send(JSON.stringify({message: "Internal Occurred"}));
+            console.log(error);
+        });
+
+};
+
+export let updateCredential = (req: Request, res: Response) => {
+    // here is the weird thing about this api
+    // because you don't need to be login to used this route
+    // anyone that has access to your partyId can change your username or password
+    // in general terms this would not change your username
+
+    const correlationId = req.headers.correlationid;
+    const credential = req.body.credential;
+    const user = req.body.user;
+    const partyId = req.params.partyId;
+
+    if (!correlationId) {
+        res.status(400);
+        res.setHeader("content-type", "application/json");
+        res.send(JSON.stringify({message: "A \"correlationId\" is required."}));
+        return;
+    }
+
+    if (!credential || !credential.password) {
+        res.status(400);
+        res.setHeader("content-type", "application/json");
+        res.send(JSON.stringify({message: "'Credential' must be sent, and must contain a password."}));
+        return;
+    }
+
+    if (!user || !user.firstName || !user.lastName) {
+        res.status(400);
+        res.setHeader("content-type", "application/json");
+        res.send(JSON.stringify({message: "'User' must be sent, and contain first and last name."}));
+        return;
+    }
+
+    const headerOptions = {
+        correlationId: correlationId
+    };
+
+    credentialOrchestrator.updateCredential(credential, user,  partyId, headerOptions)
+        .subscribe(confirmation => {
+            res.status(201);
+            res.setHeader("content-type", "application/json");
+            res.send(JSON.stringify(confirmation));
+        }, error => {
+            res.status(!error.code ? 500 : error.code);
+            const msg = !error.message ? "Internal Server Error" : error.message;
+            res.send(JSON.stringify(msg));
+            console.log(error);
+        });
+
+};

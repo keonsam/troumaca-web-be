@@ -2,11 +2,12 @@ import {Photo} from "../data/photo/photo";
 import {Observable} from "rxjs";
 
 export interface PhotoRepository {
-  savePhoto(type: string, photo: Photo): Observable<Photo>;
 
-  getPhotos(partyId: string, type?: string): Observable<Photo>;
+    getPhotos(partyId: string, type?: string): Observable<Photo>;
 
-  updatePhoto(partyId: string, type: string, photo: Photo): Observable<number>;
+    savePhoto(type: string, photo: File, partyId: string): Observable<Photo>;
 
-  // deletePhoto(partyId: string): Observable<number>;
+    updatePhoto(partyId: string, type: string, photo: File): Observable<number>;
+
+    // deletePhoto(partyId: string): Observable<number>;
 }
