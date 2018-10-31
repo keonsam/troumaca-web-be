@@ -1,10 +1,10 @@
-import { EmailRepository } from "../../repository/email.repository";
-import { Observable ,  Observer } from "rxjs";
-import { RepositoryKind } from "../../repository.kind";
-import { emails } from "../../db";
-import { Email } from "../../data/site/email";
-import { calcSkip } from "../../db.util";
-import { generateUUID } from "../../uuid.generator";
+import {EmailRepository} from "../../repository/email.repository";
+import {Observable, Observer} from "rxjs";
+import {RepositoryKind} from "../../repository.kind";
+import {emails} from "../../db";
+import {Email} from "../../data/site/email";
+import {calcSkip} from "../../db.util";
+import {generateUUID} from "../../uuid.generator";
 
 class EmailDBRepository implements EmailRepository {
 
@@ -12,8 +12,8 @@ class EmailDBRepository implements EmailRepository {
 
   saveEmail(email: Email): Observable<Email> {
     email.siteId = generateUUID();
-    return Observable.create(function(observer: Observer<Email>) {
-      emails.insert(email, function(err: any, doc: any) {
+    return Observable.create(function (observer: Observer<Email>) {
+      emails.insert(email, function (err: any, doc: any) {
         if (err) {
           observer.error(err);
         } else {

@@ -1,7 +1,6 @@
 export class AssetKind {
 
   private _assetKindId: string;
-  private _name: string;
 
   get assetKindId(): string {
     return this._assetKindId;
@@ -10,6 +9,8 @@ export class AssetKind {
   set assetKindId(value: string) {
     this._assetKindId = value;
   }
+
+  private _name: string;
 
   get name(): string {
     return this._name;

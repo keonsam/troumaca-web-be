@@ -13,7 +13,7 @@ export class PersonProfileOrchestrator {
     this.personRepository = createPersonRepository();
   }
 
-  createProfilePerson(profile:PersonProfile, options?: any): Observable<Person> {
+  createProfilePerson(profile: PersonProfile, options?: any): Observable<Person> {
     return this.personRepository.addPerson(profile.person, options);
   }
 

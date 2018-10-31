@@ -1,10 +1,10 @@
-import { resourceTypes } from "../../db";
-import { ResourceTypeRepository } from "../../repository/resource.type.repository";
-import { ResourceType } from "../../data/authorization/resource.type";
-import { Observable ,  Observer } from "rxjs";
-import { RepositoryKind } from "../../repository.kind";
-import { generateUUID } from "../../uuid.generator";
-import { calcSkip } from "../../db.util";
+import {resourceTypes} from "../../db";
+import {ResourceTypeRepository} from "../../repository/resource.type.repository";
+import {ResourceType} from "../../data/authorization/resource.type";
+import {Observable, Observer} from "rxjs";
+import {RepositoryKind} from "../../repository.kind";
+import {generateUUID} from "../../uuid.generator";
+import {calcSkip} from "../../db.util";
 
 class ResourceTypeDBRepository implements ResourceTypeRepository {
 
@@ -32,7 +32,6 @@ class ResourceTypeDBRepository implements ResourceTypeRepository {
           observer.complete();
         });
       }
-      
     });
   }
 
@@ -66,8 +65,8 @@ class ResourceTypeDBRepository implements ResourceTypeRepository {
 
   addResourceType(resourceType: ResourceType): Observable<ResourceType> {
     resourceType.resourceTypeId = generateUUID();
-    return Observable.create(function(observer: Observer<ResourceType>) {
-      resourceTypes.insert(resourceType, function(err: any, doc: any) {
+    return Observable.create(function (observer: Observer<ResourceType>) {
+      resourceTypes.insert(resourceType, function (err: any, doc: any) {
         if (err) {
           observer.error(err);
         } else {

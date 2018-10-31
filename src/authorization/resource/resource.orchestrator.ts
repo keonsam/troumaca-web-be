@@ -1,18 +1,18 @@
-import { ResourceRepository } from "../../repository/resource.repository";
-import { createResourceRepositoryFactory } from "../../adapter/authorization/resource.repository.factory";
-import { Resource } from "../../data/authorization/resource";
-import { Observable, of } from "rxjs";
-import { flatMap, map, switchMap } from "rxjs/operators";
-import { shapeResourcesResponse } from "./resource.response.shaper";
-import { Result } from "../../result.success";
-import { getSortOrderOrDefault } from "../../sort.order.util";
-import { ResourcePermission } from "../../data/authorization/resource.permission";
-import { ResourcePermissionRepository } from "../../repository/resource.permission.repository";
-import { createResourcePermissionRepositoryFactory } from "../../adapter/authorization/resource.permission.repository.factory";
-import { ResourceTypeRepository } from "../../repository/resource.type.repository";
-import { createResourceTypeRepositoryFactory } from "../../adapter/authorization/resource.type.repository.factory";
-import { ResourceType } from "../../data/authorization/resource.type";
-import { resourcePermissions } from "../../db";
+import {ResourceRepository} from "../../repository/resource.repository";
+import {createResourceRepositoryFactory} from "../../adapter/authorization/resource.repository.factory";
+import {Resource} from "../../data/authorization/resource";
+import {Observable, of} from "rxjs";
+import {flatMap, map, switchMap} from "rxjs/operators";
+import {shapeResourcesResponse} from "./resource.response.shaper";
+import {Result} from "../../result.success";
+import {getSortOrderOrDefault} from "../../sort.order.util";
+import {ResourcePermission} from "../../data/authorization/resource.permission";
+import {ResourcePermissionRepository} from "../../repository/resource.permission.repository";
+import {createResourcePermissionRepositoryFactory} from "../../adapter/authorization/resource.permission.repository.factory";
+import {ResourceTypeRepository} from "../../repository/resource.type.repository";
+import {createResourceTypeRepositoryFactory} from "../../adapter/authorization/resource.type.repository.factory";
+import {ResourceType} from "../../data/authorization/resource.type";
+import {resourcePermissions} from "../../db";
 
 export class ResourceOrchestrator {
 
@@ -38,7 +38,7 @@ export class ResourceOrchestrator {
     //         // return new Result<any>(false, "", shapeResourcesResp);
     //       }));
     //   }));
-    return null;
+    return undefined;
   }
 
   getAssignedResourcesByArray(number: number, size: number, field: string, direction: string, assignedArray: string[]): Observable<Result<any>> {
@@ -53,7 +53,7 @@ export class ResourceOrchestrator {
     //         // return new Result<any>(false, "", shapeResourcesResp);
     //       }));
     //   }));
-    return null;
+    return undefined;
   }
 
   getResources(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
@@ -96,22 +96,22 @@ export class ResourceOrchestrator {
     //       }));
     //     }
     //   }));
-    return null;
+    return undefined;
   }
 
   addResource(resource: Resource, resourcePermissions: ResourcePermission[]): Observable<Resource> {
     return this.resourceRepository.addResource(resource)
-      .pipe(switchMap( value => {
+      .pipe(switchMap(value => {
         if (!value || resourcePermissions.length === 0) return of(value);
         // const resourceId = value.resourceId;
         // resourcePermissions.forEach(val => {
         //     val.resourceId = resourceId;
         // });
-          return this.resourcePermissionRepository.addResourcePermission(resourcePermissions)
-            .pipe(map( resourcePermissions => {
-              if (!resourcePermissions) return new Resource();
-                return value;
-            }));
+        return this.resourcePermissionRepository.addResourcePermission(resourcePermissions)
+          .pipe(map(resourcePermissions => {
+            if (!resourcePermissions) return new Resource();
+            return value;
+          }));
       }));
   }
 
@@ -124,21 +124,21 @@ export class ResourceOrchestrator {
     //           // return resource;
     //     }));
     //   }));
-    return null;
+    return undefined;
   }
 
   updateResource(resourceId: string, resource: Resource, resourcePermissions: ResourcePermission[]): Observable<number> {
     return this.resourceRepository.updateResource(resourceId, resource)
-      .pipe(switchMap( numReplaced => {
+      .pipe(switchMap(numReplaced => {
         if (!numReplaced || resourcePermissions.length === 0) return of(numReplaced);
         return this.resourcePermissionRepository.deleteResourcePermission(resourceId)
-            .pipe(switchMap(numReplaced2 => {
-                return this.resourcePermissionRepository.addResourcePermission(resourcePermissions)
-                  .pipe(map( docs => {
-                      if (!docs) return 0;
-                      return numReplaced;
-                  }));
-            }));
+          .pipe(switchMap(numReplaced2 => {
+            return this.resourcePermissionRepository.addResourcePermission(resourcePermissions)
+              .pipe(map(docs => {
+                if (!docs) return 0;
+                return numReplaced;
+              }));
+          }));
       }));
   }
 

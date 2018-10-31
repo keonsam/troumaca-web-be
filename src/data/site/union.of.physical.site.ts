@@ -1,19 +1,5 @@
 export class UnionOfPhysicalSite {
 
-  private _siteId: string;
-  private _name: string;
-  private _describe: string;
-  private _city: string;
-  private _stateOrProvince: string;
-  private _postalCode: string;
-  private _country: string;
-  private _streetNumber: string;
-  private _street: string;
-  private _apartmentOrSuite: string;
-  private _floor: string;
-  private _postOfficeBoxNumber: string;
-
-
   constructor(siteId?: string, name?: string, describe?: string, city?: string, stateOrProvince?: string,
               postalCode?: string, country?: string, streetNumber?: string, street?: string, apartmentOrSuite?: string,
               floor?: string, postOfficeBoxNumber?: string) {
@@ -31,6 +17,8 @@ export class UnionOfPhysicalSite {
     this._postOfficeBoxNumber = postOfficeBoxNumber;
   }
 
+  private _siteId: string;
+
   get siteId(): string {
     return this._siteId;
   }
@@ -38,6 +26,8 @@ export class UnionOfPhysicalSite {
   set siteId(value: string) {
     this._siteId = value;
   }
+
+  private _name: string;
 
   get name(): string {
     return this._name;
@@ -47,6 +37,8 @@ export class UnionOfPhysicalSite {
     this._name = value;
   }
 
+  private _describe: string;
+
   get describe(): string {
     return this._describe;
   }
@@ -54,6 +46,8 @@ export class UnionOfPhysicalSite {
   set describe(value: string) {
     this._describe = value;
   }
+
+  private _city: string;
 
   get city(): string {
     return this._city;
@@ -63,6 +57,8 @@ export class UnionOfPhysicalSite {
     this._city = value;
   }
 
+  private _stateOrProvince: string;
+
   get stateOrProvince(): string {
     return this._stateOrProvince;
   }
@@ -70,6 +66,8 @@ export class UnionOfPhysicalSite {
   set stateOrProvince(value: string) {
     this._stateOrProvince = value;
   }
+
+  private _postalCode: string;
 
   get postalCode(): string {
     return this._postalCode;
@@ -79,6 +77,8 @@ export class UnionOfPhysicalSite {
     this._postalCode = value;
   }
 
+  private _country: string;
+
   get country(): string {
     return this._country;
   }
@@ -86,6 +86,8 @@ export class UnionOfPhysicalSite {
   set country(value: string) {
     this._country = value;
   }
+
+  private _streetNumber: string;
 
   get streetNumber(): string {
     return this._streetNumber;
@@ -95,6 +97,8 @@ export class UnionOfPhysicalSite {
     this._streetNumber = value;
   }
 
+  private _street: string;
+
   get street(): string {
     return this._street;
   }
@@ -102,6 +106,8 @@ export class UnionOfPhysicalSite {
   set street(value: string) {
     this._street = value;
   }
+
+  private _apartmentOrSuite: string;
 
   get apartmentOrSuite(): string {
     return this._apartmentOrSuite;
@@ -111,6 +117,8 @@ export class UnionOfPhysicalSite {
     this._apartmentOrSuite = value;
   }
 
+  private _floor: string;
+
   get floor(): string {
     return this._floor;
   }
@@ -118,6 +126,8 @@ export class UnionOfPhysicalSite {
   set floor(value: string) {
     this._floor = value;
   }
+
+  private _postOfficeBoxNumber: string;
 
   get postOfficeBoxNumber(): string {
     return this._postOfficeBoxNumber;

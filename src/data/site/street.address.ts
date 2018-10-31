@@ -1,13 +1,8 @@
-import { PhysicalSite } from "./physical.site";
+import {PhysicalSite} from "./physical.site";
 
 export class StreetAddress extends PhysicalSite {
 
   private _suiteOrApartment: string;
-  private _floor: string;
-  private _suiteOrApartmentNumber: string;
-  private _streetNumber: string;
-  private _street: string;
-
 
   get suiteOrApartment(): string {
     return this._suiteOrApartment;
@@ -17,6 +12,8 @@ export class StreetAddress extends PhysicalSite {
     this._suiteOrApartment = value;
   }
 
+  private _floor: string;
+
   get floor(): string {
     return this._floor;
   }
@@ -24,6 +21,8 @@ export class StreetAddress extends PhysicalSite {
   set floor(value: string) {
     this._floor = value;
   }
+
+  private _suiteOrApartmentNumber: string;
 
   get suiteOrApartmentNumber(): string {
     return this._suiteOrApartmentNumber;
@@ -33,6 +32,8 @@ export class StreetAddress extends PhysicalSite {
     this._suiteOrApartmentNumber = value;
   }
 
+  private _streetNumber: string;
+
   get streetNumber(): string {
     return this._streetNumber;
   }
@@ -40,6 +41,8 @@ export class StreetAddress extends PhysicalSite {
   set streetNumber(value: string) {
     this._streetNumber = value;
   }
+
+  private _street: string;
 
   get street(): string {
     return this._street;

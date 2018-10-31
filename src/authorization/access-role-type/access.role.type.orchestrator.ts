@@ -1,11 +1,11 @@
-import { AccessRoleTypeRepository } from "../../repository/access.role.type.repository";
-import { createAccessRoleTypeRepositoryFactory } from "../../adapter/authorization/access.role.type.repository.factory";
-import { AccessRoleType } from "../../data/authorization/access.role.type";
-import { Observable } from "rxjs";
-import { flatMap, map } from "rxjs/operators";
-import { shapeAccessRoleTypesResponse } from "./access.role.type.response.shaper";
-import { Result } from "../../result.success";
-import { getSortOrderOrDefault } from "../../sort.order.util";
+import {AccessRoleTypeRepository} from "../../repository/access.role.type.repository";
+import {createAccessRoleTypeRepositoryFactory} from "../../adapter/authorization/access.role.type.repository.factory";
+import {AccessRoleType} from "../../data/authorization/access.role.type";
+import {Observable} from "rxjs";
+import {flatMap, map} from "rxjs/operators";
+import {shapeAccessRoleTypesResponse} from "./access.role.type.response.shaper";
+import {Result} from "../../result.success";
+import {getSortOrderOrDefault} from "../../sort.order.util";
 
 export class AccessRoleTypeOrchestrator {
 
@@ -31,7 +31,7 @@ export class AccessRoleTypeOrchestrator {
     //         // return new Result<any>(false, "accessRoleTypes", shapeAccessRoleTypesResp);
     //       }));
     //   }));
-    return null;
+    return undefined;
   }
 
   addAccessRoleType(accessRoleType: AccessRoleType): Observable<AccessRoleType> {

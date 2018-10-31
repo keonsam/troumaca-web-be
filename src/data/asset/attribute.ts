@@ -1,19 +1,6 @@
 export class Attribute {
 
   private _attributeId: string;
-  private _tenantId: string;
-  private _name: string;
-  private _format: string;
-  // replace with data type
-  private _dataTypeId: string;
-  // replace with unit of measure
-  private _unitOfMeasureId: string;
-  private _unitOfMeasureName: string;
-  private _dataTypeName: string;
-  private _maximumValue: string;
-  private _minimumValue: string;
-  private _createdOn: Date;
-  private _modifiedOn: Date;
 
   get attributeId(): string {
     return this._attributeId;
@@ -23,6 +10,8 @@ export class Attribute {
     this._attributeId = value;
   }
 
+  private _tenantId: string;
+
   get tenantId(): string {
     return this._tenantId;
   }
@@ -30,6 +19,8 @@ export class Attribute {
   set tenantId(value: string) {
     this._tenantId = value;
   }
+
+  private _name: string;
 
   get name(): string {
     return this._name;
@@ -39,6 +30,8 @@ export class Attribute {
     this._name = value;
   }
 
+  private _format: string;
+
   get format(): string {
     return this._format;
   }
@@ -46,6 +39,9 @@ export class Attribute {
   set format(value: string) {
     this._format = value;
   }
+
+  // replace with data type
+  private _dataTypeId: string;
 
   get dataTypeId(): string {
     return this._dataTypeId;
@@ -55,6 +51,9 @@ export class Attribute {
     this._dataTypeId = value;
   }
 
+  // replace with unit of measure
+  private _unitOfMeasureId: string;
+
   get unitOfMeasureId(): string {
     return this._unitOfMeasureId;
   }
@@ -63,37 +62,7 @@ export class Attribute {
     this._unitOfMeasureId = value;
   }
 
-  get maximumValue(): string {
-    return this._maximumValue;
-  }
-
-  set maximumValue(value: string) {
-    this._maximumValue = value;
-  }
-
-  get minimumValue(): string {
-    return this._minimumValue;
-  }
-
-  set minimumValue(value: string) {
-    this._minimumValue = value;
-  }
-
-  get createdOn(): Date {
-    return this._createdOn;
-  }
-
-  set createdOn(value: Date) {
-    this._createdOn = value;
-  }
-
-  get modifiedOn(): Date {
-    return this._modifiedOn;
-  }
-
-  set modifiedOn(value: Date) {
-    this._modifiedOn = value;
-  }
+  private _unitOfMeasureName: string;
 
   get unitOfMeasureName(): string {
     return this._unitOfMeasureName;
@@ -103,6 +72,7 @@ export class Attribute {
     this._unitOfMeasureName = value;
   }
 
+  private _dataTypeName: string;
 
   get dataTypeName(): string {
     return this._dataTypeName;
@@ -110,6 +80,46 @@ export class Attribute {
 
   set dataTypeName(value: string) {
     this._dataTypeName = value;
+  }
+
+  private _maximumValue: string;
+
+  get maximumValue(): string {
+    return this._maximumValue;
+  }
+
+  set maximumValue(value: string) {
+    this._maximumValue = value;
+  }
+
+  private _minimumValue: string;
+
+  get minimumValue(): string {
+    return this._minimumValue;
+  }
+
+  set minimumValue(value: string) {
+    this._minimumValue = value;
+  }
+
+  private _createdOn: Date;
+
+  get createdOn(): Date {
+    return this._createdOn;
+  }
+
+  set createdOn(value: Date) {
+    this._createdOn = value;
+  }
+
+  private _modifiedOn: Date;
+
+  get modifiedOn(): Date {
+    return this._modifiedOn;
+  }
+
+  set modifiedOn(value: Date) {
+    this._modifiedOn = value;
   }
 
 }

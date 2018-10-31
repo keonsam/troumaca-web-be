@@ -1,9 +1,8 @@
-import { SiteRepository } from "../../repository/site.repository";
-import { RepositoryKind } from "../../repository.kind";
-import { SiteRepositoryNeDbAdapter } from "./site.repository.db.adapter";
-import { SiteRepositoryRestAdapter } from "./site.repository.rest.adapter";
-import { properties } from "../../properties.helpers";
-
+import {SiteRepository} from "../../repository/site.repository";
+import {RepositoryKind} from "../../repository.kind";
+import {SiteRepositoryNeDbAdapter} from "./site.repository.db.adapter";
+import {SiteRepositoryRestAdapter} from "./site.repository.rest.adapter";
+import {properties} from "../../properties.helpers";
 
 
 export function createSiteRepository(kind?: RepositoryKind): SiteRepository {
@@ -16,7 +15,7 @@ export function createSiteRepository(kind?: RepositoryKind): SiteRepository {
     case RepositoryKind.Rest:
       return new SiteRepositoryRestAdapter();
     default:
-        throw new Error(`Unknown Site Repository Type ${k}`);
+      throw new Error(`Unknown Site Repository Type ${k}`);
 
   }
 }

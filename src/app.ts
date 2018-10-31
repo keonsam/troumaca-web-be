@@ -28,11 +28,11 @@ const whitelist = [
 
 const corsOptions = {
   origin: function (origin: any, callback: any) {
-      if (origin === undefined || whitelist.indexOf(origin) !== -1) {
-          callback(undefined, true);
-      } else {
-          callback(new Error("Not allowed by CORS"));
-      }
+    if (origin === undefined || whitelist.indexOf(origin) !== -1) {
+      callback(undefined, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
   },
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
   credentials: true
@@ -52,7 +52,7 @@ app.use((req: any, res: any, next: any) => {
 });
 
 // error handler
-app.use(function(err: any, req: any, res: any, next: any) {
+app.use(function (err: any, req: any, res: any, next: any) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};

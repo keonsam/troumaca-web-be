@@ -3,9 +3,9 @@ import {Observable, Observer} from "rxjs";
 import {Organization} from "../../data/party/organization";
 import {properties} from "../../properties.helpers";
 import {jsonRequestHeaderMap, postJsonOptions} from "../../request.helpers";
-// import {Confirmation} from "../../data/authentication/confirmation";
+// import { Confirmation } from "../../data/authentication/confirmation";
 import request from "request";
-import { JoinOrganization } from "../../data/party/join.organization";
+import {JoinOrganization} from "../../data/party/join.organization";
 
 export class OrganizationRestRepository implements OrganizationRepository {
 

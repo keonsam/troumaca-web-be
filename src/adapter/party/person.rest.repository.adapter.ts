@@ -18,7 +18,7 @@ export class PersonRestRepositoryAdapter implements PersonRepository {
 
     const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
 
-    let isFailedRequest = function (response:any):boolean {
+    const isFailedRequest = function (response: any): boolean {
       if (!response) {
         return true;
       }
@@ -34,7 +34,7 @@ export class PersonRestRepositoryAdapter implements PersonRepository {
       request(requestOptions, function (error: any, response: any, body: any) {
         try {
           if (error) {
-            let errObj = new Error("Failure");
+            const errObj = new Error("Failure");
             if (error.code) {
               errObj.name = error.code;
             }

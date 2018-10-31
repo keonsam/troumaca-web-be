@@ -1,4 +1,4 @@
-import { Value } from "../data/asset/value";
+import {Value} from "../data/asset/value";
 
 
 export interface ValueRepository {

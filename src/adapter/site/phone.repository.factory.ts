@@ -1,10 +1,10 @@
-import { PhoneRepository } from "../../repository/phone.repository";
-import { Observable ,  Observer } from "rxjs";
-import { RepositoryKind } from "../../repository.kind";
-import { telephones } from "../../db";
-import { Phone } from "../../data/site/phone";
-import { calcSkip } from "../../db.util";
-import { generateUUID } from "../../uuid.generator";
+import {PhoneRepository} from "../../repository/phone.repository";
+import {Observable, Observer} from "rxjs";
+import {RepositoryKind} from "../../repository.kind";
+import {telephones} from "../../db";
+import {Phone} from "../../data/site/phone";
+import {calcSkip} from "../../db.util";
+import {generateUUID} from "../../uuid.generator";
 
 class PhoneDBRepository implements PhoneRepository {
 
@@ -12,8 +12,8 @@ class PhoneDBRepository implements PhoneRepository {
 
   savePhone(phone: Phone): Observable<Phone> {
     phone.siteId = generateUUID();
-    return Observable.create(function(observer: Observer<Phone>) {
-      telephones.insert(phone, function(err: any, doc: any) {
+    return Observable.create(function (observer: Observer<Phone>) {
+      telephones.insert(phone, function (err: any, doc: any) {
         if (err) {
           observer.error(err);
         } else {

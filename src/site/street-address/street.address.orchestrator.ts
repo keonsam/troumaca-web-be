@@ -1,11 +1,11 @@
-import { createStreetAddressRepository } from "../../adapter/site/street.address.repository.factory";
-import { StreetAddressRepository } from "../../repository/street.address.repository";
-import { Observable } from "rxjs";
-import { flatMap, map } from "rxjs/operators";
-import { getSortOrderOrDefault } from "../../sort.order.util";
-import { shapeStreetAddressesResponse } from "./street.address.response.shaper";
-import { StreetAddress } from "../../data/site/street.address";
-import { Result } from "../../result.success";
+import {createStreetAddressRepository} from "../../adapter/site/street.address.repository.factory";
+import {StreetAddressRepository} from "../../repository/street.address.repository";
+import {Observable} from "rxjs";
+import {flatMap, map} from "rxjs/operators";
+import {getSortOrderOrDefault} from "../../sort.order.util";
+import {shapeStreetAddressesResponse} from "./street.address.response.shaper";
+import {StreetAddress} from "../../data/site/street.address";
+import {Result} from "../../result.success";
 
 export class StreetAddressOrchestrator {
 

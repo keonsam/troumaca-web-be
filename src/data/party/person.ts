@@ -1,12 +1,8 @@
-import { Party } from "./party";
+import {Party} from "./party";
 
 export class Person extends Party {
 
   private _partyType: string;
-  private _firstName: string;
-  private _middleName: string;
-  private _lastName: string;
-  private _dateOfBirth: Date;
 
   get partyType(): string {
     return this._partyType;
@@ -14,6 +10,46 @@ export class Person extends Party {
 
   set partyType(value: string) {
     this._partyType = value;
+  }
+
+  private _firstName: string;
+
+  get firstName(): string {
+    return this._firstName;
+  }
+
+  set firstName(value: string) {
+    this._firstName = value;
+  }
+
+  private _middleName: string;
+
+  get middleName(): string {
+    return this._middleName;
+  }
+
+  set middleName(value: string) {
+    this._middleName = value;
+  }
+
+  private _lastName: string;
+
+  get lastName(): string {
+    return this._lastName;
+  }
+
+  set lastName(value: string) {
+    this._lastName = value;
+  }
+
+  private _dateOfBirth: Date;
+
+  get dateOfBirth(): Date {
+    return this._dateOfBirth;
+  }
+
+  set dateOfBirth(value: Date) {
+    this._dateOfBirth = value;
   }
 
   get partyId(): string {
@@ -28,38 +64,6 @@ export class Person extends Party {
     return `${this.lastName}, ${this.firstName}`;
   }
 
-  get firstName(): string {
-    return this._firstName;
-  }
-
-  set firstName(value: string) {
-    this._firstName = value;
-  }
-
-  get middleName(): string {
-    return this._middleName;
-  }
-
-  set middleName(value: string) {
-    this._middleName = value;
-  }
-
-  get lastName(): string {
-    return this._lastName;
-  }
-
-  set lastName(value: string) {
-    this._lastName = value;
-  }
-
-  get dateOfBirth(): Date {
-    return this._dateOfBirth;
-  }
-
-  set dateOfBirth(value: Date) {
-    this._dateOfBirth = value;
-  }
-
   toJson() {
     return {
       partyId: this.partyId,
@@ -71,7 +75,7 @@ export class Person extends Party {
       middleName: this.middleName,
       lastName: this.lastName,
       dateOfBirth: this.dateOfBirth
-    }
+    };
   }
 
 }

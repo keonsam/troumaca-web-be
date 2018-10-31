@@ -4,15 +4,15 @@ export function jsonRequestHeaderMap(options: any) {
 
   let correlationId = "";
   if (options.correlationId) {
-    correlationId = options.correlationId
+    correlationId = options.correlationId;
   } else if (options.correlationid) {
-    correlationId = options.correlationid
+    correlationId = options.correlationid;
   }
 
   return {
     "Content-Type": "application/json",
     "correlationId": correlationId,
-    "sourcePartyId" : "",
+    "sourcePartyId": "",
   };
 
 }
@@ -42,13 +42,13 @@ export function postJsonOptions(uri: any, headers: any, json: any) {
   };
 
   // if (headers) {
-    // headerMap.set("headers", headers);
-    // options.headers = headers;
+  // headerMap.set("headers", headers);
+  // options.headers = headers;
   // }
 
   // if (headers) {
-    // headerMap.set("json", json);
-    // options.json = json;
+  // headerMap.set("json", json);
+  // options.json = json;
   // }
 
   // return options;

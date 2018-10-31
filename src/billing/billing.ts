@@ -1,8 +1,5 @@
 export class Billing {
   private _name: string;
-  private _date: Date;
-  private _description: string;
-  private _amount: string;
 
   get name(): string {
     return this._name;
@@ -12,6 +9,8 @@ export class Billing {
     this._name = value;
   }
 
+  private _date: Date;
+
   get date(): Date {
     return this._date;
   }
@@ -20,6 +19,8 @@ export class Billing {
     this._date = value;
   }
 
+  private _description: string;
+
   get description(): string {
     return this._description;
   }
@@ -27,6 +28,8 @@ export class Billing {
   set description(value: string) {
     this._description = value;
   }
+
+  private _amount: string;
 
   get amount(): string {
     return this._amount;

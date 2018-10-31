@@ -1,7 +1,7 @@
-import { OrganizationRepository } from "../../repository/organization.repository";
-import { RepositoryKind } from "../../repository.kind";
-import { OrganizationDBRepository } from "./organization.db.repository";
-import { OrganizationRestRepository } from "./organization.rest.repository";
+import {OrganizationRepository} from "../../repository/organization.repository";
+import {RepositoryKind} from "../../repository.kind";
+import {OrganizationDBRepository} from "./organization.db.repository";
+import {OrganizationRestRepository} from "./organization.rest.repository";
 import {properties} from "../../properties.helpers";
 
 export function createOrganizationRepository(kind?: RepositoryKind): OrganizationRepository {

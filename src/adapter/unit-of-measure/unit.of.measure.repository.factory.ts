@@ -1,8 +1,8 @@
-import { UnitOfMeasureRepository } from "../../repository/unit.of.measure.repository";
-import { RepositoryKind } from "../../repository.kind";
-import { properties } from "../../properties.helpers";
-import { UnitOfMeasureRepositoryNeDbAdapter } from "./unit.of.measure.repository.db.adapter";
-import { UnitOfMeasureRepositoryRestAdapter } from "./unit.of.measure.repository.rest.adapter";
+import {UnitOfMeasureRepository} from "../../repository/unit.of.measure.repository";
+import {RepositoryKind} from "../../repository.kind";
+import {properties} from "../../properties.helpers";
+import {UnitOfMeasureRepositoryNeDbAdapter} from "./unit.of.measure.repository.db.adapter";
+import {UnitOfMeasureRepositoryRestAdapter} from "./unit.of.measure.repository.rest.adapter";
 
 export function createUnitOfMeasureRepository(kind?: RepositoryKind): UnitOfMeasureRepository {
   const type: number = properties.get("unit.of.measure.repository.type") as number;
@@ -14,6 +14,6 @@ export function createUnitOfMeasureRepository(kind?: RepositoryKind): UnitOfMeas
     case RepositoryKind.Rest:
       return new UnitOfMeasureRepositoryRestAdapter();
     default:
-        throw new Error(`Unknown Unit Of Measure Repository Type ${k}`);
+      throw new Error(`Unknown Unit Of Measure Repository Type ${k}`);
   }
 }

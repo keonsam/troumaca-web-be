@@ -1,10 +1,11 @@
-import { CredentialConfirmation } from "../../data/authentication/credential.confirmation";
-import { ConfirmationRepository } from "../../repository/confirmation.repository";
-import { properties } from "../../properties.helpers";
-import { jsonRequestHeaderMap, postJsonOptions } from "../../request.helpers";
-import { Observable ,  Observer } from "rxjs";
+import {CredentialConfirmation} from "../../data/authentication/credential.confirmation";
+import {ConfirmationRepository} from "../../repository/confirmation.repository";
+import {properties} from "../../properties.helpers";
+import {jsonRequestHeaderMap, postJsonOptions} from "../../request.helpers";
+import {Observable, Observer} from "rxjs";
 import request from "request";
-import { Confirmation } from "../../data/authentication/confirmation";
+import {Confirmation} from "../../data/authentication/confirmation";
+
 // import {classToPlain, plainToClass} from "class-transformer";
 
 export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository {

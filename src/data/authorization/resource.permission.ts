@@ -1,14 +1,8 @@
-import { Permission } from "./permission";
+import {Permission} from "./permission";
 
 export class ResourcePermission {
 
   private _resourcePermissionId: string;
-  private _resourceId: string;
-  private _permissionName: string;
-  private _permissionId: string;
-  private _description: string;
-  private _createdOn: Date;
-  private _modifiedOn: Date;
 
   get resourcePermissionId(): string {
     return this._resourcePermissionId;
@@ -18,6 +12,8 @@ export class ResourcePermission {
     this._resourcePermissionId = value;
   }
 
+  private _resourceId: string;
+
   get resourceId(): string {
     return this._resourceId;
   }
@@ -26,37 +22,47 @@ export class ResourcePermission {
     this._resourceId = value;
   }
 
+  private _permissionName: string;
+
   get permissionName(): string {
-      return this._permissionName;
+    return this._permissionName;
   }
 
   set permissionName(value: string) {
-      this._permissionName = value;
+    this._permissionName = value;
   }
 
+  private _permissionId: string;
+
   get permissionId(): string {
-      return this._permissionId;
+    return this._permissionId;
   }
 
   set permissionId(value: string) {
-      this._permissionId = value;
+    this._permissionId = value;
   }
 
+  private _description: string;
+
   get description(): string {
-      return this._description;
+    return this._description;
   }
 
   set description(value: string) {
-      this._description = value;
+    this._description = value;
   }
 
+  private _createdOn: Date;
+
   get createdOn(): Date {
-      return this._createdOn;
+    return this._createdOn;
   }
 
   set createdOn(value: Date) {
     this._createdOn = value;
   }
+
+  private _modifiedOn: Date;
 
   get modifiedOn(): Date {
     return this._modifiedOn;

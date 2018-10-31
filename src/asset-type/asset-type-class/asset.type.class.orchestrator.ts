@@ -1,13 +1,13 @@
-import { Observable } from "rxjs";
-import { flatMap, map} from "rxjs/operators";
-import { getSortOrderOrDefault } from "../../sort.order.util";
-import { AssetTypeClass } from "../../data/asset/asset.type.class";
-import { AssignedAttribute } from "../../data/asset/assigned.attribute";
-import { createAssetTypeClassRepositoryFactory } from "../../adapter/asset/asset.type.class.repository.factory";
-import { AssetTypeClassRepository } from "../../repository/asset.type.class.repository";
-import { shapeAssetTypeClassesResponse } from "./asset.type.class.response.shaper";
-import { Result } from "../../result.success";
-import { AssetTypeClassResponse } from "../../data/asset/asset.type.class.response";
+import {Observable} from "rxjs";
+import {flatMap, map} from "rxjs/operators";
+import {getSortOrderOrDefault} from "../../sort.order.util";
+import {AssetTypeClass} from "../../data/asset/asset.type.class";
+import {AssignedAttribute} from "../../data/asset/assigned.attribute";
+import {createAssetTypeClassRepositoryFactory} from "../../adapter/asset/asset.type.class.repository.factory";
+import {AssetTypeClassRepository} from "../../repository/asset.type.class.repository";
+import {shapeAssetTypeClassesResponse} from "./asset.type.class.response.shaper";
+import {Result} from "../../result.success";
+import {AssetTypeClassResponse} from "../../data/asset/asset.type.class.response";
 
 export class AssetTypeClassOrchestrator {
 
@@ -24,15 +24,15 @@ export class AssetTypeClassOrchestrator {
   getAssetTypeClasses(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
     const sort = getSortOrderOrDefault(field, direction);
     return this.assetTypeClassRepository
-    .getAssetTypeClasses(number, size, sort)
-    .pipe(flatMap(value => {
-      return this.assetTypeClassRepository
-        .getAssetTypeClassCount()
-        .pipe(map(count => {
-          const shapeAssetTypeClassesResp = shapeAssetTypeClassesResponse("assetTypeClasses", value, number, size, value.length, count, sort);
-          return new Result(false, "", shapeAssetTypeClassesResp);
-        }));
-    }));
+      .getAssetTypeClasses(number, size, sort)
+      .pipe(flatMap(value => {
+        return this.assetTypeClassRepository
+          .getAssetTypeClassCount()
+          .pipe(map(count => {
+            const shapeAssetTypeClassesResp = shapeAssetTypeClassesResponse("assetTypeClasses", value, number, size, value.length, count, sort);
+            return new Result(false, "", shapeAssetTypeClassesResp);
+          }));
+      }));
   }
 
   getAssetTypeClass(assetTypeClassId: string): Observable<AssetTypeClassResponse> {
@@ -48,7 +48,7 @@ export class AssetTypeClassOrchestrator {
   }
 
   deleteAssetTypeClass(assetTypeClassId: string): Observable<number> {
-      return this.assetTypeClassRepository.deleteAssetTypeClass(assetTypeClassId);
+    return this.assetTypeClassRepository.deleteAssetTypeClass(assetTypeClassId);
   }
 
 }

@@ -1,10 +1,10 @@
-import { StreetAddressRepository } from "../../repository/street.address.repository";
-import { Observable ,  Observer } from "rxjs";
-import { RepositoryKind } from "../../repository.kind";
-import { streetAddresses } from "../../db";
-import { StreetAddress } from "../../data/site/street.address";
-import { calcSkip } from "../../db.util";
-import { generateUUID } from "../../uuid.generator";
+import {StreetAddressRepository} from "../../repository/street.address.repository";
+import {Observable, Observer} from "rxjs";
+import {RepositoryKind} from "../../repository.kind";
+import {streetAddresses} from "../../db";
+import {StreetAddress} from "../../data/site/street.address";
+import {calcSkip} from "../../db.util";
+import {generateUUID} from "../../uuid.generator";
 
 class StreetAddressDBRepository implements StreetAddressRepository {
 
@@ -12,8 +12,8 @@ class StreetAddressDBRepository implements StreetAddressRepository {
 
   saveStreetAddress(streetAddress: StreetAddress): Observable<StreetAddress> {
     streetAddress.siteId = generateUUID();
-    return Observable.create(function(observer: Observer<StreetAddress>) {
-      streetAddresses.insert(streetAddress, function(err: any, doc: any) {
+    return Observable.create(function (observer: Observer<StreetAddress>) {
+      streetAddresses.insert(streetAddress, function (err: any, doc: any) {
         if (err) {
           observer.error(err);
         } else {

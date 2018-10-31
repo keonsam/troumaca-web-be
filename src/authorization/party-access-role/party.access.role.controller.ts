@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { PartyAccessRoleOrchestrator } from "./party.access.role.orchestrator";
+import {Request, Response} from "express";
+import {PartyAccessRoleOrchestrator} from "./party.access.role.orchestrator";
 // import {getNumericValueOrDefault} from '../../number.util';
 // import {getStringValueOrDefault} from '../../string.util';
 

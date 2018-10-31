@@ -1,16 +1,9 @@
-import { ResourceType } from "./resource.type";
+import {ResourceType} from "./resource.type";
 import {ResourcePermission} from "./resource.permission";
 
 export class Resource {
 
   private _resourceId: string;
-  private _resourceTypeId: string;
-  private _resourceTypeName: string;
-  private _resourcePermissions: ResourcePermission[];
-  private _name: string;
-  private _description: string;
-  private _createdOn: Date;
-  private _modifiedOn: Date;
 
   get resourceId(): string {
     return this._resourceId;
@@ -20,6 +13,8 @@ export class Resource {
     this._resourceId = value;
   }
 
+  private _resourceTypeId: string;
+
   get resourceTypeId(): string {
     return this._resourceTypeId;
   }
@@ -28,21 +23,27 @@ export class Resource {
     this._resourceTypeId = value;
   }
 
+  private _resourceTypeName: string;
+
   get resourceTypeName(): string {
-      return this._resourceTypeName;
+    return this._resourceTypeName;
   }
 
   set resourceTypeName(value: string) {
-      this._resourceTypeName = value;
+    this._resourceTypeName = value;
   }
 
+  private _resourcePermissions: ResourcePermission[];
+
   get resourcePermissions(): ResourcePermission[] {
-      return this._resourcePermissions;
+    return this._resourcePermissions;
   }
 
   set resourcePermissions(value: ResourcePermission[]) {
-      this._resourcePermissions = value;
+    this._resourcePermissions = value;
   }
+
+  private _name: string;
 
   get name(): string {
     return this._name;
@@ -52,12 +53,20 @@ export class Resource {
     this._name = value;
   }
 
+  private _description: string;
+
   get description(): string {
     return this._description;
   }
 
   set description(value: string) {
     this._description = value;
+  }
+
+  private _createdOn: Date;
+
+  get createdOn(): Date {
+    return this._createdOn;
   }
 
   // get ownerPartyId(): string {
@@ -68,13 +77,11 @@ export class Resource {
   //   this._ownerPartyId = value;
   // }
 
-  get createdOn(): Date {
-    return this._createdOn;
-  }
-
   set createdOn(value: Date) {
     this._createdOn = value;
   }
+
+  private _modifiedOn: Date;
 
   get modifiedOn(): Date {
     return this._modifiedOn;

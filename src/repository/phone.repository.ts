@@ -1,5 +1,5 @@
-import { Phone } from "../data/site/phone";
-import { Observable } from "rxjs";
+import {Phone} from "../data/site/phone";
+import {Observable} from "rxjs";
 
 export interface PhoneRepository {
   savePhone(phone: Phone): Observable<Phone>;

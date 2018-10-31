@@ -1,9 +1,10 @@
-import { partyAccessRoles } from "../../db";
-import { PartyAccessRoleRepository } from "../../repository/party.access.role.repository";
-import { PartyAccessRole } from "../../data/authorization/party.access.role";
-import { Observable, Observer, throwError } from "rxjs";
-import { generateUUID } from "../../uuid.generator";
-import { switchMap } from "rxjs/operators";
+import {partyAccessRoles} from "../../db";
+import {PartyAccessRoleRepository} from "../../repository/party.access.role.repository";
+import {PartyAccessRole} from "../../data/authorization/party.access.role";
+import {Observable, Observer, throwError} from "rxjs";
+import {generateUUID} from "../../uuid.generator";
+import {switchMap} from "rxjs/operators";
+
 // import {calcSkip} from "../../db.util";
 
 export class PartyAccessRoleDBRepository implements PartyAccessRoleRepository {
@@ -51,7 +52,7 @@ export class PartyAccessRoleDBRepository implements PartyAccessRoleRepository {
   // };
 
   addPartyAccessRoles(partyAccessRoleArr: PartyAccessRole[], partyId: string): Observable<PartyAccessRole[]> {
-    partyAccessRoleArr.forEach( value => {
+    partyAccessRoleArr.forEach(value => {
       value.partyAccessRoleId = generateUUID();
       value.partyId = partyId;
       value.createdOn = new Date();
@@ -59,20 +60,6 @@ export class PartyAccessRoleDBRepository implements PartyAccessRoleRepository {
     });
     return this.addPartyAccessRolesLocal(partyAccessRoleArr);
   }
-
-  private addPartyAccessRolesLocal(partyAccessRoleArr: PartyAccessRole[]): Observable<PartyAccessRole[]> {
-      return Observable.create(function(observer: Observer<PartyAccessRole[]>) {
-          partyAccessRoles.insert(partyAccessRoleArr, function(err: any, docs: any) {
-              if (err) {
-                  observer.error(err);
-              } else {
-                  observer.next(docs);
-              }
-              observer.complete();
-          });
-      });
-  }
-
 
   deletePartyAccessRole(partyId: string): Observable<number> {
     return Observable.create(function (observer: Observer<number>) {
@@ -141,32 +128,45 @@ export class PartyAccessRoleDBRepository implements PartyAccessRoleRepository {
 
   updatePartyAccessRoles(partyAccessRoles: PartyAccessRole[], partyId: string): Observable<PartyAccessRole[]> {
     return this.deletePartyAccessRole(partyId)
-        .pipe(switchMap(numDel => {
-          if (!numDel) {
-            return throwError(`Failed to Delete partyAccessRoles ${numDel}`);
-          } else {
-            return this.updatePartyAccessRolesLocal(partyAccessRoles, partyId)
-          }
-        }));
+      .pipe(switchMap(numDel => {
+        if (!numDel) {
+          return throwError(`Failed to Delete partyAccessRoles ${numDel}`);
+        } else {
+          return this.updatePartyAccessRolesLocal(partyAccessRoles, partyId);
+        }
+      }));
+  }
+
+  private addPartyAccessRolesLocal(partyAccessRoleArr: PartyAccessRole[]): Observable<PartyAccessRole[]> {
+    return Observable.create(function (observer: Observer<PartyAccessRole[]>) {
+      partyAccessRoles.insert(partyAccessRoleArr, function (err: any, docs: any) {
+        if (err) {
+          observer.error(err);
+        } else {
+          observer.next(docs);
+        }
+        observer.complete();
+      });
+    });
   }
 
   private updatePartyAccessRolesLocal(partyAccessRoleArr: PartyAccessRole[], partyId: string): Observable<PartyAccessRole[]> {
-      partyAccessRoleArr.forEach( value => {
-        if (!value.partyAccessRoleId) {
-          value.partyAccessRoleId = generateUUID();
-        }
-        if (!value.partyId) {
-            value.partyId = partyId;
-        }
+    partyAccessRoleArr.forEach(value => {
+      if (!value.partyAccessRoleId) {
+        value.partyAccessRoleId = generateUUID();
+      }
+      if (!value.partyId) {
+        value.partyId = partyId;
+      }
 
-        if (!value.createdOn) {
-            value.createdOn = new Date();
-        }
+      if (!value.createdOn) {
+        value.createdOn = new Date();
+      }
 
-        value.modifiedOn = new Date();
-      });
+      value.modifiedOn = new Date();
+    });
 
-      return this.addPartyAccessRolesLocal(partyAccessRoleArr);
+    return this.addPartyAccessRolesLocal(partyAccessRoleArr);
   }
 
 

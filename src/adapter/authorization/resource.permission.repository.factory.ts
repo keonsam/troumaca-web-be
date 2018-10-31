@@ -1,16 +1,16 @@
-import { ResourcePermissionRepository } from "../../repository/resource.permission.repository";
-import { ResourcePermission } from "../../data/authorization/resource.permission";
-import { permissions, resourcePermissions } from "../../db";
-import { Observable ,  Observer, of } from "rxjs";
-import { RepositoryKind } from "../../repository.kind";
-import { generateUUID } from "../../uuid.generator";
-import { map, switchMap } from "rxjs/operators";
-import { Permission } from "../../data/authorization/permission";
+import {ResourcePermissionRepository} from "../../repository/resource.permission.repository";
+import {ResourcePermission} from "../../data/authorization/resource.permission";
+import {permissions, resourcePermissions} from "../../db";
+import {Observable, Observer, of} from "rxjs";
+import {RepositoryKind} from "../../repository.kind";
+import {generateUUID} from "../../uuid.generator";
+import {map, switchMap} from "rxjs/operators";
+import {Permission} from "../../data/authorization/permission";
 
 class ResourcePermissionDBRepository implements ResourcePermissionRepository {
 
   getAllResourcePermissions(): Observable<ResourcePermission[]> {
-    return Observable.create(function(observer: Observer<ResourcePermission[]>) {
+    return Observable.create(function (observer: Observer<ResourcePermission[]>) {
       resourcePermissions.find({}, function (err: any, docs: any) {
         if (err) {
           observer.error(err);
@@ -24,83 +24,44 @@ class ResourcePermissionDBRepository implements ResourcePermissionRepository {
 
   getResourcePermissionsByResourceId(resourceId: string): Observable<ResourcePermission[]> {
     return this.getResourcePermissionsByResourceIdLocal(resourceId)
-        .pipe( switchMap( resourcePermissions => {
-          if (!resourcePermissions) return of(resourcePermissions);
-          const permissionIds: string[] = resourcePermissions.map(x => x.permissionId);
-          return this.getPermissionsLocalByIds(permissionIds)
-              .pipe( map( permissions => {
-                if (!permissions) return resourcePermissions;
-                resourcePermissions.forEach( value => {
-                  const index = permissions.findIndex( x => x.permissionId === value.permissionId);
-                  if (index > -1) {
-                    value.permissionName = permissions[index].name;
-                    value.description = permissions[index].description;
-                  }
-                });
-                return resourcePermissions;
-                  }
-              ));
-        }));
-  }
-
-    getResourcePermissionsByResourceIds(resourceIds: string[]): Observable<ResourcePermission[]> {
-        return this.getResourcePermissionsByResourceIdsLocal(resourceIds)
-            .pipe( switchMap( resourcePermissions => {
-                if (!resourcePermissions) return of(resourcePermissions);
-                const permissionIds: string[] = resourcePermissions.map(x => x.permissionId);
-                return this.getPermissionsLocalByIds(permissionIds)
-                    .pipe( map( permissions => {
-                            if (!permissions) return resourcePermissions;
-                            resourcePermissions.forEach( value => {
-                                const index = permissions.findIndex( x => x.permissionId === value.permissionId);
-                                if (index > -1) {
-                                    value.permissionName = permissions[index].name;
-                                    value.description = permissions[index].description;
-                                }
-                            });
-                            return resourcePermissions;
-                        }
-                    ));
-            }));
-    }
-
-  private getResourcePermissionsByResourceIdLocal(resourceId: string): Observable<ResourcePermission[]> {
-      return Observable.create(function(observer: Observer<ResourcePermission[]>) {
-          resourcePermissions.find({resourceId}, function (err: any, docs: any) {
-              if (err) {
-                  observer.error(err);
-              } else {
-                  observer.next(docs);
-              }
-              observer.complete();
-          });
-      });
-  }
-
-    private getResourcePermissionsByResourceIdsLocal(resourceIds: string[]): Observable<ResourcePermission[]> {
-        return Observable.create(function(observer: Observer<ResourcePermission[]>) {
-            resourcePermissions.find({resourceId : { $in: resourceIds}} , function (err: any, docs: any) {
-                if (err) {
-                    observer.error(err);
-                } else {
-                    observer.next(docs);
+      .pipe(switchMap(resourcePermissions => {
+        if (!resourcePermissions) return of(resourcePermissions);
+        const permissionIds: string[] = resourcePermissions.map(x => x.permissionId);
+        return this.getPermissionsLocalByIds(permissionIds)
+          .pipe(map(permissions => {
+              if (!permissions) return resourcePermissions;
+              resourcePermissions.forEach(value => {
+                const index = permissions.findIndex(x => x.permissionId === value.permissionId);
+                if (index > -1) {
+                  value.permissionName = permissions[index].name;
+                  value.description = permissions[index].description;
                 }
-                observer.complete();
-            });
-        });
-    }
+              });
+              return resourcePermissions;
+            }
+          ));
+      }));
+  }
 
-  private getPermissionsLocalByIds(permissionIds: string[]): Observable<Permission[]> {
-    return Observable.create( (observer: Observer<Permission[]>) => {
-      permissions.find({permissionId: {$in: permissionIds} }, function (err: any, docs: any) {
-              if (!err) {
-                  observer.next(docs);
-              } else {
-                  observer.error(err);
-              }
-              observer.complete();
-          });
-    });
+  getResourcePermissionsByResourceIds(resourceIds: string[]): Observable<ResourcePermission[]> {
+    return this.getResourcePermissionsByResourceIdsLocal(resourceIds)
+      .pipe(switchMap(resourcePermissions => {
+        if (!resourcePermissions) return of(resourcePermissions);
+        const permissionIds: string[] = resourcePermissions.map(x => x.permissionId);
+        return this.getPermissionsLocalByIds(permissionIds)
+          .pipe(map(permissions => {
+              if (!permissions) return resourcePermissions;
+              resourcePermissions.forEach(value => {
+                const index = permissions.findIndex(x => x.permissionId === value.permissionId);
+                if (index > -1) {
+                  value.permissionName = permissions[index].name;
+                  value.description = permissions[index].description;
+                }
+              });
+              return resourcePermissions;
+            }
+          ));
+      }));
   }
 
   addResourcePermission(resourcePermission: ResourcePermission[]): Observable<ResourcePermission[]> {
@@ -110,8 +71,8 @@ class ResourcePermissionDBRepository implements ResourcePermissionRepository {
         value.resourcePermissionId = generateUUID();
       }
     });
-    return Observable.create(function(observer: Observer<ResourcePermission[]>) {
-      resourcePermissions.insert(resourcePermission, function(err: any, doc: any) {
+    return Observable.create(function (observer: Observer<ResourcePermission[]>) {
+      resourcePermissions.insert(resourcePermission, function (err: any, doc: any) {
         if (err) {
           observer.error(err);
         } else {
@@ -170,6 +131,45 @@ class ResourcePermissionDBRepository implements ResourcePermissionRepository {
     });
   }
 
+  private getResourcePermissionsByResourceIdLocal(resourceId: string): Observable<ResourcePermission[]> {
+    return Observable.create(function (observer: Observer<ResourcePermission[]>) {
+      resourcePermissions.find({resourceId}, function (err: any, docs: any) {
+        if (err) {
+          observer.error(err);
+        } else {
+          observer.next(docs);
+        }
+        observer.complete();
+      });
+    });
+  }
+
+  private getResourcePermissionsByResourceIdsLocal(resourceIds: string[]): Observable<ResourcePermission[]> {
+    return Observable.create(function (observer: Observer<ResourcePermission[]>) {
+      resourcePermissions.find({resourceId: {$in: resourceIds}}, function (err: any, docs: any) {
+        if (err) {
+          observer.error(err);
+        } else {
+          observer.next(docs);
+        }
+        observer.complete();
+      });
+    });
+  }
+
+  private getPermissionsLocalByIds(permissionIds: string[]): Observable<Permission[]> {
+    return Observable.create((observer: Observer<Permission[]>) => {
+      permissions.find({permissionId: {$in: permissionIds}}, function (err: any, docs: any) {
+        if (!err) {
+          observer.next(docs);
+        } else {
+          observer.error(err);
+        }
+        observer.complete();
+      });
+    });
+  }
+
 }
 
 
@@ -184,7 +184,7 @@ class ResourcePermissionRestRepository implements ResourcePermissionRepository {
   }
 
   getResourcePermissionsByResourceIds(resourceIds: string[]): Observable<ResourcePermission[]> {
-      return undefined;
+    return undefined;
   }
 
   addResourcePermission(resourcePermission: ResourcePermission[]): Observable<ResourcePermission[]> {

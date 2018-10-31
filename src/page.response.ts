@@ -1,12 +1,5 @@
 export class PageResponse<T> {
 
-  private _items: T;
-  private _pageNumber: number;
-  private _pageSize: number;
-  private _totalPageItems: number;
-  private _sortOrder: string;
-
-
   constructor(items?: T, pageNumber?: number, pageSize?: number, totalPageItems?: number, sortOrder?: string) {
     this._items = items;
     this._pageNumber = pageNumber;
@@ -14,6 +7,8 @@ export class PageResponse<T> {
     this._totalPageItems = totalPageItems;
     this._sortOrder = sortOrder;
   }
+
+  private _items: T;
 
   get items(): T {
     return this._items;
@@ -23,6 +18,8 @@ export class PageResponse<T> {
     this._items = value;
   }
 
+  private _pageNumber: number;
+
   get pageNumber(): number {
     return this._pageNumber;
   }
@@ -30,6 +27,8 @@ export class PageResponse<T> {
   set pageNumber(value: number) {
     this._pageNumber = value;
   }
+
+  private _pageSize: number;
 
   get pageSize(): number {
     return this._pageSize;
@@ -39,6 +38,8 @@ export class PageResponse<T> {
     this._pageSize = value;
   }
 
+  private _totalPageItems: number;
+
   get totalPageItems(): number {
     return this._totalPageItems;
   }
@@ -46,6 +47,8 @@ export class PageResponse<T> {
   set totalPageItems(value: number) {
     this._totalPageItems = value;
   }
+
+  private _sortOrder: string;
 
   get sortOrder(): string {
     return this._sortOrder;

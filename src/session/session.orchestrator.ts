@@ -1,9 +1,9 @@
-import { createSessionRepositoryFactory } from "../adapter/session/session.repository.factory";
-import { SessionRepository } from "../repository/session.repository";
-import { Session } from "../data/session/session";
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
-import { ValidSession } from "../data/session/valid.session";
+import {createSessionRepositoryFactory} from "../adapter/session/session.repository.factory";
+import {SessionRepository} from "../repository/session.repository";
+import {Session} from "../data/session/session";
+import {Observable} from "rxjs";
+import {map} from "rxjs/operators";
+import {ValidSession} from "../data/session/valid.session";
 
 export class SessionOrchestrator {
 
@@ -23,7 +23,7 @@ export class SessionOrchestrator {
 
   handleSessionLogOut(sessionId: string, options?: any): Observable<boolean> {
     return this.sessionRepository.expireSession(sessionId, options)
-      .pipe(map( numReplaced => {
+      .pipe(map(numReplaced => {
         if (numReplaced) {
           return true;
         } else {

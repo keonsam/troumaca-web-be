@@ -1,11 +1,8 @@
-import { RepositoryKind } from "../../repository.kind";
-import { CredentialRepository } from "../../repository/credential.repository";
-import { properties } from "../../properties.helpers";
-import { CredentialRepositoryNeDbAdapter } from "./credential.repository.db.adapter";
-import { CredentialRepositoryRestAdapter } from "./credential.repository.rest.adapter";
-
-
-
+import {RepositoryKind} from "../../repository.kind";
+import {CredentialRepository} from "../../repository/credential.repository";
+import {properties} from "../../properties.helpers";
+import {CredentialRepositoryNeDbAdapter} from "./credential.repository.db.adapter";
+import {CredentialRepositoryRestAdapter} from "./credential.repository.rest.adapter";
 
 
 export function createCredentialRepositoryFactory(kind?: RepositoryKind): CredentialRepository {

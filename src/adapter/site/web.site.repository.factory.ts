@@ -1,10 +1,10 @@
-import { WebSiteRepository } from "../../repository/web.site.repository";
-import { Observable ,  Observer } from "rxjs";
-import { RepositoryKind } from "../../repository.kind";
-import { webSites } from "../../db";
-import { WebSite } from "../../data/site/web.site";
-import { calcSkip } from "../../db.util";
-import { generateUUID } from "../../uuid.generator";
+import {WebSiteRepository} from "../../repository/web.site.repository";
+import {Observable, Observer} from "rxjs";
+import {RepositoryKind} from "../../repository.kind";
+import {webSites} from "../../db";
+import {WebSite} from "../../data/site/web.site";
+import {calcSkip} from "../../db.util";
+import {generateUUID} from "../../uuid.generator";
 
 class WebSiteDBRepository implements WebSiteRepository {
 
@@ -12,8 +12,8 @@ class WebSiteDBRepository implements WebSiteRepository {
 
   saveWebSite(webSite: WebSite): Observable<WebSite> {
     webSite.siteId = generateUUID();
-    return Observable.create(function(observer: Observer<WebSite>) {
-      webSites.insert(webSite, function(err: any, doc: any) {
+    return Observable.create(function (observer: Observer<WebSite>) {
+      webSites.insert(webSite, function (err: any, doc: any) {
         if (err) {
           observer.error(err);
         } else {

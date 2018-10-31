@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { ValueOrchestrator } from "./value.orchestrator";
+import {Request, Response} from "express";
+import {ValueOrchestrator} from "./value.orchestrator";
 
 const valueOrchestrator: ValueOrchestrator = new ValueOrchestrator();
 

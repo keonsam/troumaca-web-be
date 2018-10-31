@@ -1,8 +1,5 @@
 export class Billing {
   private _billingId: string;
-  private _methodId: string;
-  private _confirmed: boolean;
-  private _type: string;
 
   get billingId(): string {
     return this._billingId;
@@ -12,6 +9,8 @@ export class Billing {
     this._billingId = value;
   }
 
+  private _methodId: string;
+
   get methodId(): string {
     return this._methodId;
   }
@@ -20,6 +19,8 @@ export class Billing {
     this._methodId = value;
   }
 
+  private _confirmed: boolean;
+
   get confirmed(): boolean {
     return this._confirmed;
   }
@@ -27,6 +28,8 @@ export class Billing {
   set confirmed(value: boolean) {
     this._confirmed = value;
   }
+
+  private _type: string;
 
   get type(): string {
     return this._type;

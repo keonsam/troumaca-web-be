@@ -1,11 +1,6 @@
 export class ResourceType {
 
   private _resourceTypeId: string;
-  private _name: string;
-  private _description: string;
-  // private _ownerPartyId:string;
-  private _createdOn: Date;
-  private _modifiedOn: Date;
 
   get resourceTypeId(): string {
     return this._resourceTypeId;
@@ -15,6 +10,8 @@ export class ResourceType {
     this._resourceTypeId = value;
   }
 
+  private _name: string;
+
   get name(): string {
     return this._name;
   }
@@ -23,12 +20,21 @@ export class ResourceType {
     this._name = value;
   }
 
+  private _description: string;
+
   get description(): string {
     return this._description;
   }
 
   set description(value: string) {
     this._description = value;
+  }
+
+  // private _ownerPartyId:string;
+  private _createdOn: Date;
+
+  get createdOn(): Date {
+    return this._createdOn;
   }
 
   // get ownerPartyId(): string {
@@ -39,13 +45,11 @@ export class ResourceType {
   //   this._ownerPartyId = value;
   // }
 
-  get createdOn(): Date {
-    return this._createdOn;
-  }
-
   set createdOn(value: Date) {
     this._createdOn = value;
   }
+
+  private _modifiedOn: Date;
 
   get modifiedOn(): Date {
     return this._modifiedOn;

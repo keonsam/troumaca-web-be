@@ -1,9 +1,9 @@
-export class  Confirmation {
+export class Confirmation {
 
-    confirmationId: string;
-    credentialId: string;
-    code: string;
-    status: string;
-    modifiedOn: Date;
-    createdOn: Date;
+  confirmationId: string;
+  credentialId: string;
+  code: string;
+  status: string;
+  modifiedOn: Date;
+  createdOn: Date;
 }

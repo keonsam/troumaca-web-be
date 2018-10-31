@@ -1,8 +1,8 @@
-import { ValueRepository } from "../../repository/value.repository";
-import { RepositoryKind } from "../../repository.kind";
-import { properties } from "../../properties.helpers";
-import { ValueRepositoryNeDbAdapter } from "./value.repository.db.adapter";
-import { ValueRepositoryRestAdapter } from "./value.repository.rest.adapter";
+import {ValueRepository} from "../../repository/value.repository";
+import {RepositoryKind} from "../../repository.kind";
+import {properties} from "../../properties.helpers";
+import {ValueRepositoryNeDbAdapter} from "./value.repository.db.adapter";
+import {ValueRepositoryRestAdapter} from "./value.repository.rest.adapter";
 
 
 export function createValueRepository(kind?: RepositoryKind): ValueRepository {
@@ -15,6 +15,6 @@ export function createValueRepository(kind?: RepositoryKind): ValueRepository {
     case RepositoryKind.Rest:
       return new ValueRepositoryRestAdapter();
     default:
-        throw new Error(`Unknown Value Repository Type ${k}`);
+      throw new Error(`Unknown Value Repository Type ${k}`);
   }
 }

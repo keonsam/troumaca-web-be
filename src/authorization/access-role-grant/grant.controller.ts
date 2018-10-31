@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
-import { GrantOrchestrator } from "./grant.orchestrator";
-import { getNumericValueOrDefault } from "../../number.util";
-import { getStringValueOrDefault } from "../../string.util";
+import {Request, Response} from "express";
+import {GrantOrchestrator} from "./grant.orchestrator";
+import {getNumericValueOrDefault} from "../../number.util";
+import {getStringValueOrDefault} from "../../string.util";
 
 const orchestrator: GrantOrchestrator = new GrantOrchestrator();
 

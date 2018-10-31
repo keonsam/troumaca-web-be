@@ -1,4 +1,4 @@
-import { Router } from "express";
+import {Router} from "express";
 
 import * as confirmationController from "./authentication/credential/confirmation/confirmation.controller";
 import * as credentialController from "./authentication/credential/credential.controller";
@@ -39,9 +39,9 @@ import checkSession from "./middleware/check-session";
 const router: Router = Router();
 
 router.get("/", (req, res) => {
-    res.status(200).json({
-        message: "Welcome to Troumaka API"
-    });
+  res.status(200).json({
+    message: "Welcome to Troumaka API"
+  });
 });
 
 
@@ -110,7 +110,6 @@ router.put("/access-role-types/:accessRoleTypeId", checkSession, accessRoleTypeC
 router.delete("/access-role-types/:accessRoleTypeId", checkSession, accessRoleTypeController.deleteAccessRoleType);
 
 // ##### SECURITY END #####
-
 
 
 // Asset Type
@@ -186,7 +185,6 @@ router.put("/phones/:siteId", checkSession, phoneController.updatePhone);
 router.delete("/phones/:siteId", checkSession, phoneController.deletePhone);
 
 
-
 // PARTY
 
 // user
@@ -215,7 +213,6 @@ router.post("/photos/:type", checkSession, photoController.savePhoto);
 router.put("/photos/:type/:partyId", checkSession, photoController.updatePhoto);
 
 
-
 // SUBSCRIPTION && BILLING
 
 router.get("/subscriptions/modules", checkSession, subscriptionController.getSubscriptionModules);
@@ -224,14 +221,14 @@ router.post("/subscriptions", checkSession, subscriptionController.addSubscripti
 // billing
 router.get("/billings/payment-methods", checkSession, billingController.getPaymentMethods);
 router.get("/billings", checkSession, billingController.getBillings);
-router.get( "/billings/credit-cards", checkSession, billingController.getCreditCards);
-router.post( "/billings/credit-cards", checkSession, billingController.addCreditCard);
-router.post( "/billings/validate/card-name", checkSession, billingController.cardName);
-router.post( "/billings/validate/card-number", checkSession, billingController.cardNumber);
-router.post( "/billings/validate/card-exp-date", checkSession, billingController.cardExpDate);
-router.post( "/billings/validate/card-cvv", checkSession, billingController.cardCVV);
-router.put( "/billings/credit-cards/:creditCardId", checkSession, billingController.updateCreditCard);
-router.delete( "/billings/credit-cards/:creditCardId", checkSession, billingController.deleteCreditCard);
+router.get("/billings/credit-cards", checkSession, billingController.getCreditCards);
+router.post("/billings/credit-cards", checkSession, billingController.addCreditCard);
+router.post("/billings/validate/card-name", checkSession, billingController.cardName);
+router.post("/billings/validate/card-number", checkSession, billingController.cardNumber);
+router.post("/billings/validate/card-exp-date", checkSession, billingController.cardExpDate);
+router.post("/billings/validate/card-cvv", checkSession, billingController.cardCVV);
+router.put("/billings/credit-cards/:creditCardId", checkSession, billingController.updateCreditCard);
+router.delete("/billings/credit-cards/:creditCardId", checkSession, billingController.deleteCreditCard);
 
 
 // PROFILES

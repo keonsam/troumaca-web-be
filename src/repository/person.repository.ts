@@ -1,5 +1,5 @@
-import { Person } from "../data/party/person";
-import { Observable } from "rxjs";
+import {Person} from "../data/party/person";
+import {Observable} from "rxjs";
 
 export interface PersonRepository {
 

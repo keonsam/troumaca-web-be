@@ -1,9 +1,9 @@
-import { grants } from "../../db";
-import { GrantRepository } from "../../repository/grant.repository";
-import { Grant } from "../../data/authorization/grant";
-import { Observable ,  Observer } from "rxjs";
-import { RepositoryKind } from "../../repository.kind";
-import { generateUUID } from "../../uuid.generator";
+import {grants} from "../../db";
+import {GrantRepository} from "../../repository/grant.repository";
+import {Grant} from "../../data/authorization/grant";
+import {Observable, Observer} from "rxjs";
+import {RepositoryKind} from "../../repository.kind";
+import {generateUUID} from "../../uuid.generator";
 
 class GrantDBRepository implements GrantRepository {
 
@@ -11,7 +11,7 @@ class GrantDBRepository implements GrantRepository {
     const query = {
       "accessRoleId": accessRoleId
     };
-    return Observable.create(function(observer: Observer<Grant[]>) {
+    return Observable.create(function (observer: Observer<Grant[]>) {
       grants.find(query, function (err: any, docs: any[]) {
         if (!err) {
           observer.next(docs);
@@ -19,7 +19,7 @@ class GrantDBRepository implements GrantRepository {
           observer.error(err);
         }
         observer.complete();
-        });
+      });
     });
   }
 
@@ -29,8 +29,8 @@ class GrantDBRepository implements GrantRepository {
         value.grantId = generateUUID();
       }
     });
-    return Observable.create(function(observer: Observer<Grant[]>) {
-      grants.insert(grant, function(err: any, docs: any) {
+    return Observable.create(function (observer: Observer<Grant[]>) {
+      grants.insert(grant, function (err: any, docs: any) {
         if (err) {
           observer.error(err);
         } else {
