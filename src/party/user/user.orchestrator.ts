@@ -19,6 +19,8 @@ import {CredentialRepository} from "../../repository/credential.repository";
 import {createCredentialRepositoryFactory} from "../../adapter/authentication/credential.repository.factory";
 import {SessionRepository} from "../../repository/session.repository";
 import {createSessionRepositoryFactory} from "../../adapter/session/session.repository.factory";
+import {CreateCredential} from "../../repository/create.credential";
+import {Person} from "../../data/party/person";
 
 export class UserOrchestrator {
 
@@ -90,18 +92,18 @@ export class UserOrchestrator {
       }));
   }
 
-  saveUser(user: User, credential: Credential, partyAccessRoles: PartyAccessRole[]): Observable<User> {
+  saveUser(person: Person, credential: Credential, partyAccessRoles: PartyAccessRole[]): Observable<User> {
     credential.password = generate({length: 10, numbers: true});
     // This present a problem after the user confirm the account.
     // We will need to either make them active in the confirmation process or just make them active here.
     // or they will be sent to the join / create organization page.
-    return this.credentialRepository.addCredential(credential)
+    return this.credentialRepository.addCredential(person, credential)
       .pipe(switchMap(credentialRes => {
         if (!credentialRes) {
           return throwError(`Credential was not created ${credentialRes}`);
         } else {
-          user.partyId = credentialRes.credential.partyId;
-          return this.userRepository.saveUser(user)
+          person.partyId = credentialRes.credential.partyId;
+          return this.userRepository.saveUser(person)
             .pipe(switchMap(userRes => {
               if (!userRes) {
                 return throwError(`User not created ${userRes}`);

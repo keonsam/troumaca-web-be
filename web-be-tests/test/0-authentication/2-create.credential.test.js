@@ -22,7 +22,7 @@ describe('create-credential', function () {
   it('create credential', function (done) {
     api.post("/authentication/credentials")
       .set('Accept', 'application/json')
-      .set('correlationId', 1234567890)
+      .set('Correlation-Id', 1234567890)
       .send({credential, user})
       .expect('Content-Type', /json/)
       .expect(201)

@@ -7,22 +7,27 @@ import {SessionRepository} from "../../repository/session.repository";
 import {AuthenticatedCredential} from "../../data/authentication/authenticated.credential";
 import {Observable, of, throwError} from "rxjs";
 import {switchMap, map} from "rxjs/operators";
-import {User} from "../../data/party/user";
 import {UserRepository} from "../../repository/user.repository";
 import {createUserRepository} from "../../adapter/party/user.repository.factory";
 import {Confirmation} from "../../data/authentication/confirmation";
+import {PersonRepository} from "../../repository/person.repository";
+import {createPersonRepository} from "../../adapter/party/person.repository.factory";
+import {Person} from "../../data/party/person";
+import {CreateCredential} from "../../repository/create.credential";
 
 export class CredentialOrchestrator {
 
   private credentialRepository: CredentialRepository;
   private sessionRepository: SessionRepository;
   private userRepository: UserRepository;
+  private personRepository: PersonRepository;
 
 
   constructor() {
     this.sessionRepository = createSessionRepositoryFactory();
     this.credentialRepository = createCredentialRepositoryFactory();
     this.userRepository = createUserRepository();
+    this.personRepository = createPersonRepository();
   }
 
   isValidUsername(username: string, partyId: string): Observable<boolean> {
@@ -34,23 +39,23 @@ export class CredentialOrchestrator {
       .isValidPassword(password);
   }
 
-  addCredential(credential: Credential, user: User, options?: any): Observable<Confirmation> {
-    return this.credentialRepository.addCredential(credential, options)
-      .pipe(switchMap(createdCredential => {
-        if (!createdCredential) {
-          return throwError(createdCredential);
-        } else {
-          user.partyId = createdCredential.credential.partyId;
-          return this.userRepository.saveUser(user)
-            .pipe(map(user => {
-              if (!user) {
-                throw new Error("user was not created.");
-              } else {
-                return createdCredential.confirmation;
-              }
-            }));
-        }
-      }));
+  addCredential(credential: Credential, person: Person, options?: any): Observable<Confirmation> {
+    return this.credentialRepository.addCredential(person, credential, options)
+    .pipe(switchMap(createdCredential => {
+      if (!createdCredential) {
+        return throwError(credential);
+      } else {
+        person.partyId = credential.partyId;
+        return this.personRepository.addPerson(person)
+        .pipe(map(person => {
+          if (!person) {
+            throw new Error("user was not created.");
+          } else {
+            return createdCredential.confirmation;
+          }
+        }));
+      }
+    }));
   }
 
   authenticate(credential: Credential, options?: any): Observable<AuthenticatedCredential> {

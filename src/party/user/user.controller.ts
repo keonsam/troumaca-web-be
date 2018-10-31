@@ -5,6 +5,7 @@ import {getStringValueOrDefault} from "../../string.util";
 import {User} from "../../data/party/user";
 import {Credential} from "../../data/authentication/credential";
 import {PartyAccessRole} from "../../data/authorization/party.access.role";
+import {Person} from "../../data/party/person";
 
 const userOrchestrator: UserOrchestrator = new UserOrchestrator();
 
@@ -89,11 +90,11 @@ export let getUserMe = (req: Request, res: Response) => {
 };
 
 export let saveUser = (req: Request, res: Response) => {
-  const user: User = req.body.user;
+  const person: Person = req.body.user;
   const credential: Credential = req.body.credential;
   const partyAccessRoles: PartyAccessRole[] = req.body.partyAccessRoles;
 
-  if (!user || !user.firstName || !user.lastName) {
+  if (!person || !person.firstName || !person.lastName) {
     res.status(400);
     res.setHeader("content-type", "application/json");
     res.send({message: "'User' must exist, and contain first and last name."});
@@ -114,11 +115,11 @@ export let saveUser = (req: Request, res: Response) => {
     return;
   }
 
-  userOrchestrator.saveUser(user, credential, partyAccessRoles)
-    .subscribe(user => {
+  userOrchestrator.saveUser(person, credential, partyAccessRoles)
+    .subscribe(person => {
       res.status(201);
       res.setHeader("content-type", "application/json");
-      res.send(JSON.stringify(user));
+      res.send(JSON.stringify(person));
     }, error => {
       res.status(500);
       res.setHeader("content-type", "application/json");

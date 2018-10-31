@@ -91,11 +91,11 @@ export class UserRepositoryNeDbAdapter implements UserRepository {
   }
 
 
-  saveUser(user: User): Observable<User> {
-    user.createdOn = new Date();
-    user.modifiedOn = new Date();
+  saveUser(person: Person): Observable<User> {
+    person.createdOn = new Date();
+    person.modifiedOn = new Date();
     return Observable.create(function (observer: Observer<User>) {
-      users.insert(user, function (err: any, doc: any) {
+      users.insert(person, function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {

@@ -36,8 +36,8 @@ export class OrganizationDBRepository implements OrganizationRepository {
     if (!organization.version) {
       organization.version = generateUUID();
     }
-    if (!organization.tenantPartyId) {
-      organization.tenantPartyId = generateUUID();
+    if (!organization.ownerPartyId) {
+      organization.ownerPartyId = generateUUID();
     }
     if (!organization.modifiedOn) {
       organization.modifiedOn = new Date();

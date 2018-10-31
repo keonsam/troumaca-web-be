@@ -846,7 +846,7 @@ definitions:
         type: "string"
       version:
         type: "string"
-      tenantPartyId:
+      ownerPartyId:
         type: "string"
       modifiedDate:
         type: "string"
@@ -856,11 +856,11 @@ definitions:
     type: "object"
     required:
     - "partyId"
-    - "tenantPartyId"
+    - "ownerPartyId"
     properties:
       parthId:
         type: "string"
-      tenantPartyId:
+      ownerPartyId:
         type: "string"
 
   RequestedAccess:
@@ -936,7 +936,7 @@ definitions:
     - "resourceTypeId"
     - "name"
     - "version"
-    - "tenantPartyId"
+    - "ownerPartyId"
     - "modifiedOn"
     properties:
       resourceId:
@@ -949,7 +949,7 @@ definitions:
         type: "string"
       version:
         type: "string"
-      tenantPartyId:
+      ownerPartyId:
         type: "string"
       modifiedOn:
         type: "string"
@@ -971,7 +971,7 @@ definitions:
     - "resourceTypeId"
     - "name"
     - "version"
-    - "tenantPartyId"
+    - "ownerPartyId"
     - "modifiedOn"
     properties:
       resourceTypeId:
@@ -982,7 +982,7 @@ definitions:
         type: "string"
       version:
         type: "string"
-      tenantPartyId:
+      ownerPartyId:
         type: "string"
       modifiedOn:
         type: "string"
@@ -1048,7 +1048,7 @@ definitions:
         type: "string"
       version:
         type: "string"
-      tenantPartyId:
+      ownerPartyId:
         type: "string"
       modifiedOn:
         type: "string"
@@ -1074,7 +1074,7 @@ definitions:
         format: "date-time"
       version:
         type: "string"
-      tenantPartyId:
+      ownerPartyId:
         type: "string"
       modifiedOn:
         type: "string"
@@ -1095,7 +1095,7 @@ definitions:
         type: "string"
       version:
         type: "string"
-      tenantPartyId:
+      ownerPartyId:
         type: "string"
       modifiedOn:
         type: "string"
@@ -1127,7 +1127,7 @@ definitions:
         type: "string"
       version:
         type: "string"
-      tenantPartyId:
+      ownerPartyId:
         type: "string"
       modifiedOn:
         type: "string"
@@ -1222,7 +1222,7 @@ definitions:
         type: "string"
       version:
         type: "string"
-      tenantPartyId:
+      ownerPartyId:
         type: "string"
       modifiedOn:
         type: "string"
@@ -1246,7 +1246,7 @@ definitions:
     - "name"
     - "description"
     - "version"
-    - "tenantPartyId"
+    - "ownerPartyId"
     - "modifiedOn"
     properties:
       accessRoleTypeId:
@@ -1257,7 +1257,7 @@ definitions:
         type: "string"
       version:
         type: "string"
-      tenantPartyId:
+      ownerPartyId:
         type: "string"
       modifiedOn:
         type: "string"
@@ -1294,7 +1294,7 @@ definitions:
         type: "string"
       version:
         type: "string"
-      tenantPartyId:
+      ownerPartyId:
         type: "string"
       createdOn:
         type: "string"

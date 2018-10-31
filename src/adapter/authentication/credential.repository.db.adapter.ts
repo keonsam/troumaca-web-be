@@ -12,6 +12,8 @@ import {CreatedCredential} from "../../data/authentication/created.credential";
 import {Observable, Observer, of, throwError} from "rxjs";
 import {switchMap, map} from "rxjs/operators";
 import {generate} from "generate-password";
+import {CreateCredential} from "../../repository/create.credential";
+import {Person} from "../../data/party/person";
 
 export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
 
@@ -78,8 +80,8 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
 
   }
 
-  addCredential(credential: Credential, options?: any): Observable<CreatedCredential> {
-    return this.addCredentialLocal(credential)
+  addCredential(person: Person, credential: Credential, options?: any): Observable<CreatedCredential> {
+    return this.addCredentialLocal(person, credential)
       .pipe(switchMap(credential => {
         if (!credential) {
           return throwError("Credential was not created.");
@@ -377,7 +379,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
     });
   }
 
-  addCredentialLocal(credential: Credential): Observable<Credential> {
+  addCredentialLocal(person: Person, credential: Credential): Observable<Credential> {
     credential.credentialId = generateUUID();
     credential.partyId = generateUUID();
     credential.createdOn = new Date();

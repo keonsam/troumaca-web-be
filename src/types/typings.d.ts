@@ -7,3 +7,8 @@ declare module "password-validator" {
   var PasswordValidator: any;
   export = PasswordValidator;
 }
+
+declare module "header-case-normalizer" {
+  var headerCaseNormalizer: any;
+  export = headerCaseNormalizer;
+}
