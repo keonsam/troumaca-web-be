@@ -1,11 +1,11 @@
-import { ResourceTypeRepository } from "../../repository/resource.type.repository";
-import { createResourceTypeRepositoryFactory } from "../../adapter/authorization/resource.type.repository.factory";
-import { ResourceType } from "../../data/authorization/resource.type";
-import { Observable } from "rxjs";
-import { flatMap, map } from "rxjs/operators";
-import { shapeResourceTypesResponse } from "./resource.type.response.shaper";
-import { Result } from "../../result.success";
-import { getSortOrderOrDefault } from "../../sort.order.util";
+import {ResourceTypeRepository} from "../../repository/resource.type.repository";
+import {createResourceTypeRepositoryFactory} from "../../adapter/authorization/resource.type.repository.factory";
+import {ResourceType} from "../../data/authorization/resource.type";
+import {Observable} from "rxjs";
+import {flatMap, map} from "rxjs/operators";
+import {shapeResourceTypesResponse} from "./resource.type.response.shaper";
+import {Result} from "../../result.success";
+import {getSortOrderOrDefault} from "../../sort.order.util";
 
 export class ResourceTypeOrchestrator {
 
@@ -32,7 +32,7 @@ export class ResourceTypeOrchestrator {
     //         // return new Result<any>(false, "resourceTypes", shapeResourceTypesResp);
     //       }));
     //   }));
-    return null;
+    return undefined;
   }
 
   addResourceType(resourceType: ResourceType): Observable<ResourceType> {

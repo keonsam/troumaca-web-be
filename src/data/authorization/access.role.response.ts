@@ -1,14 +1,13 @@
-import { AccessRole } from "./access.role";
-import { Grant } from "./grant";
+import {AccessRole} from "./access.role";
+import {Grant} from "./grant";
 
 export class AccessRoleResponse {
-  private _accessRole: AccessRole;
-  private _grants: Grant[];
-
   constructor(accessRole: AccessRole, grants: Grant[]) {
     this._accessRole = accessRole;
     this._grants = grants;
   }
+
+  private _accessRole: AccessRole;
 
   get accessRole(): AccessRole {
     return this._accessRole;
@@ -17,6 +16,8 @@ export class AccessRoleResponse {
   set accessRole(value: AccessRole) {
     this._accessRole = value;
   }
+
+  private _grants: Grant[];
 
   get grants(): Grant[] {
     return this._grants;
@@ -27,9 +28,9 @@ export class AccessRoleResponse {
   }
 
   toJson() {
-      return {
-       accessRole: this.accessRole,
-       grants: this.grants
-      };
+    return {
+      accessRole: this.accessRole,
+      grants: this.grants
+    };
   }
 }

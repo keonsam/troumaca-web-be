@@ -1,4 +1,4 @@
-import { CredentialStatus } from "./credential.status";
+import {CredentialStatus} from "./credential.status";
 
 export class CredentialConfirmation {
 

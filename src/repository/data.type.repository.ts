@@ -1,5 +1,5 @@
-import { DataType } from "../data/data-type/data.type";
-import { Observable } from "rxjs";
+import {DataType} from "../data/data-type/data.type";
+import {Observable} from "rxjs";
 
 export interface DataTypeRepository {
 

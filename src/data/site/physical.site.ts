@@ -1,13 +1,8 @@
-import { Site } from "./site";
+import {Site} from "./site";
 
 export class PhysicalSite extends Site {
 
   private _city: string;
-  private _stateOrProvince: string;
-  private _postalCode: string;
-  private _country: string;
-  private _createdOn: Date;
-  private _modifiedOn: Date;
 
   get city(): string {
     return this._city;
@@ -17,6 +12,8 @@ export class PhysicalSite extends Site {
     this._city = value;
   }
 
+  private _stateOrProvince: string;
+
   get stateOrProvince(): string {
     return this._stateOrProvince;
   }
@@ -24,6 +21,8 @@ export class PhysicalSite extends Site {
   set stateOrProvince(value: string) {
     this._stateOrProvince = value;
   }
+
+  private _postalCode: string;
 
   get postalCode(): string {
     return this._postalCode;
@@ -33,6 +32,8 @@ export class PhysicalSite extends Site {
     this._postalCode = value;
   }
 
+  private _country: string;
+
   get country(): string {
     return this._country;
   }
@@ -41,6 +42,8 @@ export class PhysicalSite extends Site {
     this._country = value;
   }
 
+  private _createdOn: Date;
+
   get createdOn(): Date {
     return this._createdOn;
   }
@@ -48,6 +51,8 @@ export class PhysicalSite extends Site {
   set createdOn(value: Date) {
     this._createdOn = value;
   }
+
+  private _modifiedOn: Date;
 
   get modifiedOn(): Date {
     return this._modifiedOn;

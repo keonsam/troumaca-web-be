@@ -16,7 +16,7 @@ describe('create-credential', function () {
 
   const user = {
       firstName: "Bom",
-      lastName: "Bam",
+      lastName: "Bam"
   };
 
   it('create credential', function (done) {

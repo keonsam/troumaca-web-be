@@ -1,8 +1,8 @@
-import { RepositoryKind } from "../../repository.kind";
-import { properties } from "../../properties.helpers";
-import { DepreciationRepository } from "../../repository/depreciation.repository";
-import { DepreciationRepositoryNeDbAdapter } from "./depreciation.repository.db.adapter";
-import { DepreciationRepositoryRestAdapter } from "./depreciation.repository.rest.adapter";
+import {RepositoryKind} from "../../repository.kind";
+import {properties} from "../../properties.helpers";
+import {DepreciationRepository} from "../../repository/depreciation.repository";
+import {DepreciationRepositoryNeDbAdapter} from "./depreciation.repository.db.adapter";
+import {DepreciationRepositoryRestAdapter} from "./depreciation.repository.rest.adapter";
 
 export function createDepreciationRepositoryFactory(kind?: RepositoryKind): DepreciationRepository {
   const type: number = properties.get("depreciation.repository.type") as number;

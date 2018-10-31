@@ -1,9 +1,8 @@
-import { PhotoRepository } from "../../repository/photo.repository";
-import { RepositoryKind } from "../../repository.kind";
-import { properties } from "../../properties.helpers";
-import { PhotoRepositoryNeDbAdapter } from "./photo.repository.db.adapter";
-import { PhotoRepositoryRestAdapter } from "./photo.repository.rest.adapter";
-
+import {PhotoRepository} from "../../repository/photo.repository";
+import {RepositoryKind} from "../../repository.kind";
+import {properties} from "../../properties.helpers";
+import {PhotoRepositoryNeDbAdapter} from "./photo.repository.db.adapter";
+import {PhotoRepositoryRestAdapter} from "./photo.repository.rest.adapter";
 
 
 export function createPhotoRepository(kind?: RepositoryKind): PhotoRepository {
@@ -16,6 +15,6 @@ export function createPhotoRepository(kind?: RepositoryKind): PhotoRepository {
     case RepositoryKind.Rest:
       return new PhotoRepositoryRestAdapter();
     default:
-        throw new Error(`Unknown Photo Repository Type ${k}`);
+      throw new Error(`Unknown Photo Repository Type ${k}`);
   }
 }

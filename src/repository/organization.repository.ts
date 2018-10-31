@@ -1,6 +1,6 @@
-import { Organization } from "../data/party/organization";
-import { Observable } from "rxjs";
-import { JoinOrganization } from "../data/party/join.organization";
+import {Organization} from "../data/party/organization";
+import {Observable} from "rxjs";
+import {JoinOrganization} from "../data/party/join.organization";
 
 export interface OrganizationRepository {
 

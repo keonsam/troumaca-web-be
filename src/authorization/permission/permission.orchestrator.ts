@@ -1,11 +1,11 @@
-import { PermissionRepository } from "../../repository/permission.repository";
-import { createPermissionRepositoryFactory } from "./permission.repository.factory";
-import { Permission } from "../../data/authorization/permission";
-import { Observable } from "rxjs";
-import { flatMap, map} from "rxjs/operators";
-import { getSortOrderOrDefault } from "../../sort.order.util";
-import { Result } from "../../result.success";
-import { shapePermissionsResponse } from "./permission.response.shaper";
+import {PermissionRepository} from "../../repository/permission.repository";
+import {createPermissionRepositoryFactory} from "./permission.repository.factory";
+import {Permission} from "../../data/authorization/permission";
+import {Observable} from "rxjs";
+import {flatMap, map} from "rxjs/operators";
+import {getSortOrderOrDefault} from "../../sort.order.util";
+import {Result} from "../../result.success";
+import {shapePermissionsResponse} from "./permission.response.shaper";
 
 export class PermissionOrchestrator {
 
@@ -23,7 +23,7 @@ export class PermissionOrchestrator {
         return this.permissionRepository
           .getPermissionCount(assignedArray)
           .pipe(map(count => {
-            const shapePermissionsResp = shapePermissionsResponse( value, number, size, value.length, count, sort);
+            const shapePermissionsResp = shapePermissionsResponse(value, number, size, value.length, count, sort);
             return new Result<any>(false, "", shapePermissionsResp);
           }));
       }));
@@ -44,11 +44,11 @@ export class PermissionOrchestrator {
   }
 
   getPermissionById(permissionId: string): Observable<Permission> {
-      return this.permissionRepository.getPermissionById(permissionId);
+    return this.permissionRepository.getPermissionById(permissionId);
   }
 
   addPermission(permission: Permission): Observable<Permission> {
-      return this.permissionRepository.addPermission(permission);
+    return this.permissionRepository.addPermission(permission);
   }
 
   updatePermission(permissionId: string, permission: Permission): Observable<number> {

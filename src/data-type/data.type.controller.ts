@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { DataTypeOrchestrator } from "./data.type.orchestrator";
+import {Request, Response} from "express";
+import {DataTypeOrchestrator} from "./data.type.orchestrator";
 
 const dataTypeOrchestrator: DataTypeOrchestrator = new DataTypeOrchestrator();
 

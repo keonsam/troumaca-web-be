@@ -1,19 +1,19 @@
-import { AccessRoleRepository } from "../../repository/access.role.repository";
-import { createAccessRoleRepository} from "../../adapter/authorization/access.role.repository.factory";
-import { Observable, of } from "rxjs";
-import { switchMap, map } from "rxjs/operators";
-import { shapeAccessRolesResponse } from "./access.role.response.shaper";
-import { Result } from "../../result.success";
-import { getSortOrderOrDefault } from "../../sort.order.util";
-import { Grant } from "../../data/authorization/grant";
-import { GrantRepository } from "../../repository/grant.repository";
-import { createGrantRepositoryFactory } from "../../adapter/authorization/grant.repository.factory";
-import { PartyAccessRoleRepository } from "../../repository/party.access.role.repository";
-import { createPartyAccessRoleRepositoryFactory } from "../../adapter/authorization/party.access.role.repository.factory";
-import { AccessRoleTypeRepository } from "../../repository/access.role.type.repository";
-import { createAccessRoleTypeRepositoryFactory } from "../../adapter/authorization/access.role.type.repository.factory";
-import { AccessRoleType } from "../../data/authorization/access.role.type";
-import { AccessRoleResponse } from "../../data/authorization/access.role.response";
+import {AccessRoleRepository} from "../../repository/access.role.repository";
+import {createAccessRoleRepository} from "../../adapter/authorization/access.role.repository.factory";
+import {Observable, of} from "rxjs";
+import {switchMap, map} from "rxjs/operators";
+import {shapeAccessRolesResponse} from "./access.role.response.shaper";
+import {Result} from "../../result.success";
+import {getSortOrderOrDefault} from "../../sort.order.util";
+import {Grant} from "../../data/authorization/grant";
+import {GrantRepository} from "../../repository/grant.repository";
+import {createGrantRepositoryFactory} from "../../adapter/authorization/grant.repository.factory";
+import {PartyAccessRoleRepository} from "../../repository/party.access.role.repository";
+import {createPartyAccessRoleRepositoryFactory} from "../../adapter/authorization/party.access.role.repository.factory";
+import {AccessRoleTypeRepository} from "../../repository/access.role.type.repository";
+import {createAccessRoleTypeRepositoryFactory} from "../../adapter/authorization/access.role.type.repository.factory";
+import {AccessRoleType} from "../../data/authorization/access.role.type";
+import {AccessRoleResponse} from "../../data/authorization/access.role.response";
 import {AccessRole} from "../../data/authorization/access.role";
 
 export class AccessRoleOrchestrator {
@@ -58,53 +58,53 @@ export class AccessRoleOrchestrator {
     //         }));
     //     }
     //   }));
-    return null;
+    return undefined;
   }
 
-    getAccessRoleById(accessRoleId: string): Observable<AccessRoleResponse> {
-        return this.accessRoleRepository.getAccessRoleById(accessRoleId)
-            .pipe(switchMap((accessRole: AccessRole) => {
-                if (!accessRole) return of(undefined);
-                return this.accessRoleTypeRepository.getAccessRoleTypeById(accessRole.accessRoleTypeId)
-                    .pipe(switchMap(accessRoleType => {
-                        accessRole.accessRoleType = new AccessRoleType();
-                        // if (accessRoleType) accessRole.accessRoleType = accessRoleType;
-                        return this.grantRepository.getGrantsByAccessRoleId(accessRoleId)
-                            .pipe(map(grants => {
-                              // return  new AccessRoleResponse(accessRole, grants);
-                            }));
-                    }));
-            }));
-    }
+  getAccessRoleById(accessRoleId: string): Observable<AccessRoleResponse> {
+    return this.accessRoleRepository.getAccessRoleById(accessRoleId)
+      .pipe(switchMap((accessRole: AccessRole) => {
+        if (!accessRole) return of(undefined);
+        return this.accessRoleTypeRepository.getAccessRoleTypeById(accessRole.accessRoleTypeId)
+          .pipe(switchMap(accessRoleType => {
+            accessRole.accessRoleType = new AccessRoleType();
+            // if (accessRoleType) accessRole.accessRoleType = accessRoleType;
+            return this.grantRepository.getGrantsByAccessRoleId(accessRoleId)
+              .pipe(map(grants => {
+                // return  new AccessRoleResponse(accessRole, grants);
+              }));
+          }));
+      }));
+  }
 
   addAccessRole(accessRole: AccessRole, grants: Grant[]): Observable<AccessRole> {
     return this.accessRoleRepository.addAccessRole(accessRole)
       .pipe(switchMap(accessRole => {
-          if (!accessRole || grants.length == 0) return of(accessRole);
-          // const accessRoleId = accessRole.accessRoleId;
-          grants.forEach(value => {
-            // value.accessRoleId = accessRoleId;
-          });
-          return this.grantRepository.addGrant(grants)
-            .pipe(map(grants => {
-              if ( !grants) return new AccessRole();
-              return accessRole;
-            }));
+        if (!accessRole || grants.length == 0) return of(accessRole);
+        // const accessRoleId = accessRole.accessRoleId;
+        grants.forEach(value => {
+          // value.accessRoleId = accessRoleId;
+        });
+        return this.grantRepository.addGrant(grants)
+          .pipe(map(grants => {
+            if (!grants) return new AccessRole();
+            return accessRole;
+          }));
       }));
   }
 
   updateAccessRole(accessRoleId: string, accessRole: AccessRole, grants: Grant[]): Observable<number> {
     return this.accessRoleRepository.updateAccessRole(accessRoleId, accessRole)
       .pipe(switchMap(numUpdated => {
-          if (!numUpdated || grants.length === 0) return of(numUpdated);
-          return this.grantRepository.deleteGrant(accessRoleId)
-            .pipe(switchMap(numReplaced => {
-                return this.grantRepository.addGrant(grants)
-                  .pipe(map(grants => {
-                    if (!grants) return 0;
-                    return numUpdated;
-                  }));
-            }));
+        if (!numUpdated || grants.length === 0) return of(numUpdated);
+        return this.grantRepository.deleteGrant(accessRoleId)
+          .pipe(switchMap(numReplaced => {
+            return this.grantRepository.addGrant(grants)
+              .pipe(map(grants => {
+                if (!grants) return 0;
+                return numUpdated;
+              }));
+          }));
       }));
   }
 
@@ -114,13 +114,13 @@ export class AccessRoleOrchestrator {
         if (numReplaced) {
           return this.grantRepository.deleteGrant(accessRoleId)
             .pipe(switchMap(numReplaced2 => {
-                return this.partyAccessRoleRepository.deletePartyAccessRoleByAccessRoleId(accessRoleId)
-                  .pipe(map( numReplaced3 => {
-                    return numReplaced;
-                  }));
+              return this.partyAccessRoleRepository.deletePartyAccessRoleByAccessRoleId(accessRoleId)
+                .pipe(map(numReplaced3 => {
+                  return numReplaced;
+                }));
             }));
         }
-        }));
+      }));
   }
 
 }

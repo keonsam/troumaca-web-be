@@ -1,15 +1,14 @@
-import { AssetType } from "./asset.type";
-import { Value } from "./value";
+import {AssetType} from "./asset.type";
+import {Value} from "./value";
 
 export class AssetTypeResponse {
 
-  private _assetType: AssetType;
-  private _values: Value[];
-
   constructor(assetType: AssetType, values: Value[]) {
-      this._assetType = assetType;
-      this._values = values;
+    this._assetType = assetType;
+    this._values = values;
   }
+
+  private _assetType: AssetType;
 
   get assetType(): AssetType {
     return this._assetType;
@@ -18,6 +17,8 @@ export class AssetTypeResponse {
   set assetType(value: AssetType) {
     this._assetType = value;
   }
+
+  private _values: Value[];
 
   get values(): Value[] {
     return this._values;
@@ -29,8 +30,8 @@ export class AssetTypeResponse {
 
   toJson() {
     return {
-        assetType: this.assetType,
-        values: this.values
+      assetType: this.assetType,
+      values: this.values
     };
   }
 }

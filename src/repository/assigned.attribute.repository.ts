@@ -1,6 +1,6 @@
-import { Attribute } from "../data/asset/attribute";
-import { AssignedAttribute } from "../data/asset/assigned.attribute";
-import { Observable } from "rxjs";
+import {Attribute} from "../data/asset/attribute";
+import {AssignedAttribute} from "../data/asset/assigned.attribute";
+import {Observable} from "rxjs";
 
 export interface AssignedAttributeRepository {
 

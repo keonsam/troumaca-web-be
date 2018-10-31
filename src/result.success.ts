@@ -1,14 +1,12 @@
 export class Result<T> {
 
-  private _fail: boolean;
-  private _data: T;
-  private _message: string;
-
   constructor(fail?: boolean, message?: string, data?: T) {
     this._fail = fail;
     this._message = message;
     this._data = data;
   }
+
+  private _fail: boolean;
 
   get fail(): boolean {
     return this._fail;
@@ -18,6 +16,8 @@ export class Result<T> {
     this._fail = value;
   }
 
+  private _data: T;
+
   get data(): T {
     return this._data;
   }
@@ -25,6 +25,8 @@ export class Result<T> {
   set data(value: T) {
     this._data = value;
   }
+
+  private _message: string;
 
   get message(): string {
     return this._message;

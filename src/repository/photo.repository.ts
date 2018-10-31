@@ -1,5 +1,5 @@
-import { Photo } from "../data/photo/photo";
-import { Observable } from "rxjs";
+import {Photo} from "../data/photo/photo";
+import {Observable} from "rxjs";
 
 export interface PhotoRepository {
   savePhoto(type: string, photo: Photo): Observable<Photo>;

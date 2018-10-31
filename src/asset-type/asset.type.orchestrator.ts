@@ -1,13 +1,13 @@
-import { createAssetTypeRepository } from "../adapter/asset/asset.type.repository.factory";
-import { AssetTypeRepository } from "../repository/asset.type.repository";
-import { AssetType } from "../data/asset/asset.type";
-import { Observable } from "rxjs";
-import { Result } from "../result.success";
-import { getSortOrderOrDefault } from "../sort.order.util";
-import { shapeAssetTypesResponse } from "./asset.type.response.shaper";
-import { Value } from "../data/asset/value";
-import { AssetTypeResponse } from "../data/asset/asset.type.response";
-import { switchMap, map } from "rxjs/operators";
+import {createAssetTypeRepository} from "../adapter/asset/asset.type.repository.factory";
+import {AssetTypeRepository} from "../repository/asset.type.repository";
+import {AssetType} from "../data/asset/asset.type";
+import {Observable} from "rxjs";
+import {Result} from "../result.success";
+import {getSortOrderOrDefault} from "../sort.order.util";
+import {shapeAssetTypesResponse} from "./asset.type.response.shaper";
+import {Value} from "../data/asset/value";
+import {AssetTypeResponse} from "../data/asset/asset.type.response";
+import {switchMap, map} from "rxjs/operators";
 
 export class AssetTypeOrchestrator {
 
@@ -33,7 +33,7 @@ export class AssetTypeOrchestrator {
     //           // return new Result<any>(false, "assetTypes", shapeAssetTypesResp);
     //         }));
     //   }));
-    return null;
+    return undefined;
   }
 
   getAssetTypeById(assetTypeId: string): Observable<AssetTypeResponse> {
@@ -41,15 +41,15 @@ export class AssetTypeOrchestrator {
   }
 
   saveAssetType(assetType: AssetType, values: Value[]): Observable<AssetType> {
-      return this.assetTypeRepository.saveAssetType(assetType, values);
+    return this.assetTypeRepository.saveAssetType(assetType, values);
   }
 
   updateAssetType(assetTypeId: string, assetType: AssetType, values: Value[]): Observable<number> {
-      return this.assetTypeRepository.updateAssetType(assetTypeId, assetType, values);
+    return this.assetTypeRepository.updateAssetType(assetTypeId, assetType, values);
   }
 
   deleteAssetType(assetTypeId: string): Observable<number> {
-      return this.assetTypeRepository.deleteAssetType(assetTypeId);
+    return this.assetTypeRepository.deleteAssetType(assetTypeId);
   }
 
 }

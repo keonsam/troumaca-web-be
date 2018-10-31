@@ -1,7 +1,7 @@
-import { AssetType } from "../data/asset/asset.type";
-import { Value } from "../data/asset/value";
-import { AssetTypeResponse } from "../data/asset/asset.type.response";
-import { Observable } from "rxjs";
+import {AssetType} from "../data/asset/asset.type";
+import {Value} from "../data/asset/value";
+import {AssetTypeResponse} from "../data/asset/asset.type.response";
+import {Observable} from "rxjs";
 
 export interface AssetTypeRepository {
 

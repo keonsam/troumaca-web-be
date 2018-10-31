@@ -1,12 +1,12 @@
-import { Credential } from "../../data/authentication/credential";
-import { CredentialRepository } from "../../repository/credential.repository";
-import { Observable, Observer, throwError } from "rxjs";
+import {Credential} from "../../data/authentication/credential";
+import {CredentialRepository} from "../../repository/credential.repository";
+import {Observable, Observer, throwError} from "rxjs";
 import request from "request";
-import { classToPlain} from "class-transformer";
-import { jsonRequestHeaderMap, postJsonOptions } from "../../request.helpers";
-import { properties } from "../../properties.helpers";
-import { AuthenticatedCredential } from "../../data/authentication/authenticated.credential";
-import { CreatedCredential } from "../../data/authentication/created.credential";
+import {classToPlain} from "class-transformer";
+import {jsonRequestHeaderMap, postJsonOptions} from "../../request.helpers";
+import {properties} from "../../properties.helpers";
+import {AuthenticatedCredential} from "../../data/authentication/authenticated.credential";
+import {CreatedCredential} from "../../data/authentication/created.credential";
 
 export class CredentialRepositoryRestAdapter implements CredentialRepository {
 
@@ -20,7 +20,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
 
     // let headers:any = strMapToJson(headerMap);
     const json = {
-        password: password
+      password: password
     };
 
     uri = uri + "/authentication/credentials/validate-password";
@@ -108,8 +108,8 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
 
     // let headers:any = strMapToJson(headerMap);
     const json = {
-        username: credential.username,
-        password: credential.password
+      username: credential.username,
+      password: credential.password
     };
 
     const uriAndPath: string = uri + "/authentication/authenticate";
@@ -119,17 +119,17 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
     return Observable.create(function (observer: Observer<number>) {
       request(requestOptions, function (error: any, response: any, body: any) {
         try {
-            if (error) {
-              observer.error(error);
-              observer.complete();
-            } else if (response && response.statusCode != 200) {
-              observer.error(body);
-              observer.complete();
-            } else {
-              // let vp:boolean = plainToClass(Boolean, body["valid"] as Object);
-              observer.next(body);
-              observer.complete();
-            }
+          if (error) {
+            observer.error(error);
+            observer.complete();
+          } else if (response && response.statusCode != 200) {
+            observer.error(body);
+            observer.complete();
+          } else {
+            // let vp:boolean = plainToClass(Boolean, body["valid"] as Object);
+            observer.next(body);
+            observer.complete();
+          }
         } catch (e) {
           observer.error(new Error(e.message));
           observer.complete();
@@ -139,7 +139,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
   }
 
   updateCredentialStatusById(credentialId: string, status: string): Observable<number> {
-      return undefined;
+    return undefined;
   }
 
   updateCredentialStatusByPartyId(partyId: string, status: string): Observable<number> {
@@ -148,10 +148,10 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
 
 
   updateUserCredential(partyId: string, credential: Credential): Observable<number> {
-      return undefined;
+    return undefined;
   }
 
-    // addUserCredential(credential:Credential):Observable<Credential> {
+  // addUserCredential(credential:Credential):Observable<Credential> {
   //   return undefined;
   // }
   //

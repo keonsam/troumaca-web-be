@@ -1,9 +1,8 @@
-import { VirtualSite } from "./virtual.site";
+import {VirtualSite} from "./virtual.site";
 
 export class Email extends VirtualSite {
 
   private _domainName: string;
-  private _emailAddress: string;
 
   get domainName(): string {
     return this._domainName;
@@ -12,6 +11,8 @@ export class Email extends VirtualSite {
   set domainName(value: string) {
     this._domainName = value;
   }
+
+  private _emailAddress: string;
 
   get emailAddress(): string {
     return this._emailAddress;

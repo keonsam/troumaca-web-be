@@ -1,5 +1,5 @@
-export class  ValidSession {
-    valid: boolean;
-    partyId: string;
+export class ValidSession {
+  valid: boolean;
+  partyId: string;
 
 }

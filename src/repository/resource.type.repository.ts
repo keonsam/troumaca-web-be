@@ -1,5 +1,5 @@
-import { ResourceType } from "../data/authorization/resource.type";
-import { Observable } from "rxjs";
+import {ResourceType} from "../data/authorization/resource.type";
+import {Observable} from "rxjs";
 
 export interface ResourceTypeRepository {
 

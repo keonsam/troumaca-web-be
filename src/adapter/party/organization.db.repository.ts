@@ -1,10 +1,10 @@
 import {OrganizationRepository} from "../../repository/organization.repository";
 import {Observable, Observer} from "rxjs";
 import {Organization} from "../../data/party/organization";
-import { organizations, requests } from "../../db";
+import {organizations, requests} from "../../db";
 import {generateUUID} from "../../uuid.generator";
 import {calcSkip} from "../../db.util";
-import { JoinOrganization } from "../../data/party/join.organization";
+import {JoinOrganization} from "../../data/party/join.organization";
 
 export class OrganizationDBRepository implements OrganizationRepository {
 
@@ -26,14 +26,22 @@ export class OrganizationDBRepository implements OrganizationRepository {
   }
 
   saveCustomerOrganization(organization: Organization, options?: any): Observable<Organization> {
-    return this.saveOrganization(organization, options)
+    return this.saveOrganization(organization, options);
   }
 
   saveOrganization(organization: Organization, options?: any): Observable<Organization> {
-    if (!organization.partyId) { organization.partyId = generateUUID(); }
-    if (!organization.version) { organization.version = generateUUID(); }
-    if (!organization.tenantPartyId) { organization.tenantPartyId = generateUUID(); }
-    if (!organization.modifiedOn) { organization.modifiedOn = new Date(); }
+    if (!organization.partyId) {
+      organization.partyId = generateUUID();
+    }
+    if (!organization.version) {
+      organization.version = generateUUID();
+    }
+    if (!organization.tenantPartyId) {
+      organization.tenantPartyId = generateUUID();
+    }
+    if (!organization.modifiedOn) {
+      organization.modifiedOn = new Date();
+    }
 
     return Observable.create(function (observer: Observer<Organization>) {
       organizations.insert(organization, function (err: any, doc: any) {
@@ -48,17 +56,17 @@ export class OrganizationDBRepository implements OrganizationRepository {
   }
 
   saveAccessRequest(request: JoinOrganization): Observable<JoinOrganization> {
-      request.accessRequestId = generateUUID();
-      return Observable.create(function (observer: Observer<JoinOrganization>) {
-          requests.insert(request, function (err: any, doc: any) {
-              if (!err) {
-                  observer.next(doc);
-              } else {
-                  observer.error(err);
-              }
-              observer.complete();
-          });
+    request.accessRequestId = generateUUID();
+    return Observable.create(function (observer: Observer<JoinOrganization>) {
+      requests.insert(request, function (err: any, doc: any) {
+        if (!err) {
+          observer.next(doc);
+        } else {
+          observer.error(err);
+        }
+        observer.complete();
       });
+    });
   }
 
   getOrganizations(pageNumber: number, pageSize: number, order: string): Observable<Organization[]> {

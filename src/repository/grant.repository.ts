@@ -1,5 +1,5 @@
-import { Grant } from "../data/authorization/grant";
-import { Observable } from "rxjs";
+import {Grant} from "../data/authorization/grant";
+import {Observable} from "rxjs";
 
 export interface GrantRepository {
 

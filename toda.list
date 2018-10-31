@@ -1,2 +1,17 @@
+n Create credential
+
+n Create person
+n Confirm username
+n Create organization
+n Create contract
+n Create role types
+n Create role
+n Request access
+n Add subscription item
+n Add person profile pic image
+n Add organization profile pic image
+
+
+Backlog
 - Upgrade typescript 3
 - Track all request and response, exclude sensitive data (password)

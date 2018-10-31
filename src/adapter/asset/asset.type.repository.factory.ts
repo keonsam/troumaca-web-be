@@ -1,8 +1,8 @@
-import { AssetTypeRepository } from "../../repository/asset.type.repository";
-import { RepositoryKind } from "../../repository.kind";
-import { properties } from "../../properties.helpers";
-import { AssetTypeRepositoryNeDbAdapter } from "./asset.type.repository.db.adapter";
-import { AssetTypeRepositoryRestAdapter } from "./asset.type.repository.rest.adapter";
+import {AssetTypeRepository} from "../../repository/asset.type.repository";
+import {RepositoryKind} from "../../repository.kind";
+import {properties} from "../../properties.helpers";
+import {AssetTypeRepositoryNeDbAdapter} from "./asset.type.repository.db.adapter";
+import {AssetTypeRepositoryRestAdapter} from "./asset.type.repository.rest.adapter";
 
 export function createAssetTypeRepository(kind?: RepositoryKind): AssetTypeRepository {
   const type: number = properties.get("asset.type.repository.type") as number;
@@ -14,7 +14,7 @@ export function createAssetTypeRepository(kind?: RepositoryKind): AssetTypeRepos
     case RepositoryKind.Rest:
       return new AssetTypeRepositoryRestAdapter();
     default:
-        throw new Error(`Unknown Asset Type Repository Type ${k}`);
+      throw new Error(`Unknown Asset Type Repository Type ${k}`);
 
   }
 }

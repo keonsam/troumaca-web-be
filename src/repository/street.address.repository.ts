@@ -1,5 +1,5 @@
-import { StreetAddress } from "../data/site/street.address";
-import { Observable } from "rxjs";
+import {StreetAddress} from "../data/site/street.address";
+import {Observable} from "rxjs";
 
 export interface StreetAddressRepository {
   saveStreetAddress(streetAddress: StreetAddress): Observable<StreetAddress>;

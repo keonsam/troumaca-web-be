@@ -1,10 +1,8 @@
-import { RepositoryKind } from "../../repository.kind";
-import { properties } from "../../properties.helpers";
-import { AssetTypeClassRepositoryRestAdapter } from "./asset.type.class.repository.rest.adapter";
-import { AssetTypeClassRepository } from "../../repository/asset.type.class.repository";
-import { AssetTypeClassRepositoryNeDbAdapter } from "./asset.type.class.repository.db.adapter";
-
-
+import {RepositoryKind} from "../../repository.kind";
+import {properties} from "../../properties.helpers";
+import {AssetTypeClassRepositoryRestAdapter} from "./asset.type.class.repository.rest.adapter";
+import {AssetTypeClassRepository} from "../../repository/asset.type.class.repository";
+import {AssetTypeClassRepositoryNeDbAdapter} from "./asset.type.class.repository.db.adapter";
 
 
 export function createAssetTypeClassRepositoryFactory(kind?: RepositoryKind): AssetTypeClassRepository {

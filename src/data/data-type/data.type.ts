@@ -1,7 +1,6 @@
 export class DataType {
 
   private _dataTypeId: string;
-  private _name: string;
 
   get dataTypeId(): string {
     return this._dataTypeId;
@@ -11,6 +10,7 @@ export class DataType {
     this._dataTypeId = value;
   }
 
+  private _name: string;
 
   get name(): string {
     return this._name;

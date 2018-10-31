@@ -1,4 +1,4 @@
-import { PhysicalSite } from "./physical.site";
+import {PhysicalSite} from "./physical.site";
 
 export class PostOfficeBox extends PhysicalSite {
 

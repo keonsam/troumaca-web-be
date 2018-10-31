@@ -1,5 +1,5 @@
-import { Email } from "../data/site/email";
-import { Observable } from "rxjs";
+import {Email} from "../data/site/email";
+import {Observable} from "rxjs";
 
 export interface EmailRepository {
   saveEmail(email: Email): Observable<Email>;

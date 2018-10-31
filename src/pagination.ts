@@ -1,12 +1,11 @@
 export class Pagination {
 
-  private _page: number;
-  private _sort: string;
-
   constructor(page: number, sort: string) {
     this.page = page;
     this.sort = sort;
   }
+
+  private _page: number;
 
   get page(): number {
     return this._page;
@@ -15,6 +14,8 @@ export class Pagination {
   set page(value: number) {
     this._page = value;
   }
+
+  private _sort: string;
 
   get sort(): string {
     return this._sort;

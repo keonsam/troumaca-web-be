@@ -6,18 +6,19 @@ import {Photo} from "../photo/photo";
 export class PersonProfile {
 
   private _person: Person;
-  private _photo: Photo;
-
-  // private _credential: Credential;
-  // private _accessRole:AccessRole;
 
   get person(): Person {
     return this._person;
   }
 
+  // private _credential: Credential;
+  // private _accessRole:AccessRole;
+
   set person(value: Person) {
     this._person = value;
   }
+
+  private _photo: Photo;
 
   get photo(): Photo {
     return this._photo;

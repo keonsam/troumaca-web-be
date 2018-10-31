@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
-import { CredentialOrchestrator } from "./credential.orchestrator";
-import { AuthenticatedCredential } from "../../data/authentication/authenticated.credential";
-import { Credential } from "../../data/authentication/credential";
+import {Request, Response} from "express";
+import {CredentialOrchestrator} from "./credential.orchestrator";
+import {AuthenticatedCredential} from "../../data/authentication/authenticated.credential";
+import {Credential} from "../../data/authentication/credential";
 
 const credentialOrchestrator: CredentialOrchestrator = new CredentialOrchestrator();
 
@@ -11,50 +11,50 @@ export let isValidUsername = (req: Request, res: Response) => {
   const partyId = req.body.partyId;
 
   if (!username) {
-      res.status(400);
-      res.setHeader("content-type", "application/json");
-      res.send(JSON.stringify({message: "Username can not be empty."}));
-      return;
+    res.status(400);
+    res.setHeader("content-type", "application/json");
+    res.send(JSON.stringify({message: "Username can not be empty."}));
+    return;
   }
 
   credentialOrchestrator.isValidUsername(username, partyId)
-  .subscribe((next: boolean) => {
-    res.status(200);
-    const resp = {valid: next};
-    res.setHeader("content-type", "application/json");
-    res.send(JSON.stringify(resp));
-  }, error => {
-    res.status(500);
+    .subscribe((next: boolean) => {
+      res.status(200);
+      const resp = {valid: next};
+      res.setHeader("content-type", "application/json");
+      res.send(JSON.stringify(resp));
+    }, error => {
+      res.status(500);
       res.setHeader("content-type", "application/json");
       res.send(JSON.stringify({message: "Internal Server Error"}));
-    console.log(error);
-  });
+      console.log(error);
+    });
 
 };
 
 export let isValidPassword = (req: Request, res: Response) => {
 
-    const password: string = req.body.password;
+  const password: string = req.body.password;
 
   if (!password) {
-      res.status(400);
-      res.setHeader("content-type", "application/json");
-      res.send(JSON.stringify({message: "A password must exist."}));
-      return;
+    res.status(400);
+    res.setHeader("content-type", "application/json");
+    res.send(JSON.stringify({message: "A password must exist."}));
+    return;
   }
 
   credentialOrchestrator.isValidPassword(password)
-  .subscribe((next: boolean) => {
+    .subscribe((next: boolean) => {
       res.status(200);
       const resp = {valid: next};
       res.setHeader("content-type", "application/json");
       res.send(JSON.stringify(resp));
-  }, error => {
+    }, error => {
       res.status(500);
       res.setHeader("content-type", "application/json");
       res.send(JSON.stringify({message: "Internal Server Error"}));
       console.log(error);
-  });
+    });
 
 };
 
@@ -65,89 +65,89 @@ export let addCredential = (req: Request, res: Response) => {
   const user = req.body.user;
 
   if (!correlationId) {
-      res.status(400);
-      res.setHeader("content-type", "application/json");
-      res.send(JSON.stringify({message: "A \"correlationId\" is required."}));
-      return;
+    res.status(400);
+    res.setHeader("content-type", "application/json");
+    res.send(JSON.stringify({message: "A \"correlationId\" is required."}));
+    return;
   }
 
   if (!credential || !credential.username || !credential.password) {
-      res.status(400);
-      res.setHeader("content-type", "application/json");
-      res.send(JSON.stringify({message: "'Credential' must be sent, and must contain username and password."}));
-      return;
+    res.status(400);
+    res.setHeader("content-type", "application/json");
+    res.send(JSON.stringify({message: "'Credential' must be sent, and must contain username and password."}));
+    return;
   }
 
   if (!user || !user.firstName || !user.lastName) {
-      res.status(400);
-      res.setHeader("content-type", "application/json");
-      res.send(JSON.stringify({message: "'User' must be sent, and contain first and last name."}));
-      return;
+    res.status(400);
+    res.setHeader("content-type", "application/json");
+    res.send(JSON.stringify({message: "'User' must be sent, and contain first and last name."}));
+    return;
   }
 
   const headerOptions = {
-      correlationId: correlationId
+    correlationId: correlationId
   };
 
   credentialOrchestrator.addCredential(credential, user, headerOptions)
-  .subscribe(confirmation => {
+    .subscribe(confirmation => {
       res.status(201);
       res.setHeader("content-type", "application/json");
       res.send(JSON.stringify(confirmation));
-  }, error => {
-    res.status(!error.code ? 500 : error.code);
-    const msg = !error.message ? "Internal Server Error" : error.message;
-    res.send(JSON.stringify(msg));
-    console.log(error);
-  });
+    }, error => {
+      res.status(!error.code ? 500 : error.code);
+      const msg = !error.message ? "Internal Server Error" : error.message;
+      res.send(JSON.stringify(msg));
+      console.log(error);
+    });
 
 };
 
 export let authenticate = (req: Request, res: Response) => {
 
-    const credential: Credential = req.body;
+  const credential: Credential = req.body;
 
-    if (!credential || !credential.username || !credential.password) {
-        res.status(400);
-        res.setHeader("content-type", "application/json");
-        res.send(JSON.stringify({message: "'Credential' must be sent, and must contain username and password."}));
-        return;
-    }
+  if (!credential || !credential.username || !credential.password) {
+    res.status(400);
+    res.setHeader("content-type", "application/json");
+    res.send(JSON.stringify({message: "'Credential' must be sent, and must contain username and password."}));
+    return;
+  }
 
-    const correlationId = req.headers.correlationid;
+  const correlationId = req.headers.correlationid;
 
-    if (!correlationId) {
-        res.status(400);
-        res.setHeader("content-type", "application/json");
-        res.send(JSON.stringify({message: "A \"correlationId\" is required."}));
-        return;
-    }
+  if (!correlationId) {
+    res.status(400);
+    res.setHeader("content-type", "application/json");
+    res.send(JSON.stringify({message: "A \"correlationId\" is required."}));
+    return;
+  }
 
-    const headerOptions = {
-        correlationId: correlationId,
-        sourceSystemHost: req.headers.host,
-        sourceSystemName: ""
-    };
+  const headerOptions = {
+    correlationId: correlationId,
+    sourceSystemHost: req.headers.host,
+    sourceSystemName: ""
+  };
 
-    credentialOrchestrator.authenticate(credential, headerOptions)
-        .subscribe((authenticatedCredential: AuthenticatedCredential) => {
-            if (authenticatedCredential && authenticatedCredential.sessionId) {
-                res.cookie("sessionId", authenticatedCredential.sessionId, {
-                    path: "/",
-                    maxAge: 20 * 60000,
-                    httpOnly: true
-                });
-            }
-            const body = JSON.stringify(authenticatedCredential);
-            res.status(200);
-            res.setHeader("content-type", "application/json");
-            res.send(body);
-        }, error => {
-            res.status(500);
-            res.setHeader("content-type", "application/json");
-            res.send(JSON.stringify({message: "Internal Occurred"}));
-            console.log(error);
+  credentialOrchestrator.authenticate(credential, headerOptions)
+    .subscribe((authenticatedCredential: AuthenticatedCredential) => {
+      if (authenticatedCredential && authenticatedCredential.sessionId) {
+        res.cookie("sessionId", authenticatedCredential.sessionId, {
+          path: "/",
+          maxAge: 20 * 60000,
+          httpOnly: true
         });
+      }
+      const body = JSON.stringify(authenticatedCredential);
+      res.status(200);
+      res.setHeader("content-type", "application/json");
+      res.send(body);
+    }, error => {
+      res.status(500);
+      res.setHeader("content-type", "application/json");
+      res.send(JSON.stringify({message: "Internal Occurred"}));
+      console.log(error);
+    });
 
 };
 

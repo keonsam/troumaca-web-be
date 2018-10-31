@@ -1,10 +1,10 @@
-import { PostOfficeBoxRepository } from "../../repository/post.office.box.repository";
-import { Observable ,  Observer } from "rxjs";
-import { RepositoryKind } from "../../repository.kind";
-import { postOfficeBoxes } from "../../db";
-import { PostOfficeBox } from "../../data/site/post.office.box";
-import { calcSkip } from "../../db.util";
-import { generateUUID } from "../../uuid.generator";
+import {PostOfficeBoxRepository} from "../../repository/post.office.box.repository";
+import {Observable, Observer} from "rxjs";
+import {RepositoryKind} from "../../repository.kind";
+import {postOfficeBoxes} from "../../db";
+import {PostOfficeBox} from "../../data/site/post.office.box";
+import {calcSkip} from "../../db.util";
+import {generateUUID} from "../../uuid.generator";
 
 class PostOfficeBoxDBRepository implements PostOfficeBoxRepository {
 
@@ -12,8 +12,8 @@ class PostOfficeBoxDBRepository implements PostOfficeBoxRepository {
 
   savePostOfficeBox(postOfficeBox: PostOfficeBox): Observable<PostOfficeBox> {
     postOfficeBox.siteId = generateUUID();
-    return Observable.create(function(observer: Observer<PostOfficeBox>) {
-      postOfficeBoxes.insert(postOfficeBox, function(err: any, doc: any) {
+    return Observable.create(function (observer: Observer<PostOfficeBox>) {
+      postOfficeBoxes.insert(postOfficeBox, function (err: any, doc: any) {
         if (err) {
           observer.error(err);
         } else {

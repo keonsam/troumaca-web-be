@@ -9,7 +9,7 @@ function jsonToMap(jsonStr: string) {
 }
 
 function strMapToObj(strMap: any) {
-  const obj = Object.create(null);
+  const obj = Object.create(undefined);
   for (const [k, v] of strMap) {
     // We don’t escape the key '__proto__'
     // which can cause problems on older engines

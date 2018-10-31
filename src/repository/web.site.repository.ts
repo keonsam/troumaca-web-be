@@ -1,5 +1,5 @@
-import { WebSite } from "../data/site/web.site";
-import { Observable } from "rxjs";
+import {WebSite} from "../data/site/web.site";
+import {Observable} from "rxjs";
 
 export interface WebSiteRepository {
   saveWebSite(webSite: WebSite): Observable<WebSite>;

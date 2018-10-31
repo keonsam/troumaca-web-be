@@ -1,7 +1,7 @@
-import { Credential } from "../data/authentication/credential";
-import { AuthenticatedCredential } from "../data/authentication/authenticated.credential";
-import { CreatedCredential } from "../data/authentication/created.credential";
-import { Observable } from "rxjs";
+import {Credential} from "../data/authentication/credential";
+import {AuthenticatedCredential} from "../data/authentication/authenticated.credential";
+import {CreatedCredential} from "../data/authentication/created.credential";
+import {Observable} from "rxjs";
 
 export interface CredentialRepository {
 
@@ -17,10 +17,10 @@ export interface CredentialRepository {
 
   updateCredentialStatusByPartyId(partyId: string, status: string): Observable<number>;
 
-    // USED BY OTHER REPOS
+  // USED BY OTHER REPOS
   updateUserCredential(partyId: string, credential: Credential): Observable<number>;
 
-    // isValidEditUsername(partyId:string, username:string):Observable<boolean>;
+  // isValidEditUsername(partyId:string, username:string):Observable<boolean>;
   //
   // getCredentialByUsername(username:string):Observable<Credential>;
   //

@@ -12,7 +12,7 @@ export class AccessRoleDBRepository implements AccessRoleRepository {
   findAccessRoles(searchStr: string, pageSize: number): Observable<AccessRole[]> {
     const searchStrLocal = new RegExp(searchStr);
     const query = searchStr ? {name: {$regex: searchStrLocal}} : {};
-    return Observable.create(function(observer: Observer<AccessRole[]>) {
+    return Observable.create(function (observer: Observer<AccessRole[]>) {
       accessRoles.find(query).limit(100).exec(function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
@@ -54,8 +54,8 @@ export class AccessRoleDBRepository implements AccessRoleRepository {
 
   addAccessRole(accessRole: AccessRole): Observable<AccessRole> {
     accessRole.accessRoleId = generateUUID();
-    return Observable.create(function(observer: Observer<AccessRole>) {
-      accessRoles.insert(accessRole, function(err: any, doc: any) {
+    return Observable.create(function (observer: Observer<AccessRole>) {
+      accessRoles.insert(accessRole, function (err: any, doc: any) {
         if (err) {
           observer.error(err);
         } else {

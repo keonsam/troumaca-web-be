@@ -1,6 +1,6 @@
-import { Request, Response } from "express";
-import { AssetOrchestrator } from "./asset.kind.orchestrator";
-import { shapeAssetKindResponse2 } from "./asset.kind.response.shaper";
+import {Request, Response} from "express";
+import {AssetOrchestrator} from "./asset.kind.orchestrator";
+import {shapeAssetKindResponse2} from "./asset.kind.response.shaper";
 
 const assetOrchestrator: AssetOrchestrator = new AssetOrchestrator();
 

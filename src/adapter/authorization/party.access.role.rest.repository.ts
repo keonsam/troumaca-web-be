@@ -1,6 +1,6 @@
-import { PartyAccessRoleRepository } from "../../repository/party.access.role.repository";
-import { PartyAccessRole } from "../../data/authorization/party.access.role";
-import { Observable } from "rxjs";
+import {PartyAccessRoleRepository} from "../../repository/party.access.role.repository";
+import {PartyAccessRole} from "../../data/authorization/party.access.role";
+import {Observable} from "rxjs";
 
 export class PartyAccessRoleRestRepository implements PartyAccessRoleRepository {
 
@@ -12,6 +12,7 @@ export class PartyAccessRoleRestRepository implements PartyAccessRoleRepository 
   getPartyAccessRoles(): Observable<PartyAccessRole[]> {
     return undefined;
   }
+
   //
   // getPartyAccessRoleCount():Observable<number> {
   //   return undefined;
@@ -38,7 +39,7 @@ export class PartyAccessRoleRestRepository implements PartyAccessRoleRepository 
   }
 
   updatePartyAccessRoles(partyAccessRoles: PartyAccessRole[], partyId: string): Observable<PartyAccessRole[]> {
-      return undefined;
+    return undefined;
   }
 
 }

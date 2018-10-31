@@ -1,18 +1,8 @@
-import { Party } from "../party/party";
+import {Party} from "../party/party";
 
 export class Photo extends Party {
 
   private _id: string;
-  private _name: string;
-  private _data: string;
-  private _size: number;
-  private _height: string;
-  private _width: string;
-
-  // Todo: old attributes
-  private _imageStr: string;
-  private _userImage: string;
-  private _organizationImage: string;
 
   get id(): string {
     return this._id;
@@ -22,6 +12,8 @@ export class Photo extends Party {
     this._id = value;
   }
 
+  private _name: string;
+
   get name(): string {
     return this._name;
   }
@@ -29,6 +21,8 @@ export class Photo extends Party {
   set name(value: string) {
     this._name = value;
   }
+
+  private _data: string;
 
   get data(): string {
     return this._data;
@@ -38,6 +32,8 @@ export class Photo extends Party {
     this._data = value;
   }
 
+  private _size: number;
+
   get size(): number {
     return this._size;
   }
@@ -45,6 +41,8 @@ export class Photo extends Party {
   set size(value: number) {
     this._size = value;
   }
+
+  private _height: string;
 
   get height(): string {
     return this._height;
@@ -54,6 +52,8 @@ export class Photo extends Party {
     this._height = value;
   }
 
+  private _width: string;
+
   get width(): string {
     return this._width;
   }
@@ -62,6 +62,18 @@ export class Photo extends Party {
     this._width = value;
   }
 
+  // Todo: old attributes
+  private _imageStr: string;
+
+  get imageStr(): string {
+    return this._imageStr;
+  }
+
+  set imageStr(value: string) {
+    this._imageStr = value;
+  }
+
+  private _userImage: string;
 
   get userImage(): string {
     return this._userImage;
@@ -71,13 +83,7 @@ export class Photo extends Party {
     this._userImage = value;
   }
 
-  get imageStr(): string {
-    return this._imageStr;
-  }
-
-  set imageStr(value: string) {
-    this._imageStr = value;
-  }
+  private _organizationImage: string;
 
   get organizationImage(): string {
     return this._organizationImage;
@@ -90,9 +96,9 @@ export class Photo extends Party {
 
   toJson() {
     return {
-        partyId: this.partyId,
-        userImage: this.userImage,
-        organizationImage: this.organizationImage
+      partyId: this.partyId,
+      userImage: this.userImage,
+      organizationImage: this.organizationImage
     };
   }
 }

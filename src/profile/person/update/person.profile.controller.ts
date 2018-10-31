@@ -1,11 +1,11 @@
-import { Request, Response } from "express";
-import { PersonProfileOrchestrator } from "./person.profile.orchestrator";
-import { shapePersonResponse2 } from "../person.profile.response.shaper";
+import {Request, Response} from "express";
+import {PersonProfileOrchestrator} from "./person.profile.orchestrator";
+import {shapePersonResponse2} from "../person.profile.response.shaper";
 
 const personProfileOrchestrator: PersonProfileOrchestrator = new PersonProfileOrchestrator();
 
 export let findPerson = (req: Request, res: Response) => {
-  const searchStr: string =  req.query.q;
+  const searchStr: string = req.query.q;
   const pageSize: number = req.query.pageSize;
 
   // personProfileOrchestrator.findPerson(searchStr, pageSize)

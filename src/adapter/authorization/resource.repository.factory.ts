@@ -1,10 +1,10 @@
-import { resources } from "../../db";
-import { ResourceRepository } from "../../repository/resource.repository";
-import { Resource } from "../../data/authorization/resource";
-import { Observable ,  Observer } from "rxjs";
-import { RepositoryKind } from "../../repository.kind";
-import { generateUUID } from "../../uuid.generator";
-import { calcSkip } from "../../db.util";
+import {resources} from "../../db";
+import {ResourceRepository} from "../../repository/resource.repository";
+import {Resource} from "../../data/authorization/resource";
+import {Observable, Observer} from "rxjs";
+import {RepositoryKind} from "../../repository.kind";
+import {generateUUID} from "../../uuid.generator";
+import {calcSkip} from "../../db.util";
 
 class ResourceDBRepository implements ResourceRepository {
 
@@ -13,7 +13,7 @@ class ResourceDBRepository implements ResourceRepository {
   getResourcesByArray(pageNumber: number, pageSize: number, order: string, assignedArray: string[]): Observable<Resource[]> {
     return Observable.create(function (observer: Observer<Resource[]>) {
       const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
-      resources.find({ resourceId: { $nin: assignedArray }}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
+      resources.find({resourceId: {$nin: assignedArray}}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -27,7 +27,7 @@ class ResourceDBRepository implements ResourceRepository {
   getAssignedResourcesByArray(pageNumber: number, pageSize: number, order: string, assignedArray: string[]): Observable<Resource[]> {
     return Observable.create(function (observer: Observer<Resource[]>) {
       const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
-      resources.find({ resourceId: { $in: assignedArray }}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
+      resources.find({resourceId: {$in: assignedArray}}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -42,14 +42,14 @@ class ResourceDBRepository implements ResourceRepository {
     const localDefaultPageSize = this.defaultPageSize;
     const skip = calcSkip(pageNumber, pageSize, localDefaultPageSize);
     return Observable.create(function (observer: Observer<Resource[]>) {
-        resources.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
-            if (!err) {
-                observer.next(doc);
-            } else {
-                observer.error(err);
-            }
-            observer.complete();
-        });
+      resources.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
+        if (!err) {
+          observer.next(doc);
+        } else {
+          observer.error(err);
+        }
+        observer.complete();
+      });
     });
   }
 
@@ -68,8 +68,8 @@ class ResourceDBRepository implements ResourceRepository {
 
   addResource(resource: Resource): Observable<Resource> {
     resource.resourceId = generateUUID();
-    return Observable.create(function(observer: Observer<Resource>) {
-      resources.insert(resource, function(err: any, doc: any) {
+    return Observable.create(function (observer: Observer<Resource>) {
+      resources.insert(resource, function (err: any, doc: any) {
         if (err) {
           observer.error(err);
         } else {

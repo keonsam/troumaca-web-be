@@ -1,9 +1,5 @@
 export class Subscription {
-    private _subscriptionId: string;
-    private _moduleId: string;
-    private _subscribed: boolean;
-    private _name: string;
-    private _cost: string;
+  private _subscriptionId: string;
 
   get subscriptionId(): string {
     return this._subscriptionId;
@@ -13,6 +9,18 @@ export class Subscription {
     this._subscriptionId = value;
   }
 
+  private _moduleId: string;
+
+  get moduleId(): string {
+    return this._moduleId;
+  }
+
+  set moduleId(value: string) {
+    this._moduleId = value;
+  }
+
+  private _subscribed: boolean;
+
   get subscribed(): boolean {
     return this._subscribed;
   }
@@ -21,28 +29,23 @@ export class Subscription {
     this._subscribed = value;
   }
 
-
-  get moduleId(): string {
-        return this._moduleId;
-  }
-
-  set moduleId(value: string) {
-        this._moduleId = value;
-  }
+  private _name: string;
 
   get name(): string {
-        return this._name;
+    return this._name;
   }
 
   set name(value: string) {
-        this._name = value;
+    this._name = value;
   }
 
+  private _cost: string;
+
   get cost(): string {
-        return this._cost;
+    return this._cost;
   }
 
   set cost(value: string) {
-      this._cost = value;
+    this._cost = value;
   }
 }

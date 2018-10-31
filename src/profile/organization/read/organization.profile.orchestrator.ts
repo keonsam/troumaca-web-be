@@ -1,5 +1,5 @@
-import { createOrganizationRepository } from "../../../adapter/party/organization.repository.factory";
-import { OrganizationRepository } from "../../../repository/organization.repository";
+import {createOrganizationRepository} from "../../../adapter/party/organization.repository.factory";
+import {OrganizationRepository} from "../../../repository/organization.repository";
 import {Organization} from "../../../data/party/organization";
 import {Observable} from "rxjs";
 

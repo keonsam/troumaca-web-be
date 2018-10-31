@@ -1,17 +1,11 @@
 export class Value {
 
-  private _valueId: string;
-  private _tenantId: string;
-  private _assetTypeId: string;
-  private _attributeId: string;
-  private _text: string;
-  private _createOn: string;
-  private _modifiedOn: string;
-
-  constructor( attributeId?: string, text?: string) {
+  constructor(attributeId?: string, text?: string) {
     this._attributeId = attributeId;
     this._text = text;
   }
+
+  private _valueId: string;
 
   get valueId(): string {
     return this._valueId;
@@ -21,6 +15,8 @@ export class Value {
     this._valueId = value;
   }
 
+  private _tenantId: string;
+
   get tenantId(): string {
     return this._tenantId;
   }
@@ -28,6 +24,8 @@ export class Value {
   set tenantId(value: string) {
     this._tenantId = value;
   }
+
+  private _assetTypeId: string;
 
   get assetTypeId(): string {
     return this._assetTypeId;
@@ -37,6 +35,8 @@ export class Value {
     this._assetTypeId = value;
   }
 
+  private _attributeId: string;
+
   get attributeId(): string {
     return this._attributeId;
   }
@@ -44,6 +44,8 @@ export class Value {
   set attributeId(value: string) {
     this._attributeId = value;
   }
+
+  private _text: string;
 
   get text(): string {
     return this._text;
@@ -53,6 +55,8 @@ export class Value {
     this._text = value;
   }
 
+  private _createOn: string;
+
   get createOn(): string {
     return this._createOn;
   }
@@ -60,6 +64,8 @@ export class Value {
   set createOn(value: string) {
     this._createOn = value;
   }
+
+  private _modifiedOn: string;
 
   get modifiedOn(): string {
     return this._modifiedOn;

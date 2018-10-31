@@ -1,12 +1,8 @@
-import { VirtualSite } from "./virtual.site";
+import {VirtualSite} from "./virtual.site";
 
 export class Phone extends VirtualSite {
 
   private _countryCode: string;
-  private _areaCode: string;
-  private _exchange: string;
-  private _telephoneNumber: string;
-  private _extension: string;
 
   get countryCode(): string {
     return this._countryCode;
@@ -16,6 +12,8 @@ export class Phone extends VirtualSite {
     this._countryCode = value;
   }
 
+  private _areaCode: string;
+
   get areaCode(): string {
     return this._areaCode;
   }
@@ -23,6 +21,8 @@ export class Phone extends VirtualSite {
   set areaCode(value: string) {
     this._areaCode = value;
   }
+
+  private _exchange: string;
 
   get exchange(): string {
     return this._exchange;
@@ -32,6 +32,8 @@ export class Phone extends VirtualSite {
     this._exchange = value;
   }
 
+  private _telephoneNumber: string;
+
   get telephoneNumber(): string {
     return this._telephoneNumber;
   }
@@ -39,6 +41,8 @@ export class Phone extends VirtualSite {
   set telephoneNumber(value: string) {
     this._telephoneNumber = value;
   }
+
+  private _extension: string;
 
   get extension(): string {
     return this._extension;

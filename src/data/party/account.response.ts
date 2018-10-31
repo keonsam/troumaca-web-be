@@ -1,17 +1,15 @@
-import { User } from "./user";
-import { Organization } from "./organization";
+import {User} from "./user";
+import {Organization} from "./organization";
 
 export class AccountResponse {
-
-  private _created: boolean;
-  private _user: User;
-  private _organization: Organization;
 
   constructor(created?: boolean, user?: User, organization?: Organization) {
     this._created = created;
     this._user = user;
     this._organization = organization;
   }
+
+  private _created: boolean;
 
   get created(): boolean {
     return this._created;
@@ -21,6 +19,8 @@ export class AccountResponse {
     this._created = value;
   }
 
+  private _user: User;
+
   get user(): User {
     return this._user;
   }
@@ -28,6 +28,8 @@ export class AccountResponse {
   set user(value: User) {
     this._user = value;
   }
+
+  private _organization: Organization;
 
   get organization(): Organization {
     return this._organization;

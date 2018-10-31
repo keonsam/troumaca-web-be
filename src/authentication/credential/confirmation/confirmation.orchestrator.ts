@@ -1,7 +1,7 @@
-import { createCredentialConfirmationRepositoryFactory } from "../../../adapter/authentication/confirmation.repository.factory";
-import { ConfirmationRepository } from "../../../repository/confirmation.repository";
-import { Confirmation } from "../../../data/authentication/confirmation";
-import { Observable } from "rxjs";
+import {createCredentialConfirmationRepositoryFactory} from "../../../adapter/authentication/confirmation.repository.factory";
+import {ConfirmationRepository} from "../../../repository/confirmation.repository";
+import {Confirmation} from "../../../data/authentication/confirmation";
+import {Observable} from "rxjs";
 
 export class ConfirmationOrchestrator {
 
@@ -12,7 +12,7 @@ export class ConfirmationOrchestrator {
   }
 
   resendConfirmCode(confirmationId: string, credentialId: string, options?: any): Observable<Confirmation> {
-      return this.confirmationRepository.resendConfirmCode(confirmationId, credentialId, options);
+    return this.confirmationRepository.resendConfirmCode(confirmationId, credentialId, options);
   }
 
   confirmCode(confirmationId: string, credentialId: string, confirmation: Confirmation, options?: any): Observable<Confirmation> {

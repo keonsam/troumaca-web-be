@@ -1,4 +1,3 @@
-
 export class Credential {
   partyId: string;
   credentialId: string;

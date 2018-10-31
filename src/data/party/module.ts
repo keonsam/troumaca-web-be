@@ -1,4 +1,4 @@
-import { ModuleInformation } from "./module.information";
+import {ModuleInformation} from "./module.information";
 
 export class Module {
   moduleId: string;

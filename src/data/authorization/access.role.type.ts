@@ -1,11 +1,6 @@
 export class AccessRoleType {
 
   private _accessRoleTypeId: string;
-  private _name: string;
-  private _description: string;
-  private _ownerPartyId: string;
-  private _createdOn: Date;
-  private _modifiedOn: Date;
 
   get accessRoleTypeId(): string {
     return this._accessRoleTypeId;
@@ -15,6 +10,8 @@ export class AccessRoleType {
     this._accessRoleTypeId = value;
   }
 
+  private _name: string;
+
   get name(): string {
     return this._name;
   }
@@ -22,6 +19,8 @@ export class AccessRoleType {
   set name(value: string) {
     this._name = value;
   }
+
+  private _description: string;
 
   get description(): string {
     return this._description;
@@ -31,6 +30,8 @@ export class AccessRoleType {
     this._description = value;
   }
 
+  private _ownerPartyId: string;
+
   get ownerPartyId(): string {
     return this._ownerPartyId;
   }
@@ -39,6 +40,8 @@ export class AccessRoleType {
     this._ownerPartyId = value;
   }
 
+  private _createdOn: Date;
+
   get createdOn(): Date {
     return this._createdOn;
   }
@@ -46,6 +49,8 @@ export class AccessRoleType {
   set createdOn(value: Date) {
     this._createdOn = value;
   }
+
+  private _modifiedOn: Date;
 
   get modifiedOn(): Date {
     return this._modifiedOn;

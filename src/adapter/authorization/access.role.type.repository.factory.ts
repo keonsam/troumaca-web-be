@@ -1,10 +1,10 @@
-import { accessRoleTypes } from "../../db";
-import { AccessRoleTypeRepository } from "../../repository/access.role.type.repository";
-import { AccessRoleType } from "../../data/authorization/access.role.type";
-import { Observable ,  Observer } from "rxjs";
-import { RepositoryKind } from "../../repository.kind";
-import { generateUUID } from "../../uuid.generator";
-import { calcSkip } from "../../db.util";
+import {accessRoleTypes} from "../../db";
+import {AccessRoleTypeRepository} from "../../repository/access.role.type.repository";
+import {AccessRoleType} from "../../data/authorization/access.role.type";
+import {Observable, Observer} from "rxjs";
+import {RepositoryKind} from "../../repository.kind";
+import {generateUUID} from "../../uuid.generator";
+import {calcSkip} from "../../db.util";
 
 class AccessRoleTypeDBRepository implements AccessRoleTypeRepository {
 
@@ -65,8 +65,8 @@ class AccessRoleTypeDBRepository implements AccessRoleTypeRepository {
 
   addAccessRoleType(accessRoleType: AccessRoleType): Observable<AccessRoleType> {
     accessRoleType.accessRoleTypeId = generateUUID();
-    return Observable.create(function(observer: Observer<AccessRoleType>) {
-      accessRoleTypes.insert(accessRoleType, function(err: any, doc: any) {
+    return Observable.create(function (observer: Observer<AccessRoleType>) {
+      accessRoleTypes.insert(accessRoleType, function (err: any, doc: any) {
         if (err) {
           observer.error(err);
         } else {

@@ -1,7 +1,7 @@
-import { RepositoryKind } from "../../repository.kind";
-import { properties } from "../../properties.helpers";
-import { DataTypeRepositoryNeDbAdapter } from "./data.type.repository.db.adapter";
-import { DataTypeRepositoryRestAdapter } from "./data.type.repository.rest.adapter";
+import {RepositoryKind} from "../../repository.kind";
+import {properties} from "../../properties.helpers";
+import {DataTypeRepositoryNeDbAdapter} from "./data.type.repository.db.adapter";
+import {DataTypeRepositoryRestAdapter} from "./data.type.repository.rest.adapter";
 
 export function createDataTypeRepository(kind?: RepositoryKind) {
   const type: number = properties.get("data.type.repository.type") as number;
@@ -13,6 +13,6 @@ export function createDataTypeRepository(kind?: RepositoryKind) {
     case RepositoryKind.Rest:
       return new DataTypeRepositoryRestAdapter();
     default:
-        throw new Error(`Unknown Data Type Repository Type ${k}`);
+      throw new Error(`Unknown Data Type Repository Type ${k}`);
   }
 }

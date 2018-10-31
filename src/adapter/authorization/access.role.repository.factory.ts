@@ -1,5 +1,5 @@
-import { AccessRoleRepository } from "../../repository/access.role.repository";
-import { RepositoryKind } from "../../repository.kind";
+import {AccessRoleRepository} from "../../repository/access.role.repository";
+import {RepositoryKind} from "../../repository.kind";
 import {AccessRoleDBRepository} from "./access.role.db.repository";
 import {AccessRoleRestRepository} from "./access.role.rest.repository";
 

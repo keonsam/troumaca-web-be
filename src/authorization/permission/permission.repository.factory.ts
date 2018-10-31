@@ -1,10 +1,10 @@
-import { permissions } from "../../db";
-import { PermissionRepository } from "../../repository/permission.repository";
-import { Permission } from "../../data/authorization/permission";
-import { Observable ,  Observer } from "rxjs";
-import { RepositoryKind } from "../../repository.kind";
-import { generateUUID } from "../../uuid.generator";
-import { calcSkip } from "../../db.util";
+import {permissions} from "../../db";
+import {PermissionRepository} from "../../repository/permission.repository";
+import {Permission} from "../../data/authorization/permission";
+import {Observable, Observer} from "rxjs";
+import {RepositoryKind} from "../../repository.kind";
+import {generateUUID} from "../../uuid.generator";
+import {calcSkip} from "../../db.util";
 
 class PermissionDBRepository implements PermissionRepository {
 
@@ -13,7 +13,7 @@ class PermissionDBRepository implements PermissionRepository {
   getPermissionsByArray(pageNumber: number, pageSize: number, order: string, assignedArray: string[]): Observable<Permission[]> {
     return Observable.create(function (observer: Observer<Permission[]>) {
       const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
-      permissions.find({ permissionId: { $nin: assignedArray }}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
+      permissions.find({permissionId: {$nin: assignedArray}}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -40,7 +40,7 @@ class PermissionDBRepository implements PermissionRepository {
   }
 
   getPermissionCount(assignedArray?: string[]): Observable<number> {
-    const query = assignedArray ? { permissionId: { $nin: assignedArray } } : {};
+    const query = assignedArray ? {permissionId: {$nin: assignedArray}} : {};
     return Observable.create(function (observer: Observer<number>) {
       permissions.count(query, function (err: any, count: number) {
         if (!err) {
@@ -55,8 +55,8 @@ class PermissionDBRepository implements PermissionRepository {
 
   addPermission(permission: Permission): Observable<Permission> {
     permission.permissionId = generateUUID();
-    return Observable.create(function(observer: Observer<Permission>) {
-      permissions.insert(permission, function(err: any, doc: any) {
+    return Observable.create(function (observer: Observer<Permission>) {
+      permissions.insert(permission, function (err: any, doc: any) {
         if (err) {
           observer.error(err);
         } else {

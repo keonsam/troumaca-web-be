@@ -1,13 +1,5 @@
 export class UnitOfMeasure {
 
-  private _unitOfMeasureId: string;
-  private _quantity: string;
-  private _name: string;
-  private _symbol: string;
-  private _factor: string;
-  private _otherSiBaseUnitsExpression: string;
-  private _siBaseUnitsExpression: string;
-
   constructor(unitOfMeasureId?: string, quantity?: string, name?: string, symbol?: string, factor?: string, otherSiBaseUnitsExpression?: string, siBaseUnitsExpression?: string) {
     this._unitOfMeasureId = unitOfMeasureId;
     this._quantity = quantity;
@@ -18,6 +10,8 @@ export class UnitOfMeasure {
     this._siBaseUnitsExpression = siBaseUnitsExpression;
   }
 
+  private _unitOfMeasureId: string;
+
   get unitOfMeasureId(): string {
     return this._unitOfMeasureId;
   }
@@ -25,6 +19,8 @@ export class UnitOfMeasure {
   set unitOfMeasureId(value: string) {
     this._unitOfMeasureId = value;
   }
+
+  private _quantity: string;
 
   get quantity(): string {
     return this._quantity;
@@ -34,6 +30,8 @@ export class UnitOfMeasure {
     this._quantity = value;
   }
 
+  private _name: string;
+
   get name(): string {
     return this._name;
   }
@@ -41,6 +39,8 @@ export class UnitOfMeasure {
   set name(value: string) {
     this._name = value;
   }
+
+  private _symbol: string;
 
   get symbol(): string {
     return this._symbol;
@@ -50,6 +50,8 @@ export class UnitOfMeasure {
     this._symbol = value;
   }
 
+  private _factor: string;
+
   get factor(): string {
     return this._factor;
   }
@@ -58,6 +60,8 @@ export class UnitOfMeasure {
     this._factor = value;
   }
 
+  private _otherSiBaseUnitsExpression: string;
+
   get otherSiBaseUnitsExpression(): string {
     return this._otherSiBaseUnitsExpression;
   }
@@ -65,6 +69,8 @@ export class UnitOfMeasure {
   set otherSiBaseUnitsExpression(value: string) {
     this._otherSiBaseUnitsExpression = value;
   }
+
+  private _siBaseUnitsExpression: string;
 
   get siBaseUnitsExpression(): string {
     return this._siBaseUnitsExpression;

@@ -1,12 +1,7 @@
-import { AssetTypeClass } from "./asset.type.class";
-import { AssignedAttribute } from "./assigned.attribute";
+import {AssetTypeClass} from "./asset.type.class";
+import {AssignedAttribute} from "./assigned.attribute";
 
 export class AssetTypeClassResponse {
-
-  private _created: boolean;
-  private _assetTypeClass: AssetTypeClass;
-  private _assignedAttributes: AssignedAttribute[];
-
 
   constructor(created?: boolean, assetTypeClass?: AssetTypeClass, assignedAttributes?: AssignedAttribute[]) {
     this._created = created;
@@ -14,6 +9,7 @@ export class AssetTypeClassResponse {
     this._assignedAttributes = assignedAttributes;
   }
 
+  private _created: boolean;
 
   get created(): boolean {
     return this._created;
@@ -23,6 +19,8 @@ export class AssetTypeClassResponse {
     this._created = value;
   }
 
+  private _assetTypeClass: AssetTypeClass;
+
   get assetTypeClass(): AssetTypeClass {
     return this._assetTypeClass;
   }
@@ -30,6 +28,8 @@ export class AssetTypeClassResponse {
   set assetTypeClass(value: AssetTypeClass) {
     this._assetTypeClass = value;
   }
+
+  private _assignedAttributes: AssignedAttribute[];
 
   get assignedAttributes(): AssignedAttribute[] {
     return this._assignedAttributes;
