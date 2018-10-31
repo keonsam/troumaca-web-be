@@ -1,7 +1,7 @@
 export class Party {
   partyId: string;
   version: string;
-  tenantPartyId: string;
+  ownerPartyId: string;
   createdOn: Date;
   modifiedOn: Date;
 

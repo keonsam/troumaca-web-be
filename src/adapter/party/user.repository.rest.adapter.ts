@@ -29,7 +29,7 @@ export class UserRepositoryRestAdapter implements UserRepository {
     return undefined;
   }
 
-  saveUser(user: User): Observable<User> {
+  saveUser(person: Person): Observable<User> {
     return undefined;
   }
 

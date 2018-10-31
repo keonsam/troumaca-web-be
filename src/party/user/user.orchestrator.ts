@@ -1,24 +1,26 @@
-import { createUserRepository } from "../../adapter/party/user.repository.factory";
-import { UserRepository } from "../../repository/user.repository";
-import { User } from "../../data/party/user";
-import { Observable, of, throwError } from "rxjs";
-import { switchMap, map, flatMap } from "rxjs/operators";
-import { shapeUsersResponse } from "./user.response.shaper";
-import { Result } from "../../result.success";
-import { Credential } from "../../data/authentication/credential";
-import { generate } from "generate-password";
-import { getSortOrderOrDefault } from "../../sort.order.util";
-import { PartyAccessRole } from "../../data/authorization/party.access.role";
-import { PartyAccessRoleRepository } from "../../repository/party.access.role.repository";
-import { createPartyAccessRoleRepositoryFactory } from "../../adapter/authorization/party.access.role.repository.factory";
-import { UserResponse } from "../../data/party/user.response";
-import { AccessRoleRepository } from "../../repository/access.role.repository";
-import { createAccessRoleRepository } from "../../adapter/authorization/access.role.repository.factory";
-import { AccessRole } from "../../data/authorization/access.role";
-import { CredentialRepository } from "../../repository/credential.repository";
-import { createCredentialRepositoryFactory } from "../../adapter/authentication/credential.repository.factory";
-import { SessionRepository } from "../../repository/session.repository";
-import { createSessionRepositoryFactory } from "../../adapter/session/session.repository.factory";
+import {createUserRepository} from "../../adapter/party/user.repository.factory";
+import {UserRepository} from "../../repository/user.repository";
+import {User} from "../../data/party/user";
+import {Observable, of, throwError} from "rxjs";
+import {switchMap, map, flatMap} from "rxjs/operators";
+import {shapeUsersResponse} from "./user.response.shaper";
+import {Result} from "../../result.success";
+import {Credential} from "../../data/authentication/credential";
+import {generate} from "generate-password";
+import {getSortOrderOrDefault} from "../../sort.order.util";
+import {PartyAccessRole} from "../../data/authorization/party.access.role";
+import {PartyAccessRoleRepository} from "../../repository/party.access.role.repository";
+import {createPartyAccessRoleRepositoryFactory} from "../../adapter/authorization/party.access.role.repository.factory";
+import {UserResponse} from "../../data/party/user.response";
+import {AccessRoleRepository} from "../../repository/access.role.repository";
+import {createAccessRoleRepository} from "../../adapter/authorization/access.role.repository.factory";
+import {AccessRole} from "../../data/authorization/access.role";
+import {CredentialRepository} from "../../repository/credential.repository";
+import {createCredentialRepositoryFactory} from "../../adapter/authentication/credential.repository.factory";
+import {SessionRepository} from "../../repository/session.repository";
+import {createSessionRepositoryFactory} from "../../adapter/session/session.repository.factory";
+import {CreateCredential} from "../../repository/create.credential";
+import {Person} from "../../data/party/person";
 
 export class UserOrchestrator {
 
@@ -90,35 +92,35 @@ export class UserOrchestrator {
             }));
     }
 
-    saveUser(user: User, credential: Credential, partyAccessRoles: PartyAccessRole[]): Observable<User> {
-        credential.password = generate({length: 10, numbers: true});
-        // This present a problem after the user confirm the account.
-        // We will need to either make them active in the confirmation process or just make them active here.
-        // or they will be sent to the join / create organization page.
-        return this.credentialRepository.addCredential(credential)
-            .pipe(switchMap(credentialRes => {
-                if (!credentialRes) {
-                    return throwError(`Credential was not created ${credentialRes}`);
-                } else {
-                    user.partyId = credentialRes.credential.partyId;
-                    return this.userRepository.saveUser(user)
-                        .pipe(switchMap(userRes => {
-                            if (!userRes) {
-                                return throwError(`User not created ${userRes}`);
-                            } else {
-                                return this.partyAccessRoleRepository.addPartyAccessRoles(partyAccessRoles, userRes.partyId)
-                                    .pipe(map(partyAccessRolesRes => {
-                                        if (!partyAccessRolesRes) {
-                                            throw new Error(`Failed to add PartyAccessRoles ${partyAccessRolesRes}`);
-                                        } else {
-                                            return userRes;
-                                        }
-                                    }));
-                            }
-                        }));
-                }
+  saveUser(person: Person, credential: Credential, partyAccessRoles: PartyAccessRole[]): Observable<User> {
+    credential.password = generate({length: 10, numbers: true});
+    // This present a problem after the user confirm the account.
+    // We will need to either make them active in the confirmation process or just make them active here.
+    // or they will be sent to the join / create organization page.
+    return this.credentialRepository.addCredential(person, credential)
+      .pipe(switchMap(credentialRes => {
+        if (!credentialRes) {
+          return throwError(`Credential was not created ${credentialRes}`);
+        } else {
+          person.partyId = credentialRes.credential.partyId;
+          return this.userRepository.saveUser(person)
+            .pipe(switchMap(userRes => {
+              if (!userRes) {
+                return throwError(`User not created ${userRes}`);
+              } else {
+                return this.partyAccessRoleRepository.addPartyAccessRoles(partyAccessRoles, userRes.partyId)
+                  .pipe(map(partyAccessRolesRes => {
+                    if (!partyAccessRolesRes) {
+                      throw new Error(`Failed to add PartyAccessRoles ${partyAccessRolesRes}`);
+                    } else {
+                      return userRes;
+                    }
+                  }));
+              }
             }));
-    }
+        }
+      }));
+  }
 
     updateUser(partyId: string, user: User, credential: Credential, partyAccessRoles: PartyAccessRole[]): Observable<number> {
         if (credential && credential.username === user.name) {

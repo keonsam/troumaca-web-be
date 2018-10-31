@@ -12,11 +12,11 @@ export class PersonRestRepositoryAdapter implements PersonRepository {
 
     const headerMap = jsonRequestHeaderMap(options ? options : {});
 
-    const json = person.toJson();
+    // const json = person.toJson();
 
     const uriAndPath: string = uri + "/parties/persons";
 
-    const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
+    const requestOptions: any = postJsonOptions(uriAndPath, headerMap, person);
 
     const isFailedRequest = function (response: any): boolean {
       if (!response) {

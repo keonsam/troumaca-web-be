@@ -2,6 +2,7 @@ import {Request, Response} from "express";
 import {CredentialOrchestrator} from "./credential.orchestrator";
 import {AuthenticatedCredential} from "../../data/authentication/authenticated.credential";
 import {Credential} from "../../data/authentication/credential";
+import {HeaderNormalizer} from "../../header.normalizer";
 
 const credentialOrchestrator: CredentialOrchestrator = new CredentialOrchestrator();
 
@@ -13,22 +14,22 @@ export let getCredential = (req: Request, res: Response) => {
     const headerOptions = {
         correlationId: correlationId
     };
-    credentialOrchestrator.getCredentialByPartyId(partyId, headerOptions)
-        .subscribe( user => {
-            if (user) {
-                res.status(200);
-                res.send(JSON.stringify(user));
-            } else {
-                res.status(404);
-                res.setHeader("content-type", "application/json");
-                res.send(JSON.stringify({message: "No Registered Credential Found."}));
-            }
-        }, error => {
-            res.status(!error.code ? 500 : error.code);
-            const msg = !error.message ? "Internal Server Error" : error.message;
-            res.send(JSON.stringify(msg));
-            console.log(error);
-        });
+    // credentialOrchestrator.getCredentialByPartyId(partyId, headerOptions)
+    //     .subscribe( user => {
+    //         if (user) {
+    //             res.status(200);
+    //             res.send(JSON.stringify(user));
+    //         } else {
+    //             res.status(404);
+    //             res.setHeader("content-type", "application/json");
+    //             res.send(JSON.stringify({message: "No Registered Credential Found."}));
+    //         }
+    //     }, error => {
+    //         res.status(!error.code ? 500 : error.code);
+    //         const msg = !error.message ? "Internal Server Error" : error.message;
+    //         res.send(JSON.stringify(msg));
+    //         console.log(error);
+    //     });
 };
 
 export let isValidUsername = (req: Request, res: Response) => {
@@ -85,10 +86,10 @@ export let isValidPassword = (req: Request, res: Response) => {
 };
 
 export let addCredential = (req: Request, res: Response) => {
-
-  const correlationId = req.headers.correlationid;
+  HeaderNormalizer.normalize(req);
+  const correlationId = req.headers["Correlation-Id"];
   const credential = req.body.credential;
-  const user = req.body.user;
+  const person = req.body.user;
 
   if (!correlationId) {
     res.status(400);
@@ -104,7 +105,7 @@ export let addCredential = (req: Request, res: Response) => {
     return;
   }
 
-  if (!user || !user.firstName || !user.lastName) {
+  if (!person || !person.firstName || !person.lastName) {
     res.status(400);
     res.setHeader("content-type", "application/json");
     res.send(JSON.stringify({message: "'User' must be sent, and contain first and last name."}));
@@ -112,10 +113,10 @@ export let addCredential = (req: Request, res: Response) => {
   }
 
   const headerOptions = {
-    correlationId: correlationId
+    "Correlation-Id": correlationId
   };
 
-  credentialOrchestrator.addCredential(credential, user, headerOptions)
+  credentialOrchestrator.addCredential(credential, person, headerOptions)
     .subscribe(confirmation => {
       res.status(201);
       res.setHeader("content-type", "application/json");

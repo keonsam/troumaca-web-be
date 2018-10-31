@@ -14,7 +14,7 @@ export interface UserRepository {
 
   getPerson(partyId: string): Observable<Person>;
 
-  saveUser(user: User): Observable<User>;
+  saveUser(person: Person): Observable<User>;
 
   deleteUser(partyId: string): Observable<number>;
 
