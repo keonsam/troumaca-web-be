@@ -10,6 +10,6 @@ export class Photo extends Party {
   width: string;
 
   // Todo: old attributes
-  userImage: any;
-  organizationImage: any;
+  userImage: string;
+  organizationImage: string;
 }

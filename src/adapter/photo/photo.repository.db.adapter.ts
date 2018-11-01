@@ -1,13 +1,14 @@
 import { PhotoRepository } from "../../repository/photo.repository";
 import { Photo } from "../../data/photo/photo";
 import {  photos } from "../../db";
-import { Observable ,  Observer } from "rxjs";
+import { Observable, Observer, throwError } from "rxjs";
+import { switchMap } from "rxjs/operators";
 
 export class PhotoRepositoryNeDbAdapter implements PhotoRepository {
 
     getPhotos(partyId: string, type?: string): Observable<Photo> {
         return Observable.create( (observer: Observer<Photo>) => {
-            const query = { "partyId": partyId };
+            const query = { "partyId": partyId};
             photos.findOne(query, (err: any, doc: any) => {
                 if (!err) {
                     observer.next(doc);
@@ -19,7 +20,7 @@ export class PhotoRepositoryNeDbAdapter implements PhotoRepository {
         });
     }
 
-    savePhoto(type: string, photo: File, partyId: string): Observable<Photo> {
+    savePhoto(type: string, photo: string, partyId: string): Observable<Photo> {
         const body = new Photo();
         body.partyId = partyId;
         if (type === "user") {
@@ -41,7 +42,18 @@ export class PhotoRepositoryNeDbAdapter implements PhotoRepository {
         });
     }
 
-    updatePhoto(partyId: string, type: string, photo: File): Observable<number> {
+    updatePhoto(partyId: string, type: string, photo: string): Observable<Photo> {
+        return this.updatePhotoLocal(partyId, type, photo)
+            .pipe( switchMap( num => {
+                if (!num) {
+                    return throwError(`Failed to update image ${num}`);
+                } else {
+                    return this.getPhotos(partyId);
+                }
+            }));
+    }
+
+    private updatePhotoLocal(partyId: string, type: string, photo: string): Observable<number> {
         return Observable.create(function (observer: Observer<number>) {
             const query = {"partyId": partyId};
             const body = new Photo();
@@ -61,5 +73,4 @@ export class PhotoRepositoryNeDbAdapter implements PhotoRepository {
             });
         });
     }
-
 }

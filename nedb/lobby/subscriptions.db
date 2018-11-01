@@ -1,6 +1,1 @@
-{"moduleId":"d76d3eef-4858-42b1-93f0-93ace4b88ac2","subscriptionId":"f22f51d6-1be7-41a6-9756-5a93b4bc8834","partyId":"46567357-acfb-45c9-86d8-0d569a8445c4","subscribed":true,"createdOn":{"$$date":1540937597163},"modifiedOn":{"$$date":1540937597163},"_id":"352uOKYiLaarZAMM"}
-{"moduleId":"d76d3eef-4858-42b1-93f0-93ace4b88ac2","cost":"199.99","subscriptionId":"68b65a6e-332a-440d-813e-0016fc28ad73","subscribed":true,"_id":"3kaTDF6fqQltXDFQ"}
-{"moduleId":"e350595f-3628-4522-8ff0-ff8ecc0a8c15","cost":"Free","subscriptionId":"512e06d5-9109-460e-aea1-454fb81b1769","subscribed":true,"_id":"6apLnMDbAus14tYT"}
-{"moduleId":"ea88c01b-1a13-4680-a560-3f9ac4fc72fb","cost":"Free","subscriptionId":"c5a33b76-e0de-4664-b647-f0d33aff8fd1","subscribed":true,"_id":"flCCuhSZb6ZkX8iv"}
 {"$$indexCreated":{"fieldName":"subscriptionId","unique":true,"sparse":false}}
-{"moduleId":"e350595f-3628-4522-8ff0-ff8ecc0a8c15","subscriptionId":"ac676f3e-fcce-4291-bf07-103af2fdb144","partyId":"46567357-acfb-45c9-86d8-0d569a8445c4","subscribed":true,"createdOn":{"$$date":1540937867333},"modifiedOn":{"$$date":1540937867333},"_id":"EymumlYr9h0i5qnG"}

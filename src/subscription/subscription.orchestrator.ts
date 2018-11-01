@@ -22,4 +22,8 @@ export class  SubscriptionOrchestrator {
         return this.subscriptionRepository.addSubscription(subscription, partyId);
     }
 
+    deleteSubscription(subscriptionId: string, partyId: string): Observable<number> {
+        return this.subscriptionRepository.deleteSubscription(subscriptionId, partyId);
+    }
+
 }
