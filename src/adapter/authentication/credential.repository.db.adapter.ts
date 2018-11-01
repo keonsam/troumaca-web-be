@@ -268,39 +268,39 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
         });
     }
 
-    private getCredentialByUsername(username: string): Observable<Credential> {
-        return Observable.create(function (observer: Observer<Credential>) {
-            const query = {
-                "username": username
-            };
+  private getCredentialByUsername(username: string): Observable<Credential> {
+    return Observable.create(function (observer: Observer<Credential>) {
+      const query = {
+        "username": username
+      };
 
-            credentials.findOne(query, function (err: any, doc: any) {
-                if (!err) {
-                    observer.next(doc);
-                } else {
-                    observer.error(err);
-                }
-                observer.complete();
-            });
-        });
-    }
+      credentials.findOne(query, function (err: any, doc: any) {
+        if (!err) {
+            observer.next(doc);
+        } else {
+            observer.error(err);
+        }
+        observer.complete();
+      });
+    });
+  }
 
-    private verifyCredential(username: string, password: string): Observable<Credential> {
-        return Observable.create((observer: Observer<Credential>) => {
-            const query = {
-                "username": username,
-                "password": password
-            };
-            credentials.findOne(query, (err: any, doc: any) => {
-                if (!err) {
-                    observer.next(doc);
-                } else {
-                    observer.error(err);
-                }
-                observer.complete();
-            });
-        });
-    }
+  private verifyCredential(username: string, password: string): Observable<Credential> {
+      return Observable.create((observer: Observer<Credential>) => {
+          const query = {
+              "username": username,
+              "password": password
+          };
+          credentials.findOne(query, (err: any, doc: any) => {
+              if (!err) {
+                  observer.next(doc);
+              } else {
+                  observer.error(err);
+              }
+              observer.complete();
+          });
+      });
+  }
 
   addCredentialLocal(person: Person, credential: Credential): Observable<Credential> {
     credential.credentialId = generateUUID();
