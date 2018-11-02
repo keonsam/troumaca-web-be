@@ -53,5 +53,25 @@ export const addSubscription = (req: Request, res: Response) => {
         });
 };
 
+export const deleteSubscription = (req: Request, res: Response) => {
+    const subscriptionId = req.params.subscriptionId;
+    res.setHeader("content-type", "application/json");
+
+    subscriptionOrchestrator.deleteSubscription(subscriptionId, res.locals.partyId)
+        .subscribe( num => {
+            if (num) {
+                const body = JSON.stringify(num);
+                res.status(201);
+                res.send(body);
+            } else {
+                res.status(404);
+                res.send(JSON.stringify({message: `No date found for ${subscriptionId}`}));
+            }
+        }, error => {
+            console.log(error);
+            res.status(500);
+            res.send(JSON.stringify({message: "Server Error, please try again"}));
+        });
+};
 
 

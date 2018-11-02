@@ -32,7 +32,7 @@ import * as billingController from "./billing/billing.controller";
 import * as depreciationController from "./depreciation/depreciation.controller";
 import * as organizationProfileController from "./profile/organization/create/organization.profile.controller";
 import * as personProfileController from "./profile/person/create/person.profile.controller";
-
+import { upload } from "./middleware/multer.config";
 
 import checkSession from "./middleware/check-session";
 
@@ -216,8 +216,8 @@ router.delete("/organizations/:partyId", checkSession, organizationController.de
 
 // photos
 router.get("/photos", checkSession, photoController.getPhotos);
-router.post("/photos/:type", checkSession, photoController.savePhoto);
-router.put("/photos/:type", checkSession, photoController.updatePhoto);
+router.post("/photos/:type", checkSession, upload.single("image"), photoController.savePhoto);
+router.put("/photos/:type", checkSession, upload.single("image"), photoController.updatePhoto);
 
 
 
@@ -226,6 +226,7 @@ router.put("/photos/:type", checkSession, photoController.updatePhoto);
 router.get("/subscriptions/apps", checkSession, subscriptionController.getApps);
 router.get("/subscriptions", checkSession, subscriptionController.getSubscriptions);
 router.post("/subscriptions", checkSession, subscriptionController.addSubscription);
+router.delete("/subscriptions/:subscriptionId", checkSession, subscriptionController.deleteSubscription);
 
 // billing
 router.get("/billings/payment-methods", checkSession, billingController.getPaymentMethods);

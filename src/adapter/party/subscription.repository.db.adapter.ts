@@ -13,12 +13,14 @@ export class SubscriptionRepositoryNeDbAdapter implements SubscriptionRepository
     getApps(partyId: string): Observable<App[]> {
         return this.getSubscriptionsLocal(partyId)
             .pipe( switchMap( subscriptionArr => {
-                if (!subscriptionArr) {
+                console.log(subscriptionArr);
+                if (!subscriptionArr || subscriptionArr.length < 1) {
                     return of(apps);
                 } else {
                     // the service will determine weather this is subscribed or not.
                     subscriptionArr.forEach(x => {
-                       apps.find(v => v.moduleId === x.moduleId).subscribed = true;
+                       const index = apps.findIndex(v => v.moduleId === x.moduleId);
+                       apps[index].subscribed = true;
                     });
                     return of(apps);
                 }
@@ -102,6 +104,19 @@ export class SubscriptionRepositoryNeDbAdapter implements SubscriptionRepository
             billings.insert(billing, function (err: any, doc: any) {
                 if (!err) {
                     observer.next(doc);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
+        });
+    }
+
+    deleteSubscription(subscriptionId: string, partyId: string): Observable<number> {
+        return Observable.create(function (observer: Observer<number>) {
+            subscriptions.remove({subscriptionId, partyId}, {}, (err: any, numReplaced: any) => {
+                if (!err) {
+                    observer.next(numReplaced);
                 } else {
                     observer.error(err);
                 }

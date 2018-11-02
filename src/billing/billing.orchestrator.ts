@@ -3,7 +3,6 @@ import { BillingRepository } from "../repository/billing.repository";
 import { Observable } from "rxjs";
 import { PaymentMethod } from "../data/party/payment.method";
 import { Billing } from "../data/party/billing";
-import { map } from "rxjs/operators";
 import { PaymentInformation } from "../data/party/payment.information";
 
 export class  BillingOrchestrator {

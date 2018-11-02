@@ -24,16 +24,21 @@ export let getPhotos = (req: Request, res: Response) => {
 };
 
 export let savePhoto = (req: Request, res: Response) => {
+    // Pay not too much attention to how this works
+    // it might be better to separate user and organization image
+    // take the best possible way for the service
+    // I can change this around later
+    console.log("working");
     const type: string = req.params.type;
-    const image: File = req.body.image;
+    const image: string = req.file.path;
     const partyId: string = res.locals.partyId;
-    res.setHeader("content-type", "application/json");
+    res.setHeader("content-type", "multipart/form-data");
     if (!image) {
         return res.status(400).send({
-            message: "Image must exist."
+            message: "Image was not saved, please try again."
         });
     }
-    orchestrator.savePhoto(type, image, partyId)
+    orchestrator.savePhoto("user", image, partyId)
         .subscribe(photo => {
             res.status(201);
             res.send(JSON.stringify(photo));
@@ -45,23 +50,25 @@ export let savePhoto = (req: Request, res: Response) => {
 };
 
 export let updatePhoto = (req: Request, res: Response) => {
+    // Pay not too much attention to how this works
+    // it might be better to separate user and organization image
+    // take the best possible way for the service
+    // I can change this around later
     const type: string = req.params.type;
-    const image: File = req.body;
+    const image: string = req.file.path;
     const partyId: string = res.locals.partyId;
-    res.setHeader("content-type", "image/*");
+    res.setHeader("content-type", "multipart/form-data");
     if (!image) {
         return res.status(400).send({
-            message: "Image must exist."
+            message: "Image was not updated, please try again."
         });
     }
-    console.log(req.body);
-    console.log(image);
     orchestrator
         .updatePhoto(partyId, type, image)
-        .subscribe(affected => {
-            if (affected > 0) {
+        .subscribe( photo => {
+            if (photo) {
                 res.status(200);
-                res.send(JSON.stringify(affected));
+                res.send(JSON.stringify(photo));
             } else {
                 res.status(404);
                 res.send(JSON.stringify({message: "No Data Found For " + req.params.partyId}));
