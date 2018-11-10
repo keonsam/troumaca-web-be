@@ -16,4 +16,8 @@ export class SubscriptionRepositoryRestAdapter implements SubscriptionRepository
     public addSubscription(subscription: Subscription, partyId: string): Observable<Subscription> {
         return undefined;
     }
+
+    deleteSubscription(subscriptionId: string, partyId: string): Observable<number> {
+        return undefined;
+    }
 }

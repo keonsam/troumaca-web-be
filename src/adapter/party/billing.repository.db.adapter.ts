@@ -123,7 +123,7 @@ export class BillingRepositoryNeDbAdapter implements BillingRepository {
     updatePaymentInformation(paymentInfo: PaymentInformation, paymentId: string): Observable<number> {
         paymentInfo.modifiedOn = new Date();
         return Observable.create((observer: Observer<number>) => {
-            paymentInformation.update(paymentId, paymentInfo, {}, (err: any, numUpdated: any) => {
+            paymentInformation.update({paymentId}, paymentInfo, {}, (err: any, numUpdated: any) => {
                 if (!err) {
                     observer.next(numUpdated);
                 } else {

@@ -1,6 +1,6 @@
-import {AssetRepository} from "../../repository/asset.repository";
-import {Asset} from "../../data/asset/asset";
-import {Observable} from "rxjs";
+import { AssetRepository } from "../../repository/asset.repository";
+import { Asset } from "../../data/asset/asset";
+import { Observable } from "rxjs";
 
 
 export class AssetRepositoryRestAdapter implements AssetRepository {

@@ -91,9 +91,14 @@ export const updatePaymentInformation = (req: Request, res: Response) => {
 
     billingOrchestrator.updatePaymentInformation(paymentInfo, paymentId)
         .subscribe( num => {
-            const body = JSON.stringify(num);
-            res.status(201);
-            res.send(body);
+            if (num) {
+                const body = JSON.stringify(num);
+                res.status(200);
+                res.send(body);
+            } else {
+                res.status(404);
+                res.send(JSON.stringify({message : `No data found for ${paymentId}.`}));
+            }
         }, error => {
             console.log(error);
             res.status(500);
@@ -110,7 +115,6 @@ export const deletePaymentInformation = (req: Request, res: Response) => {
         .subscribe( num => {
             const body = JSON.stringify(num);
             res.status(201);
-            res.setHeader("content-type", "application/json");
             res.send(body);
         }, error => {
             console.log(error);
@@ -118,6 +122,7 @@ export const deletePaymentInformation = (req: Request, res: Response) => {
             res.send(JSON.stringify({message: "Server Error, please try again"}));
         });
 };
+
 
 // VALIDATION
 
