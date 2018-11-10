@@ -21,17 +21,16 @@ export class AssetOrchestrator {
 
   getAssets(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
     const sort: string = getSortOrderOrDefault(field, direction);
-    // return this.assetRepository
-    //     .getAssets(number, size, sort)
-    //     .pipe(switchMap((assets: Asset[]) => {
-    //         return this.assetRepository
-    //             .getAssetCount()
-    //             .pipe(map(count => {
-    //                 // const shapeAssetsResp: any = shapeAssetsResponse(assets, number, size, assets.length, count, sort);
-    //                 // return new Result<any>(false, "assets", shapeAssetsResp);
-    //             }));
-    //     }));
-    return undefined;
+    return this.assetRepository
+        .getAssets(number, size, sort)
+        .pipe(switchMap((assets: Asset[]) => {
+            return this.assetRepository
+                .getAssetCount()
+                .pipe(map(count => {
+                    const shapeAssetsResp: any = shapeAssetsResponse(assets, number, size, assets.length, count, sort);
+                    return new Result<any>(false, "assets", shapeAssetsResp);
+                }));
+        }));
   }
 
   getAssetById(assetId: string): Observable<Asset> {

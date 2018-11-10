@@ -1,1 +1,4 @@
 {"$$indexCreated":{"fieldName":"assetTypeClassId","unique":true,"sparse":false}}
+{"name":"test","description":"","assetTypeClassId":"b5c35ab1-08f9-4a08-a505-7b5d82f0903c","createdOn":{"$$date":1541803532254},"modifiedOn":{"$$date":1541803532254},"_id":"7Wmp0gAgTvkKZvso"}
+{"name":"test","description":"","assetTypeClassId":"b5c35ab1-08f9-4a08-a505-7b5d82f0903c","createdOn":"2018-11-09T22:45:32.254Z","modifiedOn":{"$$date":1541803544950},"_id":"7Wmp0gAgTvkKZvso"}
+{"name":"test Edited","description":"","assetTypeClassId":"b5c35ab1-08f9-4a08-a505-7b5d82f0903c","createdOn":"2018-11-09T22:45:32.254Z","modifiedOn":{"$$date":1541803559840},"_id":"7Wmp0gAgTvkKZvso"}

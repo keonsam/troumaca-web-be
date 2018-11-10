@@ -19,7 +19,6 @@ import {CredentialRepository} from "../../repository/credential.repository";
 import {createCredentialRepositoryFactory} from "../../adapter/authentication/credential.repository.factory";
 import {SessionRepository} from "../../repository/session.repository";
 import {createSessionRepositoryFactory} from "../../adapter/session/session.repository.factory";
-import {CreateCredential} from "../../repository/create.credential";
 import {Person} from "../../data/party/person";
 
 export class UserOrchestrator {

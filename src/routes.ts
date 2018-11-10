@@ -59,8 +59,8 @@ router.post("/authentication/confirmations/resend", confirmationController.resen
 router.post("/authentication/confirmations/verify", confirmationController.confirmCode);
 // session
 router.get("/sessions/is-valid-session", sessionController.isValidSession);
+router.get("/sessions/logout", checkSession, sessionController.handleSessionLogOut);
 // router.get("/sessions/partyId", checkSession, sessionController.getPartyId);
-// router.get("/sessions/log-out-user", checkSession, sessionController.handleSessionLogOut);
 // permissions
 router.get("/permissions", checkSession, permissionController.getPermissions);
 router.get("/permissions/permissions", checkSession, permissionController.getPermissionsByArray);
@@ -149,11 +149,12 @@ router.delete("/asset-type-classes/:assetTypeClassId", checkSession, assetTypeCl
 router.get("/attributes", checkSession, attributeController.getAttributes);
 router.get("/attributes/:attributeId", checkSession, attributeController.getAttributeById);
 router.post("/attributes", checkSession, attributeController.saveAttribute);
+router.post("/attributes/available", checkSession, attributeController.getAvailableAttributes);
+router.post("/attributes/assigned", checkSession, attributeController.getAssignableAttributes);
 router.put("/attributes/:attributeId", checkSession, attributeController.updateAttribute);
 router.delete("/attributes/:attributeId", checkSession, attributeController.deleteAttribute);
 // assigned-attributes
 router.get("/assigned-attributes/:assetTypeClassId", checkSession, assignedAttributeController.getAssignedAttributesByClassId);
-router.post("/available-attributes", checkSession, attributeController.getAvailableAttributes);
 router.get("/assigned-attributes/:assetTypeClassId", checkSession, assignedAttributeController.getAssignedAttributesByClassId);
 // site
 router.get("/sites/find", checkSession, siteController.findSite);

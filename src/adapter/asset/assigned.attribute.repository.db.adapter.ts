@@ -49,9 +49,7 @@ export class AssignedAttributeRepositoryNeDbAdapter implements AssignedAttribute
         return this.attributeRepositoryNeDbAdapter.getAttributesByIds(assignedArray)
           .pipe(map(attributes => {
             assignedAttributes.forEach(value => {
-              const index = attributes.findIndex(x => x.attributeId === value.attributeId);
-              value.attributeName = index !== -1 ? attributes[index].name : "";
-              value.dataTypeName = attributes[index].dataTypeName;
+              value.attribute = attributes.find(x => x.attributeId === value.attributeId);
             });
             return assignedAttributes;
           }));
@@ -81,6 +79,10 @@ export class AssignedAttributeRepositoryNeDbAdapter implements AssignedAttribute
       if (!value.assignedAttributeId) {
         value.assignedAttributeId = generateUUID();
       }
+      if (!value.createdOn) {
+        value.createdOn = new Date();
+      }
+      value.modifiedOn = new Date();
     });
     return Observable.create((observer: Observer<AssignedAttribute[]>) => {
       assignedAttributes.insert(assignedAttributeArr, function (err: any, docs: any) {
