@@ -8,22 +8,22 @@ import { Confirmation } from "../data/authentication/confirmation";
 
 export interface CredentialRepository {
 
-    isValidUsername(username: string, partyId: string): Observable<boolean>;
+  isValidUsername(username: string, partyId: string): Observable<boolean>;
 
-    isValidPassword(password: string): Observable<boolean>;
+  isValidPassword(password: string): Observable<boolean>;
 
   addCredential(person: Person, credential: Credential, options?: any): Observable<CreatedCredential>;
 
-    authenticate(credential: Credential, options: any): Observable<AuthenticatedCredential>;
+  authenticate(credential: Credential, options: any): Observable<AuthenticatedCredential>;
 
-    forgetPassword(credential: Credential, options: any): Observable<Confirmation>;
+  forgetPassword(credential: Credential, options: any): Observable<Confirmation>;
 
-    updateCredential(partyId: string, credential: Credential): Observable<number>;
+  updateCredential(partyId: string, credential: Credential): Observable<number>;
 
-    // USED BY OTHER REPOS
+  // USED BY OTHER REPOS
 
-    updateCredentialStatusByPartyId(partyId: string, status: string): Observable<number>;
+  updateCredentialStatusByPartyId(partyId: string, status: string): Observable<number>;
 
-    deleteCredentialByPartyId(partyId: string): Observable<number>;
+  deleteCredentialByPartyId(partyId: string): Observable<number>;
 
 }

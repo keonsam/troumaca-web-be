@@ -6,7 +6,7 @@ port = 8080
 host.port = http://localhost:8888
 #host.port = http://ec2-107-21-60-104.compute-1.amazonaws.com:8080
 #host.port = http://ec2-54-145-159-234.compute-1.amazonaws.com:8080
-repository.type = 1
+repository.type = 2
 
 
 [confirmation]
@@ -14,7 +14,7 @@ host = localhost
 port = 8080
 host.port = http://localhost:8888
 #host.port = http://ec2-54-145-159-234.compute-1.amazonaws.com:8080
-repository.type = 1
+repository.type = 2
 
 
 [authorization]
@@ -28,7 +28,7 @@ repository.type = 1
 host = localhost
 port = 8686
 host.port = http://localhost:8686
-repository.type = 1
+repository.type = 2
 
 
 [asset]
@@ -37,6 +37,11 @@ port = 8080
 host.port = http://localhost:8080
 repository.type = 1
 
+[contract]
+host = localhost
+port = 6161
+host.port = http://localhost:6161
+repository.type = 2
 
 [session]
 host = localhost
@@ -44,3 +49,10 @@ port = 8080
 #host.port = http://localhost:8888
 host.port = http://ec2-52-55-156-224.compute-1.amazonaws.com:8080
 repository.type = 1
+
+[search]
+host = localhost
+port = 6262
+host.port = http://localhost:6262
+#host.port = http://ec2-52-55-156-224.compute-1.amazonaws.com:8080
+repository.type = 2

@@ -25,7 +25,7 @@ export class OrganizationDBRepository implements OrganizationRepository {
     });
   }
 
-  saveCustomerOrganization(organization: Organization, options?: any): Observable<Organization> {
+  addCustomer(organization: Organization, options?: any): Observable<Organization> {
     return this.saveOrganization(organization, options);
   }
 

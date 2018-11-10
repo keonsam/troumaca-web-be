@@ -1,3 +1,3 @@
+{"billingId":"9379e445-8623-4ece-bf7c-654e9e7d108b","partyId":"46567357-acfb-45c9-86d8-0d569a8445c4","name":"User Management","description":"initial billing","amount":"Free","createdOn":{"$$date":1540937867337},"modifiedOn":{"$$date":1540937867337},"_id":"MG39UeEtBFSaIGwI"}
 {"billingId":"b4db5f0d-5c9e-4b59-b936-8c309f6fd342","partyId":"46567357-acfb-45c9-86d8-0d569a8445c4","name":"Asset Management","description":"initial billing","amount":"199.99","createdOn":{"$$date":1540937597167},"modifiedOn":{"$$date":1540937597167},"_id":"OCWyysXrv2aOHV8w"}
 {"$$indexCreated":{"fieldName":"billingId","unique":true,"sparse":false}}
-{"billingId":"9379e445-8623-4ece-bf7c-654e9e7d108b","partyId":"46567357-acfb-45c9-86d8-0d569a8445c4","name":"User Management","description":"initial billing","amount":"Free","createdOn":{"$$date":1540937867337},"modifiedOn":{"$$date":1540937867337},"_id":"MG39UeEtBFSaIGwI"}

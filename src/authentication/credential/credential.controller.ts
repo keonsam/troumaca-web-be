@@ -88,6 +88,9 @@ export let isValidPassword = (req: Request, res: Response) => {
 export let addCredential = (req: Request, res: Response) => {
   HeaderNormalizer.normalize(req);
   const correlationId = req.headers["Correlation-Id"];
+  const ownerPartyId = req.headers["Owner-Party-Id"];
+  const requestingPartyId = req.headers["Party-Id"];
+
   const credential = req.body.credential;
   const person = req.body.user;
 
@@ -113,13 +116,15 @@ export let addCredential = (req: Request, res: Response) => {
   }
 
   const headerOptions = {
-    "Correlation-Id": correlationId
+    "Correlation-Id": correlationId,
+    "Owner-Party-Id": ownerPartyId,
+    "Party-Id": requestingPartyId
   };
 
   credentialOrchestrator.addCredential(credential, person, headerOptions)
     .subscribe(confirmation => {
       res.status(201);
-      res.setHeader("content-type", "application/json");
+      res.setHeader("Content-Type", "application/json");
       res.send(JSON.stringify(confirmation));
     }, error => {
       res.status(!error.code ? 500 : error.code);

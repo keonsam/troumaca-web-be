@@ -1,7 +1,7 @@
 import {createOrganizationRepository} from "../../adapter/party/organization.repository.factory";
 import {OrganizationRepository} from "../../repository/organization.repository";
 import {Organization} from "../../data/party/organization";
-import {Observable, of, throwError} from "rxjs";
+import {Observable, throwError} from "rxjs";
 import {flatMap, map, switchMap} from "rxjs/operators";
 import {shapeOrganizationsResponse} from "./organization.response.shaper";
 import {Result} from "../../result.success";
@@ -46,6 +46,25 @@ export class OrganizationOrchestrator {
 
   saveOrganization(organization: Organization): Observable<Organization> {
     return this.organizationRepository.saveOrganization(organization);
+  }
+
+  addCustomer(organization: Organization, options?: any): Observable<Organization> {
+    return this.organizationRepository.addCustomer(organization, options)
+      // .pipe(switchMap(organizationRes => {
+      //   if (!organizationRes) {
+      //     return throwError("Failed to save organization.");
+      //   } else {
+      //     return this.credentialRepository.updateCredentialStatusByPartyId(organization.partyId, "Active")
+      //       .pipe(map(numUpdated => {
+      //         if (!numUpdated) {
+      //           throw new Error("credential status was not updated.");
+      //         } else {
+      //           return organizationRes;
+      //         }
+      //       }));
+      //   }
+      // }))
+      ;
   }
 
   saveOrganizationCompany(organization: Organization): Observable<Organization> {
