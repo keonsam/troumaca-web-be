@@ -1,6 +1,6 @@
 import {Credential} from "../../data/authentication/credential";
 import {CredentialRepository} from "../../repository/credential.repository";
-import {Observable, Observer, throwError} from "rxjs";
+import {Observable, Observer} from "rxjs";
 import request from "request";
 import {classToPlain} from "class-transformer";
 import {jsonRequestHeaderMap, postJsonOptions} from "../../request.helpers";
@@ -92,6 +92,8 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
 
     return Observable.create(function (observer: Observer<CreatedCredential>) {
       request(requestOptions, function (error: any, response: any, body: any) {
+        const statusCode = response.statusCode;
+        console.log("response.statusCode " + statusCode);
         if (error) {
           observer.error(error);
         } else {

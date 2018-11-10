@@ -14,7 +14,8 @@ export class PersonRestRepositoryAdapter implements PersonRepository {
 
     // const json = person.toJson();
 
-    const uriAndPath: string = uri + "/parties/persons";
+    // const uriAndPath: string = uri + "/parties/persons";
+    const uriAndPath: string = uri + "/parties/persons/find-or-create";
 
     const requestOptions: any = postJsonOptions(uriAndPath, headerMap, person);
 

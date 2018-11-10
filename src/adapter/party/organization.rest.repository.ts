@@ -13,7 +13,7 @@ export class OrganizationRestRepository implements OrganizationRepository {
     return undefined;
   }
 
-  saveCustomerOrganization(organization: Organization, options?: any): Observable<Organization> {
+  addCustomer(organization: Organization, options?: any): Observable<Organization> {
     const uri: string = properties.get("party.host.port") as string;
 
     const headerMap = jsonRequestHeaderMap(options ? options : {});

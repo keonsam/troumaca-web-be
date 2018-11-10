@@ -6,7 +6,7 @@ export interface OrganizationRepository {
 
   findOrganization(searchStr: string, pageSize: number): Observable<Organization[]>;
 
-  saveCustomerOrganization(organization: Organization, options?: any): Observable<Organization>;
+  addCustomer(organization: Organization, options?: any): Observable<Organization>;
 
   saveOrganization(organization: Organization, options?: any): Observable<Organization>;
 

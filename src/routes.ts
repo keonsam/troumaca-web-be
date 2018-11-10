@@ -32,6 +32,8 @@ import * as billingController from "./billing/billing.controller";
 import * as depreciationController from "./depreciation/depreciation.controller";
 import * as organizationProfileController from "./profile/organization/create/organization.profile.controller";
 import * as personProfileController from "./profile/person/create/person.profile.controller";
+import * as searchController from "./search/search.controller";
+
 import { upload } from "./middleware/multer.config";
 
 import checkSession from "./middleware/check-session";
@@ -209,6 +211,7 @@ router.get("/organizations/profile", checkSession, organizationController.getOrg
 router.get("/organizations/:partyId", checkSession, organizationController.getOrganization);
 router.get("/organizations", checkSession, organizationController.getOrganizations);
 router.post("/organizations", checkSession, organizationController.saveOrganization);
+router.post("/organizations/customer", checkSession, organizationController.addCustomer);
 router.post("/organizations/profiles", checkSession, organizationController.saveOrganizationCompany);
 router.post("/organizations/request-access", checkSession, organizationController.saveAccessRequest);
 router.put("/organizations/profile", checkSession, organizationController.updateOrganizationCompany);
@@ -261,5 +264,7 @@ router.post("/depreciation", checkSession, depreciationController.saveDepreciati
 router.put("/depreciation/:depreciationId", checkSession, depreciationController.updateDepreciation);
 router.delete("/depreciation/:depreciationId/:type", checkSession, depreciationController.deleteDepreciation);
 
+// SEARCH
+router.get("/search/:indexName", checkSession, searchController.search);
 
 export default router;

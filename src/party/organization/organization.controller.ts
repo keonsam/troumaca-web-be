@@ -4,6 +4,7 @@ import {getNumericValueOrDefault} from "../../number.util";
 import {getStringValueOrDefault} from "../../string.util";
 import {JoinOrganization} from "../../data/party/join.organization";
 import {Organization} from "../../data/party/organization";
+import {HeaderNormalizer} from "../../header.normalizer";
 
 const organizationOrchestrator: OrganizationOrchestrator = new OrganizationOrchestrator();
 
@@ -101,6 +102,39 @@ export  let saveOrganization = (req: Request, res: Response) => {
         res.status(500);
         res.send(JSON.stringify({message: "Error Occurred"}));
         console.log(error);
+    });
+};
+
+export  let addCustomer = (req: Request, res: Response) => {
+  HeaderNormalizer.normalize(req);
+
+  const organization: Organization = req.body;
+
+  if (!organization || !organization.name) {
+    res.status(400);
+    res.setHeader("content-type", "application/json");
+    res.send(JSON.stringify({message: "'Organization' must be sent, and must contain name and purpose."}));
+    return;
+  }
+
+  const reqCorrelationId = req.headers["Correlation-Id"];
+  const reqPartyId = req.headers["Party-Id"];
+
+  const headerOptions = {
+    "Correlation-Id": reqCorrelationId,
+    "Party-Id": reqPartyId
+  };
+
+  organizationOrchestrator.addCustomer(organization, headerOptions)
+    .subscribe(org => {
+      res.status(201);
+      res.setHeader("content-type", "application/json");
+      res.send(JSON.stringify(org));
+    }, error => {
+      res.status(500);
+      res.setHeader("content-type", "application/json");
+      res.send(JSON.stringify({message: "Error Occurred"}));
+      console.log(error);
     });
 };
 
