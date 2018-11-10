@@ -1,36 +1,28 @@
 import {Attribute} from "../data/asset/attribute";
-import {AssignedAttribute} from "../data/asset/assigned.attribute";
 import {Observable} from "rxjs";
 
 export interface AttributeRepository {
 
-  // getAssignedAttributes(pageNumber: number, pageSize: number, order: string, assignedAttributes: string[]): Observable<Attribute[]>;
-  //
-  //
-  // getAssignedAttributesById(assetTypeClassId: string): Observable<AssignedAttribute[]>;
+    getAttributes(pageNumber: number, pageSize: number, order: string): Observable<Attribute[]>;
 
-  getAvailableAttributes(pageNumber: number, pageSize: number, order: string, assignedAttributes: string[]): Observable<Attribute[]>;
+    getAttributeCount(): Observable<number>;
 
-  getAvailableAttributeCount(assignedAttributes: string[]): Observable<number>;
+    getAttributeById(attributeId: string): Observable<Attribute>;
 
-  getAttributes(pageNumber: number, pageSize: number, order: string): Observable<Attribute[]>;
+    addAttribute(attribute: Attribute): Observable<Attribute>;
 
-  getAttributeCount(): Observable<number>;
+    updateAttribute(attributeId: string, attribute: Attribute): Observable<number>;
 
-  getAttributeById(attributeId: string): Observable<Attribute>;
+    deleteAttribute(attributeId: string): Observable<number>;
 
-  addAttribute(attribute: Attribute): Observable<Attribute>;
+    // OTHERS
 
-  updateAttribute(attributeId: string, attribute: Attribute): Observable<number>;
+    getAvailableAttributes(pageNumber: number, pageSize: number, order: string, assignedAttributes: string[]): Observable<Attribute[]>;
 
-  deleteAttribute(attributeId: string): Observable<number>;
+    getAvailableAttributeCount(assignedAttributes: string[]): Observable<number>;
 
-  // getAttributeByArray(attributeArray: string[]): Observable<Attribute[]>;
+    getAssignableAttributes(pageNumber: number, pageSize: number, order: string, assignedAttributes: string[]): Observable<Attribute[]>;
 
-  // saveAssignedAttributes(assignedAttribute: AssignedAttribute[]): Observable<AssignedAttribute[]>;
-
-  // updateAssignedAttribute(assetTypeClassId: string, assignedAttribute: AssignedAttribute): Observable<number>;
-
-  // deleteAssignedAttribute(assetTypeClassId: string): Observable<number>;
+    getAssignableAttributeCount(assignedAttributes: string[]): Observable<number>;
 
 }

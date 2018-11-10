@@ -44,7 +44,7 @@ export let getAssetTypeClass = (req: Request, res: Response) => {
     .subscribe(assetTypeClassResponse => {
       if (assetTypeClassResponse) {
         res.status(200);
-        res.send(JSON.stringify(assetTypeClassResponse.toJson()));
+        res.send(JSON.stringify(assetTypeClassResponse));
       } else {
         res.status(404);
         res.send(JSON.stringify({message: "No Data Found For " + req.params.assetTypeClassId}));
@@ -57,8 +57,8 @@ export let getAssetTypeClass = (req: Request, res: Response) => {
 };
 
 export let saveAssetTypeClass = (req: Request, res: Response) => {
-  const assetTypeClass = req.body.newAssetTypeClass;
-  const assignedAttributes = req.body.newAssignedAttributes;
+  const assetTypeClass = req.body.assetTypeClass;
+  const assignedAttributes = req.body.assignedAttributes;
   if (!assetTypeClass) {
     return res.status(400).send({
       message: "Asset Type Class can not be empty"
@@ -77,8 +77,8 @@ export let saveAssetTypeClass = (req: Request, res: Response) => {
 
 export let updateAssetTypeClass = (req: Request, res: Response) => {
   const assetTypeClassId = req.params.assetTypeClassId;
-  const assetTypeClass = req.body.newAssetTypeClass;
-  const assignedAttribute = req.body.newAssignedAttributes;
+  const assetTypeClass = req.body.assetTypeClass;
+  const assignedAttribute = req.body.assignedAttributes;
   if (!req.body) {
     return res.status(400).send({
       message: "Asset Type Class can not be empty"

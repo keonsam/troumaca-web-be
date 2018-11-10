@@ -6,7 +6,7 @@ import {AssetTypeClass} from "../../data/asset/asset.type.class";
 import {AssetTypeClassResponse} from "../../data/asset/asset.type.class.response";
 import {AssignedAttribute} from "../../data/asset/assigned.attribute";
 import {AssignedAttributeRepositoryNeDbAdapter} from "./assigned.attribute.repository.db.adapter";
-import {Observable, Observer, of} from "rxjs";
+import { Observable, Observer, of, throwError } from "rxjs";
 import {switchMap, map} from "rxjs/operators";
 
 export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassRepository {
@@ -62,57 +62,74 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
   }
 
   getAssetTypeClassById(assetTypeClassId: string): Observable<AssetTypeClassResponse> {
-    // return this.getAssetTypeClassByIdLocal(assetTypeClassId)
-    //     .pipe(switchMap(assetTypeClass => {
-    //         return this.assignedAttributeRepositoryNeDbAdapter.getAssignedAttributesByClassId(assetTypeClassId)
-    //             .pipe(map(assignedAttributes => {
-    //                 // return new AssetTypeClassResponse(true, assetTypeClass, assignedAttributes);
-    //             }));
-    //     }));
-    return undefined;
+    return this.getAssetTypeClassByIdLocal(assetTypeClassId)
+        .pipe(switchMap(assetTypeClass => {
+          if (!assetTypeClass) {
+            return throwError(`No asset type class found ${assetTypeClass}`);
+          }
+            return this.assignedAttributeRepositoryNeDbAdapter.getAssignedAttributesByClassId(assetTypeClassId)
+                .pipe(map(assignedAttributes => {
+                    return new AssetTypeClassResponse(assetTypeClass, assignedAttributes);
+                }));
+        }));
   }
 
   saveAssetTypeClass(assetTypeClass: AssetTypeClass, assignedAttributeArr: AssignedAttribute[]): Observable<AssetTypeClass> {
-    assetTypeClass.assetTypeClassId = generateUUID();
-    assignedAttributeArr.forEach(value => {
-      value.assetTypeClassId = assetTypeClass.assetTypeClassId;
-      value.assignedAttributeId = generateUUID();
-    });
-    return this.saveAssetTypeClassLocal(assetTypeClass)
-      .pipe(switchMap(doc => {
-        if (!doc) {
-          return of(doc);
-        } else {
-          return this.assignedAttributeRepositoryNeDbAdapter.saveAssignedAttributes(assignedAttributeArr)
-            .pipe(map(assignedAttributes => {
-              return doc;
-            }));
-        }
-      }));
+      assetTypeClass.assetTypeClassId = generateUUID();
+      assignedAttributeArr.forEach(value => {
+          value.assetTypeClassId = assetTypeClass.assetTypeClassId;
+          value.assignedAttributeId = generateUUID();
+          value.createdOn = new Date();
+          value.modifiedOn = new Date();
+      });
+      assetTypeClass.createdOn = new Date();
+      assetTypeClass.modifiedOn = new Date();
+      return this.saveAssetTypeClassLocal(assetTypeClass)
+          .pipe(switchMap(doc => {
+              if (!doc) {
+                  return throwError(`Failed to save asset type class ${doc}`);
+              } else if (!assignedAttributeArr) {
+                  return of(doc);
+              }
+              return this.assignedAttributeRepositoryNeDbAdapter.saveAssignedAttributes(assignedAttributeArr)
+                  .pipe(map(assignedAttributes => {
+                      if (!assignedAttributes) {
+                          throw new Error(`Failed to save assigned Attributes ${assignedAttributes}`);
+                      }
+                      return doc;
+                  }));
+          }));
   }
 
   updateAssetTypeClass(assetTypeClassId: string, assetTypeClass: AssetTypeClass, assignedAttributeArr: AssignedAttribute[]): Observable<number> {
-    return this.updateAssetTypeClassLocal(assetTypeClassId, assetTypeClass)
-      .pipe(switchMap(numReplaced => {
-        if (!numReplaced) {
-          return of(numReplaced);
-        } else {
-          return this.assignedAttributeRepositoryNeDbAdapter.deleteAssignedAttributes(assetTypeClassId)
-            .pipe(switchMap(num => {
-              return this.assignedAttributeRepositoryNeDbAdapter.saveAssignedAttributes(assignedAttributeArr)
-                .pipe(map(assignedAttributeArr => {
-                  return numReplaced;
-                }));
-            }));
-        }
-      }));
+      return this.updateAssetTypeClassLocal(assetTypeClassId, assetTypeClass)
+          .pipe(switchMap(numReplaced => {
+              if (!numReplaced) {
+                  return throwError(`Failed to update asset class type ${numReplaced}`);
+              } else {
+                  return this.assignedAttributeRepositoryNeDbAdapter.deleteAssignedAttributes(assetTypeClassId)
+                      .pipe(switchMap(num => {
+                          if (!num) {
+                              return throwError(`Failed to delete assigned Attributes ${num}`);
+                          }
+                          return this.assignedAttributeRepositoryNeDbAdapter.saveAssignedAttributes(assignedAttributeArr)
+                              .pipe(map(doc2 => {
+                                if (!doc2) {
+                                  throw new Error(`Failed to save assigned Attributes ${doc2}`);
+                                } else {
+                                  return numReplaced;
+                                }
+                              }));
+                      }));
+              }
+          }));
   }
 
   deleteAssetTypeClass(assetTypeClassId: string): Observable<number> {
     return this.deleteAssetTypeClassLocal(assetTypeClassId)
       .pipe(switchMap(num => {
         if (!num) {
-          return of(num);
+          return throwError(`Failed to delete ${num}`);
         } else {
           return this.assignedAttributeRepositoryNeDbAdapter.deleteAssignedAttributes(assetTypeClassId);
         }
@@ -135,7 +152,7 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
 
   // HELPS
 
-  getAssetTypeClassByIdLocal(assetTypeClassId: string): Observable<AssetTypeClass> {
+  private getAssetTypeClassByIdLocal(assetTypeClassId: string): Observable<AssetTypeClass> {
     return Observable.create(function (observer: Observer<AssetTypeClass>) {
       const query = {"assetTypeClassId": assetTypeClassId};
       assetTypeClasses.findOne(query, function (err: any, doc: any) {
@@ -162,7 +179,8 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
     });
   }
 
-  updateAssetTypeClassLocal(assetTypeClassId: string, assetTypeClass: AssetTypeClass): Observable<number> {
+  private updateAssetTypeClassLocal(assetTypeClassId: string, assetTypeClass: AssetTypeClass): Observable<number> {
+    assetTypeClass.modifiedOn = new Date();
     return Observable.create((observer: Observer<number>) => {
       const query = {"assetTypeClassId": assetTypeClassId};
       assetTypeClasses.update(query, assetTypeClass, {}, function (err: any, numReplaced: number) {

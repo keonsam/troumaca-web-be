@@ -38,8 +38,7 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
           return this.assetTypeRepositoryNeDbAdapter.getAssetTypesByIds(assetTypeIds)
             .pipe(map(assetTypes => {
               assets.forEach(value => {
-                const index = assetTypes.findIndex((x: AssetType) => x.assetTypeId === value.assetTypeId);
-                value.assetTypeName = index !== -1 ? assetTypes[index].name : "";
+                value.assetType = assetTypes.find((x: AssetType) => x.assetTypeId === value.assetTypeId);
               });
               return assets;
             }));
@@ -76,16 +75,11 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
                           return this.siteRepositoryNeDbAdapter.getSitesByIds(siteIds)
                             .pipe(map(sites => {
                               assets.forEach((value: Asset) => {
-                                const index = assetKinds.findIndex((x: AssetKind) => x.assetKindId === value.assetKindId);
-                                const index2 = assetTypes.findIndex((x: AssetType) => x.assetTypeId === value.assetTypeId);
-                                const index3 = unitOfMeasures.findIndex((x: UnitOfMeasure) => x.unitOfMeasureId === value.unitOfMeasureId);
-                                const index4 = users.findIndex((x: User) => x.partyId === value.personId);
-                                const index5 = sites.findIndex((x: Site) => x.siteId === value.siteId);
-                                value.assetKindName = index !== -1 ? assetKinds[index].name : "";
-                                value.assetTypeName = index2 !== -1 ? assetTypes[index2].name : "";
-                                value.unitOfMeasureName = index3 !== -1 ? unitOfMeasures[index3].name : "";
-                                value.personName = index4 !== -1 ? users[index4].firstName : "";
-                                value.siteName = index5 !== -1 ? sites[index5].name : "";
+                                value.assetKind = assetKinds.find((x: AssetKind) => x.assetKindId === value.assetKindId);
+                                value.assetType = assetTypes.find((x: AssetType) => x.assetTypeId === value.assetTypeId);
+                                value.unitOfMeasure = unitOfMeasures.find((x: UnitOfMeasure) => x.unitOfMeasureId === value.unitOfMeasureId);
+                                value.person = users.find((x: User) => x.partyId === value.personId);
+                                value.site = sites.find((x: Site) => x.siteId === value.siteId);
                               });
                               return assets;
                             }));
@@ -126,11 +120,11 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
                         .pipe(switchMap(user => {
                           return this.siteRepositoryNeDbAdapter.getSiteById(asset.siteId)
                             .pipe(map(site => {
-                              asset.assetKindName = assetKind ? assetKind.name : "";
-                              asset.assetTypeName = assetType ? assetType.name : "";
-                              asset.unitOfMeasureName = unitOfMeasure ? unitOfMeasure.name : "";
-                              asset.personName = user ? user.firstName : "";
-                              asset.siteName = site ? site.name : "";
+                              asset.assetKind = assetKind;
+                              asset.assetType = assetType;
+                              asset.unitOfMeasure = unitOfMeasure;
+                              asset.person = user;
+                              asset.site = site;
                               return asset;
                             }));
                         }));
@@ -204,8 +198,7 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
           return this.assetTypeRepositoryNeDbAdapter.getAssetTypesByIds(assetTypeIds)
             .pipe(map(assetTypes => {
               assets.forEach(value => {
-                const index = assetTypes.findIndex((x: AssetType) => x.assetTypeId === value.assetTypeId);
-                value.assetTypeName = index !== -1 ? assetTypes[index].name : "";
+                value.assetType = assetTypes.find((x: AssetType) => x.assetTypeId === value.assetTypeId);
               });
               return assets;
             }));

@@ -17,23 +17,6 @@ export class AttributeOrchestrator {
     this.attributeClassRepository = createAttributeRepositoryFactory();
   }
 
-
-  getAvailableAttributes(number: number, size: number, field: string, direction: string, assignedAttributes: string[]): Observable<Result<any>> {
-    const sort = getSortOrderOrDefault(field, direction);
-    // return this.attributeClassRepository
-    //     .getAvailableAttributes(number, size, sort, assignedAttributes)
-    //     .pipe(flatMap(value => {
-    //         return this.attributeClassRepository
-    //             .getAvailableAttributeCount(assignedAttributes)
-    //             .pipe(map(count => {
-    //                 // const shapeAttrResp = shapeAttributesResponse( value, number, size, value.length, count, sort);
-    //                 // return new Result<any>(false, "success", shapeAttrResp);
-    //                 // return new PageResponse<Attribute[]>(value, number, size, count, sort);
-    //             }));
-    //     }));
-    return undefined;
-  }
-
   getAttributes(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
     const sort: string = getSortOrderOrDefault(field, direction);
     return this.attributeClassRepository
@@ -68,39 +51,34 @@ export class AttributeOrchestrator {
     return this.attributeClassRepository.deleteAttribute(attributeId);
   }
 
-  //
-  // getAssignedAttributes(number: number, size: number, field: string, direction: string, assignedAttributes: string[]): Observable<Result<any>> {
-  //     const sort = getSortOrderOrDefault(field, direction);
-  //     return this.attributeClassRepository
-  //         .getAssignedAttributes(number, size, sort, assignedAttributes)
-  //         .flatMap(value => {
-  //             return this.attributeClassRepository
-  //                 .getAvailableAttributeCount()
-  //                 .map(count => {
-  //                     const shapeAttrResp = shapeAttributesResponse(value, number, size, value.length, count, sort);
-  //                     return new Result<any>(false, "success", shapeAttrResp);
-  //                     // return new PageResponse<Attribute[]>(value, number, size, count, sort);
-  //                 });
-  //         });
-  // }
-  //
-  // getAssignedAttributesByClassId(assetTypeClassId: string): Observable<AssignedAttribute[]> {
-  //     return this.attributeClassRepository.getAssignedAttributesById(assetTypeClassId)
-  //         .pipe(switchMap((assignedAttributes: AssignedAttribute[]) => {
-  //             if (assignedAttributes.length === 0) {
-  //                 return of(assignedAttributes);
-  //             } else {
-  //                 const assignedArray: string[] = assignedAttributes.map((x: AssignedAttribute) => x.attributeId);
-  //                 return this.getAttributesForAssigned(assignedArray)
-  //                     .map(attributes => {
-  //                         assignedAttributes.forEach(value => {
-  //                             const index = attributes.findIndex(x => x.attributeId === value.attributeId);
-  //                             value.attribute = index !== -1 ? attributes[index] : new Attribute();
-  //                         });
-  //                         return assignedAttributes;
-  //                     });
-  //             }
-  //         });
-  // }
+  // OTHERS
+
+    getAvailableAttributes(number: number, size: number, field: string, direction: string, assignedAttributes: string[]): Observable<Result<any>> {
+        const sort = getSortOrderOrDefault(field, direction);
+        return this.attributeClassRepository
+            .getAvailableAttributes(number, size, sort, assignedAttributes)
+            .pipe(flatMap(value => {
+                return this.attributeClassRepository
+                    .getAvailableAttributeCount(assignedAttributes)
+                    .pipe(map(count => {
+                        const shapeAttrResp = shapeAttributesResponse( value, number, size, value.length, count, sort);
+                        return new Result<any>(false, "success", shapeAttrResp);
+                    }));
+            }));
+    }
+
+    getAssignableAttributes(number: number, size: number, field: string, direction: string, assignedAttributes: string[]): Observable<Result<any>> {
+        const sort = getSortOrderOrDefault(field, direction);
+        return this.attributeClassRepository
+            .getAssignableAttributes(number, size, sort, assignedAttributes)
+            .pipe(flatMap(value => {
+                return this.attributeClassRepository
+                    .getAssignableAttributeCount(assignedAttributes)
+                    .pipe(map(count => {
+                        const shapeAttrResp = shapeAttributesResponse( value, number, size, value.length, count, sort);
+                        return new Result<any>(false, "success", shapeAttrResp);
+                    }));
+            }));
+    }
 
 }
