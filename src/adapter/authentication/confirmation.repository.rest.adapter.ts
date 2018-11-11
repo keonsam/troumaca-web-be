@@ -33,11 +33,10 @@ export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository
           } else {
             observer.next(body["confirmation"]);
           }
-          observer.complete();
         } catch (e) {
           observer.error(new Error(e.message));
-          observer.complete();
         }
+        observer.complete();
       });
     });
   }
