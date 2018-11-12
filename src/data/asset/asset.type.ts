@@ -1,3 +1,6 @@
+import { AssetTypeClass } from "./asset.type.class";
+import { UnitOfMeasure } from "../unit-of-measure/unit.of.measure";
+
 export class AssetType {
     assetTypeId: string;
     assetTypeClassId: string;
@@ -6,6 +9,8 @@ export class AssetType {
     description: string;
     name: string;
     materialCode: string;
-    assetTypeClassName: string;
-    unitOfMeasureName: string;
+    assetTypeClass: AssetTypeClass;
+    unitOfMeasure: UnitOfMeasure;
+    createdOn: Date;
+    modifiedOn: Date;
 }

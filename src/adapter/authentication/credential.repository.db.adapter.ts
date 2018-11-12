@@ -112,10 +112,10 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
                     authenticatedCredential.credentialId = credentialId;
                     authenticatedCredential.partyId = credential.partyId;
                     if (credential.status === "Active") {
-                        authenticatedCredential.authenticateStatus = "AccountActive";
+                        authenticatedCredential.authenticateStatus = "CredentialActive";
                         return of(authenticatedCredential);
                     } else if (credential.status === "Confirmed") {
-                        authenticatedCredential.authenticateStatus = "AccountConfirmed";
+                        authenticatedCredential.authenticateStatus = "CredentialConfirmed";
                         return of(authenticatedCredential);
                     } else if (credential.status === "New") {
                         const confirmation: Confirmation = new Confirmation();
@@ -126,7 +126,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
                                     throw new Error("Confirmation was not created");
                                 } else {
                                     authenticatedCredential.confirmationId = confirmation.confirmationId;
-                                    authenticatedCredential.authenticateStatus = "AccountUsernameNotConfirmed";
+                                    authenticatedCredential.authenticateStatus = "CredentialUsernameNotConfirmed";
                                     return authenticatedCredential;
                                 }
                             }));

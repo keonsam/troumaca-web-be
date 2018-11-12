@@ -152,7 +152,7 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
 
   // HELPS
 
-  private getAssetTypeClassByIdLocal(assetTypeClassId: string): Observable<AssetTypeClass> {
+   getAssetTypeClassByIdLocal(assetTypeClassId: string): Observable<AssetTypeClass> {
     return Observable.create(function (observer: Observer<AssetTypeClass>) {
       const query = {"assetTypeClassId": assetTypeClassId};
       assetTypeClasses.findOne(query, function (err: any, doc: any) {

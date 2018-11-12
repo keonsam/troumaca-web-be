@@ -136,6 +136,10 @@ export let addCredential = (req: Request, res: Response) => {
 };
 
 export let authenticate = (req: Request, res: Response) => {
+    HeaderNormalizer.normalize(req);
+    const correlationId = req.headers["Correlation-Id"];
+    const ownerPartyId = req.headers["Owner-Party-Id"];
+    const requestingPartyId = req.headers["Party-Id"];
 
   const credential: Credential = req.body;
 
@@ -146,8 +150,6 @@ export let authenticate = (req: Request, res: Response) => {
     return;
   }
 
-  const correlationId = req.headers.correlationid;
-
   if (!correlationId) {
     res.status(400);
     res.setHeader("content-type", "application/json");
@@ -155,11 +157,11 @@ export let authenticate = (req: Request, res: Response) => {
     return;
   }
 
-  const headerOptions = {
-    correlationId: correlationId,
-    sourceSystemHost: req.headers.host,
-    sourceSystemName: ""
-  };
+    const headerOptions = {
+        "Correlation-Id": correlationId,
+        "Owner-Party-Id": ownerPartyId,
+        "Party-Id": requestingPartyId
+    };
 
   credentialOrchestrator.authenticate(credential, headerOptions)
     .subscribe((authenticatedCredential: AuthenticatedCredential) => {
