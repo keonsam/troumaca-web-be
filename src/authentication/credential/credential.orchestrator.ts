@@ -18,46 +18,46 @@ import {User} from "../../data/party/user";
 
 export class CredentialOrchestrator {
 
-  private credentialRepository: CredentialRepository;
-  private sessionRepository: SessionRepository;
-  private userRepository: UserRepository;
-  private personRepository: PersonRepository;
+    private credentialRepository: CredentialRepository;
+    private sessionRepository: SessionRepository;
+    private userRepository: UserRepository;
+    private personRepository: PersonRepository;
 
 
-  constructor() {
-    this.sessionRepository = createSessionRepositoryFactory();
-    this.credentialRepository = createCredentialRepositoryFactory();
-    this.userRepository = createUserRepository();
-    this.personRepository = createPersonRepository();
-  }
+    constructor() {
+        this.sessionRepository = createSessionRepositoryFactory();
+        this.credentialRepository = createCredentialRepositoryFactory();
+        this.userRepository = createUserRepository();
+        this.personRepository = createPersonRepository();
+    }
 
-  isValidUsername(username: string, partyId: string): Observable<boolean> {
-    return this.credentialRepository.isValidUsername(username, partyId);
-  }
+    isValidUsername(username: string, partyId: string): Observable<boolean> {
+        return this.credentialRepository.isValidUsername(username, partyId);
+    }
 
-  isValidPassword(password: string): Observable<boolean> {
-    return this.credentialRepository
-      .isValidPassword(password);
-  }
+    isValidPassword(password: string): Observable<boolean> {
+        return this.credentialRepository
+            .isValidPassword(password);
+    }
 
-  addCredential(credential: Credential, person: Person, options?: any): Observable<Confirmation> {
-    return this.credentialRepository.addCredential(person, credential, options)
-    .pipe(switchMap(createdCredential => {
-      if (!createdCredential) {
-        return throwError(credential);
-      } else {
-        person.partyId = credential.partyId;
-        return this.personRepository.addPerson(person)
-        .pipe(map(person => {
-          if (!person) {
-            throw new Error("user was not created.");
-          } else {
-            return createdCredential.confirmation;
-          }
-        }));
-      }
-    }));
-  }
+    addCredential(credential: Credential, person: Person, options?: any): Observable<Confirmation> {
+        return this.credentialRepository.addCredential(person, credential, options)
+            .pipe(switchMap(createdCredential => {
+                if (!createdCredential) {
+                    return throwError(credential);
+                } else {
+                    person.partyId = credential.partyId;
+                    return this.personRepository.addPerson(person, options)
+                        .pipe(map(person => {
+                            if (!person) {
+                                throw new Error("user was not created.");
+                            } else {
+                                return createdCredential.confirmation;
+                            }
+                        }));
+                }
+            }));
+    }
 
     authenticate(credential: Credential, options?: any): Observable<AuthenticatedCredential> {
         // A person can access the application under the following conditions:
@@ -70,7 +70,7 @@ export class CredentialOrchestrator {
             .pipe(switchMap(authenticatedCredential => {
                 if (!authenticatedCredential) {
                     return throwError(authenticatedCredential);
-                } else if (authenticatedCredential.authenticateStatus === "AccountConfirmed" || authenticatedCredential.authenticateStatus === "AccountActive") {
+                } else if (authenticatedCredential.authenticateStatus === "CredentialConfirmed" || authenticatedCredential.authenticateStatus === "CredentialActive") {
                     const session: Session = new Session();
                     session.partyId = authenticatedCredential.partyId;
                     session.credentialId = authenticatedCredential.credentialId;

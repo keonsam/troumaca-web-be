@@ -2,7 +2,7 @@ import {CredentialConfirmation} from "../../data/authentication/credential.confi
 import {ConfirmationRepository} from "../../repository/confirmation.repository";
 import {properties} from "../../properties.helpers";
 import {jsonRequestHeaderMap, postJsonOptions} from "../../request.helpers";
-import {Observable, Observer} from "rxjs";
+import { Observable, Observer, of, throwError } from "rxjs";
 import request from "request";
 import {Confirmation} from "../../data/authentication/confirmation";
 
@@ -15,31 +15,36 @@ export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository
   }
 
   confirmCode(confirmationId: string, credentialId: string, confirmation: Confirmation, options?: any): Observable<Confirmation> {
-    const uri: string = properties.get("credential.host.port") as string;
+      const uri: string = properties.get("credential.host.port") as string;
 
-    const headerMap = jsonRequestHeaderMap(options ? options : {});
+      const headerMap = jsonRequestHeaderMap(options ? options : {});
 
-    const json = confirmation;
+      const json = confirmation;
 
-    const uriAndPath: string = uri + "/authentication/confirmations/" + confirmationId + "/credentials/" + credentialId;
+      const uriAndPath: string = uri + "/authentication/confirmations/" + confirmationId + "/credentials/" + credentialId;
 
-    const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
+      const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
 
-    return Observable.create(function (observer: Observer<Confirmation>) {
-      request(requestOptions, function (error: any, response: any, body: any) {
-        try {
-          if (response && response.statusCode != 200) {
-            observer.error(body);
-          } else {
-            observer.next(body["confirmation"]);
-          }
-          observer.complete();
-        } catch (e) {
-          observer.error(new Error(e.message));
-          observer.complete();
-        }
-      });
-    });
+      try {
+          return Observable.create(function (observer: Observer<Confirmation>) {
+              request(requestOptions, function (error: any, response: any, body: any) {
+                  try {
+                      if (response && response.statusCode != 200) {
+                          observer.error(body);
+                      } else {
+                          observer.next(body["confirmation"]);
+                      }
+                      observer.complete();
+                  } catch (e) {
+                      observer.error(new Error(e.message));
+                      observer.complete();
+                  }
+              });
+          });
+      } catch (e) {
+          return throwError( new Error());
+      }
+
   }
 
   resendConfirmCode(confirmationId: string, credentialId: string, options?: any): Observable<Confirmation> {
