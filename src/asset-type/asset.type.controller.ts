@@ -39,10 +39,10 @@ export let getAssetTypes = (req: Request, res: Response) => {
 
 export let getAssetTypeById = (req: Request, res: Response) => {
   assetTypeOrchestrator.getAssetTypeById(req.params.assetTypeId)
-    .subscribe(assetTypeResponse => {
-      if (assetTypeResponse) {
+    .subscribe(assetType => {
+      if (assetType) {
         res.status(200);
-        res.send(JSON.stringify(assetTypeResponse.toJson()));
+        res.send(JSON.stringify(assetType));
       } else {
         res.status(404);
         res.send(JSON.stringify({message: "No Data Found For " + req.params.assetTypeId}));

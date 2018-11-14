@@ -71,7 +71,9 @@ router.post("/permissions", checkSession, permissionController.savePermission);
 router.put("/permissions/:permissionId", checkSession, permissionController.updatePermission);
 router.delete("/permissions/:permissionId", checkSession, permissionController.deletePermission);
 router.get("/permissions", permissionController.getPermissions);
-router.post("/available-permissions", permissionController.getPermissionsByArray);
+router.post("/permissions/available", permissionController.getPermissionsByArray);
+router.post("/permissions/assignable", permissionController.getAssignablePermissions);
+
 router.get("/permissions/:permissionId", permissionController.getPermissionById);
 router.post("/permissions", permissionController.savePermission);
 router.delete("/permissions/:permissionId", permissionController.deletePermission);
@@ -97,8 +99,7 @@ router.post("/resource-types", checkSession, resourceTypeController.saveResource
 router.put("/resource-types/:resourceTypeId", checkSession, resourceTypeController.updateResourceType);
 router.delete("/resource-types/:resourceTypeId", checkSession, resourceTypeController.deleteResourceType);
 // resource-permissions
-router.get("/resource-permissions", checkSession, resourcePermissionController.getAllResourcePermissions);
-router.get("/resource-permissions/:resourceId", checkSession, resourcePermissionController.getResourcePermissionsByResourceId);
+
 // access-roles
 router.get("/access-roles/find", checkSession, accessRoleController.findAccessRoles);
 router.get("/access-roles", checkSession, accessRoleController.getAccessRoles);

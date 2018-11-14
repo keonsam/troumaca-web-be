@@ -3,7 +3,7 @@ import {Observable} from "rxjs";
 
 export interface ResourcePermissionRepository {
 
-  getAllResourcePermissions(): Observable<ResourcePermission[]>;
+  // getAllResourcePermissions(): Observable<ResourcePermission[]>;
 
   getResourcePermissionsByResourceId(resourceId: string): Observable<ResourcePermission[]>;
 

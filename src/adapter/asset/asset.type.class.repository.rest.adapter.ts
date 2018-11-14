@@ -1,6 +1,5 @@
 import {AssetTypeClassRepository} from "../../repository/asset.type.class.repository";
 import {AssetTypeClass} from "../../data/asset/asset.type.class";
-import {AssetTypeClassResponse} from "../../data/asset/asset.type.class.response";
 import {AssignedAttribute} from "../../data/asset/assigned.attribute";
 import {Observable} from "rxjs";
 
@@ -22,7 +21,7 @@ export class AssetTypeClassRepositoryRestAdapter implements AssetTypeClassReposi
     return undefined;
   }
 
-  getAssetTypeClassById(assetTypeClassId: string): Observable<AssetTypeClassResponse> {
+  getAssetTypeClassById(assetTypeClassId: string): Observable<AssetTypeClass> {
     return undefined;
   }
 

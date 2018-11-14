@@ -1,9 +1,12 @@
 import {AccessRoleRepository} from "../../repository/access.role.repository";
 import {AccessRole} from "../../data/authorization/access.role";
-import {Observable, Observer} from "rxjs";
-import {accessRoles} from "../../db";
+import { Observable, Observer, of } from "rxjs";
+import { accessRoles, accessRoleTypes, grants } from "../../db";
 import {calcSkip} from "../../db.util";
 import {generateUUID} from "../../uuid.generator";
+import { map, switchMap } from "rxjs/operators";
+import { AccessRoleType } from "../../data/authorization/access.role.type";
+import { Grant } from "../../data/authorization/grant";
 
 export class AccessRoleDBRepository implements AccessRoleRepository {
 
@@ -83,19 +86,18 @@ export class AccessRoleDBRepository implements AccessRoleRepository {
   }
 
   getAccessRoleById(accessRoleId: string): Observable<AccessRole> {
-    return Observable.create(function (observer: Observer<AccessRole>) {
-      const query = {
-        "accessRoleId": accessRoleId
-      };
-      accessRoles.findOne(query, function (err: any, doc: any) {
-        if (!err) {
-          observer.next(doc);
-        } else {
-          observer.error(err);
-        }
-        observer.complete();
-      });
-    });
+    return this.getAccessRoleByIdLocal(accessRoleId)
+        .pipe(switchMap( accessRole => {
+          return this.getAccessRoleTypeById(accessRole.accessRoleTypeId)
+              .pipe( switchMap(accessRoleType => {
+                accessRole.accessRoleType = accessRoleType;
+                return this.getGrantsByAccessRoleId(accessRole.accessRoleId)
+                    .pipe( map(grants => {
+                      accessRole.grants = grants;
+                      return accessRole;
+                    }));
+              }));
+        }));
   }
 
   getAccessRoleByIds(accessRoleIds: string[]): Observable<AccessRole[]> {
@@ -134,4 +136,46 @@ export class AccessRoleDBRepository implements AccessRoleRepository {
     return undefined;
   }
 
+  // HELPERS
+    private getAccessRoleByIdLocal(accessRoleId: string): Observable<AccessRole> {
+        return Observable.create(function (observer: Observer<AccessRole>) {
+            const query = {
+                "accessRoleId": accessRoleId
+            };
+            accessRoles.findOne(query, function (err: any, doc: any) {
+                if (!err) {
+                    observer.next(doc);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
+        });
+    }
+
+    private getAccessRoleTypeById(accessRoleTypeId: string): Observable<AccessRoleType> {
+        return Observable.create(function (observer: Observer<AccessRoleType>) {
+            accessRoleTypes.findOne({accessRoleTypeId}, function (err: any, doc: any) {
+                if (!err) {
+                    observer.next(doc);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
+        });
+    }
+
+    private getGrantsByAccessRoleId(accessRoleId: string): Observable<Grant[]> {
+        return Observable.create(function (observer: Observer<Grant[]>) {
+            grants.find({accessRoleId}, function (err: any, doc: any) {
+                if (!err) {
+                    observer.next(doc);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
+        });
+    }
 }

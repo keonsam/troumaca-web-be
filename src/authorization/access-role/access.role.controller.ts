@@ -41,10 +41,10 @@ export let getAccessRoles = (req: Request, res: Response) => {
 export let getAccessRoleById = (req: Request, res: Response) => {
   orchestrator
     .getAccessRoleById(req.params.accessRoleId)
-    .subscribe(accessRoleResponse => {
-      if (accessRoleResponse) {
+    .subscribe(accessRole => {
+      if (accessRole) {
         res.status(200);
-        res.send(JSON.stringify(accessRoleResponse.toJson()));
+        res.send(JSON.stringify(accessRole));
       } else {
         res.status(404);
         res.send(JSON.stringify({message: "No Data Found For " + req.params.accessRoleId}));
@@ -58,7 +58,7 @@ export let getAccessRoleById = (req: Request, res: Response) => {
 
 export let saveAccessRole = (req: Request, res: Response) => {
   const accessRole = req.body.accessRole;
-  const grants = req.body.grant;
+  const grants = req.body.grants;
   if (!req.body) {
     return res.status(400).send({
       message: "Access Role can not be empty"
@@ -78,7 +78,7 @@ export let saveAccessRole = (req: Request, res: Response) => {
 export let updateAccessRole = (req: Request, res: Response) => {
   const accessRoleId = req.params.accessRoleId;
   const accessRole = req.body.accessRole;
-  const grants = req.body.grant;
+  const grants = req.body.grants;
   if (!req.body) {
     return res.status(400).send({
       message: "Access Role can not be empty"

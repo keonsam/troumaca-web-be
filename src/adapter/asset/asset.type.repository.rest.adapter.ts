@@ -1,7 +1,6 @@
 import {AssetTypeRepository} from "../../repository/asset.type.repository";
 import {AssetType} from "../../data/asset/asset.type";
 import {Value} from "../../data/asset/value";
-import {AssetTypeResponse} from "../../data/asset/asset.type.response";
 import {Observable} from "rxjs";
 
 export class AssetTypeRepositoryRestAdapter implements AssetTypeRepository {
@@ -17,7 +16,7 @@ export class AssetTypeRepositoryRestAdapter implements AssetTypeRepository {
     return undefined;
   }
 
-  getAssetTypeById(assetTypeId: string): Observable<AssetTypeResponse> {
+  getAssetTypeById(assetTypeId: string): Observable<AssetType> {
     return undefined;
   }
 

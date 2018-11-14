@@ -6,7 +6,6 @@ import {Result} from "../result.success";
 import {getSortOrderOrDefault} from "../sort.order.util";
 import {shapeAssetTypesResponse} from "./asset.type.response.shaper";
 import {Value} from "../data/asset/value";
-import {AssetTypeResponse} from "../data/asset/asset.type.response";
 import {switchMap, map} from "rxjs/operators";
 
 export class AssetTypeOrchestrator {
@@ -35,7 +34,7 @@ export class AssetTypeOrchestrator {
       }));
   }
 
-  getAssetTypeById(assetTypeId: string): Observable<AssetTypeResponse> {
+  getAssetTypeById(assetTypeId: string): Observable<AssetType> {
     return this.assetTypeRepository.getAssetTypeById(assetTypeId);
   }
 
