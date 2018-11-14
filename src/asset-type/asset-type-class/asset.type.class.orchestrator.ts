@@ -7,7 +7,6 @@ import {createAssetTypeClassRepositoryFactory} from "../../adapter/asset/asset.t
 import {AssetTypeClassRepository} from "../../repository/asset.type.class.repository";
 import {shapeAssetTypeClassesResponse} from "./asset.type.class.response.shaper";
 import {Result} from "../../result.success";
-import {AssetTypeClassResponse} from "../../data/asset/asset.type.class.response";
 
 export class AssetTypeClassOrchestrator {
 
@@ -35,7 +34,7 @@ export class AssetTypeClassOrchestrator {
       }));
   }
 
-  getAssetTypeClass(assetTypeClassId: string): Observable<AssetTypeClassResponse> {
+  getAssetTypeClass(assetTypeClassId: string): Observable<AssetTypeClass> {
     return this.assetTypeClassRepository.getAssetTypeClassById(assetTypeClassId);
   }
 

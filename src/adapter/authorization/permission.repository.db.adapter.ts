@@ -2,27 +2,12 @@ import {permissions} from "../../db";
 import {PermissionRepository} from "../../repository/permission.repository";
 import {Permission} from "../../data/authorization/permission";
 import {Observable, Observer} from "rxjs";
-import {RepositoryKind} from "../../repository.kind";
 import {generateUUID} from "../../uuid.generator";
 import {calcSkip} from "../../db.util";
 
-class PermissionDBRepository implements PermissionRepository {
+export class PermissionRepositoryDbAdapter implements PermissionRepository {
 
   private defaultPageSize: number = 10;
-
-  getPermissionsByArray(pageNumber: number, pageSize: number, order: string, assignedArray: string[]): Observable<Permission[]> {
-    return Observable.create(function (observer: Observer<Permission[]>) {
-      const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
-      permissions.find({permissionId: {$nin: assignedArray}}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
-        if (!err) {
-          observer.next(doc);
-        } else {
-          observer.error(err);
-        }
-        observer.complete();
-      });
-    });
-  }
 
   getPermissions(pageNumber: number, pageSize: number, order: string): Observable<Permission[]> {
     const localDefaultPageSize = this.defaultPageSize;
@@ -40,9 +25,8 @@ class PermissionDBRepository implements PermissionRepository {
   }
 
   getPermissionCount(assignedArray?: string[]): Observable<number> {
-    const query = assignedArray ? {permissionId: {$nin: assignedArray}} : {};
     return Observable.create(function (observer: Observer<number>) {
-      permissions.count(query, function (err: any, count: number) {
+      permissions.count({}, function (err: any, count: number) {
         if (!err) {
           observer.next(count);
         } else {
@@ -115,55 +99,66 @@ class PermissionDBRepository implements PermissionRepository {
     });
   }
 
+  // OTHERS
+
+    getPermissionsByArray(pageNumber: number, pageSize: number, order: string, assignedArray: string[]): Observable<Permission[]> {
+        const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
+        return Observable.create(function (observer: Observer<Permission[]>) {
+            permissions.find({permissionId: {$nin: assignedArray}}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
+                if (!err) {
+                    observer.next(doc);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
+        });
+    }
+
+    getAvailablePermissionsCount(assignedArray: string[]): Observable<number> {
+        const query = {permissionId: {$nin: assignedArray}};
+        return Observable.create(function (observer: Observer<number>) {
+            permissions.count(query, function (err: any, count: number) {
+                if (!err) {
+                    observer.next(count);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
+        });
+    }
+
+    getAssignablePermissions(pageNumber: number, pageSize: number, order: string, assignedArray: string[]): Observable<Permission[]> {
+        const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
+        return Observable.create(function (observer: Observer<Permission[]>) {
+            permissions.find({permissionId: {$in: assignedArray}}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
+                if (!err) {
+                    observer.next(doc);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
+        });
+    }
+
+    getAssignablePermissionsCount(assignedArray?: string[]): Observable<number> {
+        const query = {permissionId: {$in: assignedArray}};
+        return Observable.create(function (observer: Observer<number>) {
+            permissions.count(query, function (err: any, count: number) {
+                if (!err) {
+                    observer.next(count);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
+        });
+    }
+
 }
 
-
-class PermissionRestRepository implements PermissionRepository {
-
-  getPermissionsByArray(pageNumber: number, pageSize: number, order: string, assignedArray: string[]): Observable<Permission[]> {
-    return undefined;
-  }
-
-  getAllPermissions(): Observable<Permission[]> {
-    return undefined;
-  }
-
-  getPermissions(pageNumber: number, pageSize: number, order: string): Observable<Permission[]> {
-    return undefined;
-  }
-
-  getPermissionCount(assignedArray?: string[]): Observable<number> {
-    return undefined;
-  }
-
-  addPermission(permission: Permission): Observable<Permission> {
-    return undefined;
-  }
-
-  deletePermission(permissionId: string): Observable<number> {
-    return undefined;
-  }
-
-  getPermissionById(permissionId: string): Observable<Permission> {
-    return undefined;
-  }
-
-  updatePermission(permissionId: string, permission: Permission): Observable<number> {
-    return undefined;
-  }
-
-}
-
-export function createPermissionRepositoryFactory(kind?: RepositoryKind): PermissionRepository {
-  switch (kind) {
-    case RepositoryKind.Nedb:
-      return new PermissionDBRepository();
-    case RepositoryKind.Rest:
-      return new PermissionRestRepository();
-    default:
-      return new PermissionDBRepository();
-  }
-}
 
 
 

@@ -1,6 +1,5 @@
 import {AssetType} from "../data/asset/asset.type";
 import {Value} from "../data/asset/value";
-import {AssetTypeResponse} from "../data/asset/asset.type.response";
 import {Observable} from "rxjs";
 
 export interface AssetTypeRepository {
@@ -11,7 +10,7 @@ export interface AssetTypeRepository {
 
   getAssetTypeCount(): Observable<number>;
 
-  getAssetTypeById(assetId: string): Observable<AssetTypeResponse>;
+  getAssetTypeById(assetId: string): Observable<AssetType>;
 
   saveAssetType(assetType: AssetType, values: Value[]): Observable<AssetType>;
 

@@ -1,5 +1,2 @@
-{"$$indexCreated":{"fieldName":"assetTypeId","unique":true,"sparse":false}}
-{"name":"test","description":"","modelNumber":"","materialCode":"","assetTypeClassId":"b5c35ab1-08f9-4a08-a505-7b5d82f0903c","assetTypeId":"6bc4fa8a-84b6-4088-91d4-8a1cc84e7cff","_id":"xi9t7lkvm3cXIEPU"}
-{"name":"test","description":"","modelNumber":"","materialCode":"","assetTypeClassId":"b5c35ab1-08f9-4a08-a505-7b5d82f0903c","assetTypeId":"6bc4fa8a-84b6-4088-91d4-8a1cc84e7cff","_id":"xi9t7lkvm3cXIEPU"}
-{"name":"test","description":"","modelNumber":"","materialCode":"","assetTypeClassId":"b5c35ab1-08f9-4a08-a505-7b5d82f0903c","assetTypeId":"6bc4fa8a-84b6-4088-91d4-8a1cc84e7cff","_id":"xi9t7lkvm3cXIEPU"}
 {"name":"test Edited","description":"","modelNumber":"","materialCode":"","assetTypeClassId":"b5c35ab1-08f9-4a08-a505-7b5d82f0903c","assetTypeId":"6bc4fa8a-84b6-4088-91d4-8a1cc84e7cff","_id":"xi9t7lkvm3cXIEPU"}
+{"$$indexCreated":{"fieldName":"assetTypeId","unique":true,"sparse":false}}

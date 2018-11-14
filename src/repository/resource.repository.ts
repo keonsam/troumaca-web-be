@@ -3,21 +3,23 @@ import {Observable} from "rxjs";
 
 export interface ResourceRepository {
 
-  getResourcesByArray(pageNumber: number, pageSize: number, order: string, assignedArray: string[]): Observable<Resource[]>;
+    getResources(number: number, size: number, sort: string): Observable<Resource[]>;
 
-  getAssignedResourcesByArray(pageNumber: number, pageSize: number, order: string, assignedArray: string[]): Observable<Resource[]>;
+    getResourceCount(): Observable<number>;
 
-  getResources(number: number, size: number, sort: string): Observable<Resource[]>;
+    addResource(resource: Resource): Observable<Resource>;
 
-  getResourceCount(): Observable<number>;
+    getResourceById(resourceId: string): Observable<Resource>;
 
-  addResource(resource: Resource): Observable<Resource>;
+    updateResource(resourceId: string, resource: Resource): Observable<number>;
 
-  getResourceById(resourceId: string): Observable<Resource>;
+    deleteResource(resourceId: string): Observable<number>;
 
-  updateResource(resourceId: string, resource: Resource): Observable<number>;
+    // OTHERS
 
-  deleteResource(resourceId: string): Observable<number>;
+    getResourcesByArray(pageNumber: number, pageSize: number, order: string, assignedArray: string[]): Observable<Resource[]>;
+
+    getAssignedResourcesByArray(pageNumber: number, pageSize: number, order: string, assignedArray: string[]): Observable<Resource[]>;
 
 }
 

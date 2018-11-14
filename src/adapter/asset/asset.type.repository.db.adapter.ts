@@ -9,7 +9,6 @@ import {AssetTypeClassRepositoryNeDbAdapter} from "./asset.type.class.repository
 import {UnitOfMeasureRepositoryNeDbAdapter} from "../unit-of-measure/unit.of.measure.repository.db.adapter";
 import {Value} from "../../data/asset/value";
 import {ValueRepositoryNeDbAdapter} from "./value.repository.db.adapter";
-import {AssetTypeResponse} from "../../data/asset/asset.type.response";
 
 export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
 
@@ -73,7 +72,7 @@ export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
     });
   }
 
-  getAssetTypeById(assetTypeId: string): Observable<AssetTypeResponse> {
+  getAssetTypeById(assetTypeId: string): Observable<AssetType> {
     return this.getAssetTypeByIdLocal(assetTypeId)
       .pipe(switchMap(assetType => {
         if (!assetType) {
@@ -87,7 +86,8 @@ export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
                   .pipe(map(values => {
                     assetType.assetTypeClass = assetTypeClass;
                     assetType.unitOfMeasure = unitOfMeasure;
-                    return new AssetTypeResponse(assetType, values);
+                    assetType.values = values;
+                    return assetType;
                   }));
               }));
           }));

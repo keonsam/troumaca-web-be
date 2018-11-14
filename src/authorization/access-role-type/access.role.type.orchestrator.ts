@@ -21,17 +21,16 @@ export class AccessRoleTypeOrchestrator {
 
   getAccessRoleTypes(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
     const sort: string = getSortOrderOrDefault(field, direction);
-    // return this.accessRoleTypeRepository
-    //   .getAccessRoleTypes(number, size, sort)
-    //   .pipe(flatMap(value => {
-    //     return this.accessRoleTypeRepository
-    //       .getAccessRoleTypeCount()
-    //       .pipe(map(count => {
-    //         // const shapeAccessRoleTypesResp: any = shapeAccessRoleTypesResponse(value, number, size, value.length, count, sort);
-    //         // return new Result<any>(false, "accessRoleTypes", shapeAccessRoleTypesResp);
-    //       }));
-    //   }));
-    return undefined;
+    return this.accessRoleTypeRepository
+      .getAccessRoleTypes(number, size, sort)
+      .pipe(flatMap(value => {
+        return this.accessRoleTypeRepository
+          .getAccessRoleTypeCount()
+          .pipe(map(count => {
+            const shapeAccessRoleTypesResp: any = shapeAccessRoleTypesResponse(value, number, size, value.length, count, sort);
+            return new Result<any>(false, "accessRoleTypes", shapeAccessRoleTypesResp);
+          }));
+      }));
   }
 
   addAccessRoleType(accessRoleType: AccessRoleType): Observable<AccessRoleType> {

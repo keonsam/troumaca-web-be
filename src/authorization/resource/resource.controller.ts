@@ -5,45 +5,6 @@ import {getStringValueOrDefault} from "../../string.util";
 
 const orchestrator: ResourceOrchestrator = new ResourceOrchestrator();
 
-export let getResourcesByArray = (req: Request, res: Response) => {
-
-  const number = getNumericValueOrDefault(req.body.pageNumber, 1);
-  const size = getNumericValueOrDefault(req.body.pageSize, 10);
-  const field = getStringValueOrDefault(req.body.sortField, "");
-  const direction = getStringValueOrDefault(req.body.sortOrder, "");
-  const assignedArray = req.body.assignedArray;
-
-  orchestrator.getResourcesByArray(number, size, field, direction, assignedArray)
-    .subscribe(result => {
-      res.status(200);
-      res.send(JSON.stringify(result.data));
-    }, error => {
-      res.status(500);
-      res.send(JSON.stringify({message: "Error Occurred"}));
-      console.log(error);
-    });
-
-};
-
-export let getAssignedResourcesByArray = (req: Request, res: Response) => {
-
-  const number = getNumericValueOrDefault(req.query.pageNumber, 1);
-  const size = getNumericValueOrDefault(req.query.pageSize, 10);
-  const field = getStringValueOrDefault(req.query.sortField, "");
-  const direction = getStringValueOrDefault(req.query.sortOrder, "");
-  const assignedArray = req.query.assignedArray ? req.query.assignedArray.split(",") : [];
-
-  orchestrator.getAssignedResourcesByArray(number, size, field, direction, assignedArray)
-    .subscribe(result => {
-      res.status(200);
-      res.send(JSON.stringify(result.data));
-    }, error => {
-      res.status(500);
-      res.send(JSON.stringify({message: "Error Occurred"}));
-      console.log(error);
-    });
-};
-
 export let getResources = (req: Request, res: Response) => {
   const number = getNumericValueOrDefault(req.query.pageNumber, 1);
   const size = getNumericValueOrDefault(req.query.pageSize, 10);
@@ -83,7 +44,7 @@ export let getResourceById = (req: Request, res: Response) => {
 
 export let saveResource = (req: Request, res: Response) => {
   const resource = req.body.resource;
-  const resourcePermissions = req.body.resourcePermission;
+  const resourcePermissions = req.body.resourcePermissions;
   if (!req.body) {
     return res.status(400).send({
       message: "Resource can not be empty"
@@ -103,7 +64,7 @@ export let saveResource = (req: Request, res: Response) => {
 export let updateResource = (req: Request, res: Response) => {
   const resourceId = req.params.resourceId;
   const resource = req.body.resource;
-  const resourcePermissions = req.body.resourcePermission;
+  const resourcePermissions = req.body.resourcePermissions;
   if (!req.body) {
     return res.status(400).send({
       message: "Resource can not be empty"
@@ -145,3 +106,45 @@ export let deleteResource = (req: Request, res: Response) => {
       console.log(error);
     });
 };
+
+// OTHERS
+
+export let getResourcesByArray = (req: Request, res: Response) => {
+
+    const number = getNumericValueOrDefault(req.body.pageNumber, 1);
+    const size = getNumericValueOrDefault(req.body.pageSize, 10);
+    const field = getStringValueOrDefault(req.body.sortField, "");
+    const direction = getStringValueOrDefault(req.body.sortOrder, "");
+    const assignedArray = req.body.assignedArray;
+
+    orchestrator.getResourcesByArray(number, size, field, direction, assignedArray)
+        .subscribe(result => {
+            res.status(200);
+            res.send(JSON.stringify(result.data));
+        }, error => {
+            res.status(500);
+            res.send(JSON.stringify({message: "Error Occurred"}));
+            console.log(error);
+        });
+
+};
+
+export let getAssignedResourcesByArray = (req: Request, res: Response) => {
+
+    const number = getNumericValueOrDefault(req.query.pageNumber, 1);
+    const size = getNumericValueOrDefault(req.query.pageSize, 10);
+    const field = getStringValueOrDefault(req.query.sortField, "");
+    const direction = getStringValueOrDefault(req.query.sortOrder, "");
+    const assignedArray = req.query.assignedArray ? req.query.assignedArray.split(",") : [];
+
+    orchestrator.getAssignedResourcesByArray(number, size, field, direction, assignedArray)
+        .subscribe(result => {
+            res.status(200);
+            res.send(JSON.stringify(result.data));
+        }, error => {
+            res.status(500);
+            res.send(JSON.stringify({message: "Error Occurred"}));
+            console.log(error);
+        });
+};
+

@@ -22,17 +22,16 @@ export class ResourceTypeOrchestrator {
 
   getResourceTypes(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
     const sort: string = getSortOrderOrDefault(field, direction);
-    // return this.resourceTypeRepository
-    //   .getResourceTypes(number, size, sort)
-    //   .pipe(flatMap(value => {
-    //     return this.resourceTypeRepository
-    //       .getResourceTypeCount()
-    //       .pipe(map(count => {
-    //         // const shapeResourceTypesResp: any = shapeResourceTypesResponse(value, number, size, value.length, count, sort);
-    //         // return new Result<any>(false, "resourceTypes", shapeResourceTypesResp);
-    //       }));
-    //   }));
-    return undefined;
+    return this.resourceTypeRepository
+      .getResourceTypes(number, size, sort)
+      .pipe(flatMap(value => {
+        return this.resourceTypeRepository
+          .getResourceTypeCount()
+          .pipe(map(count => {
+            const shapeResourceTypesResp: any = shapeResourceTypesResponse(value, number, size, value.length, count, sort);
+            return new Result<any>(false, "resourceTypes", shapeResourceTypesResp);
+          }));
+      }));
   }
 
   addResourceType(resourceType: ResourceType): Observable<ResourceType> {

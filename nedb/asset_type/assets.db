@@ -1,2 +1,2 @@
-{"$$indexCreated":{"fieldName":"assetId","unique":true,"sparse":false}}
 {"assetKindId":"65694257-0aa8-4fb6-abb7-e6c7b83cf4f2","assetTypeId":"6bc4fa8a-84b6-4088-91d4-8a1cc84e7cff","serialNumber":"","quantity":"","unitOfMeasureId":"d1acfefe-d7fe-11e7-9296-cec278b6b50a","description":"","personId":"ffc10433-b99e-46cb-a2cf-b8ad0458e908","siteId":"01615ccc-74a8-41da-b052-c590ea05f056","assetId":"6ad3c40b-47c3-4674-b290-bab26b37ab58","_id":"sYXHxXo9AHSEMjzV"}
+{"$$indexCreated":{"fieldName":"assetId","unique":true,"sparse":false}}
