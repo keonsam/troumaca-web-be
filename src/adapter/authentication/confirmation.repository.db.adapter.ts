@@ -73,6 +73,10 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
       }));
   }
 
+  resendConfirmCodeByUsername(username: string, options?: any): Observable<Confirmation> {
+    throw new Error();
+  }
+
   // USED BY OTHER REPO
 
   addConfirmation(confirmation: Confirmation): Observable<Confirmation> {
