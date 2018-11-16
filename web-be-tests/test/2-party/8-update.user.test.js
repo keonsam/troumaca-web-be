@@ -20,7 +20,7 @@ describe('update-user-profile', function () {
     it('should be an authenticated credential with status of "AccountActive"', function (done) {
         api.post('/authentication/authenticate')
             .set('Accept', 'application/json')
-            .set('correlationId', 1234567890)
+            .set('Correlation-Id', 1234567890)
             .send({
                 username: "tester1@shapestone.com",
                 password: "Tester2@user",
@@ -45,7 +45,7 @@ describe('update-user-profile', function () {
     it('it should get user', function (done) {
         api.get('/users/ffc10433-b99e-46cb-a2cf-b8ad0458e908')
             .set('Accept', 'application/json')
-            .set('correlationId', 1234567890)
+            .set('Correlation-Id', 1234567890)
             .set('Cookie', [cookie])
             .expect('Content-Type', /json/)
             .expect(200)
@@ -70,7 +70,7 @@ describe('update-user-profile', function () {
     it('it should update be an updated user ', function (done) {
         api.put('/users/ffc10433-b99e-46cb-a2cf-b8ad0458e908')
             .set('Accept', 'application/json')
-            .set('correlationId', 1234567890)
+            .set('Correlation-Id', 1234567890)
             .set('Cookie', [cookie])
             .send({
                 user,

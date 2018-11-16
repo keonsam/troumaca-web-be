@@ -12,7 +12,7 @@ describe('find-users', function () {
     it('should be an authenticated credential with status of "AccountActive"', function (done) {
         api.post('/authentication/authenticate')
             .set('Accept', 'application/json')
-            .set('correlationId', 1234567890)
+            .set('Correlation-Id', 1234567890)
             .send({
                 username: "tester1@shapestone.com",
                 password: "Tester2@user"
@@ -37,7 +37,7 @@ describe('find-users', function () {
     it('it should find all user without any search string', function (done) {
         api.get('/users/find')
             .set('Accept', 'application/json')
-            .set('correlationId', 1234567890)
+            .set('Correlation-Id', 1234567890)
             .set('Cookie', [cookie])
             .expect('Content-Type', /json/)
             .expect(200)
@@ -54,7 +54,7 @@ describe('find-users', function () {
     it('it should find all user with any search string', function (done) {
         api.get('/users/find?q=test&pageSize=15')
             .set('Accept', 'application/json')
-            .set('correlationId', 1234567890)
+            .set('Correlation-Id', 1234567890)
             .set('Cookie', [cookie])
             .expect('Content-Type', /json/)
             .expect(200)
