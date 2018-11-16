@@ -13,8 +13,8 @@ import {Confirmation} from "../../data/authentication/confirmation";
 import {PersonRepository} from "../../repository/person.repository";
 import {createPersonRepository} from "../../adapter/party/person.repository.factory";
 import {Person} from "../../data/party/person";
-import {CreateCredential} from "../../repository/create.credential";
 import {User} from "../../data/party/user";
+import {ChangePassword} from "../../data/authentication/change.password";
 
 export class CredentialOrchestrator {
 
@@ -31,13 +31,12 @@ export class CredentialOrchestrator {
     this.personRepository = createPersonRepository();
   }
 
-  isValidUsername(username: string, partyId: string): Observable<boolean> {
-    return this.credentialRepository.isValidUsername(username, partyId);
+  isValidUsername(username: string, partyId: string, options?: any): Observable<boolean> {
+    return this.credentialRepository.isValidUsername(username, partyId, options);
   }
 
-  isValidPassword(password: string): Observable<boolean> {
-    return this.credentialRepository
-      .isValidPassword(password);
+  isValidPassword(password: string, options?: any): Observable<boolean> {
+    return this.credentialRepository.isValidPassword(password, options);
   }
 
   addCredential(credential: Credential, person: Person, options?: any): Observable<Confirmation> {
@@ -47,7 +46,7 @@ export class CredentialOrchestrator {
         return throwError(credential);
       } else {
         person.partyId = credential.partyId;
-        return this.personRepository.addPerson(person)
+        return this.personRepository.addPerson(person, options)
         .pipe(map(person => {
           if (!person) {
             throw new Error("user was not created.");
@@ -59,69 +58,75 @@ export class CredentialOrchestrator {
     }));
   }
 
-    authenticate(credential: Credential, options?: any): Observable<AuthenticatedCredential> {
-        // A person can access the application under the following conditions:
-        // 1. He/she provides a valid set of credentials
-        // 2. He/she has confirmed their username (email, or phone)
-        // 3. He/she has completed the quick profile, person, account type, and possible organization name.
+  authenticate(credential: Credential, options?: any): Observable<AuthenticatedCredential> {
+    // A person can access the application under the following conditions:
+    // 1. He/she provides a valid set of credentials
+    // 2. He/she has confirmed their username (email, or phone)
+    // 3. He/she has completed the quick profile, person, account type, and possible organization name.
 
-        return this.credentialRepository
-            .authenticate(credential, options)
-            .pipe(switchMap(authenticatedCredential => {
-                if (!authenticatedCredential) {
-                    return throwError(authenticatedCredential);
-                } else if (authenticatedCredential.authenticateStatus === "AccountConfirmed" || authenticatedCredential.authenticateStatus === "AccountActive") {
-                    const session: Session = new Session();
-                    session.partyId = authenticatedCredential.partyId;
-                    session.credentialId = authenticatedCredential.credentialId;
-                    session.username = authenticatedCredential.username;
+    return this.credentialRepository
+    .authenticate(credential, options)
+    .pipe(switchMap(authenticatedCredential => {
+      if (!authenticatedCredential) {
+        return throwError(authenticatedCredential);
+      } else if (authenticatedCredential.authenticateStatus === "AccountConfirmed" || authenticatedCredential.authenticateStatus === "AccountActive") {
+        const session: Session = new Session();
+        session.partyId = authenticatedCredential.partyId;
+        session.credentialId = authenticatedCredential.credentialId;
+        session.username = authenticatedCredential.username;
 
-                    if (authenticatedCredential.authenticateStatus) {
-                        session.data.set("authenticateStatus", authenticatedCredential.authenticateStatus);
-                    }
+        if (authenticatedCredential.authenticateStatus) {
+          session.data.set("authenticateStatus", authenticatedCredential.authenticateStatus);
+        }
 
-                    if (authenticatedCredential.username) {
-                        session.data.set("username", authenticatedCredential.username);
-                    }
+        if (authenticatedCredential.username) {
+          session.data.set("username", authenticatedCredential.username);
+        }
 
-                    if (authenticatedCredential.confirmationId) {
-                        session.data.set("confirmationId", authenticatedCredential.confirmationId);
-                    }
-                    return this.sessionRepository.addSession(session, options)
-                        .pipe(map(session => {
-                            if (!session) {
-                                throw new Error("Session was not created.");
-                            } else {
-                                authenticatedCredential.sessionId = session.sessionId;
-                                return authenticatedCredential;
-                            }
-                        }));
-                } else {
-                    return of(authenticatedCredential);
-                }
-            }));
-    }
+        if (authenticatedCredential.confirmationId) {
+          session.data.set("confirmationId", authenticatedCredential.confirmationId);
+        }
 
-    forgetPassword(credential: Credential, options?: any): Observable<Confirmation> {
-        return this.credentialRepository.forgetPassword(credential, options);
-    }
+        return this.sessionRepository.addSession(session, options)
+          .pipe(map(session => {
+            if (!session) {
+              throw new Error("Session was not created.");
+            } else {
+              authenticatedCredential.sessionId = session.sessionId;
+              return authenticatedCredential;
+            }
+          }));
+      } else {
+        return of(authenticatedCredential);
+      }
+    }));
+  }
 
-    updateCredential(credential: Credential, user: User, partyId: string, options?: any): Observable<number> {
-        delete user.username;
-        return this.credentialRepository.updateCredential(partyId, credential)
-            .pipe(switchMap(numUpdated => {
-                if (!numUpdated) {
-                    return throwError(`Credential failed to update ${numUpdated}`);
-                } else {
-                    return this.userRepository.updateUser(partyId, user)
-                        .pipe(map(numUpdated2 => {
-                            if (!numUpdated2) {
-                                throw new Error(`user failed to update. ${numUpdated2}`);
-                            } else {
-                                return (numUpdated + numUpdated2);
-                            }
-                        }));
-                }
-            }));
-    }
+  forgetPassword(credential: Credential, options?: any): Observable<Confirmation> {
+    return this.credentialRepository.forgetPassword(credential, options);
+  }
+
+  changePassword(changePassword: ChangePassword, options?: any): Observable<Confirmation> {
+    return this.credentialRepository.changePassword(changePassword, options);
+  }
+
+
+  updateCredential(credential: Credential, user: User, partyId: string, options?: any): Observable<number> {
+      delete user.username;
+      return this.credentialRepository.updateCredential(partyId, credential)
+          .pipe(switchMap(numUpdated => {
+              if (!numUpdated) {
+                  return throwError(`Credential failed to update ${numUpdated}`);
+              } else {
+                  return this.userRepository.updateUser(partyId, user)
+                      .pipe(map(numUpdated2 => {
+                          if (!numUpdated2) {
+                              throw new Error(`user failed to update. ${numUpdated2}`);
+                          } else {
+                              return (numUpdated + numUpdated2);
+                          }
+                      }));
+              }
+          }));
+  }
 }

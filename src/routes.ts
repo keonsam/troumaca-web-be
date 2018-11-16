@@ -55,9 +55,11 @@ router.post("/authentication/validate-username", credentialController.isValidUse
 router.post("/authentication/credentials", credentialController.addCredential);
 router.post("/authentication/authenticate", credentialController.authenticate);
 router.post("/authentication/forgot-password", credentialController.forgetPassword);
+router.post("/authentication/change-password", credentialController.changePassword);
 router.put("/authentication/credentials/:partyId", credentialController.updateCredential);
 // confirmation
 router.post("/authentication/confirmations/resend", confirmationController.resendConfirmCode);
+router.post("/authentication/confirmations/resend-by-username", confirmationController.resendConfirmCodeByUsername);
 router.post("/authentication/confirmations/verify", confirmationController.confirmCode);
 // session
 router.get("/sessions/is-valid-session", sessionController.isValidSession);

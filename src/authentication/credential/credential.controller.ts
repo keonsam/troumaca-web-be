@@ -3,6 +3,7 @@ import {CredentialOrchestrator} from "./credential.orchestrator";
 import {AuthenticatedCredential} from "../../data/authentication/authenticated.credential";
 import {Credential} from "../../data/authentication/credential";
 import {HeaderNormalizer} from "../../header.normalizer";
+import {ChangePassword} from "../../data/authentication/change.password";
 
 const credentialOrchestrator: CredentialOrchestrator = new CredentialOrchestrator();
 
@@ -33,6 +34,10 @@ export let getCredential = (req: Request, res: Response) => {
 };
 
 export let isValidUsername = (req: Request, res: Response) => {
+  HeaderNormalizer.normalize(req);
+  const correlationId = req.headers["Correlation-Id"];
+  const ownerPartyId = req.headers["Owner-Party-Id"];
+  const requestingPartyId = req.headers["Party-Id"];
 
   const username = req.body.username;
   const partyId = req.body.partyId;
@@ -44,7 +49,13 @@ export let isValidUsername = (req: Request, res: Response) => {
     return;
   }
 
-  credentialOrchestrator.isValidUsername(username, partyId)
+  const headerOptions = {
+    "Correlation-Id": correlationId,
+    "Owner-Party-Id": ownerPartyId,
+    "Party-Id": requestingPartyId
+  };
+
+  credentialOrchestrator.isValidUsername(username, partyId, headerOptions)
     .subscribe((next: boolean) => {
       res.status(200);
       const resp = {valid: next};
@@ -60,6 +71,10 @@ export let isValidUsername = (req: Request, res: Response) => {
 };
 
 export let isValidPassword = (req: Request, res: Response) => {
+  HeaderNormalizer.normalize(req);
+  const correlationId = req.headers["Correlation-Id"];
+  const ownerPartyId = req.headers["Owner-Party-Id"];
+  const requestingPartyId = req.headers["Party-Id"];
 
   const password: string = req.body.password;
 
@@ -70,7 +85,13 @@ export let isValidPassword = (req: Request, res: Response) => {
     return;
   }
 
-  credentialOrchestrator.isValidPassword(password)
+  const headerOptions = {
+    "Correlation-Id": correlationId,
+    "Owner-Party-Id": ownerPartyId,
+    "Party-Id": requestingPartyId
+  };
+
+  credentialOrchestrator.isValidPassword(password, headerOptions)
     .subscribe((next: boolean) => {
       res.status(200);
       const resp = {valid: next};
@@ -136,6 +157,10 @@ export let addCredential = (req: Request, res: Response) => {
 };
 
 export let authenticate = (req: Request, res: Response) => {
+  HeaderNormalizer.normalize(req);
+  const correlationId = req.headers["Correlation-Id"];
+  const ownerPartyId = req.headers["Owner-Party-Id"];
+  const requestingPartyId = req.headers["Party-Id"];
 
   const credential: Credential = req.body;
 
@@ -146,7 +171,105 @@ export let authenticate = (req: Request, res: Response) => {
     return;
   }
 
-  const correlationId = req.headers.correlationid;
+  if (!correlationId) {
+    res.status(400);
+    res.setHeader("content-type", "application/json");
+    res.send(JSON.stringify({message: "A \"correlationId\" is required."}));
+    return;
+  }
+
+  const headerOptions = {
+    "Correlation-Id": correlationId,
+    "Owner-Party-Id": ownerPartyId,
+    "Party-Id": requestingPartyId
+  };
+
+  credentialOrchestrator.authenticate(credential, headerOptions)
+  .subscribe((authenticatedCredential: AuthenticatedCredential) => {
+    if (authenticatedCredential && authenticatedCredential.sessionId) {
+      res.cookie("sessionId", authenticatedCredential.sessionId, {
+        path: "/",
+        maxAge: 20 * 60000,
+        httpOnly: true
+      });
+    }
+    const body = JSON.stringify(authenticatedCredential);
+    res.status(200);
+    res.setHeader("content-type", "application/json");
+    res.send(body);
+  }, error => {
+    res.status(500);
+    res.setHeader("content-type", "application/json");
+    res.send(JSON.stringify({message: "Internal Occurred"}));
+    console.log(error);
+  });
+
+};
+
+export let forgetPassword = (req: Request, res: Response) => {
+  HeaderNormalizer.normalize(req);
+  const correlationId = req.headers["Correlation-Id"];
+  const ownerPartyId = req.headers["Owner-Party-Id"];
+  const requestingPartyId = req.headers["Party-Id"];
+
+  const credential: Credential = req.body;
+
+  if (!credential || !credential.username) {
+      res.status(400);
+      res.setHeader("content-type", "application/json");
+      res.send(JSON.stringify({message: "'Credential' contain username."}));
+      return;
+  }
+
+  if (!correlationId) {
+      res.status(400);
+      res.setHeader("content-type", "application/json");
+      res.send(JSON.stringify({message: "A \"correlationId\" is required."}));
+      return;
+  }
+
+  const headerOptions = {
+    "Correlation-Id": correlationId,
+    "Owner-Party-Id": ownerPartyId,
+    "Party-Id": requestingPartyId
+  };
+
+  credentialOrchestrator.forgetPassword(credential, headerOptions)
+  .subscribe(confirmation => {
+    if (confirmation && confirmation.confirmationId) {
+      const body = JSON.stringify(confirmation);
+      res.status(201);
+      res.setHeader("content-type", "application/json");
+      res.send(body);
+  } else {
+      const body = JSON.stringify(confirmation);
+      res.status(404);
+      res.setHeader("content-type", "application/json");
+      res.send(body);
+    }
+  }, error => {
+    res.status(500);
+    res.setHeader("content-type", "application/json");
+    res.send(JSON.stringify({message: "Internal Occurred"}));
+    console.log(error);
+  });
+
+};
+
+export let changePassword = (req: Request, res: Response) => {
+  HeaderNormalizer.normalize(req);
+  const correlationId = req.headers["Correlation-Id"];
+  const ownerPartyId = req.headers["Owner-Party-Id"];
+  const requestingPartyId = req.headers["Party-Id"];
+
+  const changePassword: ChangePassword = req.body;
+
+  if (!changePassword || !changePassword.username) {
+    res.status(400);
+    res.setHeader("content-type", "application/json");
+    res.send(JSON.stringify({message: "'Credential' contain username."}));
+    return;
+  }
 
   if (!correlationId) {
     res.status(400);
@@ -156,78 +279,30 @@ export let authenticate = (req: Request, res: Response) => {
   }
 
   const headerOptions = {
-    correlationId: correlationId,
-    sourceSystemHost: req.headers.host,
-    sourceSystemName: ""
+    "Correlation-Id": correlationId,
+    "Owner-Party-Id": ownerPartyId,
+    "Party-Id": requestingPartyId
   };
 
-  credentialOrchestrator.authenticate(credential, headerOptions)
-    .subscribe((authenticatedCredential: AuthenticatedCredential) => {
-      if (authenticatedCredential && authenticatedCredential.sessionId) {
-        res.cookie("sessionId", authenticatedCredential.sessionId, {
-          path: "/",
-          maxAge: 20 * 60000,
-          httpOnly: true
-        });
+  credentialOrchestrator.changePassword(changePassword, headerOptions)
+    .subscribe(confirmation => {
+      if (confirmation && confirmation.confirmationId) {
+        const body = JSON.stringify(confirmation);
+        res.status(201);
+        res.setHeader("content-type", "application/json");
+        res.send(body);
+      } else {
+        const body = JSON.stringify(confirmation);
+        res.status(404);
+        res.setHeader("content-type", "application/json");
+        res.send(body);
       }
-      const body = JSON.stringify(authenticatedCredential);
-      res.status(200);
-      res.setHeader("content-type", "application/json");
-      res.send(body);
     }, error => {
       res.status(500);
       res.setHeader("content-type", "application/json");
       res.send(JSON.stringify({message: "Internal Occurred"}));
       console.log(error);
     });
-
-};
-
-export let forgetPassword = (req: Request, res: Response) => {
-
-    const credential: Credential = req.body;
-
-    if (!credential || !credential.username) {
-        res.status(400);
-        res.setHeader("content-type", "application/json");
-        res.send(JSON.stringify({message: "'Credential' contain username."}));
-        return;
-    }
-
-    const correlationId = req.headers.correlationid;
-
-    if (!correlationId) {
-        res.status(400);
-        res.setHeader("content-type", "application/json");
-        res.send(JSON.stringify({message: "A \"correlationId\" is required."}));
-        return;
-    }
-
-    const headerOptions = {
-        correlationId: correlationId,
-        sourceSystemHost: req.headers.host,
-        sourceSystemName: ""
-    };
-
-    credentialOrchestrator.forgetPassword(credential, headerOptions)
-        .subscribe(confirmation => {
-            if (confirmation && confirmation.confirmationId) {
-                const body = JSON.stringify(confirmation);
-                res.status(201);
-                res.setHeader("content-type", "application/json");
-                res.send(body);
-            } else {
-                const body = JSON.stringify(confirmation);
-                res.status(404);
-                res.setHeader("content-type", "application/json");
-                res.send(body);
-            }
-        }, error => {
-            res.status(500);
-            res.setHeader("content-type", "application/json");
-            res.send(JSON.stringify({message: "Internal Occurred"}));
-            console.log(error);
-        });
 
 };
 

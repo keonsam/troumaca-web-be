@@ -5,12 +5,13 @@ import {Observable} from "rxjs";
 import {CreateCredential} from "./create.credential";
 import {Person} from "../data/party/person";
 import { Confirmation } from "../data/authentication/confirmation";
+import {ChangePassword} from "../data/authentication/change.password";
 
 export interface CredentialRepository {
 
-  isValidUsername(username: string, partyId: string): Observable<boolean>;
+  isValidUsername(username: string, partyId: string, options?: any): Observable<boolean>;
 
-  isValidPassword(password: string): Observable<boolean>;
+  isValidPassword(password: string, options?: any): Observable<boolean>;
 
   addCredential(person: Person, credential: Credential, options?: any): Observable<CreatedCredential>;
 
@@ -18,12 +19,14 @@ export interface CredentialRepository {
 
   forgetPassword(credential: Credential, options: any): Observable<Confirmation>;
 
-  updateCredential(partyId: string, credential: Credential): Observable<number>;
+  changePassword(changePassword: ChangePassword, options: any): Observable<Confirmation>;
+
+  updateCredential(partyId: string, credential: Credential, options?: any): Observable<number>;
 
   // USED BY OTHER REPOS
 
-  updateCredentialStatusByPartyId(partyId: string, status: string): Observable<number>;
+  updateCredentialStatusByPartyId(partyId: string, status: string, options?: any): Observable<number>;
 
-  deleteCredentialByPartyId(partyId: string): Observable<number>;
+  deleteCredentialByPartyId(partyId: string, options?: any): Observable<number>;
 
 }

@@ -6,8 +6,11 @@ import {HeaderNormalizer} from "../../../header.normalizer";
 const confirmationOrchestrator: ConfirmationOrchestrator = new ConfirmationOrchestrator();
 
 export let resendConfirmCode = (req: Request, res: Response) => {
+  HeaderNormalizer.normalize(req);
+  const correlationId = req.headers["Correlation-Id"];
+  const ownerPartyId = req.headers["Owner-Party-Id"];
+  const requestingPartyId = req.headers["Party-Id"];
 
-  const correlationId = req.headers.correlationid;
   const confirmation = req.body;
 
   if (!correlationId) {
@@ -25,9 +28,9 @@ export let resendConfirmCode = (req: Request, res: Response) => {
   }
 
   const headerOptions = {
-    correlationId: correlationId,
-    sourceSystemHost: req.headers.host,
-    sourceSystemName: ""
+    "Correlation-Id": correlationId,
+    "Owner-Party-Id": ownerPartyId,
+    "Party-Id": requestingPartyId
   };
 
   confirmationOrchestrator
@@ -44,6 +47,50 @@ export let resendConfirmCode = (req: Request, res: Response) => {
     });
 
 };
+
+export let resendConfirmCodeByUsername = (req: Request, res: Response) => {
+  HeaderNormalizer.normalize(req);
+  const correlationId = req.headers["Correlation-Id"];
+  const ownerPartyId = req.headers["Owner-Party-Id"];
+  const requestingPartyId = req.headers["Party-Id"];
+
+  const confirmation = req.body;
+
+  if (!correlationId) {
+    res.status(400);
+    res.setHeader("content-type", "application/json");
+    res.send(JSON.stringify({message: "A \"correlationId\" is required."}));
+    return;
+  }
+
+  if (!confirmation.username) {
+    res.status(400);
+    res.setHeader("content-type", "application/json");
+    res.send(JSON.stringify({message: "'Confirm' by username a \"username\" value."}));
+    return;
+  }
+
+  const headerOptions = {
+    "Correlation-Id": correlationId,
+    "Owner-Party-Id": ownerPartyId,
+    "Party-Id": requestingPartyId
+  };
+
+  confirmationOrchestrator
+    .resendConfirmCodeByUsername(confirmation.username, headerOptions)
+    .subscribe(next => {
+      const body = JSON.stringify(next);
+      res.status(201);
+      res.setHeader("content-type", "application/json");
+      res.send(body);
+    }, error => {
+      res.status(500);
+      res.send(JSON.stringify({message: "Error Occurred"}));
+      console.log(error);
+    });
+
+};
+
 
 export let confirmCode = (req: Request, res: Response) => {
   HeaderNormalizer.normalize(req);
@@ -88,21 +135,3 @@ export let confirmCode = (req: Request, res: Response) => {
     });
 
 };
-
-// export let getConfirmationsUsername = (req: Request, res: Response) => {
-//   let credentialConfirmationId = req.params.credentialConfirmationId;
-//   confirmationOrchestrator.getConfirmationsUsername(credentialConfirmationId)
-//     .subscribe(username => {
-//       if (username) {
-//           res.status(200);
-//           res.send(JSON.stringify(username));
-//       }else {
-//         res.status(404);
-//         res.send(JSON.stringify({message: 'No Data Found For ' + req.params.credentialConfirmationId}));
-//       }
-//     }, error => {
-//       res.status(500);
-//       res.send(error);
-//       console.log(error);
-//     });
-// };
