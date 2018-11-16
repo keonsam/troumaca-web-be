@@ -5,7 +5,7 @@ import {properties} from "../../properties.helpers";
 import {jsonRequestHeaderMap, postJsonOptions} from "../../request.helpers";
 import request from "request";
 
-export class PersonRestRepositoryAdapter implements PersonRepository {
+export class PersonRepositoryRestAdapter implements PersonRepository {
 
   addPerson(person: Person, options?: any): Observable<Person> {
     const uri: string = properties.get("party.host.port") as string;

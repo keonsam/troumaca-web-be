@@ -1,7 +1,7 @@
 import {RepositoryKind} from "../../repository.kind";
 import {PersonRepository} from "../../repository/person.repository";
 import {PersonDbRepositoryAdapter} from "./person.db.repository.adapter";
-import {PersonRestRepositoryAdapter} from "./person.rest.repository.adapter";
+import {PersonRepositoryRestAdapter} from "./person.repository.rest.adapter";
 import {properties} from "../../properties.helpers";
 
 export function createPersonRepository(kind?: RepositoryKind): PersonRepository {
@@ -11,7 +11,7 @@ export function createPersonRepository(kind?: RepositoryKind): PersonRepository 
     case RepositoryKind.Nedb:
       return new PersonDbRepositoryAdapter();
     case RepositoryKind.Rest:
-      return new PersonRestRepositoryAdapter();
+      return new PersonRepositoryRestAdapter();
     default:
       return new PersonDbRepositoryAdapter();
   }

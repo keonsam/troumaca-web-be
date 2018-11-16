@@ -41,7 +41,7 @@ export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository
 
     const json = {credentialId: credentialId};
 
-    const uriAndPath: string = `${uri}/authentication/confirmations/${confirmationId}/credentials/${credentialId}/resend`;
+    const uriAndPath: string = `${uri}/authentication/confirmations/credentials/${credentialId}/resend`;
 
     const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
 
