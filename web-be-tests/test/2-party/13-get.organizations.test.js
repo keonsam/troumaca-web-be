@@ -12,7 +12,7 @@ describe('get-organizations', function () {
     it('should be an authenticated credential with status of "AccountActive"', function (done) {
         api.post('/authentication/authenticate')
             .set('Accept', 'application/json')
-            .set('correlationId', 1234567890)
+            .set('Correlation-Id', 1234567890)
             .send({
                 username: "tester1@shapestone.com",
                 password: "Tester2@user"
@@ -37,7 +37,7 @@ describe('get-organizations', function () {
     it('it should get organizations', function (done) {
         api.get('/organizations?pageNumber=1&pageSize=10&sortOrder=asc')
             .set('Accept', 'application/json')
-            .set('correlationId', 1234567890)
+            .set('Correlation-Id', 1234567890)
             .set('Cookie', [cookie])
             .expect('Content-Type', /json/)
             .expect(200)

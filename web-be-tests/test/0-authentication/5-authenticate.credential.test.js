@@ -8,7 +8,7 @@ describe('authenticate-credential', function () {
   it('should be an authenticated credential with status of "AccountActive"', function (done) {
       api.post('/authentication/authenticate')
           .set('Accept', 'application/json')
-          .set('correlationId', 1234567890)
+          .set('Correlation-Id', 1234567890)
           .send({
               username: "tester1@shapestone.com",
               password: "Tester2@user"
@@ -30,7 +30,7 @@ describe('authenticate-credential', function () {
   it('should be an authenticated credential with status of "AccountConfirmed"', function (done) {
       api.post('/authentication/authenticate')
           .set('Accept', 'application/json')
-          .set('correlationId', 1234567890)
+          .set('Correlation-Id', 1234567890)
           .send({
               username: "tester2@shapestone.com",
               password: "Tester2@user"
@@ -52,7 +52,7 @@ describe('authenticate-credential', function () {
   it('should be an authenticated credential with status of "AccountUsernameNotConfirmed"', function (done) {
       api.post('/authentication/authenticate')
           .set('Accept', 'application/json')
-          .set('correlationId', 1234567890)
+          .set('Correlation-Id', 1234567890)
           .send({
               username: "tester3@shapestone.com",
               password: "Tester2@user"
@@ -74,7 +74,7 @@ describe('authenticate-credential', function () {
   it('should be a failed authentication with wrong username', function (done) {
       api.post('/authentication/authenticate')
           .set('Accept', 'application/json')
-          .set('correlationId', 1234567890)
+          .set('Correlation-Id', 1234567890)
           .send({
               username: "tester11@shapestone.com",
               password: "Tester2@user"
@@ -92,7 +92,7 @@ describe('authenticate-credential', function () {
   it('should be a failed authentication with wrong password', function (done) {
       api.post('/authentication/authenticate')
           .set('Accept', 'application/json')
-          .set('correlationId', 1234567890)
+          .set('Correlation-Id', 1234567890)
           .send({
               username: "tester1@shapestone.com",
               password: "Tester3@user"

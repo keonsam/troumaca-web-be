@@ -36,7 +36,7 @@ describe('update-invited-user-credential', function () {
     it('should be an authenticated credential with status of "AccountActive"', function (done) {
         api.post('/authentication/authenticate')
             .set('Accept', 'application/json')
-            .set('correlationId', 1234567890)
+            .set('Correlation-Id', 1234567890)
             .send({
                 username: "tester1@shapestone.com",
                 password: "Tester2@user"
@@ -61,7 +61,7 @@ describe('update-invited-user-credential', function () {
     it('it should save user', function (done) {
         api.post('/users')
             .set('Accept', 'application/json')
-            .set('correlationId', 1234567890)
+            .set('Correlation-Id', 1234567890)
             .set('Cookie', [cookie])
             .send({
                 user,
@@ -84,7 +84,7 @@ describe('update-invited-user-credential', function () {
     it('it should get invited user', function (done) {
         api.get(`/authentication/credentials/${partyId}`)
             .set('Accept', 'application/json')
-            .set('correlationId', 1234567890)
+            .set('Correlation-Id', 1234567890)
             .expect('Content-Type', /json/)
             .expect(200)
             .end(function (err, res) {
@@ -103,7 +103,7 @@ describe('update-invited-user-credential', function () {
     it('it should update an invited user', function (done) {
         api.put(`/authentication/credentials/${partyId}`)
             .set('Accept', 'application/json')
-            .set('correlationId', 1234567890)
+            .set('Correlation-Id', 1234567890)
             .send({
                 'user': user2,
                 'credential': credentialUpdate

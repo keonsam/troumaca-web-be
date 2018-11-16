@@ -12,7 +12,7 @@ describe('session-is-valid', function () {
     it('should be an authenticated credential with status of "AccountActive"', function (done) {
         api.post('/authentication/authenticate')
             .set('Accept', 'application/json')
-            .set('correlationId', 1234567890)
+            .set('Correlation-Id', 1234567890)
             .send({
                 username: "tester1@shapestone.com",
                 password: "Tester2@user"
@@ -37,7 +37,7 @@ describe('session-is-valid', function () {
     it('should be an valid session with sessionId', function (done) {
         api.get('/sessions/is-valid-session')
             .set('Accept', 'application/json')
-            .set('correlationId', 1234567890)
+            .set('Correlation-Id', 1234567890)
             .set('Cookie', [cookie])
             .expect('Content-Type', /json/)
             .expect(200)
@@ -57,7 +57,7 @@ describe('session-is-valid', function () {
     it('should be an invalid session wrong sessionId', function (done) {
         api.get('/sessions/is-valid-session')
             .set('Accept', 'application/json')
-            .set('correlationId', 1234567890)
+            .set('Correlation-Id', 1234567890)
             .set('Cookie', ['sessionId=f7e4083d-302c-45b5-a90f-8f6f9a825412'])
             .expect('Content-Type', /json/)
             .expect(500)
@@ -72,7 +72,7 @@ describe('session-is-valid', function () {
     it('should be an invalid session no sessionId', function (done) {
         api.get('/sessions/is-valid-session')
             .set('Accept', 'application/json')
-            .set('correlationId', 1234567890)
+            .set('Correlation-Id', 1234567890)
             .set('Cookie', ['sessionId='])
             .expect('Content-Type', /json/)
             .expect(440)
@@ -89,7 +89,7 @@ describe('session-is-valid', function () {
     it('should be an invalid session no cookie', function (done) {
         api.get('/sessions/is-valid-session')
             .set('Accept', 'application/json')
-            .set('correlationId', 1234567890)
+            .set('Correlation-Id', 1234567890)
             .expect('Content-Type', /json/)
             .expect(440)
             .end(function (err, res) {
@@ -109,7 +109,7 @@ describe('session-is-valid', function () {
     // it('should be an valid session with less than 20 minutes passed', function (done) {
     //     api.get('/sessions/is-valid-session')
     //         .set('Accept', 'application/json')
-    //         .set('correlationId', 1234567890)
+    //         .set('Correlation-Id', 1234567890)
     //         .set('Cookie', [cookie])
     //         .expect('Content-Type', /json/)
     //         .expect(200)
@@ -128,7 +128,7 @@ describe('session-is-valid', function () {
     // it('should be an invalid session with more than 20 minutes passed', function (done) {
     //     api.get('/sessions/is-valid-session')
     //         .set('Accept', 'application/json')
-    //         .set('correlationId', 1234567890)
+    //         .set('Correlation-Id', 1234567890)
     //         .set('Cookie', [cookie])
     //         .expect('Content-Type', /json/)
     //         .expect(440)

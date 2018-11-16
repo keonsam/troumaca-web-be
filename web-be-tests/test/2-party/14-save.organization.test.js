@@ -14,7 +14,7 @@ describe('save-organization', function () {
     it('should be an authenticated credential with status of "AccountActive"', function (done) {
         api.post('/authentication/authenticate')
             .set('Accept', 'application/json')
-            .set('correlationId', 1234567890)
+            .set('Correlation-Id', 1234567890)
             .send({
                 username: "tester1@shapestone.com",
                 password: "Tester2@user"
@@ -39,7 +39,7 @@ describe('save-organization', function () {
     it('it should save organization', function (done) {
         api.post('/organizations')
             .set('Accept', 'application/json')
-            .set('correlationId', 1234567890)
+            .set('Correlation-Id', 1234567890)
             .set('Cookie', [cookie])
             .send({
                 name: `Added Company ${time}`,
