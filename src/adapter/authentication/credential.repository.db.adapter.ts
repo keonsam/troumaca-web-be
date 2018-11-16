@@ -101,41 +101,40 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
       }));
   }
 
-  authenticate(credential: Credential, options?: any): Observable<AuthenticatedCredential> {
-    return this.verifyCredential(credential.username, credential.password)
-    .pipe(switchMap((credential: Credential) => {
-      if (!credential) {
-        return of("Failed to verify Credential");
-      } else {
-        const authenticatedCredential: AuthenticatedCredential = new AuthenticatedCredential();
-        const credentialId = credential.credentialId;
-        authenticatedCredential.username = credential.username;
-        authenticatedCredential.credentialId = credentialId;
-        authenticatedCredential.partyId = credential.partyId;
-
-        if (credential.status === "Active") {
-          authenticatedCredential.authenticateStatus = "AccountActive";
-          return of(authenticatedCredential);
-        } else if (credential.status === "Confirmed") {
-          authenticatedCredential.authenticateStatus = "AccountConfirmed";
-          return of(authenticatedCredential);
-        } else if (credential.status === "New") {
-          const confirmation: Confirmation = new Confirmation();
-          confirmation.credentialId = credentialId;
-          return this.confirmationRepositoryNeDbAdapter.addConfirmation(confirmation)
-          .pipe(map(confirmationRes => {
-            if (!confirmationRes) {
-              throw new Error("Confirmation was not created");
-            } else {
-              authenticatedCredential.confirmationId = confirmation.confirmationId;
-              authenticatedCredential.authenticateStatus = "AccountUsernameNotConfirmed";
-              return authenticatedCredential;
-            }
-          }));
-        }
-      }
-    }));
-  }
+    authenticate(credential: Credential, options?: any): Observable<AuthenticatedCredential> {
+        return this.verifyCredential(credential.username, credential.password)
+            .pipe(switchMap((credential: Credential) => {
+                if (!credential) {
+                    return of("Failed to verify Credential");
+                } else {
+                    const authenticatedCredential: AuthenticatedCredential = new AuthenticatedCredential();
+                    const credentialId = credential.credentialId;
+                    authenticatedCredential.username = credential.username;
+                    authenticatedCredential.credentialId = credentialId;
+                    authenticatedCredential.partyId = credential.partyId;
+                    if (credential.status === "Active") {
+                        authenticatedCredential.authenticateStatus = "CredentialActive";
+                        return of(authenticatedCredential);
+                    } else if (credential.status === "Confirmed") {
+                        authenticatedCredential.authenticateStatus = "CredentialConfirmed";
+                        return of(authenticatedCredential);
+                    } else if (credential.status === "New") {
+                        const confirmation: Confirmation = new Confirmation();
+                        confirmation.credentialId = credentialId;
+                        return this.confirmationRepositoryNeDbAdapter.addConfirmation(confirmation)
+                            .pipe(map(confirmationRes => {
+                                if (!confirmationRes) {
+                                    throw new Error("Confirmation was not created");
+                                } else {
+                                    authenticatedCredential.confirmationId = confirmation.confirmationId;
+                                    authenticatedCredential.authenticateStatus = "CredentialUsernameNotConfirmed";
+                                    return authenticatedCredential;
+                                }
+                            }));
+                    }
+                }
+            }));
+    }
 
   forgetPassword(credential: Credential, options: any): Observable<Confirmation> {
     return this.getCredentialByUsername(credential.username)

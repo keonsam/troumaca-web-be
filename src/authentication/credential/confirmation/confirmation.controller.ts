@@ -1,7 +1,7 @@
 import {Response, Request} from "express";
 import {ConfirmationOrchestrator} from "./confirmation.orchestrator";
 import {Confirmation} from "../../../data/authentication/confirmation";
-import {HeaderNormalizer} from "../../../header.normalizer";
+import { HeaderNormalizer } from "../../../header.normalizer";
 
 const confirmationOrchestrator: ConfirmationOrchestrator = new ConfirmationOrchestrator();
 
@@ -93,10 +93,10 @@ export let resendConfirmCodeByUsername = (req: Request, res: Response) => {
 
 
 export let confirmCode = (req: Request, res: Response) => {
-  HeaderNormalizer.normalize(req);
-  const correlationId = req.headers["Correlation-Id"];
-  const ownerPartyId = req.headers["Owner-Party-Id"];
-  const requestingPartyId = req.headers["Party-Id"];
+    HeaderNormalizer.normalize(req);
+    const correlationId = req.headers["Correlation-Id"];
+    const ownerPartyId = req.headers["Owner-Party-Id"];
+    const requestingPartyId = req.headers["Party-Id"];
 
   const confirmation: Confirmation = req.body;
 
@@ -107,6 +107,7 @@ export let confirmCode = (req: Request, res: Response) => {
     return;
   }
 
+
   if (!correlationId) {
     res.status(400);
     res.setHeader("content-type", "application/json");
@@ -114,11 +115,11 @@ export let confirmCode = (req: Request, res: Response) => {
     return;
   }
 
-  const headerOptions = {
-    "Correlation-Id": correlationId,
-    "Owner-Party-Id": ownerPartyId,
-    "Party-Id": requestingPartyId
-  };
+    const headerOptions = {
+        "Correlation-Id": correlationId,
+        "Owner-Party-Id": ownerPartyId,
+        "Party-Id": requestingPartyId
+    };
 
   confirmationOrchestrator
     .confirmCode(confirmation.confirmationId, confirmation.credentialId, confirmation, headerOptions)

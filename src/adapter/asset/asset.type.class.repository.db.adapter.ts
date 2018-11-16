@@ -3,7 +3,6 @@ import {assetTypeClasses} from "../../db";
 import {calcSkip} from "../../db.util";
 import {AssetTypeClassRepository} from "../../repository/asset.type.class.repository";
 import {AssetTypeClass} from "../../data/asset/asset.type.class";
-import {AssetTypeClassResponse} from "../../data/asset/asset.type.class.response";
 import {AssignedAttribute} from "../../data/asset/assigned.attribute";
 import {AssignedAttributeRepositoryNeDbAdapter} from "./assigned.attribute.repository.db.adapter";
 import { Observable, Observer, of, throwError } from "rxjs";
@@ -61,7 +60,7 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
     });
   }
 
-  getAssetTypeClassById(assetTypeClassId: string): Observable<AssetTypeClassResponse> {
+  getAssetTypeClassById(assetTypeClassId: string): Observable<AssetTypeClass> {
     return this.getAssetTypeClassByIdLocal(assetTypeClassId)
         .pipe(switchMap(assetTypeClass => {
           if (!assetTypeClass) {
@@ -69,7 +68,8 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
           }
             return this.assignedAttributeRepositoryNeDbAdapter.getAssignedAttributesByClassId(assetTypeClassId)
                 .pipe(map(assignedAttributes => {
-                    return new AssetTypeClassResponse(assetTypeClass, assignedAttributes);
+                    assetTypeClass.assignedAttributes = assignedAttributes;
+                    return assetTypeClass;
                 }));
         }));
   }
@@ -152,7 +152,7 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
 
   // HELPS
 
-  private getAssetTypeClassByIdLocal(assetTypeClassId: string): Observable<AssetTypeClass> {
+   getAssetTypeClassByIdLocal(assetTypeClassId: string): Observable<AssetTypeClass> {
     return Observable.create(function (observer: Observer<AssetTypeClass>) {
       const query = {"assetTypeClassId": assetTypeClassId};
       assetTypeClasses.findOne(query, function (err: any, doc: any) {

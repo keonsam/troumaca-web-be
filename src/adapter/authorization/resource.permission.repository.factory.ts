@@ -9,18 +9,18 @@ import {Permission} from "../../data/authorization/permission";
 
 class ResourcePermissionDBRepository implements ResourcePermissionRepository {
 
-  getAllResourcePermissions(): Observable<ResourcePermission[]> {
-    return Observable.create(function (observer: Observer<ResourcePermission[]>) {
-      resourcePermissions.find({}, function (err: any, docs: any) {
-        if (err) {
-          observer.error(err);
-        } else {
-          observer.next(docs);
-        }
-        observer.complete();
-      });
-    });
-  }
+  // getAllResourcePermissions(): Observable<ResourcePermission[]> {
+  //   return Observable.create(function (observer: Observer<ResourcePermission[]>) {
+  //     resourcePermissions.find({}, function (err: any, docs: any) {
+  //       if (err) {
+  //         observer.error(err);
+  //       } else {
+  //         observer.next(docs);
+  //       }
+  //       observer.complete();
+  //     });
+  //   });
+  // }
 
   getResourcePermissionsByResourceId(resourceId: string): Observable<ResourcePermission[]> {
     return this.getResourcePermissionsByResourceIdLocal(resourceId)
@@ -31,11 +31,7 @@ class ResourcePermissionDBRepository implements ResourcePermissionRepository {
           .pipe(map(permissions => {
               if (!permissions) return resourcePermissions;
               resourcePermissions.forEach(value => {
-                const index = permissions.findIndex(x => x.permissionId === value.permissionId);
-                if (index > -1) {
-                  value.permissionName = permissions[index].name;
-                  value.description = permissions[index].description;
-                }
+                value.permission  = permissions.find(x => x.permissionId === value.permissionId);
               });
               return resourcePermissions;
             }
@@ -52,11 +48,7 @@ class ResourcePermissionDBRepository implements ResourcePermissionRepository {
           .pipe(map(permissions => {
               if (!permissions) return resourcePermissions;
               resourcePermissions.forEach(value => {
-                const index = permissions.findIndex(x => x.permissionId === value.permissionId);
-                if (index > -1) {
-                  value.permissionName = permissions[index].name;
-                  value.description = permissions[index].description;
-                }
+                value.permission = permissions.find(x => x.permissionId === value.permissionId);
               });
               return resourcePermissions;
             }
@@ -175,9 +167,9 @@ class ResourcePermissionDBRepository implements ResourcePermissionRepository {
 
 class ResourcePermissionRestRepository implements ResourcePermissionRepository {
 
-  getAllResourcePermissions(): Observable<ResourcePermission[]> {
-    return undefined;
-  }
+  // getAllResourcePermissions(): Observable<ResourcePermission[]> {
+  //   return undefined;
+  // }
 
   getResourcePermissionsByResourceId(resourceId: string): Observable<ResourcePermission[]> {
     return undefined;

@@ -6,7 +6,6 @@ import {Result} from "../result.success";
 import {getSortOrderOrDefault} from "../sort.order.util";
 import {shapeAssetTypesResponse} from "./asset.type.response.shaper";
 import {Value} from "../data/asset/value";
-import {AssetTypeResponse} from "../data/asset/asset.type.response";
 import {switchMap, map} from "rxjs/operators";
 
 export class AssetTypeOrchestrator {
@@ -22,21 +21,20 @@ export class AssetTypeOrchestrator {
   }
 
   getAssetTypes(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
-    // const sort: string = getSortOrderOrDefault(field, direction);
-    // return this.assetTypeRepository
-    //   .getAssetTypes(number, size, sort)
-    //   .pipe(switchMap(assetTypes => {
-    //     return this.assetTypeRepository
-    //         .getAssetTypeCount()
-    //         .pipe(map(count => {
-    //           // const shapeAssetTypesResp: any = shapeAssetTypesResponse(assetTypes, number, size, assetTypes.length, count, sort);
-    //           // return new Result<any>(false, "assetTypes", shapeAssetTypesResp);
-    //         }));
-    //   }));
-    return undefined;
+    const sort: string = getSortOrderOrDefault(field, direction);
+    return this.assetTypeRepository
+      .getAssetTypes(number, size, sort)
+      .pipe(switchMap(assetTypes => {
+        return this.assetTypeRepository
+            .getAssetTypeCount()
+            .pipe(map(count => {
+              const shapeAssetTypesResp: any = shapeAssetTypesResponse(assetTypes, number, size, assetTypes.length, count, sort);
+              return new Result<any>(false, "assetTypes", shapeAssetTypesResp);
+            }));
+      }));
   }
 
-  getAssetTypeById(assetTypeId: string): Observable<AssetTypeResponse> {
+  getAssetTypeById(assetTypeId: string): Observable<AssetType> {
     return this.assetTypeRepository.getAssetTypeById(assetTypeId);
   }
 

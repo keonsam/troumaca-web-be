@@ -64,16 +64,16 @@ export class CredentialOrchestrator {
     // 2. He/she has confirmed their username (email, or phone)
     // 3. He/she has completed the quick profile, person, account type, and possible organization name.
 
-    return this.credentialRepository
-    .authenticate(credential, options)
-    .pipe(switchMap(authenticatedCredential => {
-      if (!authenticatedCredential) {
-        return throwError(authenticatedCredential);
-      } else if (authenticatedCredential.authenticateStatus === "AccountConfirmed" || authenticatedCredential.authenticateStatus === "AccountActive") {
-        const session: Session = new Session();
-        session.partyId = authenticatedCredential.partyId;
-        session.credentialId = authenticatedCredential.credentialId;
-        session.username = authenticatedCredential.username;
+      return this.credentialRepository
+      .authenticate(credential, options)
+      .pipe(switchMap(authenticatedCredential => {
+        if (!authenticatedCredential) {
+          return throwError(authenticatedCredential);
+        } else if (authenticatedCredential.authenticateStatus === "CredentialConfirmed" || authenticatedCredential.authenticateStatus === "CredentialActive") {
+          const session: Session = new Session();
+          session.partyId = authenticatedCredential.partyId;
+          session.credentialId = authenticatedCredential.credentialId;
+          session.username = authenticatedCredential.username;
 
         if (authenticatedCredential.authenticateStatus) {
           session.data.set("authenticateStatus", authenticatedCredential.authenticateStatus);

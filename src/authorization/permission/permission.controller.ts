@@ -6,7 +6,6 @@ import {getStringValueOrDefault} from "../../string.util";
 const orchestrator: PermissionOrchestrator = new PermissionOrchestrator();
 
 export let getPermissions = (req: Request, res: Response) => {
-  console.log(req.query);
   const number = getNumericValueOrDefault(req.query.pageNumber, 1);
   const size = getNumericValueOrDefault(req.query.pageSize, 10);
   const field = getStringValueOrDefault(req.query.sortField, "");
@@ -14,25 +13,6 @@ export let getPermissions = (req: Request, res: Response) => {
 
   orchestrator
     .getPermissions(number, size, field, direction)
-    .subscribe(result => {
-      res.status(200);
-      res.send(JSON.stringify(result.data));
-    }, error => {
-      res.status(500);
-      res.send(JSON.stringify({message: "Error Occurred"}));
-
-    });
-};
-
-export let getPermissionsByArray = (req: Request, res: Response) => {
-
-  const number = getNumericValueOrDefault(req.body.pageNumber, 1);
-  const size = getNumericValueOrDefault(req.body.pageSize, 10);
-  const field = getStringValueOrDefault(req.body.sortField, "");
-  const direction = getStringValueOrDefault(req.body.sortOrder, "");
-  const assignedArray = req.body.assignedArray;
-
-  orchestrator.getPermissionsByArray(number, size, field, direction, assignedArray)
     .subscribe(result => {
       res.status(200);
       res.send(JSON.stringify(result.data));
@@ -121,5 +101,45 @@ export let deletePermission = (req: Request, res: Response) => {
       res.send(JSON.stringify({message: "Error Occurred"}));
       console.log(error);
     });
+};
+
+// OTHERS
+
+export let getPermissionsByArray = (req: Request, res: Response) => {
+
+    const number = getNumericValueOrDefault(req.body.pageNumber, 1);
+    const size = getNumericValueOrDefault(req.body.pageSize, 10);
+    const field = getStringValueOrDefault(req.body.sortField, "");
+    const direction = getStringValueOrDefault(req.body.sortOrder, "");
+    const assignedArray = req.body.assignedArray;
+
+    orchestrator.getPermissionsByArray(number, size, field, direction, assignedArray)
+        .subscribe(result => {
+            res.status(200);
+            res.send(JSON.stringify(result.data));
+        }, error => {
+            res.status(500);
+            res.send(JSON.stringify({message: "Error Occurred"}));
+
+        });
+};
+
+export let getAssignablePermissions = (req: Request, res: Response) => {
+
+    const number = getNumericValueOrDefault(req.body.pageNumber, 1);
+    const size = getNumericValueOrDefault(req.body.pageSize, 10);
+    const field = getStringValueOrDefault(req.body.sortField, "");
+    const direction = getStringValueOrDefault(req.body.sortOrder, "");
+    const assignedArray = req.body.assignedArray;
+
+    orchestrator.getAssignablePermissions(number, size, field, direction, assignedArray)
+        .subscribe(result => {
+            res.status(200);
+            res.send(JSON.stringify(result.data));
+        }, error => {
+            res.status(500);
+            res.send(JSON.stringify({message: "Error Occurred"}));
+
+        });
 };
 
