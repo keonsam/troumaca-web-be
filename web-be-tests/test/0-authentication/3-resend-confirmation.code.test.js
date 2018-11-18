@@ -5,7 +5,7 @@ var should = require('chai').should(),
 
 describe('resend-confirmation', function () {
 
-    this.timeout(5000);
+    this.timeout(9000);
 
     const time = new Date().getTime();
 
@@ -28,15 +28,16 @@ describe('resend-confirmation', function () {
     it('resent create credential', function (done) {
         api.post("/authentication/credentials")
             .set('Accept', 'application/json')
-            .set('correlationId', 1234567890)
+            .set('Correlation-Id', 1234567890)
             .send({credential, user})
-            .expect('Content-Type', /json/)
+            .expect('content-type', 'application/json; charset=utf-8')
             .expect(201)
             .end(function (err, res) {
                 if (!err) {
                     expect(res.body.confirmationId).to.be.a('string');
                     expect(res.body.credentialId).to.be.a('string');
-                    expect(res.body.code).to.have.lengthOf(6);
+                    expect(res.body.code).to.greaterThan(999);
+                    expect(res.body.code).to.lessThan(1000001);
                     expect(res.body.status).to.equal("New");
                     confirm.confirmationId = res.body.confirmationId;
                     confirm.credentialId = res.body.credentialId;
@@ -52,9 +53,9 @@ describe('resend-confirmation', function () {
     it('should send a new confirmation', function (done) {
         api.post('/authentication/confirmations/resend')
             .set('Accept', 'application/json')
-            .set('correlationId', 1234567890)
+            .set('Correlation-Id', 1234567890)
             .send(confirm)
-            .expect('Content-Type', /json/)
+            .expect('content-Type', 'application/json; charset=utf-8')
             .expect(201)
             .end(function (err, res) {
                 if (!err) {
@@ -62,7 +63,7 @@ describe('resend-confirmation', function () {
                     expect(res.body.confirmationId).to.be.a('string');
                     expect(res.body.credentialId).to.be.a('string');
                     expect(res.body.code).to.have.lengthOf(6);
-                    expect(res.body.status).to.equal("New");
+                    expect(res.body.status).to.equal("Resent");
                 }else {
                     console.log(err);
                 }

@@ -10,6 +10,7 @@ import {CreatedCredential} from "../../data/authentication/created.credential";
 import {CreateCredential} from "../../repository/create.credential";
 import {Person} from "../../data/party/person";
 import {Confirmation} from "../../data/authentication/confirmation";
+import {ChangePassword} from "../../data/authentication/change.password";
 
 export class CredentialRepositoryRestAdapter implements CredentialRepository {
 
@@ -108,7 +109,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
     });
   }
 
-  authenticate(credential: Credential, options: any): Observable<AuthenticatedCredential> {
+  authenticate(credential: Credential, options?: any): Observable<AuthenticatedCredential> {
     const uri: string = properties.get("credential.host.port") as string;
 
     const headerMap = jsonRequestHeaderMap(options ? options : {});
@@ -143,19 +144,81 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
     });
   }
 
-  forgetPassword(credential: Credential, options: any): Observable<Confirmation> {
-    return undefined;
+  forgetPassword(credential: Credential, options?: any): Observable<Confirmation> {
+    const uri: string = properties.get("credential.host.port") as string;
+
+    const headerMap = jsonRequestHeaderMap(options ? options : {});
+
+    const json = {
+      username: credential.username
+    };
+
+    const uriAndPath: string = uri + "/authentication/credentials/forget-password-confirm-code";
+
+    const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
+
+    return Observable.create(function (observer: Observer<number>) {
+      request(requestOptions, function (error: any, response: any, body: any) {
+        try {
+          if (error) {
+            observer.error(error);
+          } else if (response && response.statusCode != 200) {
+            observer.error(body);
+          } else {
+            observer.next(body);
+          }
+        } catch (e) {
+          observer.error(new Error(e.message));
+        }
+        observer.complete();
+      });
+    });
   }
 
-  updateCredential(partyId: string, credential: Credential): Observable<number> {
+  changePassword(changePassword: ChangePassword, options: any): Observable<Confirmation> {
+    const uri: string = properties.get("credential.host.port") as string;
+
+    const headerMap = jsonRequestHeaderMap(options ? options : {});
+
+    const json = {
+      credentialId: changePassword.credentialId,
+      username: changePassword.username,
+      password: changePassword.password,
+      newPassword: changePassword.newPassword,
+      code: changePassword.code
+    };
+
+    const uriAndPath: string = uri + "/authentication/credentials/changed-password";
+
+    const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
+
+    return Observable.create(function (observer: Observer<number>) {
+      request(requestOptions, function (error: any, response: any, body: any) {
+        try {
+          if (error) {
+            observer.error(error);
+          } else if (response && response.statusCode != 200) {
+            observer.error(body);
+          } else {
+            observer.next(body);
+          }
+        } catch (e) {
+          observer.error(new Error(e.message));
+        }
+        observer.complete();
+      });
+    });
+  }
+
+  updateCredential(partyId: string, credential: Credential, options?: any): Observable<number> {
       return undefined;
   }
 
-  deleteCredentialByPartyId(partyId: string): Observable<number> {
+  deleteCredentialByPartyId(partyId: string, options?: any): Observable<number> {
     return undefined;
   }
 
-  public updateCredentialStatusByPartyId(partyId: string, status: string): Observable<number> {
+  public updateCredentialStatusByPartyId(partyId: string, status: string, options?: any): Observable<number> {
     return undefined;
   }
 

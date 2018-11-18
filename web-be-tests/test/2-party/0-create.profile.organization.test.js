@@ -37,7 +37,7 @@ describe('create-profile-organization', function () {
   it('create profile organization 1 credential', function (done) {
       api.post("/authentication/credentials")
           .set('Accept', 'application/json')
-          .set('correlationId', 1234567890)
+          .set('Correlation-Id', 1234567890)
           .send({credential, user})
           .expect('Content-Type', /json/)
           .expect(201)
@@ -63,7 +63,7 @@ describe('create-profile-organization', function () {
 
       api.post("/authentication/confirmations/verify")
           .set('Accept', 'application/json')
-          .set('correlationId', 1234567890)
+          .set('Correlation-Id', 1234567890)
           .send(confirm)
           .expect('Content-Type', /json/)
           .expect(200)
@@ -80,7 +80,7 @@ describe('create-profile-organization', function () {
   it('should be an authenticated credential with status of "AccountConfirmed"', function (done) {
       api.post('/authentication/authenticate')
           .set('Accept', 'application/json')
-          .set('correlationId', 1234567890)
+          .set('Correlation-Id', 1234567890)
           .send(credential)
           .expect('Content-Type', /json/)
           .expect(200)
@@ -101,7 +101,7 @@ describe('create-profile-organization', function () {
   it('create profile organization', function (done) {
       api.post("/organizations/profiles")
           .set('Accept', 'application/json')
-          .set('correlationId', 1234567890)
+          .set('Correlation-Id', 1234567890)
           .set('Cookie', [cookie])
           .send(organization)
           .expect('Content-Type', /json/)
