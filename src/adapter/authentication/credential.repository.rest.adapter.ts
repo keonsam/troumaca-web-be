@@ -188,7 +188,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
       code: changePassword.code
     };
 
-    const uriAndPath: string = uri + "/authentication/credentials/changed-password";
+    const uriAndPath: string = uri + "/authentication/credentials/changed-password-with-code";
 
     const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
 
