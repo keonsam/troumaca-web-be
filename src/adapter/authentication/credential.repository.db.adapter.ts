@@ -140,7 +140,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
     return this.getCredentialByUsername(credential.username)
       .pipe( switchMap( credential => {
         if (!credential) {
-          return of(undefined);
+          return throwError(`No credential found. ${credential}`);
         } else {
           const confirmation: Confirmation = new Confirmation();
           confirmation.credentialId = credential.credentialId;
@@ -157,7 +157,14 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
   }
 
   changePassword(changePassword: ChangePassword, options: any): Observable<Confirmation> {
-    return undefined;
+    return this.changePasswordLocal(changePassword)
+        .pipe(switchMap( num => {
+            if (!num) {
+                return throwError(`Failed to update credential ${num}`);
+            } else {
+                return this.confirmationRepositoryNeDbAdapter.getConfirmationByCredentialId(changePassword.credentialId, "Confirmed");
+            }
+        }));
   }
 
   updateCredential(partyId: string, credential: Credential): Observable<number> {
@@ -327,22 +334,21 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
     });
   }
 
-  private updateUserCredentialLocal(partyId: string, credential: Credential): Observable<number> {
-    return Observable.create(function (observer: Observer<number>) {
-      if (credential.username) {
-        credential.status = "suspended";
-      }
-      credential.modifiedOn = new Date();
-      const query = {"partyId": partyId};
-      credentials.update(query, {$set: credential}, {}, function (err, numReplaced) {
-        if (!err) {
-          observer.next(numReplaced);
-        } else {
-          observer.error(err);
-        }
-        observer.complete();
-      });
-    });
-  }
+    private changePasswordLocal(changePassword: ChangePassword): Observable<number> {
+        return Observable.create(function (observer: Observer<number>) {
+            const query = {
+                "credentialId": changePassword.credentialId
+            };
+
+            credentials.update(query, {$set: {password: changePassword.newPassword} }, {}, function (err: any, num: any) {
+                if (!err) {
+                    observer.next(num);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
+        });
+    }
 
 }

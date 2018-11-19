@@ -49,14 +49,12 @@ router.get("/", (req, res) => {
 
 // ##### SECURITY START #####
 // authentication
-router.get("/authentication/credentials/:partyId", credentialController.getCredential);
 router.post("/authentication/validate-password", credentialController.isValidPassword);
 router.post("/authentication/validate-username", credentialController.isValidUsername);
 router.post("/authentication/credentials", credentialController.addCredential);
 router.post("/authentication/authenticate", credentialController.authenticate);
 router.post("/authentication/forgot-password", credentialController.forgetPassword);
 router.post("/authentication/change-password", credentialController.changePassword);
-router.put("/authentication/credentials/:partyId", credentialController.updateCredential);
 
 // confirmation
 router.post("/authentication/confirmations/resend", confirmationController.resendConfirmCode);

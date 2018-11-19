@@ -7,33 +7,6 @@ import {ChangePassword} from "../../data/authentication/change.password";
 
 const credentialOrchestrator: CredentialOrchestrator = new CredentialOrchestrator();
 
-export let getCredential = (req: Request, res: Response) => {
-
-    res.setHeader("content-type", "application/json");
-    const correlationId = req.headers.correlationid;
-    const partyId = req.params.partyId;
-
-    const headerOptions = {
-        correlationId: correlationId
-    };
-    // credentialOrchestrator.getCredentialByPartyId(partyId, headerOptions)
-    //     .subscribe( user => {
-    //         if (user) {
-    //             res.status(200);
-    //             res.send(JSON.stringify(user));
-    //         } else {
-    //             res.status(404);
-    //             res.setHeader("content-type", "application/json");
-    //             res.send(JSON.stringify({message: "No Registered Credential Found."}));
-    //         }
-    //     }, error => {
-    //         res.status(!error.code ? 500 : error.code);
-    //         const msg = !error.message ? "Internal Server Error" : error.message;
-    //         res.send(JSON.stringify(msg));
-    //         console.log(error);
-    //     });
-
-};
 
 export let isValidUsername = (req: Request, res: Response) => {
 
@@ -304,56 +277,5 @@ export let changePassword = (req: Request, res: Response) => {
       res.send(JSON.stringify({message: "Internal Occurred"}));
       console.log(error);
     });
-
-};
-
-export let updateCredential = (req: Request, res: Response) => {
-
-    // here is the weird thing about this api
-    // because you don't need to be login to used this route
-    // anyone that has access to your partyId can change your username or password
-    // in general terms this would not change your username
-
-    const correlationId = req.headers.correlationid;
-    const credential = req.body.credential;
-    const user = req.body.user;
-    const partyId = req.params.partyId;
-
-    if (!correlationId) {
-        res.status(400);
-        res.setHeader("content-type", "application/json");
-        res.send(JSON.stringify({message: "A \"correlationId\" is required."}));
-        return;
-    }
-
-    if (!credential || !credential.password) {
-        res.status(400);
-        res.setHeader("content-type", "application/json");
-        res.send(JSON.stringify({message: "'Credential' must be sent, and must contain a password."}));
-        return;
-    }
-
-    if (!user || !user.firstName || !user.lastName) {
-        res.status(400);
-        res.setHeader("content-type", "application/json");
-        res.send(JSON.stringify({message: "'User' must be sent, and contain first and last name."}));
-        return;
-    }
-
-    const headerOptions = {
-        correlationId: correlationId
-    };
-
-    credentialOrchestrator.updateCredential(credential, user,  partyId, headerOptions)
-        .subscribe(confirmation => {
-            res.status(201);
-            res.setHeader("content-type", "application/json");
-            res.send(JSON.stringify(confirmation));
-        }, error => {
-            res.status(!error.code ? 500 : error.code);
-            const msg = !error.message ? "Internal Server Error" : error.message;
-            res.send(JSON.stringify(msg));
-            console.log(error);
-        });
 
 };
