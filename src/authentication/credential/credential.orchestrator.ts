@@ -109,24 +109,4 @@ export class CredentialOrchestrator {
   changePassword(changePassword: ChangePassword, options?: any): Observable<Confirmation> {
     return this.credentialRepository.changePassword(changePassword, options);
   }
-
-
-  updateCredential(credential: Credential, user: User, partyId: string, options?: any): Observable<number> {
-      delete user.username;
-      return this.credentialRepository.updateCredential(partyId, credential)
-          .pipe(switchMap(numUpdated => {
-              if (!numUpdated) {
-                  return throwError(`Credential failed to update ${numUpdated}`);
-              } else {
-                  return this.userRepository.updateUser(partyId, user)
-                      .pipe(map(numUpdated2 => {
-                          if (!numUpdated2) {
-                              throw new Error(`user failed to update. ${numUpdated2}`);
-                          } else {
-                              return (numUpdated + numUpdated2);
-                          }
-                      }));
-              }
-          }));
-  }
 }
