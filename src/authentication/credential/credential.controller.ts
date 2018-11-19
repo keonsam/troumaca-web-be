@@ -8,6 +8,7 @@ import {ChangePassword} from "../../data/authentication/change.password";
 const credentialOrchestrator: CredentialOrchestrator = new CredentialOrchestrator();
 
 export let getCredential = (req: Request, res: Response) => {
+
     res.setHeader("content-type", "application/json");
     const correlationId = req.headers.correlationid;
     const partyId = req.params.partyId;
@@ -31,9 +32,11 @@ export let getCredential = (req: Request, res: Response) => {
     //         res.send(JSON.stringify(msg));
     //         console.log(error);
     //     });
+
 };
 
 export let isValidUsername = (req: Request, res: Response) => {
+
   HeaderNormalizer.normalize(req);
   const correlationId = req.headers["Correlation-Id"];
   const ownerPartyId = req.headers["Owner-Party-Id"];
@@ -71,6 +74,7 @@ export let isValidUsername = (req: Request, res: Response) => {
 };
 
 export let isValidPassword = (req: Request, res: Response) => {
+
   HeaderNormalizer.normalize(req);
   const correlationId = req.headers["Correlation-Id"];
   const ownerPartyId = req.headers["Owner-Party-Id"];
@@ -107,6 +111,7 @@ export let isValidPassword = (req: Request, res: Response) => {
 };
 
 export let addCredential = (req: Request, res: Response) => {
+
   HeaderNormalizer.normalize(req);
   const correlationId = req.headers["Correlation-Id"];
   const ownerPartyId = req.headers["Owner-Party-Id"];
@@ -157,6 +162,7 @@ export let addCredential = (req: Request, res: Response) => {
 };
 
 export let authenticate = (req: Request, res: Response) => {
+
   HeaderNormalizer.normalize(req);
   const correlationId = req.headers["Correlation-Id"];
   const ownerPartyId = req.headers["Owner-Party-Id"];
@@ -207,6 +213,7 @@ export let authenticate = (req: Request, res: Response) => {
 };
 
 export let forgetPassword = (req: Request, res: Response) => {
+
   HeaderNormalizer.normalize(req);
   const correlationId = req.headers["Correlation-Id"];
   const ownerPartyId = req.headers["Owner-Party-Id"];
@@ -257,19 +264,20 @@ export let forgetPassword = (req: Request, res: Response) => {
 };
 
 export let changePassword = (req: Request, res: Response) => {
+
   HeaderNormalizer.normalize(req);
   const correlationId = req.headers["Correlation-Id"];
   const ownerPartyId = req.headers["Owner-Party-Id"];
   const requestingPartyId = req.headers["Party-Id"];
 
-  const changePassword: ChangePassword = req.body;
+  const changePassword = req.body;
 
-  if (!changePassword || !changePassword.username) {
-    res.status(400);
-    res.setHeader("content-type", "application/json");
-    res.send(JSON.stringify({message: "'Credential' contain username."}));
-    return;
-  }
+  // if (!changePassword || !changePassword.username) {
+  //   res.status(400);
+  //   res.setHeader("content-type", "application/json");
+  //   res.send(JSON.stringify({message: "'Credential' contain username."}));
+  //   return;
+  // }
 
   if (!correlationId) {
     res.status(400);
@@ -285,18 +293,11 @@ export let changePassword = (req: Request, res: Response) => {
   };
 
   credentialOrchestrator.changePassword(changePassword, headerOptions)
-    .subscribe(confirmation => {
-      if (confirmation && confirmation.confirmationId) {
-        const body = JSON.stringify(confirmation);
-        res.status(201);
-        res.setHeader("content-type", "application/json");
-        res.send(body);
-      } else {
-        const body = JSON.stringify(confirmation);
-        res.status(404);
-        res.setHeader("content-type", "application/json");
-        res.send(body);
-      }
+    .subscribe(changedPassword => {
+      const body = JSON.stringify(changedPassword);
+      res.status(200);
+      res.setHeader("content-type", "application/json");
+      res.send(body);
     }, error => {
       res.status(500);
       res.setHeader("content-type", "application/json");
@@ -307,6 +308,7 @@ export let changePassword = (req: Request, res: Response) => {
 };
 
 export let updateCredential = (req: Request, res: Response) => {
+
     // here is the weird thing about this api
     // because you don't need to be login to used this route
     // anyone that has access to your partyId can change your username or password
