@@ -178,4 +178,8 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
     });
   }
 
+  validateCode(credentialId: string, code: string, options?: any): Observable<boolean> {
+    return undefined;
+  }
+
 }

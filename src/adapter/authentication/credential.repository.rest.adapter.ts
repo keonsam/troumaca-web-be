@@ -84,7 +84,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
     const createCredential: CreateCredential = new CreateCredential(person, credential);
 
     const headerMap = jsonRequestHeaderMap(options ? options : {});
-    // let headers:any = strMapToJson(headerMap);
+
     const credentialJson = classToPlain(createCredential);
 
     const uriAndPath: string = uri + "/authentication/credentials";
@@ -93,8 +93,6 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
 
     return Observable.create(function (observer: Observer<CreatedCredential>) {
       request(requestOptions, function (error: any, response: any, body: any) {
-        const statusCode = response.statusCode;
-        console.log("response.statusCode " + statusCode);
         if (error) {
           observer.error(error);
         } else {

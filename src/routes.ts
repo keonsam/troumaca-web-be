@@ -62,6 +62,7 @@ router.put("/authentication/credentials/:partyId", credentialController.updateCr
 router.post("/authentication/confirmations/resend", confirmationController.resendConfirmCode);
 router.post("/authentication/confirmations/resend-by-username", confirmationController.resendConfirmCodeByUsername);
 router.post("/authentication/confirmations/verify", confirmationController.confirmCode);
+router.post("/authentication/confirmations/validate-code", confirmationController.validateCode);
 
 // session
 router.get("/sessions/is-valid-session", sessionController.isValidSession);
