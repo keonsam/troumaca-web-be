@@ -29,7 +29,7 @@ describe('forget-password', function () {
   //let confirmation2 = {confirmationId: "", credentialId: "", code: "", status: ""};
   const changePassword = {
     credentialId: "",
-    password: credential.password,
+    password: "",
     newPassword: "Tester2@user2",
     code: ""
   };
