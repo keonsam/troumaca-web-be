@@ -52,7 +52,6 @@ describe('forget-password', function () {
           expect(res.body.credentialId).to.be.a('string');
           expect(res.body.code).to.have.lengthOf(6);
           expect(res.body.status).to.equal("New");
-
           confirmation.confirmationId = res.body.confirmationId;
           confirmation.credentialId = res.body.credentialId;
           confirmation.code = res.body.code;
