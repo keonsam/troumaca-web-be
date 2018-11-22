@@ -23,4 +23,8 @@ export class ConfirmationOrchestrator {
     return this.confirmationRepository.resendConfirmCodeByUsername(username, options);
   }
 
+  validateCode(credentialId: string, code: string, options?: any): Observable<boolean> {
+    return this.confirmationRepository.validateCode(credentialId, code, options);
+  }
+
 }
