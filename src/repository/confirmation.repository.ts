@@ -9,4 +9,6 @@ export interface ConfirmationRepository {
 
   resendConfirmCodeByUsername(username: string, options?: any): Observable<Confirmation>;
 
+  validateCode(credentialId: string, code: string, options?: any): Observable<boolean>;
+
 }

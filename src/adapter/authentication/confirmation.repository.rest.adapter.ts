@@ -1,9 +1,11 @@
 import {ConfirmationRepository} from "../../repository/confirmation.repository";
 import {properties} from "../../properties.helpers";
 import {jsonRequestHeaderMap, postJsonOptions} from "../../request.helpers";
-import { Observable, Observer, of, throwError } from "rxjs";
+import { Observable, Observer} from "rxjs";
 import request from "request";
 import {Confirmation} from "../../data/authentication/confirmation";
+import {classToPlain} from "class-transformer";
+import {ValidateConfirmCode} from "../../repository/validate.confirm.code";
 
 export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository {
 
@@ -80,6 +82,34 @@ export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository
             observer.error(body);
           } else {
             observer.next(body["confirmation"]);
+          }
+        } catch (e) {
+          observer.error(new Error(e.message));
+        }
+        observer.complete();
+      });
+    });
+  }
+
+  validateCode(credentialId: string, code: string, options?: any): Observable<boolean> {
+    const uri: string = properties.get("credential.host.port") as string;
+
+    const headerMap = jsonRequestHeaderMap(options ? options : {});
+
+    const validateConfirmCodeJson = classToPlain(new ValidateConfirmCode(credentialId, code));
+
+    const uriAndPath: string = `${uri}/authentication/confirmations/validate-code`;
+
+    const requestOptions: any = postJsonOptions(uriAndPath, headerMap, validateConfirmCodeJson);
+
+    return Observable.create(function (observer: Observer<Confirmation>) {
+      request(requestOptions, function (error: any, response: any, body: any) {
+        console.log(body);
+        try {
+          if (response && response.statusCode != 200) {
+            observer.error(body);
+          } else {
+            observer.next(body);
           }
         } catch (e) {
           observer.error(new Error(e.message));

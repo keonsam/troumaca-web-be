@@ -85,7 +85,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
     const createCredential: CreateCredential = new CreateCredential(person, credential);
 
     const headerMap = jsonRequestHeaderMap(options ? options : {});
-    // let headers:any = strMapToJson(headerMap);
+
     const credentialJson = classToPlain(createCredential);
 
     const uriAndPath: string = uri + "/authentication/credentials";
