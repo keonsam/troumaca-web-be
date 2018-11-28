@@ -53,7 +53,7 @@ router.post("/authentication/validate-password", credentialController.isValidPas
 router.post("/authentication/validate-username", credentialController.isValidUsername);
 router.post("/authentication/credentials", credentialController.addCredential);
 router.post("/authentication/authenticate", credentialController.authenticate);
-router.post("/authentication/forgot-password", credentialController.forgetPassword);
+// router.post("/authentication/forgot-password", credentialController.forgetPassword);
 router.post("/authentication/change-password", credentialController.changePassword);
 
 // confirmation
@@ -219,7 +219,7 @@ router.get("/organizations/:partyId", checkSession, organizationController.getOr
 router.get("/organizations", checkSession, organizationController.getOrganizations);
 router.post("/organizations", checkSession, organizationController.saveOrganization);
 router.post("/organizations/customer", checkSession, organizationController.addCustomer);
-router.post("/organizations/profiles", checkSession, organizationController.saveOrganizationCompany);
+// router.post("/organizations/profiles", checkSession, organizationController.saveOrganizationCompany);
 router.post("/organizations/request-access", checkSession, organizationController.saveAccessRequest);
 router.put("/organizations/profile", checkSession, organizationController.updateOrganizationCompany);
 router.put("/organizations/:partyId", checkSession, organizationController.updateOrganization);
@@ -227,8 +227,8 @@ router.delete("/organizations/:partyId", checkSession, organizationController.de
 
 // photos
 router.get("/photos", checkSession, photoController.getPhotos);
-router.post("/photos/:type", checkSession, upload.single("image"), photoController.savePhoto);
-router.put("/photos/:type", checkSession, upload.single("image"), photoController.updatePhoto);
+router.post("/photos/user", checkSession, upload, photoController.savePhoto);
+router.put("/photos/user", checkSession, upload, photoController.updatePhoto);
 
 
 

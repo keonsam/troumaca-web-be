@@ -11,15 +11,14 @@ import {getSortOrderOrDefault} from "../../sort.order.util";
 import {PartyAccessRole} from "../../data/authorization/party.access.role";
 import {PartyAccessRoleRepository} from "../../repository/party.access.role.repository";
 import {createPartyAccessRoleRepositoryFactory} from "../../adapter/authorization/party.access.role.repository.factory";
-import {UserResponse} from "../../data/party/user.response";
 import {AccessRoleRepository} from "../../repository/access.role.repository";
 import {createAccessRoleRepository} from "../../adapter/authorization/access.role.repository.factory";
-import {AccessRole} from "../../data/authorization/access.role";
 import {CredentialRepository} from "../../repository/credential.repository";
 import {createCredentialRepositoryFactory} from "../../adapter/authentication/credential.repository.factory";
 import {SessionRepository} from "../../repository/session.repository";
 import {createSessionRepositoryFactory} from "../../adapter/session/session.repository.factory";
 import {Person} from "../../data/party/person";
+import { AccessRole} from "../../data/authorization/access.role";
 
 export class UserOrchestrator {
 
@@ -55,36 +54,23 @@ export class UserOrchestrator {
             }));
     }
 
-    getUser(partyId: string): Observable<UserResponse> {
+    getUser(partyId: string): Observable<User> {
         return this.userRepository.getUser(partyId)
             .pipe(switchMap(user => {
                 if (!user) {
-                    return of(new UserResponse());
+                    return throwError(`Failed to get user ${partyId} ${user}`);
                 } else {
                     return this.partyAccessRoleRepository.getPartyAccessRolesByPartyId(partyId)
-                        .pipe(switchMap((partyAccessRoles: PartyAccessRole[]) => {
+                        .pipe(map((partyAccessRoles: PartyAccessRole[]) => {
                             if (partyAccessRoles.length < 1) {
                                 // error below should return an error if no party access role/s is found but,
                                 // un-invited user which request join access can't automatically have the role of admin
                                 // skip for now
                                 // return throwError(`No PartyAccessRoles found ${partyAccessRoles}`);
-                                return of(new UserResponse(user));
+                                throw new Error(`Failed to get party access roles ${partyAccessRoles}`);
                             } else {
-                                const accessRoleIds: string[] = partyAccessRoles.map(x => {
-                                    if (x.accessRoleId) return x.accessRoleId;
-                                });
-                                return this.accessRoleRepository.getAccessRoleByIds(accessRoleIds)
-                                    .pipe(map(accessRoles => {
-                                        if (accessRoles.length < 1) {
-                                            throw new Error(`No AccessRole found ${accessRoles}`);
-                                        } else {
-                                            partyAccessRoles.forEach(value => {
-                                                const index = accessRoles.findIndex(x => x.accessRoleId === value.accessRoleId);
-                                                value.accessRole = index !== -1 ? accessRoles[index] : new AccessRole();
-                                            });
-                                            return new UserResponse(user, partyAccessRoles);
-                                        }
-                                    }));
+                                user.partyAccessRoles = partyAccessRoles;
+                                return user;
                             }
                         }));
                 }

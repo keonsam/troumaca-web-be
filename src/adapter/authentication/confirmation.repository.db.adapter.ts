@@ -6,6 +6,7 @@ import {Confirmation} from "../../data/authentication/confirmation";
 import {Observable, Observer, of, throwError} from "rxjs";
 import {switchMap, map} from "rxjs/operators";
 import {factory} from "../../ConfigLog4j";
+import { Credential } from "../../data/authentication/credential";
 
 const log = factory.getLogger("authentication.ConfirmationRepositoryNeDbAdapter");
 
@@ -74,7 +75,23 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
   }
 
   resendConfirmCodeByUsername(username: string, options?: any): Observable<Confirmation> {
-    throw new Error();
+      return this.getCredentialByUsername(username)
+          .pipe( switchMap( credential => {
+              if (!credential) {
+                  return throwError(`No credential found. ${credential}`);
+              } else {
+                  const confirmation: Confirmation = new Confirmation();
+                  confirmation.credentialId = credential.credentialId;
+                  return this.addConfirmation(confirmation)
+                      .pipe(map(confirmation => {
+                          if (!confirmation) {
+                              throw new Error("Confirmation failed to be created.");
+                          } else {
+                              return confirmation;
+                          }
+                      }));
+              }
+          }));
   }
 
   // USED BY OTHER REPO
@@ -177,5 +194,22 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
       });
     });
   }
+
+    private getCredentialByUsername(username: string): Observable<Credential> {
+        return Observable.create(function (observer: Observer<Credential>) {
+            const query = {
+                "username": username
+            };
+
+            credentials.findOne(query, function (err: any, doc: any) {
+                if (!err) {
+                    observer.next(doc);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
+        });
+    }
 
 }

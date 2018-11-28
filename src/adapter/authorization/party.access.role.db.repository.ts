@@ -1,9 +1,10 @@
-import {partyAccessRoles} from "../../db";
+import { accessRoles, partyAccessRoles } from "../../db";
 import {PartyAccessRoleRepository} from "../../repository/party.access.role.repository";
 import {PartyAccessRole} from "../../data/authorization/party.access.role";
 import {Observable, Observer, throwError} from "rxjs";
 import {generateUUID} from "../../uuid.generator";
-import {switchMap} from "rxjs/operators";
+import { map, switchMap } from "rxjs/operators";
+import { AccessRole } from "../../data/authorization/access.role";
 
 // import {calcSkip} from "../../db.util";
 
@@ -109,19 +110,55 @@ export class PartyAccessRoleDBRepository implements PartyAccessRoleRepository {
   }
 
   getPartyAccessRolesByPartyId(partyId: string): Observable<PartyAccessRole[]> {
-    return Observable.create(function (observer: Observer<PartyAccessRole[]>) {
-      const query = {
-        "partyId": partyId
-      };
-      partyAccessRoles.find(query, function (err: any, docs: any) {
-        if (!err) {
-          observer.next(docs);
-        } else {
-          observer.error(err);
-        }
-        observer.complete();
+    return this.getPartyAccessRolesByPartyIdLocal(partyId)
+        .pipe(switchMap( partyAccessRoles => {
+            const accessRoleIds: string[] = partyAccessRoles.map(x => {
+                if (x.accessRoleId) return x.accessRoleId;
+            });
+            return this.getAccessRoleByIds(accessRoleIds)
+                .pipe(map(accessRoles => {
+                    if (accessRoles.length < 1) {
+                        throw new Error(`No AccessRole found ${accessRoles}`);
+                    } else {
+                        partyAccessRoles.forEach(value => {
+                            value.accessRole =  accessRoles.find(x => x.accessRoleId === value.accessRoleId);
+                        });
+                        return partyAccessRoles;
+                    }
+                }));
+        }));
+  }
+
+  private getPartyAccessRolesByPartyIdLocal(partyId: string): Observable<PartyAccessRole[]> {
+      return Observable.create(function (observer: Observer<PartyAccessRole[]>) {
+          const query = {
+              "partyId": partyId
+          };
+          partyAccessRoles.find(query, function (err: any, docs: any) {
+              if (!err) {
+                  observer.next(docs);
+              } else {
+                  observer.error(err);
+              }
+              observer.complete();
+          });
       });
-    });
+  }
+
+  private getAccessRoleByIds(accessRoleIds: string[]): Observable<AccessRole[]> {
+      return Observable.create(function (observer: Observer<AccessRole[]>) {
+          // let query = {
+          //   "accessRoleId":accessRoleId
+          // };
+          accessRoles.find({accessRoleId: {$in: accessRoleIds}}, function (err: any, docs: any) {
+              if (!err) {
+                  observer.next(docs);
+              } else {
+                  observer.error(err);
+              }
+              observer.complete();
+          });
+      });
   }
 
   updatePartyAccessRole(partyAccessRoleId: string, partyAccessRole: PartyAccessRole): Observable<number> {

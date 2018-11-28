@@ -21,6 +21,8 @@ const checkSession = (req: Request, res: Response, next: NextFunction) => {
       .isValidSession(sessionId)
       .subscribe(isValid => {
         if (isValid) {
+          req.headers["Party-Id"] = isValid.partyId;
+          // remove below after converting
           res.locals.partyId = isValid.partyId;
           callback(undefined, true);
         } else {

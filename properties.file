@@ -21,7 +21,7 @@ repository.type = 2
 host = localhost
 port = 8080
 host.port = http://localhost:8888
-repository.type = 2
+repository.type = 1
 
 
 [party]

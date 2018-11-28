@@ -29,7 +29,7 @@ describe('forget-password', function () {
     const changePassword = {
         username: "",
         credentialId: "",
-        password: credential.password,
+        password: '',
         newPassword: "Tester2@user2",
         code: ""
     };
@@ -59,7 +59,7 @@ describe('forget-password', function () {
     let usernameMap = {username: credential.username};
     console.log(usernameMap);
     it('forget password send username', function (done) {
-        api.post("/authentication/forgot-password")
+        api.post("/authentication/confirmations/resend-by-username")
             .set('Accept', 'application/json')
             .set('Correlation-Id', "f18934a4-ea54-11e8-9f32-f2801f1b9fd1")
             .send(usernameMap)
@@ -92,7 +92,6 @@ describe('forget-password', function () {
             .end(function (err, res) {
                 if (!err) {
                     expect(res.body.status).to.equal("Confirmed");
-                    changePassword.username = credential.username;
                     changePassword.credentialId = confirmation.credentialId;
                     changePassword.code = confirmation.code;
                     changePassword.newPassword = "Troumaca4200@";
@@ -114,7 +113,7 @@ describe('forget-password', function () {
             .end(function (err, res) {
                 if (!err) {
                     console.log(res.body);
-                    expect(res.body.status).to.equal("Confirmed")
+                    expect(res.body.changed).to.equal(true);
                 } else {
                     console.log(err);
                 }

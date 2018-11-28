@@ -11,6 +11,7 @@ import {CreateCredential} from "../../repository/create.credential";
 import {Person} from "../../data/party/person";
 import {Confirmation} from "../../data/authentication/confirmation";
 import {ChangePassword} from "../../data/authentication/change.password";
+import { ChangeResponse } from "../../data/authentication/change.response";
 
 export class CredentialRepositoryRestAdapter implements CredentialRepository {
 
@@ -93,8 +94,6 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
 
     return Observable.create(function (observer: Observer<CreatedCredential>) {
       request(requestOptions, function (error: any, response: any, body: any) {
-        const statusCode = response.statusCode;
-        console.log("response.statusCode " + statusCode);
         if (error) {
           observer.error(error);
         } else {
@@ -175,7 +174,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
     });
   }
 
-  changePassword(changePassword: ChangePassword, options: any): Observable<Confirmation> {
+  changePassword(changePassword: ChangePassword, options: any): Observable<ChangeResponse> {
     const uri: string = properties.get("credential.host.port") as string;
 
     const headerMap = jsonRequestHeaderMap(options ? options : {});
@@ -192,7 +191,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
 
     const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
 
-    return Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<ChangeResponse>) {
       request(requestOptions, function (error: any, response: any, body: any) {
         try {
           if (error) {

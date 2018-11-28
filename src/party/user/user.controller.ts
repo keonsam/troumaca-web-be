@@ -50,11 +50,11 @@ export let getUsers = (req: Request, res: Response) => {
 export let getUser = (req: Request, res: Response) => {
   const partyId = req.params.partyId;
   userOrchestrator.getUser(partyId)
-    .subscribe(userResponse => {
-      if (userResponse.user) {
+    .subscribe(user => {
+      if (user) {
         res.status(200);
         res.setHeader("content-type", "application/json");
-        res.send(JSON.stringify(userResponse));
+        res.send(JSON.stringify(user));
       } else {
         res.status(404);
         res.setHeader("content-type", "application/json");
@@ -71,11 +71,11 @@ export let getUser = (req: Request, res: Response) => {
 export let getUserMe = (req: Request, res: Response) => {
   const partyId = res.locals.partyId;
   userOrchestrator.getUser(partyId)
-    .subscribe(userResponse => {
-      if (userResponse.user) {
+    .subscribe(user => {
+      if (user) {
         res.status(200);
         res.setHeader("content-type", "application/json");
-        res.send(JSON.stringify(userResponse));
+        res.send(JSON.stringify(user));
       } else {
         res.status(404);
         res.setHeader("content-type", "application/json");
