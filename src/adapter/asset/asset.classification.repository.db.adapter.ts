@@ -1,14 +1,14 @@
 import {generateUUID} from "../../uuid.generator";
 import {assetTypeClasses} from "../../db";
 import {calcSkip} from "../../db.util";
-import {AssetTypeClassRepository} from "../../repository/asset.type.class.repository";
-import {AssetTypeClass} from "../../data/asset/asset.type.class";
+import {AssetClassificationRepository} from "../../repository/asset.classification.repository";
+import {AssetClassification} from "../../data/asset/asset.classification";
 import {AssignedAttribute} from "../../data/asset/assigned.attribute";
 import {AssignedAttributeRepositoryNeDbAdapter} from "./assigned.attribute.repository.db.adapter";
 import { Observable, Observer, of, throwError } from "rxjs";
 import {switchMap, map} from "rxjs/operators";
 
-export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassRepository {
+export class AssetClassificationRepositoryNeDbAdapter implements AssetClassificationRepository {
 
   private defaultPageSize: number;
   private assignedAttributeRepositoryNeDbAdapter: AssignedAttributeRepositoryNeDbAdapter = new AssignedAttributeRepositoryNeDbAdapter();
@@ -17,11 +17,11 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
     this.defaultPageSize = 10;
   }
 
-  findAssetTypeClass(searchStr: string, pageSize: number): Observable<AssetTypeClass[]> {
+  findAssetTypeClass(searchStr: string, pageSize: number): Observable<AssetClassification[]> {
     const searchStrLocal = new RegExp(searchStr);
     const query = searchStr ? {name: {$regex: searchStrLocal}} : {};
     const size = searchStr ? pageSize : 100;
-    return Observable.create(function (observer: Observer<AssetTypeClass[]>) {
+    return Observable.create(function (observer: Observer<AssetClassification[]>) {
       assetTypeClasses.find(query).limit(size).exec(function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
@@ -33,9 +33,9 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
     });
   }
 
-  getAssetTypeClasses(pageNumber: number, pageSize: number, order: string): Observable<AssetTypeClass[]> {
+  getAssetTypeClasses(pageNumber: number, pageSize: number, order: string): Observable<AssetClassification[]> {
     const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
-    return Observable.create(function (observer: Observer<AssetTypeClass[]>) {
+    return Observable.create(function (observer: Observer<AssetClassification[]>) {
       assetTypeClasses.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
@@ -60,7 +60,7 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
     });
   }
 
-  getAssetTypeClassById(assetTypeClassId: string): Observable<AssetTypeClass> {
+  getAssetTypeClassById(assetTypeClassId: string): Observable<AssetClassification> {
     return this.getAssetTypeClassByIdLocal(assetTypeClassId)
         .pipe(switchMap(assetTypeClass => {
           if (!assetTypeClass) {
@@ -68,21 +68,25 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
           }
             return this.assignedAttributeRepositoryNeDbAdapter.getAssignedAttributesByClassId(assetTypeClassId)
                 .pipe(map(assignedAttributes => {
-                    assetTypeClass.assignedAttributes = assignedAttributes;
+                    // assetTypeClass.assignedAttributes = assignedAttributes;
                     return assetTypeClass;
                 }));
         }));
   }
 
-  saveAssetTypeClass(assetTypeClass: AssetTypeClass, assignedAttributeArr: AssignedAttribute[]): Observable<AssetTypeClass> {
-      assetTypeClass.assetTypeClassId = generateUUID();
+  addAssetClassification(assetTypeClass: AssetClassification, options?: any): Observable<AssetClassification> {
+    return undefined;
+  }
+
+  addAssetTypeClassWithAttributes(assetTypeClass: AssetClassification, assignedAttributeArr: AssignedAttribute[]): Observable<AssetClassification> {
+      assetTypeClass.assetClassificationId = generateUUID();
       assignedAttributeArr.forEach(value => {
-          value.assetTypeClassId = assetTypeClass.assetTypeClassId;
+          // value.assetClassificationId = assetTypeClass.assetClassificationId;
           value.assignedAttributeId = generateUUID();
           value.createdOn = new Date();
           value.modifiedOn = new Date();
       });
-      assetTypeClass.createdOn = new Date();
+      // assetTypeClass.createdOn = new Date();
       assetTypeClass.modifiedOn = new Date();
       return this.saveAssetTypeClassLocal(assetTypeClass)
           .pipe(switchMap(doc => {
@@ -101,7 +105,7 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
           }));
   }
 
-  updateAssetTypeClass(assetTypeClassId: string, assetTypeClass: AssetTypeClass, assignedAttributeArr: AssignedAttribute[]): Observable<number> {
+  updateAssetTypeClass(assetTypeClassId: string, assetTypeClass: AssetClassification, assignedAttributeArr: AssignedAttribute[]): Observable<number> {
       return this.updateAssetTypeClassLocal(assetTypeClassId, assetTypeClass)
           .pipe(switchMap(numReplaced => {
               if (!numReplaced) {
@@ -137,8 +141,8 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
   }
 
   // USED BY OTHER REPOS
-  getAssetTypeClassByIds(assetTypeClassIds: string[]): Observable<AssetTypeClass[]> {
-    return Observable.create(function (observer: Observer<AssetTypeClass[]>) {
+  getAssetTypeClassByIds(assetTypeClassIds: string[]): Observable<AssetClassification[]> {
+    return Observable.create(function (observer: Observer<AssetClassification[]>) {
       assetTypeClasses.find({assetTypeClassId: {$in: assetTypeClassIds}}, function (err: any, docs: any) {
         if (!err) {
           observer.next(docs);
@@ -152,8 +156,8 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
 
   // HELPS
 
-   getAssetTypeClassByIdLocal(assetTypeClassId: string): Observable<AssetTypeClass> {
-    return Observable.create(function (observer: Observer<AssetTypeClass>) {
+   getAssetTypeClassByIdLocal(assetTypeClassId: string): Observable<AssetClassification> {
+    return Observable.create(function (observer: Observer<AssetClassification>) {
       const query = {"assetTypeClassId": assetTypeClassId};
       assetTypeClasses.findOne(query, function (err: any, doc: any) {
         if (!err) {
@@ -166,8 +170,8 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
     });
   }
 
-  saveAssetTypeClassLocal(assetTypeClass: AssetTypeClass): Observable<AssetTypeClass> {
-    return Observable.create(function (observer: Observer<AssetTypeClass>) {
+  saveAssetTypeClassLocal(assetTypeClass: AssetClassification): Observable<AssetClassification> {
+    return Observable.create(function (observer: Observer<AssetClassification>) {
       assetTypeClasses.insert(assetTypeClass, function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
@@ -179,7 +183,7 @@ export class AssetTypeClassRepositoryNeDbAdapter implements AssetTypeClassReposi
     });
   }
 
-  private updateAssetTypeClassLocal(assetTypeClassId: string, assetTypeClass: AssetTypeClass): Observable<number> {
+  private updateAssetTypeClassLocal(assetTypeClassId: string, assetTypeClass: AssetClassification): Observable<number> {
     assetTypeClass.modifiedOn = new Date();
     return Observable.create((observer: Observer<number>) => {
       const query = {"assetTypeClassId": assetTypeClassId};

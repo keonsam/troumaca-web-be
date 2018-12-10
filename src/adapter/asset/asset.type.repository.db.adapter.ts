@@ -5,15 +5,18 @@ import {switchMap, map} from "rxjs/operators";
 import {assetTypes} from "../../db";
 import {generateUUID} from "../../uuid.generator";
 import {calcSkip} from "../../db.util";
-import {AssetTypeClassRepositoryNeDbAdapter} from "./asset.type.class.repository.db.adapter";
+import {AssetClassificationRepositoryNeDbAdapter} from "./asset.classification.repository.db.adapter";
 import {UnitOfMeasureRepositoryNeDbAdapter} from "../unit-of-measure/unit.of.measure.repository.db.adapter";
 import {Value} from "../../data/asset/value";
 import {ValueRepositoryNeDbAdapter} from "./value.repository.db.adapter";
+import {ProductType} from "../../data/asset/product.type";
+import {PartOrEquipmentType} from "../../data/asset/part.or.equipment.type";
+import {MaterialType} from "../../data/asset/material.type";
 
 export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
 
   private defaultPageSize: number = 10;
-  private assetTypeClassRepositoryNeDbAdapter: AssetTypeClassRepositoryNeDbAdapter = new AssetTypeClassRepositoryNeDbAdapter();
+  private assetTypeClassRepositoryNeDbAdapter: AssetClassificationRepositoryNeDbAdapter = new AssetClassificationRepositoryNeDbAdapter();
   private unitOfMeasureRepositoryNeDbAdapter: UnitOfMeasureRepositoryNeDbAdapter = new UnitOfMeasureRepositoryNeDbAdapter();
   private valueRepositoryNeDbAdapter: ValueRepositoryNeDbAdapter = new ValueRepositoryNeDbAdapter();
 
@@ -49,7 +52,7 @@ export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
               return this.unitOfMeasureRepositoryNeDbAdapter.getUnitOfMeasuresByIds(unitOfMeasureIds)
                 .pipe(map(unitOfMeasures => {
                   assetTypes.forEach(value => {
-                    value.assetTypeClass = assetTypeClasses.find(x => x.assetTypeClassId === value.assetTypeClassId);
+                    value.assetTypeClass = assetTypeClasses.find(x => x.assetClassificationId === value.assetTypeClassId);
                     value.unitOfMeasure = unitOfMeasures.find(x => x.unitOfMeasureId === value.unitOfMeasureId);
                   });
                   return assetTypes;
@@ -116,6 +119,10 @@ export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
           }));
   }
 
+  addOtherAssetType(assetType: AssetType, options?: any): Observable<AssetType> {
+    return undefined;
+  }
+
   updateAssetType(assetTypeId: string, assetType: AssetType, values: Value[]): Observable<number> {
     return this.updateAssetTypeLocal(assetTypeId, assetType)
       .pipe(switchMap(num => {
@@ -154,6 +161,19 @@ export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
         }
       }));
   }
+
+  addMaterialType(materialType: MaterialType, options?: any): Observable<MaterialType> {
+    return undefined;
+  }
+
+  addPartOrEquipmentType(partOrEquipmentType: PartOrEquipmentType, options?: any): Observable<PartOrEquipmentType> {
+    return undefined;
+  }
+
+  addProductType(productType: ProductType, options?: any): Observable<ProductType> {
+    return undefined;
+  }
+
 
   // USED BY OTHER REPO
 

@@ -4,7 +4,7 @@ import {AssignedAttributeOrchestrator} from "./assigned.attribute.orchestrator";
 const orchestrator: AssignedAttributeOrchestrator = new AssignedAttributeOrchestrator();
 
 export let getAssignedAttributesByClassId = (req: Request, res: Response) => {
-  const assetTypeClassId = req.params.assetTypeClassId;
+  const assetTypeClassId = req.params.assetClassificationId;
 
   orchestrator.getAssignedAttributesByClassId(assetTypeClassId)
     .subscribe(assignedAttributes => {

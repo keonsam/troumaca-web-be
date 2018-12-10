@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
-import {getNumericValueOrDefault} from "../../number.util";
-import {getStringValueOrDefault} from "../../string.util";
+import {getNumericValueOrDefault} from "../number.util";
+import {getStringValueOrDefault} from "../string.util";
 import {AssetOrchestrator} from "./asset.orchestrator";
 
 const assetOrchestrator: AssetOrchestrator = new AssetOrchestrator();

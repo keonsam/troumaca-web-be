@@ -3,7 +3,6 @@ import {CredentialOrchestrator} from "./credential.orchestrator";
 import {AuthenticatedCredential} from "../../data/authentication/authenticated.credential";
 import {Credential} from "../../data/authentication/credential";
 import {HeaderNormalizer} from "../../header.normalizer";
-import {ChangePassword} from "../../data/authentication/change.password";
 
 const credentialOrchestrator: CredentialOrchestrator = new CredentialOrchestrator();
 

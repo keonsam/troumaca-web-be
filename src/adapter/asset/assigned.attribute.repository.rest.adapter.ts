@@ -39,7 +39,7 @@ export class AssignedAttributeRepositoryRestAdapter implements AssignedAttribute
   //     return undefined;
   // }
   //
-  // deleteAssignedAttribute(assetTypeClassId: string): Observable<number> {
+  // deleteAssignedAttribute(assetClassificationId: string): Observable<number> {
   //     return undefined;
   // }
   //
@@ -59,7 +59,7 @@ export class AssignedAttributeRepositoryRestAdapter implements AssignedAttribute
   //     return undefined;
   // }
   //
-  // updateAssignedAttribute(assetTypeClassId: string, assignedAttribute: AssignedAttribute): Observable<number> {
+  // updateAssignedAttribute(assetClassificationId: string, assignedAttribute: AssignedAttribute): Observable<number> {
   //     return undefined;
   // }
 

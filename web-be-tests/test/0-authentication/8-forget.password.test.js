@@ -41,30 +41,30 @@ describe('forget-password', function () {
 
   it('forget password create credential', function (done) {
     api.post("/authentication/credentials")
-      .set('Accept', 'application/json')
-      .set('Correlation-Id', "cc62af18-ea2a-11e8-9f32-f2801f1b9fd1")
-      .send({credential, user})
-      // .expect('Content-Type', /json/)
-      .expect(201)
-      .end(function (err, res) {
-        if (!err) {
-          expect(res.body.confirmationId).to.be.a('string');
-          expect(res.body.credentialId).to.be.a('string');
-          expect(res.body.code).to.have.lengthOf(6);
-          expect(res.body.status).to.equal("New");
-          confirmation.confirmationId = res.body.confirmationId;
-          confirmation.credentialId = res.body.credentialId;
-          confirmation.code = res.body.code;
-          confirmation.status = res.body.status;
+    .set('Accept', 'application/json')
+    .set('Correlation-Id', "cc62af18-ea2a-11e8-9f32-f2801f1b9fd1")
+    .send({credential, user})
+    // .expect('Content-Type', /json/)
+    .expect(201)
+    .end(function (err, res) {
+      if (!err) {
+        expect(res.body.confirmationId).to.be.a('string');
+        expect(res.body.credentialId).to.be.a('string');
+        expect(res.body.code).to.have.lengthOf(6);
+        expect(res.body.status).to.equal("New");
+        confirmation.confirmationId = res.body.confirmationId;
+        confirmation.credentialId = res.body.credentialId;
+        confirmation.code = res.body.code;
+        confirmation.status = res.body.status;
 
-          changePassword.confirmationId = res.body.confirmationId;
-          changePassword.credentialId = res.body.credentialId;
-          changePassword.code = res.body.code;
-        } else {
-          console.log(err);
-        }
-        done(err);
-      });
+        changePassword.confirmationId = res.body.confirmationId;
+        changePassword.credentialId = res.body.credentialId;
+        changePassword.code = res.body.code;
+      } else {
+        console.log(err);
+      }
+      done(err);
+    });
   });
 
   // it('forget password confirm credential', function (done) {
@@ -93,58 +93,58 @@ describe('forget-password', function () {
   console.log(usernameMap);
   it('forget password send forget password code', function (done) {
     api.post("/authentication/confirmations/resend-by-username")
-      .set('Accept', 'application/json')
-      .set('Correlation-Id', "f18934a4-ea54-11e8-9f32-f2801f1b9fd1")
-      .send(usernameMap)
-      // .expect('Content-Type', /json/)
-      .expect(200)
-      .end(function (err, res) {
-        if (!err) {
-          console.log(res.body);
-          validateCode.credentialId = res.body.credentialId;
-          validateCode.code = res.body.code;
-        } else {
-          console.log(err);
-        }
-        done(err);
-      });
+    .set('Accept', 'application/json')
+    .set('Correlation-Id', "f18934a4-ea54-11e8-9f32-f2801f1b9fd1")
+    .send(usernameMap)
+    // .expect('Content-Type', /json/)
+    .expect(200)
+    .end(function (err, res) {
+      if (!err) {
+        console.log(res.body);
+        validateCode.credentialId = res.body.credentialId;
+        validateCode.code = res.body.code;
+      } else {
+        console.log(err);
+      }
+      done(err);
+    });
   });
 
   it('forget password validate code', function (done) {
     api.post("/authentication/confirmations/validate-code")
-      .set('Accept', 'application/json')
-      .set('Correlation-Id', "e595d0be-ea2a-11e8-9f32-f2801f1b9fd1")
-      .send(validateCode)
-      // .expect('Content-Type', /json/)
-      .expect(200)
-      .end(function (err, res) {
-        if (!err) {
-          console.log(res.body);
-          expect(res.body.valid).to.equal(true);
-        } else {
-          console.log(err);
-        }
-        done(err);
-      });
+    .set('Accept', 'application/json')
+    .set('Correlation-Id', "e595d0be-ea2a-11e8-9f32-f2801f1b9fd1")
+    .send(validateCode)
+    // .expect('Content-Type', /json/)
+    .expect(200)
+    .end(function (err, res) {
+      if (!err) {
+        console.log(res.body);
+        expect(res.body.valid).to.equal(true);
+      } else {
+        console.log(err);
+      }
+      done(err);
+    });
   });
 
   it('forget password change password', function (done) {
     console.log(changePassword);
     api.post("/authentication/change-password")
-      .set('Accept', 'application/json')
-      .set('Correlation-Id', "f18934a4-ea54-11e8-9f32-f2801f1b9fd1")
-      .send(changePassword)
-      // .expect('Content-Type', /json/)
-      .expect(200)
-      .end(function (err, res) {
-        if (!err) {
-          console.log(res.body);
-          //expect(res.body.status).to.equal("Confirmed")
-        } else {
-          console.log(err);
-        }
-        done(err);
-      });
+    .set('Accept', 'application/json')
+    .set('Correlation-Id', "f18934a4-ea54-11e8-9f32-f2801f1b9fd1")
+    .send(changePassword)
+    // .expect('Content-Type', /json/)
+    .expect(200)
+    .end(function (err, res) {
+      if (!err) {
+        console.log(res.body);
+        //expect(res.body.status).to.equal("Confirmed")
+      } else {
+        console.log(err);
+      }
+      done(err);
+    });
   })
 
 });
