@@ -6,13 +6,13 @@ import * as permissionController from "./authorization/permission/permission.con
 import * as resourceController from "./authorization/resource/resource.controller";
 import * as accessRoleController from "./authorization/access-role/access.role.controller";
 import * as accessRoleTypeController from "./authorization/access-role-type/access.role.type.controller";
-import * as resourcePermissionController from "./authorization/resource-permission/resource.permission.controller";
+// import * as resourcePermissionController from "./authorization/resource-permission/resource.permission.controller";
 import * as resourceTypeController from "./authorization/resource-type/resource.type.controller";
 
-import * as assetController from "./asset-type/asset/asset.controller";
-import * as attributeController from "./asset-type/attribute/attribute.controller";
-import * as assignedAttributeController from "./asset-type/attribute/assigned-attributes/assigned.attribute.controller";
-import * as assetKindController from "./asset-type/kind/asset.kind.controller";
+import * as assetController from "./asset/asset.controller";
+import * as attributeController from "./asset/attribute/attribute.controller";
+import * as assignedAttributeController from "./asset/attribute/assigned-attributes/assigned.attribute.controller";
+import * as assetKindController from "./asset/kind/asset.kind.controller";
 import * as phoneController from "./site/phone/phone.controller";
 import * as photoController from "./party/photo/photo.controller";
 import * as unitOfMeasureController from "./unit-of-measure/unit.of.measure.controller";
@@ -24,8 +24,8 @@ import * as postOfficeBoxController from "./site/post-office-box/post.office.box
 import * as streetAddressController from "./site/street-address/street.address.controller";
 import * as sessionController from "./session/session.controller";
 import * as userController from "./party/user/user.controller";
-import * as assetTypeClassController from "./asset-type/asset-type-class/asset.type.class.controller";
-import * as assetTypeController from "./asset-type/asset.type.controller";
+import * as assetClassificationController from "./asset/asset-classification/asset.classification.controller";
+import * as assetTypeController from "./asset/asset-type/asset.type.controller";
 import * as organizationController from "./party/organization/organization.controller";
 import * as subscriptionController from "./subscription/subscription.controller";
 import * as billingController from "./billing/billing.controller";
@@ -33,6 +33,7 @@ import * as depreciationController from "./depreciation/depreciation.controller"
 import * as organizationProfileController from "./profile/organization/create/organization.profile.controller";
 import * as personProfileController from "./profile/person/create/person.profile.controller";
 import * as searchController from "./search/search.controller";
+import * as contractPartyController from "./contract/party.relationship.controller";
 
 import { upload } from "./middleware/multer.config";
 
@@ -47,7 +48,8 @@ router.get("/", (req, res) => {
 });
 
 
-// ##### SECURITY START #####
+// ##### REGISTRATION (SECURITY) START #####
+
 // authentication
 router.post("/authentication/validate-password", credentialController.isValidPassword);
 router.post("/authentication/validate-username", credentialController.isValidUsername);
@@ -122,8 +124,7 @@ router.post("/access-role-types", checkSession, accessRoleTypeController.saveAcc
 router.put("/access-role-types/:accessRoleTypeId", checkSession, accessRoleTypeController.updateAccessRoleType);
 router.delete("/access-role-types/:accessRoleTypeId", checkSession, accessRoleTypeController.deleteAccessRoleType);
 
-// ##### SECURITY END #####
-
+// ##### REGISTRATION (SECURITY) END #####
 
 
 // Asset Type
@@ -145,16 +146,21 @@ router.delete("/assets/:assetId", checkSession, assetController.deleteAsset);
 router.get("/asset-types/find", checkSession, assetTypeController.findAssetTypes);
 router.get("/asset-types", checkSession, assetTypeController.getAssetTypes);
 router.get("/asset-types/:assetTypeId", checkSession, assetTypeController.getAssetTypeById);
-router.post("/asset-types", checkSession, assetTypeController.saveAssetType);
+
+router.post("/assets/asset-types/material-types", checkSession, assetTypeController.addMaterialType);
+router.post("/assets/asset-types/other-asset-types", checkSession, assetTypeController.addOtherAssetType);
+router.post("/assets/asset-types/product-types", checkSession, assetTypeController.addProductType);
+router.post("/assets/asset-types/part-or-equipment-types", checkSession, assetTypeController.addPartOrEquipmentType);
+
 router.put("/asset-types/:assetTypeId", checkSession, checkSession, assetTypeController.updateAssetType);
 router.delete("/asset-types/:assetTypeId", checkSession, assetTypeController.deleteAssetType);
 // asset-type-class
-router.get("/asset-type-classes/find", checkSession, assetTypeClassController.findAssetTypeClass);
-router.get("/asset-type-classes", checkSession, assetTypeClassController.getAssetTypeClasses);
-router.get("/asset-type-classes/:assetTypeClassId", checkSession, assetTypeClassController.getAssetTypeClass);
-router.post("/asset-type-classes", checkSession, assetTypeClassController.saveAssetTypeClass);
-router.put("/asset-type-classes/:assetTypeClassId", checkSession, assetTypeClassController.updateAssetTypeClass);
-router.delete("/asset-type-classes/:assetTypeClassId", checkSession, assetTypeClassController.deleteAssetTypeClass);
+router.get("/asset-type-classes/find", checkSession, assetClassificationController.findAssetTypeClass);
+router.get("/asset-type-classes", checkSession, assetClassificationController.getAssetTypeClasses);
+router.get("/asset-type-classes/:assetClassificationId", checkSession, assetClassificationController.getAssetTypeClass);
+router.post("/asset-type-classes", checkSession, assetClassificationController.addAssetClassification);
+router.put("/asset-type-classes/:assetClassificationId", checkSession, assetClassificationController.updateAssetTypeClass);
+router.delete("/asset-type-classes/:assetClassificationId", checkSession, assetClassificationController.deleteAssetTypeClass);
 // attribute
 router.get("/attributes", checkSession, attributeController.getAttributes);
 router.get("/attributes/:attributeId", checkSession, attributeController.getAttributeById);
@@ -164,9 +170,13 @@ router.post("/attributes/assigned", checkSession, attributeController.getAssigna
 router.put("/attributes/:attributeId", checkSession, attributeController.updateAttribute);
 router.delete("/attributes/:attributeId", checkSession, attributeController.deleteAttribute);
 // assigned-attributes
-router.get("/assigned-attributes/:assetTypeClassId", checkSession, assignedAttributeController.getAssignedAttributesByClassId);
-router.get("/assigned-attributes/:assetTypeClassId", checkSession, assignedAttributeController.getAssignedAttributesByClassId);
-// site
+router.get("/assigned-attributes/:assetClassificationId", checkSession, assignedAttributeController.getAssignedAttributesByClassId);
+router.get("/assigned-attributes/:assetClassificationId", checkSession, assignedAttributeController.getAssignedAttributesByClassId);
+
+
+// SITE
+
+
 router.get("/sites/find", checkSession, siteController.findSite);
 // street-address
 router.get("/street-addresses", checkSession, streetAddressController.getStreetAddresses);
@@ -272,7 +282,13 @@ router.post("/depreciation", checkSession, depreciationController.saveDepreciati
 router.put("/depreciation/:depreciationId", checkSession, depreciationController.updateDepreciation);
 router.delete("/depreciation/:depreciationId/:type", checkSession, depreciationController.deleteDepreciation);
 
+
 // SEARCH
 router.get("/search/:indexName", checkSession, searchController.search);
+
+
+// CONTRACT
+router.get("/contracts/party-relationships/exists", checkSession, contractPartyController.checkPartyRelationship);
+
 
 export default router;

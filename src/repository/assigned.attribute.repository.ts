@@ -17,8 +17,8 @@ export interface AssignedAttributeRepository {
   //
   // saveAssignedAttributes(assignedAttribute: AssignedAttribute[]): Observable<AssignedAttribute[]>;
   //
-  // updateAssignedAttribute(assetTypeClassId: string, assignedAttribute: AssignedAttribute): Observable<number>;
+  // updateAssignedAttribute(assetClassificationId: string, assignedAttribute: AssignedAttribute): Observable<number>;
   //
-  // deleteAssignedAttribute(assetTypeClassId: string): Observable<number>;
+  // deleteAssignedAttribute(assetClassificationId: string): Observable<number>;
 
 }
