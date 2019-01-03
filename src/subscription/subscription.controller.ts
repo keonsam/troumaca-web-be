@@ -5,7 +5,8 @@ const subscriptionOrchestrator: SubscriptionOrchestrator = new SubscriptionOrche
 
 export const getApps = (req: Request, res: Response) => {
     res.setHeader("content-type", "application/json");
-    subscriptionOrchestrator.getApps(res.locals.partyId)
+
+    subscriptionOrchestrator.getApps(req.headers["Party-Id"])
         .subscribe( apps => {
             const body = JSON.stringify(apps);
             res.status(200).send(body);

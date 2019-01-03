@@ -5,7 +5,7 @@ import { App } from "../../data/party/app";
 
 export class SubscriptionRepositoryRestAdapter implements SubscriptionRepository {
 
-    getApps(partyId: string): Observable<App[]> {
+    getApps(partyId: any): Observable<App[]> {
         return undefined;
     }
 

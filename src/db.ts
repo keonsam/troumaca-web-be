@@ -23,6 +23,7 @@ const theWebSiteDb = path.resolve(__dirname, "..") + "/nedb/site/web-sites.db";
 const thePostOfficeBoxDb = path.resolve(__dirname, "..") + "/nedb/site/post-office-boxes.db";
 
 // party
+const theContactInfoDb = path.resolve(__dirname, "..") + "/nedb/party/contact-info.db";
 const thePersonsDb = path.resolve(__dirname, "..") + "/nedb/party/persons.db";
 const theOrganizationDb = path.resolve(__dirname, "..") + "/nedb/party/organizations.db";
 const theRequestsDb = path.resolve(__dirname, "..") + "/nedb/party/requests.db";
@@ -65,6 +66,11 @@ const depreciationSystemDb = path.resolve(__dirname, "..") + "/nedb/depreciation
 const propertyClassesDb = path.resolve(__dirname, "..") + "/nedb/depreciation/propertyClasses.db";
 
 // Todo: Fix remove
+// party
+
+export let contacts = new Datastore(theContactInfoDb);
+contacts.loadDatabase(handleError);
+contacts.ensureIndex({fieldName: "contactInfoId", unique: true}, handleError);
 
 export let photos = new Datastore(thePhotosDb);
 photos.loadDatabase(handleError);

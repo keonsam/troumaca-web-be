@@ -6,7 +6,6 @@ import * as permissionController from "./authorization/permission/permission.con
 import * as resourceController from "./authorization/resource/resource.controller";
 import * as accessRoleController from "./authorization/access-role/access.role.controller";
 import * as accessRoleTypeController from "./authorization/access-role-type/access.role.type.controller";
-import * as resourcePermissionController from "./authorization/resource-permission/resource.permission.controller";
 import * as resourceTypeController from "./authorization/resource-type/resource.type.controller";
 
 import * as assetController from "./asset-type/asset/asset.controller";
@@ -33,6 +32,7 @@ import * as depreciationController from "./depreciation/depreciation.controller"
 import * as organizationProfileController from "./profile/organization/create/organization.profile.controller";
 import * as personProfileController from "./profile/person/create/person.profile.controller";
 import * as searchController from "./search/search.controller";
+import * as partyController from "./party/party.controller";
 
 import { upload } from "./middleware/multer.config";
 
@@ -203,6 +203,12 @@ router.delete("/phones/:siteId", checkSession, phoneController.deletePhone);
 
 // PARTY
 
+router.get("/parties/contact-info", checkSession, partyController.getContactInfo);
+router.post("/parties/contact-info,", checkSession, partyController.addContactInfo);
+router.put("/parties/contact-info/:contactInfoId", checkSession, partyController.updateContactInfo);
+router.get("/parties/address", checkSession, partyController.getAddress);
+router.post("/parties/address,", checkSession, partyController.addAddress);
+router.put("/parties/address/:siteId", checkSession, partyController.updateAddress);
 // user
 router.get("/users/find", checkSession, userController.findUser);
 router.get("/users/profile", checkSession, userController.getUserMe);
@@ -235,7 +241,7 @@ router.put("/photos/user", checkSession, upload, photoController.updatePhoto);
 
 // SUBSCRIPTION && BILLING
 
-router.get("/subscriptions/apps", checkSession, subscriptionController.getApps);
+router.get("/apps", checkSession, subscriptionController.getApps);
 router.get("/subscriptions", checkSession, subscriptionController.getSubscriptions);
 router.post("/subscriptions", checkSession, subscriptionController.addSubscription);
 router.delete("/subscriptions/:subscriptionId", checkSession, subscriptionController.deleteSubscription);

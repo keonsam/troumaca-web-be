@@ -57,7 +57,7 @@ export let getAssetById = (req: Request, res: Response) => {
 export let saveAsset = (req: Request, res: Response) => {
   if (!req.body) {
     return res.status(400).send({
-      message: "Asset can not be empty"
+      message: "Asset must exist."
     });
   }
   assetOrchestrator.saveAsset(req.body)

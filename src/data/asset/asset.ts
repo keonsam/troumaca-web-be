@@ -1,25 +1,34 @@
-import { AssetKind } from "./asset.kind";
-import { AssetType } from "./asset.type";
-import { UnitOfMeasure } from "../unit-of-measure/unit.of.measure";
-import { User } from "../party/user";
-import { Site } from "../site/site";
+import {DiscreteItem} from "./discrete.item";
+import {InventoryItem} from "./inventory.item";
+import {Building} from "./building";
+import {Lot} from "./lot";
+import {AssetSpecification} from "./asset.specification";
+import {AssetBrand} from "./asset.brand";
+import {AssetCharacteristics} from "./asset.characteristics";
 
 export class Asset {
-    assetId: string;
-    tenantId: string;
-    assetKindId: string;
-    assetKind: AssetKind;
-    assetTypeId: string;
-    assetType: AssetType;
-    serialNumber: string;
-    quantity: string;
-    unitOfMeasureId: string;
-    unitOfMeasure: UnitOfMeasure;
-    description: string;
-    personId: string;
-    person: User;
-    siteId: string;
-    site: Site;
-    createdOn: string;
-    modifiedOn: string;
+  assetId: string;
+  name: string;
+  createdOn: string;
+  destroyOn: string;
+  expireOn: string;
+  description: string;
+  discreteItem: DiscreteItem;
+  inventoryItem: InventoryItem;
+  building: Building;
+  lot: Lot;
+  specification: AssetSpecification;
+  brand: AssetBrand;
+  characteristics: AssetCharacteristics;
+
+  constructor() {
+    this.discreteItem = new DiscreteItem();
+    this.inventoryItem = new InventoryItem();
+    this.building = new Building();
+    this.lot = new Lot();
+    this.specification = new AssetSpecification();
+    this.brand = new AssetBrand();
+    this.characteristics = new AssetCharacteristics();
+  }
+
 }
