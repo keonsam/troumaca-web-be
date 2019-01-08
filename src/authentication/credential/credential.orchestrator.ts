@@ -15,6 +15,7 @@ import {createPersonRepository} from "../../adapter/party/person.repository.fact
 import {Person} from "../../data/party/person";
 import {User} from "../../data/party/user";
 import {ChangePassword} from "../../data/authentication/change.password";
+import { ChangeResponse } from "../../data/authentication/change.response";
 
 export class CredentialOrchestrator {
 
@@ -106,7 +107,7 @@ export class CredentialOrchestrator {
     return this.credentialRepository.forgetPassword(credential, options);
   }
 
-  changePassword(changePassword: ChangePassword, options?: any): Observable<Confirmation> {
+  changePassword(changePassword: ChangePassword, options?: any): Observable<ChangeResponse> {
     return this.credentialRepository.changePassword(changePassword, options);
   }
 }

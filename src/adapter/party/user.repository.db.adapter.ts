@@ -40,7 +40,8 @@ export class UserRepositoryNeDbAdapter implements UserRepository {
                 throw new Error(`getCredentialByPartyIds Failed ${credentials}`);
               } else {
                 users.forEach(val => {
-                  val.username = credentials.find(x => x.partyId === val.partyId).username;
+                  const credential = credentials.find(x => x.partyId === val.partyId);
+                  val.username = credential ? credential.username : "";
                 });
                 return users;
               }
@@ -159,7 +160,7 @@ export class UserRepositoryNeDbAdapter implements UserRepository {
   getUsersLocal(pageNumber: number, pageSize: number, order: string): Observable<User[]> {
     const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
     return Observable.create(function (observer: Observer<User[]>) {
-      users.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
+      users.find({}).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {

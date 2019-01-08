@@ -10,7 +10,7 @@ export class  SubscriptionOrchestrator {
         this.subscriptionRepository = createSubscriptionRepositoryFactory();
     }
 
-    public getApps(partyId: string): Observable<App[]> {
+    public getApps(partyId: any): Observable<App[]> {
         return this.subscriptionRepository.getApps(partyId);
     }
 

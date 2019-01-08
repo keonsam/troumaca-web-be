@@ -54,10 +54,61 @@ export let getAssetById = (req: Request, res: Response) => {
     });
 };
 
+export let getAssetSpecById = (req: Request, res: Response) => {
+  assetOrchestrator.getAssetSpecById(req.params.assetId)
+      .subscribe(assets => {
+        if (assets) {
+          res.status(200);
+          res.send(JSON.stringify(assets));
+        } else {
+          res.status(404);
+          res.send(JSON.stringify({message: "No Data Found For " + req.params.assetId}));
+        }
+      }, error => {
+        res.status(500);
+        res.send(error);
+        console.log(error);
+      });
+};
+
+export let getAssetBrandById = (req: Request, res: Response) => {
+  assetOrchestrator.getAssetBrandById(req.params.assetId)
+      .subscribe(assets => {
+        if (assets) {
+          res.status(200);
+          res.send(JSON.stringify(assets));
+        } else {
+          res.status(404);
+          res.send(JSON.stringify({message: "No Data Found For " + req.params.assetId}));
+        }
+      }, error => {
+        res.status(500);
+        res.send(error);
+        console.log(error);
+      });
+};
+
+export let getAssetCharacteristicsById = (req: Request, res: Response) => {
+  assetOrchestrator.getAssetCharacteristicsById(req.params.assetId)
+      .subscribe(assets => {
+        if (assets) {
+          res.status(200);
+          res.send(JSON.stringify(assets));
+        } else {
+          res.status(404);
+          res.send(JSON.stringify({message: "No Data Found For " + req.params.assetId}));
+        }
+      }, error => {
+        res.status(500);
+        res.send(error);
+        console.log(error);
+      });
+};
+
 export let saveAsset = (req: Request, res: Response) => {
   if (!req.body) {
     return res.status(400).send({
-      message: "Asset can not be empty"
+      message: "Asset must exist."
     });
   }
   assetOrchestrator.saveAsset(req.body)
@@ -69,6 +120,59 @@ export let saveAsset = (req: Request, res: Response) => {
       res.send(JSON.stringify({message: "Error Occurred"}));
       console.log(error);
     });
+};
+
+export let addAssetSpec = (req: Request, res: Response) => {
+  if (!req.body) {
+    return res.status(400).send({
+      message: "Asset must exist."
+    });
+  }
+  assetOrchestrator.addAssetSpec(req.body)
+      .subscribe(assets => {
+        res.status(201);
+        res.send(JSON.stringify(assets));
+      }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: "Error Occurred"}));
+        console.log(error);
+      });
+};
+
+export let addAssetBrand = (req: Request, res: Response) => {
+  if (!req.body) {
+    return res.status(400).send({
+      message: "Asset must exist."
+    });
+  }
+  assetOrchestrator.addAssetBrand(req.body)
+      .subscribe(assets => {
+        res.status(201);
+        res.send(JSON.stringify(assets));
+      }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: "Error Occurred"}));
+        console.log(error);
+      });
+};
+
+
+export let addAssetCharacteristics = (req: Request, res: Response) => {
+  if (!req.body) {
+    return res.status(400).send({
+      message: "Asset must exist."
+    });
+  }
+
+  assetOrchestrator.addAssetCharacteristics(req.body)
+      .subscribe(assets => {
+        res.status(201);
+        res.send(JSON.stringify(assets));
+      }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: "Error Occurred"}));
+        console.log(error);
+      });
 };
 
 export let updateAsset = (req: Request, res: Response) => {

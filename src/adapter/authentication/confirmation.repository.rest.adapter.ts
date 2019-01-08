@@ -77,7 +77,6 @@ export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository
 
     return Observable.create(function (observer: Observer<Confirmation>) {
       request(requestOptions, function (error: any, response: any, body: any) {
-        console.log(body);
         try {
           if (response && response.statusCode != 200) {
             observer.error(body);

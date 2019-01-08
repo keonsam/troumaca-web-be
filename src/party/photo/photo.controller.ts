@@ -4,7 +4,7 @@ import { PhotoOrchestrator } from "./photo.orchestrator";
 const orchestrator: PhotoOrchestrator = new PhotoOrchestrator();
 
 export let getPhotos = (req: Request, res: Response) => {
-    const type: string = req.params.type;
+    const type: string = "user";
     const partyId: string = res.locals.partyId;
     res.setHeader("content-type", "application/json");
     orchestrator.getPhotos(partyId, type)
@@ -28,25 +28,29 @@ export let savePhoto = (req: Request, res: Response) => {
     // it might be better to separate user and organization image
     // take the best possible way for the service
     // I can change this around later
+    console.log(req.file);
+    console.log(req.files);
+    console.log(req);
     console.log("working");
-    const type: string = req.params.type;
-    const image: string = req.file.path;
+    const type: string = "user";
+    // const image: string = req.file.path;
     const partyId: string = res.locals.partyId;
     res.setHeader("content-type", "multipart/form-data");
-    if (!image) {
-        return res.status(400).send({
-            message: "Image was not saved, please try again."
-        });
-    }
-    orchestrator.savePhoto("user", image, partyId)
-        .subscribe(photo => {
-            res.status(201);
-            res.send(JSON.stringify(photo));
-        }, error => {
-            res.status(500);
-            res.send(JSON.stringify({message: "Error Occurred"}));
-            console.log(error);
-        });
+    res.send();
+    // if (!image) {
+    //     return res.status(400).send({
+    //         message: "Image was not saved, please try again."
+    //     });
+    // }
+    // orchestrator.savePhoto("user", undefined, partyId)
+    //     .subscribe(photo => {
+    //         res.status(201);
+    //         res.send(JSON.stringify(photo));
+    //     }, error => {
+    //         res.status(500);
+    //         res.send(JSON.stringify({message: "Error Occurred"}));
+    //         console.log(error);
+    //     });
 };
 
 export let updatePhoto = (req: Request, res: Response) => {
@@ -54,7 +58,7 @@ export let updatePhoto = (req: Request, res: Response) => {
     // it might be better to separate user and organization image
     // take the best possible way for the service
     // I can change this around later
-    const type: string = req.params.type;
+    const type: string = "user";
     const image: string = req.file.path;
     const partyId: string = res.locals.partyId;
     res.setHeader("content-type", "multipart/form-data");

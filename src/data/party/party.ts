@@ -1,5 +1,5 @@
 export class Party {
-  partyId: string;
+  partyId: any;
   version: string;
   ownerPartyId: string;
   createdOn: Date;

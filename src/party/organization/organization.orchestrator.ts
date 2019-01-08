@@ -49,7 +49,7 @@ export class OrganizationOrchestrator {
   }
 
   addCustomer(organization: Organization, options?: any): Observable<Organization> {
-    return this.organizationRepository.addCustomer(organization, options)
+    return this.organizationRepository.addCustomer(organization, options);
       // .pipe(switchMap(organizationRes => {
       //   if (!organizationRes) {
       //     return throwError("Failed to save organization.");
@@ -64,7 +64,6 @@ export class OrganizationOrchestrator {
       //       }));
       //   }
       // }))
-      ;
   }
 
   saveOrganizationCompany(organization: Organization): Observable<Organization> {

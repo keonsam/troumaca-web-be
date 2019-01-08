@@ -82,7 +82,7 @@ export let resendConfirmCodeByUsername = (req: Request, res: Response) => {
     .resendConfirmCodeByUsername(confirmation.username, headerOptions)
     .subscribe(next => {
       const body = JSON.stringify(next);
-      res.status(200);
+      res.status(201);
       res.setHeader("content-type", "application/json");
       res.send(body);
     }, error => {

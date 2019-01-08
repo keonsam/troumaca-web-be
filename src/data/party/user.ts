@@ -1,4 +1,5 @@
 import {Party} from "./party";
+import { PartyAccessRole } from "../authorization/party.access.role";
 
 export class User extends Party {
 
@@ -6,6 +7,7 @@ export class User extends Party {
   middleName: string;
   lastName: string;
   username: string;
+  partyAccessRoles: PartyAccessRole[];
   dateOfBirth: Date;
 
   get name(): string {

@@ -15,6 +15,7 @@ import {generate} from "generate-password";
 import {CreateCredential} from "../../repository/create.credential";
 import {Person} from "../../data/party/person";
 import {ChangePassword} from "../../data/authentication/change.password";
+import { ChangeResponse } from "../../data/authentication/change.response";
 
 export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
 
@@ -156,13 +157,16 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
     }));
   }
 
-  changePassword(changePassword: ChangePassword, options: any): Observable<Confirmation> {
+  changePassword(changePassword: ChangePassword, options: any): Observable<ChangeResponse> {
     return this.changePasswordLocal(changePassword)
-        .pipe(switchMap( num => {
+        .pipe(map( num => {
             if (!num) {
-                return throwError(`Failed to update credential ${num}`);
+                throw new Error(`Failed to update credential ${num}`);
             } else {
-                return this.confirmationRepositoryNeDbAdapter.getConfirmationByCredentialId(changePassword.credentialId, "Confirmed");
+                const changeRes = new ChangeResponse();
+                changeRes.name = "ChangePassword";
+                changeRes.changed = true;
+                return changeRes;
             }
         }));
   }

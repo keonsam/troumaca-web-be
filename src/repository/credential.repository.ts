@@ -5,6 +5,7 @@ import {Observable} from "rxjs";
 import {Person} from "../data/party/person";
 import { Confirmation } from "../data/authentication/confirmation";
 import {ChangePassword} from "../data/authentication/change.password";
+import { ChangeResponse } from "../data/authentication/change.response";
 
 export interface CredentialRepository {
 
@@ -18,7 +19,7 @@ export interface CredentialRepository {
 
   forgetPassword(credential: Credential, options: any): Observable<Confirmation>;
 
-  changePassword(changePassword: ChangePassword, options: any): Observable<Confirmation>;
+  changePassword(changePassword: ChangePassword, options: any): Observable<ChangeResponse>;
 
   updateCredential(partyId: string, credential: Credential, options?: any): Observable<number>;
 

@@ -3,7 +3,7 @@ var should = require('chai').should(),
   supertest = require('supertest'),
   api = supertest('http://localhost:3000');
 
-describe('create-profile-organization', function () {
+describe('add-customer', function () {
 
 
   this.timeout(5000);
@@ -18,6 +18,9 @@ describe('create-profile-organization', function () {
   const organization = {
       name: `My Company ${time}`,
       purpose: "The Big Bad Company",
+      email: `myCompany${time}@shapestone.com`,
+      number: `1784${time}`,
+      address: `In USA`,
       description: "In LA"
   };
 
@@ -34,7 +37,7 @@ describe('create-profile-organization', function () {
 
   let cookie = '';
 
-  it('create profile organization 1 credential', function (done) {
+  it('add company credential', function (done) {
       api.post("/authentication/credentials")
           .set('Accept', 'application/json')
           .set('Correlation-Id', 1234567890)
@@ -56,7 +59,7 @@ describe('create-profile-organization', function () {
   });
 
 
-  it('create profile organization 1 confirmation', function (done) {
+  it('add company confirmation', function (done) {
 
       console.log("Completed 2.");
 
@@ -98,8 +101,8 @@ describe('create-profile-organization', function () {
           });
   });
 
-  it('create profile organization', function (done) {
-      api.post("/organizations/profiles")
+  it('add company organization', function (done) {
+      api.post("/organizations/customer")
           .set('Accept', 'application/json')
           .set('Correlation-Id', 1234567890)
           .set('Cookie', [cookie])
@@ -111,8 +114,6 @@ describe('create-profile-organization', function () {
                   console.log(err);
               }else {
                   expect(res.body.partyId).to.be.a('string');
-                  expect(res.body.name).to.be.a('string');
-                  expect(res.body.purpose).to.be.a('string');
               }
               done(err);
           });

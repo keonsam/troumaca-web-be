@@ -109,6 +109,7 @@ export  let addCustomer = (req: Request, res: Response) => {
   HeaderNormalizer.normalize(req);
 
   const organization: Organization = req.body;
+  organization.partyId = req.headers["Party-Id"];
 
   if (!organization || !organization.name) {
     res.status(400);
