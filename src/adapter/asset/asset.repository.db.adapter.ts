@@ -128,9 +128,8 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
   }
 
   addAssetSpec(asset: Asset): Observable<AssetSpecification> {
-      asset.assetId = generateUUID();
       return Observable.create(function (observer: Observer<AssetSpecification>) {
-          assets.insert(asset, function (err: any, doc: any) {
+          assetSpecs.insert(asset, function (err: any, doc: any) {
               if (err) {
                   observer.error(err);
               } else {
@@ -142,9 +141,8 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
   }
 
   addAssetBrand(asset: Asset): Observable<AssetBrand> {
-      asset.assetId = generateUUID();
       return Observable.create(function (observer: Observer<AssetBrand>) {
-          assets.insert(asset, function (err: any, doc: any) {
+          assetBrands.insert(asset, function (err: any, doc: any) {
               if (err) {
                   observer.error(err);
               } else {
@@ -156,9 +154,8 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
   }
 
   addAssetCharacteristics(asset: Asset): Observable<AssetCharacteristics> {
-      asset.assetId = generateUUID();
       return Observable.create(function (observer: Observer<AssetCharacteristics>) {
-          assets.insert(asset, function (err: any, doc: any) {
+          assetChars.insert(asset, function (err: any, doc: any) {
               if (err) {
                   observer.error(err);
               } else {
