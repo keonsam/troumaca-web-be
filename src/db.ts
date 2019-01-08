@@ -168,7 +168,7 @@ assetKinds.ensureIndex({fieldName: "assetKindId", unique: true}, handleError);
 
 export let assetTypeClasses = new Datastore(theAssetTypeClassesDb);
 assetTypeClasses.loadDatabase(handleError);
-assetTypeClasses.ensureIndex({fieldName: "assetTypeClassId", unique: true}, handleError);
+assetTypeClasses.ensureIndex({fieldName: "assetClassificationId", unique: true}, handleError);
 
 export let assetTypes = new Datastore(theAssetTypesDb);
 assetTypes.loadDatabase(handleError);

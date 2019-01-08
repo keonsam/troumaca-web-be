@@ -1,12 +1,15 @@
-import {createAssetTypeRepository} from "../adapter/asset/asset.type.repository.factory";
-import {AssetTypeRepository} from "../repository/asset.type.repository";
-import {AssetType} from "../data/asset/asset.type";
+import {createAssetTypeRepository} from "../../adapter/asset/asset.type.repository.factory";
+import {AssetTypeRepository} from "../../repository/asset.type.repository";
+import {AssetType} from "../../data/asset/asset.type";
 import {Observable} from "rxjs";
-import {Result} from "../result.success";
-import {getSortOrderOrDefault} from "../sort.order.util";
+import {Result} from "../../result.success";
+import {getSortOrderOrDefault} from "../../sort.order.util";
 import {shapeAssetTypesResponse} from "./asset.type.response.shaper";
-import {Value} from "../data/asset/value";
+import {Value} from "../../data/asset/value";
 import {switchMap, map} from "rxjs/operators";
+import {MaterialType} from "../../data/asset/material.type";
+import {ProductType} from "../../data/asset/product.type";
+import {PartOrEquipmentType} from "../../data/asset/part.or.equipment.type";
 
 export class AssetTypeOrchestrator {
 
@@ -40,6 +43,22 @@ export class AssetTypeOrchestrator {
 
   saveAssetType(assetType: AssetType, values: Value[]): Observable<AssetType> {
     return this.assetTypeRepository.saveAssetType(assetType, values);
+  }
+
+  addMaterialType(materialType: MaterialType, options?: any): Observable<MaterialType> {
+    return this.assetTypeRepository.addMaterialType(materialType, options);
+  }
+
+  addProductType(productType: ProductType, options?: any): Observable<ProductType> {
+    return this.assetTypeRepository.addProductType(productType, options);
+  }
+
+  addPartOrEquipmentType(partOrEquipmentType: PartOrEquipmentType, options?: any): Observable<PartOrEquipmentType> {
+    return this.assetTypeRepository.addPartOrEquipmentType(partOrEquipmentType, options);
+  }
+
+  addOtherAssetType(assetType: AssetType, options?: any): Observable<AssetType> {
+    return this.assetTypeRepository.addOtherAssetType(assetType, options);
   }
 
   updateAssetType(assetTypeId: string, assetType: AssetType, values: Value[]): Observable<number> {
