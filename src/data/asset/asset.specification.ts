@@ -1,4 +1,5 @@
 export class AssetSpecification {
+  assetId: string;
   type: string;
   name: string;
   partOf: string;

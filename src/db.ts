@@ -12,6 +12,9 @@ const theAssetTypesDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-
 const theAssetTypeClassesDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-type-classes.db";
 const theValuesDb = path.resolve(__dirname, "..") + "/nedb/asset_type/values.db";
 const theAssetsDb = path.resolve(__dirname, "..") + "/nedb/asset_type/assets.db";
+const theAssetSpecsDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-specs.db";
+const theAssetBrandsDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-brands.db";
+const theAssetCharsDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-chars.db";
 const theAssetKindsDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-kinds.db";
 
 // sites
@@ -142,6 +145,18 @@ unitOfMeasures.ensureIndex({fieldName: "unitOfMeasureId", unique: true}, handleE
 export let assets = new Datastore(theAssetsDb);
 assets.loadDatabase(handleError);
 assets.ensureIndex({fieldName: "assetId", unique: true}, handleError);
+
+export let assetSpecs = new Datastore(theAssetSpecsDb);
+assetSpecs.loadDatabase(handleError);
+assetSpecs.ensureIndex({fieldName: "assetId", unique: true}, handleError);
+
+export let assetBrands = new Datastore(theAssetBrandsDb);
+assetBrands.loadDatabase(handleError);
+assetBrands.ensureIndex({fieldName: "assetId", unique: true}, handleError);
+
+export let assetChars = new Datastore(theAssetCharsDb);
+assetChars.loadDatabase(handleError);
+assetChars.ensureIndex({fieldName: "assetId", unique: true}, handleError);
 
 export let values = new Datastore(theValuesDb);
 values.loadDatabase(handleError);

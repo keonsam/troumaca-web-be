@@ -1,9 +1,12 @@
 import {AssetRepository} from "../../repository/asset.repository";
 import {Asset} from "../../data/asset/asset";
 import {generateUUID} from "../../uuid.generator";
-import {assets} from "../../db";
+import { assetBrands, assetChars, assets, assetSpecs } from "../../db";
 import {calcSkip} from "../../db.util";
 import {Observable, Observer} from "rxjs";
+import { AssetSpecification } from "../../data/asset/asset.specification";
+import { AssetBrand } from "../../data/asset/asset.brand";
+import { AssetCharacteristics } from "../../data/asset/asset.characteristics";
 
 export class AssetRepositoryNeDbAdapter implements AssetRepository {
 
@@ -68,6 +71,48 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
     });
   }
 
+    getAssetSpecById(assetId: string): Observable<AssetSpecification> {
+        return Observable.create((observer: Observer<AssetSpecification>) => {
+            const query = {"assetId": assetId};
+            assetSpecs.findOne(query, function (err: any, doc: any) {
+                if (!err) {
+                    observer.next(doc);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
+        });
+    }
+
+    getAssetBrandById(assetId: string): Observable<AssetBrand> {
+        return Observable.create((observer: Observer<AssetBrand>) => {
+            const query = {"assetId": assetId};
+            assetBrands.findOne(query, function (err: any, doc: any) {
+                if (!err) {
+                    observer.next(doc);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
+        });
+    }
+
+    getAssetCharacteristicsById(assetId: string): Observable<AssetCharacteristics> {
+        return Observable.create((observer: Observer<AssetCharacteristics>) => {
+            const query = {"assetId": assetId};
+            assetChars.findOne(query, function (err: any, doc: any) {
+                if (!err) {
+                    observer.next(doc);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
+        });
+    }
+
   saveAsset(asset: Asset): Observable<Asset> {
     asset.assetId = generateUUID();
     return Observable.create(function (observer: Observer<Asset>) {
@@ -80,6 +125,48 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
         observer.complete();
       });
     });
+  }
+
+  addAssetSpec(asset: Asset): Observable<AssetSpecification> {
+      asset.assetId = generateUUID();
+      return Observable.create(function (observer: Observer<AssetSpecification>) {
+          assets.insert(asset, function (err: any, doc: any) {
+              if (err) {
+                  observer.error(err);
+              } else {
+                  observer.next(doc);
+              }
+              observer.complete();
+          });
+      });
+  }
+
+  addAssetBrand(asset: Asset): Observable<AssetBrand> {
+      asset.assetId = generateUUID();
+      return Observable.create(function (observer: Observer<AssetBrand>) {
+          assets.insert(asset, function (err: any, doc: any) {
+              if (err) {
+                  observer.error(err);
+              } else {
+                  observer.next(doc);
+              }
+              observer.complete();
+          });
+      });
+  }
+
+  addAssetCharacteristics(asset: Asset): Observable<AssetCharacteristics> {
+      asset.assetId = generateUUID();
+      return Observable.create(function (observer: Observer<AssetCharacteristics>) {
+          assets.insert(asset, function (err: any, doc: any) {
+              if (err) {
+                  observer.error(err);
+              } else {
+                  observer.next(doc);
+              }
+              observer.complete();
+          });
+      });
   }
 
   updateAsset(assetId: string, asset: Asset): Observable<number> {

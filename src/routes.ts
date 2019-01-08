@@ -141,6 +141,15 @@ router.get("/assets/:assetId", checkSession, assetController.getAssetById);
 router.post("/assets", checkSession, assetController.saveAsset);
 router.put("/assets/:assetId", checkSession, assetController.updateAsset);
 router.delete("/assets/:assetId", checkSession, assetController.deleteAsset);
+
+router.get("/asset-specifications/:assetId", checkSession, assetController.getAssetSpecById);
+router.get("/asset-brands/:assetId", checkSession, assetController.getAssetBrandById);
+router.get("/asset-characteristics/:assetId", checkSession, assetController.getAssetCharacteristicsById);
+
+router.post("/asset-specifications", checkSession, assetController.addAssetSpec);
+router.post("/asset-brands", checkSession, assetController.addAssetBrand);
+router.post("/asset-characteristics", checkSession, assetController.addAssetCharacteristics);
+
 // asset-type
 router.get("/asset-types/find", checkSession, assetTypeController.findAssetTypes);
 router.get("/asset-types", checkSession, assetTypeController.getAssetTypes);
