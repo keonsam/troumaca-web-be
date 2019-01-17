@@ -38,20 +38,21 @@ export let getAssets = (req: Request, res: Response) => {
 };
 
 export let getAssetById = (req: Request, res: Response) => {
-  assetOrchestrator.getAssetById(req.params.assetId)
-    .subscribe(assets => {
-      if (assets) {
-        res.status(200);
-        res.send(JSON.stringify(assets));
-      } else {
-        res.status(404);
-        res.send(JSON.stringify({message: "No Data Found For " + req.params.assetId}));
-      }
-    }, error => {
-      res.status(500);
-      res.send(error);
-      console.log(error);
-    });
+    assetOrchestrator.getAssetById(req.params.assetId)
+        .subscribe(assets => {
+            if (assets) {
+                const body = JSON.stringify(assets);
+                res.status(200);
+                res.send(body);
+            } else {
+                res.status(404);
+                res.send(JSON.stringify({message: "No Data Found For " + req.params.assetId}));
+            }
+        }, error => {
+            res.status(500);
+            res.send(error);
+            console.log(error);
+        });
 };
 
 export let getAssetSpecById = (req: Request, res: Response) => {
@@ -195,6 +196,72 @@ export let updateAsset = (req: Request, res: Response) => {
       res.send(JSON.stringify({message: "Error Occurred"}));
       console.log(error);
     });
+};
+
+export let updateAssetSpec = (req: Request, res: Response) => {
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Asset content can not be empty"
+        });
+    }
+    assetOrchestrator.updateAssetSpec(req.params.assetId, req.body)
+        .subscribe(affected => {
+            if (affected > 0) {
+                res.status(200);
+                res.send(JSON.stringify(affected));
+            } else {
+                res.status(404);
+                res.send(JSON.stringify({message: "No Data Found For " + req.params.assetId}));
+            }
+        }, error => {
+            res.status(500);
+            res.send(JSON.stringify({message: "Error Occurred"}));
+            console.log(error);
+        });
+};
+
+export let updateAssetBrand = (req: Request, res: Response) => {
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Asset content can not be empty"
+        });
+    }
+    assetOrchestrator.updateAssetBrand(req.params.assetId, req.body)
+        .subscribe(affected => {
+            if (affected > 0) {
+                res.status(200);
+                res.send(JSON.stringify(affected));
+            } else {
+                res.status(404);
+                res.send(JSON.stringify({message: "No Data Found For " + req.params.assetId}));
+            }
+        }, error => {
+            res.status(500);
+            res.send(JSON.stringify({message: "Error Occurred"}));
+            console.log(error);
+        });
+};
+
+export let updateAssetChars = (req: Request, res: Response) => {
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Asset content can not be empty"
+        });
+    }
+    assetOrchestrator.updateAssetChars(req.params.assetId, req.body)
+        .subscribe(affected => {
+            if (affected > 0) {
+                res.status(200);
+                res.send(JSON.stringify(affected));
+            } else {
+                res.status(404);
+                res.send(JSON.stringify({message: "No Data Found For " + req.params.assetId}));
+            }
+        }, error => {
+            res.status(500);
+            res.send(JSON.stringify({message: "Error Occurred"}));
+            console.log(error);
+        });
 };
 
 export let deleteAsset = (req: Request, res: Response) => {

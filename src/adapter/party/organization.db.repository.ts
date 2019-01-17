@@ -1,10 +1,15 @@
 import {OrganizationRepository} from "../../repository/organization.repository";
-import {Observable, Observer} from "rxjs";
+import { Observable, Observer, throwError } from "rxjs";
 import {Organization} from "../../data/party/organization";
-import {organizations, requests} from "../../db";
+import { contacts, organizations, requests, streetAddresses } from "../../db";
 import {generateUUID} from "../../uuid.generator";
 import {calcSkip} from "../../db.util";
 import {JoinOrganization} from "../../data/party/join.organization";
+import { OrganizationCompany } from "../../data/party/organization.company";
+import { map, switchMap } from "rxjs/operators";
+import { Address } from "../../data/party/address";
+import { error } from "util";
+import { ContactInfo } from "../../data/party/contact.info";
 
 export class OrganizationDBRepository implements OrganizationRepository {
 
@@ -70,9 +75,9 @@ export class OrganizationDBRepository implements OrganizationRepository {
   }
 
   getOrganizations(pageNumber: number, pageSize: number, order: string): Observable<Organization[]> {
+    const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
     return Observable.create((observer: Observer<Organization[]>) => {
-      const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
-      organizations.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
+      organizations.find({}).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -81,6 +86,19 @@ export class OrganizationDBRepository implements OrganizationRepository {
         observer.complete();
       });
     });
+  }
+
+  getOrganizationCompany(partyId: any): Observable<OrganizationCompany> {
+    return this.getOrganization(partyId)
+        .pipe(map( organization => {
+          if (!organization) {
+            throw new Error("failed to get organization company");
+          } else {
+            const organizationCompany: OrganizationCompany = new OrganizationCompany();
+            organizationCompany.organization = organization;
+            return organizationCompany;
+          }
+        }));
   }
 
   getOrganizationCount(): Observable<number> {

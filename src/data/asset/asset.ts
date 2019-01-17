@@ -6,10 +6,10 @@ import {Lot} from "./lot";
 export class Asset {
   assetId: string;
   name: string;
-  createdOn: string;
-  destroyOn: string;
-  expireOn: string;
-  description: string;
+  createdOn: Date;
+  destroyOn: Date;
+  expireOn: Date;
+  description: Date;
   discreteItem: DiscreteItem;
   inventoryItem: InventoryItem;
   building: Building;

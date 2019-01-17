@@ -18,7 +18,7 @@ export class PartyAccessRoleRestRepository implements PartyAccessRoleRepository 
   //   return undefined;
   // }
 
-  addPartyAccessRoles(partyAccessRole: PartyAccessRole[], partyId: string): Observable<PartyAccessRole[]> {
+  addPartyAccessRoles(partyAccessRole: string[], partyId: string): Observable<PartyAccessRole[]> {
     return undefined;
   }
 
@@ -38,7 +38,7 @@ export class PartyAccessRoleRestRepository implements PartyAccessRoleRepository 
     return undefined;
   }
 
-  updatePartyAccessRoles(partyAccessRoles: PartyAccessRole[], partyId: string): Observable<PartyAccessRole[]> {
+  updatePartyAccessRoles(partyAccessRoles: string[], partyId: string): Observable<PartyAccessRole[]> {
     return undefined;
   }
 
