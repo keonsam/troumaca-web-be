@@ -6,6 +6,7 @@ import {jsonRequestHeaderMap, postJsonOptions} from "../../request.helpers";
 // import { Confirmation } from "../../data/authentication/confirmation";
 import request from "request";
 import {JoinOrganization} from "../../data/party/join.organization";
+import { OrganizationCompany } from "../../data/party/organization.company";
 
 export class OrganizationRestRepository implements OrganizationRepository {
 
@@ -76,6 +77,10 @@ export class OrganizationRestRepository implements OrganizationRepository {
   }
 
   getOrganization(partyId: string): Observable<Organization> {
+    return undefined;
+  }
+
+  getOrganizationCompany(partyId: any): Observable<OrganizationCompany> {
     return undefined;
   }
 

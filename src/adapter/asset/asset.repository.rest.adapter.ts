@@ -43,19 +43,31 @@ export class AssetRepositoryRestAdapter implements AssetRepository {
     return undefined;
   }
 
-  addAssetSpec(asset: Asset): Observable<AssetSpecification> {
+  addAssetSpec(asset: AssetSpecification): Observable<AssetSpecification> {
     return undefined;
   }
 
-  addAssetBrand(asset: Asset): Observable<AssetBrand> {
+  addAssetBrand(asset: AssetBrand): Observable<AssetBrand> {
     return undefined;
   }
 
-  addAssetCharacteristics(asset: Asset): Observable<AssetCharacteristics> {
+  addAssetCharacteristics(asset: AssetCharacteristics): Observable<AssetCharacteristics> {
     return undefined;
   }
 
   updateAsset(assetId: string, asset: Asset): Observable<number> {
+    return undefined;
+  }
+
+  updateAssetSpec(assetId: string, asset: AssetSpecification): Observable<number> {
+    return undefined;
+  }
+
+  updateAssetBrand(assetId: string, asset: AssetBrand): Observable<number> {
+    return undefined;
+  }
+
+  updateAssetChars(assetId: string, asset: AssetCharacteristics): Observable<number> {
     return undefined;
   }
 

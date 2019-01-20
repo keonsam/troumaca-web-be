@@ -4,8 +4,8 @@ import {getNumericValueOrDefault} from "../../number.util";
 import {getStringValueOrDefault} from "../../string.util";
 import {User} from "../../data/party/user";
 import {Credential} from "../../data/authentication/credential";
-import {PartyAccessRole} from "../../data/authorization/party.access.role";
 import {Person} from "../../data/party/person";
+import { HeaderNormalizer } from "../../header.normalizer";
 
 const userOrchestrator: UserOrchestrator = new UserOrchestrator();
 
@@ -69,8 +69,12 @@ export let getUser = (req: Request, res: Response) => {
 };
 
 export let getUserMe = (req: Request, res: Response) => {
-  const partyId = res.locals.partyId;
-  userOrchestrator.getUser(partyId)
+  HeaderNormalizer.normalize(req);
+  const correlationId = req.headers["Correlation-Id"];
+  const ownerPartyId = req.headers["Owner-Party-Id"];
+  const requestingPartyId = req.headers["Party-Id"];
+
+  userOrchestrator.getUser(requestingPartyId)
     .subscribe(user => {
       if (user) {
         res.status(200);
@@ -92,7 +96,7 @@ export let getUserMe = (req: Request, res: Response) => {
 export let saveUser = (req: Request, res: Response) => {
   const person: Person = req.body.user;
   const credential: Credential = req.body.credential;
-  const partyAccessRoles: PartyAccessRole[] = req.body.partyAccessRoles;
+  const partyAccessRoles: string[] = req.body.partyAccessRoles;
 
   if (!person || !person.firstName || !person.lastName) {
     res.status(400);
@@ -117,9 +121,15 @@ export let saveUser = (req: Request, res: Response) => {
 
   userOrchestrator.saveUser(person, credential, partyAccessRoles)
     .subscribe(person => {
-      res.status(201);
-      res.setHeader("content-type", "application/json");
-      res.send(JSON.stringify(person));
+      if (person) {
+        res.status(201);
+        res.setHeader("content-type", "application/json");
+        res.send(JSON.stringify(person));
+      } else {
+        res.status(404);
+        res.setHeader("content-type", "application/json");
+        res.send(JSON.stringify({message: "Could not create user."}));
+      }
     }, error => {
       res.status(500);
       res.setHeader("content-type", "application/json");
@@ -132,7 +142,7 @@ export let updateUser = (req: Request, res: Response) => {
   const partyId = req.params.partyId;
   const user: User = req.body.user;
   const credential: Credential = req.body.credential;
-  const partyAccessRoles: PartyAccessRole[] = req.body.partyAccessRoles;
+  const partyAccessRoles: string[] = req.body.partyAccessRoles;
 
   if (!user || !user.firstName || !user.lastName) {
     res.status(400);

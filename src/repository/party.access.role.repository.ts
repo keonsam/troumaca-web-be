@@ -9,13 +9,13 @@ export interface PartyAccessRoleRepository {
 
   // getPartyAccessRoleCount():Observable<number>;
 
-  addPartyAccessRoles(partyAccessRole: PartyAccessRole[], partyId: string): Observable<PartyAccessRole[]>;
+  addPartyAccessRoles(partyAccessRole: string[], partyId: string): Observable<PartyAccessRole[]>;
 
   getPartyAccessRolesByPartyId(partyId: string): Observable<PartyAccessRole[]>;
 
   updatePartyAccessRole(partyAccessRoleId: string, partyAccessRole: PartyAccessRole): Observable<number>;
 
-  updatePartyAccessRoles(partyAccessRoles: PartyAccessRole[], partyId: string): Observable<PartyAccessRole[]>;
+  updatePartyAccessRoles(partyAccessRoles: string[], partyId: string): Observable<PartyAccessRole[]>;
 
   deletePartyAccessRoles(partyId: string): Observable<number>;
 

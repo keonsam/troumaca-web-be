@@ -18,7 +18,6 @@ import {createCredentialRepositoryFactory} from "../../adapter/authentication/cr
 import {SessionRepository} from "../../repository/session.repository";
 import {createSessionRepositoryFactory} from "../../adapter/session/session.repository.factory";
 import {Person} from "../../data/party/person";
-import { AccessRole} from "../../data/authorization/access.role";
 
 export class UserOrchestrator {
 
@@ -54,7 +53,7 @@ export class UserOrchestrator {
             }));
     }
 
-    getUser(partyId: string): Observable<User> {
+    getUser(partyId: any): Observable<User> {
         return this.userRepository.getUser(partyId)
             .pipe(switchMap(user => {
                 if (!user) {
@@ -77,7 +76,7 @@ export class UserOrchestrator {
             }));
     }
 
-  saveUser(person: Person, credential: Credential, partyAccessRoles: PartyAccessRole[]): Observable<User> {
+  saveUser(person: Person, credential: Credential, partyAccessRoles: string[]): Observable<User> {
     credential.password = generate({length: 10, numbers: true});
     // This present a problem after the user confirm the account.
     // We will need to either make them active in the confirmation process or just make them active here.
@@ -107,31 +106,19 @@ export class UserOrchestrator {
       }));
   }
 
-    updateUser(partyId: string, user: User, credential: Credential, partyAccessRoles: PartyAccessRole[]): Observable<number> {
-        if (credential && credential.username === user.name) {
-            delete credential.username;
-        }
-        delete user.username;
+    updateUser(partyId: string, user: User, credential: Credential, partyAccessRoles: string[]): Observable<number> {
         return this.userRepository.updateUser(partyId, user)
             .pipe(switchMap(numUpdated => {
                 if (!numUpdated) {
                     return throwError(`No User found to update ${numUpdated}`);
                 } else {
                     return this.partyAccessRoleRepository.updatePartyAccessRoles(partyAccessRoles, partyId)
-                        .pipe(switchMap(partyAccessRolesRes => {
+                        .pipe(map(partyAccessRolesRes => {
                             if (!partyAccessRolesRes) {
-                                return throwError(`updatePartyAccessRoles Failed ${partyAccessRolesRes}`);
-                            } else if (!credential) {
-                                return of(numUpdated);
+                                throw new Error(`updatePartyAccessRoles Failed ${partyAccessRolesRes}`);
                             } else {
-                                return this.credentialRepository.updateCredential(partyId, credential)
-                                    .pipe(map(numUpdated2 => {
-                                        if (!numUpdated2) {
-                                            throw new Error(`updateUserCredential Failed ${numUpdated2}`);
-                                        } else {
-                                            return numUpdated;
-                                        }
-                                    }));
+                                // update of the credential needed
+                                return numUpdated + partyAccessRoles.length;
                             }
                         }));
                 }
@@ -139,28 +126,23 @@ export class UserOrchestrator {
     }
 
     updateUserMe(partyId: string, user: User, credential: Credential): Observable<number> {
-        if (credential && credential.username === user.name) {
-            delete credential.username;
-        }
         delete user.username;
-        return this.userRepository.updateUser(partyId, user)
-            .pipe(switchMap(numUpdated => {
-                if (!numUpdated) {
-                    return throwError(`No Profile found to update ${numUpdated}`);
-                } else if (!credential) {
-                    return of(numUpdated);
-                } else {
-                    // TODO : separate this in the future if needed
-                    return this.credentialRepository.updateCredential(partyId, credential)
-                        .pipe( map( numUpdated2 => {
-                            if (!numUpdated2) {
-                                throw new Error(`updateUserCredential Failed ${numUpdated2}`);
-                            } else {
-                                return numUpdated;
-                            }
-                        }));
-                }
-            }));
+        return this.userRepository.updateUser(partyId, user);
+            // .pipe(switchMap(numUpdated => {
+            //     if (!numUpdated) {
+            //         return throwError(`No Profile found to update ${numUpdated}`);
+            //     } else {
+            //         // TODO : separate this in the future if needed
+            //         return this.credentialRepository.updateCredential(partyId, credential)
+            //             .pipe( map( numUpdated2 => {
+            //                 if (!numUpdated2) {
+            //                     throw new Error(`updateUserCredential Failed ${numUpdated2}`);
+            //                 } else {
+            //                     return numUpdated;
+            //                 }
+            //             }));
+            //     }
+            // }));
     }
 
     deleteUser(partyId: string): Observable<number> {

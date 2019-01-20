@@ -15,8 +15,8 @@ export const apps: App[] = [
     },
     {
         moduleId: "c07d3eef-4858-42b1-93f0-93ace4b88ac2",
-        name: "About",
-        route: "/parties/organization-profile",
+        name: "Company",
+        route: "/parties/organization/profile",
         iconClass: "build"
     },
     {

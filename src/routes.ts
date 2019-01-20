@@ -8,10 +8,10 @@ import * as accessRoleController from "./authorization/access-role/access.role.c
 import * as accessRoleTypeController from "./authorization/access-role-type/access.role.type.controller";
 import * as resourceTypeController from "./authorization/resource-type/resource.type.controller";
 
-import * as assetController from "./asset-type/asset/asset.controller";
-import * as attributeController from "./asset-type/attribute/attribute.controller";
-import * as assignedAttributeController from "./asset-type/attribute/assigned-attributes/assigned.attribute.controller";
-import * as assetKindController from "./asset-type/kind/asset.kind.controller";
+import * as assetController from "./asset/asset.controller";
+import * as attributeController from "./asset/attribute/attribute.controller";
+import * as assignedAttributeController from "./asset/attribute/assigned-attributes/assigned.attribute.controller";
+import * as assetKindController from "./asset/kind/asset.kind.controller";
 import * as phoneController from "./site/phone/phone.controller";
 import * as photoController from "./party/photo/photo.controller";
 import * as unitOfMeasureController from "./unit-of-measure/unit.of.measure.controller";
@@ -23,8 +23,8 @@ import * as postOfficeBoxController from "./site/post-office-box/post.office.box
 import * as streetAddressController from "./site/street-address/street.address.controller";
 import * as sessionController from "./session/session.controller";
 import * as userController from "./party/user/user.controller";
-import * as assetTypeClassController from "./asset-type/asset-type-class/asset.type.class.controller";
-import * as assetTypeController from "./asset-type/asset.type.controller";
+// import * as assetTypeClassController from "./asset/asset-type-class/asset.type.class.controller";
+import * as assetTypeController from "./asset/asset-type/asset.type.controller";
 import * as organizationController from "./party/organization/organization.controller";
 import * as subscriptionController from "./subscription/subscription.controller";
 import * as billingController from "./billing/billing.controller";
@@ -150,20 +150,24 @@ router.post("/asset-specifications", checkSession, assetController.addAssetSpec)
 router.post("/asset-brands", checkSession, assetController.addAssetBrand);
 router.post("/asset-characteristics", checkSession, assetController.addAssetCharacteristics);
 
+router.put("/asset-specifications/:assetId", checkSession, assetController.updateAssetSpec);
+router.put("/asset-brands/:assetId", checkSession, assetController.updateAssetBrand);
+router.put("/asset-characteristics/:assetId", checkSession, assetController.updateAssetChars);
+
 // asset-type
 router.get("/asset-types/find", checkSession, assetTypeController.findAssetTypes);
 router.get("/asset-types", checkSession, assetTypeController.getAssetTypes);
 router.get("/asset-types/:assetTypeId", checkSession, assetTypeController.getAssetTypeById);
-router.post("/asset-types", checkSession, assetTypeController.saveAssetType);
+// router.post("/asset-types", checkSession, assetTypeController.saveAssetType);
 router.put("/asset-types/:assetTypeId", checkSession, checkSession, assetTypeController.updateAssetType);
 router.delete("/asset-types/:assetTypeId", checkSession, assetTypeController.deleteAssetType);
 // asset-type-class
-router.get("/asset-type-classes/find", checkSession, assetTypeClassController.findAssetTypeClass);
-router.get("/asset-type-classes", checkSession, assetTypeClassController.getAssetTypeClasses);
-router.get("/asset-type-classes/:assetTypeClassId", checkSession, assetTypeClassController.getAssetTypeClass);
-router.post("/asset-type-classes", checkSession, assetTypeClassController.saveAssetTypeClass);
-router.put("/asset-type-classes/:assetTypeClassId", checkSession, assetTypeClassController.updateAssetTypeClass);
-router.delete("/asset-type-classes/:assetTypeClassId", checkSession, assetTypeClassController.deleteAssetTypeClass);
+// router.get("/asset-type-classes/find", checkSession, assetTypeClassController.findAssetTypeClass);
+// router.get("/asset-type-classes", checkSession, assetTypeClassController.getAssetTypeClasses);
+// router.get("/asset-type-classes/:assetTypeClassId", checkSession, assetTypeClassController.getAssetTypeClass);
+// router.post("/asset-type-classes", checkSession, assetTypeClassController.saveAssetTypeClass);
+// router.put("/asset-type-classes/:assetTypeClassId", checkSession, assetTypeClassController.updateAssetTypeClass);
+// router.delete("/asset-type-classes/:assetTypeClassId", checkSession, assetTypeClassController.deleteAssetTypeClass);
 // attribute
 router.get("/attributes", checkSession, attributeController.getAttributes);
 router.get("/attributes/:attributeId", checkSession, attributeController.getAttributeById);
@@ -213,10 +217,10 @@ router.delete("/phones/:siteId", checkSession, phoneController.deletePhone);
 // PARTY
 
 router.get("/parties/contact-info", checkSession, partyController.getContactInfo);
-router.post("/parties/contact-info,", checkSession, partyController.addContactInfo);
+router.post("/parties/contact-info", checkSession, partyController.addContactInfo);
 router.put("/parties/contact-info/:contactInfoId", checkSession, partyController.updateContactInfo);
 router.get("/parties/address", checkSession, partyController.getAddress);
-router.post("/parties/address,", checkSession, partyController.addAddress);
+router.post("/parties/address", checkSession, partyController.addAddress);
 router.put("/parties/address/:siteId", checkSession, partyController.updateAddress);
 // user
 router.get("/users/find", checkSession, userController.findUser);
@@ -230,7 +234,7 @@ router.delete("/users/:partyId", checkSession, userController.deleteUser);
 
 // organizations
 router.get("/organizations/find", checkSession, organizationController.findOrganizations);
-router.get("/organizations/profile", checkSession, organizationController.getOrganizationCompany);
+router.get("/organizations/company", checkSession, organizationController.getOrganizationCompany);
 router.get("/organizations/:partyId", checkSession, organizationController.getOrganization);
 router.get("/organizations", checkSession, organizationController.getOrganizations);
 router.post("/organizations", checkSession, organizationController.saveOrganization);

@@ -1,2 +1,3 @@
 {"name":"test Edited","description":"","assetTypeClassId":"b5c35ab1-08f9-4a08-a505-7b5d82f0903c","createdOn":"2018-11-09T22:45:32.254Z","modifiedOn":{"$$date":1541803559840},"_id":"7Wmp0gAgTvkKZvso"}
+{"$$indexCreated":{"fieldName":"assetClassificationId","unique":true,"sparse":false}}
 {"$$indexCreated":{"fieldName":"assetTypeClassId","unique":true,"sparse":false}}

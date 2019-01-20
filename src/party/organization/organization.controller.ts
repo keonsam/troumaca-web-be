@@ -2,7 +2,6 @@ import {Request, Response} from "express";
 import {OrganizationOrchestrator} from "./organization.orchestrator";
 import {getNumericValueOrDefault} from "../../number.util";
 import {getStringValueOrDefault} from "../../string.util";
-import {JoinOrganization} from "../../data/party/join.organization";
 import {Organization} from "../../data/party/organization";
 import {HeaderNormalizer} from "../../header.normalizer";
 
@@ -65,17 +64,27 @@ export  let getOrganization = (req: Request, res: Response) => {
 };
 
 export  let getOrganizationCompany = (req: Request, res: Response) => {
-    const partyId = res.locals.partyId;
+    HeaderNormalizer.normalize(req);
+    const correlationId = req.headers["Correlation-Id"];
+    const ownerPartyId = req.headers["Owner-Party-Id"];
+    const requestingPartyId = req.headers["Party-Id"];
+
+    const headerOptions = {
+        "Correlation-Id": correlationId,
+        "Owner-Party-Id": ownerPartyId,
+        "Party-Id": requestingPartyId
+    };
+
     res.setHeader("content-type", "application/json");
     organizationOrchestrator
-        .getOrganization(partyId)
-        .subscribe(organization => {
-            if (organization) {
+        .getOrganizationCompany(requestingPartyId)
+        .subscribe(organizationCompany => {
+            if (organizationCompany) {
                 res.status(200);
-                res.send(JSON.stringify(organization));
+                res.send(JSON.stringify(organizationCompany));
             } else {
                 res.status(404);
-                res.send(JSON.stringify({message: "No Data Found For " + req.params.partyId}));
+                res.send(JSON.stringify({message: "No Data Found For "}));
             }
         }, error => {
             res.status(500);

@@ -19,9 +19,14 @@ export let getContactInfo = (req: Request, res: Response) => {
 
     partyOrchestrator.getContactInfo(type, requestingPartyId)
         .subscribe( contactInfo => {
-            res.status(200);
-            res.setHeader("content-type", "application/json");
-            res.send(JSON.stringify(contactInfo));
+            if (contactInfo) {
+                res.status(200);
+                res.setHeader("content-type", "application/json");
+                res.send(JSON.stringify(contactInfo));
+            } else {
+                res.status(404);
+                res.send(JSON.stringify({message: "No Data Found"}));
+            }
         }, error => {
             res.status(500);
             res.setHeader("content-type", "application/json");
@@ -101,10 +106,15 @@ export let getAddress = (req: Request, res: Response) => {
     res.setHeader("content-type", "application/json");
 
     partyOrchestrator.getAddress(type, requestingPartyId)
-        .subscribe( value => {
-            res.status(200);
-            res.setHeader("content-type", "application/json");
-            res.send(JSON.stringify(value));
+        .subscribe( address => {
+            if (address) {
+                res.status(200);
+                res.setHeader("content-type", "application/json");
+                res.send(JSON.stringify(address));
+            } else {
+                res.status(404);
+                res.send(JSON.stringify({message: "No Data Found"}));
+            }
         }, error => {
             res.status(500);
             res.setHeader("content-type", "application/json");
@@ -158,9 +168,14 @@ export let updateAddress = (req: Request, res: Response) => {
 
     partyOrchestrator.updateAddress(type, address, siteId)
         .subscribe( num => {
-            res.status(200);
-            res.setHeader("content-type", "application/json");
-            res.send(JSON.stringify(num));
+            if (num) {
+                res.status(200);
+                res.setHeader("content-type", "application/json");
+                res.send(JSON.stringify(num));
+            } else {
+                res.status(404);
+                res.send(JSON.stringify({message: "Failed to update" + siteId }));
+            }
         }, error => {
             res.status(500);
             res.setHeader("content-type", "application/json");

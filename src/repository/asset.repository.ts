@@ -22,13 +22,19 @@ export interface AssetRepository {
 
   saveAsset(asset: Asset): Observable<Asset>;
 
-  addAssetSpec(asset: Asset): Observable<AssetSpecification>;
+  addAssetSpec(asset: AssetSpecification): Observable<AssetSpecification>;
 
-  addAssetBrand(asset: Asset): Observable<AssetBrand>;
+  addAssetBrand(asset: AssetBrand): Observable<AssetBrand>;
 
-  addAssetCharacteristics(asset: Asset): Observable<AssetCharacteristics>;
+  addAssetCharacteristics(asset: AssetCharacteristics): Observable<AssetCharacteristics>;
 
   updateAsset(assetId: string, asset: Asset): Observable<number>;
+
+  updateAssetSpec(assetId: string, asset: AssetSpecification): Observable<number>;
+
+  updateAssetBrand(assetId: string, asset: AssetBrand): Observable<number>;
+
+  updateAssetChars(assetId: string, asset: AssetCharacteristics): Observable<number>;
 
   deleteAsset(assetId: string): Observable<number>;
 
