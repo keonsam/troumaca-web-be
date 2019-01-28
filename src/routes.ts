@@ -9,9 +9,7 @@ import * as accessRoleTypeController from "./authorization/access-role-type/acce
 import * as resourceTypeController from "./authorization/resource-type/resource.type.controller";
 
 import * as assetController from "./asset/asset.controller";
-import * as attributeController from "./asset/attribute/attribute.controller";
-import * as assignedAttributeController from "./asset/attribute/assigned-attributes/assigned.attribute.controller";
-import * as assetKindController from "./asset/kind/asset.kind.controller";
+import * as assetRoleTypeController from "./asset/asset-role-type/asset.role.type.controller";
 import * as phoneController from "./site/phone/phone.controller";
 import * as photoController from "./party/photo/photo.controller";
 import * as unitOfMeasureController from "./unit-of-measure/unit.of.measure.controller";
@@ -23,7 +21,6 @@ import * as postOfficeBoxController from "./site/post-office-box/post.office.box
 import * as streetAddressController from "./site/street-address/street.address.controller";
 import * as sessionController from "./session/session.controller";
 import * as userController from "./party/user/user.controller";
-// import * as assetTypeClassController from "./asset/asset-type-class/asset.type.class.controller";
 import * as assetTypeController from "./asset/asset-type/asset.type.controller";
 import * as organizationController from "./party/organization/organization.controller";
 import * as subscriptionController from "./subscription/subscription.controller";
@@ -129,11 +126,12 @@ router.delete("/access-role-types/:accessRoleTypeId", checkSession, accessRoleTy
 // Asset Type
 
 // asset-kind
-router.get("/asset-kinds", checkSession, assetKindController.getAssetKinds);
+// router.get("/asset-kinds", checkSession, assetKindController.getAssetKinds);
 // unit-of-measure
 router.get("/unit-of-measures/find", checkSession, unitOfMeasureController.findUnitOfMeasure);
 // data-type
 router.get("/data-types", checkSession, dataTypeController.getDataTypes);
+
 // asset
 router.get("/assets/find", checkSession, assetController.findAssets);
 router.get("/assets", checkSession, assetController.getAssets);
@@ -161,50 +159,42 @@ router.get("/asset-types/:assetTypeId", checkSession, assetTypeController.getAss
 // router.post("/asset-types", checkSession, assetTypeController.saveAssetType);
 router.put("/asset-types/:assetTypeId", checkSession, checkSession, assetTypeController.updateAssetType);
 router.delete("/asset-types/:assetTypeId", checkSession, assetTypeController.deleteAssetType);
-// asset-type-class
-// router.get("/asset-type-classes/find", checkSession, assetTypeClassController.findAssetTypeClass);
-// router.get("/asset-type-classes", checkSession, assetTypeClassController.getAssetTypeClasses);
-// router.get("/asset-type-classes/:assetTypeClassId", checkSession, assetTypeClassController.getAssetTypeClass);
-// router.post("/asset-type-classes", checkSession, assetTypeClassController.saveAssetTypeClass);
-// router.put("/asset-type-classes/:assetTypeClassId", checkSession, assetTypeClassController.updateAssetTypeClass);
-// router.delete("/asset-type-classes/:assetTypeClassId", checkSession, assetTypeClassController.deleteAssetTypeClass);
-// attribute
-router.get("/attributes", checkSession, attributeController.getAttributes);
-router.get("/attributes/:attributeId", checkSession, attributeController.getAttributeById);
-router.post("/attributes", checkSession, attributeController.saveAttribute);
-router.post("/attributes/available", checkSession, attributeController.getAvailableAttributes);
-router.post("/attributes/assigned", checkSession, attributeController.getAssignableAttributes);
-router.put("/attributes/:attributeId", checkSession, attributeController.updateAttribute);
-router.delete("/attributes/:attributeId", checkSession, attributeController.deleteAttribute);
-// assigned-attributes
-router.get("/assigned-attributes/:assetTypeClassId", checkSession, assignedAttributeController.getAssignedAttributesByClassId);
-router.get("/assigned-attributes/:assetTypeClassId", checkSession, assignedAttributeController.getAssignedAttributesByClassId);
+
+// asset role type
+router.get("/assets/asset-role-types", checkSession, assetRoleTypeController.saveAssetRoleType);
+
+
 // site
 router.get("/sites/find", checkSession, siteController.findSite);
+
 // street-address
 router.get("/street-addresses", checkSession, streetAddressController.getStreetAddresses);
 router.get("/street-addresses/:siteId", checkSession, streetAddressController.getStreetAddressById);
 router.post("/street-addresses", checkSession, streetAddressController.saveStreetAddress);
 router.put("/street-addresses/:siteId", checkSession, streetAddressController.updateStreetAddress);
 router.delete("/street-addresses/:siteId", checkSession, streetAddressController.deleteStreetAddress);
+
 // post office box
 router.get("/post-office-boxes", checkSession, postOfficeBoxController.getPostOfficeBoxes);
 router.get("/post-office-boxes/:siteId", checkSession, postOfficeBoxController.getPostOfficeBoxById);
 router.post("/post-office-boxes", checkSession, postOfficeBoxController.savePostOfficeBox);
 router.put("/post-office-boxes/:siteId", checkSession, postOfficeBoxController.updatePostOfficeBox);
 router.delete("/post-office-boxes/:siteId", checkSession, postOfficeBoxController.deletePostOfficeBox);
+
 // emails
 router.get("/emails", checkSession, emailController.getEmails);
 router.get("/emails/:siteId", checkSession, emailController.getEmailById);
 router.post("/emails", checkSession, emailController.saveEmail);
 router.put("/emails/:siteId", checkSession, emailController.updateEmail);
 router.delete("/emails/:siteId", checkSession, emailController.deleteEmail);
+
 // web-site
 router.get("/web-sites", checkSession, webSiteController.getWebSites);
 router.get("/web-sites/:siteId", checkSession, webSiteController.getWebSiteById);
 router.post("/web-sites", checkSession, webSiteController.saveWebSite);
 router.put("/web-sites/:siteId", checkSession, webSiteController.updateWebSite);
 router.delete("/web-sites/:siteId", checkSession, webSiteController.deleteWebSite);
+
 // phone
 router.get("/phones", checkSession, phoneController.getPhones);
 router.get("/phones/:siteId", checkSession, phoneController.getPhoneById);
@@ -212,10 +202,7 @@ router.post("/phones", checkSession, phoneController.savePhone);
 router.put("/phones/:siteId", checkSession, phoneController.updatePhone);
 router.delete("/phones/:siteId", checkSession, phoneController.deletePhone);
 
-
-
 // PARTY
-
 router.get("/parties/contact-info", checkSession, partyController.getContactInfo);
 router.post("/parties/contact-info", checkSession, partyController.addContactInfo);
 router.put("/parties/contact-info/:contactInfoId", checkSession, partyController.updateContactInfo);

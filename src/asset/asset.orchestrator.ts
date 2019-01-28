@@ -6,7 +6,7 @@ import {Asset} from "../data/asset/asset";
 import {Observable} from "rxjs";
 import {switchMap, map} from "rxjs/operators";
 import {Result} from "../result.success";
-import { AssetCharacteristics } from "../data/asset/asset.characteristics";
+import { AssetCharacteristic } from "../data/asset/asset.characteristic";
 import { AssetBrand } from "../data/asset/asset.brand";
 import { AssetSpecification } from "../data/asset/asset.specification";
 
@@ -48,7 +48,7 @@ export class AssetOrchestrator {
     return this.assetRepository.getAssetBrandById(assetId);
   }
 
-  getAssetCharacteristicsById(assetId: string): Observable<AssetCharacteristics> {
+  getAssetCharacteristicsById(assetId: string): Observable<AssetCharacteristic> {
     return this.assetRepository.getAssetCharacteristicsById(assetId);
   }
 
@@ -64,7 +64,7 @@ export class AssetOrchestrator {
     return this.assetRepository.addAssetBrand(asset);
   }
 
-  addAssetCharacteristics(asset: AssetCharacteristics): Observable<AssetCharacteristics> {
+  addAssetCharacteristics(asset: AssetCharacteristic): Observable<AssetCharacteristic> {
     return this.assetRepository.addAssetCharacteristics(asset);
   }
 
@@ -80,7 +80,7 @@ export class AssetOrchestrator {
     return this.assetRepository.updateAssetBrand(assetId, asset);
   }
 
-  updateAssetChars(assetId: string, asset: AssetCharacteristics): Observable<number> {
+  updateAssetChars(assetId: string, asset: AssetCharacteristic): Observable<number> {
     return this.assetRepository.updateAssetChars(assetId, asset);
   }
 

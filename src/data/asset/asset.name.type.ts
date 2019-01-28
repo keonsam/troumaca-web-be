@@ -1,9 +1,8 @@
-export class AssetBrand {
-  assetBrandId: string;
+export class AssetNameType {
+  assetNameTypeId: string;
   name: string;
   canonicalName: string;
   description: string;
-  abbreviation: string;
   version: string;
   ownerPartyId: string;
   dateModified: Date;

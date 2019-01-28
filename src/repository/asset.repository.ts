@@ -2,7 +2,7 @@ import {Asset} from "../data/asset/asset";
 import {Observable} from "rxjs";
 import { AssetSpecification } from "../data/asset/asset.specification";
 import { AssetBrand } from "../data/asset/asset.brand";
-import { AssetCharacteristics } from "../data/asset/asset.characteristics";
+import { AssetCharacteristic } from "../data/asset/asset.characteristic";
 
 export interface AssetRepository {
 
@@ -18,7 +18,7 @@ export interface AssetRepository {
 
   getAssetBrandById(assetId: string): Observable<AssetBrand>;
 
-  getAssetCharacteristicsById(assetId: string): Observable<AssetCharacteristics>;
+  getAssetCharacteristicsById(assetId: string): Observable<AssetCharacteristic>;
 
   saveAsset(asset: Asset): Observable<Asset>;
 
@@ -26,7 +26,7 @@ export interface AssetRepository {
 
   addAssetBrand(asset: AssetBrand): Observable<AssetBrand>;
 
-  addAssetCharacteristics(asset: AssetCharacteristics): Observable<AssetCharacteristics>;
+  addAssetCharacteristics(asset: AssetCharacteristic): Observable<AssetCharacteristic>;
 
   updateAsset(assetId: string, asset: Asset): Observable<number>;
 
@@ -34,7 +34,7 @@ export interface AssetRepository {
 
   updateAssetBrand(assetId: string, asset: AssetBrand): Observable<number>;
 
-  updateAssetChars(assetId: string, asset: AssetCharacteristics): Observable<number>;
+  updateAssetChars(assetId: string, asset: AssetCharacteristic): Observable<number>;
 
   deleteAsset(assetId: string): Observable<number>;
 

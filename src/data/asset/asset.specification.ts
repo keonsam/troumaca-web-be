@@ -1,10 +1,13 @@
-export class AssetSpecification {
-  assetId: string;
-  type: string;
-  name: string;
-  partOf: string;
+import {AssetType} from "./asset.type";
+
+export class AssetSpecification extends AssetType {
+
   modelNumber: string;
   standardPrice: number;
-  effectiveDate: Date;
-  description: string;
+  dateEffective: Date;
+
+  constructor() {
+    super();
+    this.typeName = "specification";
+  }
 }

@@ -6,7 +6,7 @@ import {calcSkip} from "../../db.util";
 import {Observable, Observer} from "rxjs";
 import { AssetSpecification } from "../../data/asset/asset.specification";
 import { AssetBrand } from "../../data/asset/asset.brand";
-import { AssetCharacteristics } from "../../data/asset/asset.characteristics";
+import { AssetCharacteristic } from "../../data/asset/asset.characteristic";
 
 export class AssetRepositoryNeDbAdapter implements AssetRepository {
 
@@ -99,8 +99,8 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
         });
     }
 
-    getAssetCharacteristicsById(assetId: string): Observable<AssetCharacteristics> {
-        return Observable.create((observer: Observer<AssetCharacteristics>) => {
+    getAssetCharacteristicsById(assetId: string): Observable<AssetCharacteristic> {
+        return Observable.create((observer: Observer<AssetCharacteristic>) => {
             const query = {"assetId": assetId};
             assetChars.findOne(query, function (err: any, doc: any) {
                 if (!err) {
@@ -153,8 +153,8 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
         });
     }
 
-    addAssetCharacteristics(asset: AssetCharacteristics): Observable<AssetCharacteristics> {
-        return Observable.create(function (observer: Observer<AssetCharacteristics>) {
+    addAssetCharacteristics(asset: AssetCharacteristic): Observable<AssetCharacteristic> {
+        return Observable.create(function (observer: Observer<AssetCharacteristic>) {
             assetChars.insert(asset, function (err: any, doc: any) {
                 if (err) {
                     observer.error(err);
@@ -208,7 +208,7 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
         });
     }
 
-    updateAssetChars(assetId: string, asset: AssetCharacteristics): Observable<number> {
+    updateAssetChars(assetId: string, asset: AssetCharacteristic): Observable<number> {
         const query = {assetId};
         return Observable.create(function (observer: Observer<number>) {
             assetChars.update(query, asset, {}, function (err: any, numReplaced: number) {

@@ -1,25 +1,25 @@
-import {DiscreteItem} from "./discrete.item";
-import {InventoryItem} from "./inventory.item";
-import {Building} from "./building";
-import {Lot} from "./lot";
+import {AssetCharacteristic} from "./asset.characteristic";
+import {AssetSite} from "./asset.site";
+import {AssetName} from "./asset.name";
+import {AssetIdentifier} from "./asset.identifier";
+import {AssetRole} from "./asset.role";
+import {AssetType} from "./asset.type";
 
 export class Asset {
-  assetId: string;
-  name: string;
-  createdOn: Date;
-  destroyOn: Date;
-  expireOn: Date;
-  description: Date;
-  discreteItem: DiscreteItem;
-  inventoryItem: InventoryItem;
-  building: Building;
-  lot: Lot;
 
-  constructor() {
-    this.discreteItem = new DiscreteItem();
-    this.inventoryItem = new InventoryItem();
-    this.building = new Building();
-    this.lot = new Lot();
-  }
+  assetId: string;
+  typeName: String;
+  assetType: AssetType;
+  name: string;
+  description: string;
+  dateOfCreation: Date;
+  dateOfDestruction: Date;
+  assetSite: AssetSite;
+  partOfAssets: Asset[];
+  composedOfAssets: Asset[];
+  assetCharacteristics: AssetCharacteristic[];
+  assetNames: AssetName[];
+  assetIdentifiers: AssetIdentifier[];
+  assetRoles: AssetRole[];
 
 }

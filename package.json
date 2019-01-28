@@ -41,7 +41,7 @@
     "cors": "^2.8.4",
     "debug": "^3.1.0",
     "express": "^4.16.2",
-    "generate-password": "^1.4.0",
+    "generate-password": "^1.4.1",
     "generate-sms-verification-code": "^1.0.5",
     "header-case-normalizer": "^1.0.3",
     "install": "^0.12.1",

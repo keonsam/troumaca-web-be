@@ -3,7 +3,7 @@ import { Asset } from "../../data/asset/asset";
 import { Observable } from "rxjs";
 import { AssetSpecification } from "../../data/asset/asset.specification";
 import { AssetBrand } from "../../data/asset/asset.brand";
-import { AssetCharacteristics } from "../../data/asset/asset.characteristics";
+import { AssetCharacteristic } from "../../data/asset/asset.characteristic";
 
 
 export class AssetRepositoryRestAdapter implements AssetRepository {
@@ -35,7 +35,7 @@ export class AssetRepositoryRestAdapter implements AssetRepository {
     return undefined;
   }
 
-  getAssetCharacteristicsById(assetId: string): Observable<AssetCharacteristics> {
+  getAssetCharacteristicsById(assetId: string): Observable<AssetCharacteristic> {
     return undefined;
   }
 
@@ -51,7 +51,7 @@ export class AssetRepositoryRestAdapter implements AssetRepository {
     return undefined;
   }
 
-  addAssetCharacteristics(asset: AssetCharacteristics): Observable<AssetCharacteristics> {
+  addAssetCharacteristics(asset: AssetCharacteristic): Observable<AssetCharacteristic> {
     return undefined;
   }
 
@@ -67,7 +67,7 @@ export class AssetRepositoryRestAdapter implements AssetRepository {
     return undefined;
   }
 
-  updateAssetChars(assetId: string, asset: AssetCharacteristics): Observable<number> {
+  updateAssetChars(assetId: string, asset: AssetCharacteristic): Observable<number> {
     return undefined;
   }
 

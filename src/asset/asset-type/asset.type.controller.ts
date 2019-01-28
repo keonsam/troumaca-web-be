@@ -55,90 +55,6 @@ export let getAssetTypeById = (req: Request, res: Response) => {
     });
 };
 
-export let addPartOrEquipmentType = (req: Request, res: Response) => {
-
-  HeaderNormalizer.normalize(req);
-  const correlationId = req.headers["Correlation-Id"];
-  const ownerPartyId = req.headers["Owner-Party-Id"];
-
-  const partOrEquipmentType = req.body;
-  if (!partOrEquipmentType) {
-    return res.status(400).send({message: "Other Asset Type can not be empty"});
-  }
-
-  const headerOptions = {
-    "Correlation-Id": correlationId,
-    "Owner-Party-Id": ownerPartyId
-  };
-
-  assetTypeOrchestrator.addPartOrEquipmentType(partOrEquipmentType, headerOptions)
-  .subscribe(assetType => {
-    res.status(201);
-    res.send(JSON.stringify(assetType));
-  }, error => {
-    res.status(500);
-    res.send(JSON.stringify({message: "Error Occurred"}));
-    console.log(error);
-  });
-
-};
-
-export let addProductType = (req: Request, res: Response) => {
-
-  HeaderNormalizer.normalize(req);
-  const correlationId = req.headers["Correlation-Id"];
-  const ownerPartyId = req.headers["Owner-Party-Id"];
-
-  const productType = req.body;
-  if (!productType) {
-    return res.status(400).send({message: "Other Asset Type can not be empty"});
-  }
-
-  const headerOptions = {
-    "Correlation-Id": correlationId,
-    "Owner-Party-Id": ownerPartyId
-  };
-
-  assetTypeOrchestrator.addProductType(productType, headerOptions)
-  .subscribe(assetType => {
-    res.status(201);
-    res.send(JSON.stringify(assetType));
-  }, error => {
-    res.status(500);
-    res.send(JSON.stringify({message: "Error Occurred"}));
-    console.log(error);
-  });
-
-};
-
-export let addMaterialType = (req: Request, res: Response) => {
-
-  HeaderNormalizer.normalize(req);
-  const correlationId = req.headers["Correlation-Id"];
-  const ownerPartyId = req.headers["Owner-Party-Id"];
-
-  const materialType = req.body;
-  if (!materialType) {
-    return res.status(400).send({message: "Material Type can not be empty"});
-  }
-
-  const headerOptions = {
-    "Correlation-Id": correlationId,
-    "Owner-Party-Id": ownerPartyId
-  };
-
-  assetTypeOrchestrator.addMaterialType(materialType, headerOptions)
-  .subscribe(assetType => {
-    res.status(201);
-    res.send(JSON.stringify(assetType));
-  }, error => {
-    res.status(500);
-    res.send(JSON.stringify({message: "Error Occurred"}));
-    console.log(error);
-  });
-
-};
-
 export let addOtherAssetType = (req: Request, res: Response) => {
 
   HeaderNormalizer.normalize(req);
@@ -178,40 +94,42 @@ export let addAssetTypeWithCharacteristics = (req: Request, res: Response) => {
       .send({message: "Asset Type can not be empty"});
   }
 
-  assetTypeOrchestrator.saveAssetType(assetType, values)
-    .subscribe(assetType => {
-      res.status(201);
-      res.send(JSON.stringify(assetType));
-    }, error => {
-      res.status(500);
-      res.send(JSON.stringify({message: "Error Occurred"}));
-      console.log(error);
-    });
+  // assetTypeOrchestrator.saveAssetType(assetType, values)
+  //   .subscribe(assetType => {
+  //     res.status(201);
+  //     res.send(JSON.stringify(assetType));
+  //   }, error => {
+  //     res.status(500);
+  //     res.send(JSON.stringify({message: "Error Occurred"}));
+  //     console.log(error);
+  //   });
 };
 
 
 export let updateAssetType = (req: Request, res: Response) => {
   const assetType = req.body.assetType;
   const values = req.body.values;
+
   if (!assetType) {
     return res.status(400).send({
       message: "Asset Type can not be empty"
     });
   }
-  assetTypeOrchestrator.updateAssetType(req.params.assetTypeId, assetType, values)
-    .subscribe(affected => {
-      if (affected > 0) {
-        res.status(200);
-        res.send(JSON.stringify(affected));
-      } else {
-        res.status(404);
-        res.send(JSON.stringify({message: "No Data Found For " + req.params.assetTypeId}));
-      }
-    }, error => {
-      res.status(500);
-      res.send(JSON.stringify({message: "Error Occurred"}));
-      console.log(error);
-    });
+
+  // assetTypeOrchestrator.updateAssetType(req.params.assetTypeId, assetType, values)
+  //   .subscribe(affected => {
+  //     if (affected > 0) {
+  //       res.status(200);
+  //       res.send(JSON.stringify(affected));
+  //     } else {
+  //       res.status(404);
+  //       res.send(JSON.stringify({message: "No Data Found For " + req.params.assetTypeId}));
+  //     }
+  //   }, error => {
+  //     res.status(500);
+  //     res.send(JSON.stringify({message: "Error Occurred"}));
+  //     console.log(error);
+  //   });
 };
 
 export let deleteAssetType = (req: Request, res: Response) => {
