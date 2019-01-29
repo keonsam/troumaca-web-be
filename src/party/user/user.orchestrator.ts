@@ -61,16 +61,18 @@ export class UserOrchestrator {
                 } else {
                     return this.partyAccessRoleRepository.getPartyAccessRolesByPartyId(partyId)
                         .pipe(map((partyAccessRoles: PartyAccessRole[]) => {
-                            if (partyAccessRoles.length < 1) {
-                                // error below should return an error if no party access role/s is found but,
-                                // un-invited user which request join access can't automatically have the role of admin
-                                // skip for now
-                                // return throwError(`No PartyAccessRoles found ${partyAccessRoles}`);
-                                throw new Error(`Failed to get party access roles ${partyAccessRoles}`);
-                            } else {
-                                user.partyAccessRoles = partyAccessRoles;
-                                return user;
-                            }
+                            user.partyAccessRoles = partyAccessRoles;
+                            return user;
+                            // if (partyAccessRoles.length < 1) {
+                            //     // error below should return an error if no party access role/s is found but,
+                            //     // un-invited user which request join access can't automatically have the role of admin
+                            //     // skip for now
+                            //     // return throwError(`No PartyAccessRoles found ${partyAccessRoles}`);
+                            //     throw new Error(`Failed to get party access roles ${partyAccessRoles}`);
+                            // } else {
+                            //     user.partyAccessRoles = partyAccessRoles;
+                            //     return user;
+                            // }
                         }));
                 }
             }));

@@ -34,7 +34,7 @@ import * as personProfileController from "./profile/person/create/person.profile
 import * as searchController from "./search/search.controller";
 import * as partyController from "./party/party.controller";
 
-import { upload } from "./middleware/multer.config";
+import upload from "./middleware/multer.config";
 
 import checkSession from "./middleware/check-session";
 
@@ -247,8 +247,11 @@ router.delete("/organizations/:partyId", checkSession, organizationController.de
 
 // photos
 router.get("/photos", checkSession, photoController.getPhotos);
-router.post("/photos/user", checkSession, upload, photoController.savePhoto);
-router.put("/photos/user", checkSession, upload, photoController.updatePhoto);
+router.post("/photos/user", checkSession, upload.single("image"), photoController.savePhotoUser);
+router.post("/photos/organization", checkSession, upload.single("image"), photoController.savePhotoOrganization);
+router.put("/photos/user/:photoId", checkSession, upload.single("image"), photoController.updatePhotoUser);
+router.put("/photos/organization/:photoId", checkSession, upload.single("image"), photoController.updatePhotoOrganization);
+
 
 
 

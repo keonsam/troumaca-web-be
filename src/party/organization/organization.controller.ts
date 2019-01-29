@@ -77,7 +77,7 @@ export  let getOrganizationCompany = (req: Request, res: Response) => {
 
     res.setHeader("content-type", "application/json");
     organizationOrchestrator
-        .getOrganizationCompany(requestingPartyId)
+        .getOrganization(requestingPartyId)
         .subscribe(organizationCompany => {
             if (organizationCompany) {
                 res.status(200);

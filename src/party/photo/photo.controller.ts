@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import { PhotoOrchestrator } from "./photo.orchestrator";
+import { HeaderNormalizer } from "../../header.normalizer";
+import { Photo } from "../../data/photo/photo";
 
 const orchestrator: PhotoOrchestrator = new PhotoOrchestrator();
 
@@ -23,52 +25,77 @@ export let getPhotos = (req: Request, res: Response) => {
     });
 };
 
-export let savePhoto = (req: Request, res: Response) => {
-    // Pay not too much attention to how this works
-    // it might be better to separate user and organization image
-    // take the best possible way for the service
-    // I can change this around later
-    console.log(req.file);
-    console.log(req.files);
-    console.log(req);
-    console.log("working");
-    const type: string = "user";
-    // const image: string = req.file.path;
-    const partyId: string = res.locals.partyId;
-    res.setHeader("content-type", "multipart/form-data");
-    res.send();
-    // if (!image) {
-    //     return res.status(400).send({
-    //         message: "Image was not saved, please try again."
-    //     });
-    // }
-    // orchestrator.savePhoto("user", undefined, partyId)
-    //     .subscribe(photo => {
-    //         res.status(201);
-    //         res.send(JSON.stringify(photo));
-    //     }, error => {
-    //         res.status(500);
-    //         res.send(JSON.stringify({message: "Error Occurred"}));
-    //         console.log(error);
-    //     });
+export let savePhotoUser = (req: Request, res: Response) => {
+    HeaderNormalizer.normalize(req);
+    const correlationId = req.headers["Correlation-Id"];
+    const ownerPartyId = req.headers["Owner-Party-Id"];
+    const requestingPartyId = req.headers["Party-Id"];
+
+    const headerOptions = {
+        "Correlation-Id": correlationId,
+        "Owner-Party-Id": ownerPartyId,
+        "Party-Id": requestingPartyId
+    };
+
+    const photo = new Photo();
+    photo.userImage = req.file.filename;
+    photo.partyId = requestingPartyId;
+
+    orchestrator.savePhoto(photo)
+        .subscribe(photo => {
+            res.status(201);
+            res.send(JSON.stringify(photo));
+        }, error => {
+            res.status(500);
+            res.send(JSON.stringify({message: "Error Occurred"}));
+            console.log(error);
+        });
 };
 
-export let updatePhoto = (req: Request, res: Response) => {
-    // Pay not too much attention to how this works
-    // it might be better to separate user and organization image
-    // take the best possible way for the service
-    // I can change this around later
-    const type: string = "user";
-    const image: string = req.file.path;
-    const partyId: string = res.locals.partyId;
-    res.setHeader("content-type", "multipart/form-data");
-    if (!image) {
-        return res.status(400).send({
-            message: "Image was not updated, please try again."
+export let savePhotoOrganization = (req: Request, res: Response) => {
+    HeaderNormalizer.normalize(req);
+    const correlationId = req.headers["Correlation-Id"];
+    const ownerPartyId = req.headers["Owner-Party-Id"];
+    const requestingPartyId = req.headers["Party-Id"];
+
+    const headerOptions = {
+        "Correlation-Id": correlationId,
+        "Owner-Party-Id": ownerPartyId,
+        "Party-Id": requestingPartyId
+    };
+
+    const photo = new Photo();
+    photo.organizationImage = req.file.filename;
+    photo.partyId = requestingPartyId;
+
+    orchestrator.savePhoto(photo)
+        .subscribe(photo => {
+            res.status(201);
+            res.send(JSON.stringify(photo));
+        }, error => {
+            res.status(500);
+            res.send(JSON.stringify({message: "Error Occurred"}));
+            console.log(error);
         });
-    }
+};
+
+export let updatePhotoUser = (req: Request, res: Response) => {
+    HeaderNormalizer.normalize(req);
+    const correlationId = req.headers["Correlation-Id"];
+    const ownerPartyId = req.headers["Owner-Party-Id"];
+    const requestingPartyId = req.headers["Party-Id"];
+
+    const headerOptions = {
+        "Correlation-Id": correlationId,
+        "Owner-Party-Id": ownerPartyId,
+        "Party-Id": requestingPartyId
+    };
+
+    const photo = new Photo();
+    photo.userImage = req.file.filename;
+
     orchestrator
-        .updatePhoto(partyId, type, image)
+        .updatePhoto(photo, req.params.photoId)
         .subscribe( photo => {
             if (photo) {
                 res.status(200);
@@ -84,3 +111,35 @@ export let updatePhoto = (req: Request, res: Response) => {
         });
 };
 
+export let updatePhotoOrganization = (req: Request, res: Response) => {
+    HeaderNormalizer.normalize(req);
+    const correlationId = req.headers["Correlation-Id"];
+    const ownerPartyId = req.headers["Owner-Party-Id"];
+    const requestingPartyId = req.headers["Party-Id"];
+
+    const headerOptions = {
+        "Correlation-Id": correlationId,
+        "Owner-Party-Id": ownerPartyId,
+        "Party-Id": requestingPartyId
+    };
+
+    const photo = new Photo();
+    photo.organizationImage = req.file.filename;
+
+
+    orchestrator
+        .updatePhoto(photo, req.params.photoId)
+        .subscribe( photo => {
+            if (photo) {
+                res.status(200);
+                res.send(JSON.stringify(photo));
+            } else {
+                res.status(404);
+                res.send(JSON.stringify({message: "No Data Found For " + req.params.partyId}));
+            }
+        }, error => {
+            res.status(500);
+            res.send(JSON.stringify({message: "Error Occurred"}));
+            console.log(error);
+        });
+};
