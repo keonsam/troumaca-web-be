@@ -33,6 +33,8 @@ import * as organizationProfileController from "./profile/organization/create/or
 import * as personProfileController from "./profile/person/create/person.profile.controller";
 import * as searchController from "./search/search.controller";
 import * as partyController from "./party/party.controller";
+import * as brandController from "./brand/brand.controller";
+import * as assetCharacteristicController from "./asset-characteristic/asset.characteristic.controller";
 
 import upload from "./middleware/multer.config";
 
@@ -127,6 +129,21 @@ router.delete("/access-role-types/:accessRoleTypeId", checkSession, accessRoleTy
 
 
 // Asset Type
+
+// BRANDS
+router.get("/brands", checkSession, brandController.getBrands);
+router.get("/brands/:brandId", checkSession, brandController.getBrandById);
+router.post("/brands", checkSession, brandController.saveBrand);
+router.put("/brands/:brandId", checkSession, brandController.updateBrand);
+router.delete("/brands/:brandId", checkSession, brandController.deleteBrand);
+
+// ASSET CHARACTERISTICS
+router.get("/assetCharacteristics", checkSession, assetCharacteristicController.getAssetCharacteristics);
+router.get("/assetCharacteristics/types", checkSession, assetCharacteristicController.getTypes);
+router.get("/assetCharacteristics/:assetCharacteristicId", checkSession, assetCharacteristicController.getAssetCharacteristicById);
+router.post("/assetCharacteristics", checkSession, assetCharacteristicController.saveAssetCharacteristic);
+router.put("/assetCharacteristics/:assetCharacteristicId", checkSession, assetCharacteristicController.updateAssetCharacteristic);
+router.delete("/assetCharacteristics/:assetCharacteristicId", checkSession, assetCharacteristicController.deleteAssetCharacteristic);
 
 // asset-kind
 router.get("/asset-kinds", checkSession, assetKindController.getAssetKinds);

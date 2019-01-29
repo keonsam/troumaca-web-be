@@ -1,1 +1,4 @@
+{"$$indexCreated":{"fieldName":"assetCharacteristicId","unique":true,"sparse":false}}
 {"$$indexCreated":{"fieldName":"assetId","unique":true,"sparse":false}}
+{"name":"Volume","defaultValue":"2","typeId":"054b50c2-9e8a-4cfb-8bac-54af9ac53613","description":"volume of assets","formula":"h x v x p","maxValue":"1","minValue":"10","catValue":"","effectiveDate":"","untilDate":"","unitOfMeasureId":"a7fcd7e8-d7fc-11e7-9296-cec278b6b50a","assetCharacteristicId":"bec280a3-cca1-46c0-9c7b-f55c9d91690a","_id":"7vTSnPRy1r597B1U"}
+{"name":"Volume Update","defaultValue":"2","typeId":"054b50c2-9e8a-4cfb-8bac-54af9ac53613","description":"volume of assets","formula":"h x v x p","maxValue":"1","minValue":"10","catValue":"","effectiveDate":"","untilDate":"","unitOfMeasureId":"a7fcd7e8-d7fc-11e7-9296-cec278b6b50a","assetCharacteristicId":"bec280a3-cca1-46c0-9c7b-f55c9d91690a","_id":"7vTSnPRy1r597B1U"}

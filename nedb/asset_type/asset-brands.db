@@ -1,1 +1,4 @@
+{"$$indexCreated":{"fieldName":"brandId","unique":true,"sparse":false}}
 {"$$indexCreated":{"fieldName":"assetId","unique":true,"sparse":false}}
+{"name":"Tromaca","abbreviation":"T","description":"StartUp","brandId":"1ee2c93c-9fb8-443f-886e-21de72bb1750","_id":"SHOCrUCFnAy3BT1n"}
+{"name":"TromacaED","abbreviation":"T","description":"StartUp","brandId":"1ee2c93c-9fb8-443f-886e-21de72bb1750","_id":"SHOCrUCFnAy3BT1n"}

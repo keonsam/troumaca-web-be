@@ -32,6 +32,18 @@ export const apps: App[] = [
         iconClass: "store"
     },
     {
+        moduleId: "c27d3eef-4858-42b1-93f0-93ace4b88ac3",
+        name: "Brands",
+        route: "/brands/listing",
+        iconClass: "store"
+    },
+    {
+        moduleId: "c27d3eef-4858-42b1-93f0-93ace4b88ac4",
+        name: "Asset Characteristics",
+        route: "/assetCharacteristics/listing",
+        iconClass: "store"
+    },
+    {
         moduleId: "c67d3eef-4858-42b1-93f0-93ace4b88ac2",
         name: "Sites",
         route: "/sites/street-addresses",

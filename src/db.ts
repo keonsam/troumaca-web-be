@@ -152,11 +152,11 @@ assetSpecs.ensureIndex({fieldName: "assetId", unique: true}, handleError);
 
 export let assetBrands = new Datastore(theAssetBrandsDb);
 assetBrands.loadDatabase(handleError);
-assetBrands.ensureIndex({fieldName: "assetId", unique: true}, handleError);
+assetBrands.ensureIndex({fieldName: "brandId", unique: true}, handleError);
 
 export let assetChars = new Datastore(theAssetCharsDb);
 assetChars.loadDatabase(handleError);
-assetChars.ensureIndex({fieldName: "assetId", unique: true}, handleError);
+assetChars.ensureIndex({fieldName: "assetCharacteristicId", unique: true}, handleError);
 
 export let values = new Datastore(theValuesDb);
 values.loadDatabase(handleError);
