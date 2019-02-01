@@ -1,9 +1,9 @@
-import { AssetRepository } from "../../repository/asset.repository";
-import { Asset } from "../../data/asset/asset";
+import { AssetRepository } from "../../../repository/asset.repository";
+import { Asset } from "../../../data/asset/asset";
 import { Observable } from "rxjs";
-import { AssetSpecification } from "../../data/asset/asset.specification";
-import { AssetBrand } from "../../data/asset/asset.brand";
-import { AssetCharacteristic } from "../../data/asset/asset.characteristic";
+import { AssetSpecification } from "../../../data/asset/asset.specification";
+import { AssetBrand } from "../../../data/asset/asset.brand";
+import { AssetCharacteristic } from "../../../data/asset/asset.characteristic";
 
 
 export class AssetRepositoryRestAdapter implements AssetRepository {

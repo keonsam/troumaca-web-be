@@ -7,6 +7,8 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 
+// import { ApolloServer, gql } from "apollo-server-express";
+
 import router from "./routes";
 
 const app = express();
@@ -64,5 +66,22 @@ app.use(function (err: any, req: any, res: any, next: any) {
   res.send('{"message":"Express REST API error"}');
   res.render("error");
 });
+
+// Construct a schema, using GraphQL schema language
+// const typeDefs = gql`
+//   type Query {
+//     hello: String
+//   }
+// `;
+
+// Provide resolver functions for your schema fields
+// const resolvers = {
+//   Query: {
+//     hello: () => 'Hello world!',
+//   },
+// };
+
+// const server = new ApolloServer({ typeDefs, resolvers });
+// server.applyMiddleware({ app });
 
 export default app;

@@ -1,5 +1,6 @@
 import { Router } from "express";
 
+
 import * as confirmationController from "./authentication/credential/confirmation/confirmation.controller";
 import * as credentialController from "./authentication/credential/credential.controller";
 import * as permissionController from "./authorization/permission/permission.controller";
@@ -161,7 +162,12 @@ router.put("/asset-types/:assetTypeId", checkSession, checkSession, assetTypeCon
 router.delete("/asset-types/:assetTypeId", checkSession, assetTypeController.deleteAssetType);
 
 // asset role type
-router.get("/assets/asset-role-types", checkSession, assetRoleTypeController.saveAssetRoleType);
+router.post("/assets/asset-role-types", checkSession, assetRoleTypeController.addAssetRoleType);
+router.put("/assets/asset-role-types/:assetRoleTypeId", checkSession, assetRoleTypeController.updateAssetRoleType);
+router.get("/assets/asset-role-types", checkSession, assetRoleTypeController.getAssetRoleTypes);
+router.get("/assets/asset-role-types/:assetRoleTypeId", checkSession, assetRoleTypeController.getAssetRoleTypeById);
+router.post("/assets/asset-role-types/search", checkSession, assetRoleTypeController.findAssetRoleTypes);
+router.delete("/assets/asset-role-types/:assetRoleTypeId", checkSession, assetRoleTypeController.deleteAssetRoleType);
 
 
 // site

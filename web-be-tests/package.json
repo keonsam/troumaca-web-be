@@ -4,7 +4,8 @@
   "description": "Example API Testing",
   "author": "Rifky Ali",
   "dependencies": {
-    "body-parser": "^1.17.1"
+    "body-parser": "^1.17.1",
+    "request": "^2.88.0"
   },
   "scripts": {
     "prestart": "npm install",

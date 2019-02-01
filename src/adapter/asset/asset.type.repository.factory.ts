@@ -1,8 +1,8 @@
 import {AssetTypeRepository} from "../../repository/asset.type.repository";
 import {RepositoryKind} from "../../repository.kind";
 import {properties} from "../../properties.helpers";
-import {AssetTypeRepositoryNeDbAdapter} from "./asset.type.repository.db.adapter";
-import {AssetTypeRepositoryRestAdapter} from "./asset.type.repository.rest.adapter";
+import {AssetTypeRepositoryNeDbAdapter} from "./db/asset.type.repository.db.adapter";
+import {AssetTypeRepositoryRestAdapter} from "./rest/asset.type.repository.rest.adapter";
 
 export function createAssetTypeRepository(kind?: RepositoryKind): AssetTypeRepository {
   const type: number = properties.get("asset.type.repository.type") as number;

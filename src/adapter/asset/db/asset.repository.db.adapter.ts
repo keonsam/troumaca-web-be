@@ -1,12 +1,12 @@
-import {AssetRepository} from "../../repository/asset.repository";
-import {Asset} from "../../data/asset/asset";
-import {generateUUID} from "../../uuid.generator";
-import { assetBrands, assetChars, assets, assetSpecs } from "../../db";
-import {calcSkip} from "../../db.util";
+import {AssetRepository} from "../../../repository/asset.repository";
+import {Asset} from "../../../data/asset/asset";
+import {generateUUID} from "../../../uuid.generator";
+import { assetBrands, assetChars, assets, assetSpecs } from "../../../db";
+import {calcSkip} from "../../../db.util";
 import {Observable, Observer} from "rxjs";
-import { AssetSpecification } from "../../data/asset/asset.specification";
-import { AssetBrand } from "../../data/asset/asset.brand";
-import { AssetCharacteristic } from "../../data/asset/asset.characteristic";
+import { AssetSpecification } from "../../../data/asset/asset.specification";
+import { AssetBrand } from "../../../data/asset/asset.brand";
+import { AssetCharacteristic } from "../../../data/asset/asset.characteristic";
 
 export class AssetRepositoryNeDbAdapter implements AssetRepository {
 

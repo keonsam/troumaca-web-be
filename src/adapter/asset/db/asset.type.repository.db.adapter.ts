@@ -1,10 +1,10 @@
-import {AssetTypeRepository} from "../../repository/asset.type.repository";
+import {AssetTypeRepository} from "../../../repository/asset.type.repository";
 import { Observable, Observer, of, throwError } from "rxjs";
-import {AssetType} from "../../data/asset/asset.type";
+import {AssetType} from "../../../data/asset/asset.type";
 import {switchMap, map} from "rxjs/operators";
-import {assetTypes} from "../../db";
-import {generateUUID} from "../../uuid.generator";
-import {calcSkip} from "../../db.util";
+import {assetTypes} from "../../../db";
+import {generateUUID} from "../../../uuid.generator";
+import {calcSkip} from "../../../db.util";
 
 export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
 

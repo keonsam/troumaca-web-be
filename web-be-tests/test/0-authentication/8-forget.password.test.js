@@ -90,7 +90,7 @@ describe('forget-password', function () {
   // });
 
   let usernameMap = {username: credential.username};
-  console.log(usernameMap);
+  //console.log(usernameMap);
   it('forget password send forget password code', function (done) {
     api.post("/authentication/confirmations/resend-by-username")
     .set('Accept', 'application/json')

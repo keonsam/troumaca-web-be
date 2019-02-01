@@ -1,11 +1,11 @@
-import {AssetTypeRepository} from "../../repository/asset.type.repository";
-import {AssetType} from "../../data/asset/asset.type";
+import {AssetTypeRepository} from "../../../repository/asset.type.repository";
+import {AssetType} from "../../../data/asset/asset.type";
 import {Observable, Observer} from "rxjs";
-import {properties} from "../../properties.helpers";
-import {jsonRequestHeaderMap, postJsonOptions} from "../../request.helpers";
-import {Organization} from "../../data/party/organization";
+import {properties} from "../../../properties.helpers";
+import {jsonRequestHeaderMap, postJsonOptions} from "../../../request.helpers";
+import {Organization} from "../../../data/party/organization";
 import request from "request";
-import {OtherAssetType} from "../../data/asset/other.asset.type";
+import {OtherAssetType} from "../../../data/asset/other.asset.type";
 
 export class AssetTypeRepositoryRestAdapter implements AssetTypeRepository {
   findAssetTypes(searchStr: string, pageSize: number): Observable<AssetType[]> {
@@ -23,10 +23,6 @@ export class AssetTypeRepositoryRestAdapter implements AssetTypeRepository {
   getAssetTypeById(assetTypeId: string): Observable<AssetType> {
     return undefined;
   }
-
-  // saveAssetType(assetType: AssetType, values: Value[]): Observable<AssetType> {
-  //   return undefined;
-  // }
 
   addOtherAssetType(otherAssetType: OtherAssetType, options?: any): Observable<OtherAssetType> {
     const uri: string = properties.get("asset.host.port") as string;

@@ -1,16 +1,16 @@
-import {DepreciationRepository} from "../../repository/depreciation.repository";
-import {Depreciation} from "../../data/asset/depreciation";
+import {DepreciationRepository} from "../../../repository/depreciation.repository";
+import {Depreciation} from "../../../data/asset/depreciation";
 import {Observable, Observer, of} from "rxjs";
 import {switchMap, map} from "rxjs/operators";
-import {generateUUID} from "../../uuid.generator";
-import {bookDepreciation, depreciationMethod, depreciationSystem, propertyClasses, taxDepreciation} from "../../db";
-import {calcSkip} from "../../db.util";
-import {Asset} from "../../data/asset/asset";
+import {generateUUID} from "../../../uuid.generator";
+import {bookDepreciation, depreciationMethod, depreciationSystem, propertyClasses, taxDepreciation} from "../../../db";
+import {calcSkip} from "../../../db.util";
+import {Asset} from "../../../data/asset/asset";
 import {AssetRepositoryNeDbAdapter} from "./asset.repository.db.adapter";
-import {DepreciationMethod} from "./depreciation.method";
-import {DepreciationFormula} from "./depreciation.formula";
-import {DepreciationSystem} from "../../data/asset/depreciation.system";
-import {PropertyClass} from "../../data/asset/property.class";
+import {DepreciationMethod} from "../depreciation.method";
+import {DepreciationFormula} from "../depreciation.formula";
+import {DepreciationSystem} from "../../../data/asset/depreciation.system";
+import {PropertyClass} from "../../../data/asset/property.class";
 
 export class DepreciationRepositoryNeDbAdapter implements DepreciationRepository {
 
