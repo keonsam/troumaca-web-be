@@ -12,7 +12,6 @@ import {PartyAccessRoleRepository} from "../../repository/party.access.role.repo
 import {createPartyAccessRoleRepositoryFactory} from "../../adapter/authorization/party.access.role.repository.factory";
 import {AccessRoleTypeRepository} from "../../repository/access.role.type.repository";
 import {createAccessRoleTypeRepositoryFactory} from "../../adapter/authorization/access.role.type.repository.factory";
-import {AccessRoleType} from "../../data/authorization/access.role.type";
 import {AccessRole} from "../../data/authorization/access.role";
 
 export class AccessRoleOrchestrator {
@@ -51,53 +50,58 @@ export class AccessRoleOrchestrator {
   }
 
   addAccessRole(accessRole: AccessRole, grants: Grant[]): Observable<AccessRole> {
-    return this.accessRoleRepository.addAccessRole(accessRole)
-      .pipe(switchMap(accessRole => {
-        if (!accessRole) {
-            return throwError(`Failed to save access role ${accessRole}`);
-        }
-        const accessRoleId = accessRole.accessRoleId;
-        grants.forEach(value => {
-          value.accessRoleId = accessRoleId;
-        });
-        return this.grantRepository.addGrant(grants)
-          .pipe(map(grants => {
-            if (!grants) return new AccessRole();
-            return accessRole;
-          }));
-      }));
+    // return this.accessRoleRepository.addAccessRole(accessRole)
+    //   .pipe(switchMap(accessRole => {
+    //     if (!accessRole) {
+    //         return throwError(`Failed to save access role ${accessRole}`);
+    //     }
+    //     const accessRoleId = accessRole.accessRoleId;
+    //     grants.forEach(value => {
+    //       value.accessRoleId = accessRoleId;
+    //     });
+    //     return this.grantRepository.addGrant(grants)
+    //       .pipe(map(grants => {
+    //         if (!grants) return new AccessRole();
+    //         return accessRole;
+    //       }));
+    //   }));
+
+    return null;
   }
 
   updateAccessRole(accessRoleId: string, accessRole: AccessRole, grants: Grant[]): Observable<number> {
-    return this.accessRoleRepository.updateAccessRole(accessRoleId, accessRole)
-      .pipe(switchMap(numUpdated => {
-        if (!numUpdated) {
-            return throwError(`Failed to update access role ${accessRoleId} ${numUpdated}`);
-        }
-        return this.grantRepository.deleteGrant(accessRoleId)
-          .pipe(switchMap(numReplaced => {
-            return this.grantRepository.addGrant(grants)
-              .pipe(map(grants => {
-                if (!grants) return 0;
-                return numUpdated;
-              }));
-          }));
-      }));
+    // return this.accessRoleRepository.updateAccessRole(accessRoleId, accessRole)
+    //   .pipe(switchMap(numUpdated => {
+    //     if (!numUpdated) {
+    //         return throwError(`Failed to update access role ${accessRoleId} ${numUpdated}`);
+    //     }
+    //     return this.grantRepository.deleteGrant(accessRoleId)
+    //       .pipe(switchMap(numReplaced => {
+    //         return this.grantRepository.addGrant(grants)
+    //           .pipe(map(grants => {
+    //             if (!grants) return 0;
+    //             return numUpdated;
+    //           }));
+    //       }));
+    //   }));
+
+    return null;
   }
 
   deleteAccessRole(accessRoleId: string): Observable<number> {
-    return this.accessRoleRepository.deleteAccessRole(accessRoleId)
-      .pipe(switchMap(numReplaced => {
-        if (numReplaced) {
-          return this.grantRepository.deleteGrant(accessRoleId)
-            .pipe(switchMap(numReplaced2 => {
-              return this.partyAccessRoleRepository.deletePartyAccessRoleByAccessRoleId(accessRoleId)
-                .pipe(map(numReplaced3 => {
-                  return numReplaced;
-                }));
-            }));
-        }
-      }));
+    // return this.accessRoleRepository.deleteAccessRole(accessRoleId)
+    //   .pipe(switchMap(numReplaced => {
+    //     if (numReplaced) {
+    //       return this.grantRepository.deleteGrant(accessRoleId)
+    //         .pipe(switchMap(numReplaced2 => {
+    //           return this.partyAccessRoleRepository.deletePartyAccessRoleByAccessRoleId(accessRoleId)
+    //             .pipe(map(numReplaced3 => {
+    //               return numReplaced;
+    //             }));
+    //         }));
+    //     }
+    //   }));
+    return null;
   }
 
 }

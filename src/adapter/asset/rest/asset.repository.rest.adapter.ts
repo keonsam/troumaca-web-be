@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { AssetSpecification } from "../../../data/asset/asset.specification";
 import { AssetBrand } from "../../../data/asset/asset.brand";
 import { AssetCharacteristic } from "../../../data/asset/asset.characteristic";
+import {Affect} from "../../../data/affect";
 
 
 export class AssetRepositoryRestAdapter implements AssetRepository {
@@ -55,10 +56,6 @@ export class AssetRepositoryRestAdapter implements AssetRepository {
     return undefined;
   }
 
-  updateAsset(assetId: string, asset: Asset): Observable<number> {
-    return undefined;
-  }
-
   updateAssetSpec(assetId: string, asset: AssetSpecification): Observable<number> {
     return undefined;
   }
@@ -71,7 +68,15 @@ export class AssetRepositoryRestAdapter implements AssetRepository {
     return undefined;
   }
 
-  deleteAsset(assetId: string): Observable<number> {
+  addAsset(asset: Asset): Observable<Asset> {
+    return undefined;
+  }
+
+  deleteAsset(assetId: string): Observable<Affect> {
+    return undefined;
+  }
+
+  updateAsset(assetId: string, asset: Asset): Observable<Affect> {
     return undefined;
   }
 

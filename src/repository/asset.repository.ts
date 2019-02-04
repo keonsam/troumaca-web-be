@@ -3,8 +3,15 @@ import {Observable} from "rxjs";
 import { AssetSpecification } from "../data/asset/asset.specification";
 import { AssetBrand } from "../data/asset/asset.brand";
 import { AssetCharacteristic } from "../data/asset/asset.characteristic";
+import {Affect} from "../data/affect";
 
 export interface AssetRepository {
+
+  addAsset(asset: Asset): Observable<Asset>;
+
+  updateAsset(assetId: string, asset: Asset): Observable<Affect>;
+
+  deleteAsset(assetId: string): Observable<Affect>;
 
   findAssets(searchStr: string, pageSize: number): Observable<Asset[]>;
 
@@ -28,14 +35,10 @@ export interface AssetRepository {
 
   addAssetCharacteristics(asset: AssetCharacteristic): Observable<AssetCharacteristic>;
 
-  updateAsset(assetId: string, asset: Asset): Observable<number>;
-
   updateAssetSpec(assetId: string, asset: AssetSpecification): Observable<number>;
 
   updateAssetBrand(assetId: string, asset: AssetBrand): Observable<number>;
 
   updateAssetChars(assetId: string, asset: AssetCharacteristic): Observable<number>;
-
-  deleteAsset(assetId: string): Observable<number>;
 
 }

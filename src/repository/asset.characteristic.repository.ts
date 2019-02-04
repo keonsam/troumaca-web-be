@@ -1,15 +1,23 @@
 import {AssetCharacteristic} from "../data/asset/asset.characteristic";
 import {Observable} from "rxjs";
+import {Affect} from "../data/affect";
+import {Sort} from "../util/sort";
+import {Page} from "../util/page";
 
 export interface AssetCharacteristicRepository {
 
-  findAssetCharacteristics(searchStr: string, pageSize: number): Observable<AssetCharacteristic[]>;
+  addAssetCharacteristic(assetCharacteristic: AssetCharacteristic, headerOptions?:any): Observable<AssetCharacteristic>;
 
-  getAssetCharacteristics(pageNumber: number, pageSize: number, order: string): Observable<AssetCharacteristic[]>;
+  updateAssetCharacteristic(assetCharacteristic: AssetCharacteristic, headerOptions?:any): Observable<Affect>;
 
-  getAssetCharacteristicCount(): Observable<number>;
+  deleteAssetCharacteristic(assetCharacteristicId: string, ownerPartyId: string, headerOptions?:any): Observable<Affect>;
 
-  getAssetCharacteristicById(assetId: string): Observable<AssetCharacteristic>;
+  findAssetCharacteristics(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?:any): Observable<AssetCharacteristic[]>;
 
-  deleteAssetCharacteristic(assetId: string): Observable<number>;
+  getAssetCharacteristics(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetCharacteristic[]>>;
+
+  getAssetCharacteristicCount(ownerPartyId: string, headerOptions?:any): Observable<number>;
+
+  getAssetCharacteristicById(assetCharacteristicId: string, ownerPartyId: string, headerOptions?:any): Observable<AssetCharacteristic>;
+
 }

@@ -1,15 +1,10 @@
-import {AssetCharacteristicValue} from "./asset.characteristic.value";
-import {AssetCharacteristicType} from "./asset.characteristic.type";
-import {UnitOfMeasure} from "../unit-of-measure/unit.of.measure";
-
 export class AssetCharacteristic {
   assetCharacteristicId: string;
-  assetCharacteristicType: AssetCharacteristicType;
+  assetCharacteristicTypeId: string;
   name: string;
   description: string;
-  assetCharacteristicValue: AssetCharacteristicValue;
   format: string;
-  unitOfMeasure: UnitOfMeasure;
+  unitOfMeasurementId: string;
   version: string;
   ownerPartyId: string;
   dateModified: Date;

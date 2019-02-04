@@ -3,23 +3,29 @@ import Datastore from "nedb";
 
 // reference data
 const theDataTypesDb = path.resolve(__dirname, "..") + "/nedb/data-types.db";
-const theMeasuresDb = path.resolve(__dirname, "..") + "/nedb/unit-of-measures.db";
-const theMeasureSystemsDb = path.resolve(__dirname, "..") + "/nedb/unit-of-measure-systems.db";
-const theMeasureDimensionsDb = path.resolve(__dirname, "..") + "/nedb/unit-of-measure-dimensions.db";
+const theUnitOfMeasurementDb = path.resolve(__dirname, "..") + "/nedb/unit-of-measurements.db";
+const theUnitOfMeasurementSystemsDb = path.resolve(__dirname, "..") + "/nedb/unit-of-measurement-systems.db";
+const theUnitMeasurementDimensionsDb = path.resolve(__dirname, "..") + "/nedb/unit-of-measurement-dimensions.db";
 
-// asset type
+// asset / asset type
 const theAssetsDb = path.resolve(__dirname, "..") + "/nedb/asset_type/assets.db";
 const theAssetTypesDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-types.db";
 const theAssetRoleTypesDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-role-types.db";
-
+const theAssetNameTypesDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-name-types.db";
+const theAssetIdentifierTypesDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-identifier-types.db";
+const theAssetCharacteristicTypesDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-characteristic-types.db";
+const theAssetBrandsDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-brands.db";
+const theAssetCategoryLegalValuesDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-category-legal-values.db";
+const theAssetCharacteristicsDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-characteristics.db";
+const theAssetSpecificationsDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-specifications.db";
+const theOtherAssetTypesDb = path.resolve(__dirname, "..") + "/nedb/asset_type/other-asset-types.db";
 
 const theAttributesDb = path.resolve(__dirname, "..") + "/nedb/asset_type/attributes.db";
 const theAssignedAttributesDb = path.resolve(__dirname, "..") + "/nedb/asset_type/assigned-attributes.db";
 const theAssetTypeClassesDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-type-classes.db";
 const theValuesDb = path.resolve(__dirname, "..") + "/nedb/asset_type/values.db";
-const theAssetSpecsDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-specs.db";
-const theAssetBrandsDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-brands.db";
-const theAssetCharsDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-chars.db";
+
+// const theAssetCharsDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-chars.db";
 const theAssetKindsDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-kinds.db";
 
 // sites
@@ -141,17 +147,17 @@ export let dataTypes = new Datastore(theDataTypesDb);
 dataTypes.loadDatabase(handleError);
 dataTypes.ensureIndex({fieldName: "dataTypeId", unique: true}, handleError);
 
-export let unitOfMeasures = new Datastore(theMeasuresDb);
-unitOfMeasures.loadDatabase(handleError);
-unitOfMeasures.ensureIndex({fieldName: "unitOfMeasureId", unique: true}, handleError);
+export let unitOfMeasurements = new Datastore(theUnitOfMeasurementDb);
+unitOfMeasurements.loadDatabase(handleError);
+unitOfMeasurements.ensureIndex({fieldName: "unitOfMeasurementId", unique: true}, handleError);
 
-export let unitOfMeasureSystems = new Datastore(theMeasureSystemsDb);
-unitOfMeasureSystems.loadDatabase(handleError);
-unitOfMeasureSystems.ensureIndex({fieldName: "unitOfMeasureSystemId", unique: true}, handleError);
+export let unitOfMeasurementSystems = new Datastore(theUnitOfMeasurementSystemsDb);
+unitOfMeasurementSystems.loadDatabase(handleError);
+unitOfMeasurementSystems.ensureIndex({fieldName: "unitOfMeasurementSystemId", unique: true}, handleError);
 
-export let unitOfMeasureDimensions = new Datastore(theMeasureDimensionsDb);
-unitOfMeasureDimensions.loadDatabase(handleError);
-unitOfMeasureDimensions.ensureIndex({fieldName: "unitOfMeasureDimensionId", unique: true}, handleError);
+export let unitOfMeasurementDimensions = new Datastore(theUnitMeasurementDimensionsDb);
+unitOfMeasurementDimensions.loadDatabase(handleError);
+unitOfMeasurementDimensions.ensureIndex({fieldName: "unitOfMeasurementDimensionId", unique: true}, handleError);
 
 // asset type
 export let assets = new Datastore(theAssetsDb);
@@ -166,18 +172,37 @@ export let assetRoleTypes = new Datastore(theAssetRoleTypesDb);
 assetRoleTypes.loadDatabase(handleError);
 assetRoleTypes.ensureIndex({fieldName: "assetRoleTypeId", unique: true}, handleError);
 
+export let assetNameTypes = new Datastore(theAssetNameTypesDb);
+assetNameTypes.loadDatabase(handleError);
+assetNameTypes.ensureIndex({fieldName: "assetNameTypeId", unique: true}, handleError);
 
-export let assetSpecs = new Datastore(theAssetSpecsDb);
-assetSpecs.loadDatabase(handleError);
-assetSpecs.ensureIndex({fieldName: "assetId", unique: true}, handleError);
+export let assetIdentifierTypes = new Datastore(theAssetIdentifierTypesDb);
+assetIdentifierTypes.loadDatabase(handleError);
+assetIdentifierTypes.ensureIndex({fieldName: "assetIdentifierTypeId", unique: true}, handleError);
+
+export let assetCharacteristicTypes = new Datastore(theAssetCharacteristicTypesDb);
+assetCharacteristicTypes.loadDatabase(handleError);
+assetCharacteristicTypes.ensureIndex({fieldName: "assetCharacteristicTypeId", unique: true}, handleError);
 
 export let assetBrands = new Datastore(theAssetBrandsDb);
 assetBrands.loadDatabase(handleError);
-assetBrands.ensureIndex({fieldName: "assetId", unique: true}, handleError);
+assetBrands.ensureIndex({fieldName: "assetBrandId", unique: true}, handleError);
 
-export let assetChars = new Datastore(theAssetCharsDb);
-assetChars.loadDatabase(handleError);
-assetChars.ensureIndex({fieldName: "assetId", unique: true}, handleError);
+export let assetCategoryLegalValues = new Datastore(theAssetCategoryLegalValuesDb);
+assetCategoryLegalValues.loadDatabase(handleError);
+assetCategoryLegalValues.ensureIndex({fieldName: "assetCategoryLegalValueId", unique: true}, handleError);
+
+export let assetSpecifications = new Datastore(theAssetSpecificationsDb);
+assetSpecifications.loadDatabase(handleError);
+assetSpecifications.ensureIndex({fieldName: "assetTypeId", unique: true}, handleError);
+
+export let assetCharacteristics = new Datastore(theAssetCharacteristicsDb);
+assetCharacteristics.loadDatabase(handleError);
+assetCharacteristics.ensureIndex({fieldName: "assetCharacteristicId", unique: true}, handleError);
+
+export let otherAssetTypes = new Datastore(theOtherAssetTypesDb);
+otherAssetTypes.loadDatabase(handleError);
+otherAssetTypes.ensureIndex({fieldName: "assetTypeId", unique: true}, handleError);
 
 export let values = new Datastore(theValuesDb);
 values.loadDatabase(handleError);

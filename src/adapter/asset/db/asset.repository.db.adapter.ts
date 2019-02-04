@@ -1,18 +1,23 @@
 import {AssetRepository} from "../../../repository/asset.repository";
 import {Asset} from "../../../data/asset/asset";
 import {generateUUID} from "../../../uuid.generator";
-import { assetBrands, assetChars, assets, assetSpecs } from "../../../db";
+import { assetBrands, assets, assetSpecifications } from "../../../db";
 import {calcSkip} from "../../../db.util";
 import {Observable, Observer} from "rxjs";
 import { AssetSpecification } from "../../../data/asset/asset.specification";
 import { AssetBrand } from "../../../data/asset/asset.brand";
 import { AssetCharacteristic } from "../../../data/asset/asset.characteristic";
+import {Affect} from "../../../data/affect";
 
 export class AssetRepositoryNeDbAdapter implements AssetRepository {
 
     private defaultPageSize: number = 10;
 
     constructor() {
+    }
+
+    addAsset(asset: Asset): Observable<Asset> {
+        return null
     }
 
     findAssets(searchStr: string, pageSize: number): Observable<Asset[]> {
@@ -74,7 +79,7 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
     getAssetSpecById(assetId: string): Observable<AssetSpecification> {
         return Observable.create((observer: Observer<AssetSpecification>) => {
             const query = {"assetId": assetId};
-            assetSpecs.findOne(query, function (err: any, doc: any) {
+            assetSpecifications.findOne(query, function (err: any, doc: any) {
                 if (!err) {
                     observer.next(doc);
                 } else {
@@ -102,14 +107,14 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
     getAssetCharacteristicsById(assetId: string): Observable<AssetCharacteristic> {
         return Observable.create((observer: Observer<AssetCharacteristic>) => {
             const query = {"assetId": assetId};
-            assetChars.findOne(query, function (err: any, doc: any) {
-                if (!err) {
-                    observer.next(doc);
-                } else {
-                    observer.error(err);
-                }
+            // assetChars.findOne(query, function (err: any, doc: any) {
+            //     if (!err) {
+            //         observer.next(doc);
+            //     } else {
+            //         observer.error(err);
+            //     }
                 observer.complete();
-            });
+            // });
         });
     }
 
@@ -129,7 +134,7 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
 
     addAssetSpec(asset: AssetSpecification): Observable<AssetSpecification> {
         return Observable.create(function (observer: Observer<AssetSpecification>) {
-            assetSpecs.insert(asset, function (err: any, doc: any) {
+            assetSpecifications.insert(asset, function (err: any, doc: any) {
                 if (err) {
                     observer.error(err);
                 } else {
@@ -155,23 +160,23 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
 
     addAssetCharacteristics(asset: AssetCharacteristic): Observable<AssetCharacteristic> {
         return Observable.create(function (observer: Observer<AssetCharacteristic>) {
-            assetChars.insert(asset, function (err: any, doc: any) {
-                if (err) {
-                    observer.error(err);
-                } else {
-                    observer.next(doc);
-                }
+            // assetChars.insert(asset, function (err: any, doc: any) {
+            //     if (err) {
+            //         observer.error(err);
+            //     } else {
+            //         observer.next(doc);
+            //     }
                 observer.complete();
-            });
+            // });
         });
     }
 
-    updateAsset(assetId: string, asset: Asset): Observable<number> {
+    updateAsset(assetId: string, asset: Asset): Observable<Affect> {
         const query = {assetId};
-        return Observable.create(function (observer: Observer<number>) {
+        return Observable.create(function (observer: Observer<Affect>) {
             assets.update(query, asset, {}, function (err: any, numReplaced: number) {
                 if (!err) {
-                    observer.next(numReplaced);
+                    observer.next(new Affect(numReplaced));
                 } else {
                     observer.error(err);
                 }
@@ -183,7 +188,7 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
     updateAssetSpec(assetId: string, asset: AssetSpecification): Observable<number> {
         const query = {assetId};
         return Observable.create(function (observer: Observer<number>) {
-            assetSpecs.update(query, asset, {}, function (err: any, numReplaced: number) {
+            assetSpecifications.update(query, asset, {}, function (err: any, numReplaced: number) {
                 if (!err) {
                     observer.next(numReplaced);
                 } else {
@@ -211,23 +216,23 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
     updateAssetChars(assetId: string, asset: AssetCharacteristic): Observable<number> {
         const query = {assetId};
         return Observable.create(function (observer: Observer<number>) {
-            assetChars.update(query, asset, {}, function (err: any, numReplaced: number) {
-                if (!err) {
-                    observer.next(numReplaced);
-                } else {
-                    observer.error(err);
-                }
+            // assetChars.update(query, asset, {}, function (err: any, numReplaced: number) {
+            //     if (!err) {
+            //         observer.next(numReplaced);
+            //     } else {
+            //         observer.error(err);
+            //     }
                 observer.complete();
-            });
+            // });
         });
     }
 
-    deleteAsset(assetId: string): Observable<number> {
+    deleteAsset(assetId: string): Observable<Affect> {
         const query = {assetId};
-        return Observable.create(function (observer: Observer<number>) {
+        return Observable.create(function (observer: Observer<Affect>) {
             assets.remove(query, {}, function (err: any, numRemoved: number) {
                 if (!err) {
-                    observer.next(numRemoved);
+                    observer.next(new Affect(numRemoved));
                 } else {
                     observer.error(err);
                 }

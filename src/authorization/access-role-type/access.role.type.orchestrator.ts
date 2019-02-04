@@ -6,6 +6,7 @@ import {flatMap, map} from "rxjs/operators";
 import {shapeAccessRoleTypesResponse} from "./access.role.type.response.shaper";
 import {Result} from "../../result.success";
 import {getSortOrderOrDefault} from "../../sort.order.util";
+import {Affect} from "../../data/affect";
 
 export class AccessRoleTypeOrchestrator {
 
@@ -41,11 +42,11 @@ export class AccessRoleTypeOrchestrator {
     return this.accessRoleTypeRepository.getAccessRoleTypeById(accessRoleTypeId);
   }
 
-  updateAccessRoleType(accessRoleTypeId: string, accessRoleType: AccessRoleType): Observable<number> {
+  updateAccessRoleType(accessRoleTypeId: string, accessRoleType: AccessRoleType): Observable<Affect> {
     return this.accessRoleTypeRepository.updateAccessRoleType(accessRoleTypeId, accessRoleType);
   }
 
-  deleteAccessRoleType(accessRoleTypeId: string): Observable<number> {
+  deleteAccessRoleType(accessRoleTypeId: string): Observable<Affect> {
     return this.accessRoleTypeRepository.deleteAccessRoleType(accessRoleTypeId);
   }
 

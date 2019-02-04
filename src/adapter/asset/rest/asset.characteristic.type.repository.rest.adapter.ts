@@ -1,17 +1,24 @@
 import {AssetCharacteristicTypeRepository} from "../../../repository/asset.characteristic.type.repository";
 import {AssetCharacteristicType} from "../../../data/asset/asset.characteristic.type";
 import {Observable} from "rxjs";
+import {Affect} from "../../../data/affect";
+import {Page} from "../../../util/page";
+import {Sort} from "../../../util/sort";
 
 export class AssetCharacteristicTypeRepositoryRestAdapter implements AssetCharacteristicTypeRepository {
-  deleteAssetCharacteristicType(assetId: string): Observable<number> {
+  addAssetCharacteristicType(assetCharacteristicType: AssetCharacteristicType, headerOptions?: any): Observable<AssetCharacteristicType> {
     return undefined;
   }
 
-  findAssetCharacteristicTypes(searchStr: string, pageSize: number): Observable<AssetCharacteristicType[]> {
+  deleteAssetCharacteristicType(assetCharacteristicTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
     return undefined;
   }
 
-  getAssetCharacteristicTypeById(assetId: string): Observable<AssetCharacteristicType> {
+  findAssetCharacteristicTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetCharacteristicType[]> {
+    return undefined;
+  }
+
+  getAssetCharacteristicTypeById(assetCharacteristicTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetCharacteristicType> {
     return undefined;
   }
 
@@ -19,7 +26,11 @@ export class AssetCharacteristicTypeRepositoryRestAdapter implements AssetCharac
     return undefined;
   }
 
-  getAssetCharacteristicTypes(pageNumber: number, pageSize: number, order: string): Observable<AssetCharacteristicType[]> {
+  getAssetCharacteristicTypes(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetCharacteristicType[]>> {
+    return undefined;
+  }
+
+  updateAssetCharacteristicType(assetCharacteristicType: AssetCharacteristicType, headerOptions?: any): Observable<Affect> {
     return undefined;
   }
 }

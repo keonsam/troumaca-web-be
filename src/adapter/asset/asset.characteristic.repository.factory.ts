@@ -4,7 +4,7 @@ import {properties} from "../../properties.helpers";
 import {AssetCharacteristicRepositoryRestAdapter} from "./rest/asset.characteristic.repository.rest.adapter";
 import {AssetCharacteristicRepositoryNeDbAdapter} from "./db/asset.characteristic.repository.db.adapter";
 
-export function createAssetCharacteristicRepositoryFactory(kind?: RepositoryKind): AssetCharacteristicRepository {
+export function createAssetCharacteristicRepository(kind?: RepositoryKind): AssetCharacteristicRepository {
   const type: number = properties.get("asset.repository.type") as number;
 
   const k: RepositoryKind = (kind) ? kind : (type === 2) ? RepositoryKind.Rest : RepositoryKind.Nedb;
@@ -15,7 +15,7 @@ export function createAssetCharacteristicRepositoryFactory(kind?: RepositoryKind
     case RepositoryKind.Rest:
       return new AssetCharacteristicRepositoryRestAdapter();
     default:
-      throw new Error(`Unknown Asset Characteristic Type Repository ${k}`);
+      throw new Error(`Unknown Asset Characteristic Repository ${k}`);
   }
 
 }

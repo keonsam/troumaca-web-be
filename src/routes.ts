@@ -11,9 +11,17 @@ import * as resourceTypeController from "./authorization/resource-type/resource.
 
 import * as assetController from "./asset/asset.controller";
 import * as assetRoleTypeController from "./asset/asset-role-type/asset.role.type.controller";
+import * as assetIdentifierTypeController from "./asset/asset-identifier-type/asset.identifier.type.controller";
+import * as assetCharacteristicTypeController from "./asset/asset-characteristic-type/asset.characteristic.type.controller";
+import * as assetCharacteristicController from "./asset/asset-characteristic/asset.characteristic.controller";
+import * as assetBrandController from "./asset/asset-brand/asset.brand.controller";
+import * as assetCategoryLegalValueController from "./asset/asset-category-legal-value/asset.category.legal.value.controller";
+import * as assetNameTypeController from "./asset/asset-name-type/asset.name.type.controller";
 import * as phoneController from "./site/phone/phone.controller";
 import * as photoController from "./party/photo/photo.controller";
-import * as unitOfMeasureController from "./unit-of-measure/unit.of.measure.controller";
+import * as unitOfMeasurementController from "./unit-of-measurement/unit.of.measurement.controller";
+import * as unitOfMeasurementSystemController from "./unit-of-measurement/unit-of-measurement-system/unit.of.measurement.system.controller";
+import * as unitOfMeasurementDimensionController from "./unit-of-measurement/unit-of-measruement-dimension/unit.of.measurement.dimension.controller";
 import * as dataTypeController from "./data-type/data.type.controller";
 import * as emailController from "./site/email/email.controller";
 import * as siteController from "./site/site.controller";
@@ -128,8 +136,6 @@ router.delete("/access-role-types/:accessRoleTypeId", checkSession, accessRoleTy
 
 // asset-kind
 // router.get("/asset-kinds", checkSession, assetKindController.getAssetKinds);
-// unit-of-measure
-router.get("/unit-of-measures/find", checkSession, unitOfMeasureController.findUnitOfMeasure);
 // data-type
 router.get("/data-types", checkSession, dataTypeController.getDataTypes);
 
@@ -153,22 +159,94 @@ router.put("/asset-specifications/:assetId", checkSession, assetController.updat
 router.put("/asset-brands/:assetId", checkSession, assetController.updateAssetBrand);
 router.put("/asset-characteristics/:assetId", checkSession, assetController.updateAssetChars);
 
-// asset-type
-router.get("/asset-types/find", checkSession, assetTypeController.findAssetTypes);
-router.get("/asset-types", checkSession, assetTypeController.getAssetTypes);
-router.get("/asset-types/:assetTypeId", checkSession, assetTypeController.getAssetTypeById);
-// router.post("/asset-types", checkSession, assetTypeController.saveAssetType);
-router.put("/asset-types/:assetTypeId", checkSession, checkSession, assetTypeController.updateAssetType);
-router.delete("/asset-types/:assetTypeId", checkSession, assetTypeController.deleteAssetType);
+
+// MW New Work: From Here
+// unit-of-measure
+router.get("/unit-of-measurements", checkSession, unitOfMeasurementController.findUnitOfMeasurements);
+router.get('/unit-of-measurements/c', checkSession, unitOfMeasurementController.getUnitOfMeasurements);
+router.get('/unit-of-measurements/search', checkSession, unitOfMeasurementController.findUnitOfMeasurements);
+router.get('/unit-of-measurements/:unitOfMeasurementId', checkSession, unitOfMeasurementController.getUnitOfMeasurementById);
+router.post('/unit-of-measurements', checkSession, unitOfMeasurementController.addUnitOfMeasurement);
+router.put('/unit-of-measurements/:unitOfMeasurementId', checkSession, unitOfMeasurementController.updateUnitOfMeasurement);
+router.delete('/unit-of-measurements/:unitOfMeasurementId', checkSession, unitOfMeasurementController.deleteUnitOfMeasurement);
+
+router.get("/unit-of-measurements/unit-of-measurement-systems", checkSession, unitOfMeasurementSystemController.findUnitOfMeasurementSystems);
+router.get('/unit-of-measurements/unit-of-measurement-systems/c', checkSession, unitOfMeasurementSystemController.getUnitOfMeasurementSystems);
+router.get('/unit-of-measurements/unit-of-measurement-systems/search', checkSession, unitOfMeasurementSystemController.findUnitOfMeasurementSystems);
+router.get('/unit-of-measurements/unit-of-measurement-systems/:unitOfMeasurementSystemId', checkSession, unitOfMeasurementSystemController.getUnitOfMeasurementSystemById);
+router.post('/unit-of-measurements/unit-of-measurement-systems', checkSession, unitOfMeasurementSystemController.addUnitOfMeasurementSystem);
+router.put('/unit-of-measurements/unit-of-measurement-systems/:unitOfMeasurementSystemId', checkSession, unitOfMeasurementSystemController.updateUnitOfMeasurementSystem);
+router.delete('/unit-of-measurements/unit-of-measurement-systems/:unitOfMeasurementSystemId', checkSession, unitOfMeasurementSystemController.deleteUnitOfMeasurementSystem);
+
+
+router.get("/unit-of-measurements/unit-of-measurement-dimensions", checkSession, unitOfMeasurementDimensionController.findUnitOfMeasurementDimensions);
+router.get('/unit-of-measurements/unit-of-measurement-dimensions/c', checkSession, unitOfMeasurementDimensionController.getUnitOfMeasurementDimensions);
+router.get('/unit-of-measurements/unit-of-measurement-dimensions/search', checkSession, unitOfMeasurementDimensionController.findUnitOfMeasurementDimensions);
+router.get('/unit-of-measurements/unit-of-measurement-dimensions/:unitOfMeasurementDimensionId', checkSession, unitOfMeasurementDimensionController.getUnitOfMeasurementDimensionById);
+router.post('/unit-of-measurements/unit-of-measurement-dimensions', checkSession, unitOfMeasurementDimensionController.addUnitOfMeasurementDimension);
+router.put('/unit-of-measurements/unit-of-measurement-dimensions/:unitOfMeasurementDimensionId', checkSession, unitOfMeasurementDimensionController.updateUnitOfMeasurementDimension);
+router.delete('/unit-of-measurements/unit-of-measurement-dimensions/:unitOfMeasurementDimensionId', checkSession, unitOfMeasurementDimensionController.deleteUnitOfMeasurementDimension);
+
 
 // asset role type
-router.post("/assets/asset-role-types", checkSession, assetRoleTypeController.addAssetRoleType);
-router.put("/assets/asset-role-types/:assetRoleTypeId", checkSession, assetRoleTypeController.updateAssetRoleType);
-router.get("/assets/asset-role-types", checkSession, assetRoleTypeController.getAssetRoleTypes);
-router.get("/assets/asset-role-types/:assetRoleTypeId", checkSession, assetRoleTypeController.getAssetRoleTypeById);
-router.post("/assets/asset-role-types/search", checkSession, assetRoleTypeController.findAssetRoleTypes);
-router.delete("/assets/asset-role-types/:assetRoleTypeId", checkSession, assetRoleTypeController.deleteAssetRoleType);
+// TODO: Figure out why GET '/assets/asset-role-types' returns a 404
+router.get('/assets/asset-role-types/c', checkSession, assetRoleTypeController.getAssetRoleTypes);
+router.get('/assets/asset-role-types/search', checkSession, assetRoleTypeController.findAssetRoleTypes);
+router.get('/assets/asset-role-types/:assetRoleTypeId', checkSession, assetRoleTypeController.getAssetRoleTypeById);
+router.post('/assets/asset-role-types', checkSession, assetRoleTypeController.addAssetRoleType);
+router.put('/assets/asset-role-types/:assetRoleTypeId', checkSession, assetRoleTypeController.updateAssetRoleType);
+router.delete('/assets/asset-role-types/:assetRoleTypeId', checkSession, assetRoleTypeController.deleteAssetRoleType);
 
+router.get('/assets/asset-name-types/c', checkSession, assetNameTypeController.getAssetNameTypes);
+router.get('/assets/asset-name-types/search', checkSession, assetNameTypeController.findAssetNameTypes);
+router.get('/assets/asset-name-types/:assetNameTypeId', checkSession, assetNameTypeController.getAssetNameTypeById);
+router.post('/assets/asset-name-types', checkSession, assetNameTypeController.addAssetNameType);
+router.put('/assets/asset-name-types/:assetNameTypeId', checkSession, assetNameTypeController.updateAssetNameType);
+router.delete('/assets/asset-name-types/:assetNameTypeId', checkSession, assetNameTypeController.deleteAssetNameType);
+
+router.get('/assets/asset-identifier-types/c', checkSession, assetIdentifierTypeController.getAssetIdentifierTypes);
+router.get('/assets/asset-identifier-types/search', checkSession, assetIdentifierTypeController.findAssetIdentifierTypes);
+router.get('/assets/asset-identifier-types/:assetIdentifierTypeId', checkSession, assetIdentifierTypeController.getAssetIdentifierTypeById);
+router.post('/assets/asset-identifier-types', checkSession, assetIdentifierTypeController.addAssetIdentifierType);
+router.put('/assets/asset-identifier-types/:assetIdentifierTypeId', checkSession, assetIdentifierTypeController.updateAssetIdentifierType);
+router.delete('/assets/asset-identifier-types/:assetIdentifierTypeId', checkSession, assetIdentifierTypeController.deleteAssetIdentifierType);
+
+router.get('/assets/asset-characteristic-types/c', checkSession, assetCharacteristicTypeController.getAssetCharacteristicTypes);
+router.get('/assets/asset-characteristic-types/search', checkSession, assetCharacteristicTypeController.findAssetCharacteristicTypes);
+router.get('/assets/asset-characteristic-types/:assetCharacteristicTypeId', checkSession, assetCharacteristicTypeController.getAssetCharacteristicTypeById);
+router.post('/assets/asset-characteristic-types', checkSession, assetCharacteristicTypeController.addAssetCharacteristicType);
+router.put('/assets/asset-characteristic-types/:assetCharacteristicTypeId', checkSession, assetCharacteristicTypeController.updateAssetCharacteristicType);
+router.delete('/assets/asset-characteristic-types/:assetCharacteristicTypeId', checkSession, assetCharacteristicTypeController.deleteAssetCharacteristicType);
+
+router.get('/assets/asset-brands/c', checkSession, assetBrandController.getAssetBrands);
+router.get('/assets/asset-brands/search', checkSession, assetBrandController.findAssetBrands);
+router.get('/assets/asset-brands/:assetBrandId', checkSession, assetBrandController.getAssetBrandById);
+router.post('/assets/asset-brands', checkSession, assetBrandController.addAssetBrand);
+router.put('/assets/asset-brands/:assetBrandId', checkSession, assetBrandController.updateAssetBrand);
+router.delete('/assets/asset-brands/:assetBrandId', checkSession, assetBrandController.deleteAssetBrand);
+
+router.get('/assets/asset-category-legal-values/c', checkSession, assetCategoryLegalValueController.getAssetCategoryLegalValues);
+router.get('/assets/asset-category-legal-values/search', checkSession, assetCategoryLegalValueController.findAssetCategoryLegalValues);
+router.get('/assets/asset-category-legal-values/:assetCategoryLegalValueId', checkSession, assetCategoryLegalValueController.getAssetCategoryLegalValueById);
+router.post('/assets/asset-category-legal-values', checkSession, assetCategoryLegalValueController.addAssetCategoryLegalValue);
+router.put('/assets/asset-category-legal-values/:assetCategoryLegalValueId', checkSession, assetCategoryLegalValueController.updateAssetCategoryLegalValue);
+router.delete('/assets/asset-category-legal-values/:assetCategoryLegalValueId', checkSession, assetCategoryLegalValueController.deleteAssetCategoryLegalValue);
+
+router.get('/assets/asset-characteristics/c', checkSession, assetCharacteristicController.getAssetCharacteristics);
+router.get('/assets/asset-characteristics/search', checkSession, assetCharacteristicController.findAssetCharacteristics);
+router.get('/assets/asset-characteristics/:assetCharacteristicId', checkSession, assetCharacteristicController.getAssetCharacteristicById);
+router.post('/assets/asset-characteristics', checkSession, assetCharacteristicController.addAssetCharacteristic);
+router.put('/assets/asset-characteristics/:assetCharacteristicId', checkSession, assetCharacteristicController.updateAssetCharacteristic);
+router.delete('/assets/asset-characteristics/:assetCharacteristicId', checkSession, assetCharacteristicController.deleteAssetCharacteristic);
+
+router.get("/assets/asset-types/c", checkSession, assetTypeController.getAssetTypes);
+router.get("/assets/asset-types/search", checkSession, assetTypeController.findAssetTypes);
+router.get("/assets/asset-types/:assetTypeId", checkSession, assetTypeController.getAssetTypeById);
+router.post('/assets/asset-types', checkSession, assetTypeController.addAssetTypes);
+router.put("/assets/asset-types/:assetTypeId", checkSession, checkSession, assetTypeController.updateAssetType);
+router.delete("/assets/asset-types/:assetTypeId", checkSession, assetTypeController.deleteAssetType);
+
+// MW New Work: TO Here
 
 // site
 router.get("/sites/find", checkSession, siteController.findSite);

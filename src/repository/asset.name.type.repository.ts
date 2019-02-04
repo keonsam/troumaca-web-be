@@ -1,15 +1,23 @@
 import {AssetNameType} from "../data/asset/asset.name.type";
 import {Observable} from "rxjs";
+import {Affect} from "../data/affect";
+import {Sort} from "../util/sort";
+import {Page} from "../util/page";
 
 export interface AssetNameTypeRepository {
 
-  findAssetNameTypes(searchStr: string, pageSize: number): Observable<AssetNameType[]>;
+  addAssetNameType(assetNameType: AssetNameType, headerOptions?:any): Observable<AssetNameType>;
 
-  getAssetNameTypes(pageNumber: number, pageSize: number, order: string): Observable<AssetNameType[]>;
+  updateAssetNameType(assetNameType: AssetNameType, headerOptions?:any): Observable<Affect>;
 
-  getAssetNameTypeCount(): Observable<number>;
+  deleteAssetNameType(assetNameTypeId: string, ownerPartyId: string, headerOptions?:any): Observable<Affect>;
 
-  getAssetNameTypeById(assetId: string): Observable<AssetNameType>;
+  findAssetNameTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?:any): Observable<AssetNameType[]>;
 
-  deleteAssetNameType(assetId: string): Observable<number>;
+  getAssetNameTypes(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetNameType[]>>;
+
+  getAssetNameTypeCount(ownerPartyId: string, headerOptions?:any): Observable<number>;
+
+  getAssetNameTypeById(assetNameTypeId: string, ownerPartyId: string, headerOptions?:any): Observable<AssetNameType>;
+
 }

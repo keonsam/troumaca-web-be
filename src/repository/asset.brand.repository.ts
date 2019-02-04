@@ -1,15 +1,23 @@
 import {AssetBrand} from "../data/asset/asset.brand";
 import {Observable} from "rxjs";
+import {Affect} from "../data/affect";
+import {Sort} from "../util/sort";
+import {Page} from "../util/page";
 
 export interface AssetBrandRepository {
 
-  findAssetBrands(searchStr: string, pageSize: number): Observable<AssetBrand[]>;
+  addAssetBrand(assetBrand: AssetBrand, headerOptions?:any): Observable<AssetBrand>;
 
-  getAssetBrands(pageNumber: number, pageSize: number, order: string): Observable<AssetBrand[]>;
+  updateAssetBrand(assetBrand: AssetBrand, headerOptions?:any): Observable<Affect>;
 
-  getAssetBrandCount(): Observable<number>;
+  deleteAssetBrand(assetBrandId: string, ownerPartyId: string, headerOptions?:any): Observable<Affect>;
 
-  getAssetBrandById(assetId: string): Observable<AssetBrand>;
+  findAssetBrands(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?:any): Observable<AssetBrand[]>;
 
-  deleteAssetBrand(assetId: string): Observable<number>;
+  getAssetBrands(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetBrand[]>>;
+
+  getAssetBrandCount(ownerPartyId: string, headerOptions?: any): Observable<number>;
+
+  getAssetBrandById(assetBrandId: string, ownerPartyId: string, headerOptions?:any): Observable<AssetBrand>;
+
 }

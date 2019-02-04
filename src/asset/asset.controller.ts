@@ -183,10 +183,10 @@ export let updateAsset = (req: Request, res: Response) => {
     });
   }
   assetOrchestrator.updateAsset(req.params.assetId, req.body)
-    .subscribe(affected => {
-      if (affected > 0) {
+    .subscribe(affect => {
+      if (affect.affected > 0) {
         res.status(200);
-        res.send(JSON.stringify(affected));
+        res.send(JSON.stringify(affect));
       } else {
         res.status(404);
         res.send(JSON.stringify({message: "No Data Found For " + req.params.assetId}));
@@ -266,10 +266,10 @@ export let updateAssetChars = (req: Request, res: Response) => {
 
 export let deleteAsset = (req: Request, res: Response) => {
   assetOrchestrator.deleteAsset(req.params.assetId)
-    .subscribe(affected => {
-      if (affected > 0) {
+    .subscribe(affect => {
+      if (affect.affected > 0) {
         res.status(200);
-        res.send(JSON.stringify(affected));
+        res.send(JSON.stringify(affect));
       } else {
         res.status(404);
         res.send(JSON.stringify({message: "No Data Found For " + req.params.assetId}));

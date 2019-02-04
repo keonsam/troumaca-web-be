@@ -1,5 +1,4 @@
 import {createAssetRepositoryFactory} from "../adapter/asset/asset.repository.factory";
-import {shapeAssetsResponse} from "./asset.response.shaper";
 import {getSortOrderOrDefault} from "../sort.order.util";
 import {AssetRepository} from "../repository/asset.repository";
 import {Asset} from "../data/asset/asset";
@@ -9,6 +8,7 @@ import {Result} from "../result.success";
 import { AssetCharacteristic } from "../data/asset/asset.characteristic";
 import { AssetBrand } from "../data/asset/asset.brand";
 import { AssetSpecification } from "../data/asset/asset.specification";
+import {Affect} from "../data/affect";
 
 export class AssetOrchestrator {
 
@@ -24,16 +24,17 @@ export class AssetOrchestrator {
 
   getAssets(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
     const sort: string = getSortOrderOrDefault(field, direction);
-    return this.assetRepository
-        .getAssets(number, size, sort)
-        .pipe(switchMap((assets: Asset[]) => {
-            return this.assetRepository
-                .getAssetCount()
-                .pipe(map((count: number) => {
-                    const shapeAssetsResp: any = shapeAssetsResponse(assets, number, size, assets.length, count, sort);
-                    return new Result<any>(false, "assets", shapeAssetsResp);
-                }));
-        }));
+    // return this.assetRepository
+    //     .getAssets(number, size, sort)
+    //     .pipe(switchMap((assets: Asset[]) => {
+    //         return this.assetRepository
+    //             .getAssetCount()
+    //             .pipe(map((count: number) => {
+    //                 const shapeAssetsResp: any = shapeAssetsResponse(assets, number, size, assets.length, count, sort);
+    //                 return new Result<any>(false, "assets", shapeAssetsResp);
+    //             }));
+    //     }));
+    return null;
   }
 
   getAssetById(assetId: string): Observable<Asset> {
@@ -68,7 +69,7 @@ export class AssetOrchestrator {
     return this.assetRepository.addAssetCharacteristics(asset);
   }
 
-  updateAsset(assetId: string, asset: Asset): Observable<number> {
+  updateAsset(assetId: string, asset: Asset): Observable<Affect> {
     return this.assetRepository.updateAsset(assetId, asset);
   }
 
@@ -84,7 +85,7 @@ export class AssetOrchestrator {
     return this.assetRepository.updateAssetChars(assetId, asset);
   }
 
-  deleteAsset(assetId: string): Observable<number> {
+  deleteAsset(assetId: string): Observable<Affect> {
     return this.assetRepository.deleteAsset(assetId);
   }
 

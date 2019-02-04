@@ -3,7 +3,6 @@ import {Asset} from "./asset";
 import {AssetType} from "./asset.type";
 
 export class AssetRole {
-
   assetRoleId: string;
   assetRoleType: AssetRoleType;
   partyId: string;

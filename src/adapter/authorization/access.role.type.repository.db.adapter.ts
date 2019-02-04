@@ -4,6 +4,7 @@ import {AccessRoleType} from "../../data/authorization/access.role.type";
 import {Observable, Observer} from "rxjs";
 import {generateUUID} from "../../uuid.generator";
 import {calcSkip} from "../../db.util";
+import {Affect} from "../../data/affect";
 
 export class AccessRoleTypeRepositoryDbAdapter implements AccessRoleTypeRepository {
 
@@ -66,14 +67,14 @@ export class AccessRoleTypeRepositoryDbAdapter implements AccessRoleTypeReposito
     });
   }
 
-  deleteAccessRoleType(accessRoleTypeId: string): Observable<number> {
-    return Observable.create(function (observer: Observer<number>) {
+  deleteAccessRoleType(accessRoleTypeId: string): Observable<Affect> {
+    return Observable.create(function (observer: Observer<Affect>) {
       const query = {
         "accessRoleTypeId": accessRoleTypeId
       };
       accessRoleTypes.remove(query, {}, function (err: any, numRemoved: number) {
         if (!err) {
-          observer.next(numRemoved);
+          observer.next(new Affect(numRemoved));
         } else {
           observer.error(err);
         }
@@ -114,14 +115,14 @@ export class AccessRoleTypeRepositoryDbAdapter implements AccessRoleTypeReposito
     });
   }
 
-  updateAccessRoleType(accessRoleTypeId: string, accessRoleType: AccessRoleType): Observable<number> {
-    return Observable.create(function (observer: Observer<number>) {
+  updateAccessRoleType(accessRoleTypeId: string, accessRoleType: AccessRoleType): Observable<Affect> {
+    return Observable.create(function (observer: Observer<Affect>) {
       const query = {
         "accessRoleTypeId": accessRoleTypeId
       };
       accessRoleTypes.update(query, accessRoleType, {}, function (err: any, numReplaced: number) {
         if (!err) {
-          observer.next(numReplaced);
+          observer.next(new Affect(numReplaced));
         } else {
           observer.error(err);
         }
