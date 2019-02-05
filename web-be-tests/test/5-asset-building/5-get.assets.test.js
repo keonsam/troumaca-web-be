@@ -5,15 +5,14 @@ const supertest = require('supertest');
 const api = supertest(host);
 const request = require('request');
 
-describe('6-get-asset-type-search', function () {
+describe('5-get-asset-buildings', function () {
 
   this.timeout(5000);
 
   const ownerPartyId = "854757a6-8ae3-4a6a-ab41-c29479ad76a9";
 
-  it('get asset type search', function (done) {
-    let query = "ufac";
-    api.get('/assets/asset-types/search?q=' + query)
+  it('get assets building', function (done) {
+    api.get('/assets/assets/c')
       .set('Correlation-ID', 1234567890)
       .set('Owner-Party-ID', ownerPartyId)
       .expect('Content-Type', /json/)
@@ -21,7 +20,7 @@ describe('6-get-asset-type-search', function () {
       .end(function (err, res) {
         if (!err) {
           for (var i = 0; i < res.body.length; i++) {
-            expect(res.body[i].name).to.be.contain(query);
+            expect(res.body[i].ownerPartyId).to.be.equal(ownerPartyId);
           }
         }
         done(err);

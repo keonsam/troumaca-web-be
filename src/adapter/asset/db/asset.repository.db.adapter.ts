@@ -1,125 +1,52 @@
 import {AssetRepository} from "../../../repository/asset.repository";
 import {Asset} from "../../../data/asset/asset";
 import {generateUUID} from "../../../uuid.generator";
-import { assetBrands, assets, assetSpecifications } from "../../../db";
-import {calcSkip} from "../../../db.util";
 import {Observable, Observer} from "rxjs";
-import { AssetSpecification } from "../../../data/asset/asset.specification";
-import { AssetBrand } from "../../../data/asset/asset.brand";
-import { AssetCharacteristic } from "../../../data/asset/asset.characteristic";
 import {Affect} from "../../../data/affect";
+import {Sort} from "../../../util/sort";
+import {Page} from "../../../util/page";
+import {assets} from "../../../db";
+import {SkipGenerator} from "../../util/skip.generator";
+import {SortGenerator} from "../../util/sort.generator";
 
 export class AssetRepositoryNeDbAdapter implements AssetRepository {
-
-    private defaultPageSize: number = 10;
 
     constructor() {
     }
 
-    addAsset(asset: Asset): Observable<Asset> {
-        return null
+    addAsset(asset: Asset, headerOptions?: any): Observable<Asset> {
+        return this.addAssetInternal(asset, headerOptions);
     }
 
-    findAssets(searchStr: string, pageSize: number): Observable<Asset[]> {
-        const searchStrLocal = new RegExp(searchStr);
-        const query = searchStr ? {name: {$regex: searchStrLocal}} : {};
-        return Observable.create((observer: Observer<Asset[]>) => {
-            assets.find(query).limit(pageSize).exec((err: any, docs: any) => {
-                if (!err) {
-                    observer.next(docs);
-                } else {
-                    observer.error(err);
-                }
-                observer.complete();
-            });
-        });
+    updateAsset(asset: Asset, headerOptions?: any): Observable<Affect> {
+        return this.updateAssetInternal(asset, headerOptions);
     }
 
-    getAssets(pageNumber: number, pageSize: number, order: string): Observable<Asset[]> {
-        const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
-        return Observable.create((observer: Observer<Asset[]>) => {
-            assets.find({}).skip(skip).limit(pageSize).exec(function (err: any, docs: any) {
-                if (!err) {
-                    observer.next(docs);
-                } else {
-                    observer.error(err);
-                }
-                observer.complete();
-            });
-        });
+    deleteAsset(assetId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
+        return this.deleteAssetInternal(assetId, ownerPartyId, headerOptions);
     }
 
-    getAssetCount(): Observable<number> {
-        return Observable.create(function (observer: Observer<number>) {
-            assets.count({}, function (err: any, count: number) {
-                if (!err) {
-                    observer.next(count);
-                } else {
-                    observer.error(err);
-                }
-                observer.complete();
-            });
-        });
+    findAssets(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<Asset[]> {
+        return this.findAssetsInternal(ownerPartyId, searchStr, pageNumber, pageSize, headerOptions);
     }
 
-    getAssetById(assetId: string): Observable<Asset> {
-        return Observable.create((observer: Observer<Asset>) => {
-            const query = {"assetId": assetId};
-            assets.findOne(query, function (err: any, doc: any) {
-                if (!err) {
-                    observer.next(doc);
-                } else {
-                    observer.error(err);
-                }
-                observer.complete();
-            });
-        });
+    getAssetById(assetId: string, ownerPartyId: string, headerOptions?: any): Observable<Asset> {
+        return this.getAssetByIdInternal(assetId, ownerPartyId, headerOptions);
     }
 
-    getAssetSpecById(assetId: string): Observable<AssetSpecification> {
-        return Observable.create((observer: Observer<AssetSpecification>) => {
-            const query = {"assetId": assetId};
-            assetSpecifications.findOne(query, function (err: any, doc: any) {
-                if (!err) {
-                    observer.next(doc);
-                } else {
-                    observer.error(err);
-                }
-                observer.complete();
-            });
-        });
+    getAssetCount(ownerPartyId:string, headerOptions?: any): Observable<number> {
+        return this.getAssetCountInternal(ownerPartyId, headerOptions);
     }
 
-    getAssetBrandById(assetId: string): Observable<AssetBrand> {
-        return Observable.create((observer: Observer<AssetBrand>) => {
-            const query = {"assetId": assetId};
-            assetBrands.findOne(query, function (err: any, doc: any) {
-                if (!err) {
-                    observer.next(doc);
-                } else {
-                    observer.error(err);
-                }
-                observer.complete();
-            });
-        });
+    getAssets(ownerPartyId:string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<Asset[]>> {
+        return this.getAssetsInternal(ownerPartyId, pageNumber, pageSize, sort, headerOptions);
     }
 
-    getAssetCharacteristicsById(assetId: string): Observable<AssetCharacteristic> {
-        return Observable.create((observer: Observer<AssetCharacteristic>) => {
-            const query = {"assetId": assetId};
-            // assetChars.findOne(query, function (err: any, doc: any) {
-            //     if (!err) {
-            //         observer.next(doc);
-            //     } else {
-            //         observer.error(err);
-            //     }
-                observer.complete();
-            // });
-        });
-    }
-
-    saveAsset(asset: Asset): Observable<Asset> {
+    addAssetInternal(asset: Asset, headerOptions?: any): Observable<Asset> {
         asset.assetId = generateUUID();
+        asset.version = generateUUID();
+        asset.dateModified = new Date();
+
         return Observable.create(function (observer: Observer<Asset>) {
             assets.insert(asset, function (err: any, doc: any) {
                 if (err) {
@@ -132,126 +59,111 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
         });
     }
 
-    addAssetSpec(asset: AssetSpecification): Observable<AssetSpecification> {
-        return Observable.create(function (observer: Observer<AssetSpecification>) {
-            assetSpecifications.insert(asset, function (err: any, doc: any) {
-                if (err) {
-                    observer.error(err);
-                } else {
-                    observer.next(doc);
-                }
-                observer.complete();
-            });
-        });
-    }
+    updateAssetInternal(asset: Asset, headerOptions?: any): Observable<Affect> {
+        asset.version = generateUUID();
+        asset.dateModified = new Date();
 
-    addAssetBrand(asset: AssetBrand): Observable<AssetBrand> {
-        return Observable.create(function (observer: Observer<AssetBrand>) {
-            assetBrands.insert(asset, function (err: any, doc: any) {
-                if (err) {
-                    observer.error(err);
-                } else {
-                    observer.next(doc);
-                }
-                observer.complete();
-            });
-        });
-    }
-
-    addAssetCharacteristics(asset: AssetCharacteristic): Observable<AssetCharacteristic> {
-        return Observable.create(function (observer: Observer<AssetCharacteristic>) {
-            // assetChars.insert(asset, function (err: any, doc: any) {
-            //     if (err) {
-            //         observer.error(err);
-            //     } else {
-            //         observer.next(doc);
-            //     }
-                observer.complete();
-            // });
-        });
-    }
-
-    updateAsset(assetId: string, asset: Asset): Observable<Affect> {
-        const query = {assetId};
         return Observable.create(function (observer: Observer<Affect>) {
-            assets.update(query, asset, {}, function (err: any, numReplaced: number) {
-                if (!err) {
-                    observer.next(new Affect(numReplaced));
-                } else {
-                    observer.error(err);
-                }
-                observer.complete();
-            });
+            assets.update(
+              {assetId:asset.assetId, ownerPartyId:asset.ownerPartyId},
+              asset,
+              { upsert: true },
+              function (err:any, numReplaced:number, upsert:any) {
+                  if (err) {
+                      observer.error(err);
+                  } else {
+
+                      observer.next(new Affect(numReplaced));
+                  }
+                  observer.complete();
+              });
         });
     }
 
-    updateAssetSpec(assetId: string, asset: AssetSpecification): Observable<number> {
-        const query = {assetId};
-        return Observable.create(function (observer: Observer<number>) {
-            assetSpecifications.update(query, asset, {}, function (err: any, numReplaced: number) {
-                if (!err) {
-                    observer.next(numReplaced);
-                } else {
-                    observer.error(err);
-                }
-                observer.complete();
-            });
-        });
-    }
-
-    updateAssetBrand(assetId: string, asset: AssetBrand): Observable<number> {
-        const query = {assetId};
-        return Observable.create(function (observer: Observer<number>) {
-            assetBrands.update(query, asset, {}, function (err: any, numReplaced: number) {
-                if (!err) {
-                    observer.next(numReplaced);
-                } else {
-                    observer.error(err);
-                }
-                observer.complete();
-            });
-        });
-    }
-
-    updateAssetChars(assetId: string, asset: AssetCharacteristic): Observable<number> {
-        const query = {assetId};
-        return Observable.create(function (observer: Observer<number>) {
-            // assetChars.update(query, asset, {}, function (err: any, numReplaced: number) {
-            //     if (!err) {
-            //         observer.next(numReplaced);
-            //     } else {
-            //         observer.error(err);
-            //     }
-                observer.complete();
-            // });
-        });
-    }
-
-    deleteAsset(assetId: string): Observable<Affect> {
-        const query = {assetId};
+    deleteAssetInternal(assetId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
         return Observable.create(function (observer: Observer<Affect>) {
-            assets.remove(query, {}, function (err: any, numRemoved: number) {
-                if (!err) {
-                    observer.next(new Affect(numRemoved));
-                } else {
-                    observer.error(err);
-                }
-                observer.complete();
+            assets.remove(
+              {assetId:assetId, ownerPartyId:ownerPartyId},
+              { multi: true },
+              function (err:any, numRemoved:number) {
+                  if (err) {
+                      observer.error(err);
+                  } else {
+                      observer.next(new Affect(numRemoved));
+                  }
+                  observer.complete();
+              });
+        });
+    }
+
+    findAssetsInternal(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<Asset[]> {
+        return Observable.create(function (observer: Observer<Asset[]>) {
+            assets.count({ ownerPartyId: ownerPartyId }, function (err, count) {
+                let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+                assets.find({ownerPartyId: ownerPartyId, name: new RegExp(searchStr) })
+                  .skip(skipAmount)
+                  .limit(pageSize)
+                  .exec(
+                    (err: any, docs: any) => {
+                        if (!err) {
+                            observer.next(docs);
+                        } else {
+                            observer.error(err);
+                        }
+                        observer.complete();
+                    })
             });
         });
     }
 
-    // USED BY OTHER REPOS
-    getAssetsByIds(assetIds: string[]): Observable<Asset[]> {
-        return Observable.create((observer: Observer<Asset[]>) => {
-            assets.find({assetId: {$in: assetIds}}, function (err: any, docs: any) {
-                if (!err) {
-                    observer.next(docs);
-                } else {
-                    observer.error(err);
-                }
-                observer.complete();
-            });
+    getAssetByIdInternal(assetId: string, ownerPartyId: string, headerOptions?: any): Observable<Asset> {
+        return Observable.create(function (observer: Observer<Asset>) {
+            assets.find(
+              {assetId:assetId, ownerPartyId:ownerPartyId},
+              (err: any, docs: any) => {
+                  if (!err) {
+                      observer.next(docs[0]);
+                  } else {
+                      observer.error(err);
+                  }
+                  observer.complete();
+              })
         });
     }
+
+    getAssetCountInternal(ownerPartyId:string, headerOptions?: any): Observable<number> {
+        return Observable.create(function (observer: Observer<number>) {
+            assets.count(
+              {ownerPartyId:ownerPartyId},
+              (err: any, count: any) => {
+                  if (!err) {
+                      observer.next(count);
+                  } else {
+                      observer.error(err);
+                  }
+                  observer.complete();
+              })
+        });
+    }
+
+    getAssetsInternal(ownerPartyId:string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<Asset[]>> {
+        return Observable.create(function (observer: Observer<Page<Asset[]>>) {
+            assets.count({ ownerPartyId: ownerPartyId }, function (err, count) {
+                let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+                let generate = SortGenerator.generate(sort);
+                assets.find({ownerPartyId:ownerPartyId})
+                  .skip(skipAmount)
+                  .limit(pageSize)
+                  .exec((err: any, docs: any) => {
+                      if (!err) {
+                          observer.next(docs);
+                      } else {
+                          observer.error(err);
+                      }
+                      observer.complete();
+                  });
+            })
+        });
+    }
+
 }

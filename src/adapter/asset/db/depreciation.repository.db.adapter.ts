@@ -34,78 +34,81 @@ export class DepreciationRepositoryNeDbAdapter implements DepreciationRepository
   }
 
   getBookDepreciationArr(pageNumber: number, pageSize: number, order: string): Observable<Depreciation[]> {
-    const depreciationFormula: DepreciationFormula = new DepreciationFormula();
-    return this.getDepreciationArrList(pageNumber, pageSize, order)
-      .pipe(switchMap(depreciationArr => {
-        const assetIds: string[] = [];
-        const methodIds: string[] = [];
-        depreciationArr.forEach(value => {
-          assetIds.push(value.assetId);
-          if (methodIds.indexOf(value.methodId) === -1) {
-            methodIds.push(value.methodId);
-          }
-        });
-        return this.assetRepositoryNeDbAdapter.getAssetsByIds(assetIds)
-          .pipe(switchMap(assets => {
-            return this.getDepreciationMethodsByIds(methodIds)
-              .pipe(map(methods => {
-                depreciationArr.forEach(value => {
-                  // const index = assets.findIndex(x => x.assetId === value.assetId);
-                  // value.assetName = index !== -1 ? assets[index].assetTypeName : "";
-                  value.methodName = methods.find(x => x.methodId == value.methodId).name;
-                  const currentDepreciation = depreciationFormula.getCurrentDepreciation(value);
-                  value.currentDepreciation = currentDepreciation.toString();
-                  const cumulativeDepreciation = depreciationFormula.getCumulativeDepreciation(value, currentDepreciation);
-                  value.cumulativeDepreciation = cumulativeDepreciation.toString();
-                  const bookValue = depreciationFormula.getBookValue(parseFloat(value.cost), cumulativeDepreciation);
-                  value.bookValue = bookValue.toString();
-                });
-                return depreciationArr;
-              }));
-          }));
-      }));
+    // const depreciationFormula: DepreciationFormula = new DepreciationFormula();
+    // return this.getDepreciationArrList(pageNumber, pageSize, order)
+    //   .pipe(switchMap(depreciationArr => {
+    //     const assetIds: string[] = [];
+    //     const methodIds: string[] = [];
+    //     depreciationArr.forEach(value => {
+    //       assetIds.push(value.assetId);
+    //       if (methodIds.indexOf(value.methodId) === -1) {
+    //         methodIds.push(value.methodId);
+    //       }
+    //     });
+    //     return this.assetRepositoryNeDbAdapter.getAssetsByIds(assetIds)
+    //       .pipe(switchMap(assets => {
+    //         return this.getDepreciationMethodsByIds(methodIds)
+    //           .pipe(map(methods => {
+    //             depreciationArr.forEach(value => {
+    //               // const index = assets.findIndex(x => x.assetId === value.assetId);
+    //               // value.assetName = index !== -1 ? assets[index].assetTypeName : "";
+    //               value.methodName = methods.find(x => x.methodId == value.methodId).name;
+    //               const currentDepreciation = depreciationFormula.getCurrentDepreciation(value);
+    //               value.currentDepreciation = currentDepreciation.toString();
+    //               const cumulativeDepreciation = depreciationFormula.getCumulativeDepreciation(value, currentDepreciation);
+    //               value.cumulativeDepreciation = cumulativeDepreciation.toString();
+    //               const bookValue = depreciationFormula.getBookValue(parseFloat(value.cost), cumulativeDepreciation);
+    //               value.bookValue = bookValue.toString();
+    //             });
+    //             return depreciationArr;
+    //           }));
+    //       }));
+    //   }));
+
+    return null;
   }
 
   getTaxDepreciationArr(pageNumber: number, pageSize: number, order: string): Observable<Depreciation[]> {
-    return this.getTaxDepreciationArrList(pageNumber, pageSize, order)
-      .pipe(switchMap(depreciationArr => {
-        const assetIds: string[] = [];
-        const methodIds: string[] = [];
-        const systemIds: string[] = [];
-        const propertyClassIds: string[] = [];
-        depreciationArr.forEach(x => {
-          assetIds.push(x.assetId);
-          if (methodIds.indexOf(x.methodId) === -1) {
-            methodIds.push(x.methodId);
-          }
-          if (systemIds.indexOf(x.systemId) === -1) {
-            systemIds.push(x.systemId);
-          }
-          if (propertyClassIds.indexOf(x.propertyClassId) === -1) {
-            propertyClassIds.push(x.propertyClassId);
-          }
-        });
-        return this.assetRepositoryNeDbAdapter.getAssetsByIds(assetIds)
-          .pipe(switchMap(assets => {
-            return this.getDepreciationMethodsByIds(methodIds)
-              .pipe(switchMap(methods => {
-                return this.getDepreciationSystemsByIds(systemIds)
-                  .pipe(switchMap(systems => {
-                    return this.getPropertyClassesByIds(propertyClassIds)
-                      .pipe(map(propertyClassArr => {
-                        depreciationArr.forEach(x => {
-                          x.methodName = methods.find(i => i.methodId === x.methodId).name;
-                          x.depreciationSystemName = systems.find(i => i.systemId === x.systemId).name;
-                          x.propertyClassName = propertyClassArr.find(i => i.propertyClassId === x.propertyClassId).name;
-                          // const index = assets.findIndex(i => i.assetId === x.assetId);
-                          // x.assetName = index !== -1 ? assets[index].assetTypeName : "";
-                        });
-                        return depreciationArr;
-                      }));
-                  }));
-              }));
-          }));
-      }));
+    // return this.getTaxDepreciationArrList(pageNumber, pageSize, order)
+    //   .pipe(switchMap(depreciationArr => {
+    //     const assetIds: string[] = [];
+    //     const methodIds: string[] = [];
+    //     const systemIds: string[] = [];
+    //     const propertyClassIds: string[] = [];
+    //     depreciationArr.forEach(x => {
+    //       assetIds.push(x.assetId);
+    //       if (methodIds.indexOf(x.methodId) === -1) {
+    //         methodIds.push(x.methodId);
+    //       }
+    //       if (systemIds.indexOf(x.systemId) === -1) {
+    //         systemIds.push(x.systemId);
+    //       }
+    //       if (propertyClassIds.indexOf(x.propertyClassId) === -1) {
+    //         propertyClassIds.push(x.propertyClassId);
+    //       }
+    //     });
+    //     return this.assetRepositoryNeDbAdapter.getAssetsByIds(assetIds)
+    //       .pipe(switchMap(assets => {
+    //         return this.getDepreciationMethodsByIds(methodIds)
+    //           .pipe(switchMap(methods => {
+    //             return this.getDepreciationSystemsByIds(systemIds)
+    //               .pipe(switchMap(systems => {
+    //                 return this.getPropertyClassesByIds(propertyClassIds)
+    //                   .pipe(map(propertyClassArr => {
+    //                     depreciationArr.forEach(x => {
+    //                       x.methodName = methods.find(i => i.methodId === x.methodId).name;
+    //                       x.depreciationSystemName = systems.find(i => i.systemId === x.systemId).name;
+    //                       x.propertyClassName = propertyClassArr.find(i => i.propertyClassId === x.propertyClassId).name;
+    //                       // const index = assets.findIndex(i => i.assetId === x.assetId);
+    //                       // x.assetName = index !== -1 ? assets[index].assetTypeName : "";
+    //                     });
+    //                     return depreciationArr;
+    //                   }));
+    //               }));
+    //           }));
+    //       }));
+    //   }));
+    return null;
   }
 
   getDepreciationCount(): Observable<number> {
@@ -135,18 +138,19 @@ export class DepreciationRepositoryNeDbAdapter implements DepreciationRepository
   }
 
   getDepreciationById(depreciationId: string, type: string): Observable<Depreciation> {
-    return this.getDepreciationByIdLocal(depreciationId, type)
-      .pipe(switchMap(depreciation => {
-        if (!depreciation) {
-          return of(depreciation);
-        } else {
-          return this.assetRepositoryNeDbAdapter.getAssetById(depreciation.assetId)
-            .pipe(map(asset => {
-              // depreciation.assetName = asset.assetTypeName;
-              return depreciation;
-            }));
-        }
-      }));
+    // return this.getDepreciationByIdLocal(depreciationId, type)
+    //   .pipe(switchMap(depreciation => {
+    //     if (!depreciation) {
+    //       return of(depreciation);
+    //     } else {
+    //       return this.assetRepositoryNeDbAdapter.getAssetById(depreciation.assetId)
+    //         .pipe(map(asset => {
+    //           // depreciation.assetName = asset.assetTypeName;
+    //           return depreciation;
+    //         }));
+    //     }
+    //   }));
+    return null;
   }
 
   saveDepreciation(depreciation: Depreciation, type: string): Observable<Depreciation> {

@@ -5,14 +5,14 @@ const supertest = require('supertest');
 const api = supertest(host);
 const request = require('request');
 
-describe('5-get-asset-types', function () {
+describe('5-get-asset-inventories', function () {
 
   this.timeout(5000);
 
   const ownerPartyId = "854757a6-8ae3-4a6a-ab41-c29479ad76a9";
 
-  it('get asset types', function (done) {
-    api.get('/assets/asset-types/c')
+  it('get asset inventories', function (done) {
+    api.get('/assets/assets/c')
       .set('Correlation-ID', 1234567890)
       .set('Owner-Party-ID', ownerPartyId)
       .expect('Content-Type', /json/)

@@ -1,13 +1,12 @@
 import {Asset} from "./asset";
 
-export class LotAsset extends Asset {
+export class Lot extends Asset {
 
   lotNumber: string;
   numberOfShares: number;
 
   constructor() {
     super();
-    this.typeName = "lot";
   }
 
 }

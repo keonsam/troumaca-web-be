@@ -5,44 +5,47 @@ const supertest = require('supertest');
 const api = supertest(host);
 const request = require('request');
 
-describe('3-delete-asset-type', function () {
+describe('3-delete-asset-inventory', function () {
 
   this.timeout(5000);
 
-  const assetType = {
-    assetTypeId: null,
-    name: "HOB Sunset",
-    canonicalName: "hob_sunset",
-    description: "HOB Sunset",
-    ownerPartyId: "854757a6-8ae3-4a6a-ab41-c29479ad76a9",
+  const ownerPartyId = "854757a6-8ae3-4a6a-ab41-c29479ad76a9";
+
+  const inventory = {
+    assetId: null,
+    name: "Some Product",
+    description: "Some Product Description",
+    inventoryId: "8745692",
+    quantity: 10,
+    ownerPartyId: ownerPartyId,
     dateModified: null,
   };
 
   beforeEach(function() {
     var options = {
-      uri: host + '/assets/asset-types',
+      uri: host + '/assets/assets',
       method: 'POST',
-      json: assetType
+      json: inventory
     };
 
     return new Promise(resolve => {
       request(options, function (error, response, body) {
         if (!error) {
-          assetType.assetTypeId = body.assetTypeId;
-          assetType.version = body.version;
-          assetType.ownerPartyId = body.ownerPartyId;
-          assetType.dateModified = body.dateModified;
+          inventory.assetId = body.assetId;
+          inventory.version = body.version;
+          inventory.ownerPartyId = body.ownerPartyId;
+          inventory.dateModified = body.dateModified;
         }
         resolve();
       });
     })
   });
 
-  it('delete asset type', function (done) {
-    api.delete("/assets/asset-types/" + assetType.assetTypeId)
+  it('delete asset inventory', function (done) {
+    api.delete("/assets/assets/" + inventory.assetId)
       .set('Accept', 'application/json')
       .set('Correlation-ID', 1234567890)
-      .set('Owner-Party-ID', assetType.ownerPartyId)
+      .set('Owner-Party-ID', inventory.ownerPartyId)
       .expect('Content-Type', /json/)
       .expect(200)
       .end(function (err, res) {

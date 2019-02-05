@@ -1,39 +1,26 @@
 import {AssetTypeRepository} from "../../../repository/asset.type.repository";
 import {Observable, Observer, of} from "rxjs";
-import {switchMap, map} from "rxjs/operators";
+// import {switchMap, map} from "rxjs/operators";
 import {AssetType} from "../../../data/asset/asset.type";
 import {assetTypes} from "../../../db";
 import {generateUUID} from "../../../uuid.generator";
 import {Affect} from "../../../data/affect";
 import {Page} from "../../../util/page";
 import {Sort} from "../../../util/sort";
-import {AssetIdentifierType} from "../../../data/asset/asset.identifier.type";
 import {SkipGenerator} from "../../util/skip.generator";
 import {SortGenerator} from "../../util/sort.generator";
-import {AssetSpecificationRepository} from "../../../repository/asset.specification.repository";
-import {OtherAssetTypeRepository} from "../../../repository/other.asset.type.repository";
-import {AssetSpecification} from "../../../data/asset/asset.specification";
-import {OtherAssetType} from "../../../data/asset/other.asset.type";
 
 export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
 
-  constructor(private assetSpecificationRepository: AssetSpecificationRepository,
-              private otherAssetTypeRepository: OtherAssetTypeRepository) {
+  constructor() {
   }
 
   addAssetType(assetType: AssetType, headerOptions?: any): Observable<AssetType> {
-    return this.addAssetTypeInternal(assetType, headerOptions)
-      .pipe(switchMap(assetType => {
-        if (assetType.typeName == "specification") {
-          return this.assetSpecificationRepository.addAssetSpecification(assetType as AssetSpecification);
-        } else {
-          return this.otherAssetTypeRepository.addOtherAssetType(assetType as OtherAssetType);
-        }
-      }))
+    return this.addAssetTypeInternal(assetType, headerOptions);
   }
 
   updateAssetType(assetType: AssetType, headerOptions?: any): Observable<Affect> {
-    return this.updateAssetTypeInternal(assetType, headerOptions)
+    return this.updateAssetTypeInternal(assetType, headerOptions);
   }
 
   deleteAssetType(assetTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
@@ -111,7 +98,7 @@ export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
   }
 
   findAssetTypesInternal(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetType[]> {
-    return Observable.create(function (observer: Observer<AssetIdentifierType[]>) {
+    return Observable.create(function (observer: Observer<AssetType[]>) {
       assetTypes.count({ ownerPartyId: ownerPartyId }, function (err, count) {
         let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
         assetTypes.find({ownerPartyId: ownerPartyId, name: new RegExp(searchStr) })
@@ -131,7 +118,7 @@ export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
   }
 
   getAssetTypeByIdInternal(assetTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetType> {
-    return Observable.create(function (observer: Observer<AssetIdentifierType>) {
+    return Observable.create(function (observer: Observer<AssetType>) {
       assetTypes.find(
         {assetTypeId:assetTypeId, ownerPartyId:ownerPartyId},
         (err: any, docs: any) => {

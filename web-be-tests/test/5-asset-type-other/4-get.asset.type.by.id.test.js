@@ -5,11 +5,11 @@ const supertest = require('supertest');
 const api = supertest(host);
 const request = require('request');
 
-describe('4-get-asset-type-by-id', function () {
+describe('4-get-other-asset-type-by-id', function () {
 
   this.timeout(5000);
 
-  const assetType = {
+  const otherAssetType = {
     assetTypeId: null,
     name: "Manufacturer",
     canonicalName: "manufacturer",
@@ -23,35 +23,35 @@ describe('4-get-asset-type-by-id', function () {
     var options = {
       uri: host + '/assets/asset-types',
       method: 'POST',
-      json: assetType
+      json: otherAssetType
     };
 
     return new Promise(function(resolve) {
       request(options, function (error, response, body) {
         if (!error) {
-          assetType.assetTypeId = body.assetTypeId;
-          assetType.version = body.version;
-          assetType.ownerPartyId = body.ownerPartyId;
-          assetType.dateModified = body.dateModified;
+          otherAssetType.assetTypeId = body.assetTypeId;
+          otherAssetType.version = body.version;
+          otherAssetType.ownerPartyId = body.ownerPartyId;
+          otherAssetType.dateModified = body.dateModified;
         }
         resolve();
       });
     });
   });
 
-  it('get asset type', function (done) {
-    api.get("/assets/asset-types/" + assetType.assetTypeId)
+  it('get other asset type', function (done) {
+    api.get("/assets/asset-types/" + otherAssetType.assetTypeId)
       .set('Correlation-ID', 1234567890)
-      .set('Owner-Party-ID', assetType.ownerPartyId)
+      .set('Owner-Party-ID', otherAssetType.ownerPartyId)
       .expect('Content-Type', /json/)
       .expect(200)
       .end(function (err, res) {
         if (!err) {
-          expect(res.body.assetTypeId).to.be.equal(assetType.assetTypeId);
-          expect(res.body.name).to.be.equal(assetType.name);
-          expect(res.body.description).to.be.equal(assetType.description);
-          expect(res.body.version).to.be.equal(assetType.version);
-          expect(res.body.dateModified).to.be.equal(assetType.dateModified);
+          expect(res.body.assetTypeId).to.be.equal(otherAssetType.assetTypeId);
+          expect(res.body.name).to.be.equal(otherAssetType.name);
+          expect(res.body.description).to.be.equal(otherAssetType.description);
+          expect(res.body.version).to.be.equal(otherAssetType.version);
+          expect(res.body.dateModified).to.be.equal(otherAssetType.dateModified);
         }
         done(err);
       });

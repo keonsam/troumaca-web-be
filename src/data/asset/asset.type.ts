@@ -1,6 +1,6 @@
 export class AssetType {
     assetTypeId: string;
-    typeName: String;
+    specification: boolean;
     name: string;
     description: string;
     version: string;

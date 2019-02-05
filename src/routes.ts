@@ -139,26 +139,6 @@ router.delete("/access-role-types/:accessRoleTypeId", checkSession, accessRoleTy
 // data-type
 router.get("/data-types", checkSession, dataTypeController.getDataTypes);
 
-// asset
-router.get("/assets/find", checkSession, assetController.findAssets);
-router.get("/assets", checkSession, assetController.getAssets);
-router.get("/assets/:assetId", checkSession, assetController.getAssetById);
-router.post("/assets", checkSession, assetController.saveAsset);
-router.put("/assets/:assetId", checkSession, assetController.updateAsset);
-router.delete("/assets/:assetId", checkSession, assetController.deleteAsset);
-
-router.get("/asset-specifications/:assetId", checkSession, assetController.getAssetSpecById);
-router.get("/asset-brands/:assetId", checkSession, assetController.getAssetBrandById);
-router.get("/asset-characteristics/:assetId", checkSession, assetController.getAssetCharacteristicsById);
-
-router.post("/asset-specifications", checkSession, assetController.addAssetSpec);
-router.post("/asset-brands", checkSession, assetController.addAssetBrand);
-router.post("/asset-characteristics", checkSession, assetController.addAssetCharacteristics);
-
-router.put("/asset-specifications/:assetId", checkSession, assetController.updateAssetSpec);
-router.put("/asset-brands/:assetId", checkSession, assetController.updateAssetBrand);
-router.put("/asset-characteristics/:assetId", checkSession, assetController.updateAssetChars);
-
 
 // MW New Work: From Here
 // unit-of-measure
@@ -245,6 +225,15 @@ router.get("/assets/asset-types/:assetTypeId", checkSession, assetTypeController
 router.post('/assets/asset-types', checkSession, assetTypeController.addAssetTypes);
 router.put("/assets/asset-types/:assetTypeId", checkSession, checkSession, assetTypeController.updateAssetType);
 router.delete("/assets/asset-types/:assetTypeId", checkSession, assetTypeController.deleteAssetType);
+
+// asset
+router.get("/assets", checkSession, assetController.getAssets);
+router.get("/assets/asset-types/search", checkSession, assetController.findAssets);
+router.get("/assets/:assetId", checkSession, assetController.getAssetById);
+router.post("/assets", checkSession, assetController.addAssets);
+router.put("/assets/:assetId", checkSession, assetController.updateAsset);
+router.delete("/assets/:assetId", checkSession, assetController.deleteAsset);
+
 
 // MW New Work: TO Here
 

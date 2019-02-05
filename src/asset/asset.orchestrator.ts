@@ -1,93 +1,41 @@
-import {createAssetRepositoryFactory} from "../adapter/asset/asset.repository.factory";
-import {getSortOrderOrDefault} from "../sort.order.util";
-import {AssetRepository} from "../repository/asset.repository";
 import {Asset} from "../data/asset/asset";
 import {Observable} from "rxjs";
-import {switchMap, map} from "rxjs/operators";
-import {Result} from "../result.success";
-import { AssetCharacteristic } from "../data/asset/asset.characteristic";
-import { AssetBrand } from "../data/asset/asset.brand";
-import { AssetSpecification } from "../data/asset/asset.specification";
+import {AssetRepository} from "../repository/asset.repository";
+import {createAssetRepository} from "../adapter/asset/asset.repository.factory";
 import {Affect} from "../data/affect";
+import {Page} from "../util/page";
+import {Sort} from "../util/sort";
 
 export class AssetOrchestrator {
 
   private assetRepository: AssetRepository;
 
   constructor(options?: any) {
-    this.assetRepository = createAssetRepositoryFactory(options);
+    this.assetRepository = createAssetRepository(options);
   }
 
-  findAssets(searchStr: string, pageSize: number): Observable<Asset[]> {
-    return this.assetRepository.findAssets(searchStr, pageSize);
+  addAsset(asset: Asset, headerOptions?: any): Observable<Asset> {
+    return this.assetRepository.addAsset(asset, headerOptions);
   }
 
-  getAssets(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
-    const sort: string = getSortOrderOrDefault(field, direction);
-    // return this.assetRepository
-    //     .getAssets(number, size, sort)
-    //     .pipe(switchMap((assets: Asset[]) => {
-    //         return this.assetRepository
-    //             .getAssetCount()
-    //             .pipe(map((count: number) => {
-    //                 const shapeAssetsResp: any = shapeAssetsResponse(assets, number, size, assets.length, count, sort);
-    //                 return new Result<any>(false, "assets", shapeAssetsResp);
-    //             }));
-    //     }));
-    return null;
+  findAssets(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<Asset[]> {
+    return this.assetRepository.findAssets(ownerPartyId, searchStr, pageNumber, pageSize, headerOptions);
   }
 
-  getAssetById(assetId: string): Observable<Asset> {
-    return this.assetRepository.getAssetById(assetId);
+  getAssets(ownerPartyId: string, number: number, size: number, sort: Sort, headerOptions?: any): Observable<Page<Asset[]>> {
+    return this.assetRepository.getAssets(ownerPartyId, number, size, sort, headerOptions);
   }
 
-  getAssetSpecById(assetId: string): Observable<AssetSpecification> {
-    return this.assetRepository.getAssetSpecById(assetId);
+  updateAsset(asset: Asset, headerOptions?: any): Observable<Affect> {
+    return this.assetRepository.updateAsset(asset, headerOptions);
   }
 
-  getAssetBrandById(assetId: string): Observable<AssetBrand> {
-    return this.assetRepository.getAssetBrandById(assetId);
+  getAssetById(assetId: string, ownerPartyId: string, headerOptions?: any): Observable<Asset> {
+    return this.assetRepository.getAssetById(assetId, ownerPartyId, headerOptions);
   }
 
-  getAssetCharacteristicsById(assetId: string): Observable<AssetCharacteristic> {
-    return this.assetRepository.getAssetCharacteristicsById(assetId);
-  }
-
-  saveAsset(asset: Asset): Observable<Asset> {
-    return this.assetRepository.saveAsset(asset);
-  }
-
-  addAssetSpec(asset: AssetSpecification): Observable<AssetSpecification> {
-    return this.assetRepository.addAssetSpec(asset);
-  }
-
-  addAssetBrand(asset: AssetBrand): Observable<AssetBrand> {
-    return this.assetRepository.addAssetBrand(asset);
-  }
-
-  addAssetCharacteristics(asset: AssetCharacteristic): Observable<AssetCharacteristic> {
-    return this.assetRepository.addAssetCharacteristics(asset);
-  }
-
-  updateAsset(assetId: string, asset: Asset): Observable<Affect> {
-    return this.assetRepository.updateAsset(assetId, asset);
-  }
-
-  updateAssetSpec(assetId: string, asset: AssetSpecification): Observable<number> {
-    return this.assetRepository.updateAssetSpec(assetId, asset);
-  }
-
-  updateAssetBrand(assetId: string, asset: AssetBrand): Observable<number> {
-    return this.assetRepository.updateAssetBrand(assetId, asset);
-  }
-
-  updateAssetChars(assetId: string, asset: AssetCharacteristic): Observable<number> {
-    return this.assetRepository.updateAssetChars(assetId, asset);
-  }
-
-  deleteAsset(assetId: string): Observable<Affect> {
-    return this.assetRepository.deleteAsset(assetId);
+  deleteAsset(assetId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
+    return this.assetRepository.deleteAsset(assetId, ownerPartyId, headerOptions);
   }
 
 }
-

@@ -1,12 +1,11 @@
 import {Asset} from "./asset";
 
-export class DiscreteItemAsset extends Asset {
+export class DiscreteItem extends Asset {
 
   serialNumber: string;
 
   constructor() {
     super();
-    this.typeName = "discreteItem";
   }
 
 }

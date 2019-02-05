@@ -574,4 +574,3 @@
 {"firstName":"TesterUpdate","lastName":"Update","partyId":"654791c-dc3a-4637-86ce-a74d7c957c2e","_id":"zyP4mmtKYeXxwwOD","modifiedOn":{"$$date":1541008197045}}
 {"firstName":"Bom","lastName":"Bam","partyId":"bbb294d2-2e03-438a-bffa-0fcd51923c9f","_id":"zyPuomPKYlXxwwOD"}
 {"$$indexCreated":{"fieldName":"partyId","unique":true,"sparse":false}}
-{"$$indexCreated":{"fieldName":"partyId","unique":true}}

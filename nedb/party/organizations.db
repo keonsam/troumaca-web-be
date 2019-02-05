@@ -212,4 +212,3 @@
 {"name":"My Company 1539609391128","purpose":"The Big Bad Company","description":"In LA","partyId":"2172090c-87db-4393-97ce-12bf68836915","version":"9b82c9ff-0d93-40b8-afec-fa5c26f31b5e","tenantPartyId":"e8991142-efd2-41b6-9d10-dd491de5388c","modifiedOn":{"$$date":1539609391473},"_id":"zl0BWxjVRZ1E1uu0"}
 {"name":"Tester 1","purpose":"The Big Bad Company","description":"Updated","partyId":"654791c-dc3a-4637-86ce-a74d7c957c2e","version":"9b82c9ff-0d93-40b8-afgg-fa5c26f31b5e","tenantPartyId":"e8991142-efd2-41b6-9d10-dd491de5543","modifiedOn":{"$$date":1541008196688},"_id":"zl0BWxjVRZ1E1uu1"}
 {"$$indexCreated":{"fieldName":"partyId","unique":true,"sparse":false}}
-{"$$indexCreated":{"fieldName":"partyId","unique":true}}

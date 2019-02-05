@@ -8,6 +8,6 @@ export class AssetSpecification extends AssetType {
 
   constructor() {
     super();
-    this.typeName = "specification";
+    this.specification = true;
   }
 }
