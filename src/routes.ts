@@ -23,7 +23,6 @@ import * as postOfficeBoxController from "./site/post-office-box/post.office.box
 import * as streetAddressController from "./site/street-address/street.address.controller";
 import * as sessionController from "./session/session.controller";
 import * as userController from "./party/user/user.controller";
-// import * as assetTypeClassController from "./asset/asset-type-class/asset.type.class.controller";
 import * as assetTypeController from "./asset/asset-type/asset.type.controller";
 import * as organizationController from "./party/organization/organization.controller";
 import * as subscriptionController from "./subscription/subscription.controller";
@@ -35,7 +34,9 @@ import * as searchController from "./search/search.controller";
 import * as partyController from "./party/party.controller";
 import * as brandController from "./brand/brand.controller";
 import * as assetCharacteristicController from "./asset-characteristic/asset.characteristic.controller";
-
+import * as assetNameTypeController from "./asset-name-type/asset.name.type.controller";
+import * as assetIdentifierTypeController from "./asset-identifier-type/asset.identifier.type.controller";
+import * as assetRoleTypeController from "./asset-role-type/asset.role.type.controller";
 import upload from "./middleware/multer.config";
 
 import checkSession from "./middleware/check-session";
@@ -132,18 +133,54 @@ router.delete("/access-role-types/:accessRoleTypeId", checkSession, accessRoleTy
 
 // BRANDS
 router.get("/brands", checkSession, brandController.getBrands);
+router.get("/brands/find", checkSession, brandController.findBrands);
 router.get("/brands/:brandId", checkSession, brandController.getBrandById);
 router.post("/brands", checkSession, brandController.saveBrand);
 router.put("/brands/:brandId", checkSession, brandController.updateBrand);
 router.delete("/brands/:brandId", checkSession, brandController.deleteBrand);
 
 // ASSET CHARACTERISTICS
-router.get("/assetCharacteristics", checkSession, assetCharacteristicController.getAssetCharacteristics);
-router.get("/assetCharacteristics/types", checkSession, assetCharacteristicController.getTypes);
-router.get("/assetCharacteristics/:assetCharacteristicId", checkSession, assetCharacteristicController.getAssetCharacteristicById);
-router.post("/assetCharacteristics", checkSession, assetCharacteristicController.saveAssetCharacteristic);
-router.put("/assetCharacteristics/:assetCharacteristicId", checkSession, assetCharacteristicController.updateAssetCharacteristic);
-router.delete("/assetCharacteristics/:assetCharacteristicId", checkSession, assetCharacteristicController.deleteAssetCharacteristic);
+router.get("/asset-characteristics", checkSession, assetCharacteristicController.getAssetCharacteristics);
+router.get("/asset-characteristics/types", checkSession, assetCharacteristicController.getTypes);
+router.get("/asset-characteristics/find", checkSession, assetCharacteristicController.findAssetCharacteristics);
+router.get("/asset-characteristics/:assetCharacteristicId", checkSession, assetCharacteristicController.getAssetCharacteristicById);
+router.post("/asset-characteristics", checkSession, assetCharacteristicController.saveAssetCharacteristic);
+router.put("/asset-characteristics/:assetCharacteristicId", checkSession, assetCharacteristicController.updateAssetCharacteristic);
+router.delete("/asset-characteristics/:assetCharacteristicId", checkSession, assetCharacteristicController.deleteAssetCharacteristic);
+
+// ASSET TYPES
+router.get("/asset-types", checkSession, assetTypeController.getAssetTypes);
+router.get("/asset-types/find", checkSession, assetTypeController.findAssetTypes);
+router.get("/asset-types/instances", checkSession, assetTypeController.findInstances);
+router.get("/asset-types/:assetTypeId", checkSession, assetTypeController.getAssetTypeById);
+router.post("/asset-types", checkSession, assetTypeController.saveAssetType);
+router.put("/asset-types/:assetTypeId", checkSession, checkSession, assetTypeController.updateAssetType);
+router.delete("/asset-types/:assetTypeId", checkSession, assetTypeController.deleteAssetType);
+
+
+// ASSET NAME TYPES
+router.get("/asset-name-types", checkSession, assetNameTypeController.getAssetNameTypes);
+router.get("/asset-name-types/find", checkSession, assetNameTypeController.findAssetNameTypes);
+router.get("/asset-name-types/:assetNameTypeId", checkSession, assetNameTypeController.getAssetNameTypeById);
+router.post("/asset-name-types", checkSession, assetNameTypeController.saveAssetNameType);
+router.put("/asset-name-types/:assetNameTypeId", checkSession, assetNameTypeController.updateAssetNameType);
+router.delete("/asset-name-types/:assetNameTypeId", checkSession, assetNameTypeController.deleteAssetNameType);
+
+// ASSET IDENTIFIER TYPES
+router.get("/asset-identifier-types", checkSession, assetIdentifierTypeController.getAssetIdentifierTypes);
+router.get("/asset-identifier-types/find", checkSession, assetIdentifierTypeController.findAssetIdentifierTypes);
+router.get("/asset-identifier-types/:assetIdentifierTypeId", checkSession, assetIdentifierTypeController.getAssetIdentifierTypeById);
+router.post("/asset-identifier-types", checkSession, assetIdentifierTypeController.saveAssetIdentifierType);
+router.put("/asset-identifier-types/:assetIdentifierTypeId", checkSession, assetIdentifierTypeController.updateAssetIdentifierType);
+router.delete("/asset-identifier-types/:assetIdentifierTypeId", checkSession, assetIdentifierTypeController.deleteAssetIdentifierType);
+
+// ASSET ROLE TYPES
+router.get("/asset-role-types", checkSession, assetRoleTypeController.getAssetRoleTypes);
+router.get("/asset-role-types/find", checkSession, assetRoleTypeController.findAssetRoleTypes);
+router.get("/asset-role-types/:assetRoleTypeId", checkSession, assetRoleTypeController.getAssetRoleTypeById);
+router.post("/asset-role-types", checkSession, assetRoleTypeController.saveAssetRoleType);
+router.put("/asset-role-types/:assetRoleTypeId", checkSession, assetRoleTypeController.updateAssetRoleType);
+router.delete("/asset-role-types/:assetRoleTypeId", checkSession, assetRoleTypeController.deleteAssetRoleType);
 
 // asset-kind
 router.get("/asset-kinds", checkSession, assetKindController.getAssetKinds);
@@ -161,23 +198,14 @@ router.delete("/assets/:assetId", checkSession, assetController.deleteAsset);
 
 router.get("/asset-specifications/:assetId", checkSession, assetController.getAssetSpecById);
 router.get("/asset-brands/:assetId", checkSession, assetController.getAssetBrandById);
-router.get("/asset-characteristics/:assetId", checkSession, assetController.getAssetCharacteristicsById);
 
 router.post("/asset-specifications", checkSession, assetController.addAssetSpec);
 router.post("/asset-brands", checkSession, assetController.addAssetBrand);
-router.post("/asset-characteristics", checkSession, assetController.addAssetCharacteristics);
 
 router.put("/asset-specifications/:assetId", checkSession, assetController.updateAssetSpec);
 router.put("/asset-brands/:assetId", checkSession, assetController.updateAssetBrand);
-router.put("/asset-characteristics/:assetId", checkSession, assetController.updateAssetChars);
 
 // asset-type
-router.get("/asset-types/find", checkSession, assetTypeController.findAssetTypes);
-router.get("/asset-types", checkSession, assetTypeController.getAssetTypes);
-router.get("/asset-types/:assetTypeId", checkSession, assetTypeController.getAssetTypeById);
-// router.post("/asset-types", checkSession, assetTypeController.saveAssetType);
-router.put("/asset-types/:assetTypeId", checkSession, checkSession, assetTypeController.updateAssetType);
-router.delete("/asset-types/:assetTypeId", checkSession, assetTypeController.deleteAssetType);
 // asset-type-class
 // router.get("/asset-type-classes/find", checkSession, assetTypeClassController.findAssetTypeClass);
 // router.get("/asset-type-classes", checkSession, assetTypeClassController.getAssetTypeClasses);

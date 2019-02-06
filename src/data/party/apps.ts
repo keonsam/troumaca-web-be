@@ -32,6 +32,12 @@ export const apps: App[] = [
         iconClass: "store"
     },
     {
+        moduleId: "c38d3eef-4858-42b1-93f0-93ace4b88ac3",
+        name: "Asset Types",
+        route: "/asset-types/listing",
+        iconClass: "store"
+    },
+    {
         moduleId: "c27d3eef-4858-42b1-93f0-93ace4b88ac3",
         name: "Brands",
         route: "/brands/listing",
@@ -40,7 +46,25 @@ export const apps: App[] = [
     {
         moduleId: "c27d3eef-4858-42b1-93f0-93ace4b88ac4",
         name: "Asset Characteristics",
-        route: "/assetCharacteristics/listing",
+        route: "/asset-characteristics/listing",
+        iconClass: "store"
+    },
+    {
+        moduleId: "c35d1eef-4858-42b1-93f0-93ace4b88ac4",
+        name: "Asset Name Types",
+        route: "/asset-name-types/listing",
+        iconClass: "store"
+    },
+    {
+        moduleId: "c46d0eef-4858-42b1-93f0-93ace4b88ac4",
+        name: "Asset Identifier Types",
+        route: "/asset-identifier-types/listing",
+        iconClass: "store"
+    },
+    {
+        moduleId: "c57d0eef-4053-42b1-93f0-93ace4b88ac4",
+        name: "Asset Role Types",
+        route: "/asset-role-types/listing",
         iconClass: "store"
     },
     {

@@ -1,22 +1,22 @@
-import {BrandRepository} from "../../repository/brand.repository";
-import { Brand} from "../../data/asset/brand";
+import {AssetNameTypeRepository} from "../../repository/asset.name.type.repository";
+import { AssetNameType} from "../../data/asset/asset.name.type";
 import {generateUUID} from "../../uuid.generator";
-import { assetBrands } from "../../db";
+import { assetNameTypes } from "../../db";
 import {calcSkip} from "../../db.util";
 import {Observable, Observer} from "rxjs";
 
-export class BrandRepositoryDbAdapter implements BrandRepository {
+export class AssetNameTypeRepositoryDbAdapter implements AssetNameTypeRepository {
 
     private defaultPageSize: number = 10;
 
     constructor() {
     }
 
-    findBrands(searchStr: string, pageSize: number): Observable<Brand[]> {
+    findAssetNameTypes(searchStr: string, pageSize: number): Observable<AssetNameType[]> {
         const searchStrLocal = new RegExp(searchStr);
         const query = searchStr ? {name: {$regex: searchStrLocal}} : {};
-        return Observable.create((observer: Observer<Brand[]>) => {
-            assetBrands.find(query).limit(100).exec((err: any, docs: any) => {
+        return Observable.create((observer: Observer<AssetNameType[]>) => {
+            assetNameTypes.find(query).limit(100).exec((err: any, docs: any) => {
                 if (!err) {
                     observer.next(docs);
                 } else {
@@ -27,10 +27,10 @@ export class BrandRepositoryDbAdapter implements BrandRepository {
         });
     }
 
-    getBrands(pageNumber: number, pageSize: number, order: string): Observable<Brand[]> {
+    getAssetNameTypes(pageNumber: number, pageSize: number, order: string): Observable<AssetNameType[]> {
         const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
-        return Observable.create((observer: Observer<Brand[]>) => {
-            assetBrands.find({}).skip(skip).limit(pageSize).exec(function (err: any, docs: any) {
+        return Observable.create((observer: Observer<AssetNameType[]>) => {
+            assetNameTypes.find({}).skip(skip).limit(pageSize).exec(function (err: any, docs: any) {
                 if (!err) {
                     observer.next(docs);
                 } else {
@@ -41,9 +41,9 @@ export class BrandRepositoryDbAdapter implements BrandRepository {
         });
     }
 
-    getBrandCount(): Observable<number> {
+    getAssetNameTypeCount(): Observable<number> {
         return Observable.create(function (observer: Observer<number>) {
-            assetBrands.count({}, function (err: any, count: number) {
+            assetNameTypes.count({}, function (err: any, count: number) {
                 if (!err) {
                     observer.next(count);
                 } else {
@@ -54,10 +54,10 @@ export class BrandRepositoryDbAdapter implements BrandRepository {
         });
     }
 
-    getBrandById(brandId: string): Observable<Brand> {
-        return Observable.create((observer: Observer<Brand>) => {
-            const query = {"brandId": brandId};
-            assetBrands.findOne(query, function (err: any, doc: any) {
+    getAssetNameTypeById(assetNameTypeId: string): Observable<AssetNameType> {
+        return Observable.create((observer: Observer<AssetNameType>) => {
+            const query = {"assetNameTypeId": assetNameTypeId};
+            assetNameTypes.findOne(query, function (err: any, doc: any) {
                 if (!err) {
                     observer.next(doc);
                 } else {
@@ -68,10 +68,10 @@ export class BrandRepositoryDbAdapter implements BrandRepository {
         });
     }
 
-    saveBrand(brand: Brand): Observable<Brand> {
-        brand.brandId = generateUUID();
-        return Observable.create(function (observer: Observer<Brand>) {
-            assetBrands.insert(brand, function (err: any, doc: any) {
+    saveAssetNameType(assetNameType: AssetNameType): Observable<AssetNameType> {
+        assetNameType.assetNameTypeId = generateUUID();
+        return Observable.create(function (observer: Observer<AssetNameType>) {
+            assetNameTypes.insert(assetNameType, function (err: any, doc: any) {
                 if (err) {
                     observer.error(err);
                 } else {
@@ -82,10 +82,10 @@ export class BrandRepositoryDbAdapter implements BrandRepository {
         });
     }
 
-    updateBrand(brandId: string, brand: Brand): Observable<number> {
-        const query = {brandId};
+    updateAssetNameType(assetNameTypeId: string, assetNameType: AssetNameType): Observable<number> {
+        const query = {assetNameTypeId};
         return Observable.create(function (observer: Observer<number>) {
-            assetBrands.update(query, brand, {}, function (err: any, numReplaced: number) {
+            assetNameTypes.update(query, assetNameType, {}, function (err: any, numReplaced: number) {
                 if (!err) {
                     observer.next(numReplaced);
                 } else {
@@ -96,10 +96,10 @@ export class BrandRepositoryDbAdapter implements BrandRepository {
         });
     }
 
-    deleteBrand(brandId: string): Observable<number> {
-        const query = {brandId};
+    deleteAssetNameType(assetNameTypeId: string): Observable<number> {
+        const query = {assetNameTypeId};
         return Observable.create(function (observer: Observer<number>) {
-            assetBrands.remove(query, {}, function (err: any, numRemoved: number) {
+            assetNameTypes.remove(query, {}, function (err: any, numRemoved: number) {
                 if (!err) {
                     observer.next(numRemoved);
                 } else {

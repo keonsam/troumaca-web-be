@@ -1,24 +1,17 @@
 import {AssetTypeRepository} from "../../repository/asset.type.repository";
-import { Observable, Observer, of, throwError } from "rxjs";
+import { Observable, Observer, of} from "rxjs";
 import {AssetType} from "../../data/asset/asset.type";
-import {switchMap, map} from "rxjs/operators";
 import {assetTypes} from "../../db";
 import {generateUUID} from "../../uuid.generator";
 import {calcSkip} from "../../db.util";
-import {AssetClassificationRepositoryNeDbAdapter} from "./asset.classification.repository.db.adapter";
-import {UnitOfMeasureRepositoryNeDbAdapter} from "../unit-of-measure/unit.of.measure.repository.db.adapter";
-import {Value} from "../../data/asset/value";
-import {ValueRepositoryNeDbAdapter} from "./value.repository.db.adapter";
 import {ProductType} from "../../data/asset/product.type";
 import {PartOrEquipmentType} from "../../data/asset/part.or.equipment.type";
 import {MaterialType} from "../../data/asset/material.type";
+import { Instance } from "../../data/asset/instance";
 
 export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
 
   private defaultPageSize: number = 10;
-  private assetTypeClassRepositoryNeDbAdapter: AssetClassificationRepositoryNeDbAdapter = new AssetClassificationRepositoryNeDbAdapter();
-  private unitOfMeasureRepositoryNeDbAdapter: UnitOfMeasureRepositoryNeDbAdapter = new UnitOfMeasureRepositoryNeDbAdapter();
-  private valueRepositoryNeDbAdapter: ValueRepositoryNeDbAdapter = new ValueRepositoryNeDbAdapter();
 
   findAssetTypes(searchStr: string, pageSize: number): Observable<AssetType[]> {
     const searchStrLocal = new RegExp(searchStr);
@@ -35,31 +28,31 @@ export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
     });
   }
 
+    findInstances(searchStr: string, pageSize: number): Observable<Instance[]> {
+        return of([
+            {
+                instanceId: "7bc3fa8a-84b6-4088-91d4-8a1cc84e7cff",
+                name: "Other Asset Type"
+            },
+            {
+                instanceId: "8bc5fa8a-84b6-4088-91d4-8a1cc84e7cff",
+                name: "Asset Specification"
+            },
+        ]);
+    }
+
   getAssetTypes(pageNumber: number, pageSize: number, order: string): Observable<AssetType[]> {
-    return this.getAssetTypesLocal(pageNumber, pageSize, order)
-      .pipe(switchMap((assetTypes: AssetType[]) => {
-        if (assetTypes.length < 1) {
-          return of(assetTypes);
-        } else {
-          const assetTypeClassIds: string[] = [];
-          const unitOfMeasureIds: string[] = [];
-          assetTypes.forEach(value => {
-            if (value.assetTypeClassId) assetTypeClassIds.push(value.assetTypeClassId);
-            if (value.unitOfMeasureId) unitOfMeasureIds.push(value.unitOfMeasureId);
+      const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
+      return Observable.create(function (observer: Observer<AssetType[]>) {
+          assetTypes.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
+              if (!err) {
+                  observer.next(doc);
+              } else {
+                  observer.error(err);
+              }
+              observer.complete();
           });
-          return this.assetTypeClassRepositoryNeDbAdapter.getAssetTypeClassByIds(assetTypeClassIds)
-            .pipe(switchMap(assetTypeClasses => {
-              return this.unitOfMeasureRepositoryNeDbAdapter.getUnitOfMeasuresByIds(unitOfMeasureIds)
-                .pipe(map(unitOfMeasures => {
-                  assetTypes.forEach(value => {
-                    value.assetTypeClass = assetTypeClasses.find(x => x.assetClassificationId === value.assetTypeClassId);
-                    value.unitOfMeasure = unitOfMeasures.find(x => x.unitOfMeasureId === value.unitOfMeasureId);
-                  });
-                  return assetTypes;
-                }));
-            }));
-        }
-      }));
+      });
   }
 
   getAssetTypeCount(): Observable<number> {
@@ -76,90 +69,70 @@ export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
   }
 
   getAssetTypeById(assetTypeId: string): Observable<AssetType> {
-    return this.getAssetTypeByIdLocal(assetTypeId)
-      .pipe(switchMap(assetType => {
-        if (!assetType) {
-          return throwError(`Failed to find asset type ${assetTypeId} ${assetType}`);
-        }
-        return this.assetTypeClassRepositoryNeDbAdapter.getAssetTypeClassByIdLocal(assetType.assetTypeClassId)
-          .pipe(switchMap(assetTypeClass => {
-            return this.unitOfMeasureRepositoryNeDbAdapter.getUnitOfMeasureById(assetType.unitOfMeasureId)
-              .pipe(switchMap(unitOfMeasure => {
-                return this.valueRepositoryNeDbAdapter.getValuesByAssetTypeId(assetTypeId)
-                  .pipe(map(values => {
-                    assetType.assetTypeClass = assetTypeClass;
-                    assetType.unitOfMeasure = unitOfMeasure;
-                    assetType.values = values;
-                    return assetType;
-                  }));
-              }));
-          }));
-      }));
+      return Observable.create(function (observer: Observer<AssetType>) {
+          const query = {
+              "assetTypeId": assetTypeId
+          };
+          assetTypes.findOne(query, function (err: any, doc: any) {
+              if (!err) {
+                  observer.next(doc);
+              } else {
+                  observer.error(err);
+              }
+              observer.complete();
+          });
+      });
   }
 
-  saveAssetType(assetType: AssetType, values: Value[]): Observable<AssetType> {
-      return this.saveAssetTypeLocal(assetType)
-          .pipe(switchMap(assetType => {
-              if (!assetType) {
-                  return throwError(`Failed to save asset type ${assetType}`);
-              } else if (values.length < 1) {
-                  return of(assetType);
+  saveAssetType(assetType: AssetType): Observable<AssetType> {
+      assetType.assetTypeId = generateUUID();
+      return Observable.create(function (observer: Observer<AssetType>) {
+          assetTypes.insert(assetType, function (err: any, doc: any) {
+              if (err) {
+                  observer.error(err);
               } else {
-                  values.forEach(val => {
-                      val.assetTypeId = assetType.assetTypeId;
-                  });
-                  return this.valueRepositoryNeDbAdapter.saveValues(values)
-                      .pipe(map(values => {
-                        if (!values) {
-                          throw new Error(`Failed to save values ${values}`);
-                        }
-                          return assetType;
-                      }));
+                  observer.next(doc);
               }
-          }));
+              observer.complete();
+          });
+      });
   }
 
   addOtherAssetType(assetType: AssetType, options?: any): Observable<AssetType> {
     return undefined;
   }
 
-  updateAssetType(assetTypeId: string, assetType: AssetType, values: Value[]): Observable<number> {
-    return this.updateAssetTypeLocal(assetTypeId, assetType)
-      .pipe(switchMap(num => {
-        if (!num) {
-          return throwError(`Failed to save num of ${assetTypeId} ${num}`);
-        } else if (values.length < 1) {
-          return of(num);
-        } else {
-          return this.valueRepositoryNeDbAdapter.deleteValuesByAssetTypeId(assetTypeId)
-            .pipe(switchMap(numRemoved => {
-              values.forEach(val => {
-                val.assetTypeId = assetType.assetTypeId;
-              });
-              return this.valueRepositoryNeDbAdapter.saveValues(values)
-                .pipe(map(valuesArr => {
-                  if (!valuesArr) {
-                    throw new Error(`Failed to save values ${valuesArr}`);
-                  }
-                  return num;
-                }));
-            }));
-        }
-      }));
+  updateAssetType(assetTypeId: string, assetType: AssetType): Observable<number> {
+      return Observable.create(function (observer: Observer<number>) {
+          const query = {
+              "assetTypeId": assetTypeId
+          };
+          assetTypes.update(query, assetType, {}, function (err: any, numReplaced: number) {
+              if (!err) {
+                  observer.next(numReplaced);
+              } else {
+                  observer.error(err);
+              }
+              observer.complete();
+          });
+      });
   }
 
   deleteAssetType(assetTypeId: string): Observable<number> {
-    return this.deleteAssetTypeLocal(assetTypeId)
-      .pipe(switchMap(num => {
-        if (!num) {
-          return throwError(`Failed to delete asset type of ${assetTypeId} ${num}`);
-        } else {
-          return this.valueRepositoryNeDbAdapter.deleteValuesByAssetTypeId(assetTypeId)
-            .pipe(map(num2 => {
-              return num;
-            }));
-        }
-      }));
+      return Observable.create(function (observer: Observer<number>) {
+          const query = {
+              "assetTypeId": assetTypeId
+          };
+
+          assetTypes.remove(query, {}, function (err: any, numRemoved: number) {
+              if (!err) {
+                  observer.next(numRemoved);
+              } else {
+                  observer.error(err);
+              }
+              observer.complete();
+          });
+      });
   }
 
   addMaterialType(materialType: MaterialType, options?: any): Observable<MaterialType> {
@@ -192,81 +165,81 @@ export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
 
   // HELPER
 
-  private getAssetTypesLocal(pageNumber: number, pageSize: number, order: string) {
-    const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
-    return Observable.create(function (observer: Observer<AssetType[]>) {
-      assetTypes.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
-        if (!err) {
-          observer.next(doc);
-        } else {
-          observer.error(err);
-        }
-        observer.complete();
-      });
-    });
-  }
+  // private getAssetTypesLocal(pageNumber: number, pageSize: number, order: string) {
+  //   const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
+  //   return Observable.create(function (observer: Observer<AssetType[]>) {
+  //     assetTypes.find({}).sort(order).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
+  //       if (!err) {
+  //         observer.next(doc);
+  //       } else {
+  //         observer.error(err);
+  //       }
+  //       observer.complete();
+  //     });
+  //   });
+  // }
 
-  getAssetTypeByIdLocal(assetTypeId: string): Observable<AssetType> {
-    return Observable.create(function (observer: Observer<AssetType>) {
-      const query = {
-        "assetTypeId": assetTypeId
-      };
-      assetTypes.findOne(query, function (err: any, doc: any) {
-        if (!err) {
-          observer.next(doc);
-        } else {
-          observer.error(err);
-        }
-        observer.complete();
-      });
-    });
-  }
+  // getAssetTypeByIdLocal(assetTypeId: string): Observable<AssetType> {
+  //   return Observable.create(function (observer: Observer<AssetType>) {
+  //     const query = {
+  //       "assetTypeId": assetTypeId
+  //     };
+  //     assetTypes.findOne(query, function (err: any, doc: any) {
+  //       if (!err) {
+  //         observer.next(doc);
+  //       } else {
+  //         observer.error(err);
+  //       }
+  //       observer.complete();
+  //     });
+  //   });
+  // }
 
-  private saveAssetTypeLocal(assetType: AssetType): Observable<AssetType> {
-    assetType.assetTypeId = generateUUID();
-    return Observable.create(function (observer: Observer<AssetType>) {
-      assetTypes.insert(assetType, function (err: any, doc: any) {
-        if (err) {
-          observer.error(err);
-        } else {
-          observer.next(doc);
-        }
-        observer.complete();
-      });
-    });
-  }
+  // private saveAssetTypeLocal(assetType: AssetType): Observable<AssetType> {
+  //   assetType.assetTypeId = generateUUID();
+  //   return Observable.create(function (observer: Observer<AssetType>) {
+  //     assetTypes.insert(assetType, function (err: any, doc: any) {
+  //       if (err) {
+  //         observer.error(err);
+  //       } else {
+  //         observer.next(doc);
+  //       }
+  //       observer.complete();
+  //     });
+  //   });
+  // }
 
-  private updateAssetTypeLocal(assetTypeId: string, assetType: AssetType): Observable<number> {
-    return Observable.create(function (observer: Observer<number>) {
-      const query = {
-        "assetTypeId": assetTypeId
-      };
-      assetTypes.update(query, assetType, {}, function (err: any, numReplaced: number) {
-        if (!err) {
-          observer.next(numReplaced);
-        } else {
-          observer.error(err);
-        }
-        observer.complete();
-      });
-    });
-  }
+  // private updateAssetTypeLocal(assetTypeId: string, assetType: AssetType): Observable<number> {
+  //   return Observable.create(function (observer: Observer<number>) {
+  //     const query = {
+  //       "assetTypeId": assetTypeId
+  //     };
+  //     assetTypes.update(query, assetType, {}, function (err: any, numReplaced: number) {
+  //       if (!err) {
+  //         observer.next(numReplaced);
+  //       } else {
+  //         observer.error(err);
+  //       }
+  //       observer.complete();
+  //     });
+  //   });
+  // }
 
-  private deleteAssetTypeLocal(assetTypeId: string): Observable<number> {
-    return Observable.create(function (observer: Observer<number>) {
-      const query = {
-        "assetTypeId": assetTypeId
-      };
-
-      assetTypes.remove(query, {}, function (err: any, numRemoved: number) {
-        if (!err) {
-          observer.next(numRemoved);
-        } else {
-          observer.error(err);
-        }
-        observer.complete();
-      });
-    });
-  }
+  // private deleteAssetTypeLocal(assetTypeId: string): Observable<number> {
+  //   return Observable.create(function (observer: Observer<number>) {
+  //     const query = {
+  //       "assetTypeId": assetTypeId
+  //     };
+  //
+  //     assetTypes.remove(query, {}, function (err: any, numRemoved: number) {
+  //       if (!err) {
+  //         observer.next(numRemoved);
+  //       } else {
+  //         observer.error(err);
+  //       }
+  //       observer.complete();
+  //     });
+  //   });
+  // }
 
 }
