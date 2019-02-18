@@ -1,4 +1,4 @@
-{"name":"Asset Identifier","description":"","assetIdentifierTypeId":"4ae0a585-f6c9-4c9e-9b00-fc40c148d488","_id":"G3CJ8B6FSWTYGv9R"}
+{"name":"Asset Identifier","description":"updated","assetIdentifierTypeId":"4ae0a585-f6c9-4c9e-9b00-fc40c148d488","_id":"G3CJ8B6FSWTYGv9R"}
 {"name":"TIA","description":"","assetIdentifierTypeId":"81620a06-195f-45c2-a7c6-01f609563ad0","_id":"KK88Q9zKMxWf67nX"}
 {"name":"AIT","description":"updated","assetIdentifierTypeId":"6f3ceee7-4136-4404-aa19-16521950ba63","_id":"M7POPSjN1Zf7jqmg"}
 {"$$indexCreated":{"fieldName":"assetIdentifierTypeId","unique":true,"sparse":false}}

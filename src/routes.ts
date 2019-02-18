@@ -9,12 +9,9 @@ import * as accessRoleTypeController from "./authorization/access-role-type/acce
 import * as resourceTypeController from "./authorization/resource-type/resource.type.controller";
 
 import * as assetController from "./asset/asset.controller";
-import * as attributeController from "./asset/attribute/attribute.controller";
-import * as assignedAttributeController from "./asset/attribute/assigned-attributes/assigned.attribute.controller";
 import * as assetKindController from "./asset/kind/asset.kind.controller";
 import * as phoneController from "./site/phone/phone.controller";
 import * as photoController from "./party/photo/photo.controller";
-import * as unitOfMeasureController from "./unit-of-measure/unit.of.measure.controller";
 import * as dataTypeController from "./data-type/data.type.controller";
 import * as emailController from "./site/email/email.controller";
 import * as siteController from "./site/site.controller";
@@ -37,6 +34,7 @@ import * as assetCharacteristicController from "./asset-characteristic/asset.cha
 import * as assetNameTypeController from "./asset-name-type/asset.name.type.controller";
 import * as assetIdentifierTypeController from "./asset-identifier-type/asset.identifier.type.controller";
 import * as assetRoleTypeController from "./asset-role-type/asset.role.type.controller";
+import * as unitOfMeasureController from "./unit-of-measure/unit.of.measure.controller";
 import upload from "./middleware/multer.config";
 
 import checkSession from "./middleware/check-session";
@@ -182,10 +180,17 @@ router.post("/asset-role-types", checkSession, assetRoleTypeController.saveAsset
 router.put("/asset-role-types/:assetRoleTypeId", checkSession, assetRoleTypeController.updateAssetRoleType);
 router.delete("/asset-role-types/:assetRoleTypeId", checkSession, assetRoleTypeController.deleteAssetRoleType);
 
+// UNIT OF MEASURES
+router.get("/unit-of-measures", checkSession, unitOfMeasureController.getUnitOfMeasures);
+router.get("/unit-of-measures/find", checkSession, unitOfMeasureController.findUnitOfMeasures);
+router.get("/unit-of-measures/:unitOfMeasureId", checkSession, unitOfMeasureController.getUnitOfMeasureById);
+router.post("/unit-of-measures", checkSession, unitOfMeasureController.saveUnitOfMeasure);
+router.put("/unit-of-measures/:unitOfMeasureId", checkSession, unitOfMeasureController.updateUnitOfMeasure);
+router.delete("/unit-of-measures/:unitOfMeasureId", checkSession, unitOfMeasureController.deleteUnitOfMeasure);
+
 // asset-kind
 router.get("/asset-kinds", checkSession, assetKindController.getAssetKinds);
 // unit-of-measure
-router.get("/unit-of-measures/find", checkSession, unitOfMeasureController.findUnitOfMeasure);
 // data-type
 router.get("/data-types", checkSession, dataTypeController.getDataTypes);
 // asset
@@ -205,25 +210,6 @@ router.post("/asset-brands", checkSession, assetController.addAssetBrand);
 router.put("/asset-specifications/:assetId", checkSession, assetController.updateAssetSpec);
 router.put("/asset-brands/:assetId", checkSession, assetController.updateAssetBrand);
 
-// asset-type
-// asset-type-class
-// router.get("/asset-type-classes/find", checkSession, assetTypeClassController.findAssetTypeClass);
-// router.get("/asset-type-classes", checkSession, assetTypeClassController.getAssetTypeClasses);
-// router.get("/asset-type-classes/:assetTypeClassId", checkSession, assetTypeClassController.getAssetTypeClass);
-// router.post("/asset-type-classes", checkSession, assetTypeClassController.saveAssetTypeClass);
-// router.put("/asset-type-classes/:assetTypeClassId", checkSession, assetTypeClassController.updateAssetTypeClass);
-// router.delete("/asset-type-classes/:assetTypeClassId", checkSession, assetTypeClassController.deleteAssetTypeClass);
-// attribute
-router.get("/attributes", checkSession, attributeController.getAttributes);
-router.get("/attributes/:attributeId", checkSession, attributeController.getAttributeById);
-router.post("/attributes", checkSession, attributeController.saveAttribute);
-router.post("/attributes/available", checkSession, attributeController.getAvailableAttributes);
-router.post("/attributes/assigned", checkSession, attributeController.getAssignableAttributes);
-router.put("/attributes/:attributeId", checkSession, attributeController.updateAttribute);
-router.delete("/attributes/:attributeId", checkSession, attributeController.deleteAttribute);
-// assigned-attributes
-router.get("/assigned-attributes/:assetTypeClassId", checkSession, assignedAttributeController.getAssignedAttributesByClassId);
-router.get("/assigned-attributes/:assetTypeClassId", checkSession, assignedAttributeController.getAssignedAttributesByClassId);
 // site
 router.get("/sites/find", checkSession, siteController.findSite);
 // street-address

@@ -19,3 +19,4 @@
 {"unitOfMeasureId":"a1b84afe-d7ff-11e7-9296-cec278b6b50a","quantity":"mass fraction","name":"kilogram per kilogram, which may be represented by the number 1","symbol":"kg/kg = 1","factor":"","otherSiBaseUnitsExpression":"","siBaseUnitsExpression":"","_id":"yQXbk2WU2JNSjNyU"}
 {"unitOfMeasureId":"f1364362-d7fd-11e7-9296-cec278b6b50a","quantity":"volume","name":"cubic meter","symbol":"m³","factor":"","otherSiBaseUnitsExpression":"","siBaseUnitsExpression":"","_id":"yQpTZNuGxdyuJSgN"}
 {"$$indexCreated":{"fieldName":"unitOfMeasureId","unique":true,"sparse":false}}
+{"name":"Gigabyte","description":"measurement of computer memory.","unitOfMeasureId":"78a4ff7d-90de-42a5-a0d4-e4632ead4ae5","_id":"i0t3xeZgbNR2qoHM"}
