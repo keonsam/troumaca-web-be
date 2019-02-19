@@ -1,10 +1,11 @@
 import {OrganizationRepository} from "../../repository/organization.repository";
 import { Observable, Observer } from "rxjs";
 import {Organization} from "../../data/party/organization";
-import { organizations, requests } from "../../db";
+import { credentials, organizations, requests } from "../../db";
 import {generateUUID} from "../../uuid.generator";
 import {calcSkip} from "../../db.util";
 import {JoinOrganization} from "../../data/party/join.organization";
+import { map, switchMap } from "rxjs/operators";
 
 export class OrganizationDBRepository implements OrganizationRepository {
 
@@ -26,7 +27,30 @@ export class OrganizationDBRepository implements OrganizationRepository {
   }
 
   addCustomer(organization: Organization, options?: any): Observable<Organization> {
-    return this.saveOrganization(organization, options);
+    return this.saveOrganization(organization, options)
+        .pipe(switchMap(organization => {
+          return this.updateAccount(organization.partyId)
+              .pipe(map(num => {
+                if (!num) {
+                  throw new Error("organization credential update failed");
+                } else {
+                  return organization;
+                }
+              }));
+        }));
+  }
+
+  private updateAccount(partyId: string): Observable<number> {
+    return Observable.create(function (observer: Observer<number>) {
+      credentials.update({partyId}, {$set: {status: "Active"}}, {}, function (err: any, numReplaced: number) {
+        if (!err) {
+          observer.next(numReplaced);
+        } else {
+          observer.error(err);
+        }
+        observer.complete();
+      });
+    });
   }
 
   saveOrganization(organization: Organization, options?: any): Observable<Organization> {
@@ -147,3 +171,4 @@ export class OrganizationDBRepository implements OrganizationRepository {
     });
   }
 }
+
