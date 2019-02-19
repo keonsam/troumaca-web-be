@@ -5,11 +5,11 @@ import {Observable} from "rxjs";
 import {Result} from "../../result.success";
 import {getSortOrderOrDefault} from "../../sort.order.util";
 import {shapeAssetTypesResponse} from "./asset.type.response.shaper";
-import {Value} from "../../data/asset/value";
 import {switchMap, map} from "rxjs/operators";
 import {MaterialType} from "../../data/asset/material.type";
 import {ProductType} from "../../data/asset/product.type";
 import {PartOrEquipmentType} from "../../data/asset/part.or.equipment.type";
+import { Instance } from "../../data/asset/instance";
 
 export class AssetTypeOrchestrator {
 
@@ -21,6 +21,10 @@ export class AssetTypeOrchestrator {
 
   findAssetTypes(searchStr: string, pageSize: number): Observable<AssetType[]> {
     return this.assetTypeRepository.findAssetTypes(searchStr, pageSize);
+  }
+
+  findInstances(searchStr: string, pageSize: number): Observable<Instance[]> {
+    return this.assetTypeRepository.findInstances(searchStr, pageSize);
   }
 
   getAssetTypes(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
@@ -41,8 +45,8 @@ export class AssetTypeOrchestrator {
     return this.assetTypeRepository.getAssetTypeById(assetTypeId);
   }
 
-  saveAssetType(assetType: AssetType, values: Value[]): Observable<AssetType> {
-    return this.assetTypeRepository.saveAssetType(assetType, values);
+  saveAssetType(assetType: AssetType): Observable<AssetType> {
+    return this.assetTypeRepository.saveAssetType(assetType);
   }
 
   addMaterialType(materialType: MaterialType, options?: any): Observable<MaterialType> {
@@ -61,8 +65,8 @@ export class AssetTypeOrchestrator {
     return this.assetTypeRepository.addOtherAssetType(assetType, options);
   }
 
-  updateAssetType(assetTypeId: string, assetType: AssetType, values: Value[]): Observable<number> {
-    return this.assetTypeRepository.updateAssetType(assetTypeId, assetType, values);
+  updateAssetType(assetTypeId: string, assetType: AssetType): Observable<number> {
+    return this.assetTypeRepository.updateAssetType(assetTypeId, assetType);
   }
 
   deleteAssetType(assetTypeId: string): Observable<number> {

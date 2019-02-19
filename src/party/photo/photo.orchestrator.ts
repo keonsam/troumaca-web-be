@@ -20,11 +20,11 @@ export class PhotoOrchestrator {
         return this.photoRepository.getPhotos(partyId, type);
     }
 
-    savePhoto(type: string, photo: string, partyId: string): Observable<Photo> {
-        return this.photoRepository.savePhoto(type, photo, partyId);
+    savePhoto(photo: Photo): Observable<Photo> {
+        return this.photoRepository.savePhoto(photo);
     }
 
-    updatePhoto(partyId: string, type: string, photo: string): Observable<Photo> {
-        return this.photoRepository.updatePhoto(partyId, type, photo);
+    updatePhoto(photo: Photo, partyId: any): Observable<Photo> {
+        return this.photoRepository.updatePhoto(photo, partyId);
     }
 }

@@ -11,7 +11,6 @@ import {createSessionRepositoryFactory} from "../../adapter/session/session.repo
 import {JoinOrganization} from "../../data/party/join.organization";
 import {CredentialRepository} from "../../repository/credential.repository";
 import {createCredentialRepositoryFactory} from "../../adapter/authentication/credential.repository.factory";
-import { OrganizationCompany } from "../../data/party/organization.company";
 
 export class OrganizationOrchestrator {
 
@@ -41,12 +40,8 @@ export class OrganizationOrchestrator {
           }));
   }
 
-  getOrganization(partyId: string): Observable<Organization> {
+  getOrganization(partyId: any): Observable<Organization> {
     return this.organizationRepository.getOrganization(partyId);
-  }
-
-  getOrganizationCompany(partyId: any): Observable<OrganizationCompany> {
-      return this.organizationRepository.getOrganizationCompany(partyId);
   }
 
   saveOrganization(organization: Organization): Observable<Organization> {

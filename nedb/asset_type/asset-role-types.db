@@ -1,0 +1,4 @@
+{"name":"Retailer","description":"updated","assetRoleTypeId":"a495f37d-10ff-418f-9910-2d5f9c0180a2","_id":"RHA7LCcHYFwgNmAy"}
+{"name":"Wholesaler","description":"","assetRoleTypeId":"30885426-b408-4578-a33c-a75784c2d86b","_id":"d3Ey8xdCxOnbOtT2"}
+{"name":"Manufacturer","description":"","assetRoleTypeId":"8226286f-5bd0-4d53-9f32-b357ab00b30c","_id":"xiqdDQ8tC1q7yTRx"}
+{"$$indexCreated":{"fieldName":"assetRoleTypeId","unique":true,"sparse":false}}

@@ -5,9 +5,9 @@ export interface PhotoRepository {
 
     getPhotos(partyId: string, type?: string): Observable<Photo>;
 
-    savePhoto(type: string, photo: string, partyId: string): Observable<Photo>;
+    savePhoto(photo: Photo): Observable<Photo>;
 
-    updatePhoto(partyId: string, type: string, photo: string): Observable<Photo>;
+    updatePhoto(photo: Photo, partyId: string): Observable<Photo>;
 
     // deletePhoto(partyId: string): Observable<number>;
 }

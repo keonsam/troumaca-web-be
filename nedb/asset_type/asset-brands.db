@@ -1,1 +1,4 @@
-{"$$indexCreated":{"fieldName":"assetId","unique":true,"sparse":false}}
+{"name":"Dell","abbreviation":"DL","description":"updated","brandId":"905e4bf5-d138-4134-b7cc-4340e3188303","_id":"27Y0lrjJqdt0efdx"}
+{"name":"Hewlett-Packard","abbreviation":"HP","description":"","brandId":"0d9b9f11-2ec0-490f-8253-0c63b1d4d307","_id":"5adSvePNslyxu2Bs"}
+{"name":"TromacaED","abbreviation":"T","description":"StartUp","brandId":"1ee2c93c-9fb8-443f-886e-21de72bb1750","_id":"SHOCrUCFnAy3BT1n"}
+{"$$indexCreated":{"fieldName":"brandId","unique":true,"sparse":false}}

@@ -20,6 +20,20 @@ export let findAssetTypes = (req: Request, res: Response) => {
     });
 };
 
+export let findInstances = (req: Request, res: Response) => {
+  const searchStr: string = req.query.q;
+  const pageSize: number = req.query.pageSize;
+  assetTypeOrchestrator.findInstances(searchStr, pageSize)
+      .subscribe(assetTypes => {
+        res.status(200);
+        res.send(JSON.stringify(assetTypes));
+      }, error => {
+        res.status(400);
+        res.send(JSON.stringify({message: "Error Occurred"}));
+        console.log(error);
+      });
+};
+
 export let getAssetTypes = (req: Request, res: Response) => {
 
   const number = getNumericValueOrDefault(req.query.pageNumber, 1);
@@ -55,122 +69,9 @@ export let getAssetTypeById = (req: Request, res: Response) => {
     });
 };
 
-export let addPartOrEquipmentType = (req: Request, res: Response) => {
+export let saveAssetType = (req: Request, res: Response) => {
 
-  HeaderNormalizer.normalize(req);
-  const correlationId = req.headers["Correlation-Id"];
-  const ownerPartyId = req.headers["Owner-Party-Id"];
-
-  const partOrEquipmentType = req.body;
-  if (!partOrEquipmentType) {
-    return res.status(400).send({message: "Other Asset Type can not be empty"});
-  }
-
-  const headerOptions = {
-    "Correlation-Id": correlationId,
-    "Owner-Party-Id": ownerPartyId
-  };
-
-  assetTypeOrchestrator.addPartOrEquipmentType(partOrEquipmentType, headerOptions)
-  .subscribe(assetType => {
-    res.status(201);
-    res.send(JSON.stringify(assetType));
-  }, error => {
-    res.status(500);
-    res.send(JSON.stringify({message: "Error Occurred"}));
-    console.log(error);
-  });
-
-};
-
-export let addProductType = (req: Request, res: Response) => {
-
-  HeaderNormalizer.normalize(req);
-  const correlationId = req.headers["Correlation-Id"];
-  const ownerPartyId = req.headers["Owner-Party-Id"];
-
-  const productType = req.body;
-  if (!productType) {
-    return res.status(400).send({message: "Other Asset Type can not be empty"});
-  }
-
-  const headerOptions = {
-    "Correlation-Id": correlationId,
-    "Owner-Party-Id": ownerPartyId
-  };
-
-  assetTypeOrchestrator.addProductType(productType, headerOptions)
-  .subscribe(assetType => {
-    res.status(201);
-    res.send(JSON.stringify(assetType));
-  }, error => {
-    res.status(500);
-    res.send(JSON.stringify({message: "Error Occurred"}));
-    console.log(error);
-  });
-
-};
-
-export let addMaterialType = (req: Request, res: Response) => {
-
-  HeaderNormalizer.normalize(req);
-  const correlationId = req.headers["Correlation-Id"];
-  const ownerPartyId = req.headers["Owner-Party-Id"];
-
-  const materialType = req.body;
-  if (!materialType) {
-    return res.status(400).send({message: "Material Type can not be empty"});
-  }
-
-  const headerOptions = {
-    "Correlation-Id": correlationId,
-    "Owner-Party-Id": ownerPartyId
-  };
-
-  assetTypeOrchestrator.addMaterialType(materialType, headerOptions)
-  .subscribe(assetType => {
-    res.status(201);
-    res.send(JSON.stringify(assetType));
-  }, error => {
-    res.status(500);
-    res.send(JSON.stringify({message: "Error Occurred"}));
-    console.log(error);
-  });
-
-};
-
-export let addOtherAssetType = (req: Request, res: Response) => {
-
-  HeaderNormalizer.normalize(req);
-  const correlationId = req.headers["Correlation-Id"];
-  const ownerPartyId = req.headers["Owner-Party-Id"];
-
-  const otherAssetType = req.body;
-  if (!otherAssetType) {
-    return res.status(400).send({message: "Other Asset Type can not be empty"});
-  }
-
-  const headerOptions = {
-    "Correlation-Id": correlationId,
-    "Owner-Party-Id": ownerPartyId
-  };
-
-  assetTypeOrchestrator.addOtherAssetType(otherAssetType, headerOptions)
-  .subscribe(assetType => {
-    res.status(201);
-    res.send(JSON.stringify(assetType));
-  }, error => {
-    res.status(500);
-    res.send(JSON.stringify({message: "Error Occurred"}));
-    console.log(error);
-  });
-
-};
-
-export let addAssetTypeWithCharacteristics = (req: Request, res: Response) => {
-
-  const assetType = req.body.assetType;
-  const values = req.body.values;
+  const assetType = req.body;
 
   if (!assetType) {
     return res
@@ -178,7 +79,7 @@ export let addAssetTypeWithCharacteristics = (req: Request, res: Response) => {
       .send({message: "Asset Type can not be empty"});
   }
 
-  assetTypeOrchestrator.saveAssetType(assetType, values)
+  assetTypeOrchestrator.saveAssetType(assetType)
     .subscribe(assetType => {
       res.status(201);
       res.send(JSON.stringify(assetType));
@@ -189,16 +90,14 @@ export let addAssetTypeWithCharacteristics = (req: Request, res: Response) => {
     });
 };
 
-
 export let updateAssetType = (req: Request, res: Response) => {
-  const assetType = req.body.assetType;
-  const values = req.body.values;
+  const assetType = req.body;
   if (!assetType) {
     return res.status(400).send({
       message: "Asset Type can not be empty"
     });
   }
-  assetTypeOrchestrator.updateAssetType(req.params.assetTypeId, assetType, values)
+  assetTypeOrchestrator.updateAssetType(req.params.assetTypeId, assetType)
     .subscribe(affected => {
       if (affected > 0) {
         res.status(200);

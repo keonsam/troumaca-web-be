@@ -10,9 +10,14 @@ import {OtherAssetType} from "../../data/asset/other.asset.type";
 import {MaterialType} from "../../data/asset/material.type";
 import {ProductType} from "../../data/asset/product.type";
 import {PartOrEquipmentType} from "../../data/asset/part.or.equipment.type";
+import { Instance } from "../../data/asset/instance";
 
 export class AssetTypeRepositoryRestAdapter implements AssetTypeRepository {
   findAssetTypes(searchStr: string, pageSize: number): Observable<AssetType[]> {
+    return undefined;
+  }
+
+  findInstances(searchStr: string, pageSize: number): Observable<Instance[]> {
     return undefined;
   }
 
@@ -28,7 +33,7 @@ export class AssetTypeRepositoryRestAdapter implements AssetTypeRepository {
     return undefined;
   }
 
-  saveAssetType(assetType: AssetType, values: Value[]): Observable<AssetType> {
+  saveAssetType(assetType: AssetType): Observable<AssetType> {
     return undefined;
   }
 
@@ -140,7 +145,7 @@ export class AssetTypeRepositoryRestAdapter implements AssetTypeRepository {
     });
   }
 
-  updateAssetType(assetTypeId: string, assetType: AssetType, values: Value[]): Observable<number> {
+  updateAssetType(assetTypeId: string, assetType: AssetType): Observable<number> {
     return undefined;
   }
 

@@ -15,6 +15,9 @@ const theAssetsDb = path.resolve(__dirname, "..") + "/nedb/asset_type/assets.db"
 const theAssetSpecsDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-specs.db";
 const theAssetBrandsDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-brands.db";
 const theAssetCharsDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-chars.db";
+const theAssetNameTypeDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-name-types.db";
+const theAssetIdentifierTypeDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-identifier-types.db";
+const theAssetRoleTypeDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-role-types.db";
 const theAssetKindsDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-kinds.db";
 
 // sites
@@ -152,11 +155,23 @@ assetSpecs.ensureIndex({fieldName: "assetId", unique: true}, handleError);
 
 export let assetBrands = new Datastore(theAssetBrandsDb);
 assetBrands.loadDatabase(handleError);
-assetBrands.ensureIndex({fieldName: "assetId", unique: true}, handleError);
+assetBrands.ensureIndex({fieldName: "brandId", unique: true}, handleError);
 
 export let assetChars = new Datastore(theAssetCharsDb);
 assetChars.loadDatabase(handleError);
-assetChars.ensureIndex({fieldName: "assetId", unique: true}, handleError);
+assetChars.ensureIndex({fieldName: "assetCharacteristicId", unique: true}, handleError);
+
+export let assetNameTypes = new Datastore(theAssetNameTypeDb);
+assetNameTypes.loadDatabase(handleError);
+assetNameTypes.ensureIndex({fieldName: "assetNameTypeId", unique: true}, handleError);
+
+export let assetIdentifierTypes = new Datastore(theAssetIdentifierTypeDb);
+assetIdentifierTypes.loadDatabase(handleError);
+assetIdentifierTypes.ensureIndex({fieldName: "assetIdentifierTypeId", unique: true}, handleError);
+
+export let assetRoleTypes = new Datastore(theAssetRoleTypeDb);
+assetRoleTypes.loadDatabase(handleError);
+assetRoleTypes.ensureIndex({fieldName: "assetRoleTypeId", unique: true}, handleError);
 
 export let values = new Datastore(theValuesDb);
 values.loadDatabase(handleError);

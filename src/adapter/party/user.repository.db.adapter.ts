@@ -1,6 +1,6 @@
 import {UserRepository} from "../../repository/user.repository";
 import {User} from "../../data/party/user";
-import {users} from "../../db";
+import { persons, users } from "../../db";
 import {calcSkip} from "../../db.util";
 import {Person} from "../../data/party/person";
 import {CredentialRepositoryNeDbAdapter} from "../authentication/credential.repository.db.adapter";
@@ -16,7 +16,7 @@ export class UserRepositoryNeDbAdapter implements UserRepository {
     const searchStrLocal = new RegExp(searchStr);
     const query = searchStr ? {firstName: {$regex: searchStrLocal}} : {};
     return Observable.create(function (observer: Observer<User[]>) {
-      users.find(query).limit(100).exec(function (err: any, doc: any) {
+      persons.find(query).limit(100).exec(function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -52,7 +52,7 @@ export class UserRepositoryNeDbAdapter implements UserRepository {
 
   getUserCount(): Observable<number> {
     return Observable.create(function (observer: Observer<number>) {
-      users.count({}, function (err: any, count: number) {
+      persons.count({}, function (err: any, count: number) {
         if (!err) {
           observer.next(count);
         } else {
@@ -80,7 +80,7 @@ export class UserRepositoryNeDbAdapter implements UserRepository {
       const query = {
         "partyId": partyId
       };
-      users.findOne(query, function (err: any, doc: any) {
+      persons.findOne(query, function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -96,7 +96,7 @@ export class UserRepositoryNeDbAdapter implements UserRepository {
     person.createdOn = new Date();
     person.modifiedOn = new Date();
     return Observable.create(function (observer: Observer<User>) {
-      users.insert(person, function (err: any, doc: any) {
+      persons.insert(person, function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -113,7 +113,7 @@ export class UserRepositoryNeDbAdapter implements UserRepository {
         "partyId": partyId
       };
       user.modifiedOn = new Date();
-      users.update(query, user, {}, function (err: any, numReplaced: number) {
+      persons.update(query, user, {}, function (err: any, numReplaced: number) {
         if (!err) {
           observer.next(numReplaced);
         } else {
@@ -130,7 +130,7 @@ export class UserRepositoryNeDbAdapter implements UserRepository {
         "partyId": partyId
       };
 
-      users.remove(query, {}, function (err: any, numRemoved: number) {
+      persons.remove(query, {}, function (err: any, numRemoved: number) {
         if (!err) {
           observer.next(numRemoved);
         } else {
@@ -144,7 +144,7 @@ export class UserRepositoryNeDbAdapter implements UserRepository {
   // USED BY OTHER REPOS
   getUsersByIds(partyIds: string[]): Observable<User[]> {
     return Observable.create((observer: Observer<User[]>) => {
-      users.find({partyId: {$in: partyIds}}, function (err: any, docs: any) {
+      persons.find({partyId: {$in: partyIds}}, function (err: any, docs: any) {
         if (!err) {
           observer.next(docs);
         } else {
@@ -160,7 +160,7 @@ export class UserRepositoryNeDbAdapter implements UserRepository {
   getUsersLocal(pageNumber: number, pageSize: number, order: string): Observable<User[]> {
     const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
     return Observable.create(function (observer: Observer<User[]>) {
-      users.find({}).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
+      persons.find({}).skip(skip).limit(pageSize).exec(function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {
@@ -177,7 +177,7 @@ export class UserRepositoryNeDbAdapter implements UserRepository {
         "partyId": partyId
       };
 
-      users.findOne(query, function (err: any, doc: any) {
+      persons.findOne(query, function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);
         } else {

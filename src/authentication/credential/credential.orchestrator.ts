@@ -44,7 +44,7 @@ export class CredentialOrchestrator {
     return this.credentialRepository.addCredential(person, credential, options)
     .pipe(switchMap(createdCredential => {
       if (!createdCredential) {
-        return throwError(credential);
+        return throwError(createdCredential);
       } else {
         person.partyId = credential.partyId;
         return this.personRepository.addPerson(person, options)
