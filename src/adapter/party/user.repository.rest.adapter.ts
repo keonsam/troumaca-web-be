@@ -2,6 +2,7 @@ import {UserRepository} from "../../repository/user.repository";
 import {User} from "../../data/party/user";
 import {Person} from "../../data/party/person";
 import {Observable} from "rxjs";
+import { UserMenu } from "../../data/party/user.menu";
 
 export class UserRepositoryRestAdapter implements UserRepository {
 
@@ -34,6 +35,10 @@ export class UserRepositoryRestAdapter implements UserRepository {
   }
 
   updateUser(partyId: string, user: User): Observable<number> {
+    return undefined;
+  }
+
+  getUserMenu(partyId: string): Observable<UserMenu> {
     return undefined;
   }
 }

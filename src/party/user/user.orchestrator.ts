@@ -18,6 +18,7 @@ import {createCredentialRepositoryFactory} from "../../adapter/authentication/cr
 import {SessionRepository} from "../../repository/session.repository";
 import {createSessionRepositoryFactory} from "../../adapter/session/session.repository.factory";
 import {Person} from "../../data/party/person";
+import { UserMenu } from "../../data/party/user.menu";
 
 export class UserOrchestrator {
 
@@ -78,35 +79,35 @@ export class UserOrchestrator {
             }));
     }
 
-  saveUser(person: Person, credential: Credential, partyAccessRoles: string[]): Observable<User> {
-    credential.password = generate({length: 10, numbers: true});
-    // This present a problem after the user confirm the account.
-    // We will need to either make them active in the confirmation process or just make them active here.
-    // or they will be sent to the join / create organization page.
-    return this.credentialRepository.addCredential(person, credential)
-      .pipe(switchMap(credentialRes => {
-        if (!credentialRes) {
-          return throwError(`Credential was not created ${credentialRes}`);
-        } else {
-          person.partyId = credentialRes.credential.partyId;
-          return this.userRepository.saveUser(person)
-            .pipe(switchMap(userRes => {
-              if (!userRes) {
-                return throwError(`User not created ${userRes}`);
-              } else {
-                return this.partyAccessRoleRepository.addPartyAccessRoles(partyAccessRoles, userRes.partyId)
-                  .pipe(map(partyAccessRolesRes => {
-                    if (!partyAccessRolesRes) {
-                      throw new Error(`Failed to add PartyAccessRoles ${partyAccessRolesRes}`);
-                    } else {
-                      return userRes;
-                    }
-                  }));
-              }
+    saveUser(person: Person, credential: Credential, partyAccessRoles: string[]): Observable<User> {
+        credential.password = generate({length: 10, numbers: true});
+        // This present a problem after the user confirm the account.
+        // We will need to either make them active in the confirmation process or just make them active here.
+        // or they will be sent to the join / create organization page.
+        return this.credentialRepository.addCredential(person, credential)
+            .pipe(switchMap(credentialRes => {
+                if (!credentialRes) {
+                    return throwError(`Credential was not created ${credentialRes}`);
+                } else {
+                    person.partyId = credentialRes.credential.partyId;
+                    return this.userRepository.saveUser(person)
+                        .pipe(switchMap(userRes => {
+                            if (!userRes) {
+                                return throwError(`User not created ${userRes}`);
+                            } else {
+                                return this.partyAccessRoleRepository.addPartyAccessRoles(partyAccessRoles, userRes.partyId)
+                                    .pipe(map(partyAccessRolesRes => {
+                                        if (!partyAccessRolesRes) {
+                                            throw new Error(`Failed to add PartyAccessRoles ${partyAccessRolesRes}`);
+                                        } else {
+                                            return userRes;
+                                        }
+                                    }));
+                            }
+                        }));
+                }
             }));
-        }
-      }));
-  }
+    }
 
     updateUser(partyId: string, user: User, credential: Credential, partyAccessRoles: string[]): Observable<number> {
         return this.userRepository.updateUser(partyId, user)
@@ -130,21 +131,21 @@ export class UserOrchestrator {
     updateUserMe(partyId: string, user: User, credential: Credential): Observable<number> {
         delete user.username;
         return this.userRepository.updateUser(partyId, user);
-            // .pipe(switchMap(numUpdated => {
-            //     if (!numUpdated) {
-            //         return throwError(`No Profile found to update ${numUpdated}`);
-            //     } else {
-            //         // TODO : separate this in the future if needed
-            //         return this.credentialRepository.updateCredential(partyId, credential)
-            //             .pipe( map( numUpdated2 => {
-            //                 if (!numUpdated2) {
-            //                     throw new Error(`updateUserCredential Failed ${numUpdated2}`);
-            //                 } else {
-            //                     return numUpdated;
-            //                 }
-            //             }));
-            //     }
-            // }));
+        // .pipe(switchMap(numUpdated => {
+        //     if (!numUpdated) {
+        //         return throwError(`No Profile found to update ${numUpdated}`);
+        //     } else {
+        //         // TODO : separate this in the future if needed
+        //         return this.credentialRepository.updateCredential(partyId, credential)
+        //             .pipe( map( numUpdated2 => {
+        //                 if (!numUpdated2) {
+        //                     throw new Error(`updateUserCredential Failed ${numUpdated2}`);
+        //                 } else {
+        //                     return numUpdated;
+        //                 }
+        //             }));
+        //     }
+        // }));
     }
 
     deleteUser(partyId: string): Observable<number> {
@@ -154,12 +155,12 @@ export class UserOrchestrator {
                     return throwError(`No User found ${value}`);
                 } else {
                     return this.credentialRepository.deleteCredentialByPartyId(partyId)
-                        .pipe( switchMap( numRep => {
+                        .pipe(switchMap(numRep => {
                             if (!numRep) {
-                                return throwError( `Credential not deleted  ${numRep}`);
+                                return throwError(`Credential not deleted  ${numRep}`);
                             } else {
                                 return this.partyAccessRoleRepository.deletePartyAccessRoles(partyId)
-                                    .pipe( map( numRep2 => {
+                                    .pipe(map(numRep2 => {
                                         if (!numRep2) {
                                             throw new Error(`Failed to delete Party Access Roles ${numRep2}`);
                                         } else {
@@ -170,5 +171,9 @@ export class UserOrchestrator {
                         }));
                 }
             }));
+    }
+
+    getUserMenu(partyId: any): Observable<UserMenu> {
+        return this.userRepository.getUserMenu(partyId);
     }
 }

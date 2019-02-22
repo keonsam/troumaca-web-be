@@ -1,6 +1,7 @@
 import {User} from "../data/party/user";
 import {Person} from "../data/party/person";
 import {Observable} from "rxjs";
+import { UserMenu } from "../data/party/user.menu";
 
 export interface UserRepository {
 
@@ -20,4 +21,5 @@ export interface UserRepository {
 
   updateUser(partyId: string, user: User): Observable<number>;
 
+  getUserMenu(partyId: string): Observable<UserMenu>;
 }

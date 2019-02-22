@@ -53,30 +53,31 @@ export let savePhotoUser = (req: Request, res: Response) => {
 };
 
 export let savePhotoOrganization = (req: Request, res: Response) => {
+    console.log("working");
     HeaderNormalizer.normalize(req);
     const correlationId = req.headers["Correlation-Id"];
     const ownerPartyId = req.headers["Owner-Party-Id"];
     const requestingPartyId = req.headers["Party-Id"];
 
-    const headerOptions = {
-        "Correlation-Id": correlationId,
-        "Owner-Party-Id": ownerPartyId,
-        "Party-Id": requestingPartyId
-    };
-
-    const photo = new Photo();
-    photo.organizationImage = req.file.filename;
-    photo.partyId = requestingPartyId;
-
-    orchestrator.savePhoto(photo)
-        .subscribe(photo => {
-            res.status(201);
-            res.send(JSON.stringify(photo));
-        }, error => {
-            res.status(500);
-            res.send(JSON.stringify({message: "Error Occurred"}));
-            console.log(error);
-        });
+    // const headerOptions = {
+    //     "Correlation-Id": correlationId,
+    //     "Owner-Party-Id": ownerPartyId,
+    //     "Party-Id": requestingPartyId
+    // };
+    //
+    // const photo = new Photo();
+    // photo.organizationImage = req.file.filename;
+    // photo.partyId = requestingPartyId;
+    //
+    // orchestrator.savePhoto(photo)
+    //     .subscribe(photo => {
+    //         res.status(201);
+    //         res.send(JSON.stringify(photo));
+    //     }, error => {
+    //         res.status(500);
+    //         res.send(JSON.stringify({message: "Error Occurred"}));
+    //         console.log(error);
+    //     });
 };
 
 export let updatePhotoUser = (req: Request, res: Response) => {

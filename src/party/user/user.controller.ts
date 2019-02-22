@@ -231,3 +231,23 @@ export let deleteUser = (req: Request, res: Response) => {
       console.log(error);
     });
 };
+
+export let getUserMenu = (req: Request, res: Response) => {
+  HeaderNormalizer.normalize(req);
+  const correlationId = req.headers["Correlation-Id"];
+  const ownerPartyId = req.headers["Owner-Party-Id"];
+  const requestingPartyId = req.headers["Party-Id"];
+
+  userOrchestrator.getUserMenu(requestingPartyId)
+      .subscribe(usersMenu => {
+        res.status(200);
+        res.setHeader("content-type", "application/json");
+        res.send(JSON.stringify(usersMenu));
+      }, error => {
+        res.status(500);
+        res.setHeader("content-type", "application/json");
+        res.send(JSON.stringify({message: "Error Occurred"}));
+        console.log(error);
+      });
+
+};

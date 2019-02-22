@@ -16,7 +16,7 @@ export class UnitOfMeasureRepositoryDbAdapter implements UnitOfMeasureRepository
         const searchStrLocal = new RegExp(searchStr);
         const query = searchStr ? {name: {$regex: searchStrLocal}} : {};
         return Observable.create((observer: Observer<UnitOfMeasure[]>) => {
-            unitOfMeasures.find(query).limit(100).exec((err: any, docs: any) => {
+            unitOfMeasures.find(query).limit(pageSize).exec((err: any, docs: any) => {
                 if (!err) {
                     observer.next(docs);
                 } else {

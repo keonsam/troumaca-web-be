@@ -4,8 +4,9 @@ import { persons, users } from "../../db";
 import {calcSkip} from "../../db.util";
 import {Person} from "../../data/party/person";
 import {CredentialRepositoryNeDbAdapter} from "../authentication/credential.repository.db.adapter";
-import {Observable, Observer, of} from "rxjs";
+import { Observable, Observer, of, throwError } from "rxjs";
 import {switchMap, map} from "rxjs/operators";
+import { UserMenu } from "../../data/party/user.menu";
 
 export class UserRepositoryNeDbAdapter implements UserRepository {
 
@@ -90,7 +91,6 @@ export class UserRepositoryNeDbAdapter implements UserRepository {
       });
     });
   }
-
 
   saveUser(person: Person): Observable<User> {
     person.createdOn = new Date();
@@ -186,5 +186,18 @@ export class UserRepositoryNeDbAdapter implements UserRepository {
         observer.complete();
       });
     });
+  }
+
+  getUserMenu(partyId: string): Observable<UserMenu> {
+    const userMenu: UserMenu = new UserMenu();
+    return this.getPerson(partyId)
+        .pipe(map(user => {
+          if (!user) {
+             throw new Error("get user failed");
+          } else {
+            userMenu.name = `${user.firstName} ${user.lastName}`;
+            return userMenu;
+          }
+        }));
   }
 }

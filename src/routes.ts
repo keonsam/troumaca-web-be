@@ -254,6 +254,7 @@ router.get("/parties/address", checkSession, partyController.getAddress);
 router.post("/parties/address", checkSession, partyController.addAddress);
 router.put("/parties/address/:siteId", checkSession, partyController.updateAddress);
 // user
+router.get("/users-menu", checkSession, userController.getUserMenu);
 router.get("/users/find", checkSession, userController.findUser);
 router.get("/users/profile", checkSession, userController.getUserMe);
 router.get("/users/:partyId", checkSession, userController.getUser);
@@ -282,9 +283,6 @@ router.post("/photos/user", checkSession, upload.single("image"), photoControlle
 router.post("/photos/organization", checkSession, upload.single("image"), photoController.savePhotoOrganization);
 router.put("/photos/user/:photoId", checkSession, upload.single("image"), photoController.updatePhotoUser);
 router.put("/photos/organization/:photoId", checkSession, upload.single("image"), photoController.updatePhotoOrganization);
-
-
-
 
 // SUBSCRIPTION && BILLING
 
