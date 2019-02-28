@@ -7,31 +7,31 @@ export class UnitOfMeasureRepositoryRestAdapter implements UnitOfMeasureReposito
   constructor() {
   }
 
-  findUnitOfMeasures(searchStr: string, pageSize: number): Observable<UnitOfMeasure[]> {
+  findUnitOfMeasures(searchStr: string, pageSize: number, options: any): Observable<UnitOfMeasure[]> {
     return undefined;
   }
 
-  getUnitOfMeasures(pageNumber: number, pageSize: number, order: string): Observable<UnitOfMeasure[]> {
+  getUnitOfMeasures(pageNumber: number, pageSize: number, order: string, options: any): Observable<UnitOfMeasure[]> {
     return undefined;
   }
 
-  getUnitOfMeasureCount(): Observable<number> {
+  getUnitOfMeasureCount(options: any): Observable<number> {
     return undefined;
   }
 
-  getUnitOfMeasureById(unitOfMeasureId: string): Observable<UnitOfMeasure> {
+  getUnitOfMeasureById(unitOfMeasureId: string, options: any): Observable<UnitOfMeasure> {
     return undefined;
   }
 
-  saveUnitOfMeasure(unitOfMeasure: UnitOfMeasure): Observable<UnitOfMeasure> {
+  saveUnitOfMeasure(unitOfMeasure: UnitOfMeasure, options: any): Observable<UnitOfMeasure> {
     return undefined;
   }
 
-  updateUnitOfMeasure(unitOfMeasureId: string, unitOfMeasure: UnitOfMeasure): Observable<number> {
+  updateUnitOfMeasure(unitOfMeasureId: string, unitOfMeasure: UnitOfMeasure, options: any): Observable<number> {
     return undefined;
   }
 
-  deleteUnitOfMeasure(unitOfMeasureId: string): Observable<number> {
+  deleteUnitOfMeasure(unitOfMeasureId: string, options: any): Observable<number> {
     return undefined;
   }
 

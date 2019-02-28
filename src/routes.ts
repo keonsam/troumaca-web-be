@@ -9,10 +9,8 @@ import * as accessRoleTypeController from "./authorization/access-role-type/acce
 import * as resourceTypeController from "./authorization/resource-type/resource.type.controller";
 
 import * as assetController from "./asset/asset.controller";
-import * as assetKindController from "./asset/kind/asset.kind.controller";
 import * as phoneController from "./site/phone/phone.controller";
 import * as photoController from "./party/photo/photo.controller";
-import * as dataTypeController from "./data-type/data.type.controller";
 import * as emailController from "./site/email/email.controller";
 import * as siteController from "./site/site.controller";
 import * as webSiteController from "./site/web-site/web.site.controller";
@@ -125,10 +123,6 @@ router.delete("/access-role-types/:accessRoleTypeId", checkSession, accessRoleTy
 
 // ##### SECURITY END #####
 
-
-
-// Asset Type
-
 // BRANDS
 router.get("/brands", checkSession, brandController.getBrands);
 router.get("/brands/find", checkSession, brandController.findBrands);
@@ -154,7 +148,6 @@ router.get("/asset-types/:assetTypeId", checkSession, assetTypeController.getAss
 router.post("/asset-types", checkSession, assetTypeController.saveAssetType);
 router.put("/asset-types/:assetTypeId", checkSession, checkSession, assetTypeController.updateAssetType);
 router.delete("/asset-types/:assetTypeId", checkSession, assetTypeController.deleteAssetType);
-
 
 // ASSET NAME TYPES
 router.get("/asset-name-types", checkSession, assetNameTypeController.getAssetNameTypes);
@@ -188,27 +181,13 @@ router.post("/unit-of-measures", checkSession, unitOfMeasureController.saveUnitO
 router.put("/unit-of-measures/:unitOfMeasureId", checkSession, unitOfMeasureController.updateUnitOfMeasure);
 router.delete("/unit-of-measures/:unitOfMeasureId", checkSession, unitOfMeasureController.deleteUnitOfMeasure);
 
-// asset-kind
-router.get("/asset-kinds", checkSession, assetKindController.getAssetKinds);
-// unit-of-measure
-// data-type
-router.get("/data-types", checkSession, dataTypeController.getDataTypes);
-// asset
+// ASSETS
 router.get("/assets/find", checkSession, assetController.findAssets);
 router.get("/assets", checkSession, assetController.getAssets);
 router.get("/assets/:assetId", checkSession, assetController.getAssetById);
 router.post("/assets", checkSession, assetController.saveAsset);
 router.put("/assets/:assetId", checkSession, assetController.updateAsset);
 router.delete("/assets/:assetId", checkSession, assetController.deleteAsset);
-
-router.get("/asset-specifications/:assetId", checkSession, assetController.getAssetSpecById);
-router.get("/asset-brands/:assetId", checkSession, assetController.getAssetBrandById);
-
-router.post("/asset-specifications", checkSession, assetController.addAssetSpec);
-router.post("/asset-brands", checkSession, assetController.addAssetBrand);
-
-router.put("/asset-specifications/:assetId", checkSession, assetController.updateAssetSpec);
-router.put("/asset-brands/:assetId", checkSession, assetController.updateAssetBrand);
 
 // site
 router.get("/sites/find", checkSession, siteController.findSite);
@@ -248,34 +227,35 @@ router.delete("/phones/:siteId", checkSession, phoneController.deletePhone);
 // PARTY
 
 router.get("/parties/contact-info", checkSession, partyController.getContactInfo);
-router.post("/parties/contact-info", checkSession, partyController.addContactInfo);
-router.put("/parties/contact-info/:contactInfoId", checkSession, partyController.updateContactInfo);
+router.put("/parties/contact-info/:type", checkSession, partyController.updateContactInfo);
 router.get("/parties/address", checkSession, partyController.getAddress);
-router.post("/parties/address", checkSession, partyController.addAddress);
-router.put("/parties/address/:siteId", checkSession, partyController.updateAddress);
-// user
-router.get("/users-menu", checkSession, userController.getUserMenu);
+router.put("/parties/address/:type", checkSession, partyController.updateAddress);
+
+// USER
 router.get("/users/find", checkSession, userController.findUser);
-router.get("/users/profile", checkSession, userController.getUserMe);
 router.get("/users/:partyId", checkSession, userController.getUser);
 router.get("/users", checkSession, userController.getUsers);
 router.post("/users", checkSession, userController.saveUser);
-router.put("/users/profile", checkSession, userController.updateUserMe);
 router.put("/users/:partyId", checkSession, userController.updateUser);
 router.delete("/users/:partyId", checkSession, userController.deleteUser);
 
+router.get("/users-menu", checkSession, userController.getUserMenu);
+router.get("/users-me", checkSession, userController.getUserMe);
+router.put("/users-me", checkSession, userController.updateUserMe);
+
 // organizations
 router.get("/organizations/find", checkSession, organizationController.findOrganizations);
-router.get("/organizations/company", checkSession, organizationController.getOrganizationCompany);
 router.get("/organizations/:partyId", checkSession, organizationController.getOrganization);
 router.get("/organizations", checkSession, organizationController.getOrganizations);
 router.post("/organizations", checkSession, organizationController.saveOrganization);
-router.post("/organizations/customer", checkSession, organizationController.addCustomer);
-// router.post("/organizations/profiles", checkSession, organizationController.saveOrganizationCompany);
-router.post("/organizations/request-access", checkSession, organizationController.saveAccessRequest);
+// router.post("/organizations/request-access", checkSession, organizationController.saveAccessRequest);
 router.put("/organizations/profile", checkSession, organizationController.updateOrganizationCompany);
 router.put("/organizations/:partyId", checkSession, organizationController.updateOrganization);
 router.delete("/organizations/:partyId", checkSession, organizationController.deleteOrganization);
+
+// COMPANY
+router.get("/company", checkSession, organizationController.getCompany);
+router.post("/company", checkSession, organizationController.addCustomer);
 
 // photos
 router.get("/photos", checkSession, photoController.getPhotos);

@@ -17,7 +17,7 @@ export let getContactInfo = (req: Request, res: Response) => {
     };
     res.setHeader("content-type", "application/json");
 
-    partyOrchestrator.getContactInfo(type, requestingPartyId)
+    partyOrchestrator.getContactInfo(type, headerOptions)
         .subscribe( contactInfo => {
             if (contactInfo) {
                 res.status(200);
@@ -35,40 +35,39 @@ export let getContactInfo = (req: Request, res: Response) => {
         });
 };
 
-export let addContactInfo = (req: Request, res: Response) => {
-    const correlationId = req.headers["Correlation-Id"];
-    const ownerPartyId = req.headers["Owner-Party-Id"];
-    const requestingPartyId = req.headers["Party-Id"];
-    const type: string = req.body.type;
-    const contactInfo: ContactInfo = req.body.contactInfo;
-
-    const headerOptions = {
-        "Correlation-Id": correlationId,
-        "Owner-Party-Id": ownerPartyId,
-        "Party-Id": requestingPartyId
-    };
-    res.setHeader("content-type", "application/json");
-
-    partyOrchestrator.addContactInfo(type, contactInfo, headerOptions)
-        .subscribe( contactInfo => {
-            res.status(200);
-            res.setHeader("content-type", "application/json");
-            res.send(JSON.stringify(contactInfo));
-        }, error => {
-            res.status(500);
-            res.setHeader("content-type", "application/json");
-            res.send(JSON.stringify({message: "Internal Server Error"}));
-            console.log(error);
-        });
-};
+// export let addContactInfo = (req: Request, res: Response) => {
+//     const correlationId = req.headers["Correlation-Id"];
+//     const ownerPartyId = req.headers["Owner-Party-Id"];
+//     const requestingPartyId = req.headers["Party-Id"];
+//     const type: string = req.body.type;
+//     const contactInfo: ContactInfo = req.body.contactInfo;
+//
+//     const headerOptions = {
+//         "Correlation-Id": correlationId,
+//         "Owner-Party-Id": ownerPartyId,
+//         "Party-Id": requestingPartyId
+//     };
+//     res.setHeader("content-type", "application/json");
+//
+//     partyOrchestrator.addContactInfo(requestingPartyId, type, contactInfo, headerOptions)
+//         .subscribe( contactInfo => {
+//             res.status(200);
+//             res.setHeader("content-type", "application/json");
+//             res.send(JSON.stringify(contactInfo));
+//         }, error => {
+//             res.status(500);
+//             res.setHeader("content-type", "application/json");
+//             res.send(JSON.stringify({message: "Internal Server Error"}));
+//             console.log(error);
+//         });
+// };
 
 export let updateContactInfo = (req: Request, res: Response) => {
     const correlationId = req.headers["Correlation-Id"];
     const ownerPartyId = req.headers["Owner-Party-Id"];
     const requestingPartyId = req.headers["Party-Id"];
-    const contactInfoId = req.params.contactInfoId;
-    const type: string = req.body.type;
-    const contactInfo: ContactInfo = req.body.contactInfo;
+    const type: string = req.params.type;
+    const contactInfo: ContactInfo = req.body;
 
     const headerOptions = {
         "Correlation-Id": correlationId,
@@ -77,7 +76,7 @@ export let updateContactInfo = (req: Request, res: Response) => {
     };
     res.setHeader("content-type", "application/json");
 
-    partyOrchestrator.updateContactInfo(type, contactInfo, contactInfoId)
+    partyOrchestrator.updateContactInfo(type, contactInfo, headerOptions)
         .subscribe( num => {
             res.status(200);
             res.setHeader("content-type", "application/json");
@@ -105,7 +104,7 @@ export let getAddress = (req: Request, res: Response) => {
     };
     res.setHeader("content-type", "application/json");
 
-    partyOrchestrator.getAddress(type, requestingPartyId)
+    partyOrchestrator.getAddress(type, headerOptions)
         .subscribe( address => {
             if (address) {
                 res.status(200);
@@ -123,41 +122,40 @@ export let getAddress = (req: Request, res: Response) => {
         });
 };
 
-export let addAddress = (req: Request, res: Response) => {
-    const correlationId = req.headers["Correlation-Id"];
-    const ownerPartyId = req.headers["Owner-Party-Id"];
-    const requestingPartyId = req.headers["Party-Id"];
-    const type: string = req.body.type;
-    const address = req.body.address;
-    address.partyId = requestingPartyId;
-
-    const headerOptions = {
-        "Correlation-Id": correlationId,
-        "Owner-Party-Id": ownerPartyId,
-        "Party-Id": requestingPartyId
-    };
-    res.setHeader("content-type", "application/json");
-
-    partyOrchestrator.addAddress(type, address, headerOptions)
-        .subscribe( value => {
-            res.status(200);
-            res.setHeader("content-type", "application/json");
-            res.send(JSON.stringify(value));
-        }, error => {
-            res.status(500);
-            res.setHeader("content-type", "application/json");
-            res.send(JSON.stringify({message: "Internal Server Error"}));
-            console.log(error);
-        });
-};
+// export let addAddress = (req: Request, res: Response) => {
+//     const correlationId = req.headers["Correlation-Id"];
+//     const ownerPartyId = req.headers["Owner-Party-Id"];
+//     const requestingPartyId = req.headers["Party-Id"];
+//     const type: string = req.body.type;
+//     const address = req.body.address;
+//     address.partyId = requestingPartyId;
+//
+//     const headerOptions = {
+//         "Correlation-Id": correlationId,
+//         "Owner-Party-Id": ownerPartyId,
+//         "Party-Id": requestingPartyId
+//     };
+//     res.setHeader("content-type", "application/json");
+//
+//     partyOrchestrator.addAddress(type, address, headerOptions)
+//         .subscribe( value => {
+//             res.status(200);
+//             res.setHeader("content-type", "application/json");
+//             res.send(JSON.stringify(value));
+//         }, error => {
+//             res.status(500);
+//             res.setHeader("content-type", "application/json");
+//             res.send(JSON.stringify({message: "Internal Server Error"}));
+//             console.log(error);
+//         });
+// };
 
 export let updateAddress = (req: Request, res: Response) => {
     const correlationId = req.headers["Correlation-Id"];
     const ownerPartyId = req.headers["Owner-Party-Id"];
     const requestingPartyId = req.headers["Party-Id"];
-    const siteId = req.params.siteId;
-    const type: string = req.body.type;
-    const address = req.body.address;
+    const type: string = req.params.type;
+    const address = req.body;
 
     const headerOptions = {
         "Correlation-Id": correlationId,
@@ -166,7 +164,7 @@ export let updateAddress = (req: Request, res: Response) => {
     };
     res.setHeader("content-type", "application/json");
 
-    partyOrchestrator.updateAddress(type, address, siteId)
+    partyOrchestrator.updateAddress(type, address, headerOptions)
         .subscribe( num => {
             if (num) {
                 res.status(200);
@@ -174,7 +172,7 @@ export let updateAddress = (req: Request, res: Response) => {
                 res.send(JSON.stringify(num));
             } else {
                 res.status(404);
-                res.send(JSON.stringify({message: "Failed to update" + siteId }));
+                res.send(JSON.stringify({message: "Failed to update" + requestingPartyId }));
             }
         }, error => {
             res.status(500);

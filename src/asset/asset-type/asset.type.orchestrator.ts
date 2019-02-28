@@ -6,9 +6,6 @@ import {Result} from "../../result.success";
 import {getSortOrderOrDefault} from "../../sort.order.util";
 import {shapeAssetTypesResponse} from "./asset.type.response.shaper";
 import {switchMap, map} from "rxjs/operators";
-import {MaterialType} from "../../data/asset/material.type";
-import {ProductType} from "../../data/asset/product.type";
-import {PartOrEquipmentType} from "../../data/asset/part.or.equipment.type";
 import { Instance } from "../../data/asset/instance";
 
 export class AssetTypeOrchestrator {
@@ -19,21 +16,21 @@ export class AssetTypeOrchestrator {
     this.assetTypeRepository = createAssetTypeRepository(options);
   }
 
-  findAssetTypes(searchStr: string, pageSize: number): Observable<AssetType[]> {
-    return this.assetTypeRepository.findAssetTypes(searchStr, pageSize);
+  findAssetTypes(searchStr: string, pageSize: number, options: any): Observable<AssetType[]> {
+    return this.assetTypeRepository.findAssetTypes(searchStr, pageSize, options);
   }
 
-  findInstances(searchStr: string, pageSize: number): Observable<Instance[]> {
-    return this.assetTypeRepository.findInstances(searchStr, pageSize);
+  findInstances(searchStr: string, pageSize: number, options: any): Observable<Instance[]> {
+    return this.assetTypeRepository.findInstances(searchStr, pageSize, options);
   }
 
-  getAssetTypes(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
+  getAssetTypes(number: number, size: number, field: string, direction: string, options: any): Observable<Result<any>> {
     const sort: string = getSortOrderOrDefault(field, direction);
     return this.assetTypeRepository
-      .getAssetTypes(number, size, sort)
+      .getAssetTypes(number, size, sort, options)
       .pipe(switchMap(assetTypes => {
         return this.assetTypeRepository
-            .getAssetTypeCount()
+            .getAssetTypeCount(options)
             .pipe(map(count => {
               const shapeAssetTypesResp: any = shapeAssetTypesResponse(assetTypes, number, size, assetTypes.length, count, sort);
               return new Result<any>(false, "assetTypes", shapeAssetTypesResp);
@@ -41,36 +38,20 @@ export class AssetTypeOrchestrator {
       }));
   }
 
-  getAssetTypeById(assetTypeId: string): Observable<AssetType> {
-    return this.assetTypeRepository.getAssetTypeById(assetTypeId);
+  getAssetTypeById(assetTypeId: string, options: any): Observable<AssetType> {
+    return this.assetTypeRepository.getAssetTypeById(assetTypeId, options);
   }
 
-  saveAssetType(assetType: AssetType): Observable<AssetType> {
-    return this.assetTypeRepository.saveAssetType(assetType);
+  saveAssetType(assetType: AssetType, options: any): Observable<AssetType> {
+    return this.assetTypeRepository.saveAssetType(assetType, options);
   }
 
-  addMaterialType(materialType: MaterialType, options?: any): Observable<MaterialType> {
-    return this.assetTypeRepository.addMaterialType(materialType, options);
+  updateAssetType(assetTypeId: string, assetType: AssetType, options: any): Observable<number> {
+    return this.assetTypeRepository.updateAssetType(assetTypeId, assetType, options);
   }
 
-  addProductType(productType: ProductType, options?: any): Observable<ProductType> {
-    return this.assetTypeRepository.addProductType(productType, options);
-  }
-
-  addPartOrEquipmentType(partOrEquipmentType: PartOrEquipmentType, options?: any): Observable<PartOrEquipmentType> {
-    return this.assetTypeRepository.addPartOrEquipmentType(partOrEquipmentType, options);
-  }
-
-  addOtherAssetType(assetType: AssetType, options?: any): Observable<AssetType> {
-    return this.assetTypeRepository.addOtherAssetType(assetType, options);
-  }
-
-  updateAssetType(assetTypeId: string, assetType: AssetType): Observable<number> {
-    return this.assetTypeRepository.updateAssetType(assetTypeId, assetType);
-  }
-
-  deleteAssetType(assetTypeId: string): Observable<number> {
-    return this.assetTypeRepository.deleteAssetType(assetTypeId);
+  deleteAssetType(assetTypeId: string, options: any): Observable<number> {
+    return this.assetTypeRepository.deleteAssetType(assetTypeId, options);
   }
 
 }

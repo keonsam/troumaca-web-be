@@ -15,17 +15,17 @@ export class AssetNameTypeOrchestrator {
         this.assetNameTypeRepository = createAssetNameTypeRepositoryFactory(options);
     }
 
-    findAssetNameTypes(searchStr: string, pageSize: number): Observable<AssetNameType[]> {
-        return this.assetNameTypeRepository.findAssetNameTypes(searchStr, pageSize);
+    findAssetNameTypes(searchStr: string, pageSize: number, options: any): Observable<AssetNameType[]> {
+        return this.assetNameTypeRepository.findAssetNameTypes(searchStr, pageSize, options);
     }
 
-    getAssetNameTypes(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
+    getAssetNameTypes(number: number, size: number, field: string, direction: string, options: any): Observable<Result<any>> {
         const sort: string = getSortOrderOrDefault(field, direction);
         return this.assetNameTypeRepository
-            .getAssetNameTypes(number, size, sort)
+            .getAssetNameTypes(number, size, sort, options)
             .pipe(switchMap((assetNameTypes: AssetNameType[]) => {
                 return this.assetNameTypeRepository
-                    .getAssetNameTypeCount()
+                    .getAssetNameTypeCount(options)
                     .pipe(map((count: number) => {
                         const shapeAssetNameTypesResp: any = shapeAssetNameTypesResponse(assetNameTypes, number, size, assetNameTypes.length, count, sort);
                         return new Result<any>(false, "assetNameTypes", shapeAssetNameTypesResp);
@@ -33,20 +33,20 @@ export class AssetNameTypeOrchestrator {
             }));
     }
 
-    getAssetNameTypeById(assetNameTypeId: string): Observable<AssetNameType> {
-        return this.assetNameTypeRepository.getAssetNameTypeById(assetNameTypeId);
+    getAssetNameTypeById(assetNameTypeId: string, options: any): Observable<AssetNameType> {
+        return this.assetNameTypeRepository.getAssetNameTypeById(assetNameTypeId, options);
     }
 
-    saveAssetNameType(assetNameType: AssetNameType): Observable<AssetNameType> {
-        return this.assetNameTypeRepository.saveAssetNameType(assetNameType);
+    saveAssetNameType(assetNameType: AssetNameType, options: any): Observable<AssetNameType> {
+        return this.assetNameTypeRepository.saveAssetNameType(assetNameType, options);
     }
 
-    updateAssetNameType(assetNameTypeId: string, assetNameType: AssetNameType): Observable<number> {
-        return this.assetNameTypeRepository.updateAssetNameType(assetNameTypeId, assetNameType);
+    updateAssetNameType(assetNameTypeId: string, assetNameType: AssetNameType, options: any): Observable<number> {
+        return this.assetNameTypeRepository.updateAssetNameType(assetNameTypeId, assetNameType, options);
     }
 
-    deleteAssetNameType(assetNameTypeId: string): Observable<number> {
-        return this.assetNameTypeRepository.deleteAssetNameType(assetNameTypeId);
+    deleteAssetNameType(assetNameTypeId: string, options: any): Observable<number> {
+        return this.assetNameTypeRepository.deleteAssetNameType(assetNameTypeId, options);
     }
 
 }

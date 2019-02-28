@@ -5,6 +5,7 @@ import {Lot} from "./lot";
 
 export class Asset {
   assetId: string;
+  ownerPartyId: string;
   name: string;
   createdOn: Date;
   destroyOn: Date;

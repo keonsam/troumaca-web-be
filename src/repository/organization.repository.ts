@@ -1,6 +1,7 @@
 import {Organization} from "../data/party/organization";
 import {Observable} from "rxjs";
 import {JoinOrganization} from "../data/party/join.organization";
+import { CompanyInfo } from "../data/party/company.info";
 
 export interface OrganizationRepository {
 
@@ -16,13 +17,13 @@ export interface OrganizationRepository {
 
   getOrganization(partyId: string): Observable<Organization>;
 
-
   saveOrganization(organization: Organization): Observable<Organization>;
 
-  saveAccessRequest(request: JoinOrganization): Observable<JoinOrganization>;
+  // saveAccessRequest(request: JoinOrganization): Observable<JoinOrganization>;
 
   deleteOrganization(partyId: string): Observable<number>;
 
   updateOrganization(partyId: string, organization: Organization): Observable<number>;
 
+  getCompany(options: any): Observable<CompanyInfo>;
 }

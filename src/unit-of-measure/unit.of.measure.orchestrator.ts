@@ -15,17 +15,17 @@ export class UnitOfMeasureOrchestrator {
         this.unitOfMeasureRepository = createUnitOfMeasureRepositoryFactory(options);
     }
 
-    findUnitOfMeasures(searchStr: string, pageSize: number): Observable<UnitOfMeasure[]> {
-        return this.unitOfMeasureRepository.findUnitOfMeasures(searchStr, pageSize);
+    findUnitOfMeasures(searchStr: string, pageSize: number, options: any): Observable<UnitOfMeasure[]> {
+        return this.unitOfMeasureRepository.findUnitOfMeasures(searchStr, pageSize, options);
     }
 
-    getUnitOfMeasures(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
+    getUnitOfMeasures(number: number, size: number, field: string, direction: string, options: any): Observable<Result<any>> {
         const sort: string = getSortOrderOrDefault(field, direction);
         return this.unitOfMeasureRepository
-            .getUnitOfMeasures(number, size, sort)
+            .getUnitOfMeasures(number, size, sort, options)
             .pipe(switchMap((unitOfMeasures: UnitOfMeasure[]) => {
                 return this.unitOfMeasureRepository
-                    .getUnitOfMeasureCount()
+                    .getUnitOfMeasureCount(options)
                     .pipe(map((count: number) => {
                         const shapeUnitOfMeasuresResp: any = shapeUnitOfMeasuresResponse(unitOfMeasures, number, size, unitOfMeasures.length, count, sort);
                         return new Result<any>(false, "unitOfMeasures", shapeUnitOfMeasuresResp);
@@ -33,20 +33,20 @@ export class UnitOfMeasureOrchestrator {
             }));
     }
 
-    getUnitOfMeasureById(unitOfMeasureId: string): Observable<UnitOfMeasure> {
-        return this.unitOfMeasureRepository.getUnitOfMeasureById(unitOfMeasureId);
+    getUnitOfMeasureById(unitOfMeasureId: string, options: any): Observable<UnitOfMeasure> {
+        return this.unitOfMeasureRepository.getUnitOfMeasureById(unitOfMeasureId, options);
     }
 
-    saveUnitOfMeasure(unitOfMeasure: UnitOfMeasure): Observable<UnitOfMeasure> {
-        return this.unitOfMeasureRepository.saveUnitOfMeasure(unitOfMeasure);
+    saveUnitOfMeasure(unitOfMeasure: UnitOfMeasure, options: any): Observable<UnitOfMeasure> {
+        return this.unitOfMeasureRepository.saveUnitOfMeasure(unitOfMeasure, options);
     }
 
-    updateUnitOfMeasure(unitOfMeasureId: string, unitOfMeasure: UnitOfMeasure): Observable<number> {
-        return this.unitOfMeasureRepository.updateUnitOfMeasure(unitOfMeasureId, unitOfMeasure);
+    updateUnitOfMeasure(unitOfMeasureId: string, unitOfMeasure: UnitOfMeasure, options: any): Observable<number> {
+        return this.unitOfMeasureRepository.updateUnitOfMeasure(unitOfMeasureId, unitOfMeasure, options);
     }
 
-    deleteUnitOfMeasure(unitOfMeasureId: string): Observable<number> {
-        return this.unitOfMeasureRepository.deleteUnitOfMeasure(unitOfMeasureId);
+    deleteUnitOfMeasure(unitOfMeasureId: string, options: any): Observable<number> {
+        return this.unitOfMeasureRepository.deleteUnitOfMeasure(unitOfMeasureId, options);
     }
 
 }

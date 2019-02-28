@@ -3,18 +3,18 @@ import {Observable} from "rxjs";
 
 export interface AssetRoleTypeRepository {
 
-  findAssetRoleTypes(searchStr: string, pageSize: number): Observable<AssetRoleType[]>;
+  findAssetRoleTypes(searchStr: string, pageSize: number, options: any): Observable<AssetRoleType[]>;
 
-  getAssetRoleTypes(pageNumber: number, pageSize: number, order: string): Observable<AssetRoleType[]>;
+  getAssetRoleTypes(pageNumber: number, pageSize: number, order: string, options: any): Observable<AssetRoleType[]>;
 
-  getAssetRoleTypeCount(): Observable<number>;
+  getAssetRoleTypeCount(options: any): Observable<number>;
 
-  getAssetRoleTypeById(assetRoleTypeId: string): Observable<AssetRoleType>;
+  getAssetRoleTypeById(assetRoleTypeId: string, options: any): Observable<AssetRoleType>;
 
-  saveAssetRoleType(assetRoleType: AssetRoleType): Observable<AssetRoleType>;
+  saveAssetRoleType(assetRoleType: AssetRoleType, options: any): Observable<AssetRoleType>;
 
-  updateAssetRoleType(assetRoleTypeId: string, assetRoleType: AssetRoleType): Observable<number>;
+  updateAssetRoleType(assetRoleTypeId: string, assetRoleType: AssetRoleType, options: any): Observable<number>;
 
-  deleteAssetRoleType(assetRoleTypeId: string): Observable<number>;
+  deleteAssetRoleType(assetRoleTypeId: string, options: any): Observable<number>;
 
 }

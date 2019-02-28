@@ -6,6 +6,7 @@ import {jsonRequestHeaderMap, postJsonOptions} from "../../request.helpers";
 // import { Confirmation } from "../../data/authentication/confirmation";
 import request from "request";
 import {JoinOrganization} from "../../data/party/join.organization";
+import { CompanyInfo } from "../../data/party/company.info";
 
 export class OrganizationRestRepository implements OrganizationRepository {
 
@@ -67,9 +68,9 @@ export class OrganizationRestRepository implements OrganizationRepository {
     });
   }
 
-  saveAccessRequest(request: JoinOrganization): Observable<JoinOrganization> {
-    return undefined;
-  }
+  // saveAccessRequest(request: JoinOrganization): Observable<JoinOrganization> {
+  //   return undefined;
+  // }
 
   deleteOrganization(partyId: string): Observable<number> {
     return undefined;
@@ -88,6 +89,10 @@ export class OrganizationRestRepository implements OrganizationRepository {
   }
 
   updateOrganization(partyId: string, organization: Organization): Observable<number> {
+    return undefined;
+  }
+
+  getCompany(partyId: any): Observable<CompanyInfo> {
     return undefined;
   }
 }

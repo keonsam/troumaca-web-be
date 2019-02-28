@@ -1,5 +1,6 @@
 export class UnitOfMeasure {
 
+  ownerPartyId: string;
   constructor(unitOfMeasureId?: string, quantity?: string, name?: string, symbol?: string, factor?: string, otherSiBaseUnitsExpression?: string, siBaseUnitsExpression?: string) {
     this._unitOfMeasureId = unitOfMeasureId;
     this._quantity = quantity;

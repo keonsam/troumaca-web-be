@@ -3,6 +3,7 @@ export class Session {
   sessionId: string;
   partyId: string;
   credentialId: string;
+  ownerPartyId: string;
   customerId: string;
   expirationTime: Date;
   createdOn: Date;

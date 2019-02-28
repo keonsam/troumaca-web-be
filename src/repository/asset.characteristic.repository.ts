@@ -3,20 +3,20 @@ import {Observable} from "rxjs";
 
 export interface AssetCharacteristicRepository {
 
-  findAssetCharacteristics(searchStr: string, pageSize: number): Observable<AssetCharacteristic[]>;
+  findAssetCharacteristics(searchStr: string, pageSize: number, options: any): Observable<AssetCharacteristic[]>;
 
-  getAssetCharacteristics(pageNumber: number, pageSize: number, order: string): Observable<AssetCharacteristic[]>;
+  getAssetCharacteristics(pageNumber: number, pageSize: number, order: string, options: any): Observable<AssetCharacteristic[]>;
 
-  getAssetCharacteristicCount(): Observable<number>;
+  getAssetCharacteristicCount(options: any): Observable<number>;
 
-  getTypes(): Observable<any[]>;
+  getTypes(options: any): Observable<any[]>;
 
-  getAssetCharacteristicById(assetCharacteristicId: string): Observable<AssetCharacteristic>;
+  getAssetCharacteristicById(assetCharacteristicId: string, options: any): Observable<AssetCharacteristic>;
 
-  saveAssetCharacteristic(assetCharacteristic: AssetCharacteristic): Observable<AssetCharacteristic>;
+  saveAssetCharacteristic(assetCharacteristic: AssetCharacteristic, options: any): Observable<AssetCharacteristic>;
 
-  updateAssetCharacteristic(assetCharacteristicId: string, assetCharacteristic: AssetCharacteristic): Observable<number>;
+  updateAssetCharacteristic(assetCharacteristicId: string, assetCharacteristic: AssetCharacteristic, options: any): Observable<number>;
 
-  deleteAssetCharacteristic(assetCharacteristicId: string): Observable<number>;
+  deleteAssetCharacteristic(assetCharacteristicId: string, options: any): Observable<number>;
 
 }

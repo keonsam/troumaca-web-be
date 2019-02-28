@@ -3,18 +3,18 @@ import {Observable} from "rxjs";
 
 export interface AssetNameTypeRepository {
 
-  findAssetNameTypes(searchStr: string, pageSize: number): Observable<AssetNameType[]>;
+  findAssetNameTypes(searchStr: string, pageSize: number, options: any): Observable<AssetNameType[]>;
 
-  getAssetNameTypes(pageNumber: number, pageSize: number, order: string): Observable<AssetNameType[]>;
+  getAssetNameTypes(pageNumber: number, pageSize: number, order: string, options: any): Observable<AssetNameType[]>;
 
-  getAssetNameTypeCount(): Observable<number>;
+  getAssetNameTypeCount(options: any): Observable<number>;
 
-  getAssetNameTypeById(assetNameTypeId: string): Observable<AssetNameType>;
+  getAssetNameTypeById(assetNameTypeId: string, options: any): Observable<AssetNameType>;
 
-  saveAssetNameType(assetNameType: AssetNameType): Observable<AssetNameType>;
+  saveAssetNameType(assetNameType: AssetNameType, options: any): Observable<AssetNameType>;
 
-  updateAssetNameType(assetNameTypeId: string, assetNameType: AssetNameType): Observable<number>;
+  updateAssetNameType(assetNameTypeId: string, assetNameType: AssetNameType, options: any): Observable<number>;
 
-  deleteAssetNameType(assetNameTypeId: string): Observable<number>;
+  deleteAssetNameType(assetNameTypeId: string, options: any): Observable<number>;
 
 }

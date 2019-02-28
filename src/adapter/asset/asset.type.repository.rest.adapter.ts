@@ -13,143 +13,35 @@ import {PartOrEquipmentType} from "../../data/asset/part.or.equipment.type";
 import { Instance } from "../../data/asset/instance";
 
 export class AssetTypeRepositoryRestAdapter implements AssetTypeRepository {
-  findAssetTypes(searchStr: string, pageSize: number): Observable<AssetType[]> {
+  findAssetTypes(searchStr: string, pageSize: number, options: any): Observable<AssetType[]> {
     return undefined;
   }
 
-  findInstances(searchStr: string, pageSize: number): Observable<Instance[]> {
+  findInstances(searchStr: string, pageSize: number, options: any): Observable<Instance[]> {
     return undefined;
   }
 
-  getAssetTypes(pageNumber: number, pageSize: number, order: string): Observable<AssetType[]> {
+  getAssetTypes(pageNumber: number, pageSize: number, order: string, options: any): Observable<AssetType[]> {
     return undefined;
   }
 
-  getAssetTypeCount(): Observable<number> {
+  getAssetTypeCount(options: any): Observable<number> {
     return undefined;
   }
 
-  getAssetTypeById(assetTypeId: string): Observable<AssetType> {
+  getAssetTypeById(assetTypeId: string, options: any): Observable<AssetType> {
     return undefined;
   }
 
-  saveAssetType(assetType: AssetType): Observable<AssetType> {
+  saveAssetType(assetType: AssetType, options: any): Observable<AssetType> {
     return undefined;
   }
 
-  addOtherAssetType(otherAssetType: OtherAssetType, options?: any): Observable<OtherAssetType> {
-    const uri: string = properties.get("asset.host.port") as string;
-
-    const headerMap = jsonRequestHeaderMap(options ? options : {});
-
-    const json = ""; // {toPartyId: toPartyId};
-
-    const uriAndPath: string = `${uri}/assets/asset-types/other-asset-types`;
-
-    const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
-
-    return Observable.create(function (observer: Observer<Organization>) {
-      request(requestOptions, function (error: any, response: any, body: any) {
-        try {
-          if (response && response.statusCode != 200) {
-            observer.error(body);
-          } else {
-            observer.next(body);
-          }
-        } catch (e) {
-          observer.error(new Error(e.message));
-        }
-        observer.complete();
-      });
-    });
-  }
-
-  addMaterialType(materialType: MaterialType, options?: any): Observable<MaterialType> {
-    const uri: string = properties.get("asset.host.port") as string;
-
-    const headerMap = jsonRequestHeaderMap(options ? options : {});
-
-    const json = ""; // {toPartyId: toPartyId};
-
-    const uriAndPath: string = `${uri}/assets/asset-types/material-types`;
-
-    const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
-
-    return Observable.create(function (observer: Observer<Organization>) {
-      request(requestOptions, function (error: any, response: any, body: any) {
-        try {
-          if (response && response.statusCode != 200) {
-            observer.error(body);
-          } else {
-            observer.next(body);
-          }
-        } catch (e) {
-          observer.error(new Error(e.message));
-        }
-        observer.complete();
-      });
-    });
-  }
-
-  addProductType(productType: ProductType, options?: any): Observable<ProductType> {
-    const uri: string = properties.get("asset.host.port") as string;
-
-    const headerMap = jsonRequestHeaderMap(options ? options : {});
-
-    const json = ""; // {toPartyId: toPartyId};
-
-    const uriAndPath: string = `${uri}/assets/asset-types/product-types`;
-
-    const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
-
-    return Observable.create(function (observer: Observer<Organization>) {
-      request(requestOptions, function (error: any, response: any, body: any) {
-        try {
-          if (response && response.statusCode != 200) {
-            observer.error(body);
-          } else {
-            observer.next(body);
-          }
-        } catch (e) {
-          observer.error(new Error(e.message));
-        }
-        observer.complete();
-      });
-    });
-  }
-
-  addPartOrEquipmentType(partOrEquipmentType: PartOrEquipmentType, options?: any): Observable<PartOrEquipmentType> {
-    const uri: string = properties.get("asset.host.port") as string;
-
-    const headerMap = jsonRequestHeaderMap(options ? options : {});
-
-    const json = ""; // {toPartyId: toPartyId};
-
-    const uriAndPath: string = `${uri}/assets/asset-types/part-or-equipment-types`;
-
-    const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
-
-    return Observable.create(function (observer: Observer<Organization>) {
-      request(requestOptions, function (error: any, response: any, body: any) {
-        try {
-          if (response && response.statusCode != 200) {
-            observer.error(body);
-          } else {
-            observer.next(body);
-          }
-        } catch (e) {
-          observer.error(new Error(e.message));
-        }
-        observer.complete();
-      });
-    });
-  }
-
-  updateAssetType(assetTypeId: string, assetType: AssetType): Observable<number> {
+  updateAssetType(assetTypeId: string, assetType: AssetType, options: any): Observable<number> {
     return undefined;
   }
 
-  deleteAssetType(assetTypeId: string): Observable<number> {
+  deleteAssetType(assetTypeId: string, options: any): Observable<number> {
     return undefined;
   }
 }

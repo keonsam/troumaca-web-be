@@ -3,18 +3,18 @@ import {Observable} from "rxjs";
 
 export interface BrandRepository {
 
-  findBrands(searchStr: string, pageSize: number): Observable<Brand[]>;
+  findBrands(searchStr: string, pageSize: number, options: any): Observable<Brand[]>;
 
-  getBrands(pageNumber: number, pageSize: number, order: string): Observable<Brand[]>;
+  getBrands(pageNumber: number, pageSize: number, order: string, options: any): Observable<Brand[]>;
 
-  getBrandCount(): Observable<number>;
+  getBrandCount(options: any): Observable<number>;
 
-  getBrandById(brandId: string): Observable<Brand>;
+  getBrandById(brandId: string, options: any): Observable<Brand>;
 
-  saveBrand(brand: Brand): Observable<Brand>;
+  saveBrand(brand: Brand, options: any): Observable<Brand>;
 
-  updateBrand(brandId: string, brand: Brand): Observable<number>;
+  updateBrand(brandId: string, brand: Brand, options: any): Observable<number>;
 
-  deleteBrand(brandId: string): Observable<number>;
+  deleteBrand(brandId: string, options: any): Observable<number>;
 
 }

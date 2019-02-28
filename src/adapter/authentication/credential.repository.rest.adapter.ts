@@ -49,7 +49,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
     });
   }
 
-  isValidUsername(username: string, partyId: string, options?: any): Observable<boolean> {
+  isValidUsername(username: string, options?: any): Observable<boolean> {
     let uri: string = properties.get("credential.host.port") as string;
 
     const headerMap = jsonRequestHeaderMap(options ? options : {});
@@ -209,9 +209,9 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
     });
   }
 
-  updateCredential(partyId: string, credential: Credential, options?: any): Observable<number> {
-      return undefined;
-  }
+  // updateCredential(partyId: string, credential: Credential, options?: any): Observable<number> {
+  //     return undefined;
+  // }
 
   deleteCredentialByPartyId(partyId: string, options?: any): Observable<number> {
     return undefined;

@@ -34,6 +34,8 @@ const thePersonsDb = path.resolve(__dirname, "..") + "/nedb/party/persons.db";
 const theOrganizationDb = path.resolve(__dirname, "..") + "/nedb/party/organizations.db";
 const theRequestsDb = path.resolve(__dirname, "..") + "/nedb/party/requests.db";
 const theUsersDb = path.resolve(__dirname, "..") + "/nedb/party/users.db";
+const theActDb = path.resolve(__dirname, "..") + "/nedb/party/activities.db";
+
 
 // authentication
 const theCredentialDb = path.resolve(__dirname, "..") + "/nedb/authentication/credentials.db";
@@ -107,6 +109,9 @@ export let credentialConfirmations = new Datastore(theCredentialConfirmationsDb)
 credentialConfirmations.loadDatabase(handleError);
 credentialConfirmations.ensureIndex({fieldName: "confirmationId", unique: true}, handleError);
 
+export const activities = new Datastore(theActDb);
+activities.loadDatabase(handleError);
+activities.ensureIndex( {fieldName: "activityId", unique: true}, handleError);
 
 // sites
 export let sites = new Datastore(theSitesDb);

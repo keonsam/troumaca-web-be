@@ -22,6 +22,7 @@ export class SessionRepositoryNeDbAdapter implements SessionRepository {
         } else if (session.expirationTime > new Date()) {
           validSession.valid = true;
           validSession.partyId = session.partyId;
+          validSession.ownerPartyId = session.ownerPartyId;
           return validSession;
         } else {
           validSession.valid = false;

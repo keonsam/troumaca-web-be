@@ -7,31 +7,31 @@ export class AssetIdentifierTypeRepositoryRestAdapter implements AssetIdentifier
   constructor() {
   }
 
-  findAssetIdentifierTypes(searchStr: string, pageSize: number): Observable<AssetIdentifierType[]> {
+  findAssetIdentifierTypes(searchStr: string, pageSize: number, options: any): Observable<AssetIdentifierType[]> {
     return undefined;
   }
 
-  getAssetIdentifierTypes(pageNumber: number, pageSize: number, order: string): Observable<AssetIdentifierType[]> {
+  getAssetIdentifierTypes(pageNumber: number, pageSize: number, order: string, options: any): Observable<AssetIdentifierType[]> {
     return undefined;
   }
 
-  getAssetIdentifierTypeCount(): Observable<number> {
+  getAssetIdentifierTypeCount(options: any): Observable<number> {
     return undefined;
   }
 
-  getAssetIdentifierTypeById(assetIdentifierTypeId: string): Observable<AssetIdentifierType> {
+  getAssetIdentifierTypeById(assetIdentifierTypeId: string, options: any): Observable<AssetIdentifierType> {
     return undefined;
   }
 
-  saveAssetIdentifierType(assetIdentifierType: AssetIdentifierType): Observable<AssetIdentifierType> {
+  saveAssetIdentifierType(assetIdentifierType: AssetIdentifierType, options: any): Observable<AssetIdentifierType> {
     return undefined;
   }
 
-  updateAssetIdentifierType(assetIdentifierTypeId: string, assetIdentifierType: AssetIdentifierType): Observable<number> {
+  updateAssetIdentifierType(assetIdentifierTypeId: string, assetIdentifierType: AssetIdentifierType, options: any): Observable<number> {
     return undefined;
   }
 
-  deleteAssetIdentifierType(assetIdentifierTypeId: string): Observable<number> {
+  deleteAssetIdentifierType(assetIdentifierTypeId: string, options: any): Observable<number> {
     return undefined;
   }
 

@@ -3,18 +3,18 @@ import {Observable} from "rxjs";
 
 export interface UnitOfMeasureRepository {
 
-  findUnitOfMeasures(searchStr: string, pageSize: number): Observable<UnitOfMeasure[]>;
+  findUnitOfMeasures(searchStr: string, pageSize: number, options: any): Observable<UnitOfMeasure[]>;
 
-  getUnitOfMeasures(pageNumber: number, pageSize: number, order: string): Observable<UnitOfMeasure[]>;
+  getUnitOfMeasures(pageNumber: number, pageSize: number, order: string, options: any): Observable<UnitOfMeasure[]>;
 
-  getUnitOfMeasureCount(): Observable<number>;
+  getUnitOfMeasureCount(options: any): Observable<number>;
 
-  getUnitOfMeasureById(unitOfMeasureId: string): Observable<UnitOfMeasure>;
+  getUnitOfMeasureById(unitOfMeasureId: string, options: any): Observable<UnitOfMeasure>;
 
-  saveUnitOfMeasure(unitOfMeasure: UnitOfMeasure): Observable<UnitOfMeasure>;
+  saveUnitOfMeasure(unitOfMeasure: UnitOfMeasure, options: any): Observable<UnitOfMeasure>;
 
-  updateUnitOfMeasure(unitOfMeasureId: string, unitOfMeasure: UnitOfMeasure): Observable<number>;
+  updateUnitOfMeasure(unitOfMeasureId: string, unitOfMeasure: UnitOfMeasure, options: any): Observable<number>;
 
-  deleteUnitOfMeasure(unitOfMeasureId: string): Observable<number>;
+  deleteUnitOfMeasure(unitOfMeasureId: string, options: any): Observable<number>;
 
 }

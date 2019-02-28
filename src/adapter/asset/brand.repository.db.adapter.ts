@@ -12,9 +12,12 @@ export class BrandRepositoryDbAdapter implements BrandRepository {
     constructor() {
     }
 
-    findBrands(searchStr: string, pageSize: number): Observable<Brand[]> {
+    findBrands(searchStr: string, pageSize: number, options: any): Observable<Brand[]> {
         const searchStrLocal = new RegExp(searchStr);
-        const query = searchStr ? {name: {$regex: searchStrLocal}} : {};
+        const query = searchStr ? {
+            name: {$regex: searchStrLocal},
+            ownerPartyId: options["Owner-Party-Id"]
+        } : {};
         return Observable.create((observer: Observer<Brand[]>) => {
             assetBrands.find(query).limit(100).exec((err: any, docs: any) => {
                 if (!err) {
@@ -27,10 +30,13 @@ export class BrandRepositoryDbAdapter implements BrandRepository {
         });
     }
 
-    getBrands(pageNumber: number, pageSize: number, order: string): Observable<Brand[]> {
+    getBrands(pageNumber: number, pageSize: number, order: string, options: any): Observable<Brand[]> {
         const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
+        const query = {
+            ownerPartyId: options["Owner-Party-Id"]
+        };
         return Observable.create((observer: Observer<Brand[]>) => {
-            assetBrands.find({}).skip(skip).limit(pageSize).exec(function (err: any, docs: any) {
+            assetBrands.find(query).skip(skip).limit(pageSize).exec(function (err: any, docs: any) {
                 if (!err) {
                     observer.next(docs);
                 } else {
@@ -41,9 +47,12 @@ export class BrandRepositoryDbAdapter implements BrandRepository {
         });
     }
 
-    getBrandCount(): Observable<number> {
+    getBrandCount(options: any): Observable<number> {
+        const query = {
+            ownerPartyId: options["Owner-Party-Id"]
+        };
         return Observable.create(function (observer: Observer<number>) {
-            assetBrands.count({}, function (err: any, count: number) {
+            assetBrands.count(query, function (err: any, count: number) {
                 if (!err) {
                     observer.next(count);
                 } else {
@@ -54,9 +63,12 @@ export class BrandRepositoryDbAdapter implements BrandRepository {
         });
     }
 
-    getBrandById(brandId: string): Observable<Brand> {
+    getBrandById(brandId: string, options: any): Observable<Brand> {
         return Observable.create((observer: Observer<Brand>) => {
-            const query = {"brandId": brandId};
+            const query = {
+                "brandId": brandId,
+                ownerPartyId: options["Owner-Party-Id"]
+            };
             assetBrands.findOne(query, function (err: any, doc: any) {
                 if (!err) {
                     observer.next(doc);
@@ -68,8 +80,9 @@ export class BrandRepositoryDbAdapter implements BrandRepository {
         });
     }
 
-    saveBrand(brand: Brand): Observable<Brand> {
+    saveBrand(brand: Brand, options: any): Observable<Brand> {
         brand.brandId = generateUUID();
+        brand.ownerPartyId = options["Owner-Party-Id"];
         return Observable.create(function (observer: Observer<Brand>) {
             assetBrands.insert(brand, function (err: any, doc: any) {
                 if (err) {
@@ -82,8 +95,11 @@ export class BrandRepositoryDbAdapter implements BrandRepository {
         });
     }
 
-    updateBrand(brandId: string, brand: Brand): Observable<number> {
-        const query = {brandId};
+    updateBrand(brandId: string, brand: Brand, options: any): Observable<number> {
+        const query = {
+            brandId,
+            ownerPartyId: options["Owner-Party-Id"]
+        };
         return Observable.create(function (observer: Observer<number>) {
             assetBrands.update(query, brand, {}, function (err: any, numReplaced: number) {
                 if (!err) {
@@ -96,8 +112,11 @@ export class BrandRepositoryDbAdapter implements BrandRepository {
         });
     }
 
-    deleteBrand(brandId: string): Observable<number> {
-        const query = {brandId};
+    deleteBrand(brandId: string, options: any): Observable<number> {
+        const query = {
+            brandId,
+            ownerPartyId: options["Owner-Party-Id"]
+        };
         return Observable.create(function (observer: Observer<number>) {
             assetBrands.remove(query, {}, function (err: any, numRemoved: number) {
                 if (!err) {

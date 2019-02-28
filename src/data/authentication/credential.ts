@@ -1,4 +1,5 @@
 export class Credential {
+  ownerPartyId: string;
   partyId: string;
   credentialId: string;
   username: string;
