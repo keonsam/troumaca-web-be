@@ -1,4 +1,1 @@
-{"name":"UPC","description":"upc number for goods.","assetNameTypeId":"bf3d7080-e6de-477a-a7c4-12b980c7e910","_id":"AbDLhsFSrinnhxTD"}
-{"name":"VIM","description":"vehicle names.","assetNameTypeId":"c364c539-5079-46d8-9b40-c9a87bd9248f","_id":"jO2HP1HdpR51wHqA"}
-{"name":"trade name","description":"","assetNameTypeId":"738c966f-7980-444b-af58-66c9a5926827","_id":"tHp3vF1CSRreMFVF"}
 {"$$indexCreated":{"fieldName":"assetNameTypeId","unique":true,"sparse":false}}

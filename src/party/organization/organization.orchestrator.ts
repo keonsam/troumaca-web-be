@@ -11,6 +11,7 @@ import {createSessionRepositoryFactory} from "../../adapter/session/session.repo
 import {JoinOrganization} from "../../data/party/join.organization";
 import {CredentialRepository} from "../../repository/credential.repository";
 import {createCredentialRepositoryFactory} from "../../adapter/authentication/credential.repository.factory";
+import { CompanyInfo } from "../../data/party/company.info";
 
 export class OrganizationOrchestrator {
 
@@ -50,20 +51,6 @@ export class OrganizationOrchestrator {
 
   addCustomer(organization: Organization, options?: any): Observable<Organization> {
     return this.organizationRepository.addCustomer(organization, options);
-      // .pipe(switchMap(organizationRes => {
-      //   if (!organizationRes) {
-      //     return throwError("Failed to save organization.");
-      //   } else {
-      //     return this.credentialRepository.updateCredentialStatusByPartyId(organization.partyId, "Active")
-      //       .pipe(map(numUpdated => {
-      //         if (!numUpdated) {
-      //           throw new Error("credential status was not updated.");
-      //         } else {
-      //           return organizationRes;
-      //         }
-      //       }));
-      //   }
-      // }))
   }
 
   saveOrganizationCompany(organization: Organization): Observable<Organization> {
@@ -84,23 +71,23 @@ export class OrganizationOrchestrator {
       }));
   }
 
-  saveAccessRequest(request: JoinOrganization): Observable<JoinOrganization> {
-    return this.organizationRepository.saveAccessRequest(request)
-      .pipe(switchMap(requestRes => {
-        if (!requestRes) {
-          return throwError("Failed to save organization access request.");
-        } else {
-          return this.credentialRepository.updateCredentialStatusByPartyId(request.partyId, "Active")
-            .pipe(map(numUpdated => {
-              if (!numUpdated) {
-                throw new Error("credential status was not updated.");
-              } else {
-                return requestRes;
-              }
-            }));
-        }
-      }));
-  }
+  // saveAccessRequest(request: JoinOrganization): Observable<JoinOrganization> {
+  //   return this.organizationRepository.saveAccessRequest(request)
+  //     .pipe(switchMap(requestRes => {
+  //       if (!requestRes) {
+  //         return throwError("Failed to save organization access request.");
+  //       } else {
+  //         return this.credentialRepository.updateCredentialStatusByPartyId(request.partyId, "Active")
+  //           .pipe(map(numUpdated => {
+  //             if (!numUpdated) {
+  //               throw new Error("credential status was not updated.");
+  //             } else {
+  //               return requestRes;
+  //             }
+  //           }));
+  //       }
+  //     }));
+  // }
 
   deleteOrganization(partyId: string): Observable<number> {
     return this.organizationRepository.deleteOrganization(partyId);
@@ -110,4 +97,7 @@ export class OrganizationOrchestrator {
     return this.organizationRepository.updateOrganization(partyId, organization);
   }
 
+  getCompany(options: any): Observable<CompanyInfo> {
+      return this.organizationRepository.getCompany(options);
+  }
 }

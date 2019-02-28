@@ -11,67 +11,31 @@ export class AssetRepositoryRestAdapter implements AssetRepository {
   constructor() {
   }
 
-  findAssets(searchStr: string, pageSize: number): Observable<Asset[]> {
+  findAssets(searchStr: string, pageSize: number, options: any): Observable<Asset[]> {
     return undefined;
   }
 
-  getAssets(pageNumber: number, pageSize: number, order: string): Observable<Asset[]> {
+  getAssets(pageNumber: number, pageSize: number, order: string, options: any): Observable<Asset[]> {
     return undefined;
   }
 
-  getAssetCount(): Observable<number> {
+  getAssetCount(options: any): Observable<number> {
     return undefined;
   }
 
-  getAssetById(assetId: string): Observable<Asset> {
+  getAssetById(assetId: string, options: any): Observable<Asset> {
     return undefined;
   }
 
-  getAssetSpecById(assetId: string): Observable<AssetSpecification> {
+  saveAsset(asset: Asset, options: any): Observable<Asset> {
     return undefined;
   }
 
-  getAssetBrandById(assetId: string): Observable<AssetBrand> {
+  updateAsset(assetId: string, asset: Asset, options: any): Observable<number> {
     return undefined;
   }
 
-  getAssetCharacteristicsById(assetId: string): Observable<AssetCharacteristics> {
-    return undefined;
-  }
-
-  saveAsset(asset: Asset): Observable<Asset> {
-    return undefined;
-  }
-
-  addAssetSpec(asset: AssetSpecification): Observable<AssetSpecification> {
-    return undefined;
-  }
-
-  addAssetBrand(asset: AssetBrand): Observable<AssetBrand> {
-    return undefined;
-  }
-
-  addAssetCharacteristics(asset: AssetCharacteristics): Observable<AssetCharacteristics> {
-    return undefined;
-  }
-
-  updateAsset(assetId: string, asset: Asset): Observable<number> {
-    return undefined;
-  }
-
-  updateAssetSpec(assetId: string, asset: AssetSpecification): Observable<number> {
-    return undefined;
-  }
-
-  updateAssetBrand(assetId: string, asset: AssetBrand): Observable<number> {
-    return undefined;
-  }
-
-  updateAssetChars(assetId: string, asset: AssetCharacteristics): Observable<number> {
-    return undefined;
-  }
-
-  deleteAsset(assetId: string): Observable<number> {
+  deleteAsset(assetId: string, options: any): Observable<number> {
     return undefined;
   }
 

@@ -3,18 +3,18 @@ import {Observable} from "rxjs";
 
 export interface AssetIdentifierTypeRepository {
 
-  findAssetIdentifierTypes(searchStr: string, pageSize: number): Observable<AssetIdentifierType[]>;
+  findAssetIdentifierTypes(searchStr: string, pageSize: number, options: any): Observable<AssetIdentifierType[]>;
 
-  getAssetIdentifierTypes(pageNumber: number, pageSize: number, order: string): Observable<AssetIdentifierType[]>;
+  getAssetIdentifierTypes(pageNumber: number, pageSize: number, order: string, options: any): Observable<AssetIdentifierType[]>;
 
-  getAssetIdentifierTypeCount(): Observable<number>;
+  getAssetIdentifierTypeCount(options: any): Observable<number>;
 
-  getAssetIdentifierTypeById(assetIdentifierTypeId: string): Observable<AssetIdentifierType>;
+  getAssetIdentifierTypeById(assetIdentifierTypeId: string, options: any): Observable<AssetIdentifierType>;
 
-  saveAssetIdentifierType(assetIdentifierType: AssetIdentifierType): Observable<AssetIdentifierType>;
+  saveAssetIdentifierType(assetIdentifierType: AssetIdentifierType, options: any): Observable<AssetIdentifierType>;
 
-  updateAssetIdentifierType(assetIdentifierTypeId: string, assetIdentifierType: AssetIdentifierType): Observable<number>;
+  updateAssetIdentifierType(assetIdentifierTypeId: string, assetIdentifierType: AssetIdentifierType, options: any): Observable<number>;
 
-  deleteAssetIdentifierType(assetIdentifierTypeId: string): Observable<number>;
+  deleteAssetIdentifierType(assetIdentifierTypeId: string, options: any): Observable<number>;
 
 }

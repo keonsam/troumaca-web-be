@@ -7,6 +7,7 @@ export class Person extends Party {
   middleName: string;
   lastName: string;
   dateOfBirth: Date;
+  ownerPartyId: string;
 
   get name(): string {
     return `${this.lastName}, ${this.firstName}`;

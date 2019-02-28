@@ -29,7 +29,7 @@ const whitelist = [
 
 const corsOptions = {
   origin: function (origin: any, callback: any) {
-    if (whitelist.indexOf(origin) !== -1) {
+    if (whitelist.indexOf(origin) !== -1 || origin === undefined) {
       callback(undefined, true);
     } else {
       callback(new Error("Not allowed by CORS"));

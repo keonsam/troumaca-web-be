@@ -15,17 +15,17 @@ export class AssetIdentifierTypeOrchestrator {
         this.assetIdentifierTypeRepository = createAssetIdentifierTypeRepositoryFactory(options);
     }
 
-    findAssetIdentifierTypes(searchStr: string, pageSize: number): Observable<AssetIdentifierType[]> {
-        return this.assetIdentifierTypeRepository.findAssetIdentifierTypes(searchStr, pageSize);
+    findAssetIdentifierTypes(searchStr: string, pageSize: number, options: any): Observable<AssetIdentifierType[]> {
+        return this.assetIdentifierTypeRepository.findAssetIdentifierTypes(searchStr, pageSize, options);
     }
 
-    getAssetIdentifierTypes(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
+    getAssetIdentifierTypes(number: number, size: number, field: string, direction: string, options: any): Observable<Result<any>> {
         const sort: string = getSortOrderOrDefault(field, direction);
         return this.assetIdentifierTypeRepository
-            .getAssetIdentifierTypes(number, size, sort)
+            .getAssetIdentifierTypes(number, size, sort, options)
             .pipe(switchMap((assetIdentifierTypes: AssetIdentifierType[]) => {
                 return this.assetIdentifierTypeRepository
-                    .getAssetIdentifierTypeCount()
+                    .getAssetIdentifierTypeCount(options)
                     .pipe(map((count: number) => {
                         const shapeAssetIdentifierTypesResp: any = shapeAssetIdentifierTypesResponse(assetIdentifierTypes, number, size, assetIdentifierTypes.length, count, sort);
                         return new Result<any>(false, "assetIdentifierTypes", shapeAssetIdentifierTypesResp);
@@ -33,20 +33,20 @@ export class AssetIdentifierTypeOrchestrator {
             }));
     }
 
-    getAssetIdentifierTypeById(assetIdentifierTypeId: string): Observable<AssetIdentifierType> {
-        return this.assetIdentifierTypeRepository.getAssetIdentifierTypeById(assetIdentifierTypeId);
+    getAssetIdentifierTypeById(assetIdentifierTypeId: string, options: any): Observable<AssetIdentifierType> {
+        return this.assetIdentifierTypeRepository.getAssetIdentifierTypeById(assetIdentifierTypeId, options);
     }
 
-    saveAssetIdentifierType(assetIdentifierType: AssetIdentifierType): Observable<AssetIdentifierType> {
-        return this.assetIdentifierTypeRepository.saveAssetIdentifierType(assetIdentifierType);
+    saveAssetIdentifierType(assetIdentifierType: AssetIdentifierType, options: any): Observable<AssetIdentifierType> {
+        return this.assetIdentifierTypeRepository.saveAssetIdentifierType(assetIdentifierType, options);
     }
 
-    updateAssetIdentifierType(assetIdentifierTypeId: string, assetIdentifierType: AssetIdentifierType): Observable<number> {
-        return this.assetIdentifierTypeRepository.updateAssetIdentifierType(assetIdentifierTypeId, assetIdentifierType);
+    updateAssetIdentifierType(assetIdentifierTypeId: string, assetIdentifierType: AssetIdentifierType, options: any): Observable<number> {
+        return this.assetIdentifierTypeRepository.updateAssetIdentifierType(assetIdentifierTypeId, assetIdentifierType, options);
     }
 
-    deleteAssetIdentifierType(assetIdentifierTypeId: string): Observable<number> {
-        return this.assetIdentifierTypeRepository.deleteAssetIdentifierType(assetIdentifierTypeId);
+    deleteAssetIdentifierType(assetIdentifierTypeId: string, options: any): Observable<number> {
+        return this.assetIdentifierTypeRepository.deleteAssetIdentifierType(assetIdentifierTypeId, options);
     }
 
 }

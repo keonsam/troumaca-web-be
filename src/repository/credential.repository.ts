@@ -9,7 +9,7 @@ import { ChangeResponse } from "../data/authentication/change.response";
 
 export interface CredentialRepository {
 
-  isValidUsername(username: string, partyId: string, options?: any): Observable<boolean>;
+  isValidUsername(username: string, options?: any): Observable<boolean>;
 
   isValidPassword(password: string, options?: any): Observable<boolean>;
 
@@ -21,7 +21,7 @@ export interface CredentialRepository {
 
   changePassword(changePassword: ChangePassword, options: any): Observable<ChangeResponse>;
 
-  updateCredential(partyId: string, credential: Credential, options?: any): Observable<number>;
+  // updateCredential(partyId: string, credential: Credential, options?: any): Observable<number>;
 
   // USED BY OTHER REPOS
 

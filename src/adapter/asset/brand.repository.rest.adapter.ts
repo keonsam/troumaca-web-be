@@ -7,31 +7,31 @@ export class BrandRepositoryRestAdapter implements BrandRepository {
   constructor() {
   }
 
-  findBrands(searchStr: string, pageSize: number): Observable<Brand[]> {
+  findBrands(searchStr: string, pageSize: number, options: any): Observable<Brand[]> {
     return undefined;
   }
 
-  getBrands(pageNumber: number, pageSize: number, order: string): Observable<Brand[]> {
+  getBrands(pageNumber: number, pageSize: number, order: string, options: any): Observable<Brand[]> {
     return undefined;
   }
 
-  getBrandCount(): Observable<number> {
+  getBrandCount(options: any): Observable<number> {
     return undefined;
   }
 
-  getBrandById(brandId: string): Observable<Brand> {
+  getBrandById(brandId: string, options: any): Observable<Brand> {
     return undefined;
   }
 
-  saveBrand(brand: Brand): Observable<Brand> {
+  saveBrand(brand: Brand, options: any): Observable<Brand> {
     return undefined;
   }
 
-  updateBrand(brandId: string, brand: Brand): Observable<number> {
+  updateBrand(brandId: string, brand: Brand, options: any): Observable<number> {
     return undefined;
   }
 
-  deleteBrand(brandId: string): Observable<number> {
+  deleteBrand(brandId: string, options: any): Observable<number> {
     return undefined;
   }
 

@@ -1,15 +1,22 @@
 import { PartyRepository } from "../../repository/party.repository";
 import { Observable, Observer } from "rxjs";
 import { ContactInfo } from "../../data/party/contact.info";
-import { contacts, streetAddresses } from "../../db";
+import { contacts, organizations, streetAddresses, users } from "../../db";
 import { generateUUID } from "../../uuid.generator";
 import { Address } from "../../data/party/address";
 
 export class PartyRepositoryDbAdapter implements PartyRepository {
 
-    getContactInfo(type: string, partyId: any): Observable<ContactInfo> {
+    getContactInfo(type: string, options: any): Observable<ContactInfo> {
+        const db = type === "organization" ? organizations : users;
+        let query = {};
+        if (type === "organization") {
+            query = {ownerPartyId: options["Owner-Party-Id"]};
+        } else {
+            query = {partyId: options["Party-Id"]};
+        }
         return Observable.create((observer: Observer<ContactInfo>) => {
-            contacts.findOne({type, partyId}, (err: any, doc: any) => {
+            db.findOne(query, (err: any, doc: any) => {
                 if (!err) {
                     observer.next(doc);
                 } else {
@@ -20,25 +27,32 @@ export class PartyRepositoryDbAdapter implements PartyRepository {
         });
     }
 
-    addContactInfo(type: string, contactInfo: ContactInfo, options?: any): Observable<ContactInfo> {
-        contactInfo.partyId = options["Party-Id"];
-        contactInfo.type = type;
-        contactInfo.contactInfoId = generateUUID();
-        return Observable.create((observer: Observer<ContactInfo>) => {
-            contacts.insert(contactInfo, (err: any, doc: any) => {
-                if (!err) {
-                    observer.next(doc);
-                } else {
-                    observer.error(err);
-                }
-                observer.complete();
-            });
-        });
-    }
+    // addContactInfo(partyId: string, type: string, contactInfo: ContactInfo, options?: any): Observable<ContactInfo> {
+    //     const update = {"contactInfo": contactInfo};
+    //     const db = type === "organization" ? organizations : users;
+    //     return Observable.create((observer: Observer<ContactInfo>) => {
+    //         db.update({}, (err: any, doc: any) => {
+    //             if (!err) {
+    //                 observer.next(doc);
+    //             } else {
+    //                 observer.error(err);
+    //             }
+    //             observer.complete();
+    //         });
+    //     });
+    // }
 
-    updateContactInfo(type: string, contactInfo: ContactInfo, contactInfoId: string): Observable<number> {
+    updateContactInfo(type: string, contactInfo: ContactInfo, options: any): Observable<number> {
+        const update = {"contactInfo": contactInfo};
+        const db = type === "organization" ? organizations : users;
+        let query = {};
+        if (type === "organization") {
+            query = {ownerPartyId: options["Owner-Party-Id"]};
+        } else {
+            query = {partyId: options["Party-Id"]};
+        }
         return Observable.create((observer: Observer<number>) => {
-            contacts.update({contactInfoId}, contactInfo, {}, (err: any, num: any) => {
+            db.update(query, {$set: update}, {}, (err: any, num: any) => {
                 if (!err) {
                     observer.next(num);
                 } else {
@@ -51,9 +65,16 @@ export class PartyRepositoryDbAdapter implements PartyRepository {
 
     // address
 
-    getAddress(type: string, partyId: any): Observable<Address> {
+    getAddress(type: string, options: any): Observable<Address> {
+        const db = type === "organization" ? organizations : users;
+        let query = {};
+        if (type === "organization") {
+            query = {ownerPartyId: options["Owner-Party-Id"]};
+        } else {
+            query = {partyId: options["Party-Id"]};
+        }
         return Observable.create((observer: Observer<Address>) => {
-            streetAddresses.findOne({type, partyId}, (err: any, doc: any) => {
+            db.findOne(query, (err: any, doc: any) => {
                 if (!err) {
                     observer.next(doc);
                 } else {
@@ -64,25 +85,33 @@ export class PartyRepositoryDbAdapter implements PartyRepository {
         });
     }
 
-    addAddress(type: string, address: Address, options?: any): Observable<Address> {
-        address.partyId = options["Party-Id"];
-        address.type = type;
-        address.siteId = generateUUID();
-        return Observable.create((observer: Observer<Address>) => {
-            streetAddresses.insert(address, (err: any, doc: any) => {
-                if (!err) {
-                    observer.next(doc);
-                } else {
-                    observer.error(err);
-                }
-                observer.complete();
-            });
-        });
-    }
+    // addAddress(type: string, address: Address, options?: any): Observable<Address> {
+    //     address.partyId = options["Party-Id"];
+    //     address.type = type;
+    //     address.siteId = generateUUID();
+    //     return Observable.create((observer: Observer<Address>) => {
+    //         streetAddresses.insert(address, (err: any, doc: any) => {
+    //             if (!err) {
+    //                 observer.next(doc);
+    //             } else {
+    //                 observer.error(err);
+    //             }
+    //             observer.complete();
+    //         });
+    //     });
+    // }
 
-    updateAddress(type: string, address: Address, siteId: any): Observable<number> {
+    updateAddress(type: string, address: Address, options: any): Observable<number> {
+        const update = {"address": address};
+        const db = type === "organization" ? organizations : users;
+        let query = {};
+        if (type === "organization") {
+            query = {ownerPartyId: options["Owner-Party-Id"]};
+        } else {
+            query = {partyId: options["Party-Id"]};
+        }
         return Observable.create((observer: Observer<number>) => {
-            streetAddresses.update({siteId}, address, {}, (err: any, num: any) => {
+            db.update(query, {$set: update}, {}, (err: any, num: any) => {
                 if (!err) {
                     observer.next(num);
                 } else {

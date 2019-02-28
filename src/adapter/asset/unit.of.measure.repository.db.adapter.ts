@@ -12,11 +12,11 @@ export class UnitOfMeasureRepositoryDbAdapter implements UnitOfMeasureRepository
     constructor() {
     }
 
-    findUnitOfMeasures(searchStr: string, pageSize: number): Observable<UnitOfMeasure[]> {
+    findUnitOfMeasures(searchStr: string, pageSize: number, options: any): Observable<UnitOfMeasure[]> {
         const searchStrLocal = new RegExp(searchStr);
         const query = searchStr ? {name: {$regex: searchStrLocal}} : {};
         return Observable.create((observer: Observer<UnitOfMeasure[]>) => {
-            unitOfMeasures.find(query).limit(100).exec((err: any, docs: any) => {
+            unitOfMeasures.find(query).limit(pageSize).exec((err: any, docs: any) => {
                 if (!err) {
                     observer.next(docs);
                 } else {
@@ -27,10 +27,13 @@ export class UnitOfMeasureRepositoryDbAdapter implements UnitOfMeasureRepository
         });
     }
 
-    getUnitOfMeasures(pageNumber: number, pageSize: number, order: string): Observable<UnitOfMeasure[]> {
+    getUnitOfMeasures(pageNumber: number, pageSize: number, order: string, options: any): Observable<UnitOfMeasure[]> {
         const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
+        const query = {
+            ownerPartyId: options["Owner-Party-Id"]
+        };
         return Observable.create((observer: Observer<UnitOfMeasure[]>) => {
-            unitOfMeasures.find({}).skip(skip).limit(pageSize).exec(function (err: any, docs: any) {
+            unitOfMeasures.find(query).skip(skip).limit(pageSize).exec(function (err: any, docs: any) {
                 if (!err) {
                     observer.next(docs);
                 } else {
@@ -41,9 +44,12 @@ export class UnitOfMeasureRepositoryDbAdapter implements UnitOfMeasureRepository
         });
     }
 
-    getUnitOfMeasureCount(): Observable<number> {
+    getUnitOfMeasureCount(options: any): Observable<number> {
+        const query = {
+            ownerPartyId: options["Owner-Party-Id"]
+        };
         return Observable.create(function (observer: Observer<number>) {
-            unitOfMeasures.count({}, function (err: any, count: number) {
+            unitOfMeasures.count(query, function (err: any, count: number) {
                 if (!err) {
                     observer.next(count);
                 } else {
@@ -54,9 +60,12 @@ export class UnitOfMeasureRepositoryDbAdapter implements UnitOfMeasureRepository
         });
     }
 
-    getUnitOfMeasureById(unitOfMeasureId: string): Observable<UnitOfMeasure> {
+    getUnitOfMeasureById(unitOfMeasureId: string, options: any): Observable<UnitOfMeasure> {
         return Observable.create((observer: Observer<UnitOfMeasure>) => {
-            const query = {"unitOfMeasureId": unitOfMeasureId};
+            const query = {
+                "unitOfMeasureId": unitOfMeasureId,
+                ownerPartyId: options["Owner-Party-Id"]
+            };
             unitOfMeasures.findOne(query, function (err: any, doc: any) {
                 if (!err) {
                     observer.next(doc);
@@ -68,8 +77,9 @@ export class UnitOfMeasureRepositoryDbAdapter implements UnitOfMeasureRepository
         });
     }
 
-    saveUnitOfMeasure(unitOfMeasure: UnitOfMeasure): Observable<UnitOfMeasure> {
+    saveUnitOfMeasure(unitOfMeasure: UnitOfMeasure, options: any): Observable<UnitOfMeasure> {
         unitOfMeasure.unitOfMeasureId = generateUUID();
+        unitOfMeasure.ownerPartyId = options["Owner-Party-Id"];
         return Observable.create(function (observer: Observer<UnitOfMeasure>) {
             unitOfMeasures.insert(unitOfMeasure, function (err: any, doc: any) {
                 if (err) {
@@ -82,8 +92,11 @@ export class UnitOfMeasureRepositoryDbAdapter implements UnitOfMeasureRepository
         });
     }
 
-    updateUnitOfMeasure(unitOfMeasureId: string, unitOfMeasure: UnitOfMeasure): Observable<number> {
-        const query = {unitOfMeasureId};
+    updateUnitOfMeasure(unitOfMeasureId: string, unitOfMeasure: UnitOfMeasure, options: any): Observable<number> {
+        const query = {
+            unitOfMeasureId,
+            ownerPartyId: options["Owner-Party-Id"]
+        };
         return Observable.create(function (observer: Observer<number>) {
             unitOfMeasures.update(query, unitOfMeasure, {}, function (err: any, numReplaced: number) {
                 if (!err) {
@@ -96,8 +109,11 @@ export class UnitOfMeasureRepositoryDbAdapter implements UnitOfMeasureRepository
         });
     }
 
-    deleteUnitOfMeasure(unitOfMeasureId: string): Observable<number> {
-        const query = {unitOfMeasureId};
+    deleteUnitOfMeasure(unitOfMeasureId: string, options: any): Observable<number> {
+        const query = {
+            unitOfMeasureId,
+            ownerPartyId: options["Owner-Party-Id"]
+        };
         return Observable.create(function (observer: Observer<number>) {
             unitOfMeasures.remove(query, {}, function (err: any, numRemoved: number) {
                 if (!err) {

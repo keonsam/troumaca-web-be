@@ -15,17 +15,17 @@ export class AssetRoleTypeOrchestrator {
         this.assetRoleTypeRepository = createAssetRoleTypeRepositoryFactory(options);
     }
 
-    findAssetRoleTypes(searchStr: string, pageSize: number): Observable<AssetRoleType[]> {
-        return this.assetRoleTypeRepository.findAssetRoleTypes(searchStr, pageSize);
+    findAssetRoleTypes(searchStr: string, pageSize: number, options: any): Observable<AssetRoleType[]> {
+        return this.assetRoleTypeRepository.findAssetRoleTypes(searchStr, pageSize, options);
     }
 
-    getAssetRoleTypes(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
+    getAssetRoleTypes(number: number, size: number, field: string, direction: string, options: any): Observable<Result<any>> {
         const sort: string = getSortOrderOrDefault(field, direction);
         return this.assetRoleTypeRepository
-            .getAssetRoleTypes(number, size, sort)
+            .getAssetRoleTypes(number, size, sort, options)
             .pipe(switchMap((assetRoleTypes: AssetRoleType[]) => {
                 return this.assetRoleTypeRepository
-                    .getAssetRoleTypeCount()
+                    .getAssetRoleTypeCount(options)
                     .pipe(map((count: number) => {
                         const shapeAssetRoleTypesResp: any = shapeAssetRoleTypesResponse(assetRoleTypes, number, size, assetRoleTypes.length, count, sort);
                         return new Result<any>(false, "assetRoleTypes", shapeAssetRoleTypesResp);
@@ -33,20 +33,20 @@ export class AssetRoleTypeOrchestrator {
             }));
     }
 
-    getAssetRoleTypeById(assetRoleTypeId: string): Observable<AssetRoleType> {
-        return this.assetRoleTypeRepository.getAssetRoleTypeById(assetRoleTypeId);
+    getAssetRoleTypeById(assetRoleTypeId: string, options: any): Observable<AssetRoleType> {
+        return this.assetRoleTypeRepository.getAssetRoleTypeById(assetRoleTypeId, options);
     }
 
-    saveAssetRoleType(assetRoleType: AssetRoleType): Observable<AssetRoleType> {
-        return this.assetRoleTypeRepository.saveAssetRoleType(assetRoleType);
+    saveAssetRoleType(assetRoleType: AssetRoleType, options: any): Observable<AssetRoleType> {
+        return this.assetRoleTypeRepository.saveAssetRoleType(assetRoleType, options);
     }
 
-    updateAssetRoleType(assetRoleTypeId: string, assetRoleType: AssetRoleType): Observable<number> {
-        return this.assetRoleTypeRepository.updateAssetRoleType(assetRoleTypeId, assetRoleType);
+    updateAssetRoleType(assetRoleTypeId: string, assetRoleType: AssetRoleType, options: any): Observable<number> {
+        return this.assetRoleTypeRepository.updateAssetRoleType(assetRoleTypeId, assetRoleType, options);
     }
 
-    deleteAssetRoleType(assetRoleTypeId: string): Observable<number> {
-        return this.assetRoleTypeRepository.deleteAssetRoleType(assetRoleTypeId);
+    deleteAssetRoleType(assetRoleTypeId: string, options: any): Observable<number> {
+        return this.assetRoleTypeRepository.deleteAssetRoleType(assetRoleTypeId, options);
     }
 
 }

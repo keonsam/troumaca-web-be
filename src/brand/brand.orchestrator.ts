@@ -15,17 +15,17 @@ export class BrandOrchestrator {
         this.brandRepository = createBrandRepositoryFactory(options);
     }
 
-    findBrands(searchStr: string, pageSize: number): Observable<Brand[]> {
-        return this.brandRepository.findBrands(searchStr, pageSize);
+    findBrands(searchStr: string, pageSize: number, options: any): Observable<Brand[]> {
+        return this.brandRepository.findBrands(searchStr, pageSize, options);
     }
 
-    getBrands(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
+    getBrands(number: number, size: number, field: string, direction: string, options: any): Observable<Result<any>> {
         const sort: string = getSortOrderOrDefault(field, direction);
         return this.brandRepository
-            .getBrands(number, size, sort)
+            .getBrands(number, size, sort, options)
             .pipe(switchMap((brands: Brand[]) => {
                 return this.brandRepository
-                    .getBrandCount()
+                    .getBrandCount(options)
                     .pipe(map((count: number) => {
                         const shapeBrandsResp: any = shapeBrandsResponse(brands, number, size, brands.length, count, sort);
                         return new Result<any>(false, "brands", shapeBrandsResp);
@@ -33,20 +33,20 @@ export class BrandOrchestrator {
             }));
     }
 
-    getBrandById(brandId: string): Observable<Brand> {
-        return this.brandRepository.getBrandById(brandId);
+    getBrandById(brandId: string, options: any): Observable<Brand> {
+        return this.brandRepository.getBrandById(brandId, options);
     }
 
-    saveBrand(brand: Brand): Observable<Brand> {
-        return this.brandRepository.saveBrand(brand);
+    saveBrand(brand: Brand, options: any): Observable<Brand> {
+        return this.brandRepository.saveBrand(brand, options);
     }
 
-    updateBrand(brandId: string, brand: Brand): Observable<number> {
-        return this.brandRepository.updateBrand(brandId, brand);
+    updateBrand(brandId: string, brand: Brand, options: any): Observable<number> {
+        return this.brandRepository.updateBrand(brandId, brand, options);
     }
 
-    deleteBrand(brandId: string): Observable<number> {
-        return this.brandRepository.deleteBrand(brandId);
+    deleteBrand(brandId: string, options: any): Observable<number> {
+        return this.brandRepository.deleteBrand(brandId, options);
     }
 
 }

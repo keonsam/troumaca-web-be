@@ -6,7 +6,6 @@ import {HeaderNormalizer} from "../../header.normalizer";
 
 const credentialOrchestrator: CredentialOrchestrator = new CredentialOrchestrator();
 
-
 export let isValidUsername = (req: Request, res: Response) => {
 
   HeaderNormalizer.normalize(req);
@@ -15,7 +14,6 @@ export let isValidUsername = (req: Request, res: Response) => {
   const requestingPartyId = req.headers["Party-Id"];
 
   const username = req.body.username;
-  const partyId = req.body.partyId;
 
   if (!username) {
     res.status(400);
@@ -30,7 +28,7 @@ export let isValidUsername = (req: Request, res: Response) => {
     "Party-Id": requestingPartyId
   };
 
-  credentialOrchestrator.isValidUsername(username, partyId, headerOptions)
+  credentialOrchestrator.isValidUsername(username, headerOptions)
     .subscribe((next: boolean) => {
       res.status(200);
       const resp = {valid: next};
@@ -134,7 +132,6 @@ export let addCredential = (req: Request, res: Response) => {
 };
 
 export let authenticate = (req: Request, res: Response) => {
-
   HeaderNormalizer.normalize(req);
   const correlationId = req.headers["Correlation-Id"];
   const ownerPartyId = req.headers["Owner-Party-Id"];

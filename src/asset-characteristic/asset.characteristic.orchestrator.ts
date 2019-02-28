@@ -15,17 +15,17 @@ export class AssetCharacteristicOrchestrator {
         this.assetCharacteristicRepository = createAssetCharacteristicRepositoryFactory(options);
     }
 
-    findAssetCharacteristics(searchStr: string, pageSize: number): Observable<AssetCharacteristic[]> {
-        return this.assetCharacteristicRepository.findAssetCharacteristics(searchStr, pageSize);
+    findAssetCharacteristics(searchStr: string, pageSize: number, options: any): Observable<AssetCharacteristic[]> {
+        return this.assetCharacteristicRepository.findAssetCharacteristics(searchStr, pageSize, options);
     }
 
-    getAssetCharacteristics(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
+    getAssetCharacteristics(number: number, size: number, field: string, direction: string, options: any): Observable<Result<any>> {
         const sort: string = getSortOrderOrDefault(field, direction);
         return this.assetCharacteristicRepository
-            .getAssetCharacteristics(number, size, sort)
+            .getAssetCharacteristics(number, size, sort, options)
             .pipe(switchMap((assetCharacteristics: AssetCharacteristic[]) => {
                 return this.assetCharacteristicRepository
-                    .getAssetCharacteristicCount()
+                    .getAssetCharacteristicCount(options)
                     .pipe(map((count: number) => {
                         const shapeAssetCharacteristicsResp: any = shapeAssetCharacteristicsResponse(assetCharacteristics, number, size, assetCharacteristics.length, count, sort);
                         return new Result<any>(false, "assetCharacteristics", shapeAssetCharacteristicsResp);
@@ -33,25 +33,24 @@ export class AssetCharacteristicOrchestrator {
             }));
     }
 
-    getTypes(): Observable<any[]> {
-        return this.assetCharacteristicRepository.getTypes();
+    getTypes(options: any): Observable<any[]> {
+        return this.assetCharacteristicRepository.getTypes(options);
     }
 
-    getAssetCharacteristicById(assetCharacteristicId: string): Observable<AssetCharacteristic> {
-        return this.assetCharacteristicRepository.getAssetCharacteristicById(assetCharacteristicId);
+    getAssetCharacteristicById(assetCharacteristicId: string, options: any): Observable<AssetCharacteristic> {
+        return this.assetCharacteristicRepository.getAssetCharacteristicById(assetCharacteristicId, options);
     }
 
-    saveAssetCharacteristic(assetCharacteristic: AssetCharacteristic): Observable<AssetCharacteristic> {
-        return this.assetCharacteristicRepository.saveAssetCharacteristic(assetCharacteristic);
+    saveAssetCharacteristic(assetCharacteristic: AssetCharacteristic, options: any): Observable<AssetCharacteristic> {
+        return this.assetCharacteristicRepository.saveAssetCharacteristic(assetCharacteristic, options);
     }
 
-    updateAssetCharacteristic(assetCharacteristicId: string, assetCharacteristic: AssetCharacteristic): Observable<number> {
-        return this.assetCharacteristicRepository.updateAssetCharacteristic(assetCharacteristicId, assetCharacteristic);
+    updateAssetCharacteristic(assetCharacteristicId: string, assetCharacteristic: AssetCharacteristic, options: any): Observable<number> {
+        return this.assetCharacteristicRepository.updateAssetCharacteristic(assetCharacteristicId, assetCharacteristic, options);
     }
 
-    deleteAssetCharacteristic(assetCharacteristicId: string): Observable<number> {
-        return this.assetCharacteristicRepository.deleteAssetCharacteristic(assetCharacteristicId);
+    deleteAssetCharacteristic(assetCharacteristicId: string, options: any): Observable<number> {
+        return this.assetCharacteristicRepository.deleteAssetCharacteristic(assetCharacteristicId, options);
     }
-
 }
 

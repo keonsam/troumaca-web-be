@@ -12,30 +12,30 @@ export class PartyOrchestrator {
         this.partyRepository = createPartyRepositoryFactory();
     }
 
-    getContactInfo(type: string, partyId: any): Observable<ContactInfo> {
-        return this.partyRepository.getContactInfo(type, partyId);
+    getContactInfo(type: string, options: any): Observable<ContactInfo> {
+        return this.partyRepository.getContactInfo(type, options);
     }
 
-    addContactInfo(type: string, contactInfo: ContactInfo, options?: any): Observable<ContactInfo> {
-        return this.partyRepository.addContactInfo(type, contactInfo, options);
-    }
+    // addContactInfo(partyId: any, type: string, contactInfo: ContactInfo, options?: any): Observable<ContactInfo> {
+    //     return this.partyRepository.addContactInfo(partyId, type, contactInfo, options);
+    // }
 
-    updateContactInfo(type: string, contactInfo: ContactInfo, contactInfoId: string): Observable<number> {
-        return this.partyRepository.updateContactInfo(type, contactInfo, contactInfoId);
+    updateContactInfo(type: string, contactInfo: ContactInfo, options: any): Observable<number> {
+        return this.partyRepository.updateContactInfo(type, contactInfo, options);
     }
 
     // address
 
-    getAddress(type: string, partyId: any): Observable<Address> {
-        return this.partyRepository.getAddress(type, partyId);
+    getAddress(type: string, options: any): Observable<Address> {
+        return this.partyRepository.getAddress(type, options);
     }
 
-    addAddress(type: string, address: Address, options?: any): Observable<Address> {
-        return this.partyRepository.addAddress(type, address, options);
-    }
+    // addAddress(type: string, address: Address, options?: any): Observable<Address> {
+    //     return this.partyRepository.addAddress(type, address, options);
+    // }
 
-    updateAddress(type: string, address: Address, siteId: string): Observable<number> {
-        return this.partyRepository.updateAddress(type, address, siteId);
+    updateAddress(type: string, address: Address, options: any): Observable<number> {
+        return this.partyRepository.updateAddress(type, address, options);
     }
 
 

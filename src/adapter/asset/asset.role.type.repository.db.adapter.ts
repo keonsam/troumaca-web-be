@@ -12,9 +12,12 @@ export class AssetRoleTypeRepositoryDbAdapter implements AssetRoleTypeRepository
     constructor() {
     }
 
-    findAssetRoleTypes(searchStr: string, pageSize: number): Observable<AssetRoleType[]> {
+    findAssetRoleTypes(searchStr: string, pageSize: number, options: any): Observable<AssetRoleType[]> {
         const searchStrLocal = new RegExp(searchStr);
-        const query = searchStr ? {name: {$regex: searchStrLocal}} : {};
+        const query = searchStr ? {
+            name: {$regex: searchStrLocal},
+            ownerPartyId: options["Owner-Party-Id"]
+        } : {};
         return Observable.create((observer: Observer<AssetRoleType[]>) => {
             assetRoleTypes.find(query).limit(100).exec((err: any, docs: any) => {
                 if (!err) {
@@ -27,10 +30,13 @@ export class AssetRoleTypeRepositoryDbAdapter implements AssetRoleTypeRepository
         });
     }
 
-    getAssetRoleTypes(pageNumber: number, pageSize: number, order: string): Observable<AssetRoleType[]> {
+    getAssetRoleTypes(pageNumber: number, pageSize: number, order: string, options: any): Observable<AssetRoleType[]> {
         const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
+        const query = {
+            ownerPartyId: options["Owner-Party-Id"]
+        };
         return Observable.create((observer: Observer<AssetRoleType[]>) => {
-            assetRoleTypes.find({}).skip(skip).limit(pageSize).exec(function (err: any, docs: any) {
+            assetRoleTypes.find(query).skip(skip).limit(pageSize).exec(function (err: any, docs: any) {
                 if (!err) {
                     observer.next(docs);
                 } else {
@@ -41,9 +47,12 @@ export class AssetRoleTypeRepositoryDbAdapter implements AssetRoleTypeRepository
         });
     }
 
-    getAssetRoleTypeCount(): Observable<number> {
+    getAssetRoleTypeCount(options: any): Observable<number> {
+        const query = {
+            ownerPartyId: options["Owner-Party-Id"]
+        };
         return Observable.create(function (observer: Observer<number>) {
-            assetRoleTypes.count({}, function (err: any, count: number) {
+            assetRoleTypes.count(query, function (err: any, count: number) {
                 if (!err) {
                     observer.next(count);
                 } else {
@@ -54,9 +63,12 @@ export class AssetRoleTypeRepositoryDbAdapter implements AssetRoleTypeRepository
         });
     }
 
-    getAssetRoleTypeById(assetRoleTypeId: string): Observable<AssetRoleType> {
+    getAssetRoleTypeById(assetRoleTypeId: string, options: any): Observable<AssetRoleType> {
         return Observable.create((observer: Observer<AssetRoleType>) => {
-            const query = {"assetRoleTypeId": assetRoleTypeId};
+            const query = {
+                "assetRoleTypeId": assetRoleTypeId,
+                ownerPartyId: options["Owner-Party-Id"]
+            };
             assetRoleTypes.findOne(query, function (err: any, doc: any) {
                 if (!err) {
                     observer.next(doc);
@@ -68,8 +80,9 @@ export class AssetRoleTypeRepositoryDbAdapter implements AssetRoleTypeRepository
         });
     }
 
-    saveAssetRoleType(assetRoleType: AssetRoleType): Observable<AssetRoleType> {
+    saveAssetRoleType(assetRoleType: AssetRoleType, options: any): Observable<AssetRoleType> {
         assetRoleType.assetRoleTypeId = generateUUID();
+        assetRoleType.ownerPartyId = options["Owner-Party-Id"];
         return Observable.create(function (observer: Observer<AssetRoleType>) {
             assetRoleTypes.insert(assetRoleType, function (err: any, doc: any) {
                 if (err) {
@@ -82,8 +95,11 @@ export class AssetRoleTypeRepositoryDbAdapter implements AssetRoleTypeRepository
         });
     }
 
-    updateAssetRoleType(assetRoleTypeId: string, assetRoleType: AssetRoleType): Observable<number> {
-        const query = {assetRoleTypeId};
+    updateAssetRoleType(assetRoleTypeId: string, assetRoleType: AssetRoleType, options: any): Observable<number> {
+        const query = {
+            assetRoleTypeId,
+            ownerPartyId: options["Owner-Party-Id"]
+        };
         return Observable.create(function (observer: Observer<number>) {
             assetRoleTypes.update(query, assetRoleType, {}, function (err: any, numReplaced: number) {
                 if (!err) {
@@ -96,8 +112,11 @@ export class AssetRoleTypeRepositoryDbAdapter implements AssetRoleTypeRepository
         });
     }
 
-    deleteAssetRoleType(assetRoleTypeId: string): Observable<number> {
-        const query = {assetRoleTypeId};
+    deleteAssetRoleType(assetRoleTypeId: string, options: any): Observable<number> {
+        const query = {
+            assetRoleTypeId,
+            ownerPartyId: options["Owner-Party-Id"]
+        };
         return Observable.create(function (observer: Observer<number>) {
             assetRoleTypes.remove(query, {}, function (err: any, numRemoved: number) {
                 if (!err) {

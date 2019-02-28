@@ -12,9 +12,12 @@ export class AssetIdentifierTypeRepositoryDbAdapter implements AssetIdentifierTy
     constructor() {
     }
 
-    findAssetIdentifierTypes(searchStr: string, pageSize: number): Observable<AssetIdentifierType[]> {
+    findAssetIdentifierTypes(searchStr: string, pageSize: number, options: any): Observable<AssetIdentifierType[]> {
         const searchStrLocal = new RegExp(searchStr);
-        const query = searchStr ? {name: {$regex: searchStrLocal}} : {};
+        const query = searchStr ? {
+            name: {$regex: searchStrLocal},
+            ownerPartyId: options["Owner-Party-Id"]
+        } : {};
         return Observable.create((observer: Observer<AssetIdentifierType[]>) => {
             assetIdentifierTypes.find(query).limit(100).exec((err: any, docs: any) => {
                 if (!err) {
@@ -27,10 +30,13 @@ export class AssetIdentifierTypeRepositoryDbAdapter implements AssetIdentifierTy
         });
     }
 
-    getAssetIdentifierTypes(pageNumber: number, pageSize: number, order: string): Observable<AssetIdentifierType[]> {
+    getAssetIdentifierTypes(pageNumber: number, pageSize: number, order: string, options: any): Observable<AssetIdentifierType[]> {
         const skip = calcSkip(pageNumber, pageSize, this.defaultPageSize);
+        const query = {
+            ownerPartyId: options["Owner-Party-Id"]
+        };
         return Observable.create((observer: Observer<AssetIdentifierType[]>) => {
-            assetIdentifierTypes.find({}).skip(skip).limit(pageSize).exec(function (err: any, docs: any) {
+            assetIdentifierTypes.find(query).skip(skip).limit(pageSize).exec(function (err: any, docs: any) {
                 if (!err) {
                     observer.next(docs);
                 } else {
@@ -41,9 +47,12 @@ export class AssetIdentifierTypeRepositoryDbAdapter implements AssetIdentifierTy
         });
     }
 
-    getAssetIdentifierTypeCount(): Observable<number> {
+    getAssetIdentifierTypeCount(options: any): Observable<number> {
+        const query = {
+            ownerPartyId: options["Owner-Party-Id"]
+        };
         return Observable.create(function (observer: Observer<number>) {
-            assetIdentifierTypes.count({}, function (err: any, count: number) {
+            assetIdentifierTypes.count(query, function (err: any, count: number) {
                 if (!err) {
                     observer.next(count);
                 } else {
@@ -54,9 +63,12 @@ export class AssetIdentifierTypeRepositoryDbAdapter implements AssetIdentifierTy
         });
     }
 
-    getAssetIdentifierTypeById(assetIdentifierTypeId: string): Observable<AssetIdentifierType> {
+    getAssetIdentifierTypeById(assetIdentifierTypeId: string, options: any): Observable<AssetIdentifierType> {
         return Observable.create((observer: Observer<AssetIdentifierType>) => {
-            const query = {"assetIdentifierTypeId": assetIdentifierTypeId};
+            const query = {
+                "assetIdentifierTypeId": assetIdentifierTypeId,
+                ownerPartyId: options["Owner-Party-Id"]
+            };
             assetIdentifierTypes.findOne(query, function (err: any, doc: any) {
                 if (!err) {
                     observer.next(doc);
@@ -68,8 +80,9 @@ export class AssetIdentifierTypeRepositoryDbAdapter implements AssetIdentifierTy
         });
     }
 
-    saveAssetIdentifierType(assetIdentifierType: AssetIdentifierType): Observable<AssetIdentifierType> {
+    saveAssetIdentifierType(assetIdentifierType: AssetIdentifierType, options: any): Observable<AssetIdentifierType> {
         assetIdentifierType.assetIdentifierTypeId = generateUUID();
+        assetIdentifierType.ownerPartyId = options["Owner-Party-Id"];
         return Observable.create(function (observer: Observer<AssetIdentifierType>) {
             assetIdentifierTypes.insert(assetIdentifierType, function (err: any, doc: any) {
                 if (err) {
@@ -82,8 +95,11 @@ export class AssetIdentifierTypeRepositoryDbAdapter implements AssetIdentifierTy
         });
     }
 
-    updateAssetIdentifierType(assetIdentifierTypeId: string, assetIdentifierType: AssetIdentifierType): Observable<number> {
-        const query = {assetIdentifierTypeId};
+    updateAssetIdentifierType(assetIdentifierTypeId: string, assetIdentifierType: AssetIdentifierType, options: any): Observable<number> {
+        const query = {
+            assetIdentifierTypeId,
+            ownerPartyId: options["Owner-Party-Id"]
+        };
         return Observable.create(function (observer: Observer<number>) {
             assetIdentifierTypes.update(query, assetIdentifierType, {}, function (err: any, numReplaced: number) {
                 if (!err) {
@@ -96,8 +112,11 @@ export class AssetIdentifierTypeRepositoryDbAdapter implements AssetIdentifierTy
         });
     }
 
-    deleteAssetIdentifierType(assetIdentifierTypeId: string): Observable<number> {
-        const query = {assetIdentifierTypeId};
+    deleteAssetIdentifierType(assetIdentifierTypeId: string, options: any): Observable<number> {
+        const query = {
+            assetIdentifierTypeId,
+            ownerPartyId: options["Owner-Party-Id"]
+        };
         return Observable.create(function (observer: Observer<number>) {
             assetIdentifierTypes.remove(query, {}, function (err: any, numRemoved: number) {
                 if (!err) {

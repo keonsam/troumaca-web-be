@@ -1,5 +1,6 @@
 export class AssetCharacteristic {
   assetCharacteristicId: string;
+  ownerPartyId: string;
   typeId: string;
   name: string;
   defaultValue: string;
