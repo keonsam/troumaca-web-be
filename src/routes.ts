@@ -9,19 +9,31 @@ import * as accessRoleController from "./authorization/access-role/access.role.c
 import * as accessRoleTypeController from "./authorization/access-role-type/access.role.type.controller";
 import * as resourceTypeController from "./authorization/resource-type/resource.type.controller";
 
-import * as assetController from "./asset/asset.controller";
 import * as assetRoleTypeController from "./asset/asset-role-type/asset.role.type.controller";
 import * as assetIdentifierTypeController from "./asset/asset-identifier-type/asset.identifier.type.controller";
 import * as assetCharacteristicTypeController from "./asset/asset-characteristic-type/asset.characteristic.type.controller";
+import * as assetNameTypeController from "./asset/asset-name-type/asset.name.type.controller";
+import * as assetStructureTypeController from "./asset/asset-structure-type/asset.structure.type.controller";
 import * as assetCharacteristicController from "./asset/asset-characteristic/asset.characteristic.controller";
 import * as assetBrandController from "./asset/asset-brand/asset.brand.controller";
 import * as assetCategoryLegalValueController from "./asset/asset-category-legal-value/asset.category.legal.value.controller";
-import * as assetNameTypeController from "./asset/asset-name-type/asset.name.type.controller";
+import * as assetController from "./asset/asset.controller";
+import * as assetStructureController from "./asset/asset-structure/asset.structure.controller";
+import * as assetTypeStructureController from "./asset/asset-type-structure/asset.type.structure.controller";
+import * as assetRoleController from "./asset/asset-role/asset.role.controller";
+import * as assetNameController from "./asset/asset-name/asset.name.controller";
+import * as assetIdentifierController from "./asset/asset-identifier/asset.identifier.controller";
+import * as assetIdentifierAssignmentController from "./asset/asset-identifier-assignment/asset.identifier.assignment.controller";
+import * as assetNameAssignmentController from "./asset/asset-name-assignment/asset.name.assignment.controller";
+import * as assetCharacteristicAssignmentController from "./asset/asset-characteristic-assignment/asset.characteristic.assignment.controller";
+
+
 import * as phoneController from "./site/phone/phone.controller";
 import * as photoController from "./party/photo/photo.controller";
 import * as unitOfMeasurementController from "./unit-of-measurement/unit.of.measurement.controller";
 import * as unitOfMeasurementSystemController from "./unit-of-measurement/unit-of-measurement-system/unit.of.measurement.system.controller";
 import * as unitOfMeasurementDimensionController from "./unit-of-measurement/unit-of-measruement-dimension/unit.of.measurement.dimension.controller";
+import * as unitOfMeasurementConversionController from "./unit-of-measurement/unit-of-measruement-conversion/unit.of.measurement.conversion.controller";
 import * as dataTypeController from "./data-type/data.type.controller";
 import * as emailController from "./site/email/email.controller";
 import * as siteController from "./site/site.controller";
@@ -51,7 +63,6 @@ router.get("/", (req, res) => {
         message: "Welcome to Troumaka API"
     });
 });
-
 
 // ##### SECURITY START #####
 // authentication
@@ -167,6 +178,13 @@ router.post('/unit-of-measurements/unit-of-measurement-dimensions', checkSession
 router.put('/unit-of-measurements/unit-of-measurement-dimensions/:unitOfMeasurementDimensionId', checkSession, unitOfMeasurementDimensionController.updateUnitOfMeasurementDimension);
 router.delete('/unit-of-measurements/unit-of-measurement-dimensions/:unitOfMeasurementDimensionId', checkSession, unitOfMeasurementDimensionController.deleteUnitOfMeasurementDimension);
 
+router.get("/unit-of-measurements/unit-of-measurement-dimensions", checkSession, unitOfMeasurementConversionController.findUnitOfMeasurementConversions);
+router.get('/unit-of-measurements/unit-of-measurement-dimensions/c', checkSession, unitOfMeasurementConversionController.getUnitOfMeasurementConversions);
+router.get('/unit-of-measurements/unit-of-measurement-dimensions/search', checkSession, unitOfMeasurementConversionController.findUnitOfMeasurementConversions);
+router.get('/unit-of-measurements/unit-of-measurement-dimensions/:unitOfMeasurementConversionId', checkSession, unitOfMeasurementConversionController.getUnitOfMeasurementConversionById);
+router.post('/unit-of-measurements/unit-of-measurement-dimensions', checkSession, unitOfMeasurementConversionController.addUnitOfMeasurementConversion);
+router.put('/unit-of-measurements/unit-of-measurement-dimensions/:unitOfMeasurementConversionId', checkSession, unitOfMeasurementConversionController.updateUnitOfMeasurementConversion);
+router.delete('/unit-of-measurements/unit-of-measurement-dimensions/:unitOfMeasurementConversionId', checkSession, unitOfMeasurementConversionController.deleteUnitOfMeasurementConversion);
 
 // asset role type
 // TODO: Figure out why GET '/assets/asset-role-types' returns a 404
@@ -198,6 +216,13 @@ router.post('/assets/asset-characteristic-types', checkSession, assetCharacteris
 router.put('/assets/asset-characteristic-types/:assetCharacteristicTypeId', checkSession, assetCharacteristicTypeController.updateAssetCharacteristicType);
 router.delete('/assets/asset-characteristic-types/:assetCharacteristicTypeId', checkSession, assetCharacteristicTypeController.deleteAssetCharacteristicType);
 
+router.get('/assets/asset-structure-types/c', checkSession, assetStructureTypeController.getAssetStructureTypes);
+router.get('/assets/asset-structure-types/search', checkSession, assetStructureTypeController.findAssetStructureTypes);
+router.get('/assets/asset-structure-types/:assetStructureTypeId', checkSession, assetStructureTypeController.getAssetStructureTypeById);
+router.post('/assets/asset-structure-types', checkSession, assetStructureTypeController.addAssetStructureType);
+router.put('/assets/asset-structure-types/:assetStructureTypeId', checkSession, assetStructureTypeController.updateAssetStructureType);
+router.delete('/assets/asset-structure-types/:assetStructureTypeId', checkSession, assetStructureTypeController.deleteAssetStructureType);
+
 router.get('/assets/asset-brands/c', checkSession, assetBrandController.getAssetBrands);
 router.get('/assets/asset-brands/search', checkSession, assetBrandController.findAssetBrands);
 router.get('/assets/asset-brands/:assetBrandId', checkSession, assetBrandController.getAssetBrandById);
@@ -226,14 +251,71 @@ router.post('/assets/asset-types', checkSession, assetTypeController.addAssetTyp
 router.put("/assets/asset-types/:assetTypeId", checkSession, checkSession, assetTypeController.updateAssetType);
 router.delete("/assets/asset-types/:assetTypeId", checkSession, assetTypeController.deleteAssetType);
 
-// asset
-router.get("/assets", checkSession, assetController.getAssets);
-router.get("/assets/asset-types/search", checkSession, assetController.findAssets);
+router.get("/assets/c", checkSession, assetController.getAssets);
+router.get("/assets/search", checkSession, assetController.findAssets);
 router.get("/assets/:assetId", checkSession, assetController.getAssetById);
 router.post("/assets", checkSession, assetController.addAssets);
 router.put("/assets/:assetId", checkSession, assetController.updateAsset);
 router.delete("/assets/:assetId", checkSession, assetController.deleteAsset);
 
+router.get("/assets/asset-structures/c", checkSession, assetStructureController.getAssetStructures);
+router.get("/assets/asset-structures/search", checkSession, assetStructureController.findAssetStructures);
+router.get("/assets/asset-structures/:assetId", checkSession, assetStructureController.getAssetStructureById);
+router.post("/assets/asset-structures", checkSession, assetStructureController.addAssetStructure);
+router.put("/assets/asset-structures/:assetId", checkSession, assetStructureController.updateAssetStructure);
+router.delete("/assets/asset-structures/:assetId", checkSession, assetStructureController.deleteAssetStructure);
+
+router.get("/assets/asset-type-structures/c", checkSession, assetTypeStructureController.getAssetTypeStructures);
+router.get("/assets/asset-type-structures/search", checkSession, assetTypeStructureController.findAssetTypeStructures);
+router.get("/assets/asset-type-structures/:assetId", checkSession, assetTypeStructureController.getAssetTypeStructureById);
+router.post("/assets/asset-type-structures", checkSession, assetTypeStructureController.addAssetTypeStructure);
+router.put("/assets/asset-type-structures/:assetId", checkSession, assetTypeStructureController.updateAssetTypeStructure);
+router.delete("/assets/asset-type-structures/:assetId", checkSession, assetTypeStructureController.deleteAssetTypeStructure);
+
+router.get('/assets/asset-roles/c', checkSession, assetRoleController.getAssetRoles);
+router.get('/assets/asset-roles/search', checkSession, assetRoleController.findAssetRoles);
+router.get('/assets/asset-roles/:assetRoleId', checkSession, assetRoleController.getAssetRoleById);
+router.post('/assets/asset-roles', checkSession, assetRoleController.addAssetRole);
+router.put('/assets/asset-roles/:assetRoleId', checkSession, assetRoleController.updateAssetRole);
+router.delete('/assets/asset-roles/:assetRoleId', checkSession, assetRoleController.deleteAssetRole);
+
+router.get('/assets/asset-names/c', checkSession, assetNameController.getAssetNames);
+router.get('/assets/asset-names/search', checkSession, assetNameController.findAssetNames);
+router.get('/assets/asset-names/:assetNameId', checkSession, assetNameController.getAssetNameById);
+router.post('/assets/asset-names', checkSession, assetNameController.addAssetName);
+router.put('/assets/asset-names/:assetNameId', checkSession, assetNameController.updateAssetName);
+router.delete('/assets/asset-names/:assetNameId', checkSession, assetNameController.deleteAssetName);
+
+router.get('/assets/asset-identifiers/c', checkSession, assetIdentifierController.getAssetIdentifiers);
+router.get('/assets/asset-identifiers/search', checkSession, assetIdentifierController.findAssetIdentifiers);
+router.get('/assets/asset-identifiers/:assetIdentifierId', checkSession, assetIdentifierController.getAssetIdentifierById);
+router.post('/assets/asset-identifiers', checkSession, assetIdentifierController.addAssetIdentifier);
+router.put('/assets/asset-identifiers/:assetIdentifierId', checkSession, assetIdentifierController.updateAssetIdentifier);
+router.delete('/assets/asset-identifiers/:assetIdentifierId', checkSession, assetIdentifierController.deleteAssetIdentifier);
+
+// Not started
+router.get("/assets/asset-identifier-assignments/c", checkSession, assetIdentifierAssignmentController.getAssetIdentifierAssignments);
+router.get("/assets/asset-identifier-assignments/search", checkSession, assetIdentifierAssignmentController.findAssetIdentifierAssignments);
+router.get("/assets/asset-identifier-assignments/:assetId", checkSession, assetIdentifierAssignmentController.getAssetIdentifierAssignmentById);
+router.post("/assets/asset-identifier-assignments", checkSession, assetIdentifierAssignmentController.addAssetIdentifierAssignment);
+router.put("/assets/asset-identifier-assignments/:assetId", checkSession, assetIdentifierAssignmentController.updateAssetIdentifierAssignment);
+router.delete("/assets/asset-identifier-assignments/:assetId", checkSession, assetIdentifierAssignmentController.deleteAssetIdentifierAssignment);
+
+// Not started
+router.get("/assets/asset-name-assignments/c", checkSession, assetNameAssignmentController.getAssetNameAssignments);
+router.get("/assets/asset-name-assignments/search", checkSession, assetNameAssignmentController.findAssetNameAssignments);
+router.get("/assets/asset-name-assignments/:assetId", checkSession, assetNameAssignmentController.getAssetNameAssignmentById);
+router.post("/assets/asset-name-assignments", checkSession, assetNameAssignmentController.addAssetNameAssignment);
+router.put("/assets/asset-name-assignments/:assetId", checkSession, assetNameAssignmentController.updateAssetNameAssignment);
+router.delete("/assets/asset-name-assignments/:assetId", checkSession, assetNameAssignmentController.deleteAssetNameAssignment);
+
+// Not started
+router.get("/assets/asset-characteristic-assignments/c", checkSession, assetCharacteristicAssignmentController.getAssetCharacteristicAssignments);
+router.get("/assets/asset-characteristic-assignments/search", checkSession, assetCharacteristicAssignmentController.findAssetCharacteristicAssignments);
+router.get("/assets/asset-characteristic-assignments/:assetId", checkSession, assetCharacteristicAssignmentController.getAssetCharacteristicAssignmentById);
+router.post("/assets/asset-characteristic-assignments", checkSession, assetCharacteristicAssignmentController.addAssetCharacteristicAssignment);
+router.put("/assets/asset-characteristic-assignments/:assetId", checkSession, assetCharacteristicAssignmentController.updateAssetCharacteristicAssignment);
+router.delete("/assets/asset-characteristic-assignments/:assetId", checkSession, assetCharacteristicAssignmentController.deleteAssetCharacteristicAssignment);
 
 // MW New Work: TO Here
 

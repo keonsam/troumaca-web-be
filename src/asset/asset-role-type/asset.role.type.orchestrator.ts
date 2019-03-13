@@ -1,7 +1,7 @@
 import {AssetRoleType} from "../../data/asset/asset.role.type";
 import {Observable} from "rxjs";
 import {AssetRoleTypeRepository} from "../../repository/asset.role.type.repository";
-import {createAssetRoleTypeRepositoryFactory} from "../../adapter/asset/asset.role.type.repository.factory";
+import {createAssetRoleTypeRepository} from "../../adapter/asset/asset.role.type.repository.factory";
 import {Affect} from "../../data/affect";
 import {Page} from "../../util/page";
 import {Sort} from "../../util/sort";
@@ -11,7 +11,7 @@ export class AssetRoleTypeOrchestrator {
   private assetRoleTypeRepository: AssetRoleTypeRepository;
 
   constructor(options?: any) {
-    this.assetRoleTypeRepository = createAssetRoleTypeRepositoryFactory(options);
+    this.assetRoleTypeRepository = createAssetRoleTypeRepository(options);
   }
 
   addAssetRoleType(assetRoleType: AssetRoleType, headerOptions?: any): Observable<AssetRoleType> {

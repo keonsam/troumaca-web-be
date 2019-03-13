@@ -4,14 +4,14 @@ import {AssetBrand} from "../../data/asset/asset.brand";
 import {Page} from "../../util/page";
 import {Sort} from "../../util/sort";
 import {AssetBrandRepository} from "../../repository/asset.brand.repository";
-import {createAssetBrandRepositoryFactory} from "../../adapter/asset/asset.brand.repository.factory";
+import {createAssetBrandRepository} from "../../adapter/asset/asset.brand.repository.factory";
 
 export class AssetBrandOrchestrator {
 
   private assetBrandRepository: AssetBrandRepository;
 
   constructor(options?: any) {
-    this.assetBrandRepository = createAssetBrandRepositoryFactory(options);
+    this.assetBrandRepository = createAssetBrandRepository(options);
   }
 
   addAssetBrand(assetBrand: AssetBrand, headerOptions?:any): Observable<AssetBrand> {

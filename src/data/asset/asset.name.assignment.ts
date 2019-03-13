@@ -7,4 +7,7 @@ export class AssetNameAssignment {
   assetNameType: AssetNameType;
   dateEffective: Date;
   dateUntil: Date;
+  version: string;
+  ownerPartyId: string;
+  dateModified: Date;
 }

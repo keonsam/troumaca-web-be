@@ -13,7 +13,6 @@ import {Confirmation} from "../../data/authentication/confirmation";
 import {PersonRepository} from "../../repository/person.repository";
 import {createPersonRepository} from "../../adapter/party/person.repository.factory";
 import {Person} from "../../data/party/person";
-import {User} from "../../data/party/user";
 import {ChangePassword} from "../../data/authentication/change.password";
 import { ChangeResponse } from "../../data/authentication/change.response";
 

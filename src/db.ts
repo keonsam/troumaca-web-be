@@ -6,6 +6,7 @@ const theDataTypesDb = path.resolve(__dirname, "..") + "/nedb/data-types.db";
 const theUnitOfMeasurementDb = path.resolve(__dirname, "..") + "/nedb/unit-of-measurements.db";
 const theUnitOfMeasurementSystemsDb = path.resolve(__dirname, "..") + "/nedb/unit-of-measurement-systems.db";
 const theUnitMeasurementDimensionsDb = path.resolve(__dirname, "..") + "/nedb/unit-of-measurement-dimensions.db";
+const theUnitMeasurementConversionsDb = path.resolve(__dirname, "..") + "/nedb/unit-of-measurement-conversions.db";
 
 // asset / asset type
 const theAssetsDb = path.resolve(__dirname, "..") + "/nedb/asset_type/assets.db";
@@ -19,6 +20,15 @@ const theAssetCategoryLegalValuesDb = path.resolve(__dirname, "..") + "/nedb/ass
 const theAssetCharacteristicsDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-characteristics.db";
 const theAssetSpecificationsDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-specifications.db";
 const theOtherAssetTypesDb = path.resolve(__dirname, "..") + "/nedb/asset_type/other-asset-types.db";
+const theAssetStructuresDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-structures.db";
+const theAssetTypeStructuresDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-type-structures.db";
+const theAssetStructureTypesDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-structures-types.db";
+const theAssetRolesDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-roles.db";
+const theAssetNamesDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-names.db";
+const theAssetIdentifiersDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-identifiers.db";
+const theAssetNameAssignmentsDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-name-assignments.db";
+const theAssetIdentifierAssignmentsDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-identifier-assignments.db";
+const theAssetCharacteristicAssignmentsDb = path.resolve(__dirname, "..") + "/nedb/asset_type/asset-characteristic-assignments.db";
 
 const theAttributesDb = path.resolve(__dirname, "..") + "/nedb/asset_type/attributes.db";
 const theAssignedAttributesDb = path.resolve(__dirname, "..") + "/nedb/asset_type/assigned-attributes.db";
@@ -159,6 +169,10 @@ export let unitOfMeasurementDimensions = new Datastore(theUnitMeasurementDimensi
 unitOfMeasurementDimensions.loadDatabase(handleError);
 unitOfMeasurementDimensions.ensureIndex({fieldName: "unitOfMeasurementDimensionId", unique: true}, handleError);
 
+export let unitOfMeasurementConversions = new Datastore(theUnitMeasurementConversionsDb);
+unitOfMeasurementConversions.loadDatabase(handleError);
+unitOfMeasurementConversions.ensureIndex({fieldName: "unitOfMeasurementConversionId", unique: true}, handleError);
+
 // asset type
 export let assets = new Datastore(theAssetsDb);
 assets.loadDatabase(handleError);
@@ -203,6 +217,42 @@ assetCharacteristics.ensureIndex({fieldName: "assetCharacteristicId", unique: tr
 export let otherAssetTypes = new Datastore(theOtherAssetTypesDb);
 otherAssetTypes.loadDatabase(handleError);
 otherAssetTypes.ensureIndex({fieldName: "assetTypeId", unique: true}, handleError);
+
+export let assetStructures = new Datastore(theAssetStructuresDb);
+assetStructures.loadDatabase(handleError);
+assetStructures.ensureIndex({fieldName: "assetStructureId", unique: true}, handleError);
+
+export let assetTypeStructures = new Datastore(theAssetTypeStructuresDb);
+assetTypeStructures.loadDatabase(handleError);
+assetTypeStructures.ensureIndex({fieldName: "assetTypeStructureId", unique: true}, handleError);
+
+export let assetStructureTypes = new Datastore(theAssetStructureTypesDb);
+assetStructureTypes.loadDatabase(handleError);
+assetStructureTypes.ensureIndex({fieldName: "assetStructureTypeId", unique: true}, handleError);
+
+export let assetRoles = new Datastore(theAssetRolesDb);
+assetRoles.loadDatabase(handleError);
+assetRoles.ensureIndex({fieldName: "assetRoleId", unique: true}, handleError);
+
+export let assetNames = new Datastore(theAssetNamesDb);
+assetNames.loadDatabase(handleError);
+assetNames.ensureIndex({fieldName: "assetNameId", unique: true}, handleError);
+
+export let assetIdentifiers = new Datastore(theAssetIdentifiersDb);
+assetIdentifiers.loadDatabase(handleError);
+assetIdentifiers.ensureIndex({fieldName: "assetIdentifierId", unique: true}, handleError);
+
+export let assetNameAssignments = new Datastore(theAssetNameAssignmentsDb);
+assetNameAssignments.loadDatabase(handleError);
+assetNameAssignments.ensureIndex({fieldName: "assetNameAssignmentId", unique: true}, handleError);
+
+export let assetIdentifierAssignments = new Datastore(theAssetIdentifierAssignmentsDb);
+assetIdentifierAssignments.loadDatabase(handleError);
+assetIdentifierAssignments.ensureIndex({fieldName: "assetIdentifierAssignmentId", unique: true}, handleError);
+
+export let assetCharacteristicAssignments = new Datastore(theAssetCharacteristicAssignmentsDb);
+assetCharacteristicAssignments.loadDatabase(handleError);
+assetCharacteristicAssignments.ensureIndex({fieldName: "assetCharacteristicAssignmentId", unique: true}, handleError);
 
 export let values = new Datastore(theValuesDb);
 values.loadDatabase(handleError);

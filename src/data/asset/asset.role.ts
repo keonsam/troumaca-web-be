@@ -11,6 +11,9 @@ export class AssetRole {
   description: string;
   dateEffective: Date;
   dateUntil: Date;
+  version: string;
+  ownerPartyId: string;
+  dateModified: Date;
 
   constructor() {
   }

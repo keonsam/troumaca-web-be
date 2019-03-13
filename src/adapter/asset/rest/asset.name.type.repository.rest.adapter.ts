@@ -4,7 +4,6 @@ import {Observable} from "rxjs";
 import {Affect} from "../../../data/affect";
 import {Sort} from "../../../util/sort";
 import {Page} from "../../../util/page";
-import {AssetRoleType} from "../../../data/asset/asset.role.type";
 
 export class AssetNameTypeRepositoryRestAdapter implements AssetNameTypeRepository {
   addAssetNameType(assetNameType: AssetNameType, headerOptions?: any): Observable<AssetNameType> {

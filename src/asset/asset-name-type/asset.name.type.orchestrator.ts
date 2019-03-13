@@ -1,6 +1,6 @@
 import {Observable} from "rxjs";
 import {AssetNameTypeRepository} from "../../repository/asset.name.type.repository";
-import {createAssetNameTypeRepositoryFactory} from "../../adapter/asset/asset.name.type.repository.factory";
+import {createAssetNameTypeRepository} from "../../adapter/asset/asset.name.type.repository.factory";
 import {Affect} from "../../data/affect";
 import {AssetNameType} from "../../data/asset/asset.name.type";
 import {Page} from "../../util/page";
@@ -11,7 +11,7 @@ export class AssetNameTypeOrchestrator {
   private assetNameTypeRepository: AssetNameTypeRepository;
 
   constructor(options?: any) {
-    this.assetNameTypeRepository = createAssetNameTypeRepositoryFactory(options);
+    this.assetNameTypeRepository = createAssetNameTypeRepository(options);
   }
 
   addAssetNameType(assetNameType: AssetNameType, headerOptions?:any): Observable<AssetNameType> {

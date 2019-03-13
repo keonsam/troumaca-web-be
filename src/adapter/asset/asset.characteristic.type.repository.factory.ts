@@ -4,7 +4,7 @@ import {properties} from "../../properties.helpers";
 import {AssetCharacteristicTypeRepositoryRestAdapter} from "./rest/asset.characteristic.type.repository.rest.adapter";
 import {AssetCharacteristicTypeRepositoryNeDbAdapter} from "./db/asset.characteristic.type.repository.db.adapter";
 
-export function createAssetCharacteristicTypeRepositoryFactory(kind?: RepositoryKind): AssetCharacteristicTypeRepository {
+export function createAssetCharacteristicTypeRepository(kind?: RepositoryKind): AssetCharacteristicTypeRepository {
   const type: number = properties.get("asset.repository.type") as number;
 
   const k: RepositoryKind = (kind) ? kind : (type === 2) ? RepositoryKind.Rest : RepositoryKind.Nedb;

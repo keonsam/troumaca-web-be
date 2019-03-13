@@ -1,4 +1,4 @@
-import {createDepreciationRepositoryFactory} from "../adapter/asset/depreciation.repository.factory";
+import {createDepreciationRepository} from "../adapter/asset/depreciation.repository.factory";
 import {shapeDepreciationResponse} from "./depreciation.response.shaper";
 import {getSortOrderOrDefault} from "../sort.order.util";
 import {DepreciationRepository} from "../repository/depreciation.repository";
@@ -16,7 +16,7 @@ export class DepreciationOrchestrator {
   private depreciationRepository: DepreciationRepository;
 
   constructor(options?: any) {
-    this.depreciationRepository = createDepreciationRepositoryFactory(options);
+    this.depreciationRepository = createDepreciationRepository(options);
   }
 
   getDepreciableAssets(searchStr: string, pageSize: number): Observable<Asset[]> {

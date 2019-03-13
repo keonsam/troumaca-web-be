@@ -4,14 +4,14 @@ import {AssetCharacteristicType} from "../../data/asset/asset.characteristic.typ
 import {Page} from "../../util/page";
 import {Sort} from "../../util/sort";
 import {AssetCharacteristicTypeRepository} from "../../repository/asset.characteristic.type.repository";
-import {createAssetCharacteristicTypeRepositoryFactory} from "../../adapter/asset/asset.characteristic.type.repository.factory";
+import {createAssetCharacteristicTypeRepository} from "../../adapter/asset/asset.characteristic.type.repository.factory";
 
 export class AssetCharacteristicTypeOrchestrator {
 
   private assetCharacteristicTypeRepository: AssetCharacteristicTypeRepository;
 
   constructor(options?: any) {
-    this.assetCharacteristicTypeRepository = createAssetCharacteristicTypeRepositoryFactory(options);
+    this.assetCharacteristicTypeRepository = createAssetCharacteristicTypeRepository(options);
   }
 
   addAssetCharacteristicType(assetCharacteristicType: AssetCharacteristicType, headerOptions?:any): Observable<AssetCharacteristicType> {

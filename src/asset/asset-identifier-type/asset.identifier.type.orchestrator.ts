@@ -2,7 +2,7 @@ import {Observable} from "rxjs";
 import {Affect} from "../../data/affect";
 import {AssetIdentifierType} from "../../data/asset/asset.identifier.type";
 import {AssetIdentifierTypeRepository} from "../../repository/asset.identifier.type.repository";
-import {createAssetIdentifierTypeRepositoryFactory} from "../../adapter/asset/asset.identifier.type.repository.factory";
+import {createAssetIdentifierTypeRepository} from "../../adapter/asset/asset.identifier.type.repository.factory";
 import {Page} from "../../util/page";
 import {Sort} from "../../util/sort";
 
@@ -11,7 +11,7 @@ export class AssetIdentifierTypeOrchestrator {
   private assetIdentifierTypeRepository: AssetIdentifierTypeRepository;
 
   constructor(options?: any) {
-    this.assetIdentifierTypeRepository = createAssetIdentifierTypeRepositoryFactory(options);
+    this.assetIdentifierTypeRepository = createAssetIdentifierTypeRepository(options);
   }
 
   addAssetIdentifierType(assetIdentifierType: AssetIdentifierType, headerOptions?:any): Observable<AssetIdentifierType> {

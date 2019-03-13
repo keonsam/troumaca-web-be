@@ -4,7 +4,7 @@ import {properties} from "../../properties.helpers";
 import {AssetRoleTypeRepositoryRestAdapter} from "./rest/asset.role.type.repository.rest.adapter";
 import {AssetRoleTypeRepositoryNeDbAdapter} from "./db/asset.role.type.repository.db.adapter";
 
-export function createAssetRoleTypeRepositoryFactory(kind?: RepositoryKind): AssetRoleTypeRepository {
+export function createAssetRoleTypeRepository(kind?: RepositoryKind): AssetRoleTypeRepository {
   const type: number = properties.get("asset.repository.type") as number;
 
   const k: RepositoryKind = (kind) ? kind : (type === 2) ? RepositoryKind.Rest : RepositoryKind.Nedb;

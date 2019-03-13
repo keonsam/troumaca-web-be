@@ -7,4 +7,7 @@ export class AssetCharacteristicAssignment {
   assetCharacteristic: AssetCharacteristic;
   dateEffective: Date;
   dateUntil: Date;
+  version: string;
+  ownerPartyId: string;
+  dateModified: Date;
 }

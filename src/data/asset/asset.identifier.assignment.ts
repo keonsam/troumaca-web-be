@@ -4,4 +4,7 @@ export class AssetIdentifierAssignment {
   assetIdentifierTypeId: string;
   dateEffective: Date;
   dateUntil: Date;
+  version: string;
+  ownerPartyId: string;
+  dateModified: Date;
 }

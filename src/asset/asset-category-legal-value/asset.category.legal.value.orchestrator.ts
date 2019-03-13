@@ -4,14 +4,14 @@ import {AssetCategoryLegalValue} from "../../data/asset/asset.category.legal.val
 import {Page} from "../../util/page";
 import {Sort} from "../../util/sort";
 import {AssetCategoryLegalValueRepository} from "../../repository/asset.category.legal.value.repository";
-import {createAssetCategoryLegalValueRepositoryFactory} from "../../adapter/asset/asset.category.legal.value.repository.factory";
+import {createAssetCategoryLegalValueRepository} from "../../adapter/asset/asset.category.legal.value.repository.factory";
 
 export class AssetCategoryLegalValueOrchestrator {
 
   private assetCategoryLegalValueRepository: AssetCategoryLegalValueRepository;
 
   constructor(options?: any) {
-    this.assetCategoryLegalValueRepository = createAssetCategoryLegalValueRepositoryFactory(options);
+    this.assetCategoryLegalValueRepository = createAssetCategoryLegalValueRepository(options);
   }
 
   addAssetCategoryLegalValue(assetCategoryLegalValue: AssetCategoryLegalValue, headerOptions?:any): Observable<AssetCategoryLegalValue> {
