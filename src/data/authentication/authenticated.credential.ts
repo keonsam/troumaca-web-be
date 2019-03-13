@@ -1,5 +1,5 @@
 export class AuthenticatedCredential {
-
+  ownerPartyId: string;
   credentialId: string;
   username: string;
   authenticateStatus: string;
@@ -7,8 +7,5 @@ export class AuthenticatedCredential {
   partyId: string;
   sessionId: string;
 
-  constructor(credentialId?: string) {
-    this.credentialId = credentialId;
-  }
 
 }

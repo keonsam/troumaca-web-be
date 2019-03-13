@@ -31,8 +31,8 @@ export class CredentialOrchestrator {
     this.personRepository = createPersonRepository();
   }
 
-  isValidUsername(username: string, partyId: string, options?: any): Observable<boolean> {
-    return this.credentialRepository.isValidUsername(username, partyId, options);
+  isValidUsername(username: string, options?: any): Observable<boolean> {
+    return this.credentialRepository.isValidUsername(username, options);
   }
 
   isValidPassword(password: string, options?: any): Observable<boolean> {
@@ -43,7 +43,7 @@ export class CredentialOrchestrator {
     return this.credentialRepository.addCredential(person, credential, options)
     .pipe(switchMap(createdCredential => {
       if (!createdCredential) {
-        return throwError(credential);
+        return throwError(createdCredential);
       } else {
         person.partyId = credential.partyId;
         return this.personRepository.addPerson(person, options)
@@ -72,6 +72,7 @@ export class CredentialOrchestrator {
         } else if (authenticatedCredential.authenticateStatus === "CredentialConfirmed" || authenticatedCredential.authenticateStatus === "CredentialActive") {
           const session: Session = new Session();
           session.partyId = authenticatedCredential.partyId;
+          session.ownerPartyId = authenticatedCredential.ownerPartyId;
           session.credentialId = authenticatedCredential.credentialId;
           session.username = authenticatedCredential.username;
 

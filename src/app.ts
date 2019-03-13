@@ -40,7 +40,7 @@ const graphqlPath:string = '/graphql';
 
 const corsOptions = {
   origin: function (origin: any, callback: any) {
-    if (origin === undefined || whitelist.indexOf(origin) !== -1) {
+    if (whitelist.indexOf(origin) !== -1 || origin === undefined) {
       callback(undefined, true);
     } else {
       callback(new Error("Not allowed by CORS"));

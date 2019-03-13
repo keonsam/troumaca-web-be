@@ -3,6 +3,7 @@ import { Photo } from "../../data/photo/photo";
 import {  photos } from "../../db";
 import { Observable, Observer, throwError } from "rxjs";
 import { switchMap } from "rxjs/operators";
+import { generateUUID } from "../../uuid.generator";
 
 export class PhotoRepositoryNeDbAdapter implements PhotoRepository {
 
@@ -20,18 +21,13 @@ export class PhotoRepositoryNeDbAdapter implements PhotoRepository {
         });
     }
 
-    savePhoto(type: string, photo: string, partyId: string): Observable<Photo> {
-        const body = new Photo();
-        body.partyId = partyId;
-        if (type === "user") {
-            body.userImage = photo;
-        } else {
-            body.organizationImage = photo;
-        }
-        body.createdOn = new Date();
-        body.modifiedOn = new Date();
+    savePhoto(photo: Photo): Observable<Photo> {
+
+        photo.photoId = generateUUID();
+        photo.createdOn = new Date();
+        photo.modifiedOn = new Date();
         return Observable.create(function(observer: Observer<Photo>) {
-            photos.insert(body, function(err: any, doc: any) {
+            photos.insert(photo, function(err: any, doc: any) {
                 if (err) {
                     observer.error(err);
                 } else {
@@ -42,8 +38,8 @@ export class PhotoRepositoryNeDbAdapter implements PhotoRepository {
         });
     }
 
-    updatePhoto(partyId: string, type: string, photo: string): Observable<Photo> {
-        return this.updatePhotoLocal(partyId, type, photo)
+    updatePhoto(photo: Photo, partyId: string): Observable<Photo> {
+        return this.updatePhotoLocal(photo, partyId)
             .pipe( switchMap( num => {
                 if (!num) {
                     return throwError(`Failed to update image ${num}`);
@@ -53,17 +49,9 @@ export class PhotoRepositoryNeDbAdapter implements PhotoRepository {
             }));
     }
 
-    private updatePhotoLocal(partyId: string, type: string, photo: string): Observable<number> {
+    private updatePhotoLocal(photo: Photo, photoId: string): Observable<number> {
         return Observable.create(function (observer: Observer<number>) {
-            const query = {"partyId": partyId};
-            const body = new Photo();
-            if (type === "user") {
-                body.userImage = photo;
-            } else {
-                body.organizationImage = photo;
-            }
-            body.modifiedOn = new Date();
-            photos.update(query, {$set: body}, {}, function (err: any, numReplaced: number) {
+            photos.update({photoId}, {$set: photo}, {}, function (err: any, numReplaced: number) {
                 if (!err) {
                     observer.next(numReplaced);
                 } else {

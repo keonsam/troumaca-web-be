@@ -1,9 +1,6 @@
 import { SubscriptionRepository } from "../../repository/subscription.repository";
 import { Subscription } from "../../data/party/subscription";
 import { Observable, Observer, of, throwError } from "rxjs";
-import { billings, subscriptions } from "../../db";
-import { generateUUID } from "../../uuid.generator";
-import { switchMap, map } from "rxjs/operators";
 import { App } from "../../data/party/app";
 import { apps } from "../../data/party/apps";
 import { Billing } from "../../data/party/billing";

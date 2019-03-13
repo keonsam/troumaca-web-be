@@ -1,7 +1,7 @@
 import { accessRoles, partyAccessRoles } from "../../db";
 import {PartyAccessRoleRepository} from "../../repository/party.access.role.repository";
 import {PartyAccessRole} from "../../data/authorization/party.access.role";
-import {Observable, Observer, throwError} from "rxjs";
+import { Observable, Observer, of, throwError } from "rxjs";
 import {generateUUID} from "../../uuid.generator";
 import { map, switchMap } from "rxjs/operators";
 import { AccessRole } from "../../data/authorization/access.role";
@@ -112,13 +112,17 @@ export class PartyAccessRoleDBRepository implements PartyAccessRoleRepository {
   getPartyAccessRolesByPartyId(partyId: string): Observable<PartyAccessRole[]> {
     return this.getPartyAccessRolesByPartyIdLocal(partyId)
         .pipe(switchMap( partyAccessRoles => {
+            if (!partyAccessRoles) {
+                return of(partyAccessRoles);
+            }
             const accessRoleIds: string[] = partyAccessRoles.map(x => {
                 if (x.accessRoleId) return x.accessRoleId;
             });
             return this.getAccessRoleByIds(accessRoleIds)
                 .pipe(map(accessRoles => {
                     if (accessRoles.length < 1) {
-                        throw new Error(`No AccessRole found ${accessRoles}`);
+                        return partyAccessRoles;
+                        // throw new Error(`No AccessRole found ${accessRoles}`);
                     } else {
                         partyAccessRoles.forEach(value => {
                             value.accessRole =  accessRoles.find(x => x.accessRoleId === value.accessRoleId);

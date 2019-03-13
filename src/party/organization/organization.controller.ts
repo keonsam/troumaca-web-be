@@ -63,36 +63,6 @@ export  let getOrganization = (req: Request, res: Response) => {
     });
 };
 
-export  let getOrganizationCompany = (req: Request, res: Response) => {
-    HeaderNormalizer.normalize(req);
-    const correlationId = req.headers["Correlation-Id"];
-    const ownerPartyId = req.headers["Owner-Party-Id"];
-    const requestingPartyId = req.headers["Party-Id"];
-
-    const headerOptions = {
-        "Correlation-Id": correlationId,
-        "Owner-Party-Id": ownerPartyId,
-        "Party-Id": requestingPartyId
-    };
-
-    res.setHeader("content-type", "application/json");
-    organizationOrchestrator
-        .getOrganizationCompany(requestingPartyId)
-        .subscribe(organizationCompany => {
-            if (organizationCompany) {
-                res.status(200);
-                res.send(JSON.stringify(organizationCompany));
-            } else {
-                res.status(404);
-                res.send(JSON.stringify({message: "No Data Found For "}));
-            }
-        }, error => {
-            res.status(500);
-            res.send(JSON.stringify({message: "Error Occurred"}));
-            console.log(error);
-        });
-};
-
 export  let saveOrganization = (req: Request, res: Response) => {
   const organization: Organization = req.body;
     if (!organization || !organization.name || !organization.purpose) {
@@ -114,99 +84,65 @@ export  let saveOrganization = (req: Request, res: Response) => {
     });
 };
 
-export  let addCustomer = (req: Request, res: Response) => {
-  HeaderNormalizer.normalize(req);
+// export  let saveOrganizationCompany = (req: Request, res: Response) => {
+//     const organization: Organization = req.body;
+//
+//     if (!organization || !organization.name || !organization.purpose) {
+//         res.status(400);
+//         res.setHeader("content-type", "application/json");
+//         res.send(JSON.stringify({message: "'Organization' must be sent, and must contain name and purpose."}));
+//         return;
+//     }
+//
+//     organization.partyId = res.locals.partyId;
+//
+//     organizationOrchestrator
+//         .saveOrganizationCompany(organization)
+//         .subscribe(organizationRes => {
+//             res.status(201);
+//             res.setHeader("content-type", "application/json");
+//             res.send(JSON.stringify(organizationRes));
+//         }, error => {
+//             res.status(500);
+//             res.setHeader("content-type", "application/json");
+//             res.send(JSON.stringify({message: "Error Occurred"}));
+//             console.log(error);
+//         });
+// };
 
-  const organization: Organization = req.body;
-  organization.partyId = req.headers["Party-Id"];
-
-  if (!organization || !organization.name) {
-    res.status(400);
-    res.setHeader("content-type", "application/json");
-    res.send(JSON.stringify({message: "'Organization' must be sent, and must contain name and purpose."}));
-    return;
-  }
-
-  const reqCorrelationId = req.headers["Correlation-Id"];
-  const reqPartyId = req.headers["Party-Id"];
-
-  const headerOptions = {
-    "Correlation-Id": reqCorrelationId,
-    "Party-Id": reqPartyId
-  };
-
-  organizationOrchestrator.addCustomer(organization, headerOptions)
-    .subscribe(org => {
-      res.status(201);
-      res.setHeader("content-type", "application/json");
-      res.send(JSON.stringify(org));
-    }, error => {
-      res.status(500);
-      res.setHeader("content-type", "application/json");
-      res.send(JSON.stringify({message: "Error Occurred"}));
-      console.log(error);
-    });
-};
-
-export  let saveOrganizationCompany = (req: Request, res: Response) => {
-    const organization: Organization = req.body;
-
-    if (!organization || !organization.name || !organization.purpose) {
-        res.status(400);
-        res.setHeader("content-type", "application/json");
-        res.send(JSON.stringify({message: "'Organization' must be sent, and must contain name and purpose."}));
-        return;
-    }
-
-    organization.partyId = res.locals.partyId;
-
-    organizationOrchestrator
-        .saveOrganizationCompany(organization)
-        .subscribe(organizationRes => {
-            res.status(201);
-            res.setHeader("content-type", "application/json");
-            res.send(JSON.stringify(organizationRes));
-        }, error => {
-            res.status(500);
-            res.setHeader("content-type", "application/json");
-            res.send(JSON.stringify({message: "Error Occurred"}));
-            console.log(error);
-        });
-};
-
-export let saveAccessRequest = (req: Request, res: Response) => {
-
-    const request = req.body;
-
-    if (!request || !request.organizationId) {
-        res.status(400);
-        res.setHeader("content-type", "application/json");
-        res.send(JSON.stringify({
-            message: "'Access Request' must exist and contains organizationId"
-        }));
-        return;
-    }
-
-    request.partyId = res.locals.partyId;
-
-    organizationOrchestrator
-        .saveAccessRequest(request)
-        .subscribe( accessRequest => {
-            if (accessRequest) {
-                res.status(201);
-                res.setHeader("content-type", "application/json");
-                res.send(JSON.stringify(accessRequest));
-            } else {
-                res.status(404);
-                res.setHeader("content-type", "application/json");
-                res.send(JSON.stringify("Error"));
-            }
-        }, error => {
-            res.status(500);
-            res.send(JSON.stringify({message: "Internal Server Error"}));
-            console.log(error);
-        });
-};
+// export let saveAccessRequest = (req: Request, res: Response) => {
+//
+//     const request = req.body;
+//
+//     if (!request || !request.organizationId) {
+//         res.status(400);
+//         res.setHeader("content-type", "application/json");
+//         res.send(JSON.stringify({
+//             message: "'Access Request' must exist and contains organizationId"
+//         }));
+//         return;
+//     }
+//
+//     request.partyId = res.locals.partyId;
+//
+//     organizationOrchestrator
+//         .saveAccessRequest(request)
+//         .subscribe( accessRequest => {
+//             if (accessRequest) {
+//                 res.status(201);
+//                 res.setHeader("content-type", "application/json");
+//                 res.send(JSON.stringify(accessRequest));
+//             } else {
+//                 res.status(404);
+//                 res.setHeader("content-type", "application/json");
+//                 res.send(JSON.stringify("Error"));
+//             }
+//         }, error => {
+//             res.status(500);
+//             res.send(JSON.stringify({message: "Internal Server Error"}));
+//             console.log(error);
+//         });
+// };
 
 export let updateOrganization = (req: Request, res: Response) => {
     const partyId = req.params.partyId;
@@ -279,3 +215,68 @@ export let deleteOrganization = (req: Request, res: Response) => {
             console.log(error);
         });
 };
+
+export  let getCompany = (req: Request, res: Response) => {
+    HeaderNormalizer.normalize(req);
+    const correlationId = req.headers["Correlation-Id"];
+    const ownerPartyId = req.headers["Owner-Party-Id"];
+    const requestingPartyId = req.headers["Party-Id"];
+
+    const headerOptions = {
+        "Correlation-Id": correlationId,
+        "Owner-Party-Id": ownerPartyId,
+        "Party-Id": requestingPartyId
+    };
+
+    res.setHeader("content-type", "application/json");
+    organizationOrchestrator
+        .getCompany(headerOptions)
+        .subscribe(organizationCompany => {
+            if (organizationCompany) {
+                res.status(200);
+                res.send(JSON.stringify(organizationCompany));
+            } else {
+                res.status(404);
+                res.send(JSON.stringify({message: "No Data Found For "}));
+            }
+        }, error => {
+            res.status(500);
+            res.send(JSON.stringify({message: "Error Occurred"}));
+            console.log(error);
+        });
+};
+
+export  let addCustomer = (req: Request, res: Response) => {
+    HeaderNormalizer.normalize(req);
+    const correlationId = req.headers["Correlation-Id"];
+    const ownerPartyId = req.headers["Owner-Party-Id"];
+    const requestingPartyId = req.headers["Party-Id"];
+
+    const organization: Organization = req.body;
+
+    if (!organization || !organization.name) {
+        res.status(400);
+        res.setHeader("content-type", "application/json");
+        res.send(JSON.stringify({message: "'Organization' must be sent with name."}));
+        return;
+    }
+
+    const headerOptions = {
+        "Correlation-Id": correlationId,
+        "Owner-Party-Id": ownerPartyId,
+        "Party-Id": requestingPartyId
+    };
+
+    organizationOrchestrator.addCustomer(organization, headerOptions)
+        .subscribe(org => {
+            res.status(201);
+            res.setHeader("content-type", "application/json");
+            res.send(JSON.stringify(org));
+        }, error => {
+            res.status(500);
+            res.setHeader("content-type", "application/json");
+            res.send(JSON.stringify({message: "Error Occurred"}));
+            console.log(error);
+        });
+};
+

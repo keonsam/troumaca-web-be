@@ -2,12 +2,11 @@ import { Party } from "../party/party";
 
 export class Photo extends Party {
 
-  id: string;
+  photoId: string;
   name: string;
   data: string;
   size: number;
-  height: string;
-  width: string;
+  type: string;
 
   // Todo: old attributes
   userImage: string;

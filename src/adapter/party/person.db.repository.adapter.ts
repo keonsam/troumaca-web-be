@@ -8,7 +8,9 @@ export class PersonDbRepositoryAdapter implements PersonRepository {
 
   addPerson(person: Person, options?: any): Observable<Person> {
     return Observable.create(function (observer: Observer<Person>) {
-      person.partyId = generateUUID();
+      if (!person.partyId) {
+        person.partyId = generateUUID();
+      }
       persons.insert(person, function (err: any, doc: any) {
         if (!err) {
           observer.next(doc);

@@ -22,8 +22,9 @@ const checkSession = (req: Request, res: Response, next: NextFunction) => {
       .subscribe(isValid => {
         if (isValid) {
           req.headers["Party-Id"] = isValid.partyId;
+          req.headers["Owner-Party-Id"] = isValid.ownerPartyId;
           // remove below after converting
-          res.locals.partyId = isValid.partyId;
+          // res.locals.partyId = isValid.partyId;
           callback(undefined, true);
         } else {
           const e: Error = new Error("Invalid session...");

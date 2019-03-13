@@ -22,6 +22,7 @@ export class SessionRepositoryNeDbAdapter implements SessionRepository {
         } else if (session.expirationTime > new Date()) {
           validSession.valid = true;
           validSession.partyId = session.partyId;
+          validSession.ownerPartyId = session.ownerPartyId;
           return validSession;
         } else {
           validSession.valid = false;
@@ -136,7 +137,7 @@ export class SessionRepositoryNeDbAdapter implements SessionRepository {
   addSession(session: Session): Observable<Session> {
 
     session.sessionId = generateUUID();
-    session.expirationTime = new Date(new Date().getTime() + (20 * 60000));
+    session.expirationTime = new Date(new Date().getTime() + (200 * 60000));
     session.createdOn = new Date();
     session.modifiedOn = new Date();
     if (!session.data) {
