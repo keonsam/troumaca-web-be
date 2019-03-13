@@ -1,22 +1,23 @@
 import {AssetType} from "../data/asset/asset.type";
 import {Observable} from "rxjs";
-import { Instance } from "../data/asset/instance";
+import {Affect} from "../data/affect";
+import {Sort} from "../util/sort";
+import {Page} from "../util/page";
 
 export interface AssetTypeRepository {
 
-  findAssetTypes(searchStr: string, pageSize: number, options: any): Observable<AssetType[]>;
+  addAssetType(assetType: AssetType, headerOptions?: any): Observable<AssetType>;
 
-  findInstances(searchStr: string, pageSize: number, options: any): Observable<Instance[]>;
+  updateAssetType(assetType: AssetType, headerOptions?: any): Observable<Affect>;
 
-  getAssetTypes(pageNumber: number, pageSize: number, order: string, options: any): Observable<AssetType[]>;
+  deleteAssetType(assetTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect>;
 
-  getAssetTypeCount(options: any): Observable<number>;
+  findAssetTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetType[]>;
 
-  getAssetTypeById(assetId: string, options: any): Observable<AssetType>;
+  getAssetTypes(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetType[]>>;
 
-  saveAssetType(assetType: AssetType, options: any): Observable<AssetType>;
+  getAssetTypeCount(ownerPartyId: string, headerOptions?: any): Observable<number>;
 
-  updateAssetType(assetId: string, assetType: AssetType, options: any): Observable<number>;
+  getAssetTypeById(assetTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetType>;
 
-  deleteAssetType(assetId: string, options: any): Observable<number>;
 }

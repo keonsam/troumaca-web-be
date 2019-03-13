@@ -1,22 +1,23 @@
-import { AssetCharacteristic } from "../data/asset/asset.characteristic";
+import {AssetCharacteristic} from "../data/asset/asset.characteristic";
 import {Observable} from "rxjs";
+import {Affect} from "../data/affect";
+import {Sort} from "../util/sort";
+import {Page} from "../util/page";
 
 export interface AssetCharacteristicRepository {
 
-  findAssetCharacteristics(searchStr: string, pageSize: number, options: any): Observable<AssetCharacteristic[]>;
+  addAssetCharacteristic(assetCharacteristic: AssetCharacteristic, headerOptions?:any): Observable<AssetCharacteristic>;
 
-  getAssetCharacteristics(pageNumber: number, pageSize: number, order: string, options: any): Observable<AssetCharacteristic[]>;
+  updateAssetCharacteristic(assetCharacteristic: AssetCharacteristic, headerOptions?:any): Observable<Affect>;
 
-  getAssetCharacteristicCount(options: any): Observable<number>;
+  deleteAssetCharacteristic(assetCharacteristicId: string, ownerPartyId: string, headerOptions?:any): Observable<Affect>;
 
-  getTypes(options: any): Observable<any[]>;
+  findAssetCharacteristics(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?:any): Observable<AssetCharacteristic[]>;
 
-  getAssetCharacteristicById(assetCharacteristicId: string, options: any): Observable<AssetCharacteristic>;
+  getAssetCharacteristics(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetCharacteristic[]>>;
 
-  saveAssetCharacteristic(assetCharacteristic: AssetCharacteristic, options: any): Observable<AssetCharacteristic>;
+  getAssetCharacteristicCount(ownerPartyId: string, headerOptions?:any): Observable<number>;
 
-  updateAssetCharacteristic(assetCharacteristicId: string, assetCharacteristic: AssetCharacteristic, options: any): Observable<number>;
-
-  deleteAssetCharacteristic(assetCharacteristicId: string, options: any): Observable<number>;
+  getAssetCharacteristicById(assetCharacteristicId: string, ownerPartyId: string, headerOptions?:any): Observable<AssetCharacteristic>;
 
 }

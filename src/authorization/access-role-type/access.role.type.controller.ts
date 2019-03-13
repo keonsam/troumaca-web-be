@@ -84,10 +84,10 @@ export let updateAccessRoleType = (req: Request, res: Response) => {
   }
   orchestrator
     .updateAccessRoleType(accessRoleTypeId, accessRoleType)
-    .subscribe(affected => {
-      if (affected > 0) {
+    .subscribe(affect => {
+      if (affect.affected > 0) {
         res.status(200);
-        res.send(JSON.stringify(affected));
+        res.send(JSON.stringify(affect));
       } else {
         res.status(404);
         res.send(JSON.stringify({message: "No Data Found For " + req.params.accessRoleTypeId}));
@@ -103,10 +103,10 @@ export let deleteAccessRoleType = (req: Request, res: Response) => {
   const accessRoleTypeId = req.params.accessRoleTypeId;
   orchestrator
     .deleteAccessRoleType(accessRoleTypeId)
-    .subscribe(affected => {
-      if (affected > 0) {
+    .subscribe(affect => {
+      if (affect.affected > 0) {
         res.status(200);
-        res.send(JSON.stringify(affected));
+        res.send(JSON.stringify(affect));
       } else {
         res.status(404);
         res.send(JSON.stringify({message: "No Data Found For " + req.params.accessRoleTypeId}));

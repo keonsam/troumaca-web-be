@@ -1,20 +1,23 @@
-import { AssetRoleType } from "../data/asset/asset.role.type";
+import {AssetRoleType} from "../data/asset/asset.role.type";
 import {Observable} from "rxjs";
+import {Affect} from "../data/affect";
+import {Sort} from "../util/sort";
+import {Page} from "../util/page";
 
 export interface AssetRoleTypeRepository {
 
-  findAssetRoleTypes(searchStr: string, pageSize: number, options: any): Observable<AssetRoleType[]>;
+  addAssetRoleType(assetRoleType: AssetRoleType, headerOptions?: any): Observable<AssetRoleType>;
 
-  getAssetRoleTypes(pageNumber: number, pageSize: number, order: string, options: any): Observable<AssetRoleType[]>;
+  updateAssetRoleType(assetRoleType: AssetRoleType, headerOptions?: any): Observable<Affect>;
 
-  getAssetRoleTypeCount(options: any): Observable<number>;
+  deleteAssetRoleType(assetRoleTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect>;
 
-  getAssetRoleTypeById(assetRoleTypeId: string, options: any): Observable<AssetRoleType>;
+  findAssetRoleTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetRoleType[]>;
 
-  saveAssetRoleType(assetRoleType: AssetRoleType, options: any): Observable<AssetRoleType>;
+  getAssetRoleTypes(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetRoleType[]>>;
 
-  updateAssetRoleType(assetRoleTypeId: string, assetRoleType: AssetRoleType, options: any): Observable<number>;
+  getAssetRoleTypeCount(ownerPartyId: string, headerOptions?: any): Observable<number>;
 
-  deleteAssetRoleType(assetRoleTypeId: string, options: any): Observable<number>;
+  getAssetRoleTypeById(assetRoleTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetRoleType>;
 
 }

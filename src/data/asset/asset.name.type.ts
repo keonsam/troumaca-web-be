@@ -1,6 +1,9 @@
 export class AssetNameType {
   assetNameTypeId: string;
-  ownerPartyId: string;
   name: string;
+  canonicalName: string;
   description: string;
+  version: string;
+  ownerPartyId: string;
+  dateModified: Date;
 }

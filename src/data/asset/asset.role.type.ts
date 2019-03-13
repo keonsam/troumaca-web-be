@@ -1,6 +1,9 @@
 export class AssetRoleType {
   assetRoleTypeId: string;
   name: string;
-  ownerPartyId: string;
+  canonicalName: string;
   description: string;
+  version: string;
+  ownerPartyId: string;
+  dateModified: Date;
 }

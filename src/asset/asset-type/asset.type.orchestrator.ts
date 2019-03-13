@@ -1,12 +1,10 @@
-import {createAssetTypeRepository} from "../../adapter/asset/asset.type.repository.factory";
-import {AssetTypeRepository} from "../../repository/asset.type.repository";
 import {AssetType} from "../../data/asset/asset.type";
 import {Observable} from "rxjs";
-import {Result} from "../../result.success";
-import {getSortOrderOrDefault} from "../../sort.order.util";
-import {shapeAssetTypesResponse} from "./asset.type.response.shaper";
-import {switchMap, map} from "rxjs/operators";
-import { Instance } from "../../data/asset/instance";
+import {AssetTypeRepository} from "../../repository/asset.type.repository";
+import {createAssetTypeRepository} from "../../adapter/asset/asset.type.repository.factory";
+import {Affect} from "../../data/affect";
+import {Page} from "../../util/page";
+import {Sort} from "../../util/sort";
 
 export class AssetTypeOrchestrator {
 
@@ -16,42 +14,28 @@ export class AssetTypeOrchestrator {
     this.assetTypeRepository = createAssetTypeRepository(options);
   }
 
-  findAssetTypes(searchStr: string, pageSize: number, options: any): Observable<AssetType[]> {
-    return this.assetTypeRepository.findAssetTypes(searchStr, pageSize, options);
+  addAssetType(assetType: AssetType, headerOptions?: any): Observable<AssetType> {
+    return this.assetTypeRepository.addAssetType(assetType, headerOptions);
   }
 
-  findInstances(searchStr: string, pageSize: number, options: any): Observable<Instance[]> {
-    return this.assetTypeRepository.findInstances(searchStr, pageSize, options);
+  findAssetTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetType[]> {
+    return this.assetTypeRepository.findAssetTypes(ownerPartyId, searchStr, pageNumber, pageSize, headerOptions);
   }
 
-  getAssetTypes(number: number, size: number, field: string, direction: string, options: any): Observable<Result<any>> {
-    const sort: string = getSortOrderOrDefault(field, direction);
-    return this.assetTypeRepository
-      .getAssetTypes(number, size, sort, options)
-      .pipe(switchMap(assetTypes => {
-        return this.assetTypeRepository
-            .getAssetTypeCount(options)
-            .pipe(map(count => {
-              const shapeAssetTypesResp: any = shapeAssetTypesResponse(assetTypes, number, size, assetTypes.length, count, sort);
-              return new Result<any>(false, "assetTypes", shapeAssetTypesResp);
-            }));
-      }));
+  getAssetTypes(ownerPartyId: string, number: number, size: number, sort: Sort, headerOptions?: any): Observable<Page<AssetType[]>> {
+    return this.assetTypeRepository.getAssetTypes(ownerPartyId, number, size, sort, headerOptions);
   }
 
-  getAssetTypeById(assetTypeId: string, options: any): Observable<AssetType> {
-    return this.assetTypeRepository.getAssetTypeById(assetTypeId, options);
+  updateAssetType(assetType: AssetType, headerOptions?: any): Observable<Affect> {
+    return this.assetTypeRepository.updateAssetType(assetType, headerOptions);
   }
 
-  saveAssetType(assetType: AssetType, options: any): Observable<AssetType> {
-    return this.assetTypeRepository.saveAssetType(assetType, options);
+  getAssetTypeById(assetTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetType> {
+    return this.assetTypeRepository.getAssetTypeById(assetTypeId, ownerPartyId, headerOptions);
   }
 
-  updateAssetType(assetTypeId: string, assetType: AssetType, options: any): Observable<number> {
-    return this.assetTypeRepository.updateAssetType(assetTypeId, assetType, options);
-  }
-
-  deleteAssetType(assetTypeId: string, options: any): Observable<number> {
-    return this.assetTypeRepository.deleteAssetType(assetTypeId, options);
+  deleteAssetType(assetTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
+    return this.assetTypeRepository.deleteAssetType(assetTypeId, ownerPartyId, headerOptions);
   }
 
 }

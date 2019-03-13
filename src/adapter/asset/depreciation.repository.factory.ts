@@ -1,10 +1,10 @@
 import {RepositoryKind} from "../../repository.kind";
 import {properties} from "../../properties.helpers";
 import {DepreciationRepository} from "../../repository/depreciation.repository";
-import {DepreciationRepositoryNeDbAdapter} from "./depreciation.repository.db.adapter";
-import {DepreciationRepositoryRestAdapter} from "./depreciation.repository.rest.adapter";
+import {DepreciationRepositoryNeDbAdapter} from "./db/depreciation.repository.db.adapter";
+import {DepreciationRepositoryRestAdapter} from "./rest/depreciation.repository.rest.adapter";
 
-export function createDepreciationRepositoryFactory(kind?: RepositoryKind): DepreciationRepository {
+export function createDepreciationRepository(kind?: RepositoryKind): DepreciationRepository {
   const type: number = properties.get("depreciation.repository.type") as number;
 
   const k: RepositoryKind = (kind) ? kind : (type === 2) ? RepositoryKind.Rest : RepositoryKind.Nedb;

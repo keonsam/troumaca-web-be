@@ -2,7 +2,7 @@ import {AccessRoleTypeRepository} from "../../repository/access.role.type.reposi
 import {RepositoryKind} from "../../repository.kind";
 import { properties } from "../../properties.helpers";
 import { AccessRoleTypeRepositoryDbAdapter } from "./access.role.type.repository.db.adapter";
-import { AccessRoleTypeRepositoryRestAdapter } from "./access.role.type.repository.rest.adapter";
+import { AssetRoleTypeRepositoryRestAdapter } from "./assetRoleTypeRepositoryRestAdapter";
 
 export function createAccessRoleTypeRepositoryFactory(kind?: RepositoryKind): AccessRoleTypeRepository {
     const type: number = properties.get("access.role.type.repository.type") as number;
@@ -12,7 +12,7 @@ export function createAccessRoleTypeRepositoryFactory(kind?: RepositoryKind): Ac
     case RepositoryKind.Nedb:
       return new AccessRoleTypeRepositoryDbAdapter();
     case RepositoryKind.Rest:
-      return new AccessRoleTypeRepositoryRestAdapter();
+      return new AssetRoleTypeRepositoryRestAdapter();
     default:
       return new AccessRoleTypeRepositoryDbAdapter();
   }

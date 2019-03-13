@@ -130,7 +130,6 @@ export let getResourcesByArray = (req: Request, res: Response) => {
 };
 
 export let getAssignedResourcesByArray = (req: Request, res: Response) => {
-
     const number = getNumericValueOrDefault(req.query.pageNumber, 1);
     const size = getNumericValueOrDefault(req.query.pageSize, 10);
     const field = getStringValueOrDefault(req.query.sortField, "");
@@ -138,13 +137,13 @@ export let getAssignedResourcesByArray = (req: Request, res: Response) => {
     const assignedArray = req.query.assignedArray ? req.query.assignedArray.split(",") : [];
 
     orchestrator.getAssignedResourcesByArray(number, size, field, direction, assignedArray)
-        .subscribe(result => {
-            res.status(200);
-            res.send(JSON.stringify(result.data));
-        }, error => {
-            res.status(500);
-            res.send(JSON.stringify({message: "Error Occurred"}));
-            console.log(error);
-        });
+    .subscribe(result => {
+        res.status(200);
+        res.send(JSON.stringify(result.data));
+    }, error => {
+        res.status(500);
+        res.send(JSON.stringify({message: "Error Occurred"}));
+        console.log(error);
+    });
 };
 

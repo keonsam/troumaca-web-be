@@ -1,11 +1,9 @@
 export class AssetType {
     assetTypeId: string;
-    ownerPartyId: string;
-    initialId: string;
-    modelNumber: string;
-    description: string;
+    specification: boolean;
     name: string;
-    materialCode: string;
-    createdOn: Date;
-    modifiedOn: Date;
+    description: string;
+    version: string;
+    ownerPartyId: string;
+    dateModified: Date;
 }

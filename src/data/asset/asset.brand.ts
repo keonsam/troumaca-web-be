@@ -1,6 +1,10 @@
 export class AssetBrand {
-  assetId: string;
+  assetBrandId: string;
   name: string;
-  abbreviation: string;
+  canonicalName: string;
   description: string;
+  abbreviation: string;
+  version: string;
+  ownerPartyId: string;
+  dateModified: Date;
 }

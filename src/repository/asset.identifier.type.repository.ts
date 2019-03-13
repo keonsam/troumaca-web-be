@@ -1,20 +1,23 @@
-import { AssetIdentifierType } from "../data/asset/asset.identifier.type";
+import {AssetIdentifierType} from "../data/asset/asset.identifier.type";
 import {Observable} from "rxjs";
+import {Affect} from "../data/affect";
+import {Sort} from "../util/sort";
+import {Page} from "../util/page";
 
 export interface AssetIdentifierTypeRepository {
 
-  findAssetIdentifierTypes(searchStr: string, pageSize: number, options: any): Observable<AssetIdentifierType[]>;
+  addAssetIdentifierType(assetIdentifierType: AssetIdentifierType, headerOptions?:any): Observable<AssetIdentifierType>;
 
-  getAssetIdentifierTypes(pageNumber: number, pageSize: number, order: string, options: any): Observable<AssetIdentifierType[]>;
+  updateAssetIdentifierType(assetIdentifierType: AssetIdentifierType, headerOptions?:any): Observable<Affect>;
 
-  getAssetIdentifierTypeCount(options: any): Observable<number>;
+  deleteAssetIdentifierType(assetIdentifierTypeId: string, ownerPartyId: string, headerOptions?:any): Observable<Affect>;
 
-  getAssetIdentifierTypeById(assetIdentifierTypeId: string, options: any): Observable<AssetIdentifierType>;
+  findAssetIdentifierTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetIdentifierType[]>;
 
-  saveAssetIdentifierType(assetIdentifierType: AssetIdentifierType, options: any): Observable<AssetIdentifierType>;
+  getAssetIdentifierTypes(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetIdentifierType[]>>;
 
-  updateAssetIdentifierType(assetIdentifierTypeId: string, assetIdentifierType: AssetIdentifierType, options: any): Observable<number>;
+  getAssetIdentifierTypeCount(ownerPartyId: string, headerOptions?:any): Observable<number>;
 
-  deleteAssetIdentifierType(assetIdentifierTypeId: string, options: any): Observable<number>;
+  getAssetIdentifierTypeById(assetIdentifierTypeId: string, ownerPartyId: string, headerOptions?:any): Observable<AssetIdentifierType>;
 
 }

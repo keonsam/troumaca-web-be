@@ -1,0 +1,19 @@
+requests
+1. register company
+2. register individual
+3. authenticate
+4. forget password
+5. read lobby content
+6. company
+     a. read company info
+     b. edit company organization
+     c. edit company phone number
+     d. edit company address
+     f. edit company url
+7.  people
+8.  me
+9.  assets
+
+
+
+

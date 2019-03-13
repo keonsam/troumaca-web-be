@@ -1,8 +1,9 @@
 export class AssetIdentifier {
-  assetIdentifierTypeId: string;
+  assetIdentifierId: string;
+  identifierValue: string;
+  dateEffective: Date;
+  dateUntil: Date;
+  version: string;
   ownerPartyId: string;
-  name: string;
-  identifierVal: string;
-  effectiveDate: string;
-  untilDate: string;
+  dateModified: Date;
 }
