@@ -89,6 +89,8 @@ const depreciationMethodDb = path.resolve(__dirname, "..") + "/nedb/depreciation
 const depreciationSystemDb = path.resolve(__dirname, "..") + "/nedb/depreciation/systems.db";
 const propertyClassesDb = path.resolve(__dirname, "..") + "/nedb/depreciation/propertyClasses.db";
 
+const theActivitiesDb = path.resolve(__dirname, "..") + "/nedb/activity/activities.db";
+
 // Todo: Fix remove
 // party
 
@@ -280,6 +282,10 @@ sessions.loadDatabase(handleError);
 export let shipments = new Datastore(theShipmentsDb);
 shipments.loadDatabase(function (err) { if (err) { console.log(err); }});
 
+// activity
+export let activities = new Datastore(theActivitiesDb);
+activities.loadDatabase(handleError);
+activities.ensureIndex({fieldName: "activityId", unique: true}, handleError);
 
 // Authorization
 export let accessRoles = new Datastore(accessRolesDb);

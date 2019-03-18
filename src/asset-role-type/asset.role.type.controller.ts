@@ -3,13 +3,17 @@ import {getNumericValueOrDefault} from "../number.util";
 import {getStringValueOrDefault} from "../string.util";
 import {AssetRoleTypeOrchestrator} from "./asset.role.type.orchestrator";
 import { HeaderNormalizer } from "../header.normalizer";
+import {Direction} from "../util/direction";
+import {Order} from "../util/order";
+import {Sort} from "../util/sort";
 
 const assetRoleTypeOrchestrator: AssetRoleTypeOrchestrator = new AssetRoleTypeOrchestrator();
 
 export let findAssetRoleTypes = (req: Request, res: Response) => {
     HeaderNormalizer.normalize(req);
     const correlationId = req.headers["Correlation-Id"];
-    const ownerPartyId = req.headers["Owner-Party-Id"];
+    const ownerPartyId = req.get("Owner-Party-Id");
+    //const ownerPartyId = req.headers["Owner-Party-Id"];
     const requestingPartyId = req.headers["Party-Id"];
 
     const headerOptions = {
@@ -17,10 +21,12 @@ export let findAssetRoleTypes = (req: Request, res: Response) => {
         "Owner-Party-Id": ownerPartyId,
         "Party-Id": requestingPartyId
     };
+
     const searchStr: string = req.query.q;
     const pageSize: number = req.query.pageSize;
+    const pageNumber: number = req.query.pageNumber;
 
-    assetRoleTypeOrchestrator.findAssetRoleTypes(searchStr, pageSize, headerOptions)
+    assetRoleTypeOrchestrator.findAssetRoleTypes(ownerPartyId, searchStr, pageNumber, pageSize, headerOptions)
         .subscribe(assetRoleTypes => {
             res.status(200);
             res.send(JSON.stringify(assetRoleTypes));
@@ -34,7 +40,8 @@ export let findAssetRoleTypes = (req: Request, res: Response) => {
 export let getAssetRoleTypes = (req: Request, res: Response) => {
     HeaderNormalizer.normalize(req);
     const correlationId = req.headers["Correlation-Id"];
-    const ownerPartyId = req.headers["Owner-Party-Id"];
+    //const ownerPartyId = req.headers["Owner-Party-Id"];
+    const ownerPartyId = req.get("Owner-Party-Id");
     const requestingPartyId = req.headers["Party-Id"];
 
     const headerOptions = {
@@ -42,12 +49,31 @@ export let getAssetRoleTypes = (req: Request, res: Response) => {
         "Owner-Party-Id": ownerPartyId,
         "Party-Id": requestingPartyId
     };
+
     const number = getNumericValueOrDefault(req.query.pageNumber, 1);
     const size = getNumericValueOrDefault(req.query.pageSize, 10);
     const field = getStringValueOrDefault(req.query.sortField, "");
     const direction = getStringValueOrDefault(req.query.sortOrder, "");
 
-    assetRoleTypeOrchestrator.getAssetRoleTypes(number, size, field, direction, headerOptions)
+    var asc: string = Direction[Direction.ASC];
+    var desc: string = Direction[Direction.DESC];
+
+    const order = new Order();
+    if (direction == asc) {
+        order.property = field;
+        order.direction = Direction.ASC;
+    } else if (direction == desc) {
+        order.property = field;
+        order.direction = Direction.DESC;
+    } else {
+        order.property = field;
+        order.direction = Direction.ASC;
+    }
+
+    const sort = new Sort();
+    sort.add(order);
+
+    assetRoleTypeOrchestrator.getAssetRoleTypes(ownerPartyId, number, size, sort, headerOptions)
         .subscribe(result => {
             res.status(200);
             res.send(JSON.stringify(result.data));
@@ -129,11 +155,11 @@ export let updateAssetRoleType = (req: Request, res: Response) => {
             message: "AssetRoleType content can not be empty"
         });
     }
-    assetRoleTypeOrchestrator.updateAssetRoleType(req.params.assetRoleTypeId, req.body, headerOptions)
-        .subscribe(affected => {
-            if (affected > 0) {
+    assetRoleTypeOrchestrator.updateAssetRoleType(req.body, headerOptions)
+        .subscribe(affect => {
+            if (affect.affected > 0) {
                 res.status(200);
-                res.send(JSON.stringify(affected));
+                res.send(JSON.stringify(affect));
             } else {
                 res.status(404);
                 res.send(JSON.stringify({message: "No Data Found For " + req.params.assetRoleTypeId}));
@@ -157,10 +183,10 @@ export let deleteAssetRoleType = (req: Request, res: Response) => {
         "Party-Id": requestingPartyId
     };
     assetRoleTypeOrchestrator.deleteAssetRoleType(req.params.assetRoleTypeId, headerOptions)
-        .subscribe(affected => {
-            if (affected > 0) {
+        .subscribe(affect => {
+            if (affect.affected > 0) {
                 res.status(200);
-                res.send(JSON.stringify(affected));
+                res.send(JSON.stringify(affect));
             } else {
                 res.status(404);
                 res.send(JSON.stringify({message: "No Data Found For " + req.params.assetRoleTypeId}));

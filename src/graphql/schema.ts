@@ -8,6 +8,17 @@ import {
   resolvers as organizationProfileResolvers
 } from './organization.profile';
 
+import {
+  typeDef as AssetNameType,
+  resolvers as assetNameTypeResolvers
+} from './asset.name.type'
+
+// using: https://blog.apollographql.com/modularizing-your-graphql-schema-code-d7f71d5ed5f2
+// other reference: https://graphql.org/learn/queries/
+// other reference: https://www.howtographql.com/advanced/2-more-graphql-concepts/
+// other reference: https://www.prisma.io/blog/how-to-wrap-a-rest-api-with-graphql-8bf3fb17547d
+// other reference: https://www.apollographql.com/docs/apollo-server/essentials/data.html
+
 // import {merge} from "rxjs";
 // import { typeDef as Organization } from './organization';
 // import { typeDef as PartyImage } from './party.image';
@@ -35,8 +46,16 @@ const resolvers = {
 // });
 
 let schema = makeExecutableSchema({
-  typeDefs: [typeDefs, OrganizationProfile],
-  resolvers: merge(resolvers, organizationProfileResolvers),
+  typeDefs: [
+    typeDefs,
+    OrganizationProfile,
+    AssetNameType
+  ],
+  resolvers: merge(
+    resolvers,
+    organizationProfileResolvers,
+    assetNameTypeResolvers
+  ),
 });
 
 // const organizationProfileQuery = `

@@ -1,33 +1,36 @@
-import {createAssetIdentifierTypeRepositoryFactory} from "../adapter/asset/asset.identifier.type.repository.factory";
+import {createAssetIdentifierTypeRepository} from "../adapter/asset/asset.identifier.type.repository.factory";
 import {shapeAssetIdentifierTypesResponse} from "./asset.identifier.type.response.shaper";
-import {getSortOrderOrDefault} from "../sort.order.util";
 import {AssetIdentifierTypeRepository} from "../repository/asset.identifier.type.repository";
 import {AssetIdentifierType} from "../data/asset/asset.identifier.type";
 import {Observable} from "rxjs";
 import {switchMap, map} from "rxjs/operators";
 import {Result} from "../result.success";
+import {Sort} from "../util/sort";
+import {Affect} from "../data/affect";
 
 export class AssetIdentifierTypeOrchestrator {
 
     private assetIdentifierTypeRepository: AssetIdentifierTypeRepository;
 
     constructor(options?: any) {
-        this.assetIdentifierTypeRepository = createAssetIdentifierTypeRepositoryFactory(options);
+        this.assetIdentifierTypeRepository = createAssetIdentifierTypeRepository(options);
     }
 
-    findAssetIdentifierTypes(searchStr: string, pageSize: number, options: any): Observable<AssetIdentifierType[]> {
-        return this.assetIdentifierTypeRepository.findAssetIdentifierTypes(searchStr, pageSize, options);
+    findAssetIdentifierTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetIdentifierType[]> {
+        return this.assetIdentifierTypeRepository.findAssetIdentifierTypes(ownerPartyId, searchStr, pageNumber, pageSize, headerOptions);
     }
 
-    getAssetIdentifierTypes(number: number, size: number, field: string, direction: string, options: any): Observable<Result<any>> {
-        const sort: string = getSortOrderOrDefault(field, direction);
+    getAssetIdentifierTypes(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, options?: any): Observable<Result<any>> {
+        //const sort: string = getSortOrderOrDefault(field, direction);
         return this.assetIdentifierTypeRepository
-            .getAssetIdentifierTypes(number, size, sort, options)
+            .getAssetIdentifierTypes(ownerPartyId, pageNumber, pageSize, sort, options)
             .pipe(switchMap((assetIdentifierTypes: AssetIdentifierType[]) => {
                 return this.assetIdentifierTypeRepository
                     .getAssetIdentifierTypeCount(options)
                     .pipe(map((count: number) => {
-                        const shapeAssetIdentifierTypesResp: any = shapeAssetIdentifierTypesResponse(assetIdentifierTypes, number, size, assetIdentifierTypes.length, count, sort);
+                        const shapeAssetIdentifierTypesResp: any = shapeAssetIdentifierTypesResponse(
+                          assetIdentifierTypes, pageNumber, pageSize, assetIdentifierTypes.length, count, sort
+                        );
                         return new Result<any>(false, "assetIdentifierTypes", shapeAssetIdentifierTypesResp);
                     }));
             }));
@@ -38,14 +41,14 @@ export class AssetIdentifierTypeOrchestrator {
     }
 
     saveAssetIdentifierType(assetIdentifierType: AssetIdentifierType, options: any): Observable<AssetIdentifierType> {
-        return this.assetIdentifierTypeRepository.saveAssetIdentifierType(assetIdentifierType, options);
+        return this.assetIdentifierTypeRepository.addAssetIdentifierType(assetIdentifierType, options);
     }
 
-    updateAssetIdentifierType(assetIdentifierTypeId: string, assetIdentifierType: AssetIdentifierType, options: any): Observable<number> {
-        return this.assetIdentifierTypeRepository.updateAssetIdentifierType(assetIdentifierTypeId, assetIdentifierType, options);
+    updateAssetIdentifierType(assetIdentifierType: AssetIdentifierType, options: any): Observable<Affect> {
+        return this.assetIdentifierTypeRepository.updateAssetIdentifierType(assetIdentifierType, options);
     }
 
-    deleteAssetIdentifierType(assetIdentifierTypeId: string, options: any): Observable<number> {
+    deleteAssetIdentifierType(assetIdentifierTypeId: string, options: any): Observable<Affect> {
         return this.assetIdentifierTypeRepository.deleteAssetIdentifierType(assetIdentifierTypeId, options);
     }
 
