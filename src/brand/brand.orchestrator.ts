@@ -1,5 +1,5 @@
 import {createBrandRepositoryFactory} from "../adapter/asset/brand.repository.factory";
-import {shapeBrandsResponse} from "./brand.response.shaper";
+// import {shapeBrandsResponse} from "./brand.response.shaper";
 import {getSortOrderOrDefault} from "../sort.order.util";
 import {BrandRepository} from "../repository/brand.repository";
 import {Brand} from "../data/asset/brand";
@@ -27,7 +27,8 @@ export class BrandOrchestrator {
                 return this.brandRepository
                     .getBrandCount(options)
                     .pipe(map((count: number) => {
-                        const shapeBrandsResp: any = shapeBrandsResponse(brands, number, size, brands.length, count, sort);
+                        const shapeBrandsResp: any = {};
+                          //(brands, number, size, brands.length, count, sort);
                         return new Result<any>(false, "brands", shapeBrandsResp);
                     }));
             }));

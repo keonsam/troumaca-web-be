@@ -359,10 +359,10 @@ router.delete("/phones/:siteId", checkSession, phoneController.deletePhone);
 
 // PARTY
 router.get("/parties/contact-info", checkSession, partyController.getContactInfo);
-router.post("/parties/contact-info", checkSession, partyController.addContactInfo);
+// router.post("/parties/contact-info", checkSession, partyController.addContactInfo);
 router.put("/parties/contact-info/:contactInfoId", checkSession, partyController.updateContactInfo);
 router.get("/parties/address", checkSession, partyController.getAddress);
-router.post("/parties/address", checkSession, partyController.addAddress);
+// router.post("/parties/address", checkSession, partyController.addAddress);
 router.put("/parties/address/:siteId", checkSession, partyController.updateAddress);
 // user
 router.get("/users/find", checkSession, userController.findUser);
@@ -376,21 +376,21 @@ router.delete("/users/:partyId", checkSession, userController.deleteUser);
 
 // organizations
 router.get("/organizations/find", checkSession, organizationController.findOrganizations);
-router.get("/organizations/company", checkSession, organizationController.getOrganizationCompany);
+// router.get("/organizations/company", checkSession, organizationController.getOrganizationCompany);
 router.get("/organizations/:partyId", checkSession, organizationController.getOrganization);
 router.get("/organizations", checkSession, organizationController.getOrganizations);
 router.post("/organizations", checkSession, organizationController.saveOrganization);
 router.post("/organizations/customer", checkSession, organizationController.addCustomer);
 // router.post("/organizations/profiles", checkSession, organizationController.saveOrganizationCompany);
-router.post("/organizations/request-access", checkSession, organizationController.saveAccessRequest);
+// router.post("/organizations/request-access", checkSession, organizationController.saveAccessRequest);
 router.put("/organizations/profile", checkSession, organizationController.updateOrganizationCompany);
 router.put("/organizations/:partyId", checkSession, organizationController.updateOrganization);
 router.delete("/organizations/:partyId", checkSession, organizationController.deleteOrganization);
 
 // photos
 router.get("/photos", checkSession, photoController.getPhotos);
-router.post("/photos/user", checkSession, upload, photoController.savePhoto);
-router.put("/photos/user", checkSession, upload, photoController.updatePhoto);
+// router.post("/photos/user", checkSession, upload, photoController.savePhoto);
+// router.put("/photos/user", checkSession, upload, photoController.updatePhoto);
 
 
 

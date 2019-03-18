@@ -1,33 +1,37 @@
-import {createAssetNameTypeRepositoryFactory} from "../adapter/asset/asset.name.type.repository.factory";
+import {createAssetNameTypeRepository} from "../adapter/asset/asset.name.type.repository.factory";
 import {shapeAssetNameTypesResponse} from "./asset.name.type.response.shaper";
-import {getSortOrderOrDefault} from "../sort.order.util";
+// import {getSortOrderOrDefault} from "../sort.order.util";
 import {AssetNameTypeRepository} from "../repository/asset.name.type.repository";
 import {AssetNameType} from "../data/asset/asset.name.type";
 import {Observable} from "rxjs";
 import {switchMap, map} from "rxjs/operators";
 import {Result} from "../result.success";
+import {Sort} from "../util/sort";
+import {Affect} from "../data/affect";
 
 export class AssetNameTypeOrchestrator {
 
     private assetNameTypeRepository: AssetNameTypeRepository;
 
     constructor(options?: any) {
-        this.assetNameTypeRepository = createAssetNameTypeRepositoryFactory(options);
+        this.assetNameTypeRepository = createAssetNameTypeRepository(options);
     }
 
-    findAssetNameTypes(searchStr: string, pageSize: number, options: any): Observable<AssetNameType[]> {
-        return this.assetNameTypeRepository.findAssetNameTypes(searchStr, pageSize, options);
+    findAssetNameTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, options?:any): Observable<AssetNameType[]> {
+        return this.assetNameTypeRepository.findAssetNameTypes(ownerPartyId, searchStr, pageNumber, pageSize, options);
     }
 
-    getAssetNameTypes(number: number, size: number, field: string, direction: string, options: any): Observable<Result<any>> {
-        const sort: string = getSortOrderOrDefault(field, direction);
+    getAssetNameTypes(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, options?: any): Observable<Result<any>> {
+        //const sort: string = getSortOrderOrDefault(field, direction);
         return this.assetNameTypeRepository
-            .getAssetNameTypes(number, size, sort, options)
+            .getAssetNameTypes(ownerPartyId, pageNumber, pageSize, sort, options)
             .pipe(switchMap((assetNameTypes: AssetNameType[]) => {
                 return this.assetNameTypeRepository
                     .getAssetNameTypeCount(options)
                     .pipe(map((count: number) => {
-                        const shapeAssetNameTypesResp: any = shapeAssetNameTypesResponse(assetNameTypes, number, size, assetNameTypes.length, count, sort);
+                        const shapeAssetNameTypesResp: any = shapeAssetNameTypesResponse(
+                          assetNameTypes, pageNumber, pageSize, assetNameTypes.length, count, sort
+                        );
                         return new Result<any>(false, "assetNameTypes", shapeAssetNameTypesResp);
                     }));
             }));
@@ -38,14 +42,14 @@ export class AssetNameTypeOrchestrator {
     }
 
     saveAssetNameType(assetNameType: AssetNameType, options: any): Observable<AssetNameType> {
-        return this.assetNameTypeRepository.saveAssetNameType(assetNameType, options);
+        return this.assetNameTypeRepository.addAssetNameType(assetNameType, options);
     }
 
-    updateAssetNameType(assetNameTypeId: string, assetNameType: AssetNameType, options: any): Observable<number> {
-        return this.assetNameTypeRepository.updateAssetNameType(assetNameTypeId, assetNameType, options);
+    updateAssetNameType(assetNameType: AssetNameType, options: any): Observable<Affect> {
+        return this.assetNameTypeRepository.updateAssetNameType(assetNameType, options);
     }
 
-    deleteAssetNameType(assetNameTypeId: string, options: any): Observable<number> {
+    deleteAssetNameType(assetNameTypeId: string, options: any): Observable<Affect> {
         return this.assetNameTypeRepository.deleteAssetNameType(assetNameTypeId, options);
     }
 
