@@ -93,7 +93,6 @@ export let resendConfirmCodeByUsername = (req: Request, res: Response) => {
 
 };
 
-
 export let confirmCode = (req: Request, res: Response) => {
 
   HeaderNormalizer.normalize(req);
@@ -125,7 +124,7 @@ export let confirmCode = (req: Request, res: Response) => {
     };
 
   confirmationOrchestrator
-    .confirmCode(confirmation.confirmationId, confirmation.credentialId, confirmation, headerOptions)
+    .confirmCode(confirmation.confirmationId, confirmation.credentialId, confirmation.code, headerOptions)
     .subscribe(next => {
       const body = JSON.stringify(next);
       res.setHeader("content-type", "application/json");

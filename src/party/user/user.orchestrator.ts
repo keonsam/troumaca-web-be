@@ -37,7 +37,7 @@ export class UserOrchestrator {
             }));
     }
 
-    getUser(partyId: any, options: any): Observable<User> {
+    getUser(partyId: any, options?: any): Observable<User> {
         return this.userRepository.getUser(partyId, options);
     }
 

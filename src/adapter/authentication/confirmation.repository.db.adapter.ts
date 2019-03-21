@@ -35,12 +35,12 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
       }));
   }
 
-  confirmCode(confirmationId: string, credentialId: string, confirmation: Confirmation, options?: any): Observable<Confirmation> {
-    return this.verifyCode(confirmationId, confirmation.code)
+  confirmCode(confirmationId: string, credentialId: string, code: string, options?: any): Observable<Confirmation> {
+    return this.verifyCode(confirmationId, code)
       .pipe(switchMap((confirmationRes: Confirmation) => {
         log.debug("Confirmation: " + confirmationRes);
         if (!confirmationRes || confirmationRes.status === "Expired" || confirmationRes.status === "Confirmed") {
-          return of(confirmation);
+          return of(confirmationRes);
         } else if (new Date(confirmationRes.createdOn.getTime() + (20 * 60000)) < new Date()) {
           return this.updateConfirmationStatus(credentialId, "Expired")
             .pipe(map(numRep => {

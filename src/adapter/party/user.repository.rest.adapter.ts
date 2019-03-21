@@ -16,7 +16,7 @@ export class UserRepositoryRestAdapter implements UserRepository {
     return undefined;
   }
 
-  getUser(partyId: string, options: any): Observable<User> {
+  getUser(partyId: string, options?: any): Observable<User> {
     return undefined;
   }
 

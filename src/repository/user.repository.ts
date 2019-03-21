@@ -13,7 +13,7 @@ export interface UserRepository {
 
   getUserCount(options: any): Observable<number>;
 
-  getUser(partyId: string, options: any): Observable<User>;
+  getUser(partyId: string, options?: any): Observable<User>;
 
   getPerson(partyId: string, options: any): Observable<Person>;
 

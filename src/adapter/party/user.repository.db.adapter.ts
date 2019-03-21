@@ -77,10 +77,10 @@ export class UserRepositoryNeDbAdapter implements UserRepository {
         });
     }
 
-    getUser(partyId: string, options: any): Observable<User> {
+    getUser(partyId: string, options?: any): Observable<User> {
         const query = {
             partyId,
-            ownerPartyId: options["Owner-Party-Id"]
+            // ownerPartyId: options["Owner-Party-Id"]
         };
         return this.getUserLocal(query)
             .pipe(switchMap(user => {

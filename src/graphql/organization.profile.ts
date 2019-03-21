@@ -1,5 +1,3 @@
-// import {OrganizationProfile} from "../data/profile/organization.profile";
-// Import
 export const typeDef = `
   extend type Query {
     organizationProfile(partyId: Int!): OrganizationProfile
@@ -9,6 +7,7 @@ export const typeDef = `
     partyId: String!
   }
 `;
+
 
 // organizationProfile(partyId: Int!): OrganizationProfile
 
@@ -22,10 +21,3 @@ export const resolvers = {
   }
 };
 
-
-// organization: Organization!
-// partyImage: PartyImage!
-// mainVirtualSite: [VirtualSite]
-// headquarter: Address
-// numberOfUsers: Int!
-// numberOfAssets: Int!

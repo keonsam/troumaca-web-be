@@ -9,12 +9,12 @@ import {ValidateConfirmCode} from "../../repository/validate.confirm.code";
 
 export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository {
 
-  confirmCode(confirmationId: string, credentialId: string, confirmation: Confirmation, options?: any): Observable<Confirmation> {
+  confirmCode(confirmationId: string, credentialId: string, code: string, options?: any): Observable<Confirmation> {
     const uri: string = properties.get("credential.host.port") as string;
 
     const headerMap = jsonRequestHeaderMap(options ? options : {});
 
-    const json = confirmation;
+    const json = {code};
 
     const uriAndPath: string = `${uri}/authentication/confirmations/${confirmationId}/credentials/${credentialId}`;
 

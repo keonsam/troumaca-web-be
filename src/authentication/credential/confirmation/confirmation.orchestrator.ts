@@ -15,8 +15,8 @@ export class ConfirmationOrchestrator {
     return this.confirmationRepository.resendConfirmCode(confirmationId, credentialId, options);
   }
 
-  confirmCode(confirmationId: string, credentialId: string, confirmation: Confirmation, options?: any): Observable<Confirmation> {
-    return this.confirmationRepository.confirmCode(confirmationId, credentialId, confirmation, options);
+  confirmCode(confirmationId: string, credentialId: string, code: string, options?: any): Observable<Confirmation> {
+    return this.confirmationRepository.confirmCode(confirmationId, credentialId, code, options);
   }
 
   resendConfirmCodeByUsername(username: string, options?: any): Observable<Confirmation> {

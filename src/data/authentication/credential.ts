@@ -7,4 +7,8 @@ export class Credential {
   status: string;
   modifiedOn: Date;
   createdOn: Date;
+  constructor(username?: string, password?: string) {
+    this.username = username;
+    this.password = password;
+  }
 }

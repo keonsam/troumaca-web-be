@@ -63,7 +63,6 @@ export class CredentialOrchestrator {
     // 1. He/she provides a valid set of credentials
     // 2. He/she has confirmed their username (email, or phone)
     // 3. He/she has completed the quick profile, person, account type, and possible organization name.
-
       return this.credentialRepository
       .authenticate(credential, options)
       .pipe(switchMap(authenticatedCredential => {

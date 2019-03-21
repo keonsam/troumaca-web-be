@@ -10,7 +10,7 @@ export const typeDef = `
     description: String
     version: String
     ownerPartyId: String
-    dateModified: Date
+    dateModified: String
   }
 `;
 
