@@ -50,7 +50,7 @@ export let getBrands = (req: Request, res: Response) => {
     brandOrchestrator.getBrands(number, size, field, direction, headerOptions)
         .subscribe(result => {
             res.status(200);
-            res.send(JSON.stringify(result.data));
+            res.send(JSON.stringify(result));
         }, error => {
             res.status(500);
             res.send(JSON.stringify({message: "Error Occurred"}));

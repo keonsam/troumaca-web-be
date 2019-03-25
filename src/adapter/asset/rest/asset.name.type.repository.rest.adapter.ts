@@ -10,15 +10,15 @@ export class AssetNameTypeRepositoryRestAdapter implements AssetNameTypeReposito
     return undefined;
   }
 
-  updateAssetNameType(assetNameType: AssetNameType, headerOptions?: any): Observable<Affect> {
+  updateAssetNameType(assetNameTypeId: string, assetNameType: AssetNameType, headerOptions?: any): Observable<number> {
     return undefined;
   }
 
-  deleteAssetNameType(assetNameTypeId: string, ownerPartyId: string, headerOptions?:any): Observable<Affect> {
+  deleteAssetNameType(assetNameTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
     return undefined;
   }
 
-  findAssetNameTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?:any): Observable<AssetNameType[]> {
+  findAssetNameTypes(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetNameType[]> {
     return undefined;
   }
 
@@ -26,11 +26,11 @@ export class AssetNameTypeRepositoryRestAdapter implements AssetNameTypeReposito
     return undefined;
   }
 
-  getAssetNameTypeCount(): Observable<number> {
+  getAssetNameTypeCount(options?: any): Observable<number> {
     return undefined;
   }
 
-  getAssetNameTypes(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetNameType[]>> {
+  getAssetNameTypes(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetNameType[]>> {
     return undefined;
   }
 }

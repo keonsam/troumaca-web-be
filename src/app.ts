@@ -71,7 +71,6 @@ app.use(session({
 const server = new ApolloServer({
     schema,
     context: ({req}: any) => {
-        console.log(req);
         return ({ req});
     }
 });

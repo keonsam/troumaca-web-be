@@ -12,7 +12,6 @@ const assetIdentifierTypeOrchestrator: AssetIdentifierTypeOrchestrator = new Ass
 export let findAssetIdentifierTypes = (req: Request, res: Response) => {
     HeaderNormalizer.normalize(req);
     const correlationId = req.headers["Correlation-Id"];
-    //const ownerPartyId = req.headers["Owner-Party-Id"];
     const ownerPartyId = req.get("Owner-Party-Id");
     const requestingPartyId = req.headers["Party-Id"];
 
@@ -25,7 +24,7 @@ export let findAssetIdentifierTypes = (req: Request, res: Response) => {
     const pageNumber: number = req.query.pageNumber;
     const pageSize: number = req.query.pageSize;
 
-    assetIdentifierTypeOrchestrator.findAssetIdentifierTypes(ownerPartyId, searchStr, pageNumber, pageSize, headerOptions)
+    assetIdentifierTypeOrchestrator.findAssetIdentifierTypes(searchStr, pageNumber, pageSize, headerOptions)
         .subscribe(assetIdentifierTypes => {
             res.status(200);
             res.send(JSON.stringify(assetIdentifierTypes));
@@ -39,7 +38,6 @@ export let findAssetIdentifierTypes = (req: Request, res: Response) => {
 export let getAssetIdentifierTypes = (req: Request, res: Response) => {
     HeaderNormalizer.normalize(req);
     const correlationId = req.headers["Correlation-Id"];
-    //const ownerPartyId = req.headers["Owner-Party-Id"];
     const ownerPartyId = req.get("Owner-Party-Id");
     const requestingPartyId = req.headers["Party-Id"];
 
@@ -54,8 +52,8 @@ export let getAssetIdentifierTypes = (req: Request, res: Response) => {
     const field = getStringValueOrDefault(req.query.sortField, "");
     const direction = getStringValueOrDefault(req.query.sortOrder, "");
 
-    var asc: string = Direction[Direction.ASC];
-    var desc: string = Direction[Direction.DESC];
+    const asc: string = Direction[Direction.ASC];
+    const desc: string = Direction[Direction.DESC];
 
     const order = new Order();
     if (direction == asc) {
@@ -72,10 +70,10 @@ export let getAssetIdentifierTypes = (req: Request, res: Response) => {
     const sort = new Sort();
     sort.add(order);
 
-    assetIdentifierTypeOrchestrator.getAssetIdentifierTypes(ownerPartyId, number, size, sort, headerOptions)
+    assetIdentifierTypeOrchestrator.getAssetIdentifierTypes(number, size, sort, headerOptions)
         .subscribe(result => {
             res.status(200);
-            res.send(JSON.stringify(result.data));
+            res.send(JSON.stringify(result));
         }, error => {
             res.status(500);
             res.send(JSON.stringify({message: "Error Occurred"}));
@@ -154,9 +152,9 @@ export let updateAssetIdentifierType = (req: Request, res: Response) => {
             message: "AssetIdentifierType content can not be empty"
         });
     }
-    assetIdentifierTypeOrchestrator.updateAssetIdentifierType(req.body, headerOptions)
+    assetIdentifierTypeOrchestrator.updateAssetIdentifierType(req.params.assetIdentifierTypeId, req.body, headerOptions)
         .subscribe(affect => {
-            if (affect.affected > 0) {
+            if (affect > 0) {
                 res.status(200);
                 res.send(JSON.stringify(affect));
             } else {
@@ -183,7 +181,7 @@ export let deleteAssetIdentifierType = (req: Request, res: Response) => {
     };
     assetIdentifierTypeOrchestrator.deleteAssetIdentifierType(req.params.assetIdentifierTypeId, headerOptions)
         .subscribe(affect => {
-            if (affect.affected > 0) {
+            if (affect > 0) {
                 res.status(200);
                 res.send(JSON.stringify(affect));
             } else {

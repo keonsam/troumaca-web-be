@@ -29,16 +29,16 @@ export class AssetRoleTypeRepositoryNeDbAdapter implements AssetRoleTypeReposito
     });
   }
 
-  updateAssetRoleType(assetRoleType: AssetRoleType, headerOptions?: any): Observable<Affect> {
+  updateAssetRoleType(assetRoleTypeId: string, assetRoleType: AssetRoleType, headerOptions?: any): Observable<Affect> {
     assetRoleType.version = generateUUID();
     assetRoleType.dateModified = new Date();
 
     return Observable.create(function (observer: Observer<Affect>) {
       assetRoleTypes.update(
-        {assetRoleTypeId:assetRoleType.assetRoleTypeId, ownerPartyId:assetRoleType.ownerPartyId},
-        assetRoleType,
-        { upsert: true },
-        function (err:any, numReplaced:number, upsert:any) {
+        {assetRoleTypeId: assetRoleTypeId},
+          {$set : {assetRoleType}},
+        { },
+        function (err: any, numReplaced: number) {
         if (err) {
           observer.error(err);
         } else {
@@ -50,10 +50,10 @@ export class AssetRoleTypeRepositoryNeDbAdapter implements AssetRoleTypeReposito
     });
   }
 
-  deleteAssetRoleType(assetRoleTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
+  deleteAssetRoleType(assetRoleTypeId: string, headerOptions?: any): Observable<Affect> {
     return Observable.create(function (observer: Observer<Affect>) {
       assetRoleTypes.remove(
-        {assetRoleTypeId:assetRoleTypeId, ownerPartyId:ownerPartyId},
+        {assetRoleTypeId: assetRoleTypeId},
         { multi: true },
         function (err:any, numRemoved:number) {
           if (err) {
@@ -66,11 +66,11 @@ export class AssetRoleTypeRepositoryNeDbAdapter implements AssetRoleTypeReposito
     });
   }
 
-  findAssetRoleTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetRoleType[]> {
+  findAssetRoleTypes(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetRoleType[]> {
     return Observable.create(function (observer: Observer<AssetIdentifierType[]>) {
-      assetRoleTypes.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-        assetRoleTypes.find({ownerPartyId: ownerPartyId, name: new RegExp(searchStr) })
+      assetRoleTypes.count({ }, function (err, count) {
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        assetRoleTypes.find({ name: new RegExp(searchStr) })
           .skip(skipAmount)
           .limit(pageSize)
           .exec(
@@ -86,10 +86,10 @@ export class AssetRoleTypeRepositoryNeDbAdapter implements AssetRoleTypeReposito
     });
   }
 
-  getAssetRoleTypeById(assetRoleTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetRoleType> {
+  getAssetRoleTypeById(assetRoleTypeId: string, headerOptions?: any): Observable<AssetRoleType> {
     return Observable.create(function (observer: Observer<AssetIdentifierType>) {
       assetRoleTypes.find(
-        {assetRoleTypeId:assetRoleTypeId, ownerPartyId:ownerPartyId},
+        {assetRoleTypeId: assetRoleTypeId},
         (err: any, docs: any) => {
           if (!err) {
             observer.next(docs[0]);
@@ -101,10 +101,10 @@ export class AssetRoleTypeRepositoryNeDbAdapter implements AssetRoleTypeReposito
     });
   }
 
-  getAssetRoleTypeCount(ownerPartyId:string, headerOptions?: any): Observable<number> {
+  getAssetRoleTypeCount(headerOptions?: any): Observable<number> {
     return Observable.create(function (observer: Observer<number>) {
       assetRoleTypes.count(
-        {ownerPartyId:ownerPartyId},
+        {},
         (err: any, count: any) => {
           if (!err) {
             observer.next(count);
@@ -116,12 +116,12 @@ export class AssetRoleTypeRepositoryNeDbAdapter implements AssetRoleTypeReposito
     });
   }
 
-  getAssetRoleTypes(ownerPartyId:string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetRoleType[]>> {
+  getAssetRoleTypes(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetRoleType[]>> {
     return Observable.create(function (observer: Observer<Page<AssetRoleType[]>>) {
-      assetRoleTypes.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-        let generate = SortGenerator.generate(sort);
-        assetRoleTypes.find({ownerPartyId:ownerPartyId})
+      assetRoleTypes.count({ }, function (err, count) {
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        const generate = SortGenerator.generate(sort);
+        assetRoleTypes.find({})
           .skip(skipAmount)
           .limit(pageSize)
           .exec((err: any, docs: any) => {

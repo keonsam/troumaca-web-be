@@ -1,6 +1,7 @@
 import { BrandRepository } from "../../repository/brand.repository";
 import { Brand} from "../../data/asset/brand";
 import { Observable } from "rxjs";
+import { Sort } from "../../util/sort";
 
 export class BrandRepositoryRestAdapter implements BrandRepository {
 
@@ -11,7 +12,7 @@ export class BrandRepositoryRestAdapter implements BrandRepository {
     return undefined;
   }
 
-  getBrands(pageNumber: number, pageSize: number, order: string, options: any): Observable<Brand[]> {
+  getBrands(pageNumber: number, pageSize: number, order: Sort, options: any): Observable<Brand[]> {
     return undefined;
   }
 

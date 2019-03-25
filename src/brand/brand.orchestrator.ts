@@ -1,11 +1,11 @@
 import {createBrandRepositoryFactory} from "../adapter/asset/brand.repository.factory";
-// import {shapeBrandsResponse} from "./brand.response.shaper";
-import {getSortOrderOrDefault} from "../sort.order.util";
 import {BrandRepository} from "../repository/brand.repository";
 import {Brand} from "../data/asset/brand";
 import {Observable} from "rxjs";
 import {switchMap, map} from "rxjs/operators";
-import {Result} from "../result.success";
+import { Brands } from "../data/asset/brands";
+import { Page } from "../data/page/page";
+import { Sort } from "../util/sort";
 
 export class BrandOrchestrator {
 
@@ -19,34 +19,31 @@ export class BrandOrchestrator {
         return this.brandRepository.findBrands(searchStr, pageSize, options);
     }
 
-    getBrands(number: number, size: number, field: string, direction: string, options: any): Observable<Result<any>> {
-        const sort: string = getSortOrderOrDefault(field, direction);
+    getBrands(number: number, size: number, sort: Sort, options?: any): Observable<Brands> {
         return this.brandRepository
             .getBrands(number, size, sort, options)
             .pipe(switchMap((brands: Brand[]) => {
                 return this.brandRepository
                     .getBrandCount(options)
                     .pipe(map((count: number) => {
-                        const shapeBrandsResp: any = {};
-                          //(brands, number, size, brands.length, count, sort);
-                        return new Result<any>(false, "brands", shapeBrandsResp);
+                        return new Brands(brands, new Page(number, size, brands.length, count));
                     }));
             }));
     }
 
-    getBrandById(brandId: string, options: any): Observable<Brand> {
+    getBrandById(brandId: string, options?: any): Observable<Brand> {
         return this.brandRepository.getBrandById(brandId, options);
     }
 
-    saveBrand(brand: Brand, options: any): Observable<Brand> {
+    saveBrand(brand: Brand, options?: any): Observable<Brand> {
         return this.brandRepository.saveBrand(brand, options);
     }
 
-    updateBrand(brandId: string, brand: Brand, options: any): Observable<number> {
+    updateBrand(brandId: string, brand: Brand, options?: any): Observable<number> {
         return this.brandRepository.updateBrand(brandId, brand, options);
     }
 
-    deleteBrand(brandId: string, options: any): Observable<number> {
+    deleteBrand(brandId: string, options?: any): Observable<number> {
         return this.brandRepository.deleteBrand(brandId, options);
     }
 

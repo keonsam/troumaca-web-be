@@ -14,23 +14,23 @@ export class AssetRoleTypeRepositoryRestAdapter implements AssetRoleTypeReposito
     return undefined;
   }
 
-  findAssetRoleTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetRoleType[]> {
+  findAssetRoleTypes(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetRoleType[]> {
     return undefined;
   }
 
-  getAssetRoleTypeById(assetRoleTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetRoleType> {
+  getAssetRoleTypeById(assetRoleTypeId: string,  headerOptions?: any): Observable<AssetRoleType> {
     return undefined;
   }
 
-  getAssetRoleTypeCount(ownerPartyId: string, headerOptions?: any): Observable<number> {
+  getAssetRoleTypeCount(headerOptions?: any): Observable<number> {
     return undefined;
   }
 
-  getAssetRoleTypes(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetRoleType[]>> {
+  getAssetRoleTypes(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetRoleType[]>> {
     return undefined;
   }
 
-  updateAssetRoleType(assetRoleType: AssetRoleType, headerOptions?: any): Observable<Affect> {
+  updateAssetRoleType(assetRoleTypeId: string, assetRoleType: AssetRoleType, headerOptions?: any): Observable<Affect> {
     return undefined;
   }
 

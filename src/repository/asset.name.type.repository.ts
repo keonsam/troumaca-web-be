@@ -8,15 +8,15 @@ export interface AssetNameTypeRepository {
 
   addAssetNameType(assetNameType: AssetNameType, headerOptions?:any): Observable<AssetNameType>;
 
-  updateAssetNameType(assetNameType: AssetNameType, headerOptions?:any): Observable<Affect>;
+  updateAssetNameType(assetNameTypeId: string, assetNameType: AssetNameType, headerOptions?: any): Observable<number>;
 
-  deleteAssetNameType(assetNameTypeId: string, ownerPartyId: string, headerOptions?:any): Observable<Affect>;
+  deleteAssetNameType(assetNameTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect>;
 
-  findAssetNameTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?:any): Observable<AssetNameType[]>;
+  findAssetNameTypes(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetNameType[]>;
 
-  getAssetNameTypes(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetNameType[]>>;
+  getAssetNameTypes(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetNameType[]>>;
 
-  getAssetNameTypeCount(ownerPartyId: string, headerOptions?:any): Observable<number>;
+  getAssetNameTypeCount(headerOptions?: any): Observable<number>;
 
   getAssetNameTypeById(assetNameTypeId: string, ownerPartyId: string, headerOptions?:any): Observable<AssetNameType>;
 

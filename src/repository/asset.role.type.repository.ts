@@ -8,15 +8,15 @@ export interface AssetRoleTypeRepository {
 
   addAssetRoleType(assetRoleType: AssetRoleType, headerOptions?: any): Observable<AssetRoleType>;
 
-  updateAssetRoleType(assetRoleType: AssetRoleType, headerOptions?: any): Observable<Affect>;
+  updateAssetRoleType(assetRoleTypeId: string, assetRoleType: AssetRoleType, headerOptions?: any): Observable<Affect>;
 
   deleteAssetRoleType(assetRoleTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect>;
 
-  findAssetRoleTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetRoleType[]>;
+  findAssetRoleTypes(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetRoleType[]>;
 
-  getAssetRoleTypes(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetRoleType[]>>;
+  getAssetRoleTypes(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetRoleType[]>>;
 
-  getAssetRoleTypeCount(ownerPartyId: string, headerOptions?: any): Observable<number>;
+  getAssetRoleTypeCount(headerOptions?: any): Observable<number>;
 
   getAssetRoleTypeById(assetRoleTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetRoleType>;
 

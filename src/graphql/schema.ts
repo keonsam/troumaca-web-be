@@ -1,7 +1,11 @@
 import { gql, makeExecutableSchema } from "apollo-server-express";
 import { merge } from "lodash";
-import { typeDef as  AuthType, resolvers as AuthResolvers } from "./authentication";
-import { typeDef as MeType, resolvers as MeResolvers } from "./me";
+import { typeDef as  Credential, resolvers as CredentialResolvers } from "./credential";
+// import { typeDef as MeType, resolvers as MeResolvers } from "./me";
+import { typeDef as Confirmation, resolvers as ConfirmationResolvers} from "./confirmation";
+import { typeDef as AssetNameType, resolvers as AssetNameTypeResolvers} from "./asset.name.type";
+import { typeDef as AssetIdentifierType, resolvers as AssetIdentifierTypeResolvers} from "./asset.identifier.type";
+import { typeDef as AssetRoleType, resolvers as AssetRoleTypeResolvers} from "./asset.role.type";
 // import {
 //   typeDef as OrganizationProfile,
 //   resolvers as organizationProfileResolvers
@@ -23,26 +27,46 @@ const typeDefs = gql`
     type Query {
         hello: String
     }
+    type Mutation {
+        hello(name: String): String
+    }
+    type Page {
+        number: Int
+        size: Int
+        items: Int
+        totalItems: Int
+    }
 `;
 
 const resolvers = {
-  Query: {
-    hello: () => "Hello world!",
-  },
+    Query: {
+        hello: () => "Hello world!",
+    },
+    Mutation: {
+        hello: (_: any, {name}: any) => `Hello ${name}`
+    }
 };
 
 const schema = makeExecutableSchema({
   typeDefs: [
       typeDefs,
-      AuthType,
-      MeType
+      Credential,
+      Confirmation,
+      AssetNameType,
+      AssetIdentifierType,
+      AssetRoleType
+      // MeType
     // OrganizationProfile,
     // AssetNameType
   ],
   resolvers: merge(
       resolvers,
-      AuthResolvers,
-      MeResolvers
+      CredentialResolvers,
+      ConfirmationResolvers,
+      AssetNameTypeResolvers,
+      AssetIdentifierTypeResolvers,
+      AssetRoleTypeResolvers
+      // MeResolvers
     // organizationProfileResolvers,
     // assetNameTypeResolvers
   ),

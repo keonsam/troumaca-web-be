@@ -14,7 +14,7 @@ export class AssetIdentifierTypeRepositoryRestAdapter implements AssetIdentifier
     return undefined;
   }
 
-  findAssetIdentifierTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetIdentifierType[]> {
+  findAssetIdentifierTypes(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetIdentifierType[]> {
     return undefined;
   }
 
@@ -22,15 +22,15 @@ export class AssetIdentifierTypeRepositoryRestAdapter implements AssetIdentifier
     return undefined;
   }
 
-  getAssetIdentifierTypeCount(ownerPartyId: string, headerOptions?: any): Observable<number> {
+  getAssetIdentifierTypeCount(headerOptions?: any): Observable<number> {
     return undefined;
   }
 
-  getAssetIdentifierTypes(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetIdentifierType[]>> {
+  getAssetIdentifierTypes(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetIdentifierType[]>> {
     return undefined;
   }
 
-  updateAssetIdentifierType(assetIdentifierType: AssetIdentifierType, headerOptions?: any): Observable<Affect> {
+  updateAssetIdentifierType(assetIdentifierTypeId: string, assetIdentifierType: AssetIdentifierType, headerOptions?: any): Observable<Affect> {
     return undefined;
   }
 

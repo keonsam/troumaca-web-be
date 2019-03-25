@@ -15,27 +15,33 @@ export class AssetRoleTypeOrchestrator {
   }
 
   addAssetRoleType(assetRoleType: AssetRoleType, headerOptions?: any): Observable<AssetRoleType> {
-    return this.assetRoleTypeRepository.addAssetRoleType(assetRoleType, headerOptions);
+    return undefined;
+    // return this.assetRoleTypeRepository.addAssetRoleType(assetRoleType, headerOptions);
   }
 
   findAssetRoleTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetRoleType[]> {
-    return this.assetRoleTypeRepository.findAssetRoleTypes(ownerPartyId, searchStr, pageNumber, pageSize, headerOptions);
+    return undefined;
+    // return this.assetRoleTypeRepository.findAssetRoleTypes(ownerPartyId, searchStr, pageNumber, pageSize, headerOptions);
   }
 
   getAssetRoleTypes(ownerPartyId: string, number: number, size: number, sort: Sort, headerOptions?: any): Observable<Page<AssetRoleType[]>> {
-    return this.assetRoleTypeRepository.getAssetRoleTypes(ownerPartyId, number, size, sort, headerOptions);
+    return undefined;
+    // return this.assetRoleTypeRepository.getAssetRoleTypes(ownerPartyId, number, size, sort, headerOptions);
   }
 
   updateAssetRoleType(assetRoleType: AssetRoleType, headerOptions?: any): Observable<Affect> {
-    return this.assetRoleTypeRepository.updateAssetRoleType(assetRoleType, headerOptions);
+    return undefined;
+    // return this.assetRoleTypeRepository.updateAssetRoleType(assetRoleType, headerOptions);
   }
 
   getAssetRoleTypeById(assetRoleTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetRoleType> {
-    return this.assetRoleTypeRepository.getAssetRoleTypeById(assetRoleTypeId, ownerPartyId, headerOptions);
+    return undefined;
+    // return this.assetRoleTypeRepository.getAssetRoleTypeById(assetRoleTypeId, ownerPartyId, headerOptions);
   }
 
   deleteAssetRoleType(assetRoleTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
-    return this.assetRoleTypeRepository.deleteAssetRoleType(assetRoleTypeId, ownerPartyId, headerOptions);
+    return undefined;
+    // return this.assetRoleTypeRepository.deleteAssetRoleType(assetRoleTypeId, ownerPartyId, headerOptions);
   }
 
 }

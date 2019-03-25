@@ -15,27 +15,33 @@ export class AssetNameTypeOrchestrator {
   }
 
   addAssetNameType(assetNameType: AssetNameType, headerOptions?:any): Observable<AssetNameType> {
-    return this.assetNameTypeRepository.addAssetNameType(assetNameType, headerOptions);
+    return undefined;
+    // return this.assetNameTypeRepository.addAssetNameType(assetNameType, headerOptions);
   }
 
   findAssetNameTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?:any): Observable<AssetNameType[]> {
-    return this.assetNameTypeRepository.findAssetNameTypes(ownerPartyId, searchStr, pageNumber, pageSize, headerOptions);
+    return undefined;
+    // return this.assetNameTypeRepository.findAssetNameTypes(ownerPartyId, searchStr, pageNumber, pageSize, headerOptions);
   }
 
   getAssetNameTypes(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetNameType[]>> {
-    return this.assetNameTypeRepository.getAssetNameTypes(ownerPartyId, pageNumber, pageSize, sort, headerOptions)
+    return undefined;
+    // return this.assetNameTypeRepository.getAssetNameTypes(ownerPartyId, pageNumber, pageSize, sort, headerOptions)
   }
 
   updateAssetNameType(assetNameType: AssetNameType, headerOptions?:any): Observable<Affect> {
-    return this.assetNameTypeRepository.updateAssetNameType(assetNameType, headerOptions);
+    return undefined;
+    // return this.assetNameTypeRepository.updateAssetNameType(assetNameType, headerOptions);
   }
 
   getAssetNameTypeById(assetNameTypeId: string, ownerPartyId: string, headerOptions?:any): Observable<AssetNameType> {
-    return this.assetNameTypeRepository.getAssetNameTypeById(assetNameTypeId, ownerPartyId, headerOptions);
+    return undefined;
+    // return this.assetNameTypeRepository.getAssetNameTypeById(assetNameTypeId, ownerPartyId, headerOptions);
   }
 
   deleteAssetNameType(assetNameTypeId: string, ownerPartyId: string, headerOptions?:any): Observable<Affect> {
-    return this.assetNameTypeRepository.deleteAssetNameType(assetNameTypeId, ownerPartyId, headerOptions);
+    return undefined;
+    // return this.assetNameTypeRepository.deleteAssetNameType(assetNameTypeId, ownerPartyId, headerOptions);
   }
 
 }

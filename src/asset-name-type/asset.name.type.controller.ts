@@ -12,7 +12,6 @@ const assetNameTypeOrchestrator: AssetNameTypeOrchestrator = new AssetNameTypeOr
 export let findAssetNameTypes = (req: Request, res: Response) => {
     HeaderNormalizer.normalize(req);
     const correlationId = req.headers["Correlation-Id"];
-    //const ownerPartyId = req.headers["Owner-Party-Id"];
     const ownerPartyId = req.get("Owner-Party-Id");
     const requestingPartyId = req.headers["Party-Id"];
 
@@ -25,7 +24,7 @@ export let findAssetNameTypes = (req: Request, res: Response) => {
     const pageSize: number = req.query.pageSize;
     const pageNumber: number = req.query.pageNumber;
 
-    assetNameTypeOrchestrator.findAssetNameTypes(ownerPartyId, searchStr, pageNumber, pageSize, headerOptions)
+    assetNameTypeOrchestrator.findAssetNameTypes(searchStr, pageNumber, pageSize, headerOptions)
         .subscribe(assetNameTypes => {
             res.status(200);
             res.send(JSON.stringify(assetNameTypes));
@@ -39,7 +38,6 @@ export let findAssetNameTypes = (req: Request, res: Response) => {
 export let getAssetNameTypes = (req: Request, res: Response) => {
     HeaderNormalizer.normalize(req);
     const correlationId = req.headers["Correlation-Id"];
-    //const ownerPartyId = req.headers["Owner-Party-Id"];
     const ownerPartyId = req.get("Owner-Party-Id");
     const requestingPartyId = req.headers["Party-Id"];
 
@@ -54,8 +52,8 @@ export let getAssetNameTypes = (req: Request, res: Response) => {
     const field = getStringValueOrDefault(req.query.sortField, "");
     const direction = getStringValueOrDefault(req.query.sortOrder, "");
 
-    var asc: string = Direction[Direction.ASC];
-    var desc: string = Direction[Direction.DESC];
+    const asc: string = Direction[Direction.ASC];
+    const desc: string = Direction[Direction.DESC];
 
     const order = new Order();
     if (direction == asc) {
@@ -72,10 +70,10 @@ export let getAssetNameTypes = (req: Request, res: Response) => {
     const sort = new Sort();
     sort.add(order);
 
-    assetNameTypeOrchestrator.getAssetNameTypes(ownerPartyId, number, size, sort, headerOptions)
+    assetNameTypeOrchestrator.getAssetNameTypes(number, size, sort, headerOptions)
         .subscribe(result => {
             res.status(200);
-            res.send(JSON.stringify(result.data));
+            res.send(JSON.stringify(result));
         }, error => {
             res.status(500);
             res.send(JSON.stringify({message: "Error Occurred"}));
@@ -156,11 +154,11 @@ export let updateAssetNameType = (req: Request, res: Response) => {
         });
     }
 
-    assetNameTypeOrchestrator.updateAssetNameType(req.body, headerOptions)
-        .subscribe(affect => {
-            if (affect.affected > 0) {
+    assetNameTypeOrchestrator.updateAssetNameType(req.params.assetNameTypeId, req.body, headerOptions)
+        .subscribe(num => {
+            if (num > 0) {
                 res.status(200);
-                res.send(JSON.stringify(affect));
+                res.send(JSON.stringify(num));
             } else {
                 res.status(404);
                 res.send(JSON.stringify({message: "No Data Found For " + req.params.assetNameTypeId}));
@@ -186,7 +184,7 @@ export let deleteAssetNameType = (req: Request, res: Response) => {
 
     assetNameTypeOrchestrator.deleteAssetNameType(req.params.assetNameTypeId, headerOptions)
         .subscribe(affect => {
-            if (affect.affected > 0) {
+            if (affect > 0) {
                 res.status(200);
                 res.send(JSON.stringify(affect));
             } else {
