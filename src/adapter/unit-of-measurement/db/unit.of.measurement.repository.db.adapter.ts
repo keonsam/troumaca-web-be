@@ -123,9 +123,9 @@ export class UnitOfMeasurementRepositoryNeDbAdapter implements UnitOfMeasurement
     return Observable.create(function (observer: Observer<Affect>) {
       unitOfMeasurements.update(
         {unitOfMeasurementId: unitOfMeasureId},
-          {$set: {unitOfMeasurement} },
-        { upsert: true },
-        function (err: any, numReplaced: number, upsert: any) {
+          {$set: unitOfMeasurement },
+        { },
+        function (err: any, numReplaced: number) {
           if (err) {
             observer.error(err);
           } else {

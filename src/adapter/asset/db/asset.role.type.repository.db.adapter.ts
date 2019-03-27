@@ -36,13 +36,12 @@ export class AssetRoleTypeRepositoryNeDbAdapter implements AssetRoleTypeReposito
     return Observable.create(function (observer: Observer<Affect>) {
       assetRoleTypes.update(
         {assetRoleTypeId: assetRoleTypeId},
-          {$set : {assetRoleType}},
+          {$set : assetRoleType},
         { },
         function (err: any, numReplaced: number) {
         if (err) {
           observer.error(err);
         } else {
-
           observer.next(new Affect(numReplaced));
         }
         observer.complete();
@@ -55,7 +54,7 @@ export class AssetRoleTypeRepositoryNeDbAdapter implements AssetRoleTypeReposito
       assetRoleTypes.remove(
         {assetRoleTypeId: assetRoleTypeId},
         { multi: true },
-        function (err:any, numRemoved:number) {
+        function (err: any, numRemoved: number) {
           if (err) {
             observer.error(err);
           } else {

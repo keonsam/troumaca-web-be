@@ -10,7 +10,7 @@ export interface AssetIdentifierTypeRepository {
 
   updateAssetIdentifierType(assetIdentifierTypeId: string, assetIdentifierType: AssetIdentifierType, headerOptions?: any): Observable<Affect>;
 
-  deleteAssetIdentifierType(assetIdentifierTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect>;
+  deleteAssetIdentifierType(assetIdentifierTypeId: string, headerOptions?: any): Observable<Affect>;
 
   findAssetIdentifierTypes(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetIdentifierType[]>;
 

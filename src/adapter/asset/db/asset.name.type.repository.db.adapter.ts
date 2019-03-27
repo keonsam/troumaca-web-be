@@ -33,7 +33,7 @@ export class AssetNameTypeRepositoryNeDbAdapter implements AssetNameTypeReposito
     assetNameType.dateModified = new Date();
     const query = {assetNameTypeId: assetNameTypeId};
     return Observable.create(function (observer: Observer<number>) {
-      assetNameTypes.update(query, {$set: {assetNameType}}, { }, function (err: any, numReplaced: number) {
+      assetNameTypes.update(query, {$set: assetNameType}, { }, function (err: any, numReplaced: number) {
           if (err) {
             observer.error(err);
           } else {

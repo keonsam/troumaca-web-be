@@ -16,7 +16,7 @@ export const typeDef = gql`
         deleteUnitOfMeasurement(unitOfMeasurementId: ID!): Int
     }
     extend type Query {
-        getUnitOfMeasurement(unitOfMeasurementId: ID!): UnitOfMeasure
+        getUnitOfMeasurement(unitOfMeasurementId: ID!): UnitOfMeasurement
         getUnitOfMeasurements(pageNumber: Int!, pageSize: Int!, sortOrder: String!): UnitOfMeasurements
         findUnitOfMeasurements(searchStr: String!, pageSize: Int!): [UnitOfMeasurement]
     }
@@ -26,7 +26,7 @@ export const typeDef = gql`
         description: String
     }
     type UnitOfMeasurements {
-        unitOfMeasures: [UnitOfMeasure]
+        unitOfMeasures: [UnitOfMeasurement]
         page: Page
     }
 `;

@@ -33,7 +33,7 @@ export class AssetIdentifierTypeRepositoryNeDbAdapter implements AssetIdentifier
     return Observable.create(function (observer: Observer<Affect>) {
       assetIdentifierTypes.update(
         {assetIdentifierTypeId: assetIdentifierTypeId},
-          {$set: {assetIdentifierType}},
+          {$set: assetIdentifierType},
         { },
         function (err: any, numReplaced: number) {
           if (err) {
@@ -47,11 +47,11 @@ export class AssetIdentifierTypeRepositoryNeDbAdapter implements AssetIdentifier
     });
   }
 
-  deleteAssetIdentifierType(assetIdentifierTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
+  deleteAssetIdentifierType(assetIdentifierTypeId: string, headerOptions?: any): Observable<Affect> {
     return Observable.create(function (observer: Observer<Affect>) {
       assetIdentifierTypes.remove(
-        {assetIdentifierTypeId: assetIdentifierTypeId, ownerPartyId: ownerPartyId},
-        function (err:any, numRemoved:number) {
+        {assetIdentifierTypeId: assetIdentifierTypeId},
+        function (err: any, numRemoved: number) {
           if (err) {
             observer.error(err);
           } else {

@@ -55,10 +55,10 @@ const schema = makeExecutableSchema({
       Credential,
       Confirmation,
       AssetNameType,
-      // AssetIdentifierType,
-      // AssetRoleType,
-      // Brand,
-      // UnitOfMeasure
+      AssetIdentifierType,
+      AssetRoleType,
+      Brand,
+      UnitOfMeasure
       // MeType
     // OrganizationProfile,
     // AssetNameType
@@ -68,10 +68,10 @@ const schema = makeExecutableSchema({
       CredentialResolvers,
       ConfirmationResolvers,
       AssetNameTypeResolvers,
-      // AssetIdentifierTypeResolvers,
-      // AssetRoleTypeResolvers,
-      // BrandResolvers,
-      // UnitOfMeasureResolvers
+      AssetIdentifierTypeResolvers,
+      AssetRoleTypeResolvers,
+      BrandResolvers,
+      UnitOfMeasureResolvers
       // MeResolvers
     // organizationProfileResolvers,
     // assetNameTypeResolvers

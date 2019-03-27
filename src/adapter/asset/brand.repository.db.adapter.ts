@@ -110,7 +110,7 @@ export class BrandRepositoryDbAdapter implements BrandRepository {
             // ownerPartyId: options["Owner-Party-Id"]
         };
         return Observable.create(function (observer: Observer<number>) {
-            assetBrands.update(query, { $set: {brand}}, {}, function (err: any, numReplaced: number) {
+            assetBrands.update(query, { $set: brand}, {}, function (err: any, numReplaced: number) {
                 if (!err) {
                     observer.next(numReplaced);
                 } else {

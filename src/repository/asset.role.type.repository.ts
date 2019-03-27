@@ -10,7 +10,7 @@ export interface AssetRoleTypeRepository {
 
   updateAssetRoleType(assetRoleTypeId: string, assetRoleType: AssetRoleType, headerOptions?: any): Observable<Affect>;
 
-  deleteAssetRoleType(assetRoleTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect>;
+  deleteAssetRoleType(assetRoleTypeId: string, headerOptions?: any): Observable<Affect>;
 
   findAssetRoleTypes(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetRoleType[]>;
 

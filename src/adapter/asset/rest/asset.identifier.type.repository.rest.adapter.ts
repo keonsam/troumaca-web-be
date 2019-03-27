@@ -10,7 +10,7 @@ export class AssetIdentifierTypeRepositoryRestAdapter implements AssetIdentifier
     return undefined;
   }
 
-  deleteAssetIdentifierType(assetIdentifierTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
+  deleteAssetIdentifierType(assetIdentifierTypeId: string, headerOptions?: any): Observable<Affect> {
     return undefined;
   }
 
