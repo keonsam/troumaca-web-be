@@ -27,7 +27,7 @@ export const typeDef = gql`
         description: String
     }
     type Brands {
-        assetNameTypes: [Brand]
+        brands: [Brand]
         page: Page
     }
 `;
@@ -74,7 +74,7 @@ export const resolvers = {
             return await brandOrchestrator.getBrands(number, size, sort).toPromise();
         },
         findBrands: async (_: any, {searchStr, pageSize}: any) => {
-            return await brandOrchestrator.findBrands(searchStr, undefined, pageSize).toPromise();
+            return await brandOrchestrator.findBrands(searchStr, pageSize).toPromise();
         },
     }
 };

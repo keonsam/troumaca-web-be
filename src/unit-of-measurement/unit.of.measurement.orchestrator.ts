@@ -5,37 +5,41 @@ import {Affect} from "../data/affect";
 import {UnitOfMeasurement} from "../data/unit-of-measurement/unit.of.measurement";
 import {Page} from "../util/page";
 import {Sort} from "../util/sort";
+import { map } from "rxjs/operators";
+import { UnitOfMeasurements } from "../data/unit-of-measurement/unit.of.measurements";
 
 export class UnitOfMeasurementOrchestrator {
 
-  private assetNameTypeRepository: UnitOfMeasurementRepository;
+  private unitOfMeasurementRepository: UnitOfMeasurementRepository;
 
   constructor(options?: any) {
-    this.assetNameTypeRepository = createUnitOfMeasurementRepository(options);
+    this.unitOfMeasurementRepository = createUnitOfMeasurementRepository(options);
   }
 
-  addUnitOfMeasurement(assetNameType: UnitOfMeasurement, headerOptions?:any): Observable<UnitOfMeasurement> {
-    return this.assetNameTypeRepository.addUnitOfMeasurement(assetNameType, headerOptions);
+  addUnitOfMeasurement(unitOfMeasurement: UnitOfMeasurement, headerOptions?: any): Observable<UnitOfMeasurement> {
+    return this.unitOfMeasurementRepository.addUnitOfMeasurement(unitOfMeasurement, headerOptions);
   }
 
-  findUnitOfMeasurements(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?:any): Observable<UnitOfMeasurement[]> {
-    return this.assetNameTypeRepository.findUnitOfMeasurements(ownerPartyId, searchStr, pageNumber, pageSize, headerOptions);
+  findUnitOfMeasurements(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<UnitOfMeasurement[]> {
+    return this.unitOfMeasurementRepository.findUnitOfMeasurements(searchStr, pageNumber, pageSize, headerOptions);
   }
 
-  getUnitOfMeasurements(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<UnitOfMeasurement[]>> {
-    return this.assetNameTypeRepository.getUnitOfMeasurements(ownerPartyId, pageNumber, pageSize, sort, headerOptions)
+  getUnitOfMeasurements(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<UnitOfMeasurements> {
+    return this.unitOfMeasurementRepository.getUnitOfMeasurements(pageNumber, pageSize, sort, headerOptions);
   }
 
-  updateUnitOfMeasurement(assetNameType: UnitOfMeasurement, headerOptions?:any): Observable<Affect> {
-    return this.assetNameTypeRepository.updateUnitOfMeasurement(assetNameType, headerOptions);
+  updateUnitOfMeasurement(unitOfMeasureId: string, unitOfMeasurement: UnitOfMeasurement, headerOptions?: any): Observable<number> {
+    return this.unitOfMeasurementRepository.updateUnitOfMeasurement(unitOfMeasureId, unitOfMeasurement, headerOptions)
+        .pipe(map(aff => aff.affected));
   }
 
-  getUnitOfMeasurementById(assetNameTypeId: string, ownerPartyId: string, headerOptions?:any): Observable<UnitOfMeasurement> {
-    return this.assetNameTypeRepository.getUnitOfMeasurementById(assetNameTypeId, ownerPartyId, headerOptions);
+  getUnitOfMeasurementById(unitOfMeasurementId: string, headerOptions?: any): Observable<UnitOfMeasurement> {
+    return this.unitOfMeasurementRepository.getUnitOfMeasurementById(unitOfMeasurementId, headerOptions);
   }
 
-  deleteUnitOfMeasurement(assetNameTypeId: string, ownerPartyId: string, headerOptions?:any): Observable<Affect> {
-    return this.assetNameTypeRepository.deleteUnitOfMeasurement(assetNameTypeId, ownerPartyId, headerOptions);
+  deleteUnitOfMeasurement(unitOfMeasurementId: string, headerOptions?: any): Observable<number> {
+    return this.unitOfMeasurementRepository.deleteUnitOfMeasurement(unitOfMeasurementId, headerOptions)
+        .pipe(map(aff => aff.affected));
   }
 
 }

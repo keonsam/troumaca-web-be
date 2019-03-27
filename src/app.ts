@@ -1,14 +1,14 @@
 import "reflect-metadata";
 
 import express from "express";
-import path from "path";
-import logger from "morgan";
-import cors from "cors";
-import bodyParser from "body-parser";
-import cookieParser from "cookie-parser";
+// import path from "path";
+// import logger from "morgan";
+// import cors from "cors";
+// import bodyParser from "body-parser";
+// import cookieParser from "cookie-parser";
 import {ApolloServer} from "apollo-server-express";
 import schema from "./graphql/schema";
-import router from "./routes";
+// import router from "./routes";
 import session from "express-session";
 
 const app = express();

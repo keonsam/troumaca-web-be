@@ -1,6 +1,5 @@
 import {createAssetCharacteristicRepository} from "../adapter/asset/asset.characteristic.repository.factory";
 import {shapeAssetCharacteristicsResponse} from "./asset.characteristic.response.shaper";
-import {getSortOrderOrDefault} from "../sort.order.util";
 import {AssetCharacteristicRepository} from "../repository/asset.characteristic.repository";
 import {AssetCharacteristic} from "../data/asset/asset.characteristic";
 import {Observable} from "rxjs";
@@ -43,11 +42,11 @@ export class AssetCharacteristicOrchestrator {
         return this.assetCharacteristicRepository.getAssetCharacteristicById(assetCharacteristicId, options);
     }
 
-    saveAssetCharacteristic(assetCharacteristic: AssetCharacteristic, options: any): Observable<AssetCharacteristic> {
+    saveAssetCharacteristic(assetCharacteristic: AssetCharacteristic, options?: any): Observable<AssetCharacteristic> {
         return this.assetCharacteristicRepository.addAssetCharacteristic(assetCharacteristic, options);
     }
 
-    updateAssetCharacteristic(assetCharacteristicId: string, assetCharacteristic: AssetCharacteristic, options: any): Observable<Affect> {
+    updateAssetCharacteristic(assetCharacteristic: AssetCharacteristic, options?: any): Observable<Affect> {
         return this.assetCharacteristicRepository.updateAssetCharacteristic(assetCharacteristic, options);
     }
 

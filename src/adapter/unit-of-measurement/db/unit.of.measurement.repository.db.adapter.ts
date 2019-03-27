@@ -4,11 +4,12 @@ import {Observable, Observer} from "rxjs";
 import {unitOfMeasurements} from "../../../db";
 import {Affect} from "../../../data/affect";
 import {Sort} from "../../../util/sort";
-import {Page} from "../../../util/page";
+import { Page } from "../../../data/page/page";
 import {generateUUID} from "../../../uuid.generator";
 import {AssetBrand} from "../../../data/asset/asset.brand";
 import {SkipGenerator} from "../../util/skip.generator";
 import {SortGenerator} from "../../util/sort.generator";
+import { UnitOfMeasurements } from "../../../data/unit-of-measurement/unit.of.measurements";
 
 export class UnitOfMeasurementRepositoryNeDbAdapter implements UnitOfMeasurementRepository {
   addUnitOfMeasurement(unitOfMeasurement: UnitOfMeasurement, headerOptions?: any): Observable<UnitOfMeasurement> {
@@ -29,12 +30,12 @@ export class UnitOfMeasurementRepositoryNeDbAdapter implements UnitOfMeasurement
 
   }
 
-  deleteUnitOfMeasurement(unitOfMeasurementId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
+  deleteUnitOfMeasurement(unitOfMeasurementId: string, headerOptions?: any): Observable<Affect> {
     return Observable.create(function (observer: Observer<Affect>) {
       unitOfMeasurements.remove(
-        {unitOfMeasurementId:unitOfMeasurementId, ownerPartyId:ownerPartyId},
+        {unitOfMeasurementId: unitOfMeasurementId},
         {},
-        function (err:any, numRemoved:number) {
+        function (err: any, numRemoved: number) {
           if (err) {
             observer.error(err);
           } else {
@@ -45,11 +46,11 @@ export class UnitOfMeasurementRepositoryNeDbAdapter implements UnitOfMeasurement
     });
   }
 
-  findUnitOfMeasurements(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<UnitOfMeasurement[]> {
+  findUnitOfMeasurements(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<UnitOfMeasurement[]> {
     return Observable.create(function (observer: Observer<AssetBrand[]>) {
-      unitOfMeasurements.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-        unitOfMeasurements.find({ownerPartyId: ownerPartyId, name: new RegExp(searchStr) })
+      unitOfMeasurements.count({ }, function (err, count) {
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        unitOfMeasurements.find({ name: new RegExp(searchStr) })
           .skip(skipAmount)
           .limit(pageSize)
           .exec(
@@ -65,11 +66,11 @@ export class UnitOfMeasurementRepositoryNeDbAdapter implements UnitOfMeasurement
     });
   }
 
-  getUnitOfMeasurementById(unitOfMeasurementId: string, ownerPartyId: string, headerOptions?: any): Observable<UnitOfMeasurement> {
+  getUnitOfMeasurementById(unitOfMeasurementId: string, headerOptions?: any): Observable<UnitOfMeasurement> {
     return Observable.create(function (observer: Observer<AssetBrand>) {
       // , ownerPartyId:ownerPartyId
       unitOfMeasurements.find(
-        {unitOfMeasurementId:unitOfMeasurementId},
+        {unitOfMeasurementId: unitOfMeasurementId},
         (err: any, docs: any) => {
           if (!err) {
             observer.next(docs[0]);
@@ -77,14 +78,14 @@ export class UnitOfMeasurementRepositoryNeDbAdapter implements UnitOfMeasurement
             observer.error(err);
           }
           observer.complete();
-        })
+        });
     });
   }
 
-  getUnitOfMeasurementCount(ownerPartyId: string, headerOptions?: any): Observable<number> {
+  getUnitOfMeasurementCount(headerOptions?: any): Observable<number> {
     return Observable.create(function (observer: Observer<number>) {
       unitOfMeasurements.count(
-        {ownerPartyId:ownerPartyId},
+        { },
         (err: any, count: any) => {
           if (!err) {
             observer.next(count);
@@ -92,44 +93,42 @@ export class UnitOfMeasurementRepositoryNeDbAdapter implements UnitOfMeasurement
             observer.error(err);
           }
           observer.complete();
-        })
+        });
     });
   }
 
-  getUnitOfMeasurements(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<UnitOfMeasurement[]>> {
-    return Observable.create(function (observer: Observer<Page<AssetBrand[]>>) {
-      unitOfMeasurements.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-        let generate = SortGenerator.generate(sort);
-        unitOfMeasurements.find({ownerPartyId:ownerPartyId})
+  getUnitOfMeasurements(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<UnitOfMeasurements> {
+    return Observable.create(function (observer: Observer<UnitOfMeasurements>) {
+      unitOfMeasurements.count({ }, function (err, count) {
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        const generate = SortGenerator.generate(sort);
+        unitOfMeasurements.find({})
           .skip(skipAmount)
           .limit(pageSize)
-          .exec((err: any, docs: any) => {
+          .exec((err: any, docs: UnitOfMeasurement[]) => {
             if (!err) {
-              observer.next(docs);
+              observer.next(new UnitOfMeasurements(docs, new Page(pageNumber, pageSize, docs.length, count)));
             } else {
               observer.error(err);
             }
             observer.complete();
           });
-      })
+      });
     });
   }
 
-  updateUnitOfMeasurement(unitOfMeasurement: UnitOfMeasurement, headerOptions?: any): Observable<Affect> {
+  updateUnitOfMeasurement(unitOfMeasureId: string, unitOfMeasurement: UnitOfMeasurement, headerOptions?: any): Observable<Affect> {
     unitOfMeasurement.version = generateUUID();
     unitOfMeasurement.dateModified = new Date();
-    //ownerPartyId:unitOfMeasurement.ownerPartyId
     return Observable.create(function (observer: Observer<Affect>) {
       unitOfMeasurements.update(
-        {unitOfMeasurementId:unitOfMeasurement.unitOfMeasurementId},
-        unitOfMeasurement,
+        {unitOfMeasurementId: unitOfMeasureId},
+          {$set: {unitOfMeasurement} },
         { upsert: true },
-        function (err:any, numReplaced:number, upsert:any) {
+        function (err: any, numReplaced: number, upsert: any) {
           if (err) {
             observer.error(err);
           } else {
-
             observer.next(new Affect(numReplaced));
           }
           observer.complete();

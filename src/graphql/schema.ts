@@ -6,6 +6,8 @@ import { typeDef as Confirmation, resolvers as ConfirmationResolvers} from "./co
 import { typeDef as AssetNameType, resolvers as AssetNameTypeResolvers} from "./asset.name.type";
 import { typeDef as AssetIdentifierType, resolvers as AssetIdentifierTypeResolvers} from "./asset.identifier.type";
 import { typeDef as AssetRoleType, resolvers as AssetRoleTypeResolvers} from "./asset.role.type";
+import { typeDef as Brand, resolvers as BrandResolvers} from "./brand";
+import { typeDef as UnitOfMeasure, resolvers as UnitOfMeasureResolvers} from "./unit.of.measurement";
 // import {
 //   typeDef as OrganizationProfile,
 //   resolvers as organizationProfileResolvers
@@ -53,8 +55,10 @@ const schema = makeExecutableSchema({
       Credential,
       Confirmation,
       AssetNameType,
-      AssetIdentifierType,
-      AssetRoleType
+      // AssetIdentifierType,
+      // AssetRoleType,
+      // Brand,
+      // UnitOfMeasure
       // MeType
     // OrganizationProfile,
     // AssetNameType
@@ -64,8 +68,10 @@ const schema = makeExecutableSchema({
       CredentialResolvers,
       ConfirmationResolvers,
       AssetNameTypeResolvers,
-      AssetIdentifierTypeResolvers,
-      AssetRoleTypeResolvers
+      // AssetIdentifierTypeResolvers,
+      // AssetRoleTypeResolvers,
+      // BrandResolvers,
+      // UnitOfMeasureResolvers
       // MeResolvers
     // organizationProfileResolvers,
     // assetNameTypeResolvers

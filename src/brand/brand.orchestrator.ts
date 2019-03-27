@@ -15,7 +15,7 @@ export class BrandOrchestrator {
         this.brandRepository = createBrandRepositoryFactory(options);
     }
 
-    findBrands(searchStr: string, pageSize: number, options: any): Observable<Brand[]> {
+    findBrands(searchStr: string, pageSize: number, options?: any): Observable<Brand[]> {
         return this.brandRepository.findBrands(searchStr, pageSize, options);
     }
 

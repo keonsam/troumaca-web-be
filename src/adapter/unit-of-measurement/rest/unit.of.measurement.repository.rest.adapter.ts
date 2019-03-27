@@ -4,33 +4,34 @@ import {Observable} from "rxjs";
 import {Affect} from "../../../data/affect";
 import {Sort} from "../../../util/sort";
 import {Page} from "../../../util/page";
+import { UnitOfMeasurements } from "../../../data/unit-of-measurement/unit.of.measurements";
 
 export class UnitOfMeasurementRepositoryRestAdapter implements UnitOfMeasurementRepository {
   addUnitOfMeasurement(unitOfMeasurement: UnitOfMeasurement, headerOptions?: any): Observable<UnitOfMeasurement> {
     return undefined;
   }
 
-  deleteUnitOfMeasurement(unitOfMeasurementId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
+  deleteUnitOfMeasurement(unitOfMeasurementId: string, headerOptions?: any): Observable<Affect> {
     return undefined;
   }
 
-  findUnitOfMeasurements(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<UnitOfMeasurement[]> {
+  findUnitOfMeasurements(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<UnitOfMeasurement[]> {
     return undefined;
   }
 
-  getUnitOfMeasurementById(unitOfMeasurementId: string, ownerPartyId: string, headerOptions?: any): Observable<UnitOfMeasurement> {
+  getUnitOfMeasurementById(unitOfMeasurementId: string, headerOptions?: any): Observable<UnitOfMeasurement> {
     return undefined;
   }
 
-  getUnitOfMeasurementCount(ownerPartyId: string, headerOptions?: any): Observable<number> {
+  getUnitOfMeasurementCount(headerOptions?: any): Observable<number> {
     return undefined;
   }
 
-  getUnitOfMeasurements(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<UnitOfMeasurement[]>> {
+  getUnitOfMeasurements(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<UnitOfMeasurements> {
     return undefined;
   }
 
-  updateUnitOfMeasurement(unitOfMeasurement: UnitOfMeasurement, headerOptions?: any): Observable<Affect> {
+  updateUnitOfMeasurement(unitOfMeasureId: string, unitOfMeasurement: UnitOfMeasurement, headerOptions?: any): Observable<Affect> {
     return undefined;
   }
 }
