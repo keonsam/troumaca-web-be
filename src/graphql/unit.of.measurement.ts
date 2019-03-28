@@ -5,14 +5,13 @@ import { Direction } from "../util/direction";
 import { Order } from "../util/order";
 import { Sort } from "../util/sort";
 import { UnitOfMeasurementOrchestrator } from "../unit-of-measurement/unit.of.measurement.orchestrator";
-import { UnitOfMeasurement } from "../data/unit-of-measurement/unit.of.measurement";
 
 const unitOfMeasureOrch: UnitOfMeasurementOrchestrator = new UnitOfMeasurementOrchestrator();
 
 export const typeDef = gql`
     extend type Mutation {
-        addUnitOfMeasurement(name: String!, description: String!): UnitOfMeasurement
-        updateUnitOfMeasurement(unitOfMeasurementId: ID!, name: String!, description: String!): Int
+        addUnitOfMeasurement(unitOfMeasurement: UnitOfMeasurementInput): UnitOfMeasurement
+        updateUnitOfMeasurement(unitOfMeasurementId: ID!, unitOfMeasurement: UnitOfMeasurementInput): Int
         deleteUnitOfMeasurement(unitOfMeasurementId: ID!): Int
     }
     extend type Query {
@@ -29,15 +28,19 @@ export const typeDef = gql`
         unitOfMeasures: [UnitOfMeasurement]
         page: Page
     }
+    input UnitOfMeasurementInput {
+        name: String!
+        description: String!
+    }
 `;
 
 export const resolvers = {
     Mutation: {
-        addUnitOfMeasurement: async (_: any, {name, description}: any) => {
-            return await unitOfMeasureOrch.addUnitOfMeasurement(new UnitOfMeasurement(name, description)).toPromise();
+        addUnitOfMeasurement: async (_: any, {unitOfMeasurement}: any) => {
+            return await unitOfMeasureOrch.addUnitOfMeasurement(unitOfMeasurement).toPromise();
         },
-        updateUnitOfMeasurement: async (_: any, {unitOfMeasurementId, name, description}: any) => {
-            return await unitOfMeasureOrch.updateUnitOfMeasurement(unitOfMeasurementId, new UnitOfMeasurement(name, description)).toPromise();
+        updateUnitOfMeasurement: async (_: any, {unitOfMeasurementId, unitOfMeasurement}: any) => {
+            return await unitOfMeasureOrch.updateUnitOfMeasurement(unitOfMeasurementId, unitOfMeasurement).toPromise();
         },
         deleteUnitOfMeasurement: async (_: any, {unitOfMeasurementId}: any) => {
             return await unitOfMeasureOrch.deleteUnitOfMeasurement(unitOfMeasurementId).toPromise();

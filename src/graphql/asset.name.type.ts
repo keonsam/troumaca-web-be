@@ -11,8 +11,8 @@ const assetNameTypeOrchestrator: AssetNameTypeOrchestrator = new AssetNameTypeOr
 
 export const typeDef = gql`
   extend type Mutation {
-    addAssetNameType(name: String!, description: String!): AssetNameType
-    updateAssetNameType(assetNameTypeId: ID!, name: String!, description: String!): Int
+    addAssetNameType(assetNameType: AssetNameTypeInput): AssetNameType
+    updateAssetNameType(assetNameTypeId: ID!, assetNameType: AssetNameTypeInput): Int
     deleteAssetNameType(assetNameTypeId: ID!): Int
   }
   extend type Query {
@@ -29,15 +29,19 @@ export const typeDef = gql`
     assetNameTypes: [AssetNameType]
     page: Page
   }
+  input AssetNameTypeInput {
+    name: String!
+    description: String!
+  }
 `;
 
 export const resolvers = {
   Mutation: {
-    addAssetNameType: async (_: any, {name, description}: any) => {
-      return await assetNameTypeOrchestrator.saveAssetNameType(new AssetNameType(name, description)).toPromise();
+    addAssetNameType: async (_: any, {assetNameType}: any) => {
+      return await assetNameTypeOrchestrator.saveAssetNameType(assetNameType).toPromise();
     },
-    updateAssetNameType: async (_: any, {assetNameTypeId, name, description}: any) => {
-      return await assetNameTypeOrchestrator.updateAssetNameType(assetNameTypeId, new AssetNameType(name, description)).toPromise();
+    updateAssetNameType: async (_: any, {assetNameTypeId, assetNameType}: any) => {
+      return await assetNameTypeOrchestrator.updateAssetNameType(assetNameTypeId, assetNameType).toPromise();
     },
     deleteAssetNameType: async (_: any, {assetNameTypeId}: any) => {
       return await assetNameTypeOrchestrator.deleteAssetNameType(assetNameTypeId).toPromise();

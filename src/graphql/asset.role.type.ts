@@ -11,8 +11,8 @@ const assetRoleTypeOrchestrator: AssetRoleTypeOrchestrator = new AssetRoleTypeOr
 
 export const typeDef = gql`
     extend type Mutation {
-        addAssetRoleType(name: String!, description: String!): AssetRoleType
-        updateAssetRoleType(assetRoleTypeId: ID!, name: String!, description: String!): Int
+        addAssetRoleType(assetRoleType: AssetRoleTypeInput): AssetRoleType
+        updateAssetRoleType(assetRoleTypeId: ID!, assetRoleType: AssetRoleTypeInput): Int
         deleteAssetRoleType(assetRoleTypeId: ID!): Int
     }
     extend type Query {
@@ -29,15 +29,19 @@ export const typeDef = gql`
         assetRoleTypes: [AssetRoleType]
         page: Page
     }
+    input AssetRoleTypeInput {
+        name: String!
+        description: String!
+    }
 `;
 
 export const resolvers = {
     Mutation: {
-        addAssetRoleType: async (_: any, {name, description}: any) => {
-            return await assetRoleTypeOrchestrator.saveAssetRoleType(new AssetRoleType(name, description)).toPromise();
+        addAssetRoleType: async (_: any, {assetRoleType}: any) => {
+            return await assetRoleTypeOrchestrator.saveAssetRoleType(assetRoleType).toPromise();
         },
-        updateAssetRoleType: async (_: any, {assetRoleTypeId, name, description}: any) => {
-            return await assetRoleTypeOrchestrator.updateAssetRoleType(assetRoleTypeId, new AssetRoleType(name, description)).toPromise();
+        updateAssetRoleType: async (_: any, {assetRoleTypeId, assetRoleType}: any) => {
+            return await assetRoleTypeOrchestrator.updateAssetRoleType(assetRoleTypeId, assetRoleType).toPromise();
         },
         deleteAssetRoleType: async (_: any, {assetRoleTypeId}: any) => {
             return await assetRoleTypeOrchestrator.deleteAssetRoleType(assetRoleTypeId).toPromise();

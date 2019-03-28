@@ -1,5 +1,0 @@
-{"partyAccessRoleId":"11b25bfd-e07b-420b-8a61-570487559ac2","accessRoleId":"3b9c30dc-9c0a-48d9-bb98-440c29bc2a8f","partyId":"e611341c-25b6-4227-8661-9aed5d6aa6dd","createdOn":{"$$date":1547746816040},"modifiedOn":{"$$date":1547746816040},"_id":"1guAcsmMjVtpb6lF"}
-{"partyAccessRoleId":"4006e37c-ca80-4d44-bdd9-13dddae007b8","accessRoleId":"bc40d2b4-1517-4447-9c8d-ed2279a7f7a9","partyId":"e611341c-25b6-4227-8661-9aed5d6aa6dd","createdOn":{"$$date":1547746816040},"modifiedOn":{"$$date":1547746816040},"_id":"NxUbLgkLh9VBgmWK"}
-{"partyAccessRoleId":"15246f71-75dc-4ec2-900c-c8325977cca0","accessRoleId":"52753d36-45b0-48bd-96a3-e845d7f22928","partyId":"e611341c-25b6-4227-8661-9aed5d6aa6dd","createdOn":{"$$date":1547746816040},"modifiedOn":{"$$date":1547746816040},"_id":"l31nekNozswxXC03"}
-{"partyAccessRoleId":"1f011e80-30a1-4dfa-9d38-b7a39eb1a01f","accessRoleId":"8976f2b0-e59b-40bb-a6d6-a55f38255286","partyId":"e611341c-25b6-4227-8661-9aed5d6aa6dd","createdOn":{"$$date":1547746816040},"modifiedOn":{"$$date":1547746816040},"_id":"lqWq8OMQ36cgF20N"}
-{"$$indexCreated":{"fieldName":"partyAccessRoleId","unique":true,"sparse":false}}

@@ -1,6 +1,6 @@
 import {AssetCharacteristicTypeRepository} from "../../../repository/asset.characteristic.type.repository";
 import {AssetCharacteristicType} from "../../../data/asset/asset.characteristic.type";
-import {Observable, Observer} from "rxjs";
+import { Observable, Observer, of } from "rxjs";
 import {Affect} from "../../../data/affect";
 import {Sort} from "../../../util/sort";
 import {Page} from "../../../util/page";
@@ -8,6 +8,10 @@ import {generateUUID} from "../../../uuid.generator";
 import {assetCharacteristicTypes} from "../../../db";
 import {SkipGenerator} from "../../util/skip.generator";
 import {SortGenerator} from "../../util/sort.generator";
+
+const continuous = new AssetCharacteristicType("054b50c2-9e8a-4cfb-8bac-54af9ac53613", "Continuous Asset Characteristic");
+const category = new AssetCharacteristicType("2f062d58-f464-40a6-921a-a49528f205f6", "Asset Category");
+const types: AssetCharacteristicType[] = [continuous, category];
 
 export class AssetCharacteristicTypeRepositoryNeDbAdapter implements AssetCharacteristicTypeRepository {
   addAssetCharacteristicType(assetCharacteristicType: AssetCharacteristicType, headerOptions?: any): Observable<AssetCharacteristicType> {
@@ -63,19 +67,20 @@ export class AssetCharacteristicTypeRepositoryNeDbAdapter implements AssetCharac
   }
 
   getAssetCharacteristicTypeById(assetCharacteristicTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetCharacteristicType> {
-    return Observable.create(function (observer: Observer<AssetCharacteristicType>) {
-      // , ownerPartyId:ownerPartyId
-      assetCharacteristicTypes.find(
-        {assetCharacteristicTypeId:assetCharacteristicTypeId},
-        (err: any, docs: any) => {
-          if (!err) {
-            observer.next(docs[0]);
-          } else {
-            observer.error(err);
-          }
-          observer.complete();
-        })
-    });
+      return of(types.find(x => x.assetCharacteristicTypeId === assetCharacteristicTypeId));
+    // return Observable.create(function (observer: Observer<AssetCharacteristicType>) {
+    //   // , ownerPartyId:ownerPartyId
+    //   assetCharacteristicTypes.find(
+    //     {assetCharacteristicTypeId:assetCharacteristicTypeId},
+    //     (err: any, docs: any) => {
+    //       if (!err) {
+    //         observer.next(docs[0]);
+    //       } else {
+    //         observer.error(err);
+    //       }
+    //       observer.complete();
+    //     })
+    // });
   }
 
   getAssetCharacteristicTypeCount(ownerPartyId: string, headerOptions?:any): Observable<number> {

@@ -8,6 +8,7 @@ import { typeDef as AssetIdentifierType, resolvers as AssetIdentifierTypeResolve
 import { typeDef as AssetRoleType, resolvers as AssetRoleTypeResolvers} from "./asset.role.type";
 import { typeDef as Brand, resolvers as BrandResolvers} from "./brand";
 import { typeDef as UnitOfMeasure, resolvers as UnitOfMeasureResolvers} from "./unit.of.measurement";
+import { typeDef as AssetCharacteristic, resolvers as AssetCharacteristicResolvers} from "./asset.characteristic";
 // import {
 //   typeDef as OrganizationProfile,
 //   resolvers as organizationProfileResolvers
@@ -58,7 +59,8 @@ const schema = makeExecutableSchema({
       AssetIdentifierType,
       AssetRoleType,
       Brand,
-      UnitOfMeasure
+      UnitOfMeasure,
+      AssetCharacteristic
       // MeType
     // OrganizationProfile,
     // AssetNameType
@@ -71,7 +73,8 @@ const schema = makeExecutableSchema({
       AssetIdentifierTypeResolvers,
       AssetRoleTypeResolvers,
       BrandResolvers,
-      UnitOfMeasureResolvers
+      UnitOfMeasureResolvers,
+      AssetCharacteristicResolvers
       // MeResolvers
     // organizationProfileResolvers,
     // assetNameTypeResolvers

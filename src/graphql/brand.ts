@@ -5,14 +5,13 @@ import { Direction } from "../util/direction";
 import { Order } from "../util/order";
 import { Sort } from "../util/sort";
 import { BrandOrchestrator } from "../brand/brand.orchestrator";
-import { Brand } from "../data/asset/brand";
 
 const brandOrchestrator: BrandOrchestrator = new BrandOrchestrator();
 
 export const typeDef = gql`
     extend type Mutation {
-        addBrand(name: String!, abbreviation: String!, description: String!): Brand
-        updateBrand(brandId: ID!, name: String!, abbreviation: String!, description: String!): Int
+        addBrand(brand: BrandInput): Brand
+        updateBrand(brandId: ID!, brand: BrandInput): Int
         deleteBrand(brandId: ID!): Int
     }
     extend type Query {
@@ -30,15 +29,20 @@ export const typeDef = gql`
         brands: [Brand]
         page: Page
     }
+    input BrandInput {
+        name: String!
+        abbreviation: String!
+        description: String!
+    }
 `;
 
 export const resolvers = {
     Mutation: {
-        addBrand: async (_: any, {name, abbreviation, description}: any) => {
-            return await brandOrchestrator.saveBrand(new Brand(name, abbreviation, description)).toPromise();
+        addBrand: async (_: any, {brand}: any) => {
+            return await brandOrchestrator.saveBrand(brand).toPromise();
         },
-        updateBrand: async (_: any, {brandId, name, abbreviation, description}: any) => {
-            return await brandOrchestrator.updateBrand(brandId, new Brand(name, abbreviation, description)).toPromise();
+        updateBrand: async (_: any, {brandId, brand}: any) => {
+            return await brandOrchestrator.updateBrand(brandId, brand).toPromise();
         },
         deleteBrand: async (_: any, {brandId}: any) => {
             return await brandOrchestrator.deleteBrand(brandId).toPromise();

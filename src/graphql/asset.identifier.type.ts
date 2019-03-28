@@ -5,14 +5,13 @@ import { Direction } from "../util/direction";
 import { Order } from "../util/order";
 import { Sort } from "../util/sort";
 import { AssetIdentifierTypeOrchestrator } from "../asset-identifier-type/asset.identifier.type.orchestrator";
-import { AssetIdentifierType } from "../data/asset/asset.identifier.type";
 
 const assetIdentifierTypeOrchestrator: AssetIdentifierTypeOrchestrator = new AssetIdentifierTypeOrchestrator();
 
 export const typeDef = gql`
     extend type Mutation {
-        addAssetIdentifierType(name: String!, description: String!): AssetIdentifierType
-        updateAssetIdentifierType(assetIdentifierTypeId: ID!, name: String!, description: String!): Int
+        addAssetIdentifierType(assetIdentifierType: AssetIdentifierTypeInput): AssetIdentifierType
+        updateAssetIdentifierType(assetIdentifierTypeId: ID!, assetIdentifierType: AssetIdentifierTypeInput): Int
         deleteAssetIdentifierType(assetIdentifierTypeId: ID!): Int
     }
     extend type Query {
@@ -29,15 +28,19 @@ export const typeDef = gql`
         assetIdentifierTypes: [AssetIdentifierType]
         page: Page
     }
+    input AssetIdentifierTypeInput {
+        name: String!
+        description: String!
+    }
 `;
 
 export const resolvers = {
     Mutation: {
-        addAssetIdentifierType: async (_: any, {name, description}: any) => {
-            return await assetIdentifierTypeOrchestrator.saveAssetIdentifierType(new AssetIdentifierType(name, description)).toPromise();
+        addAssetIdentifierType: async (_: any, {assetIdentifierType}: any) => {
+            return await assetIdentifierTypeOrchestrator.saveAssetIdentifierType(assetIdentifierType).toPromise();
         },
-        updateAssetIdentifierType: async (_: any, {assetIdentifierTypeId, name, description}: any) => {
-            return await assetIdentifierTypeOrchestrator.updateAssetIdentifierType(assetIdentifierTypeId, new AssetIdentifierType(name, description)).toPromise();
+        updateAssetIdentifierType: async (_: any, {assetIdentifierTypeId, assetIdentifierType}: any) => {
+            return await assetIdentifierTypeOrchestrator.updateAssetIdentifierType(assetIdentifierTypeId, assetIdentifierType).toPromise();
         },
         deleteAssetIdentifierType: async (_: any, {assetIdentifierTypeId}: any) => {
             return await assetIdentifierTypeOrchestrator.deleteAssetIdentifierType(assetIdentifierTypeId).toPromise();

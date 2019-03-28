@@ -1,9 +1,7 @@
 import {Observable} from "rxjs";
 import {UnitOfMeasurementRepository} from "../repository/unit.of.measurement.repository";
 import {createUnitOfMeasurementRepository} from "../adapter/unit-of-measurement/unit.of.measurement.repository.factory";
-import {Affect} from "../data/affect";
 import {UnitOfMeasurement} from "../data/unit-of-measurement/unit.of.measurement";
-import {Page} from "../util/page";
 import {Sort} from "../util/sort";
 import { map } from "rxjs/operators";
 import { UnitOfMeasurements } from "../data/unit-of-measurement/unit.of.measurements";
