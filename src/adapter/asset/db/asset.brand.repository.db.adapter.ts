@@ -30,9 +30,9 @@ export class AssetBrandRepositoryNeDbAdapter implements AssetBrandRepository {
   deleteAssetBrand(assetBrandId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
     return Observable.create(function (observer: Observer<Affect>) {
       assetBrands.remove(
-        {assetBrandId:assetBrandId, ownerPartyId:ownerPartyId},
+        {assetBrandId: assetBrandId, ownerPartyId: ownerPartyId},
         {},
-        function (err:any, numRemoved:number) {
+        function (err: any, numRemoved: number) {
           if (err) {
             observer.error(err);
           } else {
@@ -46,7 +46,7 @@ export class AssetBrandRepositoryNeDbAdapter implements AssetBrandRepository {
   findAssetBrands(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetBrand[]> {
     return Observable.create(function (observer: Observer<AssetBrand[]>) {
       assetBrands.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
         assetBrands.find({ownerPartyId: ownerPartyId, name: new RegExp(searchStr) })
           .skip(skipAmount)
           .limit(pageSize)
@@ -58,7 +58,7 @@ export class AssetBrandRepositoryNeDbAdapter implements AssetBrandRepository {
                 observer.error(err);
               }
               observer.complete();
-            })
+            });
       });
     });
   }
@@ -67,7 +67,7 @@ export class AssetBrandRepositoryNeDbAdapter implements AssetBrandRepository {
     return Observable.create(function (observer: Observer<AssetBrand>) {
       // , ownerPartyId:ownerPartyId
       assetBrands.find(
-        {assetBrandId:assetBrandId},
+        {assetBrandId: assetBrandId},
         (err: any, docs: any) => {
           if (!err) {
             observer.next(docs[0]);
@@ -75,14 +75,14 @@ export class AssetBrandRepositoryNeDbAdapter implements AssetBrandRepository {
             observer.error(err);
           }
           observer.complete();
-        })
+        });
     });
   }
 
   getAssetBrandCount(ownerPartyId: string, headerOptions?: any): Observable<number> {
     return Observable.create(function (observer: Observer<number>) {
       assetBrands.count(
-        {ownerPartyId:ownerPartyId},
+        {ownerPartyId: ownerPartyId},
         (err: any, count: any) => {
           if (!err) {
             observer.next(count);
@@ -90,16 +90,16 @@ export class AssetBrandRepositoryNeDbAdapter implements AssetBrandRepository {
             observer.error(err);
           }
           observer.complete();
-        })
+        });
     });
   }
 
   getAssetBrands(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetBrand[]>> {
     return Observable.create(function (observer: Observer<Page<AssetBrand[]>>) {
       assetBrands.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-        let generate = SortGenerator.generate(sort);
-        assetBrands.find({ownerPartyId:ownerPartyId})
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        const generate = SortGenerator.generate(sort);
+        assetBrands.find({ownerPartyId: ownerPartyId})
           .skip(skipAmount)
           .limit(pageSize)
           .exec((err: any, docs: any) => {
@@ -110,20 +110,20 @@ export class AssetBrandRepositoryNeDbAdapter implements AssetBrandRepository {
             }
             observer.complete();
           });
-      })
+      });
     });
   }
 
   updateAssetBrand(assetBrand: AssetBrand, headerOptions?: any): Observable<Affect> {
     assetBrand.version = generateUUID();
     assetBrand.dateModified = new Date();
-    //ownerPartyId:assetBrand.ownerPartyId
+    // ownerPartyId:assetBrand.ownerPartyId
     return Observable.create(function (observer: Observer<Affect>) {
       assetBrands.update(
-        {assetBrandId:assetBrand.assetBrandId},
+        {assetBrandId: assetBrand.assetBrandId},
         assetBrand,
         { upsert: true },
-        function (err:any, numReplaced:number, upsert:any) {
+        function (err: any, numReplaced: number, upsert: any) {
           if (err) {
             observer.error(err);
           } else {

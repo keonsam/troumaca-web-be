@@ -32,9 +32,9 @@ export class UnitOfMeasurementDimensionRepositoryNeDbAdapter implements UnitOfMe
   deleteUnitOfMeasurementDimension(unitOfMeasurementDimensionId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
     return Observable.create(function (observer: Observer<Affect>) {
       unitOfMeasurementDimensions.remove(
-        {unitOfMeasurementDimensionId:unitOfMeasurementDimensionId, ownerPartyId:ownerPartyId},
+        {unitOfMeasurementDimensionId: unitOfMeasurementDimensionId, ownerPartyId: ownerPartyId},
         {},
-        function (err:any, numRemoved:number) {
+        function (err: any, numRemoved: number) {
           if (err) {
             observer.error(err);
           } else {
@@ -48,7 +48,7 @@ export class UnitOfMeasurementDimensionRepositoryNeDbAdapter implements UnitOfMe
   findUnitOfMeasurementDimensions(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<UnitOfMeasurementDimension[]> {
     return Observable.create(function (observer: Observer<AssetBrand[]>) {
       unitOfMeasurementDimensions.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
         unitOfMeasurementDimensions.find({ownerPartyId: ownerPartyId, name: new RegExp(searchStr) })
           .skip(skipAmount)
           .limit(pageSize)
@@ -60,7 +60,7 @@ export class UnitOfMeasurementDimensionRepositoryNeDbAdapter implements UnitOfMe
                 observer.error(err);
               }
               observer.complete();
-            })
+            });
       });
     });
   }
@@ -69,7 +69,7 @@ export class UnitOfMeasurementDimensionRepositoryNeDbAdapter implements UnitOfMe
     return Observable.create(function (observer: Observer<AssetBrand>) {
       // , ownerPartyId:ownerPartyId
       unitOfMeasurementDimensions.find(
-        {unitOfMeasurementDimensionId:unitOfMeasurementDimensionId},
+        {unitOfMeasurementDimensionId: unitOfMeasurementDimensionId},
         (err: any, docs: any) => {
           if (!err) {
             observer.next(docs[0]);
@@ -77,14 +77,14 @@ export class UnitOfMeasurementDimensionRepositoryNeDbAdapter implements UnitOfMe
             observer.error(err);
           }
           observer.complete();
-        })
+        });
     });
   }
 
   getUnitOfMeasurementDimensionCount(ownerPartyId: string, headerOptions?: any): Observable<number> {
     return Observable.create(function (observer: Observer<number>) {
       unitOfMeasurementDimensions.count(
-        {ownerPartyId:ownerPartyId},
+        {ownerPartyId: ownerPartyId},
         (err: any, count: any) => {
           if (!err) {
             observer.next(count);
@@ -92,16 +92,16 @@ export class UnitOfMeasurementDimensionRepositoryNeDbAdapter implements UnitOfMe
             observer.error(err);
           }
           observer.complete();
-        })
+        });
     });
   }
 
   getUnitOfMeasurementDimensions(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<UnitOfMeasurementDimension[]>> {
     return Observable.create(function (observer: Observer<Page<AssetBrand[]>>) {
       unitOfMeasurementDimensions.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-        let generate = SortGenerator.generate(sort);
-        unitOfMeasurementDimensions.find({ownerPartyId:ownerPartyId})
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        const generate = SortGenerator.generate(sort);
+        unitOfMeasurementDimensions.find({ownerPartyId: ownerPartyId})
           .skip(skipAmount)
           .limit(pageSize)
           .exec((err: any, docs: any) => {
@@ -112,20 +112,20 @@ export class UnitOfMeasurementDimensionRepositoryNeDbAdapter implements UnitOfMe
             }
             observer.complete();
           });
-      })
+      });
     });
   }
 
   updateUnitOfMeasurementDimension(unitOfMeasurementDimension: UnitOfMeasurementDimension, headerOptions?: any): Observable<Affect> {
     unitOfMeasurementDimension.version = generateUUID();
     unitOfMeasurementDimension.dateModified = new Date();
-    //ownerPartyId:unitOfMeasurementDimension.ownerPartyId
+    // ownerPartyId:unitOfMeasurementDimension.ownerPartyId
     return Observable.create(function (observer: Observer<Affect>) {
       unitOfMeasurementDimensions.update(
-        {unitOfMeasurementDimensionId:unitOfMeasurementDimension.unitOfMeasurementDimensionId},
+        {unitOfMeasurementDimensionId: unitOfMeasurementDimension.unitOfMeasurementDimensionId},
         unitOfMeasurementDimension,
         { upsert: true },
-        function (err:any, numReplaced:number, upsert:any) {
+        function (err: any, numReplaced: number, upsert: any) {
           if (err) {
             observer.error(err);
           } else {

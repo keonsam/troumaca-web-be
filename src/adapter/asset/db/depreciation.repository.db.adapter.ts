@@ -1,20 +1,18 @@
 import {DepreciationRepository} from "../../../repository/depreciation.repository";
 import {Depreciation} from "../../../data/asset/depreciation";
-import {Observable, Observer, of} from "rxjs";
-import {switchMap, map} from "rxjs/operators";
+import {Observable, Observer } from "rxjs";
 import {generateUUID} from "../../../uuid.generator";
 import {bookDepreciation, depreciationMethod, depreciationSystem, propertyClasses, taxDepreciation} from "../../../db";
 import {calcSkip} from "../../../db.util";
 import {Asset} from "../../../data/asset/asset";
 import {AssetRepositoryNeDbAdapter} from "./asset.repository.db.adapter";
 import {DepreciationMethod} from "../depreciation.method";
-import {DepreciationFormula} from "../depreciation.formula";
 import {DepreciationSystem} from "../../../data/asset/depreciation.system";
 import {PropertyClass} from "../../../data/asset/property.class";
 
 export class DepreciationRepositoryNeDbAdapter implements DepreciationRepository {
 
-  private defaultPageSize: number;
+  readonly defaultPageSize: number;
   private assetRepositoryNeDbAdapter: AssetRepositoryNeDbAdapter = new AssetRepositoryNeDbAdapter();
 
   constructor() {
@@ -65,7 +63,7 @@ export class DepreciationRepositoryNeDbAdapter implements DepreciationRepository
     //       }));
     //   }));
 
-    return null;
+    return undefined;
   }
 
   getTaxDepreciationArr(pageNumber: number, pageSize: number, order: string): Observable<Depreciation[]> {
@@ -108,7 +106,7 @@ export class DepreciationRepositoryNeDbAdapter implements DepreciationRepository
     //           }));
     //       }));
     //   }));
-    return null;
+    return undefined;
   }
 
   getDepreciationCount(): Observable<number> {
@@ -150,7 +148,7 @@ export class DepreciationRepositoryNeDbAdapter implements DepreciationRepository
     //         }));
     //     }
     //   }));
-    return null;
+    return undefined;
   }
 
   saveDepreciation(depreciation: Depreciation, type: string): Observable<Depreciation> {

@@ -6,10 +6,11 @@ import request from "request";
 import {Confirmation} from "../../data/authentication/confirmation";
 import {classToPlain} from "class-transformer";
 import {ValidateConfirmCode} from "../../repository/validate.confirm.code";
+import { HeaderBaseOptions } from "../../header.base.options";
 
 export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository {
 
-  confirmCode(confirmationId: string, credentialId: string, code: string, options?: any): Observable<Confirmation> {
+  confirmCode(confirmationId: string, credentialId: string, code: string, options?: HeaderBaseOptions): Observable<Confirmation> {
     const uri: string = properties.get("credential.host.port") as string;
 
     const headerMap = jsonRequestHeaderMap(options ? options : {});
@@ -36,7 +37,7 @@ export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository
     });
   }
 
-  resendConfirmCode(confirmationId: string, credentialId: string, options?: any): Observable<Confirmation> {
+  resendConfirmCode(confirmationId: string, credentialId: string, options?: HeaderBaseOptions): Observable<Confirmation> {
     const uri: string = properties.get("credential.host.port") as string;
 
     const headerMap = jsonRequestHeaderMap(options ? options : {});
@@ -64,7 +65,7 @@ export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository
     });
   }
 
-  resendConfirmCodeByUsername(username: string, options?: any): Observable<Confirmation> {
+  resendConfirmCodeByUsername(username: string, options?: HeaderBaseOptions): Observable<Confirmation> {
     const uri: string = properties.get("credential.host.port") as string;
 
     const headerMap = jsonRequestHeaderMap(options ? options : {});
@@ -91,7 +92,7 @@ export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository
     });
   }
 
-  validateCode(credentialId: string, code: string, options?: any): Observable<boolean> {
+  validateCode(credentialId: string, code: string, options?: HeaderBaseOptions): Observable<boolean> {
     const uri: string = properties.get("credential.host.port") as string;
 
     const headerMap = jsonRequestHeaderMap(options ? options : {});

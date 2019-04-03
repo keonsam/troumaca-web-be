@@ -31,13 +31,13 @@ export class AssetIdentifierAssignmentRepositoryNeDbAdapter implements AssetIden
   updateAssetIdentifierAssignment(assetIdentifierAssignment: AssetIdentifierAssignment, headerOptions?: any): Observable<Affect> {
     assetIdentifierAssignment.version = generateUUID();
     assetIdentifierAssignment.dateModified = new Date();
-    //ownerPartyId:assetIdentifierAssignment.ownerPartyId
+    // ownerPartyId:assetIdentifierAssignment.ownerPartyId
     return Observable.create(function (observer: Observer<Affect>) {
       assetIdentifierAssignments.update(
-        {assetIdentifierAssignmentId:assetIdentifierAssignment.assetIdentifierAssignmentId},
+        {assetIdentifierAssignmentId: assetIdentifierAssignment.assetIdentifierAssignmentId},
         assetIdentifierAssignment,
         { upsert: true },
-        function (err:any, numReplaced:number, upsert:any) {
+        function (err: any, numReplaced: number, upsert: any) {
           if (err) {
             observer.error(err);
           } else {
@@ -51,12 +51,12 @@ export class AssetIdentifierAssignmentRepositoryNeDbAdapter implements AssetIden
   }
 
 
-  deleteAssetIdentifierAssignment(assetIdentifierAssignmentId: string, ownerPartyId: string, headerOptions?:any): Observable<Affect> {
+  deleteAssetIdentifierAssignment(assetIdentifierAssignmentId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
     return Observable.create(function (observer: Observer<Affect>) {
       assetIdentifierAssignments.remove(
-        {assetIdentifierAssignmentId:assetIdentifierAssignmentId, ownerPartyId:ownerPartyId},
+        {assetIdentifierAssignmentId: assetIdentifierAssignmentId, ownerPartyId: ownerPartyId},
         {},
-        function (err:any, numRemoved:number) {
+        function (err: any, numRemoved: number) {
           if (err) {
             observer.error(err);
           } else {
@@ -67,10 +67,10 @@ export class AssetIdentifierAssignmentRepositoryNeDbAdapter implements AssetIden
     });
   }
 
-  findAssetIdentifierAssignments(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?:any): Observable<AssetIdentifierAssignment[]> {
+  findAssetIdentifierAssignments(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetIdentifierAssignment[]> {
     return Observable.create(function (observer: Observer<AssetIdentifierAssignment[]>) {
       assetIdentifierAssignments.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
         assetIdentifierAssignments.find({ownerPartyId: ownerPartyId, name: new RegExp(searchStr) })
           .skip(skipAmount)
           .limit(pageSize)
@@ -82,16 +82,16 @@ export class AssetIdentifierAssignmentRepositoryNeDbAdapter implements AssetIden
                 observer.error(err);
               }
               observer.complete();
-            })
+            });
       });
     });
   }
 
-  getAssetIdentifierAssignmentById(assetIdentifierAssignmentId: string, ownerPartyId: string, headerOptions?:any): Observable<AssetIdentifierAssignment> {
+  getAssetIdentifierAssignmentById(assetIdentifierAssignmentId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetIdentifierAssignment> {
     return Observable.create(function (observer: Observer<AssetIdentifierAssignment>) {
     // , ownerPartyId:ownerPartyId
       assetIdentifierAssignments.find(
-        {assetIdentifierAssignmentId:assetIdentifierAssignmentId},
+        {assetIdentifierAssignmentId: assetIdentifierAssignmentId},
         (err: any, docs: any) => {
           if (!err) {
             observer.next(docs[0]);
@@ -99,14 +99,14 @@ export class AssetIdentifierAssignmentRepositoryNeDbAdapter implements AssetIden
             observer.error(err);
           }
           observer.complete();
-        })
+        });
     });
   }
 
-  getAssetIdentifierAssignmentCount(ownerPartyId: string, headerOptions?:any): Observable<number> {
+  getAssetIdentifierAssignmentCount(ownerPartyId: string, headerOptions?: any): Observable<number> {
     return Observable.create(function (observer: Observer<number>) {
       assetIdentifierAssignments.count(
-        {ownerPartyId:ownerPartyId},
+        {ownerPartyId: ownerPartyId},
         (err: any, count: any) => {
           if (!err) {
             observer.next(count);
@@ -114,16 +114,16 @@ export class AssetIdentifierAssignmentRepositoryNeDbAdapter implements AssetIden
             observer.error(err);
           }
           observer.complete();
-        })
+        });
     });
   }
 
   getAssetIdentifierAssignments(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetIdentifierAssignment[]>> {
     return Observable.create(function (observer: Observer<Page<AssetIdentifierAssignment[]>>) {
       assetIdentifierAssignments.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-        let generate = SortGenerator.generate(sort);
-        assetIdentifierAssignments.find({ownerPartyId:ownerPartyId})
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        const generate = SortGenerator.generate(sort);
+        assetIdentifierAssignments.find({ownerPartyId: ownerPartyId})
           .skip(skipAmount)
           .limit(pageSize)
           .exec((err: any, docs: any) => {
@@ -134,7 +134,7 @@ export class AssetIdentifierAssignmentRepositoryNeDbAdapter implements AssetIden
             }
             observer.complete();
           });
-      })
+      });
     });
   }
 

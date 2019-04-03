@@ -4,33 +4,30 @@ import {Observable, Observer} from "rxjs";
 import {Affect} from "../../../data/affect";
 import {Page} from "../../../util/page";
 import {Sort} from "../../../util/sort";
+import { AssetTypes } from "../../../data/asset/asset.types";
 
 export class AssetTypeRepositoryRestAdapter implements AssetTypeRepository {
   addAssetType(assetType: AssetType, headerOptions?: any): Observable<AssetType> {
     return undefined;
   }
 
-  deleteAssetType(assetTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
+  deleteAssetType(assetTypeId: string, headerOptions?: any): Observable<Affect> {
     return undefined;
   }
 
-  findAssetTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetType[]> {
+  findAssetTypes(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetType[]> {
     return undefined;
   }
 
-  getAssetTypeById(assetTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetType> {
+  getAssetTypeById(assetTypeId: string, headerOptions?: any): Observable<AssetType> {
     return undefined;
   }
 
-  getAssetTypeCount(ownerPartyId: string, headerOptions?: any): Observable<number> {
+  getAssetTypes(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<AssetTypes> {
     return undefined;
   }
 
-  getAssetTypes(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetType[]>> {
-    return undefined;
-  }
-
-  updateAssetType(assetType: AssetType, headerOptions?: any): Observable<Affect> {
+  updateAssetType(assetTypeId: string, assetType: AssetType, headerOptions?: any): Observable<Affect> {
     return undefined;
   }
 }

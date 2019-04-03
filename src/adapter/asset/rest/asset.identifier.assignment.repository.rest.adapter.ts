@@ -14,11 +14,11 @@ export class AssetIdentifierAssignmentRepositoryRestAdapter implements AssetIden
     return undefined;
   }
 
-  deleteAssetIdentifierAssignment(assetIdentifierAssignmentId: string, ownerPartyId: string, headerOptions?:any): Observable<Affect> {
+  deleteAssetIdentifierAssignment(assetIdentifierAssignmentId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
     return undefined;
   }
 
-  findAssetIdentifierAssignments(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?:any): Observable<AssetIdentifierAssignment[]> {
+  findAssetIdentifierAssignments(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetIdentifierAssignment[]> {
     return undefined;
   }
 

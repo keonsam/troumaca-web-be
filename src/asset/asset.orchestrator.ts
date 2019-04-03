@@ -26,8 +26,9 @@ export class AssetOrchestrator {
     return this.assetRepository.getAssets(ownerPartyId, number, size, sort, headerOptions);
   }
 
-  updateAsset(asset: Asset, headerOptions?: any): Observable<Affect> {
-    return this.assetRepository.updateAsset(asset, headerOptions);
+  updateAsset(assetId: string, asset: Asset, headerOptions?: any): Observable<Affect> {
+    return undefined;
+    // return this.assetRepository.updateAsset(assetId, asset, headerOptions);
   }
 
   getAssetById(assetId: string, ownerPartyId: string, headerOptions?: any): Observable<Asset> {

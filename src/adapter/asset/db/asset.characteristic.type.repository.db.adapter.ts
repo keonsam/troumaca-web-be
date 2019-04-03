@@ -35,7 +35,7 @@ export class AssetCharacteristicTypeRepositoryNeDbAdapter implements AssetCharac
     return Observable.create(function (observer: Observer<Affect>) {
       assetCharacteristicTypes.remove(
         {assetCharacteristicTypeId: assetCharacteristicTypeId, ownerPartyId: ownerPartyId},
-        function (err:any, numRemoved:number) {
+        function (err: any, numRemoved: number) {
           if (err) {
             observer.error(err);
           } else {
@@ -49,7 +49,7 @@ export class AssetCharacteristicTypeRepositoryNeDbAdapter implements AssetCharac
   findAssetCharacteristicTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetCharacteristicType[]> {
     return Observable.create(function (observer: Observer<AssetCharacteristicType[]>) {
       assetCharacteristicTypes.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
         assetCharacteristicTypes.find({ownerPartyId: ownerPartyId, name: new RegExp(searchStr) })
           .skip(skipAmount)
           .limit(pageSize)
@@ -61,7 +61,7 @@ export class AssetCharacteristicTypeRepositoryNeDbAdapter implements AssetCharac
                 observer.error(err);
               }
               observer.complete();
-            })
+            });
       });
     });
   }
@@ -83,10 +83,10 @@ export class AssetCharacteristicTypeRepositoryNeDbAdapter implements AssetCharac
     // });
   }
 
-  getAssetCharacteristicTypeCount(ownerPartyId: string, headerOptions?:any): Observable<number> {
+  getAssetCharacteristicTypeCount(ownerPartyId: string, headerOptions?: any): Observable<number> {
     return Observable.create(function (observer: Observer<number>) {
       assetCharacteristicTypes.count(
-        {ownerPartyId:ownerPartyId},
+        {ownerPartyId: ownerPartyId},
         (err: any, count: any) => {
           if (!err) {
             observer.next(count);
@@ -94,16 +94,16 @@ export class AssetCharacteristicTypeRepositoryNeDbAdapter implements AssetCharac
             observer.error(err);
           }
           observer.complete();
-        })
+        });
     });
   }
 
   getAssetCharacteristicTypes(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetCharacteristicType[]>> {
     return Observable.create(function (observer: Observer<Page<AssetCharacteristicType[]>>) {
       assetCharacteristicTypes.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-        let generate = SortGenerator.generate(sort);
-        assetCharacteristicTypes.find({ownerPartyId:ownerPartyId})
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        const generate = SortGenerator.generate(sort);
+        assetCharacteristicTypes.find({ownerPartyId: ownerPartyId})
           .skip(skipAmount)
           .limit(pageSize)
           .exec((err: any, docs: any) => {
@@ -114,20 +114,20 @@ export class AssetCharacteristicTypeRepositoryNeDbAdapter implements AssetCharac
             }
             observer.complete();
           });
-      })
+      });
     });
   }
 
   updateAssetCharacteristicType(assetCharacteristicType: AssetCharacteristicType, headerOptions?: any): Observable<Affect> {
     assetCharacteristicType.version = generateUUID();
     assetCharacteristicType.dateModified = new Date();
-    //ownerPartyId:assetCharacteristicType.ownerPartyId
+    // ownerPartyId:assetCharacteristicType.ownerPartyId
     return Observable.create(function (observer: Observer<Affect>) {
       assetCharacteristicTypes.update(
-        {assetCharacteristicTypeId:assetCharacteristicType.assetCharacteristicTypeId},
+        {assetCharacteristicTypeId: assetCharacteristicType.assetCharacteristicTypeId},
         assetCharacteristicType,
         { upsert: true },
-        function (err:any, numReplaced:number, upsert:any) {
+        function (err: any, numReplaced: number, upsert: any) {
           if (err) {
             observer.error(err);
           } else {

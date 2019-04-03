@@ -14,11 +14,11 @@ export class AssetNameAssignmentRepositoryRestAdapter implements AssetNameAssign
     return undefined;
   }
 
-  deleteAssetNameAssignment(assetNameAssignmentId: string, ownerPartyId: string, headerOptions?:any): Observable<Affect> {
+  deleteAssetNameAssignment(assetNameAssignmentId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
     return undefined;
   }
 
-  findAssetNameAssignments(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?:any): Observable<AssetNameAssignment[]> {
+  findAssetNameAssignments(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetNameAssignment[]> {
     return undefined;
   }
 

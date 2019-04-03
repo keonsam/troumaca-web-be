@@ -1,8 +1,8 @@
 import { gql} from "apollo-server-express";
-import { CredentialOrchestrator } from "../authentication/credential/credential.orchestrator";
+import { CredentialOrchestrator } from "../../authentication/credential/credential.orchestrator";
 import { map } from "rxjs/operators";
-import { Credential } from "../data/authentication/credential";
-import { Person } from "../data/party/person";
+import { Credential } from "../../data/authentication/credential";
+import { Person } from "../../data/party/person";
 
 const credentialOrchestrator: CredentialOrchestrator = new CredentialOrchestrator();
 

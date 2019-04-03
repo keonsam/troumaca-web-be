@@ -3,18 +3,22 @@ import {AssetNameType} from "../../../data/asset/asset.name.type";
 import {Observable, Observer} from "rxjs";
 import {Affect} from "../../../data/affect";
 import {Sort} from "../../../util/sort";
-import {Page} from "../../../util/page";
+import {Page as Page2} from "../../../util/page";
+import { Page } from "../../../data/page/page";
 import {generateUUID} from "../../../uuid.generator";
 import {assetNameTypes} from "../../../db";
 import {SkipGenerator} from "../../util/skip.generator";
 import {SortGenerator} from "../../util/sort.generator";
 import {AssetIdentifierType} from "../../../data/asset/asset.identifier.type";
+import { HeaderBaseOptions } from "../../../header.base.options";
+import { AssetNameTypes } from "../../../data/asset/asset.name.types";
 
 export class AssetNameTypeRepositoryNeDbAdapter implements AssetNameTypeRepository {
-  addAssetNameType(assetNameType: AssetNameType, headerOptions?: any): Observable<AssetNameType> {
+  addAssetNameType(assetNameType: AssetNameType, headerOptions?: HeaderBaseOptions): Observable<AssetNameType> {
     assetNameType.assetNameTypeId = generateUUID();
     assetNameType.version = generateUUID();
     assetNameType.dateModified = new Date();
+    assetNameType.ownerPartyId = headerOptions["Owner-Party-ID"];
 
     return Observable.create(function (observer: Observer<AssetNameType>) {
       assetNameTypes.insert(assetNameType, function (err: any, doc: any) {
@@ -28,7 +32,7 @@ export class AssetNameTypeRepositoryNeDbAdapter implements AssetNameTypeReposito
     });
   }
 
-  updateAssetNameType(assetNameTypeId: string, assetNameType: AssetNameType, headerOptions?: any): Observable<number> {
+  updateAssetNameType(assetNameTypeId: string, assetNameType: AssetNameType, headerOptions?: HeaderBaseOptions): Observable<number> {
     assetNameType.version = generateUUID();
     assetNameType.dateModified = new Date();
     const query = {assetNameTypeId: assetNameTypeId};
@@ -44,7 +48,7 @@ export class AssetNameTypeRepositoryNeDbAdapter implements AssetNameTypeReposito
     });
   }
 
-  deleteAssetNameType(assetNameTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
+  deleteAssetNameType(assetNameTypeId: string, headerOptions?: HeaderBaseOptions): Observable<Affect> {
     return Observable.create(function (observer: Observer<Affect>) {
       assetNameTypes.remove(
         {assetNameTypeId: assetNameTypeId},
@@ -60,11 +64,11 @@ export class AssetNameTypeRepositoryNeDbAdapter implements AssetNameTypeReposito
     });
   }
 
-  findAssetNameTypes(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetNameType[]> {
+  findAssetNameTypes(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetNameType[]> {
     return Observable.create(function (observer: Observer<AssetIdentifierType[]>) {
-      assetNameTypes.count({ }, function (err, count) {
+      assetNameTypes.count({ ownerPartyId: headerOptions["Owner-Party-ID"]}, function (err, count) {
         const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-        assetNameTypes.find({name: new RegExp(searchStr) })
+        assetNameTypes.find({ownerPartyId: headerOptions["Owner-Party-ID"], name: new RegExp(searchStr) })
           .skip(skipAmount)
           .limit(pageSize)
           .exec(
@@ -80,7 +84,7 @@ export class AssetNameTypeRepositoryNeDbAdapter implements AssetNameTypeReposito
     });
   }
 
-  getAssetNameTypeById(assetNameTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetNameType> {
+  getAssetNameTypeById(assetNameTypeId: string, headerOptions?: HeaderBaseOptions): Observable<AssetNameType> {
     return Observable.create(function (observer: Observer<AssetIdentifierType>) {
     // , ownerPartyId:ownerPartyId
       assetNameTypes.find(
@@ -96,32 +100,17 @@ export class AssetNameTypeRepositoryNeDbAdapter implements AssetNameTypeReposito
     });
   }
 
-  getAssetNameTypeCount(headerOptions?: any): Observable<number> {
-    return Observable.create(function (observer: Observer<number>) {
-      assetNameTypes.count(
-        {},
-        (err: any, count: any) => {
-          if (!err) {
-            observer.next(count);
-          } else {
-            observer.error(err);
-          }
-          observer.complete();
-        });
-    });
-  }
-
-  getAssetNameTypes(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetNameType[]>> {
-    return Observable.create(function (observer: Observer<Page<AssetNameType[]>>) {
-      assetNameTypes.count({}, function (err, count) {
+  getAssetNameTypes(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: HeaderBaseOptions): Observable<AssetNameTypes> {
+    return Observable.create(function (observer: Observer<AssetNameTypes>) {
+      assetNameTypes.count({ownerPartyId: headerOptions["Owner-Party-ID"]}, function (err, count) {
         const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
         const generate = SortGenerator.generate(sort);
-        assetNameTypes.find({})
+        assetNameTypes.find({ownerPartyId: headerOptions["Owner-Party-ID"]})
           .skip(skipAmount)
           .limit(pageSize)
-          .exec((err: any, docs: any) => {
+          .exec((err: any, docs: AssetNameType[]) => {
             if (!err) {
-              observer.next(docs);
+              observer.next(new AssetNameTypes(docs, new Page(pageNumber, pageSize, docs.length, count)));
             } else {
               observer.error(err);
             }

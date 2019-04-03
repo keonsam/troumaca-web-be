@@ -2,8 +2,8 @@ import "reflect-metadata";
 
 import express from "express";
 // import path from "path";
-// import logger from "morgan";
-// import cors from "cors";
+import logger from "morgan";
+import cors from "cors";
 // import bodyParser from "body-parser";
 // import cookieParser from "cookie-parser";
 import {ApolloServer} from "apollo-server-express";
@@ -13,7 +13,7 @@ import session from "express-session";
 
 const app = express();
 
-// app.use(logger("dev"));
+app.use(logger("dev"));
 // app.use(cookieParser());
 // app.use(bodyParser.json({limit: "50mb"}));
 // app.use(bodyParser.urlencoded({limit: "50mb", extended: false}));
@@ -53,7 +53,7 @@ const graphqlPath: string = "/graphql";
 
 // and and add the session information to the request.
 
-// app.use(cors());
+app.use(cors());
 
 const TWO_HOURS = 1000 * 60 * 60 * 60 * 2;
 app.use(session({

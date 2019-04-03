@@ -14,12 +14,12 @@ export class AssetIdentifierTypeOrchestrator {
     this.assetIdentifierTypeRepository = createAssetIdentifierTypeRepository(options);
   }
 
-  addAssetIdentifierType(assetIdentifierType: AssetIdentifierType, headerOptions?:any): Observable<AssetIdentifierType> {
+  addAssetIdentifierType(assetIdentifierType: AssetIdentifierType, headerOptions?: any): Observable<AssetIdentifierType> {
     return undefined;
     // return this.assetIdentifierTypeRepository.addAssetIdentifierType(assetIdentifierType, headerOptions);
   }
 
-  findAssetIdentifierTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?:any): Observable<AssetIdentifierType[]> {
+  findAssetIdentifierTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetIdentifierType[]> {
     return undefined;
     // return this.assetIdentifierTypeRepository.findAssetIdentifierTypes(ownerPartyId, searchStr, pageNumber, pageSize, headerOptions);
   }
@@ -29,17 +29,17 @@ export class AssetIdentifierTypeOrchestrator {
     // return this.assetIdentifierTypeRepository.getAssetIdentifierTypes(ownerPartyId, pageNumber, pageSize, sort, headerOptions)
   }
 
-  updateAssetIdentifierType(assetIdentifierType: AssetIdentifierType, headerOptions?:any): Observable<Affect> {
+  updateAssetIdentifierType(assetIdentifierType: AssetIdentifierType, headerOptions?: any): Observable<Affect> {
     return undefined;
     // return this.assetIdentifierTypeRepository.updateAssetIdentifierType(assetIdentifierType, headerOptions);
   }
 
-  getAssetIdentifierTypeById(assetIdentifierTypeId: string, ownerPartyId: string, headerOptions?:any): Observable<AssetIdentifierType> {
+  getAssetIdentifierTypeById(assetIdentifierTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetIdentifierType> {
     return undefined;
     // return this.assetIdentifierTypeRepository.getAssetIdentifierTypeById(assetIdentifierTypeId, ownerPartyId, headerOptions);
   }
 
-  deleteAssetIdentifierType(assetIdentifierTypeId: string, ownerPartyId: string, headerOptions?:any): Observable<Affect> {
+  deleteAssetIdentifierType(assetIdentifierTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
     return undefined;
     // return this.assetIdentifierTypeRepository.deleteAssetIdentifierType(assetIdentifierTypeId, ownerPartyId, headerOptions);
   }

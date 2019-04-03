@@ -15,6 +15,7 @@ import {createPersonRepository} from "../../adapter/party/person.repository.fact
 import {Person} from "../../data/party/person";
 import {ChangePassword} from "../../data/authentication/change.password";
 import { ChangeResponse } from "../../data/authentication/change.response";
+import { HeaderBaseOptions } from "../../header.base.options";
 
 export class CredentialOrchestrator {
 
@@ -31,15 +32,15 @@ export class CredentialOrchestrator {
     this.personRepository = createPersonRepository();
   }
 
-  isValidUsername(username: string, options?: any): Observable<boolean> {
+  isValidUsername(username: string, options?: HeaderBaseOptions): Observable<boolean> {
     return this.credentialRepository.isValidUsername(username, options);
   }
 
-  isValidPassword(password: string, options?: any): Observable<boolean> {
+  isValidPassword(password: string, options?: HeaderBaseOptions): Observable<boolean> {
     return this.credentialRepository.isValidPassword(password, options);
   }
 
-  addCredential(credential: Credential, person: Person, options?: any): Observable<Confirmation> {
+  addCredential(credential: Credential, person: Person, options?: HeaderBaseOptions): Observable<Confirmation> {
     return this.credentialRepository.addCredential(person, credential, options)
     .pipe(switchMap(createdCredential => {
       if (!createdCredential) {
@@ -58,7 +59,7 @@ export class CredentialOrchestrator {
     }));
   }
 
-  authenticate(credential: Credential, options?: any): Observable<AuthenticatedCredential> {
+  authenticate(credential: Credential, options?: HeaderBaseOptions): Observable<AuthenticatedCredential> {
     // A person can access the application under the following conditions:
     // 1. He/she provides a valid set of credentials
     // 2. He/she has confirmed their username (email, or phone)
@@ -102,11 +103,11 @@ export class CredentialOrchestrator {
     }));
   }
 
-  forgetPassword(credential: Credential, options?: any): Observable<Confirmation> {
-    return this.credentialRepository.forgetPassword(credential, options);
-  }
-
-  changePassword(changePassword: ChangePassword, options?: any): Observable<ChangeResponse> {
-    return this.credentialRepository.changePassword(changePassword, options);
-  }
+  // forgetPassword(credential: Credential, options?: HeaderBaseOptions): Observable<Confirmation> {
+  //   return this.credentialRepository.forgetPassword(credential, options);
+  // }
+  //
+  // changePassword(changePassword: ChangePassword, options?: HeaderBaseOptions): Observable<ChangeResponse> {
+  //   return this.credentialRepository.changePassword(changePassword, options);
+  // }
 }

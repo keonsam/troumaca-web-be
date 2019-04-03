@@ -35,10 +35,10 @@ export class OtherAssetTypeRepositoryNeDbAdapter implements OtherAssetTypeReposi
 
     return Observable.create(function (observer: Observer<Affect>) {
       otherAssetTypes.update(
-        {assetTypeId:otherAssetType.assetTypeId, ownerPartyId:otherAssetType.ownerPartyId},
+        {assetTypeId: otherAssetType.assetTypeId, ownerPartyId: otherAssetType.ownerPartyId},
         otherAssetType,
         { upsert: true },
-        function (err:any, numReplaced:number, upsert:any) {
+        function (err: any, numReplaced: number, upsert: any) {
           if (err) {
             observer.error(err);
           } else {
@@ -53,9 +53,9 @@ export class OtherAssetTypeRepositoryNeDbAdapter implements OtherAssetTypeReposi
   deleteOtherAssetType(assetTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
     return Observable.create(function (observer: Observer<Affect>) {
       otherAssetTypes.remove(
-        {assetTypeId:assetTypeId, ownerPartyId:ownerPartyId},
+        {assetTypeId: assetTypeId, ownerPartyId: ownerPartyId},
         { multi: true },
-        function (err:any, numRemoved:number) {
+        function (err: any, numRemoved: number) {
           if (err) {
             observer.error(err);
           } else {
@@ -69,7 +69,7 @@ export class OtherAssetTypeRepositoryNeDbAdapter implements OtherAssetTypeReposi
   findOtherAssetTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<OtherAssetType[]> {
     return Observable.create(function (observer: Observer<AssetIdentifierType[]>) {
       otherAssetTypes.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
         otherAssetTypes.find({ownerPartyId: ownerPartyId, name: new RegExp(searchStr) })
           .skip(skipAmount)
           .limit(pageSize)
@@ -81,7 +81,7 @@ export class OtherAssetTypeRepositoryNeDbAdapter implements OtherAssetTypeReposi
                 observer.error(err);
               }
               observer.complete();
-            })
+            });
       });
     });
   }
@@ -89,7 +89,7 @@ export class OtherAssetTypeRepositoryNeDbAdapter implements OtherAssetTypeReposi
   getOtherAssetTypeById(assetTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<OtherAssetType> {
     return Observable.create(function (observer: Observer<AssetIdentifierType>) {
       otherAssetTypes.find(
-        {assetTypeId:assetTypeId, ownerPartyId:ownerPartyId},
+        {assetTypeId: assetTypeId, ownerPartyId: ownerPartyId},
         (err: any, docs: any) => {
           if (!err) {
             observer.next(docs[0]);
@@ -97,14 +97,14 @@ export class OtherAssetTypeRepositoryNeDbAdapter implements OtherAssetTypeReposi
             observer.error(err);
           }
           observer.complete();
-        })
+        });
     });
   }
 
-  getOtherAssetTypeCount(ownerPartyId:string, headerOptions?: any): Observable<number> {
+  getOtherAssetTypeCount(ownerPartyId: string, headerOptions?: any): Observable<number> {
     return Observable.create(function (observer: Observer<number>) {
       otherAssetTypes.count(
-        {ownerPartyId:ownerPartyId},
+        {ownerPartyId: ownerPartyId},
         (err: any, count: any) => {
           if (!err) {
             observer.next(count);
@@ -112,16 +112,16 @@ export class OtherAssetTypeRepositoryNeDbAdapter implements OtherAssetTypeReposi
             observer.error(err);
           }
           observer.complete();
-        })
+        });
     });
   }
 
-  getOtherAssetTypes(ownerPartyId:string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<OtherAssetType[]>> {
+  getOtherAssetTypes(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<OtherAssetType[]>> {
     return Observable.create(function (observer: Observer<Page<OtherAssetType[]>>) {
       otherAssetTypes.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-        let generate = SortGenerator.generate(sort);
-        otherAssetTypes.find({ownerPartyId:ownerPartyId})
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        const generate = SortGenerator.generate(sort);
+        otherAssetTypes.find({ownerPartyId: ownerPartyId})
           .skip(skipAmount)
           .limit(pageSize)
           .exec((err: any, docs: any) => {
@@ -132,7 +132,7 @@ export class OtherAssetTypeRepositoryNeDbAdapter implements OtherAssetTypeReposi
             }
             observer.complete();
           });
-      })
+      });
     });
   }
 

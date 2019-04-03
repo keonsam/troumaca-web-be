@@ -61,7 +61,7 @@ export class UnitOfMeasurementRepositoryNeDbAdapter implements UnitOfMeasurement
                 observer.error(err);
               }
               observer.complete();
-            })
+            });
       });
     });
   }

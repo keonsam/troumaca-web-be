@@ -8,7 +8,7 @@ export class SkipGenerator {
       return 0;
     }
 
-    let pages = total/size;
+    const pages = total / size;
 
     if (page > pages) {
       return 0;

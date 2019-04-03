@@ -1,14 +1,16 @@
 import { gql, makeExecutableSchema } from "apollo-server-express";
 import { merge } from "lodash";
-import { typeDef as  Credential, resolvers as CredentialResolvers } from "./credential";
-// import { typeDef as MeType, resolvers as MeResolvers } from "./me";
-import { typeDef as Confirmation, resolvers as ConfirmationResolvers} from "./confirmation";
-import { typeDef as AssetNameType, resolvers as AssetNameTypeResolvers} from "./asset.name.type";
+import { typeDef as  Credential, resolvers as CredentialResolvers } from "./authentication/credential.schema";
+import { typeDef as Confirmation, resolvers as ConfirmationResolvers} from "./authentication/confirmation.schema";
+import { typeDef as Company, resolvers as CompanyResolvers} from "./party/company";
+import { typeDef as AssetNameType, resolvers as AssetNameTypeResolvers} from "./asset/asset.name.type.schema";
 import { typeDef as AssetIdentifierType, resolvers as AssetIdentifierTypeResolvers} from "./asset.identifier.type";
 import { typeDef as AssetRoleType, resolvers as AssetRoleTypeResolvers} from "./asset.role.type";
 import { typeDef as Brand, resolvers as BrandResolvers} from "./brand";
 import { typeDef as UnitOfMeasure, resolvers as UnitOfMeasureResolvers} from "./unit.of.measurement";
 import { typeDef as AssetCharacteristic, resolvers as AssetCharacteristicResolvers} from "./asset.characteristic";
+import { typeDef as AssetType, resolvers as AssetTypeResolvers} from "./asset.type.schema";
+import { RequireAuth } from "../middleware/require.auth";
 // import {
 //   typeDef as OrganizationProfile,
 //   resolvers as organizationProfileResolvers
@@ -27,6 +29,7 @@ import { typeDef as AssetCharacteristic, resolvers as AssetCharacteristicResolve
 
 // Construct a schema, using GraphQL schema language
 const typeDefs = gql`
+    directive @requireAuth on FIELD_DEFINITION
     type Query {
         hello: String
     }
@@ -55,12 +58,14 @@ const schema = makeExecutableSchema({
       typeDefs,
       Credential,
       Confirmation,
+      Company,
       AssetNameType,
-      AssetIdentifierType,
-      AssetRoleType,
-      Brand,
-      UnitOfMeasure,
-      AssetCharacteristic
+      // AssetIdentifierType,
+      // AssetRoleType,
+      // Brand,
+      // UnitOfMeasure,
+      // AssetCharacteristic,
+      // AssetType
       // MeType
     // OrganizationProfile,
     // AssetNameType
@@ -69,16 +74,21 @@ const schema = makeExecutableSchema({
       resolvers,
       CredentialResolvers,
       ConfirmationResolvers,
+      CompanyResolvers,
       AssetNameTypeResolvers,
-      AssetIdentifierTypeResolvers,
-      AssetRoleTypeResolvers,
-      BrandResolvers,
-      UnitOfMeasureResolvers,
-      AssetCharacteristicResolvers
+      // AssetIdentifierTypeResolvers,
+      // AssetRoleTypeResolvers,
+      // BrandResolvers,
+      // UnitOfMeasureResolvers,
+      // AssetCharacteristicResolvers,
+      // AssetTypeResolvers
       // MeResolvers
     // organizationProfileResolvers,
     // assetNameTypeResolvers
   ),
+    schemaDirectives: {
+        requireAuth: RequireAuth
+    }
 });
 
 export default schema;

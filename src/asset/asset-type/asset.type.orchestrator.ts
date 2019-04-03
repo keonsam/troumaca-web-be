@@ -5,6 +5,8 @@ import {createAssetTypeRepository} from "../../adapter/asset/asset.type.reposito
 import {Affect} from "../../data/affect";
 import {Page} from "../../util/page";
 import {Sort} from "../../util/sort";
+import { map } from "rxjs/operators";
+import { AssetTypes } from "../../data/asset/asset.types";
 
 export class AssetTypeOrchestrator {
 
@@ -18,24 +20,26 @@ export class AssetTypeOrchestrator {
     return this.assetTypeRepository.addAssetType(assetType, headerOptions);
   }
 
-  findAssetTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetType[]> {
-    return this.assetTypeRepository.findAssetTypes(ownerPartyId, searchStr, pageNumber, pageSize, headerOptions);
+  findAssetTypes( searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetType[]> {
+    return this.assetTypeRepository.findAssetTypes(searchStr, pageNumber, pageSize, headerOptions);
   }
 
-  getAssetTypes(ownerPartyId: string, number: number, size: number, sort: Sort, headerOptions?: any): Observable<Page<AssetType[]>> {
-    return this.assetTypeRepository.getAssetTypes(ownerPartyId, number, size, sort, headerOptions);
+  getAssetTypes(number: number, size: number, sort: Sort, headerOptions?: any): Observable<AssetTypes> {
+    return this.assetTypeRepository.getAssetTypes(number, size, sort, headerOptions);
   }
 
-  updateAssetType(assetType: AssetType, headerOptions?: any): Observable<Affect> {
-    return this.assetTypeRepository.updateAssetType(assetType, headerOptions);
+  updateAssetType(assetTypeId: string, assetType: AssetType, headerOptions?: any): Observable<number> {
+    return this.assetTypeRepository.updateAssetType(assetTypeId, assetType, headerOptions)
+        .pipe(map( aff => aff.affected));
   }
 
-  getAssetTypeById(assetTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetType> {
-    return this.assetTypeRepository.getAssetTypeById(assetTypeId, ownerPartyId, headerOptions);
+  getAssetTypeById(assetTypeId: string, headerOptions?: any): Observable<AssetType> {
+    return this.assetTypeRepository.getAssetTypeById(assetTypeId, headerOptions);
   }
 
-  deleteAssetType(assetTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
-    return this.assetTypeRepository.deleteAssetType(assetTypeId, ownerPartyId, headerOptions);
+  deleteAssetType(assetTypeId: string, headerOptions?: any): Observable<number> {
+    return this.assetTypeRepository.deleteAssetType(assetTypeId, headerOptions)
+        .pipe(map(aff => aff.affected));
   }
 
 }

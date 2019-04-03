@@ -80,7 +80,7 @@ export class AssetRoleTypeRepositoryNeDbAdapter implements AssetRoleTypeReposito
                 observer.error(err);
               }
               observer.complete();
-            })
+            });
       });
     });
   }
@@ -96,7 +96,7 @@ export class AssetRoleTypeRepositoryNeDbAdapter implements AssetRoleTypeReposito
             observer.error(err);
           }
           observer.complete();
-        })
+        });
     });
   }
 
@@ -111,7 +111,7 @@ export class AssetRoleTypeRepositoryNeDbAdapter implements AssetRoleTypeReposito
             observer.error(err);
           }
           observer.complete();
-        })
+        });
     });
   }
 
@@ -131,7 +131,7 @@ export class AssetRoleTypeRepositoryNeDbAdapter implements AssetRoleTypeReposito
             }
             observer.complete();
           });
-      })
+      });
     });
   }
 

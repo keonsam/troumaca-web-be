@@ -4,21 +4,23 @@ import {Observable} from "rxjs";
 import {Affect} from "../../../data/affect";
 import {Sort} from "../../../util/sort";
 import {Page} from "../../../util/page";
+import { HeaderBaseOptions } from "../../../header.base.options";
+import { AssetNameTypes } from "../../../data/asset/asset.name.types";
 
 export class AssetNameTypeRepositoryRestAdapter implements AssetNameTypeRepository {
-  addAssetNameType(assetNameType: AssetNameType, headerOptions?: any): Observable<AssetNameType> {
+  addAssetNameType(assetNameType: AssetNameType, headerOptions?: HeaderBaseOptions): Observable<AssetNameType> {
     return undefined;
   }
 
-  updateAssetNameType(assetNameTypeId: string, assetNameType: AssetNameType, headerOptions?: any): Observable<number> {
+  updateAssetNameType(assetNameTypeId: string, assetNameType: AssetNameType, headerOptions?: HeaderBaseOptions): Observable<number> {
     return undefined;
   }
 
-  deleteAssetNameType(assetNameTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
+  deleteAssetNameType(assetNameTypeId: string, headerOptions?: HeaderBaseOptions): Observable<Affect> {
     return undefined;
   }
 
-  findAssetNameTypes(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetNameType[]> {
+  findAssetNameTypes(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetNameType[]> {
     return undefined;
   }
 
@@ -26,11 +28,7 @@ export class AssetNameTypeRepositoryRestAdapter implements AssetNameTypeReposito
     return undefined;
   }
 
-  getAssetNameTypeCount(options?: any): Observable<number> {
-    return undefined;
-  }
-
-  getAssetNameTypes(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetNameType[]>> {
+  getAssetNameTypes(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: HeaderBaseOptions): Observable<AssetNameTypes> {
     return undefined;
   }
 }

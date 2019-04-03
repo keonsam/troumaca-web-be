@@ -1,5 +1,6 @@
 export class AssetName {
   assetNameId: string;
+  assetNameTypeId: string;
   nameValue: string;
   description: string;
   dateEffective: Date;

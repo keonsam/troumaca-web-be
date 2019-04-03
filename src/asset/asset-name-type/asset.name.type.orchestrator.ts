@@ -1,47 +1,46 @@
-import {Observable} from "rxjs";
-import {AssetNameTypeRepository} from "../../repository/asset.name.type.repository";
 import {createAssetNameTypeRepository} from "../../adapter/asset/asset.name.type.repository.factory";
-import {Affect} from "../../data/affect";
+import {AssetNameTypeRepository} from "../../repository/asset.name.type.repository";
 import {AssetNameType} from "../../data/asset/asset.name.type";
-import {Page} from "../../util/page";
+import { Observable} from "rxjs";
+import {map} from "rxjs/operators";
 import {Sort} from "../../util/sort";
+import { HeaderBaseOptions } from "../../header.base.options";
+import { RepositoryKind } from "../../repository.kind";
+import { Page } from "../../util/page";
+import { AssetNameTypes } from "../../data/asset/asset.name.types";
 
 export class AssetNameTypeOrchestrator {
 
-  private assetNameTypeRepository: AssetNameTypeRepository;
+    private assetNameTypeRepository: AssetNameTypeRepository;
 
-  constructor(options?: any) {
-    this.assetNameTypeRepository = createAssetNameTypeRepository(options);
-  }
+    constructor(options?: RepositoryKind) {
+        this.assetNameTypeRepository = createAssetNameTypeRepository(options);
+    }
 
-  addAssetNameType(assetNameType: AssetNameType, headerOptions?:any): Observable<AssetNameType> {
-    return undefined;
-    // return this.assetNameTypeRepository.addAssetNameType(assetNameType, headerOptions);
-  }
+    findAssetNameTypes(searchStr: string, pageNumber: number, pageSize: number, options?: HeaderBaseOptions): Observable<AssetNameType[]> {
+        return this.assetNameTypeRepository.findAssetNameTypes(searchStr, pageNumber, pageSize, options);
+    }
 
-  findAssetNameTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?:any): Observable<AssetNameType[]> {
-    return undefined;
-    // return this.assetNameTypeRepository.findAssetNameTypes(ownerPartyId, searchStr, pageNumber, pageSize, headerOptions);
-  }
+    getAssetNameTypes(pageNumber: number, pageSize: number, sort: Sort, options?: HeaderBaseOptions): Observable<AssetNameTypes> {
+        return this.assetNameTypeRepository.getAssetNameTypes(pageNumber, pageSize, sort, options);
+    }
 
-  getAssetNameTypes(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetNameType[]>> {
-    return undefined;
-    // return this.assetNameTypeRepository.getAssetNameTypes(ownerPartyId, pageNumber, pageSize, sort, headerOptions)
-  }
+    getAssetNameTypeById(assetNameTypeId: string, options?: HeaderBaseOptions): Observable<AssetNameType> {
+        return this.assetNameTypeRepository.getAssetNameTypeById(assetNameTypeId, options);
+    }
 
-  updateAssetNameType(assetNameType: AssetNameType, headerOptions?:any): Observable<Affect> {
-    return undefined;
-    // return this.assetNameTypeRepository.updateAssetNameType(assetNameType, headerOptions);
-  }
+    saveAssetNameType(assetNameType: AssetNameType, options?: HeaderBaseOptions): Observable<AssetNameType> {
+        return this.assetNameTypeRepository.addAssetNameType(assetNameType, options);
+    }
 
-  getAssetNameTypeById(assetNameTypeId: string, ownerPartyId: string, headerOptions?:any): Observable<AssetNameType> {
-    return undefined;
-    // return this.assetNameTypeRepository.getAssetNameTypeById(assetNameTypeId, ownerPartyId, headerOptions);
-  }
+    updateAssetNameType(assetNameTypeId: string, assetNameType: AssetNameType, options?: HeaderBaseOptions): Observable<number> {
+        return this.assetNameTypeRepository.updateAssetNameType(assetNameTypeId, assetNameType, options);
+    }
 
-  deleteAssetNameType(assetNameTypeId: string, ownerPartyId: string, headerOptions?:any): Observable<Affect> {
-    return undefined;
-    // return this.assetNameTypeRepository.deleteAssetNameType(assetNameTypeId, ownerPartyId, headerOptions);
-  }
+    deleteAssetNameType(assetNameTypeId: string, options?: HeaderBaseOptions): Observable<number> {
+        return this.assetNameTypeRepository.deleteAssetNameType(assetNameTypeId, options)
+            .pipe(map(aff => aff.affected));
+    }
 
 }
+

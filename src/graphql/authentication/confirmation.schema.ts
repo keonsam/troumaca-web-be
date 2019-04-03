@@ -1,5 +1,5 @@
 import { gql} from "apollo-server-express";
-import { ConfirmationOrchestrator } from "../authentication/credential/confirmation/confirmation.orchestrator";
+import { ConfirmationOrchestrator } from "../../authentication/credential/confirmation/confirmation.orchestrator";
 
 const confirmationOrchestrator: ConfirmationOrchestrator = new ConfirmationOrchestrator();
 

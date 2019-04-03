@@ -14,12 +14,12 @@ export class AssetCharacteristicOrchestrator {
     this.assetCharacteristicRepository = createAssetCharacteristicRepository(options);
   }
 
-  addAssetCharacteristic(assetCharacteristic: AssetCharacteristic, headerOptions?:any): Observable<AssetCharacteristic> {
+  addAssetCharacteristic(assetCharacteristic: AssetCharacteristic, headerOptions?: any): Observable<AssetCharacteristic> {
     return undefined;
     // return this.assetCharacteristicRepository.addAssetCharacteristic(assetCharacteristic, headerOptions);
   }
 
-  findAssetCharacteristics(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?:any): Observable<AssetCharacteristic[]> {
+  findAssetCharacteristics(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetCharacteristic[]> {
     return undefined;
     // return this.assetCharacteristicRepository.findAssetCharacteristics(ownerPartyId, searchStr, pageNumber, pageSize, headerOptions);
   }
@@ -29,17 +29,17 @@ export class AssetCharacteristicOrchestrator {
     // return this.assetCharacteristicRepository.getAssetCharacteristics(ownerPartyId, pageNumber, pageSize, sort, headerOptions)
   }
 
-  updateAssetCharacteristic(assetCharacteristic: AssetCharacteristic, headerOptions?:any): Observable<Affect> {
+  updateAssetCharacteristic(assetCharacteristic: AssetCharacteristic, headerOptions?: any): Observable<Affect> {
     return undefined;
     // return this.assetCharacteristicRepository.updateAssetCharacteristic(assetCharacteristic, headerOptions);
   }
 
-  getAssetCharacteristicById(assetCharacteristicId: string, ownerPartyId: string, headerOptions?:any): Observable<AssetCharacteristic> {
+  getAssetCharacteristicById(assetCharacteristicId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetCharacteristic> {
     return undefined;
     // return this.assetCharacteristicRepository.getAssetCharacteristicById(assetCharacteristicId, ownerPartyId, headerOptions);
   }
 
-  deleteAssetCharacteristic(assetCharacteristicId: string, ownerPartyId: string, headerOptions?:any): Observable<Affect> {
+  deleteAssetCharacteristic(assetCharacteristicId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
     return undefined;
     // return this.assetCharacteristicRepository.deleteAssetCharacteristic(assetCharacteristicId, ownerPartyId, headerOptions);
   }

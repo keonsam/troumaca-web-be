@@ -6,18 +6,18 @@ import {Page} from "../util/page";
 
 export interface AssetNameAssignmentRepository {
 
-  addAssetNameAssignment(assetNameAssignment: AssetNameAssignment, headerOptions?:any): Observable<AssetNameAssignment>;
+  addAssetNameAssignment(assetNameAssignment: AssetNameAssignment, headerOptions?: any): Observable<AssetNameAssignment>;
 
-  updateAssetNameAssignment(assetNameAssignment: AssetNameAssignment, headerOptions?:any): Observable<Affect>;
+  updateAssetNameAssignment(assetNameAssignment: AssetNameAssignment, headerOptions?: any): Observable<Affect>;
 
-  deleteAssetNameAssignment(assetNameAssignmentId: string, ownerPartyId: string, headerOptions?:any): Observable<Affect>;
+  deleteAssetNameAssignment(assetNameAssignmentId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect>;
 
-  findAssetNameAssignments(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?:any): Observable<AssetNameAssignment[]>;
+  findAssetNameAssignments(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetNameAssignment[]>;
 
   getAssetNameAssignments(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetNameAssignment[]>>;
 
-  getAssetNameAssignmentCount(ownerPartyId: string, headerOptions?:any): Observable<number>;
+  getAssetNameAssignmentCount(ownerPartyId: string, headerOptions?: any): Observable<number>;
 
-  getAssetNameAssignmentById(assetNameAssignmentId: string, ownerPartyId: string, headerOptions?:any): Observable<AssetNameAssignment>;
+  getAssetNameAssignmentById(assetNameAssignmentId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetNameAssignment>;
 
 }

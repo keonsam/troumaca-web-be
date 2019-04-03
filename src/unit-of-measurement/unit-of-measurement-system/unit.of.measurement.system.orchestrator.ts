@@ -14,27 +14,27 @@ export class UnitOfMeasurementSystemOrchestrator {
     this.assetNameTypeRepository = createUnitOfMeasurementSystemRepository(options);
   }
 
-  addUnitOfMeasurementSystem(assetNameType: UnitOfMeasurementSystem, headerOptions?:any): Observable<UnitOfMeasurementSystem> {
+  addUnitOfMeasurementSystem(assetNameType: UnitOfMeasurementSystem, headerOptions?: any): Observable<UnitOfMeasurementSystem> {
     return this.assetNameTypeRepository.addUnitOfMeasurementSystem(assetNameType, headerOptions);
   }
 
-  findUnitOfMeasurementSystems(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?:any): Observable<UnitOfMeasurementSystem[]> {
+  findUnitOfMeasurementSystems(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<UnitOfMeasurementSystem[]> {
     return this.assetNameTypeRepository.findUnitOfMeasurementSystems(ownerPartyId, searchStr, pageNumber, pageSize, headerOptions);
   }
 
   getUnitOfMeasurementSystems(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<UnitOfMeasurementSystem[]>> {
-    return this.assetNameTypeRepository.getUnitOfMeasurementSystems(ownerPartyId, pageNumber, pageSize, sort, headerOptions)
+    return this.assetNameTypeRepository.getUnitOfMeasurementSystems(ownerPartyId, pageNumber, pageSize, sort, headerOptions);
   }
 
-  updateUnitOfMeasurementSystem(assetNameType: UnitOfMeasurementSystem, headerOptions?:any): Observable<Affect> {
+  updateUnitOfMeasurementSystem(assetNameType: UnitOfMeasurementSystem, headerOptions?: any): Observable<Affect> {
     return this.assetNameTypeRepository.updateUnitOfMeasurementSystem(assetNameType, headerOptions);
   }
 
-  getUnitOfMeasurementSystemById(assetNameTypeId: string, ownerPartyId: string, headerOptions?:any): Observable<UnitOfMeasurementSystem> {
+  getUnitOfMeasurementSystemById(assetNameTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<UnitOfMeasurementSystem> {
     return this.assetNameTypeRepository.getUnitOfMeasurementSystemById(assetNameTypeId, ownerPartyId, headerOptions);
   }
 
-  deleteUnitOfMeasurementSystem(assetNameTypeId: string, ownerPartyId: string, headerOptions?:any): Observable<Affect> {
+  deleteUnitOfMeasurementSystem(assetNameTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
     return this.assetNameTypeRepository.deleteUnitOfMeasurementSystem(assetNameTypeId, ownerPartyId, headerOptions);
   }
 

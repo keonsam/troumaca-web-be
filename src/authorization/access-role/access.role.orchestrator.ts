@@ -66,7 +66,7 @@ export class AccessRoleOrchestrator {
     //       }));
     //   }));
 
-    return null;
+    return undefined;
   }
 
   updateAccessRole(accessRoleId: string, accessRole: AccessRole, grants: Grant[]): Observable<number> {
@@ -85,7 +85,7 @@ export class AccessRoleOrchestrator {
     //       }));
     //   }));
 
-    return null;
+    return undefined;
   }
 
   deleteAccessRole(accessRoleId: string): Observable<number> {
@@ -101,7 +101,7 @@ export class AccessRoleOrchestrator {
     //         }));
     //     }
     //   }));
-    return null;
+    return undefined;
   }
 
 }

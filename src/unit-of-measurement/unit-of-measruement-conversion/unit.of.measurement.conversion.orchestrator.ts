@@ -14,27 +14,27 @@ export class UnitOfMeasurementConversionOrchestrator {
     this.unitOfMeasurementConversionRepository = createUnitOfMeasurementConversionRepository(options);
   }
 
-  addUnitOfMeasurementConversion(assetNameType: UnitOfMeasurementConversion, headerOptions?:any): Observable<UnitOfMeasurementConversion> {
+  addUnitOfMeasurementConversion(assetNameType: UnitOfMeasurementConversion, headerOptions?: any): Observable<UnitOfMeasurementConversion> {
     return this.unitOfMeasurementConversionRepository.addUnitOfMeasurementConversion(assetNameType, headerOptions);
   }
 
-  findUnitOfMeasurementConversions(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?:any): Observable<UnitOfMeasurementConversion[]> {
+  findUnitOfMeasurementConversions(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<UnitOfMeasurementConversion[]> {
     return this.unitOfMeasurementConversionRepository.findUnitOfMeasurementConversions(ownerPartyId, searchStr, pageNumber, pageSize, headerOptions);
   }
 
   getUnitOfMeasurementConversions(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<UnitOfMeasurementConversion[]>> {
-    return this.unitOfMeasurementConversionRepository.getUnitOfMeasurementConversions(ownerPartyId, pageNumber, pageSize, sort, headerOptions)
+    return this.unitOfMeasurementConversionRepository.getUnitOfMeasurementConversions(ownerPartyId, pageNumber, pageSize, sort, headerOptions);
   }
 
-  updateUnitOfMeasurementConversion(assetNameType: UnitOfMeasurementConversion, headerOptions?:any): Observable<Affect> {
+  updateUnitOfMeasurementConversion(assetNameType: UnitOfMeasurementConversion, headerOptions?: any): Observable<Affect> {
     return this.unitOfMeasurementConversionRepository.updateUnitOfMeasurementConversion(assetNameType, headerOptions);
   }
 
-  getUnitOfMeasurementConversionById(assetNameTypeId: string, ownerPartyId: string, headerOptions?:any): Observable<UnitOfMeasurementConversion> {
+  getUnitOfMeasurementConversionById(assetNameTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<UnitOfMeasurementConversion> {
     return this.unitOfMeasurementConversionRepository.getUnitOfMeasurementConversionById(assetNameTypeId, ownerPartyId, headerOptions);
   }
 
-  deleteUnitOfMeasurementConversion(assetNameTypeId: string, ownerPartyId: string, headerOptions?:any): Observable<Affect> {
+  deleteUnitOfMeasurementConversion(assetNameTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
     return this.unitOfMeasurementConversionRepository.deleteUnitOfMeasurementConversion(assetNameTypeId, ownerPartyId, headerOptions);
   }
 

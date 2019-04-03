@@ -109,7 +109,7 @@ export class AssetIdentifierTypeRepositoryNeDbAdapter implements AssetIdentifier
             observer.error(err);
           }
           observer.complete();
-        })
+        });
     });
   }
 
