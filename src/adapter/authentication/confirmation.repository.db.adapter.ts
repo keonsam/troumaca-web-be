@@ -7,6 +7,7 @@ import {Observable, Observer, of, throwError} from "rxjs";
 import {switchMap, map} from "rxjs/operators";
 import {factory} from "../../ConfigLog4j";
 import { Credential } from "../../data/authentication/credential";
+import { HeaderBaseOptions } from "../../header.base.options";
 
 const log = factory.getLogger("authentication.ConfirmationRepositoryNeDbAdapter");
 
@@ -35,7 +36,7 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
     //     }));
     // }
 
-    confirmCode(confirmationId: string, credentialId: string, code: string, options?: any): Observable<Confirmation> {
+    confirmCode(confirmationId: string, credentialId: string, code: string, options?: HeaderBaseOptions): Observable<Confirmation> {
         return this.verifyCode(confirmationId, code)
             .pipe(switchMap((confirmationRes: Confirmation) => {
                 log.debug("Confirmation: " + confirmationRes);

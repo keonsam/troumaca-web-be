@@ -3,7 +3,6 @@ import {AssetNameType} from "../../../data/asset/asset.name.type";
 import {Observable, Observer} from "rxjs";
 import {Affect} from "../../../data/affect";
 import {Sort} from "../../../util/sort";
-import {Page as Page2} from "../../../util/page";
 import { Page } from "../../../data/page/page";
 import {generateUUID} from "../../../uuid.generator";
 import {assetNameTypes} from "../../../db";
@@ -18,7 +17,7 @@ export class AssetNameTypeRepositoryNeDbAdapter implements AssetNameTypeReposito
     assetNameType.assetNameTypeId = generateUUID();
     assetNameType.version = generateUUID();
     assetNameType.dateModified = new Date();
-    assetNameType.ownerPartyId = headerOptions["Owner-Party-ID"];
+    assetNameType.ownerPartyId = headerOptions.ownerPartyId;
 
     return Observable.create(function (observer: Observer<AssetNameType>) {
       assetNameTypes.insert(assetNameType, function (err: any, doc: any) {
@@ -66,9 +65,9 @@ export class AssetNameTypeRepositoryNeDbAdapter implements AssetNameTypeReposito
 
   findAssetNameTypes(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetNameType[]> {
     return Observable.create(function (observer: Observer<AssetIdentifierType[]>) {
-      assetNameTypes.count({ ownerPartyId: headerOptions["Owner-Party-ID"]}, function (err, count) {
+      assetNameTypes.count({ ownerPartyId: headerOptions.ownerPartyId}, function (err, count) {
         const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-        assetNameTypes.find({ownerPartyId: headerOptions["Owner-Party-ID"], name: new RegExp(searchStr) })
+        assetNameTypes.find({ownerPartyId: headerOptions.ownerPartyId, name: new RegExp(searchStr) })
           .skip(skipAmount)
           .limit(pageSize)
           .exec(
@@ -102,10 +101,10 @@ export class AssetNameTypeRepositoryNeDbAdapter implements AssetNameTypeReposito
 
   getAssetNameTypes(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: HeaderBaseOptions): Observable<AssetNameTypes> {
     return Observable.create(function (observer: Observer<AssetNameTypes>) {
-      assetNameTypes.count({ownerPartyId: headerOptions["Owner-Party-ID"]}, function (err, count) {
+      assetNameTypes.count({ownerPartyId: headerOptions.ownerPartyId}, function (err, count) {
         const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
         const generate = SortGenerator.generate(sort);
-        assetNameTypes.find({ownerPartyId: headerOptions["Owner-Party-ID"]})
+        assetNameTypes.find({ownerPartyId: headerOptions.ownerPartyId})
           .skip(skipAmount)
           .limit(pageSize)
           .exec((err: any, docs: AssetNameType[]) => {

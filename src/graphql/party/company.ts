@@ -22,7 +22,7 @@ export const typeDef = gql`
 export const resolvers = {
     Mutation: {
         addCompany: async (_: any, {company}: any, {req}: any) => {
-            const headerOptions: HeaderBaseOptions = HeaderBaseOptions.create(req);
+            const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
             return await organizationOrchestrator.saveOrganization(company, headerOptions).toPromise();
         }
     },

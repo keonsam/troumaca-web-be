@@ -6,18 +6,21 @@ import {generateUUID} from "../../../uuid.generator";
 import {assetCharacteristics} from "../../../db";
 import {SkipGenerator} from "../../util/skip.generator";
 import {Sort} from "../../../util/sort";
-import {Page} from "../../../util/page";
+import { Page} from "../../../data/page/page";
 import {SortGenerator} from "../../util/sort.generator";
 import { AssetCharacteristicType } from "../../../data/asset/asset.characteristic.type";
+import { AssetCharacteristics } from "../../../data/asset/asset.characteristics";
+import { HeaderBaseOptions } from "../../../header.base.options";
 
-const continuous = new AssetCharacteristicType("054b50c2-9e8a-4cfb-8bac-54af9ac53613", "Continuous Asset Characteristic");
-const category = new AssetCharacteristicType("2f062d58-f464-40a6-921a-a49528f205f6", "Asset Category");
+const continuous = new AssetCharacteristicType("054b50c2-9e8a-4cfb-8bac-54af9ac53613", "Continuous");
+const category = new AssetCharacteristicType("2f062d58-f464-40a6-921a-a49528f205f6", "Category");
 const types: AssetCharacteristicType[] = [continuous, category];
 export class AssetCharacteristicRepositoryNeDbAdapter implements AssetCharacteristicRepository {
-  addAssetCharacteristic(assetCharacteristic: AssetCharacteristic, headerOptions?: any): Observable<AssetCharacteristic> {
+  addAssetCharacteristic(assetCharacteristic: AssetCharacteristic, headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristic> {
     assetCharacteristic.assetCharacteristicId = generateUUID();
     assetCharacteristic.version = generateUUID();
     assetCharacteristic.dateModified = new Date();
+    assetCharacteristic.ownerPartyId = headerOptions.ownerPartyId;
 
     return Observable.create(function (observer: Observer<AssetCharacteristic>) {
       assetCharacteristics.insert(assetCharacteristic, function (err: any, doc: any) {
@@ -31,7 +34,7 @@ export class AssetCharacteristicRepositoryNeDbAdapter implements AssetCharacteri
     });
   }
 
-  deleteAssetCharacteristic(assetCharacteristicId: string, headerOptions?: any): Observable<Affect> {
+  deleteAssetCharacteristic(assetCharacteristicId: string, headerOptions?: HeaderBaseOptions): Observable<Affect> {
     return Observable.create(function (observer: Observer<Affect>) {
       assetCharacteristics.remove(
         {assetCharacteristicId: assetCharacteristicId},
@@ -46,9 +49,9 @@ export class AssetCharacteristicRepositoryNeDbAdapter implements AssetCharacteri
     });
   }
 
-  findAssetCharacteristics(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetCharacteristic[]> {
+  findAssetCharacteristics(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristic[]> {
     return Observable.create(function (observer: Observer<AssetCharacteristic[]>) {
-      assetCharacteristics.count({ }, function (err, count) {
+      assetCharacteristics.count({ ownerPartyId: headerOptions.ownerPartyId}, function (err, count) {
         const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
         assetCharacteristics.find({ name: new RegExp(searchStr) })
           .skip(skipAmount)
@@ -66,7 +69,7 @@ export class AssetCharacteristicRepositoryNeDbAdapter implements AssetCharacteri
     });
   }
 
-  getAssetCharacteristicById(assetCharacteristicId: string, headerOptions?: any): Observable<AssetCharacteristic> {
+  getAssetCharacteristicById(assetCharacteristicId: string, headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristic> {
     return Observable.create(function (observer: Observer<AssetCharacteristic>) {
       // , ownerPartyId:ownerPartyId
       assetCharacteristics.find(
@@ -82,32 +85,32 @@ export class AssetCharacteristicRepositoryNeDbAdapter implements AssetCharacteri
     });
   }
 
-  getAssetCharacteristicCount(headerOptions?: any): Observable<number> {
-    return Observable.create(function (observer: Observer<number>) {
-      assetCharacteristics.count(
-        { },
-        (err: any, count: any) => {
-          if (!err) {
-            observer.next(count);
-          } else {
-            observer.error(err);
-          }
-          observer.complete();
-        });
-    });
-  }
+  // getAssetCharacteristicCount(headerOptions?: HeaderBaseOptions): Observable<number> {
+  //   return Observable.create(function (observer: Observer<number>) {
+  //     assetCharacteristics.count(
+  //       { },
+  //       (err: any, count: any) => {
+  //         if (!err) {
+  //           observer.next(count);
+  //         } else {
+  //           observer.error(err);
+  //         }
+  //         observer.complete();
+  //       });
+  //   });
+  // }
 
-  getAssetCharacteristics(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetCharacteristic[]>> {
-    return Observable.create(function (observer: Observer<Page<AssetCharacteristic[]>>) {
-      assetCharacteristics.count({ }, function (err, count) {
+  getAssetCharacteristics(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristics> {
+    return Observable.create(function (observer: Observer<AssetCharacteristics>) {
+      assetCharacteristics.count({ ownerPartyId: headerOptions.ownerPartyId }, function (err, count) {
         const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
         const generate = SortGenerator.generate(sort);
-        assetCharacteristics.find({ })
+        assetCharacteristics.find({ ownerPartyId: headerOptions.ownerPartyId })
           .skip(skipAmount)
           .limit(pageSize)
-          .exec((err: any, docs: any) => {
+          .exec((err: any, docs: AssetCharacteristic[]) => {
             if (!err) {
-              observer.next(docs);
+              observer.next(new AssetCharacteristics(docs, new Page(pageNumber, pageSize, docs.length, count)));
             } else {
               observer.error(err);
             }
@@ -117,7 +120,7 @@ export class AssetCharacteristicRepositoryNeDbAdapter implements AssetCharacteri
     });
   }
 
-  updateAssetCharacteristic(assetCharacteristicId: string, assetCharacteristic: AssetCharacteristic, headerOptions?: any): Observable<Affect> {
+  updateAssetCharacteristic(assetCharacteristicId: string, assetCharacteristic: AssetCharacteristic, headerOptions?: HeaderBaseOptions): Observable<Affect> {
     assetCharacteristic.version = generateUUID();
     assetCharacteristic.dateModified = new Date();
     // ownerPartyId:assetCharacteristic.ownerPartyId
@@ -138,12 +141,12 @@ export class AssetCharacteristicRepositoryNeDbAdapter implements AssetCharacteri
     });
   }
 
-    getAssetCharacteristicTypes(options?: any): Observable<AssetCharacteristicType[]> {
+    getAssetCharacteristicTypes(options?: HeaderBaseOptions): Observable<AssetCharacteristicType[]> {
       // not generated values
         return of(types);
     }
 
-    getAssetCharacteristicType(assetCharacteristicTypeId: string, options?: any): Observable<AssetCharacteristicType> {
+    getAssetCharacteristicType(assetCharacteristicTypeId: string, options?: HeaderBaseOptions): Observable<AssetCharacteristicType> {
         return of(types.find(x => x.assetCharacteristicTypeId === assetCharacteristicTypeId));
     }
 

@@ -38,25 +38,25 @@ export const typeDef = gql`
 export const resolvers = {
   Mutation: {
     addAssetNameType: async (_: any, {assetNameType}: any, {req}: any) => {
-      const headerOptions: HeaderBaseOptions = HeaderBaseOptions.create(req);
+      const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
       return await assetNameTypeOrchestrator.saveAssetNameType(assetNameType, headerOptions).toPromise();
     },
     updateAssetNameType: async (_: any, {assetNameTypeId, assetNameType}: any, {req}: any) => {
-      const headerOptions: HeaderBaseOptions = HeaderBaseOptions.create(req);
+      const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
       return await assetNameTypeOrchestrator.updateAssetNameType(assetNameTypeId, assetNameType, headerOptions).toPromise();
     },
     deleteAssetNameType: async (_: any, {assetNameTypeId}: any, {req}: any) => {
-      const headerOptions: HeaderBaseOptions = HeaderBaseOptions.create(req);
+      const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
       return await assetNameTypeOrchestrator.deleteAssetNameType(assetNameTypeId, headerOptions).toPromise();
     }
   },
   Query: {
     getAssetNameType: async (_: any, {assetNameTypeId}: any, {req}: any) => {
-      const headerOptions: HeaderBaseOptions = HeaderBaseOptions.create(req);
+      const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
       return await assetNameTypeOrchestrator.getAssetNameTypeById(assetNameTypeId, headerOptions).toPromise();
     },
     getAssetNameTypes: async (_: any, {pageNumber, pageSize, sortOrder}: any, {req}: any) => {
-      const headerOptions: HeaderBaseOptions = HeaderBaseOptions.create(req);
+      const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
       const number = getNumericValueOrDefault(pageNumber, 1);
       const size = getNumericValueOrDefault(pageSize, 10);
       const field = getStringValueOrDefault(undefined, "");
@@ -82,7 +82,7 @@ export const resolvers = {
       return await assetNameTypeOrchestrator.getAssetNameTypes(number, size, sort, headerOptions).toPromise();
     },
     findAssetNameTypes: async (_: any, {searchStr, pageSize}: any, {req}: any) => {
-      const headerOptions: HeaderBaseOptions = HeaderBaseOptions.create(req);
+      const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
       return await assetNameTypeOrchestrator.findAssetNameTypes(searchStr, undefined, pageSize, headerOptions).toPromise();
     },
   }

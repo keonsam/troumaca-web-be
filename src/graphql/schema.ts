@@ -4,11 +4,11 @@ import { typeDef as  Credential, resolvers as CredentialResolvers } from "./auth
 import { typeDef as Confirmation, resolvers as ConfirmationResolvers} from "./authentication/confirmation.schema";
 import { typeDef as Company, resolvers as CompanyResolvers} from "./party/company";
 import { typeDef as AssetNameType, resolvers as AssetNameTypeResolvers} from "./asset/asset.name.type.schema";
-import { typeDef as AssetIdentifierType, resolvers as AssetIdentifierTypeResolvers} from "./asset.identifier.type";
-import { typeDef as AssetRoleType, resolvers as AssetRoleTypeResolvers} from "./asset.role.type";
-import { typeDef as Brand, resolvers as BrandResolvers} from "./brand";
-import { typeDef as UnitOfMeasure, resolvers as UnitOfMeasureResolvers} from "./unit.of.measurement";
-import { typeDef as AssetCharacteristic, resolvers as AssetCharacteristicResolvers} from "./asset.characteristic";
+import { typeDef as AssetIdentifierType, resolvers as AssetIdentifierTypeResolvers} from "./asset/asset.identifier.type.schema";
+import { typeDef as AssetRoleType, resolvers as AssetRoleTypeResolvers} from "./asset/asset.role.type.schema";
+import { typeDef as Brand, resolvers as BrandResolvers} from "./asset/brand.schema";
+import { typeDef as UnitOfMeasure, resolvers as UnitOfMeasureResolvers} from "./asset/unit.of.measurement.schema";
+import { typeDef as AssetCharacteristic, resolvers as AssetCharacteristicResolvers} from "./asset/asset.characteristic.schema";
 import { typeDef as AssetType, resolvers as AssetTypeResolvers} from "./asset.type.schema";
 import { RequireAuth } from "../middleware/require.auth";
 // import {
@@ -60,11 +60,11 @@ const schema = makeExecutableSchema({
       Confirmation,
       Company,
       AssetNameType,
-      // AssetIdentifierType,
-      // AssetRoleType,
-      // Brand,
-      // UnitOfMeasure,
-      // AssetCharacteristic,
+      AssetIdentifierType,
+      AssetRoleType,
+      Brand,
+      UnitOfMeasure,
+      AssetCharacteristic,
       // AssetType
       // MeType
     // OrganizationProfile,
@@ -76,11 +76,11 @@ const schema = makeExecutableSchema({
       ConfirmationResolvers,
       CompanyResolvers,
       AssetNameTypeResolvers,
-      // AssetIdentifierTypeResolvers,
-      // AssetRoleTypeResolvers,
-      // BrandResolvers,
-      // UnitOfMeasureResolvers,
-      // AssetCharacteristicResolvers,
+      AssetIdentifierTypeResolvers,
+      AssetRoleTypeResolvers,
+      BrandResolvers,
+      UnitOfMeasureResolvers,
+      AssetCharacteristicResolvers,
       // AssetTypeResolvers
       // MeResolvers
     // organizationProfileResolvers,

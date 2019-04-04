@@ -26,7 +26,7 @@ export class OrganizationDBRepository implements OrganizationRepository {
   // }
 
   saveOrganization(organization: Organization, options?: HeaderBaseOptions): Observable<Organization> {
-    const partyId = options["Party-ID"];
+    const partyId = options.partyId;
     return this.saveOrganizationLocal(organization, partyId)
         .pipe(switchMap(organization => {
           return this.updateAccount(partyId, organization.ownerPartyId)

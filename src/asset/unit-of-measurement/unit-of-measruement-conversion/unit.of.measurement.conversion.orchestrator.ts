@@ -1,10 +1,10 @@
 import {Observable} from "rxjs";
-import {UnitOfMeasurementConversionRepository} from "../../repository/unit.of.measurement.conversion.repository";
-import {createUnitOfMeasurementConversionRepository} from "../../adapter/unit-of-measurement/unit.of.measurement.conversion.repository.factory";
-import {Affect} from "../../data/affect";
-import {UnitOfMeasurementConversion} from "../../data/unit-of-measurement/unit.of.measurement.conversion";
-import {Page} from "../../util/page";
-import {Sort} from "../../util/sort";
+import {UnitOfMeasurementConversionRepository} from "../../../repository/unit.of.measurement.conversion.repository";
+import {createUnitOfMeasurementConversionRepository} from "../../../adapter/unit-of-measurement/unit.of.measurement.conversion.repository.factory";
+import {Affect} from "../../../data/affect";
+import {UnitOfMeasurementConversion} from "../../../data/unit-of-measurement/unit.of.measurement.conversion";
+import {Page} from "../../../util/page";
+import {Sort} from "../../../util/sort";
 
 export class UnitOfMeasurementConversionOrchestrator {
 

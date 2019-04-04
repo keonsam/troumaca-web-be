@@ -13,7 +13,7 @@ export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository
   confirmCode(confirmationId: string, credentialId: string, code: string, options?: HeaderBaseOptions): Observable<Confirmation> {
     const uri: string = properties.get("credential.host.port") as string;
 
-    const headerMap = jsonRequestHeaderMap(options ? options : {});
+    const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});
 
     const json = {code};
 
@@ -40,7 +40,7 @@ export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository
   resendConfirmCode(confirmationId: string, credentialId: string, options?: HeaderBaseOptions): Observable<Confirmation> {
     const uri: string = properties.get("credential.host.port") as string;
 
-    const headerMap = jsonRequestHeaderMap(options ? options : {});
+    const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});
 
     const json = {credentialId: credentialId};
 
@@ -68,7 +68,7 @@ export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository
   resendConfirmCodeByUsername(username: string, options?: HeaderBaseOptions): Observable<Confirmation> {
     const uri: string = properties.get("credential.host.port") as string;
 
-    const headerMap = jsonRequestHeaderMap(options ? options : {});
+    const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});
 
     const json = {username: username};
 
@@ -95,7 +95,7 @@ export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository
   validateCode(credentialId: string, code: string, options?: HeaderBaseOptions): Observable<boolean> {
     const uri: string = properties.get("credential.host.port") as string;
 
-    const headerMap = jsonRequestHeaderMap(options ? options : {});
+    const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});
 
     const validateConfirmCodeJson = classToPlain(new ValidateConfirmCode(credentialId, code));
 

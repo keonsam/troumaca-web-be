@@ -32,17 +32,17 @@ const whitelist = [
 
 const graphqlPath: string = "/graphql";
 
-// const corsOptions = {
-//   origin: function (origin: any, callback: any) {
-//     if (whitelist.indexOf(origin) !== -1 || origin === undefined) {
-//       callback(undefined, true);
-//     } else {
-//       callback(new Error("Not allowed by CORS"));
-//     }
-//   },
-//   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-//   credentials: true
-// };
+const corsOptions = {
+  origin: function (origin: any, callback: any) {
+    if (whitelist.indexOf(origin) !== -1 || origin === undefined) {
+      callback(undefined, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+  credentials: true
+};
 
 
 // routes
@@ -53,7 +53,7 @@ const graphqlPath: string = "/graphql";
 
 // and and add the session information to the request.
 
-app.use(cors());
+app.use(cors(corsOptions));
 
 const TWO_HOURS = 1000 * 60 * 60 * 60 * 2;
 app.use(session({
@@ -75,7 +75,11 @@ const server = new ApolloServer({
     }
 });
 
-server.applyMiddleware({app, path: graphqlPath});
+server.applyMiddleware({
+    app,
+    path: graphqlPath,
+    cors: false,
+});
 
 // catch 404 and forward to error handler
 // app.use((req: any, res: any, next: any) => {

@@ -49,7 +49,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
                 .pipe(map(credential => {
                     if (!credential) {
                         return true;
-                    } else if (options && credential.partyId === options["Party-ID"]) {
+                    } else if (options && credential.partyId === options.partyId) {
                         return true;
                     } else {
                         return false;

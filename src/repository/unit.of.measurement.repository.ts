@@ -3,19 +3,20 @@ import {Observable} from "rxjs";
 import {Affect} from "../data/affect";
 import {Sort} from "../util/sort";
 import { UnitOfMeasurements } from "../data/unit-of-measurement/unit.of.measurements";
+import { HeaderBaseOptions } from "../header.base.options";
 
 export interface UnitOfMeasurementRepository {
-  addUnitOfMeasurement(unitOfMeasurement: UnitOfMeasurement, headerOptions?: any): Observable<UnitOfMeasurement>;
+  addUnitOfMeasurement(unitOfMeasurement: UnitOfMeasurement, headerOptions?: HeaderBaseOptions): Observable<UnitOfMeasurement>;
 
-  updateUnitOfMeasurement(unitOfMeasureId: string, unitOfMeasurement: UnitOfMeasurement, headerOptions?: any): Observable<Affect>;
+  updateUnitOfMeasurement(unitOfMeasureId: string, unitOfMeasurement: UnitOfMeasurement, headerOptions?: HeaderBaseOptions): Observable<Affect>;
 
-  deleteUnitOfMeasurement(unitOfMeasurementId: string, headerOptions?: any): Observable<Affect>;
+  deleteUnitOfMeasurement(unitOfMeasurementId: string, headerOptions?: HeaderBaseOptions): Observable<Affect>;
 
-  findUnitOfMeasurements(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<UnitOfMeasurement[]>;
+  findUnitOfMeasurements(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<UnitOfMeasurement[]>;
 
-  getUnitOfMeasurements(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<UnitOfMeasurements>;
+  getUnitOfMeasurements(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: HeaderBaseOptions): Observable<UnitOfMeasurements>;
 
-  getUnitOfMeasurementCount(headerOptions?: any): Observable<number>;
+  // getUnitOfMeasurementCount(headerOptions?: HeaderBaseOptions): Observable<number>;
 
-  getUnitOfMeasurementById(unitOfMeasurementId: string, headerOptions?: any): Observable<UnitOfMeasurement>;
+  getUnitOfMeasurementById(unitOfMeasurementId: string, headerOptions?: HeaderBaseOptions): Observable<UnitOfMeasurement>;
 }

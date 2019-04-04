@@ -1,47 +1,57 @@
+import {createAssetRoleTypeRepository} from "../../adapter/asset/asset.role.type.repository.factory";
+// import {getSortOrderOrDefault} from "../sort.order.util";
+import {AssetRoleTypeRepository} from "../../repository/asset.role.type.repository";
 import {AssetRoleType} from "../../data/asset/asset.role.type";
 import {Observable} from "rxjs";
-import {AssetRoleTypeRepository} from "../../repository/asset.role.type.repository";
-import {createAssetRoleTypeRepository} from "../../adapter/asset/asset.role.type.repository.factory";
-import {Affect} from "../../data/affect";
-import {Page} from "../../util/page";
+import {switchMap, map} from "rxjs/operators";
+import {Result} from "../../result.success";
 import {Sort} from "../../util/sort";
+import {Affect} from "../../data/affect";
+import { AssetRoleTypes } from "../../data/asset/asset.role.types";
+import { Page } from "../../data/page/page";
+import { HeaderBaseOptions } from "../../header.base.options";
+import { RepositoryKind } from "../../repository.kind";
 
 export class AssetRoleTypeOrchestrator {
 
-  private assetRoleTypeRepository: AssetRoleTypeRepository;
+    private assetRoleTypeRepository: AssetRoleTypeRepository;
 
-  constructor(options?: any) {
-    this.assetRoleTypeRepository = createAssetRoleTypeRepository(options);
-  }
+    constructor(options?: RepositoryKind) {
+        this.assetRoleTypeRepository = createAssetRoleTypeRepository(options);
+    }
 
-  addAssetRoleType(assetRoleType: AssetRoleType, headerOptions?: any): Observable<AssetRoleType> {
-    return undefined;
-    // return this.assetRoleTypeRepository.addAssetRoleType(assetRoleType, headerOptions);
-  }
+    findAssetRoleTypes(searchStr: string, pageNumber: number, pageSize: number, options?: HeaderBaseOptions): Observable<AssetRoleType[]> {
+        return this.assetRoleTypeRepository.findAssetRoleTypes(searchStr, pageNumber, pageSize, options);
+    }
 
-  findAssetRoleTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetRoleType[]> {
-    return undefined;
-    // return this.assetRoleTypeRepository.findAssetRoleTypes(ownerPartyId, searchStr, pageNumber, pageSize, headerOptions);
-  }
+    getAssetRoleTypes(pageNumber: number, pageSize: number, sort: Sort, options?: HeaderBaseOptions): Observable<AssetRoleTypes> {
+        return this.assetRoleTypeRepository.getAssetRoleTypes(pageNumber, pageSize, sort, options);
+            // .pipe(switchMap((assetRoleTypes: AssetRoleType[]) => {
+            //     return this.assetRoleTypeRepository
+            //         .getAssetRoleTypeCount(options)
+            //         .pipe(map((count: number) => {
+            //             return new AssetRoleTypes(assetRoleTypes, new Page(pageNumber, pageSize, assetRoleTypes.length, count));
+            //         }));
+            // }));
+    }
 
-  getAssetRoleTypes(ownerPartyId: string, number: number, size: number, sort: Sort, headerOptions?: any): Observable<Page<AssetRoleType[]>> {
-    return undefined;
-    // return this.assetRoleTypeRepository.getAssetRoleTypes(ownerPartyId, number, size, sort, headerOptions);
-  }
+    getAssetRoleTypeById(assetRoleTypeId: string, options?: HeaderBaseOptions): Observable<AssetRoleType> {
+        return this.assetRoleTypeRepository.getAssetRoleTypeById(assetRoleTypeId, options);
+    }
 
-  updateAssetRoleType(assetRoleType: AssetRoleType, headerOptions?: any): Observable<Affect> {
-    return undefined;
-    // return this.assetRoleTypeRepository.updateAssetRoleType(assetRoleType, headerOptions);
-  }
+    saveAssetRoleType(assetRoleType: AssetRoleType, options?: HeaderBaseOptions): Observable<AssetRoleType> {
+        return this.assetRoleTypeRepository.addAssetRoleType(assetRoleType, options);
+    }
 
-  getAssetRoleTypeById(assetRoleTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetRoleType> {
-    return undefined;
-    // return this.assetRoleTypeRepository.getAssetRoleTypeById(assetRoleTypeId, ownerPartyId, headerOptions);
-  }
+    updateAssetRoleType(assetRoleTypeId: string, assetRoleType: AssetRoleType, options?: HeaderBaseOptions): Observable<number> {
+        return this.assetRoleTypeRepository.updateAssetRoleType(assetRoleTypeId, assetRoleType, options)
+            .pipe(map(aff => aff.affected));
+    }
 
-  deleteAssetRoleType(assetRoleTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
-    return undefined;
-    // return this.assetRoleTypeRepository.deleteAssetRoleType(assetRoleTypeId, ownerPartyId, headerOptions);
-  }
+    deleteAssetRoleType(assetRoleTypeId: string, options?: HeaderBaseOptions): Observable<number> {
+        return this.assetRoleTypeRepository.deleteAssetRoleType(assetRoleTypeId, options)
+            .pipe(map(aff => aff.affected));
+    }
 
 }
+

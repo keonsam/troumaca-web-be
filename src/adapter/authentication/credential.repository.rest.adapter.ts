@@ -22,7 +22,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
   isValidPassword(password: string, options?: HeaderBaseOptions): Observable<boolean> {
     let uri: string = properties.get("credential.host.port") as string;
 
-    const headerMap = jsonRequestHeaderMap(options ? options : {});
+    const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});
 
     // let headers:any = strMapToJson(headerMap);
     const json = {
@@ -53,7 +53,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
   isValidUsername(username: string, options?: HeaderBaseOptions): Observable<boolean> {
     let uri: string = properties.get("credential.host.port") as string;
 
-    const headerMap = jsonRequestHeaderMap(options ? options : {});
+    const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});
 
     // let headers:any = strMapToJson(headerMap);
     const json = {username: username};
@@ -85,7 +85,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
 
     const createCredential: CreateCredential = new CreateCredential(person, credential);
 
-    const headerMap = jsonRequestHeaderMap(options ? options : {});
+    const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});
 
     const credentialJson = classToPlain(createCredential);
 
@@ -112,7 +112,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
   authenticate(credential: Credential, options?: HeaderBaseOptions): Observable<AuthenticatedCredential> {
     const uri: string = properties.get("credential.host.port") as string;
 
-    const headerMap = jsonRequestHeaderMap(options ? options : {});
+    const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});
 
     // let headers:any = strMapToJson(headerMap);
     const json = {
@@ -147,7 +147,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
   forgetPassword(credential: Credential, options?: HeaderBaseOptions): Observable<Confirmation> {
     const uri: string = properties.get("credential.host.port") as string;
 
-    const headerMap = jsonRequestHeaderMap(options ? options : {});
+    const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});
 
     const json = {
       username: credential.username
@@ -178,7 +178,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
   changePassword(changePassword: ChangePassword, options?: HeaderBaseOptions): Observable<ChangeResponse> {
     const uri: string = properties.get("credential.host.port") as string;
 
-    const headerMap = jsonRequestHeaderMap(options ? options : {});
+    const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});
 
     const json = {
       credentialId: changePassword.credentialId,

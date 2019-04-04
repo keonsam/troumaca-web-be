@@ -10,12 +10,14 @@ import {AssetBrand} from "../../../data/asset/asset.brand";
 import {SkipGenerator} from "../../util/skip.generator";
 import {SortGenerator} from "../../util/sort.generator";
 import { UnitOfMeasurements } from "../../../data/unit-of-measurement/unit.of.measurements";
+import { HeaderBaseOptions } from "../../../header.base.options";
 
 export class UnitOfMeasurementRepositoryNeDbAdapter implements UnitOfMeasurementRepository {
-  addUnitOfMeasurement(unitOfMeasurement: UnitOfMeasurement, headerOptions?: any): Observable<UnitOfMeasurement> {
+  addUnitOfMeasurement(unitOfMeasurement: UnitOfMeasurement, headerOptions?: HeaderBaseOptions): Observable<UnitOfMeasurement> {
     unitOfMeasurement.unitOfMeasurementId = generateUUID();
     unitOfMeasurement.version = generateUUID();
     unitOfMeasurement.dateModified = new Date();
+    unitOfMeasurement.ownerPartyId = headerOptions.ownerPartyId;
 
     return Observable.create(function (observer: Observer<AssetBrand>) {
       unitOfMeasurements.insert(unitOfMeasurement, function (err: any, doc: any) {
@@ -30,7 +32,7 @@ export class UnitOfMeasurementRepositoryNeDbAdapter implements UnitOfMeasurement
 
   }
 
-  deleteUnitOfMeasurement(unitOfMeasurementId: string, headerOptions?: any): Observable<Affect> {
+  deleteUnitOfMeasurement(unitOfMeasurementId: string, headerOptions?: HeaderBaseOptions): Observable<Affect> {
     return Observable.create(function (observer: Observer<Affect>) {
       unitOfMeasurements.remove(
         {unitOfMeasurementId: unitOfMeasurementId},
@@ -46,9 +48,9 @@ export class UnitOfMeasurementRepositoryNeDbAdapter implements UnitOfMeasurement
     });
   }
 
-  findUnitOfMeasurements(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<UnitOfMeasurement[]> {
+  findUnitOfMeasurements(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<UnitOfMeasurement[]> {
     return Observable.create(function (observer: Observer<AssetBrand[]>) {
-      unitOfMeasurements.count({ }, function (err, count) {
+      unitOfMeasurements.count({ ownerPartyId: headerOptions.ownerPartyId}, function (err, count) {
         const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
         unitOfMeasurements.find({ name: new RegExp(searchStr) })
           .skip(skipAmount)
@@ -66,7 +68,7 @@ export class UnitOfMeasurementRepositoryNeDbAdapter implements UnitOfMeasurement
     });
   }
 
-  getUnitOfMeasurementById(unitOfMeasurementId: string, headerOptions?: any): Observable<UnitOfMeasurement> {
+  getUnitOfMeasurementById(unitOfMeasurementId: string, headerOptions?: HeaderBaseOptions): Observable<UnitOfMeasurement> {
     return Observable.create(function (observer: Observer<AssetBrand>) {
       // , ownerPartyId:ownerPartyId
       unitOfMeasurements.find(
@@ -82,27 +84,27 @@ export class UnitOfMeasurementRepositoryNeDbAdapter implements UnitOfMeasurement
     });
   }
 
-  getUnitOfMeasurementCount(headerOptions?: any): Observable<number> {
-    return Observable.create(function (observer: Observer<number>) {
-      unitOfMeasurements.count(
-        { },
-        (err: any, count: any) => {
-          if (!err) {
-            observer.next(count);
-          } else {
-            observer.error(err);
-          }
-          observer.complete();
-        });
-    });
-  }
+  // getUnitOfMeasurementCount(headerOptions?: HeaderBaseOptions): Observable<number> {
+  //   return Observable.create(function (observer: Observer<number>) {
+  //     unitOfMeasurements.count(
+  //       { },
+  //       (err: any, count: any) => {
+  //         if (!err) {
+  //           observer.next(count);
+  //         } else {
+  //           observer.error(err);
+  //         }
+  //         observer.complete();
+  //       });
+  //   });
+  // }
 
-  getUnitOfMeasurements(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<UnitOfMeasurements> {
+  getUnitOfMeasurements(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: HeaderBaseOptions): Observable<UnitOfMeasurements> {
     return Observable.create(function (observer: Observer<UnitOfMeasurements>) {
-      unitOfMeasurements.count({ }, function (err, count) {
+      unitOfMeasurements.count({ ownerPartyId: headerOptions.ownerPartyId}, function (err, count) {
         const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
         const generate = SortGenerator.generate(sort);
-        unitOfMeasurements.find({})
+        unitOfMeasurements.find({ownerPartyId: headerOptions.ownerPartyId })
           .skip(skipAmount)
           .limit(pageSize)
           .exec((err: any, docs: UnitOfMeasurement[]) => {
@@ -117,7 +119,7 @@ export class UnitOfMeasurementRepositoryNeDbAdapter implements UnitOfMeasurement
     });
   }
 
-  updateUnitOfMeasurement(unitOfMeasureId: string, unitOfMeasurement: UnitOfMeasurement, headerOptions?: any): Observable<Affect> {
+  updateUnitOfMeasurement(unitOfMeasureId: string, unitOfMeasurement: UnitOfMeasurement, headerOptions?: HeaderBaseOptions): Observable<Affect> {
     unitOfMeasurement.version = generateUUID();
     unitOfMeasurement.dateModified = new Date();
     return Observable.create(function (observer: Observer<Affect>) {

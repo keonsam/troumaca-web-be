@@ -1,2 +1,2 @@
-{"name":"test updated","description":"playground","assetNameTypeId":"58693336-7478-4bd2-b25d-1349ff19c467","version":"cb9d0507-32aa-43e6-9b57-d3cf62e8cd70","dateModified":{"$$date":1554298054365},"ownerPartyId":"fba78d62-2679-4b73-9948-fa34ef970f76","_id":"p1EwlJExGJiP3eAF"}
+{"name":"test1","description":"front-end","assetNameTypeId":"d18ee27a-35fa-4a6b-adb7-7713c0afa90a","version":"455bcdd2-6c37-4743-8f1c-753326fe1871","dateModified":{"$$date":1554378387057},"ownerPartyId":"fba78d62-2679-4b73-9948-fa34ef970f76","_id":"2w1TzZq9V4VZLcMz"}
 {"$$indexCreated":{"fieldName":"assetNameTypeId","unique":true,"sparse":false}}
