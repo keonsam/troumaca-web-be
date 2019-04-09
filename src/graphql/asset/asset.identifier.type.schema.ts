@@ -1,4 +1,4 @@
-import { gql} from "apollo-server-express";
+import { gql, ApolloError } from "apollo-server-express";
 import { getNumericValueOrDefault } from "../../number.util";
 import { getStringValueOrDefault } from "../../string.util";
 import { Direction } from "../../util/direction";
@@ -31,7 +31,7 @@ export const typeDef = gql`
     }
     input AssetIdentifierTypeInput {
         name: String!
-        description: String!
+        description: String
     }
 `;
 
@@ -39,21 +39,53 @@ export const resolvers = {
     Mutation: {
         addAssetIdentifierType: async (_: any, {assetIdentifierType}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await assetIdentifierTypeOrchestrator.saveAssetIdentifierType(assetIdentifierType, headerOptions).toPromise();
+            return await assetIdentifierTypeOrchestrator
+                .saveAssetIdentifierType(assetIdentifierType, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
         updateAssetIdentifierType: async (_: any, {assetIdentifierTypeId, assetIdentifierType}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await assetIdentifierTypeOrchestrator.updateAssetIdentifierType(assetIdentifierTypeId, assetIdentifierType, headerOptions).toPromise();
+            return await assetIdentifierTypeOrchestrator
+                .updateAssetIdentifierType(assetIdentifierTypeId, assetIdentifierType, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
         deleteAssetIdentifierType: async (_: any, {assetIdentifierTypeId}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await assetIdentifierTypeOrchestrator.deleteAssetIdentifierType(assetIdentifierTypeId, headerOptions).toPromise();
+            return await assetIdentifierTypeOrchestrator
+                .deleteAssetIdentifierType(assetIdentifierTypeId, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         }
     },
     Query: {
         getAssetIdentifierType: async (_: any, {assetIdentifierTypeId}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await assetIdentifierTypeOrchestrator.getAssetIdentifierTypeById(assetIdentifierTypeId).toPromise();
+            return await assetIdentifierTypeOrchestrator
+                .getAssetIdentifierTypeById(assetIdentifierTypeId)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
         getAssetIdentifierTypes: async (_: any, {pageNumber, pageSize, sortOrder}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
@@ -79,11 +111,27 @@ export const resolvers = {
 
             const sort = new Sort();
             sort.add(order);
-            return await assetIdentifierTypeOrchestrator.getAssetIdentifierTypes(number, size, sort, headerOptions).toPromise();
+            return await assetIdentifierTypeOrchestrator
+                .getAssetIdentifierTypes(number, size, sort, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
         findAssetIdentifierTypes: async (_: any, {searchStr, pageSize}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await assetIdentifierTypeOrchestrator.findAssetIdentifierTypes(searchStr, undefined, pageSize, headerOptions).toPromise();
+            return await assetIdentifierTypeOrchestrator
+                .findAssetIdentifierTypes(searchStr, undefined, pageSize, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
     }
 };

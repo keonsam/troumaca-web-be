@@ -1,4 +1,4 @@
-import { gql} from "apollo-server-express";
+import { gql, ApolloError } from "apollo-server-express";
 import { getNumericValueOrDefault } from "../../number.util";
 import { getStringValueOrDefault } from "../../string.util";
 import { Direction } from "../../util/direction";
@@ -53,7 +53,7 @@ export const typeDef = gql`
         name: String!
         assetCharacteristicTypeId: ID!
         defaultValue: String
-        description: String!
+        description: String
         unitOfMeasurementId: ID
         formula: String
         calculationLevel: String
@@ -67,32 +67,80 @@ export const typeDef = gql`
 
 export const resolvers = {
     AssetCharacteristic: {
-        async unitOfMeasurement(assetCharacteristic: AssetCharacteristic, {req}: any) {
+        async unitOfMeasurement(assetCharacteristic: AssetCharacteristic, _: any, {req}: any) {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await unitOfMeasurementOrchestrator.getUnitOfMeasurementById(assetCharacteristic.unitOfMeasurementId, headerOptions);
+            return await unitOfMeasurementOrchestrator
+                .getUnitOfMeasurementById(assetCharacteristic.unitOfMeasurementId, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
         async assetCharacteristicType(assetCharacteristic: AssetCharacteristic) {
-            return await assetCharacteristicOrchestrator.getAssetCharacteristicType(assetCharacteristic.assetCharacteristicTypeId);
+            return await assetCharacteristicOrchestrator
+                .getAssetCharacteristicType(assetCharacteristic.assetCharacteristicTypeId)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         }
     },
     Mutation: {
         addAssetCharacteristic: async (_: any, {assetCharacteristic}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await assetCharacteristicOrchestrator.saveAssetCharacteristic(assetCharacteristic, headerOptions).toPromise();
+            return await assetCharacteristicOrchestrator
+                .saveAssetCharacteristic(assetCharacteristic, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
         updateAssetCharacteristic: async (_: any, {assetCharacteristicId, assetCharacteristic}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await assetCharacteristicOrchestrator.updateAssetCharacteristic(assetCharacteristicId, assetCharacteristic, headerOptions).toPromise();
+            return await assetCharacteristicOrchestrator
+                .updateAssetCharacteristic(assetCharacteristicId, assetCharacteristic, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
         deleteAssetCharacteristic: async (_: any, {assetCharacteristicId}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await assetCharacteristicOrchestrator.deleteAssetCharacteristic(assetCharacteristicId, headerOptions).toPromise();
+            return await assetCharacteristicOrchestrator
+                .deleteAssetCharacteristic(assetCharacteristicId, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         }
     },
     Query: {
         getAssetCharacteristic: async (_: any, {assetCharacteristicId}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await assetCharacteristicOrchestrator.getAssetCharacteristicById(assetCharacteristicId, headerOptions).toPromise();
+            return await assetCharacteristicOrchestrator
+                .getAssetCharacteristicById(assetCharacteristicId, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
         getAssetCharacteristics: async (_: any, {pageNumber, pageSize, sortOrder}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
@@ -118,14 +166,38 @@ export const resolvers = {
 
             const sort = new Sort();
             sort.add(order);
-            return await assetCharacteristicOrchestrator.getAssetCharacteristics(number, size, sort, headerOptions).toPromise();
+            return await assetCharacteristicOrchestrator
+                .getAssetCharacteristics(number, size, sort, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
         findAssetCharacteristics: async (_: any, {searchStr, pageSize}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await assetCharacteristicOrchestrator.findAssetCharacteristics(searchStr, undefined, pageSize, headerOptions).toPromise();
+            return await assetCharacteristicOrchestrator
+                .findAssetCharacteristics(searchStr, undefined, pageSize, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
         getAssetCharacteristicTypes: async ( ) => {
-            return await assetCharacteristicOrchestrator.getAssetCharacteristicTypes().toPromise();
+            return await assetCharacteristicOrchestrator
+                .getAssetCharacteristicTypes()
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         }
     }
 };

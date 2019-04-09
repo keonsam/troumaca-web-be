@@ -1,4 +1,4 @@
-import { gql} from "apollo-server-express";
+import { gql, ApolloError } from "apollo-server-express";
 import { CredentialOrchestrator } from "../../authentication/credential/credential.orchestrator";
 import { map } from "rxjs/operators";
 import { Credential } from "../../data/authentication/credential";
@@ -32,24 +32,51 @@ export const resolvers = {
                 map( value => {
                     return {valid : value};
                     }))
-                .toPromise();
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
         validatePassword: async (_: any, {password}: any) => {
             return await credentialOrchestrator.isValidPassword(password).pipe(
                 map( value => {
                     return {valid : value};
                 }))
-                .toPromise();
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
         register: async (_: any, {username, password, firstName, lastName}: any) => {
-            return await credentialOrchestrator.addCredential(new Credential(username, password), new Person(firstName, lastName)).toPromise();
+            return await credentialOrchestrator
+                .addCredential(new Credential(username, password), new Person(firstName, lastName))
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
         login: async (_: any, {username, password}: any, {req}: any) => {
-            const auth = await credentialOrchestrator.authenticate(new Credential(username, password)).toPromise();
-            if (auth && auth.sessionId) {
-                req.session.sessionId = auth.sessionId;
-            }
-            return auth;
+            return await credentialOrchestrator.
+            authenticate(new Credential(username, password)).
+            toPromise()
+                .then( auth => {
+                    if (auth && auth.sessionId) {
+                        req.session.sessionId = auth.sessionId;
+                    }
+                    return auth;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         }
     }
 };

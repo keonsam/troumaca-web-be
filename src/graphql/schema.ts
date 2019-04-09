@@ -9,7 +9,7 @@ import { typeDef as AssetRoleType, resolvers as AssetRoleTypeResolvers} from "./
 import { typeDef as Brand, resolvers as BrandResolvers} from "./asset/brand.schema";
 import { typeDef as UnitOfMeasure, resolvers as UnitOfMeasureResolvers} from "./asset/unit.of.measurement.schema";
 import { typeDef as AssetCharacteristic, resolvers as AssetCharacteristicResolvers} from "./asset/asset.characteristic.schema";
-import { typeDef as AssetType, resolvers as AssetTypeResolvers} from "./asset.type.schema";
+import { typeDef as AssetType, resolvers as AssetTypeResolvers} from "./asset/asset.type.schema";
 import { RequireAuth } from "../middleware/require.auth";
 // import {
 //   typeDef as OrganizationProfile,
@@ -65,7 +65,7 @@ const schema = makeExecutableSchema({
       Brand,
       UnitOfMeasure,
       AssetCharacteristic,
-      // AssetType
+      AssetType
       // MeType
     // OrganizationProfile,
     // AssetNameType
@@ -81,7 +81,7 @@ const schema = makeExecutableSchema({
       BrandResolvers,
       UnitOfMeasureResolvers,
       AssetCharacteristicResolvers,
-      // AssetTypeResolvers
+      AssetTypeResolvers
       // MeResolvers
     // organizationProfileResolvers,
     // assetNameTypeResolvers

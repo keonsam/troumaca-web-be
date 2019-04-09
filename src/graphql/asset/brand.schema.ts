@@ -1,4 +1,4 @@
-import { gql} from "apollo-server-express";
+import { gql, ApolloError } from "apollo-server-express";
 import { getNumericValueOrDefault } from "../../number.util";
 import { getStringValueOrDefault } from "../../string.util";
 import { Direction } from "../../util/direction";
@@ -32,8 +32,8 @@ export const typeDef = gql`
     }
     input BrandInput {
         name: String!
-        abbreviation: String!
-        description: String!
+        abbreviation: String
+        description: String
     }
 `;
 
@@ -41,21 +41,53 @@ export const resolvers = {
     Mutation: {
         addBrand: async (_: any, {brand}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await brandOrchestrator.saveBrand(brand, headerOptions).toPromise();
+            return await brandOrchestrator
+                .saveBrand(brand, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
         updateBrand: async (_: any, {brandId, brand}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await brandOrchestrator.updateBrand(brandId, brand, headerOptions).toPromise();
+            return await brandOrchestrator
+                .updateBrand(brandId, brand, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
         deleteBrand: async (_: any, {brandId}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await brandOrchestrator.deleteBrand(brandId, headerOptions).toPromise();
+            return await brandOrchestrator
+                .deleteBrand(brandId, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         }
     },
     Query: {
         getBrand: async (_: any, {brandId}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await brandOrchestrator.getBrandById(brandId, headerOptions).toPromise();
+            return await brandOrchestrator
+                .getBrandById(brandId, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
         getBrands: async (_: any, {pageNumber, pageSize, sortOrder}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
@@ -81,11 +113,27 @@ export const resolvers = {
 
             const sort = new Sort();
             sort.add(order);
-            return await brandOrchestrator.getBrands(number, size, sort, headerOptions).toPromise();
+            return await brandOrchestrator
+                .getBrands(number, size, sort, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
         findBrands: async (_: any, {searchStr, pageSize}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await brandOrchestrator.findBrands(searchStr, pageSize, headerOptions).toPromise();
+            return await brandOrchestrator
+                .findBrands(searchStr, pageSize, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
     }
 };

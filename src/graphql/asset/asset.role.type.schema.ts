@@ -1,4 +1,4 @@
-import { gql} from "apollo-server-express";
+import { gql, ApolloError } from "apollo-server-express";
 import { getNumericValueOrDefault } from "../../number.util";
 import { getStringValueOrDefault } from "../../string.util";
 import { Direction } from "../../util/direction";
@@ -31,7 +31,7 @@ export const typeDef = gql`
     }
     input AssetRoleTypeInput {
         name: String!
-        description: String!
+        description: String
     }
 `;
 
@@ -39,21 +39,53 @@ export const resolvers = {
     Mutation: {
         addAssetRoleType: async (_: any, {assetRoleType}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await assetRoleTypeOrchestrator.saveAssetRoleType(assetRoleType, headerOptions).toPromise();
+            return await assetRoleTypeOrchestrator
+                .saveAssetRoleType(assetRoleType, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
         updateAssetRoleType: async (_: any, {assetRoleTypeId, assetRoleType}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await assetRoleTypeOrchestrator.updateAssetRoleType(assetRoleTypeId, assetRoleType, headerOptions).toPromise();
+            return await assetRoleTypeOrchestrator
+                .updateAssetRoleType(assetRoleTypeId, assetRoleType, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
         deleteAssetRoleType: async (_: any, {assetRoleTypeId}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await assetRoleTypeOrchestrator.deleteAssetRoleType(assetRoleTypeId, headerOptions).toPromise();
+            return await assetRoleTypeOrchestrator
+                .deleteAssetRoleType(assetRoleTypeId, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         }
     },
     Query: {
         getAssetRoleType: async (_: any, {assetRoleTypeId}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await assetRoleTypeOrchestrator.getAssetRoleTypeById(assetRoleTypeId, headerOptions).toPromise();
+            return await assetRoleTypeOrchestrator
+                .getAssetRoleTypeById(assetRoleTypeId, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
         getAssetRoleTypes: async (_: any, {pageNumber, pageSize, sortOrder}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
@@ -79,11 +111,27 @@ export const resolvers = {
 
             const sort = new Sort();
             sort.add(order);
-            return await assetRoleTypeOrchestrator.getAssetRoleTypes(number, size, sort, headerOptions).toPromise();
+            return await assetRoleTypeOrchestrator
+                .getAssetRoleTypes(number, size, sort, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
         findAssetRoleTypes: async (_: any, {searchStr, pageSize}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await assetRoleTypeOrchestrator.findAssetRoleTypes(searchStr, undefined, pageSize, headerOptions).toPromise();
+            return await assetRoleTypeOrchestrator
+                .findAssetRoleTypes(searchStr, undefined, pageSize, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
     }
 };

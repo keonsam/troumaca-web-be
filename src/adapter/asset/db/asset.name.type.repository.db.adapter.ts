@@ -14,21 +14,21 @@ import { AssetNameTypes } from "../../../data/asset/asset.name.types";
 
 export class AssetNameTypeRepositoryNeDbAdapter implements AssetNameTypeRepository {
   addAssetNameType(assetNameType: AssetNameType, headerOptions?: HeaderBaseOptions): Observable<AssetNameType> {
-    assetNameType.assetNameTypeId = generateUUID();
-    assetNameType.version = generateUUID();
-    assetNameType.dateModified = new Date();
-    assetNameType.ownerPartyId = headerOptions.ownerPartyId;
+      assetNameType.assetNameTypeId = generateUUID();
+      assetNameType.version = generateUUID();
+      assetNameType.dateModified = new Date();
+      assetNameType.ownerPartyId = headerOptions.ownerPartyId;
 
-    return Observable.create(function (observer: Observer<AssetNameType>) {
-      assetNameTypes.insert(assetNameType, function (err: any, doc: any) {
-        if (err) {
-          observer.error(err);
-        } else {
-          observer.next(doc);
-        }
-        observer.complete();
+      return Observable.create(function (observer: Observer<AssetNameType>) {
+          assetNameTypes.insert(assetNameType, function (err: any, doc: any) {
+              if (err) {
+                  observer.error(err);
+              } else {
+                  observer.next(doc);
+              }
+              observer.complete();
+          });
       });
-    });
   }
 
   updateAssetNameType(assetNameTypeId: string, assetNameType: AssetNameType, headerOptions?: HeaderBaseOptions): Observable<number> {

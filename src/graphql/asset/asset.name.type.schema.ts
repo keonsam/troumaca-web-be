@@ -1,4 +1,4 @@
-import { gql} from "apollo-server-express";
+import { gql, ApolloError } from "apollo-server-express";
 import { AssetNameTypeOrchestrator } from "../../asset/asset-name-type/asset.name.type.orchestrator";
 import { getNumericValueOrDefault } from "../../number.util";
 import { getStringValueOrDefault } from "../../string.util";
@@ -9,6 +9,7 @@ import { HeaderBaseOptions } from "../../header.base.options";
 
 const assetNameTypeOrchestrator: AssetNameTypeOrchestrator = new AssetNameTypeOrchestrator();
 
+const errorCode = "500";
 export const typeDef = gql`
   extend type Mutation {
     addAssetNameType(assetNameType: AssetNameTypeInput): AssetNameType @requireAuth
@@ -31,7 +32,7 @@ export const typeDef = gql`
   }
   input AssetNameTypeInput {
     name: String!
-    description: String!
+    description: String
   }
 `;
 
@@ -39,21 +40,53 @@ export const resolvers = {
   Mutation: {
     addAssetNameType: async (_: any, {assetNameType}: any, {req}: any) => {
       const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-      return await assetNameTypeOrchestrator.saveAssetNameType(assetNameType, headerOptions).toPromise();
+      return await assetNameTypeOrchestrator
+          .saveAssetNameType(assetNameType, headerOptions)
+          .toPromise()
+          .then( assetNameType => {
+            return assetNameType;
+          }, error => {
+            console.log(error);
+            throw new ApolloError(error, errorCode);
+          });
     },
     updateAssetNameType: async (_: any, {assetNameTypeId, assetNameType}: any, {req}: any) => {
       const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-      return await assetNameTypeOrchestrator.updateAssetNameType(assetNameTypeId, assetNameType, headerOptions).toPromise();
+      return await assetNameTypeOrchestrator
+          .updateAssetNameType(assetNameTypeId, assetNameType, headerOptions)
+          .toPromise()
+          .then( res => {
+            return res;
+          }, error => {
+            console.log(error);
+            throw new ApolloError(error);
+          });
     },
     deleteAssetNameType: async (_: any, {assetNameTypeId}: any, {req}: any) => {
       const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-      return await assetNameTypeOrchestrator.deleteAssetNameType(assetNameTypeId, headerOptions).toPromise();
+      return await assetNameTypeOrchestrator
+          .deleteAssetNameType(assetNameTypeId, headerOptions)
+          .toPromise()
+          .then( res => {
+            return res;
+          }, error => {
+            console.log(error);
+            throw new ApolloError(error);
+          });
     }
   },
   Query: {
     getAssetNameType: async (_: any, {assetNameTypeId}: any, {req}: any) => {
       const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-      return await assetNameTypeOrchestrator.getAssetNameTypeById(assetNameTypeId, headerOptions).toPromise();
+      return await assetNameTypeOrchestrator
+          .getAssetNameTypeById(assetNameTypeId, headerOptions)
+          .toPromise()
+          .then( res => {
+            return res;
+          }, error => {
+            console.log(error);
+            throw new ApolloError(error);
+          });
     },
     getAssetNameTypes: async (_: any, {pageNumber, pageSize, sortOrder}: any, {req}: any) => {
       const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
@@ -79,11 +112,27 @@ export const resolvers = {
 
       const sort = new Sort();
       sort.add(order);
-      return await assetNameTypeOrchestrator.getAssetNameTypes(number, size, sort, headerOptions).toPromise();
+      return await assetNameTypeOrchestrator
+          .getAssetNameTypes(number, size, sort, headerOptions)
+          .toPromise()
+          .then( res => {
+            return res;
+          }, error => {
+            console.log(error);
+            throw new ApolloError(error);
+          });
     },
     findAssetNameTypes: async (_: any, {searchStr, pageSize}: any, {req}: any) => {
       const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-      return await assetNameTypeOrchestrator.findAssetNameTypes(searchStr, undefined, pageSize, headerOptions).toPromise();
+      return await assetNameTypeOrchestrator
+          .findAssetNameTypes(searchStr, undefined, pageSize, headerOptions)
+          .toPromise()
+          .then( res => {
+            return res;
+          }, error => {
+            console.log(error);
+            throw new ApolloError(error);
+          });
     },
   }
 };

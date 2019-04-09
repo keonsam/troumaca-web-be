@@ -9,14 +9,16 @@ import {SkipGenerator} from "../../util/skip.generator";
 import {SortGenerator} from "../../util/sort.generator";
 import { AssetTypes } from "../../../data/asset/asset.types";
 import { Page } from "../../../data/page/page";
+import { HeaderBaseOptions } from "../../../header.base.options";
 
 export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
 
   constructor() {
   }
 
-  addAssetType(assetType: AssetType, headerOptions?: any): Observable<AssetType> {
+  addAssetType(assetType: AssetType, headerOptions?: HeaderBaseOptions): Observable<AssetType> {
       assetType.assetTypeId = generateUUID();
+      assetType.ownerPartyId = headerOptions.ownerPartyId;
       assetType.version = generateUUID();
       assetType.dateModified = new Date();
 
@@ -32,7 +34,7 @@ export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
       });
   }
 
-  updateAssetType(assetTypeId: string, assetType: AssetType, headerOptions?: any): Observable<Affect> {
+  updateAssetType(assetTypeId: string, assetType: AssetType, headerOptions?: HeaderBaseOptions): Observable<Affect> {
       assetType.version = generateUUID();
       assetType.dateModified = new Date();
 
@@ -52,7 +54,7 @@ export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
       });
   }
 
-  deleteAssetType(assetTypeId: string, headerOptions?: any): Observable<Affect> {
+  deleteAssetType(assetTypeId: string, headerOptions?: HeaderBaseOptions): Observable<Affect> {
       return Observable.create(function (observer: Observer<Affect>) {
           assetTypes.remove(
               {assetTypeId: assetTypeId},
@@ -68,11 +70,11 @@ export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
       });
   }
 
-  findAssetTypes(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetType[]> {
+  findAssetTypes(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetType[]> {
     return this.findAssetTypesInternal(searchStr, pageNumber, pageSize, headerOptions);
   }
 
-  getAssetTypeById(assetTypeId: string, headerOptions?: any): Observable<AssetType> {
+  getAssetTypeById(assetTypeId: string, headerOptions?: HeaderBaseOptions): Observable<AssetType> {
       return Observable.create(function (observer: Observer<AssetType>) {
           assetTypes.find(
               {assetTypeId: assetTypeId},
@@ -87,12 +89,12 @@ export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
       });
   }
 
-  getAssetTypes(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<AssetTypes> {
+  getAssetTypes(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: HeaderBaseOptions): Observable<AssetTypes> {
       return Observable.create(function (observer: Observer<AssetTypes>) {
-          assetTypes.count({ }, function (err, count) {
+          assetTypes.count({ ownerPartyId: headerOptions.ownerPartyId }, function (err, count) {
               const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
               const generate = SortGenerator.generate(sort);
-              assetTypes.find({ })
+              assetTypes.find({ ownerPartyId: headerOptions.ownerPartyId })
                   .skip(skipAmount)
                   .limit(pageSize)
                   .exec((err: any, docs: any) => {
@@ -107,7 +109,7 @@ export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
       });
   }
 
-  findAssetTypesInternal(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetType[]> {
+  findAssetTypesInternal(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetType[]> {
     return Observable.create(function (observer: Observer<AssetType[]>) {
       assetTypes.count({ }, function (err, count) {
         const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);

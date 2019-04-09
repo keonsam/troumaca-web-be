@@ -1,4 +1,4 @@
-import { gql} from "apollo-server-express";
+import { gql, ApolloError } from "apollo-server-express";
 import { getNumericValueOrDefault } from "../../number.util";
 import { getStringValueOrDefault } from "../../string.util";
 import { Direction } from "../../util/direction";
@@ -31,7 +31,7 @@ export const typeDef = gql`
     }
     input UnitOfMeasurementInput {
         name: String!
-        description: String!
+        description: String
     }
 `;
 
@@ -39,21 +39,53 @@ export const resolvers = {
     Mutation: {
         addUnitOfMeasurement: async (_: any, {unitOfMeasurement}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await unitOfMeasureOrch.addUnitOfMeasurement(unitOfMeasurement, headerOptions).toPromise();
+            return await unitOfMeasureOrch
+                .addUnitOfMeasurement(unitOfMeasurement, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
         updateUnitOfMeasurement: async (_: any, {unitOfMeasurementId, unitOfMeasurement}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await unitOfMeasureOrch.updateUnitOfMeasurement(unitOfMeasurementId, unitOfMeasurement, headerOptions).toPromise();
+            return await unitOfMeasureOrch
+                .updateUnitOfMeasurement(unitOfMeasurementId, unitOfMeasurement, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
         deleteUnitOfMeasurement: async (_: any, {unitOfMeasurementId}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await unitOfMeasureOrch.deleteUnitOfMeasurement(unitOfMeasurementId, headerOptions).toPromise();
+            return await unitOfMeasureOrch
+                .deleteUnitOfMeasurement(unitOfMeasurementId, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         }
     },
     Query: {
         getUnitOfMeasurement: async (_: any, {unitOfMeasurementId}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await unitOfMeasureOrch.getUnitOfMeasurementById(unitOfMeasurementId, headerOptions).toPromise();
+            return await unitOfMeasureOrch
+                .getUnitOfMeasurementById(unitOfMeasurementId, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
         getUnitOfMeasurements: async (_: any, {pageNumber, pageSize, sortOrder}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
@@ -79,11 +111,27 @@ export const resolvers = {
 
             const sort = new Sort();
             sort.add(order);
-            return await unitOfMeasureOrch.getUnitOfMeasurements(number, size, sort, headerOptions).toPromise();
+            return await unitOfMeasureOrch
+                .getUnitOfMeasurements(number, size, sort, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
         findUnitOfMeasurements: async (_: any, {searchStr, pageSize}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await unitOfMeasureOrch.findUnitOfMeasurements(searchStr, undefined, pageSize, headerOptions).toPromise();
+            return await unitOfMeasureOrch
+                .findUnitOfMeasurements(searchStr, undefined, pageSize, headerOptions)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    console.log(error);
+                    throw new ApolloError(error);
+                });
         },
     }
 };
