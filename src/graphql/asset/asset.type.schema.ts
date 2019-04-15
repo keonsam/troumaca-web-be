@@ -37,10 +37,10 @@ export const typeDef = gql`
         findAssetTypes(searchStr: String!, pageSize: Int!): [AssetType] @requireAuth
     }
     type AssetType {
-        assetTypeId: ID!
-        subTypeOfId: ID!
-        instanceId: ID!
-        initialId: ID!
+        assetTypeId: ID
+        subTypeOfId: ID
+        instanceId: ID
+        initialId: ID
         subTypeOf: AssetTypeSub
         name: String!
         description: String
@@ -92,6 +92,7 @@ export const typeDef = gql`
         name: String!
         description: String
         specification: AssetSpecificationInput
+        version: String!
 #        assignedCharacteristics: [AssignedCharacteristicInput]
 #        assetNames: [AssetNameInput]
 #        identifiers: [AssetIdentifierInput]

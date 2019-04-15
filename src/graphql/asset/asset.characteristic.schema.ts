@@ -61,7 +61,8 @@ export const typeDef = gql`
         minimumValue: String
         categoryValue: String
         effectiveDate: String
-        untilDate: String
+        untilDate: String,
+        version: String!
     }
 `;
 

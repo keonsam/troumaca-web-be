@@ -3,7 +3,7 @@ import libphonenumberjs from "libphonenumber-js";
 import PasswordValidator from "password-validator";
 import {generateUUID} from "../../uuid.generator";
 import {Credential} from "../../data/authentication/credential";
-import { credentialConfirmations, credentials, organizations } from "../../db";
+import { credentialConfirmations, credentials, organizations, persons } from "../../db";
 import {CredentialRepository} from "../../repository/credential.repository";
 import {AuthenticatedCredential} from "../../data/authentication/authenticated.credential";
 import {Confirmation} from "../../data/authentication/confirmation";
@@ -105,18 +105,41 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
                 if (!credential) {
                     return throwError("Credential was not created.");
                 } else {
-                    const confirmation: Confirmation = new Confirmation();
-                    confirmation.credentialId = credential.credentialId;
-                    return this.addConfirmation(confirmation)
-                        .pipe(map(confirmation => {
-                            if (!confirmation) {
-                                throw new Error("Confirmation failed to be created.");
+                    person.partyId = credential.partyId;
+                    return this.addPerson(person, options)
+                        .pipe(switchMap(personRes => {
+                            if (!personRes) {
+                                return throwError("Failed to save Person");
                             } else {
-                                return new CreatedCredential(credential, confirmation);
+                                const confirmation: Confirmation = new Confirmation();
+                                confirmation.credentialId = credential.credentialId;
+                                return this.addConfirmation(confirmation)
+                                    .pipe(map(confirmation => {
+                                        if (!confirmation) {
+                                            throw new Error("Confirmation failed to be created.");
+                                        } else {
+                                            return new CreatedCredential(credential, confirmation);
+                                        }
+                                    }));
                             }
                         }));
                 }
             }));
+    }
+
+    private addPerson(person: Person, options: HeaderBaseOptions): Observable<Person> {
+        person.createdOn = new Date();
+        person.modifiedOn = new Date();
+        return Observable.create(function (observer: Observer<Person>) {
+            persons.insert(person, function (err: any, doc: any) {
+                if (!err) {
+                    observer.next(doc);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
+        });
     }
 
     private addConfirmation(confirmation: Confirmation): Observable<Confirmation> {

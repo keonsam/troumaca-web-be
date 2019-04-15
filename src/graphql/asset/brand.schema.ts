@@ -34,6 +34,7 @@ export const typeDef = gql`
         name: String!
         abbreviation: String
         description: String
+        version: String!
     }
 `;
 

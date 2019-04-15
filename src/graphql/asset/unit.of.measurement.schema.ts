@@ -32,6 +32,7 @@ export const typeDef = gql`
     input UnitOfMeasurementInput {
         name: String!
         description: String
+        version: String!
     }
 `;
 

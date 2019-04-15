@@ -10,6 +10,8 @@ import { typeDef as Brand, resolvers as BrandResolvers} from "./asset/brand.sche
 import { typeDef as UnitOfMeasure, resolvers as UnitOfMeasureResolvers} from "./asset/unit.of.measurement.schema";
 import { typeDef as AssetCharacteristic, resolvers as AssetCharacteristicResolvers} from "./asset/asset.characteristic.schema";
 import { typeDef as AssetType, resolvers as AssetTypeResolvers} from "./asset/asset.type.schema";
+import { typeDef as Asset, resolvers as AssetResolvers } from "./asset/asset.schema";
+import { typeDef as People, resolvers as PeopleResolvers } from "./party/people.schema";
 import { RequireAuth } from "../middleware/require.auth";
 // import {
 //   typeDef as OrganizationProfile,
@@ -65,10 +67,11 @@ const schema = makeExecutableSchema({
       Brand,
       UnitOfMeasure,
       AssetCharacteristic,
-      AssetType
+      AssetType,
+      Asset,
+      People
       // MeType
     // OrganizationProfile,
-    // AssetNameType
   ],
   resolvers: merge(
       resolvers,
@@ -81,7 +84,9 @@ const schema = makeExecutableSchema({
       BrandResolvers,
       UnitOfMeasureResolvers,
       AssetCharacteristicResolvers,
-      AssetTypeResolvers
+      AssetTypeResolvers,
+      AssetResolvers,
+      PeopleResolvers
       // MeResolvers
     // organizationProfileResolvers,
     // assetNameTypeResolvers

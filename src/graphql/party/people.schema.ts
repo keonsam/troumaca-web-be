@@ -1,94 +1,115 @@
 import { gql, ApolloError } from "apollo-server-express";
-import { getNumericValueOrDefault } from "../../number.util";
+import { getNumericValueOrDefault} from "../../number.util";
 import { getStringValueOrDefault } from "../../string.util";
 import { Direction } from "../../util/direction";
 import { Order } from "../../util/order";
 import { Sort } from "../../util/sort";
-import { AssetIdentifierTypeOrchestrator } from "../../asset/asset-identifier-type/asset.identifier.type.orchestrator";
 import { HeaderBaseOptions } from "../../header.base.options";
-
-const assetIdentifierTypeOrchestrator: AssetIdentifierTypeOrchestrator = new AssetIdentifierTypeOrchestrator();
+import { PersonOrchestrator } from "../../party/person/person.orchestrator";
 
 export const typeDef = gql`
     extend type Mutation {
-        addAssetIdentifierType(assetIdentifierType: AssetIdentifierTypeInput): AssetIdentifierType @requireAuth
-        updateAssetIdentifierType(assetIdentifierTypeId: ID!, assetIdentifierType: AssetIdentifierTypeInput): Int @requireAuth
-        deleteAssetIdentifierType(assetIdentifierTypeId: ID!): Int @requireAuth
+        addPerson(person: PersonInput!, credential: CredentialInput, partyAccessRoles: PartyAccessRoleInput): Person @requireAuth
+        updatePerson(partyId: ID!, person: PersonInput!, credential: CredentialInput, partyAccessRoles: PartyAccessRoleInput): Int @requireAuth
+        deletePerson(partyId: ID!): Int @requireAuth
     }
     extend type Query {
-        getAssetIdentifierType(assetIdentifierTypeId: ID!): AssetIdentifierType @requireAuth
-        getAssetIdentifierTypes(pageNumber: Int!, pageSize: Int!, sortOrder: String!): AssetIdentifierTypes @requireAuth
-        findAssetIdentifierTypes(searchStr: String!, pageSize: Int!): [AssetIdentifierType] @requireAuth
+        getPerson(partyId: ID!): Person @requireAuth
+        getPersons(pageNumber: Int!, pageSize: Int!, sortOrder: String!): Persons @requireAuth
+        findPeople(searchStr: String!, pageSize: Int!): [Person] @requireAuth
     }
-    type AssetIdentifierType {
-        assetIdentifierTypeId: ID
+    type Person {
+        partyId: ID
+        firstName: String!
+        middleName: String
+        lastName: String!
+        username: String
+        version: String!
+#        partyAccessRoles: PartyAccessRole
+    }
+#    type PartyAccessRole {
+#        accessRoleId: String
+#        accessRole: AccessRole
+#    }
+    type AccessRole {
         name: String
-        description: String
     }
-    type AssetIdentifierTypes {
-        assetIdentifierTypes: [AssetIdentifierType]
+    type Persons {
+        persons: [Person]
         page: Page
     }
-    input AssetIdentifierTypeInput {
-        name: String!
-        description: String
+    input PersonInput {
+        firstName: String!
+        middleName: String
+        lastName: String!
         version: String!
+    }
+    input PartyAccessRoleInput {
+        accessRoleId: String,
+        version: String
+    }
+    input CredentialInput {
+        username: String,
+        version: String
     }
 `;
 
+const personOrchestrator: PersonOrchestrator = new PersonOrchestrator();
+const errorCode = "500";
+
 export const resolvers = {
     Mutation: {
-        addAssetIdentifierType: async (_: any, {assetIdentifierType}: any, {req}: any) => {
+        addPerson: async (_: any, {person, credential, partyAccessRoles}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await assetIdentifierTypeOrchestrator
-                .saveAssetIdentifierType(assetIdentifierType, headerOptions)
+            return await personOrchestrator
+                .savePerson(person, credential, partyAccessRoles, headerOptions)
                 .toPromise()
                 .then( res => {
                     return res;
                 }, error => {
                     console.log(error);
-                    throw new ApolloError(error);
+                    throw new ApolloError(error, errorCode);
                 });
         },
-        updateAssetIdentifierType: async (_: any, {assetIdentifierTypeId, assetIdentifierType}: any, {req}: any) => {
+        updatePerson: async (_: any, {partyId, person, credential, partyAccessRoles }: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await assetIdentifierTypeOrchestrator
-                .updateAssetIdentifierType(assetIdentifierTypeId, assetIdentifierType, headerOptions)
+            return await personOrchestrator
+                .updatePerson(partyId, person, credential, partyAccessRoles, headerOptions)
                 .toPromise()
                 .then( res => {
                     return res;
                 }, error => {
                     console.log(error);
-                    throw new ApolloError(error);
+                    throw new ApolloError(error, errorCode);
                 });
         },
-        deleteAssetIdentifierType: async (_: any, {assetIdentifierTypeId}: any, {req}: any) => {
+        deletePerson: async (_: any, {partyId}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await assetIdentifierTypeOrchestrator
-                .deleteAssetIdentifierType(assetIdentifierTypeId, headerOptions)
+            return await personOrchestrator
+                .deletePerson(partyId, headerOptions)
                 .toPromise()
                 .then( res => {
                     return res;
                 }, error => {
                     console.log(error);
-                    throw new ApolloError(error);
+                    throw new ApolloError(error, errorCode);
                 });
         }
     },
     Query: {
-        getAssetIdentifierType: async (_: any, {assetIdentifierTypeId}: any, {req}: any) => {
+        getPerson: async (_: any, {partyId}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await assetIdentifierTypeOrchestrator
-                .getAssetIdentifierTypeById(assetIdentifierTypeId)
+            return await personOrchestrator
+                .getPerson(partyId, headerOptions)
                 .toPromise()
                 .then( res => {
                     return res;
                 }, error => {
                     console.log(error);
-                    throw new ApolloError(error);
+                    throw new ApolloError(error, errorCode);
                 });
         },
-        getAssetIdentifierTypes: async (_: any, {pageNumber, pageSize, sortOrder}: any, {req}: any) => {
+        getPersons: async (_: any, {pageNumber, pageSize, sortOrder}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
             const number = getNumericValueOrDefault(pageNumber, 1);
             const size = getNumericValueOrDefault(pageSize, 10);
@@ -112,26 +133,26 @@ export const resolvers = {
 
             const sort = new Sort();
             sort.add(order);
-            return await assetIdentifierTypeOrchestrator
-                .getAssetIdentifierTypes(number, size, sort, headerOptions)
+            return await personOrchestrator
+                .getPersons(number, size, sort, headerOptions)
                 .toPromise()
                 .then( res => {
                     return res;
                 }, error => {
                     console.log(error);
-                    throw new ApolloError(error);
+                    throw new ApolloError(error, errorCode);
                 });
         },
-        findAssetIdentifierTypes: async (_: any, {searchStr, pageSize}: any, {req}: any) => {
+        findPeople: async (_: any, {searchStr, pageSize}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-            return await assetIdentifierTypeOrchestrator
-                .findAssetIdentifierTypes(searchStr, undefined, pageSize, headerOptions)
+            return await personOrchestrator
+                .findPeople(searchStr, pageSize, headerOptions)
                 .toPromise()
                 .then( res => {
                     return res;
                 }, error => {
                     console.log(error);
-                    throw new ApolloError(error);
+                    throw new ApolloError(error, errorCode);
                 });
         },
     }

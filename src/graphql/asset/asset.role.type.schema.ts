@@ -32,6 +32,7 @@ export const typeDef = gql`
     input AssetRoleTypeInput {
         name: String!
         description: String
+        version: String!
     }
 `;
 

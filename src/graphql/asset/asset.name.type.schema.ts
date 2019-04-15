@@ -31,8 +31,9 @@ export const typeDef = gql`
     page: Page
   }
   input AssetNameTypeInput {
-    name: String!
-    description: String
+      name: String!
+      description: String
+      version: String!
   }
 `;
 

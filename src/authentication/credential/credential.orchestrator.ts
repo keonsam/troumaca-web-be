@@ -42,21 +42,7 @@ export class CredentialOrchestrator {
 
   addCredential(credential: Credential, person: Person, options?: HeaderBaseOptions): Observable<Confirmation> {
     return this.credentialRepository.addCredential(person, credential, options)
-    .pipe(switchMap(createdCredential => {
-      if (!createdCredential) {
-        return throwError(createdCredential);
-      } else {
-        person.partyId = credential.partyId;
-        return this.personRepository.addPerson(person, options)
-        .pipe(map(person => {
-          if (!person) {
-            throw new Error("user was not created.");
-          } else {
-            return createdCredential.confirmation;
-          }
-        }));
-      }
-    }));
+        .pipe(map( res => res.confirmation));
   }
 
   authenticate(credential: Credential, options?: HeaderBaseOptions): Observable<AuthenticatedCredential> {

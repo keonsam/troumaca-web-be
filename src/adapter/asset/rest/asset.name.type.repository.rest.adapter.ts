@@ -6,7 +6,7 @@ import {Sort} from "../../../util/sort";
 import { HeaderBaseOptions } from "../../../header.base.options";
 import { AssetNameTypes } from "../../../data/asset/asset.name.types";
 import { properties } from "../../../properties.helpers";
-import { jsonRequestHeaderMap, postJsonOptions } from "../../../request.helpers";
+import { jsonRequestHeaderMap, postJsonOptions, putJsonOptions } from "../../../request.helpers";
 import request from "request";
 
 export class AssetNameTypeRepositoryRestAdapter implements AssetNameTypeRepository {
@@ -29,7 +29,7 @@ export class AssetNameTypeRepositoryRestAdapter implements AssetNameTypeReposito
           } else if (error) {
             observer.error(error);
           } else {
-            observer.next(body);
+            observer.next(body["assetNameType"]);
           }
           observer.complete();
         } catch (e) {
@@ -41,7 +41,33 @@ export class AssetNameTypeRepositoryRestAdapter implements AssetNameTypeReposito
   }
 
   updateAssetNameType(assetNameTypeId: string, assetNameType: AssetNameType, headerOptions?: HeaderBaseOptions): Observable<number> {
-    return undefined;
+    let uri: string = properties.get("assetName.host.port") as string;
+
+    const headerMap = jsonRequestHeaderMap(headerOptions ? headerOptions.toHeaders() : {});
+
+    const json = assetNameType;
+
+    uri = uri + "/assets/asset-name-types";
+
+    const requestOptions: any = putJsonOptions(uri, headerMap, json);
+
+    return Observable.create(function (observer: Observer<boolean>) {
+      request(requestOptions, function (error: any, response: any, body: any) {
+        try {
+          if (response && response.statusCode != 200) {
+            observer.error(error);
+          } else if (error) {
+            observer.error(error);
+          } else {
+            observer.next(body["assetNameType"]);
+          }
+          observer.complete();
+        } catch (e) {
+          observer.error(new Error(e.message));
+          observer.complete();
+        }
+      });
+    });
   }
 
   deleteAssetNameType(assetNameTypeId: string, headerOptions?: HeaderBaseOptions): Observable<Affect> {

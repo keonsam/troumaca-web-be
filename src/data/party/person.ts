@@ -6,11 +6,13 @@ export class Person extends Party {
   middleName: string;
   lastName: string;
   dateOfBirth: Date;
+  partyId: string;
   ownerPartyId: string;
 
   get name(): string {
     return `${this.lastName}, ${this.firstName}`;
   }
+
   constructor(firstName?: string, lastName?: string) {
     super();
     this.firstName = firstName;
