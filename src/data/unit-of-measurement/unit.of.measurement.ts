@@ -1,4 +1,10 @@
 export class UnitOfMeasurement {
+
+  constructor(name: string, description: string) {
+    this.name = name;
+    this.description = description;
+  }
+
   unitOfMeasurementId: string;
   name: string;
   symbol: string;

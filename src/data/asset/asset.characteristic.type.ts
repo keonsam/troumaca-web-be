@@ -1,4 +1,10 @@
 export class AssetCharacteristicType {
+
+  constructor(assetCharacteristicTypeId?: string, name?: string) {
+    this.assetCharacteristicTypeId = assetCharacteristicTypeId;
+    this.name = name;
+  }
+
   assetCharacteristicTypeId: string;
   name: string;
   canonicalName: string;

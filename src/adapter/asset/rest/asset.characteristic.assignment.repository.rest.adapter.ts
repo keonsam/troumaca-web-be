@@ -14,11 +14,11 @@ export class AssetCharacteristicAssignmentRepositoryRestAdapter implements Asset
     return undefined;
   }
 
-  deleteAssetCharacteristicAssignment(assetCharacteristicAssignmentId: string, ownerPartyId: string, headerOptions?:any): Observable<Affect> {
+  deleteAssetCharacteristicAssignment(assetCharacteristicAssignmentId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
     return undefined;
   }
 
-  findAssetCharacteristicAssignments(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?:any): Observable<AssetCharacteristicAssignment[]> {
+  findAssetCharacteristicAssignments(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetCharacteristicAssignment[]> {
     return undefined;
   }
 

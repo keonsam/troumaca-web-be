@@ -21,7 +21,7 @@ export let isValidSession = (req: Request, res: Response) => {
 
   const sessionId = req.cookies["sessionId"];
 
-  sessionOrchestrator.isValidSession(sessionId, headerOptions)
+  sessionOrchestrator.isValidSession(sessionId)
     .subscribe(next => {
       res.status(200);
       res.setHeader("content-type", "application/json");

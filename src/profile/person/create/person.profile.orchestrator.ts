@@ -14,11 +14,13 @@ export class PersonProfileOrchestrator {
   }
 
   createProfilePerson(profile: PersonProfile, options?: any): Observable<Person> {
-    return this.personRepository.addPerson(profile.person, options);
+    return undefined;
+    // return this.personRepository.addPerson(profile.person, options);
   }
 
   findPerson(searchStr: string, pageSize: number): Observable<Person[]> {
-    return this.personRepository.findPerson(searchStr, pageSize);
+    return undefined;
+    // return this.personRepository.findPerson(searchStr, pageSize);
   }
 
 }

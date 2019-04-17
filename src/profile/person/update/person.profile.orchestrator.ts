@@ -12,7 +12,8 @@ export class PersonProfileOrchestrator {
   }
 
   findPerson(searchStr: string, pageSize: number): Observable<Person[]> {
-    return this.personRepository.findPerson(searchStr, pageSize);
+    return undefined;
+    // return this.personRepository.findPerson(searchStr, pageSize);
   }
 
 }

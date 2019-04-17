@@ -30,13 +30,13 @@ export class AssetIdentifierRepositoryNeDbAdapter implements AssetIdentifierRepo
   updateAssetIdentifier(assetIdentifier: AssetIdentifier, headerOptions?: any): Observable<Affect> {
     assetIdentifier.version = generateUUID();
     assetIdentifier.dateModified = new Date();
-    //ownerPartyId:assetIdentifier.ownerPartyId
+    // ownerPartyId:assetIdentifier.ownerPartyId
     return Observable.create(function (observer: Observer<Affect>) {
       assetIdentifiers.update(
-        {assetIdentifierId:assetIdentifier.assetIdentifierId},
+        {assetIdentifierId: assetIdentifier.assetIdentifierId},
         assetIdentifier,
         { upsert: true },
-        function (err:any, numReplaced:number, upsert:any) {
+        function (err: any, numReplaced: number, upsert: any) {
           if (err) {
             observer.error(err);
           } else {
@@ -52,7 +52,7 @@ export class AssetIdentifierRepositoryNeDbAdapter implements AssetIdentifierRepo
     return Observable.create(function (observer: Observer<Affect>) {
       assetIdentifiers.remove(
         {assetIdentifierId: assetIdentifierId, ownerPartyId: ownerPartyId},
-        function (err:any, numRemoved:number) {
+        function (err: any, numRemoved: number) {
           if (err) {
             observer.error(err);
           } else {
@@ -66,7 +66,7 @@ export class AssetIdentifierRepositoryNeDbAdapter implements AssetIdentifierRepo
   findAssetIdentifiers(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetIdentifier[]> {
     return Observable.create(function (observer: Observer<AssetIdentifier[]>) {
       assetIdentifiers.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
         assetIdentifiers.find({ownerPartyId: ownerPartyId, name: new RegExp(searchStr) })
           .skip(skipAmount)
           .limit(pageSize)
@@ -78,7 +78,7 @@ export class AssetIdentifierRepositoryNeDbAdapter implements AssetIdentifierRepo
                 observer.error(err);
               }
               observer.complete();
-            })
+            });
       });
     });
   }
@@ -87,7 +87,7 @@ export class AssetIdentifierRepositoryNeDbAdapter implements AssetIdentifierRepo
     return Observable.create(function (observer: Observer<AssetIdentifier>) {
       // , ownerPartyId:ownerPartyId
       assetIdentifiers.find(
-        {assetIdentifierId:assetIdentifierId},
+        {assetIdentifierId: assetIdentifierId},
         (err: any, docs: any) => {
           if (!err) {
             observer.next(docs[0]);
@@ -95,14 +95,14 @@ export class AssetIdentifierRepositoryNeDbAdapter implements AssetIdentifierRepo
             observer.error(err);
           }
           observer.complete();
-        })
+        });
     });
   }
 
   getAssetIdentifierCount(ownerPartyId: string, headerOptions?: any): Observable<number> {
     return Observable.create(function (observer: Observer<number>) {
       assetIdentifiers.count(
-        {ownerPartyId:ownerPartyId},
+        {ownerPartyId: ownerPartyId},
         (err: any, count: any) => {
           if (!err) {
             observer.next(count);
@@ -110,16 +110,16 @@ export class AssetIdentifierRepositoryNeDbAdapter implements AssetIdentifierRepo
             observer.error(err);
           }
           observer.complete();
-        })
+        });
     });
   }
 
   getAssetIdentifiers(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetIdentifier[]>> {
     return Observable.create(function (observer: Observer<Page<AssetIdentifier[]>>) {
       assetIdentifiers.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-        let generate = SortGenerator.generate(sort);
-        assetIdentifiers.find({ownerPartyId:ownerPartyId})
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        const generate = SortGenerator.generate(sort);
+        assetIdentifiers.find({ownerPartyId: ownerPartyId})
           .skip(skipAmount)
           .limit(pageSize)
           .exec((err: any, docs: any) => {
@@ -130,7 +130,7 @@ export class AssetIdentifierRepositoryNeDbAdapter implements AssetIdentifierRepo
             }
             observer.complete();
           });
-      })
+      });
     });
   }
 

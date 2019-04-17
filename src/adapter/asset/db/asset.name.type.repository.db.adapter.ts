@@ -3,60 +3,56 @@ import {AssetNameType} from "../../../data/asset/asset.name.type";
 import {Observable, Observer} from "rxjs";
 import {Affect} from "../../../data/affect";
 import {Sort} from "../../../util/sort";
-import {Page} from "../../../util/page";
+import { Page } from "../../../data/page/page";
 import {generateUUID} from "../../../uuid.generator";
 import {assetNameTypes} from "../../../db";
 import {SkipGenerator} from "../../util/skip.generator";
 import {SortGenerator} from "../../util/sort.generator";
 import {AssetIdentifierType} from "../../../data/asset/asset.identifier.type";
+import { HeaderBaseOptions } from "../../../header.base.options";
+import { AssetNameTypes } from "../../../data/asset/asset.name.types";
 
 export class AssetNameTypeRepositoryNeDbAdapter implements AssetNameTypeRepository {
-  addAssetNameType(assetNameType: AssetNameType, headerOptions?: any): Observable<AssetNameType> {
-    assetNameType.assetNameTypeId = generateUUID();
-    assetNameType.version = generateUUID();
-    assetNameType.dateModified = new Date();
+  addAssetNameType(assetNameType: AssetNameType, headerOptions?: HeaderBaseOptions): Observable<AssetNameType> {
+      assetNameType.assetNameTypeId = generateUUID();
+      assetNameType.version = generateUUID();
+      assetNameType.dateModified = new Date();
+      assetNameType.ownerPartyId = headerOptions.ownerPartyId;
 
-    return Observable.create(function (observer: Observer<AssetNameType>) {
-      assetNameTypes.insert(assetNameType, function (err: any, doc: any) {
-        if (err) {
-          observer.error(err);
-        } else {
-          observer.next(doc);
-        }
-        observer.complete();
+      return Observable.create(function (observer: Observer<AssetNameType>) {
+          assetNameTypes.insert(assetNameType, function (err: any, doc: any) {
+              if (err) {
+                  observer.error(err);
+              } else {
+                  observer.next(doc);
+              }
+              observer.complete();
+          });
       });
-    });
   }
 
-  updateAssetNameType(assetNameType: AssetNameType, headerOptions?: any): Observable<Affect> {
+  updateAssetNameType(assetNameTypeId: string, assetNameType: AssetNameType, headerOptions?: HeaderBaseOptions): Observable<number> {
     assetNameType.version = generateUUID();
     assetNameType.dateModified = new Date();
-    //ownerPartyId:assetNameType.ownerPartyId
-    return Observable.create(function (observer: Observer<Affect>) {
-      assetNameTypes.update(
-        {assetNameTypeId:assetNameType.assetNameTypeId},
-        assetNameType,
-        { upsert: true },
-        function (err:any, numReplaced:number, upsert:any) {
+    const query = {assetNameTypeId: assetNameTypeId};
+    return Observable.create(function (observer: Observer<number>) {
+      assetNameTypes.update(query, {$set: assetNameType}, { }, function (err: any, numReplaced: number) {
           if (err) {
             observer.error(err);
           } else {
-
-            observer.next(new Affect(numReplaced));
+            observer.next(numReplaced);
           }
           observer.complete();
         });
     });
-
   }
 
-
-  deleteAssetNameType(assetNameTypeId: string, ownerPartyId: string, headerOptions?:any): Observable<Affect> {
+  deleteAssetNameType(assetNameTypeId: string, headerOptions?: HeaderBaseOptions): Observable<Affect> {
     return Observable.create(function (observer: Observer<Affect>) {
       assetNameTypes.remove(
-        {assetNameTypeId:assetNameTypeId, ownerPartyId:ownerPartyId},
+        {assetNameTypeId: assetNameTypeId},
         {},
-        function (err:any, numRemoved:number) {
+        function (err: any, numRemoved: number) {
           if (err) {
             observer.error(err);
           } else {
@@ -67,11 +63,11 @@ export class AssetNameTypeRepositoryNeDbAdapter implements AssetNameTypeReposito
     });
   }
 
-  findAssetNameTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?:any): Observable<AssetNameType[]> {
+  findAssetNameTypes(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetNameType[]> {
     return Observable.create(function (observer: Observer<AssetIdentifierType[]>) {
-      assetNameTypes.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-        assetNameTypes.find({ownerPartyId: ownerPartyId, name: new RegExp(searchStr) })
+      assetNameTypes.count({ ownerPartyId: headerOptions.ownerPartyId}, function (err, count) {
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        assetNameTypes.find({ownerPartyId: headerOptions.ownerPartyId, name: new RegExp(searchStr) })
           .skip(skipAmount)
           .limit(pageSize)
           .exec(
@@ -82,16 +78,16 @@ export class AssetNameTypeRepositoryNeDbAdapter implements AssetNameTypeReposito
                 observer.error(err);
               }
               observer.complete();
-            })
+            });
       });
     });
   }
 
-  getAssetNameTypeById(assetNameTypeId: string, ownerPartyId: string, headerOptions?:any): Observable<AssetNameType> {
+  getAssetNameTypeById(assetNameTypeId: string, headerOptions?: HeaderBaseOptions): Observable<AssetNameType> {
     return Observable.create(function (observer: Observer<AssetIdentifierType>) {
     // , ownerPartyId:ownerPartyId
       assetNameTypes.find(
-        {assetNameTypeId:assetNameTypeId},
+        {assetNameTypeId: assetNameTypeId},
         (err: any, docs: any) => {
           if (!err) {
             observer.next(docs[0]);
@@ -99,42 +95,27 @@ export class AssetNameTypeRepositoryNeDbAdapter implements AssetNameTypeReposito
             observer.error(err);
           }
           observer.complete();
-        })
+        });
     });
   }
 
-  getAssetNameTypeCount(ownerPartyId: string, headerOptions?:any): Observable<number> {
-    return Observable.create(function (observer: Observer<number>) {
-      assetNameTypes.count(
-        {ownerPartyId:ownerPartyId},
-        (err: any, count: any) => {
-          if (!err) {
-            observer.next(count);
-          } else {
-            observer.error(err);
-          }
-          observer.complete();
-        })
-    });
-  }
-
-  getAssetNameTypes(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetNameType[]>> {
-    return Observable.create(function (observer: Observer<Page<AssetNameType[]>>) {
-      assetNameTypes.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-        let generate = SortGenerator.generate(sort);
-        assetNameTypes.find({ownerPartyId:ownerPartyId})
+  getAssetNameTypes(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: HeaderBaseOptions): Observable<AssetNameTypes> {
+    return Observable.create(function (observer: Observer<AssetNameTypes>) {
+      assetNameTypes.count({ownerPartyId: headerOptions.ownerPartyId}, function (err, count) {
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        const generate = SortGenerator.generate(sort);
+        assetNameTypes.find({ownerPartyId: headerOptions.ownerPartyId})
           .skip(skipAmount)
           .limit(pageSize)
-          .exec((err: any, docs: any) => {
+          .exec((err: any, docs: AssetNameType[]) => {
             if (!err) {
-              observer.next(docs);
+              observer.next(new AssetNameTypes(docs, new Page(pageNumber, pageSize, docs.length, count)));
             } else {
               observer.error(err);
             }
             observer.complete();
           });
-      })
+      });
     });
   }
 

@@ -12,16 +12,17 @@ import {Person} from "../../data/party/person";
 import {Confirmation} from "../../data/authentication/confirmation";
 import {ChangePassword} from "../../data/authentication/change.password";
 import { ChangeResponse } from "../../data/authentication/change.response";
+import { HeaderBaseOptions } from "../../header.base.options";
 
 export class CredentialRepositoryRestAdapter implements CredentialRepository {
 
   constructor() {
   }
 
-  isValidPassword(password: string, options?: any): Observable<boolean> {
+  isValidPassword(password: string, options?: HeaderBaseOptions): Observable<boolean> {
     let uri: string = properties.get("credential.host.port") as string;
 
-    const headerMap = jsonRequestHeaderMap(options ? options : {});
+    const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});
 
     // let headers:any = strMapToJson(headerMap);
     const json = {
@@ -49,10 +50,10 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
     });
   }
 
-  isValidUsername(username: string, options?: any): Observable<boolean> {
+  isValidUsername(username: string, options?: HeaderBaseOptions): Observable<boolean> {
     let uri: string = properties.get("credential.host.port") as string;
 
-    const headerMap = jsonRequestHeaderMap(options ? options : {});
+    const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});
 
     // let headers:any = strMapToJson(headerMap);
     const json = {username: username};
@@ -79,12 +80,12 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
     });
   }
 
-  addCredential(person: Person, credential: Credential, options?: any): Observable<CreatedCredential> {
+  addCredential(person: Person, credential: Credential, options?: HeaderBaseOptions): Observable<CreatedCredential> {
     const uri: string = properties.get("credential.host.port") as string;
 
     const createCredential: CreateCredential = new CreateCredential(person, credential);
 
-    const headerMap = jsonRequestHeaderMap(options ? options : {});
+    const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});
 
     const credentialJson = classToPlain(createCredential);
 
@@ -108,10 +109,10 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
     });
   }
 
-  authenticate(credential: Credential, options?: any): Observable<AuthenticatedCredential> {
+  authenticate(credential: Credential, options?: HeaderBaseOptions): Observable<AuthenticatedCredential> {
     const uri: string = properties.get("credential.host.port") as string;
 
-    const headerMap = jsonRequestHeaderMap(options ? options : {});
+    const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});
 
     // let headers:any = strMapToJson(headerMap);
     const json = {
@@ -143,10 +144,10 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
     });
   }
 
-  forgetPassword(credential: Credential, options?: any): Observable<Confirmation> {
+  forgetPassword(credential: Credential, options?: HeaderBaseOptions): Observable<Confirmation> {
     const uri: string = properties.get("credential.host.port") as string;
 
-    const headerMap = jsonRequestHeaderMap(options ? options : {});
+    const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});
 
     const json = {
       username: credential.username
@@ -174,10 +175,10 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
     });
   }
 
-  changePassword(changePassword: ChangePassword, options: any): Observable<ChangeResponse> {
+  changePassword(changePassword: ChangePassword, options?: HeaderBaseOptions): Observable<ChangeResponse> {
     const uri: string = properties.get("credential.host.port") as string;
 
-    const headerMap = jsonRequestHeaderMap(options ? options : {});
+    const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});
 
     const json = {
       credentialId: changePassword.credentialId,
@@ -209,15 +210,15 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
     });
   }
 
-  // updateCredential(partyId: string, credential: Credential, options?: any): Observable<number> {
+  // updateCredential(partyId: string, credential: Credential, options?: HeaderBaseOptions): Observable<number> {
   //     return undefined;
   // }
 
-  deleteCredentialByPartyId(partyId: string, options?: any): Observable<number> {
+  deleteCredentialByPartyId(partyId: string, options?: HeaderBaseOptions): Observable<number> {
     return undefined;
   }
 
-  public updateCredentialStatusByPartyId(partyId: string, status: string, options?: any): Observable<number> {
+  public updateCredentialStatusByPartyId(partyId: string, status: string, options?: HeaderBaseOptions): Observable<number> {
     return undefined;
   }
 

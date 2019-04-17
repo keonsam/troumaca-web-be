@@ -1,5 +1,5 @@
 export class Affect {
-  affected:number;
+  affected: number;
   constructor(affected: number) {
     this.affected = affected;
   }

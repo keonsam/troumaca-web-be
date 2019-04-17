@@ -6,4 +6,8 @@ export class AssetNameType {
   version: string;
   ownerPartyId: string;
   dateModified: Date;
+  constructor(name?: string, description?: string) {
+    this.name = name;
+    this.description = description;
+  }
 }

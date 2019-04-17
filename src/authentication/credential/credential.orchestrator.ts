@@ -15,6 +15,7 @@ import {createPersonRepository} from "../../adapter/party/person.repository.fact
 import {Person} from "../../data/party/person";
 import {ChangePassword} from "../../data/authentication/change.password";
 import { ChangeResponse } from "../../data/authentication/change.response";
+import { HeaderBaseOptions } from "../../header.base.options";
 
 export class CredentialOrchestrator {
 
@@ -31,39 +32,24 @@ export class CredentialOrchestrator {
     this.personRepository = createPersonRepository();
   }
 
-  isValidUsername(username: string, options?: any): Observable<boolean> {
+  isValidUsername(username: string, options?: HeaderBaseOptions): Observable<boolean> {
     return this.credentialRepository.isValidUsername(username, options);
   }
 
-  isValidPassword(password: string, options?: any): Observable<boolean> {
+  isValidPassword(password: string, options?: HeaderBaseOptions): Observable<boolean> {
     return this.credentialRepository.isValidPassword(password, options);
   }
 
-  addCredential(credential: Credential, person: Person, options?: any): Observable<Confirmation> {
+  addCredential(credential: Credential, person: Person, options?: HeaderBaseOptions): Observable<Confirmation> {
     return this.credentialRepository.addCredential(person, credential, options)
-    .pipe(switchMap(createdCredential => {
-      if (!createdCredential) {
-        return throwError(createdCredential);
-      } else {
-        person.partyId = credential.partyId;
-        return this.personRepository.addPerson(person, options)
-        .pipe(map(person => {
-          if (!person) {
-            throw new Error("user was not created.");
-          } else {
-            return createdCredential.confirmation;
-          }
-        }));
-      }
-    }));
+        .pipe(map( res => res.confirmation));
   }
 
-  authenticate(credential: Credential, options?: any): Observable<AuthenticatedCredential> {
+  authenticate(credential: Credential, options?: HeaderBaseOptions): Observable<AuthenticatedCredential> {
     // A person can access the application under the following conditions:
     // 1. He/she provides a valid set of credentials
     // 2. He/she has confirmed their username (email, or phone)
     // 3. He/she has completed the quick profile, person, account type, and possible organization name.
-
       return this.credentialRepository
       .authenticate(credential, options)
       .pipe(switchMap(authenticatedCredential => {
@@ -103,11 +89,11 @@ export class CredentialOrchestrator {
     }));
   }
 
-  forgetPassword(credential: Credential, options?: any): Observable<Confirmation> {
-    return this.credentialRepository.forgetPassword(credential, options);
-  }
-
-  changePassword(changePassword: ChangePassword, options?: any): Observable<ChangeResponse> {
-    return this.credentialRepository.changePassword(changePassword, options);
-  }
+  // forgetPassword(credential: Credential, options?: HeaderBaseOptions): Observable<Confirmation> {
+  //   return this.credentialRepository.forgetPassword(credential, options);
+  // }
+  //
+  // changePassword(changePassword: ChangePassword, options?: HeaderBaseOptions): Observable<ChangeResponse> {
+  //   return this.credentialRepository.changePassword(changePassword, options);
+  // }
 }

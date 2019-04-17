@@ -1,11 +1,12 @@
 import {AccessRole} from "../data/authorization/access.role";
 import {Observable} from "rxjs";
 import {Affect} from "../data/affect";
+import { HeaderBaseOptions } from "../header.base.options";
 
 export interface AccessRoleRepository {
 
 
-  findAccessRoles(searchStr: string, pageSize: number): Observable<AccessRole[]>;
+  findAccessRoles(searchStr: string, pageSize: number, options: HeaderBaseOptions): Observable<AccessRole[]>;
 
   getAccessRoles(number: number, size: number, sort: string): Observable<AccessRole[]>;
 

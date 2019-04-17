@@ -1,75 +1,67 @@
 import {createOrganizationRepository} from "../../adapter/party/organization.repository.factory";
 import {OrganizationRepository} from "../../repository/organization.repository";
 import {Organization} from "../../data/party/organization";
-import {Observable, throwError} from "rxjs";
-import {flatMap, map, switchMap} from "rxjs/operators";
-import {shapeOrganizationsResponse} from "./organization.response.shaper";
-import {Result} from "../../result.success";
-import {getSortOrderOrDefault} from "../../sort.order.util";
-import {SessionRepository} from "../../repository/session.repository";
-import {createSessionRepositoryFactory} from "../../adapter/session/session.repository.factory";
-import {JoinOrganization} from "../../data/party/join.organization";
-import {CredentialRepository} from "../../repository/credential.repository";
-import {createCredentialRepositoryFactory} from "../../adapter/authentication/credential.repository.factory";
-import { CompanyInfo } from "../../data/party/company.info";
+import {Observable} from "rxjs";
+import { HeaderBaseOptions } from "../../header.base.options";
 
 export class OrganizationOrchestrator {
 
   private organizationRepository: OrganizationRepository;
-  private sessionRepository: SessionRepository;
-  private credentialRepository: CredentialRepository;
 
   constructor() {
     this.organizationRepository = createOrganizationRepository();
-    this.sessionRepository = createSessionRepositoryFactory();
-    this.credentialRepository = createCredentialRepositoryFactory();
   }
 
-  findOrganization(searchStr: string, pageSize: number): Observable<Organization[]> {
-    return this.organizationRepository.findOrganization(searchStr, pageSize);
+  // findOrganization(searchStr: string, pageSize: number): Observable<Organization[]> {
+  //   return this.organizationRepository.findOrganization(searchStr, pageSize);
+  // }
+
+  // getOrganizations (number: number, size: number, field: string, direction: string): Observable<Result<any>> {
+  //     const sort = getSortOrderOrDefault(field, direction);
+  //     return this.organizationRepository.getOrganizations(number, size, sort)
+  //         .pipe(flatMap(value => {
+  //             return this.organizationRepository.getOrganizationCount()
+  //                 .pipe(map(count => {
+  //                     const shapeOrganizationsResp: any = shapeOrganizationsResponse(value, number, size, value.length, count, sort);
+  //                     return new Result<any>(false, "organizations", shapeOrganizationsResp);
+  //                 }));
+  //         }));
+  // }
+
+  getOrganization(options: HeaderBaseOptions): Observable<Organization> {
+    return this.organizationRepository.getOrganization(options);
   }
 
-  getOrganizations (number: number, size: number, field: string, direction: string): Observable<Result<any>> {
-      const sort = getSortOrderOrDefault(field, direction);
-      return this.organizationRepository.getOrganizations(number, size, sort)
-          .pipe(flatMap(value => {
-              return this.organizationRepository.getOrganizationCount()
-                  .pipe(map(count => {
-                      const shapeOrganizationsResp: any = shapeOrganizationsResponse(value, number, size, value.length, count, sort);
-                      return new Result<any>(false, "organizations", shapeOrganizationsResp);
-                  }));
-          }));
+  saveOrganization(organization: Organization, options?: HeaderBaseOptions): Observable<Organization> {
+    return this.organizationRepository.saveOrganization(organization, options);
   }
 
-  getOrganization(partyId: any): Observable<Organization> {
-    return this.organizationRepository.getOrganization(partyId);
+  updateOrganization(organization: Organization, options: HeaderBaseOptions): Observable<number> {
+    return this.organizationRepository.updateOrganization(organization, options);
   }
 
-  saveOrganization(organization: Organization): Observable<Organization> {
-    return this.organizationRepository.saveOrganization(organization);
-  }
+  // addCustomer(organization: Organization, options?: any): Observable<Organization> {
+  //   return this.organizationRepository.addCustomer(organization, options);
+  // }
 
-  addCustomer(organization: Organization, options?: any): Observable<Organization> {
-    return this.organizationRepository.addCustomer(organization, options);
-  }
-
-  saveOrganizationCompany(organization: Organization): Observable<Organization> {
-    return this.organizationRepository.saveOrganization(organization)
-      .pipe(switchMap(organizationRes => {
-        if (!organizationRes) {
-          return throwError("Failed to save organization.");
-        } else {
-          return this.credentialRepository.updateCredentialStatusByPartyId(organization.partyId, "Active")
-            .pipe(map(numUpdated => {
-              if (!numUpdated) {
-                throw new Error("credential status was not updated.");
-              } else {
-                return organizationRes;
-              }
-            }));
-        }
-      }));
-  }
+  // saveOrganizationCompany(organization: Organization): Observable<Organization> {
+  //     return undefined;
+  //   // return this.organizationRepository.saveOrganization(organization)
+  //   //   .pipe(switchMap(organizationRes => {
+  //   //     if (!organizationRes) {
+  //   //       return throwError("Failed to save organization.");
+  //   //     } else {
+  //   //       return this.credentialRepository.updateCredentialStatusByPartyId(organization.partyId, "Active")
+  //   //         .pipe(map(numUpdated => {
+  //   //           if (!numUpdated) {
+  //   //             throw new Error("credential status was not updated.");
+  //   //           } else {
+  //   //             return organizationRes;
+  //   //           }
+  //   //         }));
+  //   //     }
+  //   //   }));
+  // }
 
   // saveAccessRequest(request: JoinOrganization): Observable<JoinOrganization> {
   //   return this.organizationRepository.saveAccessRequest(request)
@@ -89,15 +81,12 @@ export class OrganizationOrchestrator {
   //     }));
   // }
 
-  deleteOrganization(partyId: string): Observable<number> {
-    return this.organizationRepository.deleteOrganization(partyId);
-  }
-
-  updateOrganization(partyId: string, organization: Organization): Observable<number> {
-    return this.organizationRepository.updateOrganization(partyId, organization);
-  }
-
-  getCompany(options: any): Observable<CompanyInfo> {
-      return this.organizationRepository.getCompany(options);
-  }
+  // deleteOrganization(partyId: string): Observable<number> {
+  //   return this.organizationRepository.deleteOrganization(partyId);
+  // }
+  //
+  //
+  // getCompany(options: any): Observable<CompanyInfo> {
+  //     return this.organizationRepository.getCompany(options);
+  // }
 }

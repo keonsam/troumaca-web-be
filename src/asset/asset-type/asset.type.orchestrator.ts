@@ -2,40 +2,44 @@ import {AssetType} from "../../data/asset/asset.type";
 import {Observable} from "rxjs";
 import {AssetTypeRepository} from "../../repository/asset.type.repository";
 import {createAssetTypeRepository} from "../../adapter/asset/asset.type.repository.factory";
-import {Affect} from "../../data/affect";
-import {Page} from "../../util/page";
 import {Sort} from "../../util/sort";
+import { map } from "rxjs/operators";
+import { AssetTypes } from "../../data/asset/asset.types";
+import { HeaderBaseOptions } from "../../header.base.options";
+import { RepositoryKind } from "../../repository.kind";
 
 export class AssetTypeOrchestrator {
 
   private assetTypeRepository: AssetTypeRepository;
 
-  constructor(options?: any) {
+  constructor(options?: RepositoryKind) {
     this.assetTypeRepository = createAssetTypeRepository(options);
   }
 
-  addAssetType(assetType: AssetType, headerOptions?: any): Observable<AssetType> {
+  addAssetType(assetType: AssetType, headerOptions?: HeaderBaseOptions): Observable<AssetType> {
     return this.assetTypeRepository.addAssetType(assetType, headerOptions);
   }
 
-  findAssetTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetType[]> {
-    return this.assetTypeRepository.findAssetTypes(ownerPartyId, searchStr, pageNumber, pageSize, headerOptions);
+  findAssetTypes( searchStr: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetType[]> {
+    return this.assetTypeRepository.findAssetTypes(searchStr, pageNumber, pageSize, headerOptions);
   }
 
-  getAssetTypes(ownerPartyId: string, number: number, size: number, sort: Sort, headerOptions?: any): Observable<Page<AssetType[]>> {
-    return this.assetTypeRepository.getAssetTypes(ownerPartyId, number, size, sort, headerOptions);
+  getAssetTypes(number: number, size: number, sort: Sort, headerOptions?: HeaderBaseOptions): Observable<AssetTypes> {
+    return this.assetTypeRepository.getAssetTypes(number, size, sort, headerOptions);
   }
 
-  updateAssetType(assetType: AssetType, headerOptions?: any): Observable<Affect> {
-    return this.assetTypeRepository.updateAssetType(assetType, headerOptions);
+  updateAssetType(assetTypeId: string, assetType: AssetType, headerOptions?: HeaderBaseOptions): Observable<number> {
+    return this.assetTypeRepository.updateAssetType(assetTypeId, assetType, headerOptions)
+        .pipe(map( aff => aff.affected));
   }
 
-  getAssetTypeById(assetTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetType> {
-    return this.assetTypeRepository.getAssetTypeById(assetTypeId, ownerPartyId, headerOptions);
+  getAssetTypeById(assetTypeId: string, headerOptions?: HeaderBaseOptions): Observable<AssetType> {
+    return this.assetTypeRepository.getAssetTypeById(assetTypeId, headerOptions);
   }
 
-  deleteAssetType(assetTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
-    return this.assetTypeRepository.deleteAssetType(assetTypeId, ownerPartyId, headerOptions);
+  deleteAssetType(assetTypeId: string, headerOptions?: HeaderBaseOptions): Observable<number> {
+    return this.assetTypeRepository.deleteAssetType(assetTypeId, headerOptions)
+        .pipe(map(aff => aff.affected));
   }
 
 }

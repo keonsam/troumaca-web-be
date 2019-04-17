@@ -5,20 +5,20 @@ import {getStringValueOrDefault} from "../../string.util";
 
 const orchestrator: AccessRoleOrchestrator = new AccessRoleOrchestrator();
 
-export let findAccessRoles = (req: Request, res: Response) => {
-  const searchStr: string = req.query.q;
-  const pageSize: number = req.query.pageSize;
-
-  orchestrator.findAccessRoles(searchStr, pageSize)
-    .subscribe(accessRoles => {
-      res.status(200);
-      res.send(JSON.stringify(accessRoles));
-    }, error => {
-      res.status(500);
-      res.send(JSON.stringify({message: "Error Occurred"}));
-      console.log(error);
-    });
-};
+// export let findAccessRoles = (req: Request, res: Response) => {
+//   const searchStr: string = req.query.q;
+//   const pageSize: number = req.query.pageSize;
+//
+//   orchestrator.findAccessRoles(searchStr, pageSize)
+//     .subscribe(accessRoles => {
+//       res.status(200);
+//       res.send(JSON.stringify(accessRoles));
+//     }, error => {
+//       res.status(500);
+//       res.send(JSON.stringify({message: "Error Occurred"}));
+//       console.log(error);
+//     });
+// };
 
 export let getAccessRoles = (req: Request, res: Response) => {
   const number = getNumericValueOrDefault(req.query.pageNumber, 1);

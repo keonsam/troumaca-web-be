@@ -32,9 +32,9 @@ export class UnitOfMeasurementConversionRepositoryNeDbAdapter implements UnitOfM
   deleteUnitOfMeasurementConversion(unitOfMeasurementConversionId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
     return Observable.create(function (observer: Observer<Affect>) {
       unitOfMeasurementConversions.remove(
-        {unitOfMeasurementConversionId:unitOfMeasurementConversionId, ownerPartyId:ownerPartyId},
+        {unitOfMeasurementConversionId: unitOfMeasurementConversionId, ownerPartyId: ownerPartyId},
         {},
-        function (err:any, numRemoved:number) {
+        function (err: any, numRemoved: number) {
           if (err) {
             observer.error(err);
           } else {
@@ -48,7 +48,7 @@ export class UnitOfMeasurementConversionRepositoryNeDbAdapter implements UnitOfM
   findUnitOfMeasurementConversions(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<UnitOfMeasurementConversion[]> {
     return Observable.create(function (observer: Observer<AssetBrand[]>) {
       unitOfMeasurementConversions.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
         unitOfMeasurementConversions.find({ownerPartyId: ownerPartyId, name: new RegExp(searchStr) })
           .skip(skipAmount)
           .limit(pageSize)
@@ -60,7 +60,7 @@ export class UnitOfMeasurementConversionRepositoryNeDbAdapter implements UnitOfM
                 observer.error(err);
               }
               observer.complete();
-            })
+            });
       });
     });
   }
@@ -69,7 +69,7 @@ export class UnitOfMeasurementConversionRepositoryNeDbAdapter implements UnitOfM
     return Observable.create(function (observer: Observer<AssetBrand>) {
       // , ownerPartyId:ownerPartyId
       unitOfMeasurementConversions.find(
-        {unitOfMeasurementConversionId:unitOfMeasurementConversionId},
+        {unitOfMeasurementConversionId: unitOfMeasurementConversionId},
         (err: any, docs: any) => {
           if (!err) {
             observer.next(docs[0]);
@@ -77,14 +77,14 @@ export class UnitOfMeasurementConversionRepositoryNeDbAdapter implements UnitOfM
             observer.error(err);
           }
           observer.complete();
-        })
+        });
     });
   }
 
   getUnitOfMeasurementConversionCount(ownerPartyId: string, headerOptions?: any): Observable<number> {
     return Observable.create(function (observer: Observer<number>) {
       unitOfMeasurementConversions.count(
-        {ownerPartyId:ownerPartyId},
+        {ownerPartyId: ownerPartyId},
         (err: any, count: any) => {
           if (!err) {
             observer.next(count);
@@ -92,16 +92,16 @@ export class UnitOfMeasurementConversionRepositoryNeDbAdapter implements UnitOfM
             observer.error(err);
           }
           observer.complete();
-        })
+        });
     });
   }
 
   getUnitOfMeasurementConversions(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<UnitOfMeasurementConversion[]>> {
     return Observable.create(function (observer: Observer<Page<AssetBrand[]>>) {
       unitOfMeasurementConversions.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-        let generate = SortGenerator.generate(sort);
-        unitOfMeasurementConversions.find({ownerPartyId:ownerPartyId})
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        const generate = SortGenerator.generate(sort);
+        unitOfMeasurementConversions.find({ownerPartyId: ownerPartyId})
           .skip(skipAmount)
           .limit(pageSize)
           .exec((err: any, docs: any) => {
@@ -112,20 +112,20 @@ export class UnitOfMeasurementConversionRepositoryNeDbAdapter implements UnitOfM
             }
             observer.complete();
           });
-      })
+      });
     });
   }
 
   updateUnitOfMeasurementConversion(unitOfMeasurementConversion: UnitOfMeasurementConversion, headerOptions?: any): Observable<Affect> {
     unitOfMeasurementConversion.version = generateUUID();
     unitOfMeasurementConversion.dateModified = new Date();
-    //ownerPartyId:unitOfMeasurementConversion.ownerPartyId
+    // ownerPartyId:unitOfMeasurementConversion.ownerPartyId
     return Observable.create(function (observer: Observer<Affect>) {
       unitOfMeasurementConversions.update(
-        {unitOfMeasurementConversionId:unitOfMeasurementConversion.unitOfMeasurementConversionId},
+        {unitOfMeasurementConversionId: unitOfMeasurementConversion.unitOfMeasurementConversionId},
         unitOfMeasurementConversion,
         { upsert: true },
-        function (err:any, numReplaced:number, upsert:any) {
+        function (err: any, numReplaced: number, upsert: any) {
           if (err) {
             observer.error(err);
           } else {

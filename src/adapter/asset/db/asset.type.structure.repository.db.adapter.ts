@@ -30,13 +30,13 @@ export class AssetTypeStructureRepositoryNeDbAdapter implements AssetTypeStructu
   updateAssetTypeStructure(assetTypeStructure: AssetTypeStructure, headerOptions?: any): Observable<Affect> {
     assetTypeStructure.version = generateUUID();
     assetTypeStructure.dateModified = new Date();
-    //ownerPartyId:assetTypeStructure.ownerPartyId
+    // ownerPartyId:assetTypeStructure.ownerPartyId
     return Observable.create(function (observer: Observer<Affect>) {
       assetTypeStructures.update(
-        {assetTypeStructureId:assetTypeStructure.assetTypeStructureId},
+        {assetTypeStructureId: assetTypeStructure.assetTypeStructureId},
         assetTypeStructure,
         { upsert: true },
-        function (err:any, numReplaced:number, upsert:any) {
+        function (err: any, numReplaced: number, upsert: any) {
           if (err) {
             observer.error(err);
           } else {
@@ -52,7 +52,7 @@ export class AssetTypeStructureRepositoryNeDbAdapter implements AssetTypeStructu
     return Observable.create(function (observer: Observer<Affect>) {
       assetTypeStructures.remove(
         {assetTypeStructureId: assetTypeStructureId, ownerPartyId: ownerPartyId},
-        function (err:any, numRemoved:number) {
+        function (err: any, numRemoved: number) {
           if (err) {
             observer.error(err);
           } else {
@@ -66,7 +66,7 @@ export class AssetTypeStructureRepositoryNeDbAdapter implements AssetTypeStructu
   findAssetTypeStructures(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetTypeStructure[]> {
     return Observable.create(function (observer: Observer<AssetTypeStructure[]>) {
       assetTypeStructures.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
         assetTypeStructures.find({ownerPartyId: ownerPartyId, name: new RegExp(searchStr) })
           .skip(skipAmount)
           .limit(pageSize)
@@ -78,7 +78,7 @@ export class AssetTypeStructureRepositoryNeDbAdapter implements AssetTypeStructu
                 observer.error(err);
               }
               observer.complete();
-            })
+            });
       });
     });
   }
@@ -87,7 +87,7 @@ export class AssetTypeStructureRepositoryNeDbAdapter implements AssetTypeStructu
     return Observable.create(function (observer: Observer<AssetTypeStructure>) {
       // , ownerPartyId:ownerPartyId
       assetTypeStructures.find(
-        {assetTypeStructureId:assetTypeStructureId},
+        {assetTypeStructureId: assetTypeStructureId},
         (err: any, docs: any) => {
           if (!err) {
             observer.next(docs[0]);
@@ -95,14 +95,14 @@ export class AssetTypeStructureRepositoryNeDbAdapter implements AssetTypeStructu
             observer.error(err);
           }
           observer.complete();
-        })
+        });
     });
   }
 
   getAssetTypeStructureCount(ownerPartyId: string, headerOptions?: any): Observable<number> {
     return Observable.create(function (observer: Observer<number>) {
       assetTypeStructures.count(
-        {ownerPartyId:ownerPartyId},
+        {ownerPartyId: ownerPartyId},
         (err: any, count: any) => {
           if (!err) {
             observer.next(count);
@@ -110,16 +110,16 @@ export class AssetTypeStructureRepositoryNeDbAdapter implements AssetTypeStructu
             observer.error(err);
           }
           observer.complete();
-        })
+        });
     });
   }
 
   getAssetTypeStructures(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetTypeStructure[]>> {
     return Observable.create(function (observer: Observer<Page<AssetTypeStructure[]>>) {
       assetTypeStructures.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-        let generate = SortGenerator.generate(sort);
-        assetTypeStructures.find({ownerPartyId:ownerPartyId})
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        const generate = SortGenerator.generate(sort);
+        assetTypeStructures.find({ownerPartyId: ownerPartyId})
           .skip(skipAmount)
           .limit(pageSize)
           .exec((err: any, docs: any) => {
@@ -130,7 +130,7 @@ export class AssetTypeStructureRepositoryNeDbAdapter implements AssetTypeStructu
             }
             observer.complete();
           });
-      })
+      });
     });
   }
 

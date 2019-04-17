@@ -34,10 +34,10 @@ export class AssetRoleRepositoryNeDbAdapter implements AssetRoleRepository {
 
     return Observable.create(function (observer: Observer<Affect>) {
       assetRoles.update(
-        {assetRoleId:assetRole.assetRoleId, ownerPartyId:assetRole.ownerPartyId},
+        {assetRoleId: assetRole.assetRoleId, ownerPartyId: assetRole.ownerPartyId},
         assetRole,
         { upsert: true },
-        function (err:any, numReplaced:number, upsert:any) {
+        function (err: any, numReplaced: number, upsert: any) {
         if (err) {
           observer.error(err);
         } else {
@@ -52,9 +52,9 @@ export class AssetRoleRepositoryNeDbAdapter implements AssetRoleRepository {
   deleteAssetRole(assetRoleId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
     return Observable.create(function (observer: Observer<Affect>) {
       assetRoles.remove(
-        {assetRoleId:assetRoleId, ownerPartyId:ownerPartyId},
+        {assetRoleId: assetRoleId, ownerPartyId: ownerPartyId},
         { multi: true },
-        function (err:any, numRemoved:number) {
+        function (err: any, numRemoved: number) {
           if (err) {
             observer.error(err);
           } else {
@@ -68,7 +68,7 @@ export class AssetRoleRepositoryNeDbAdapter implements AssetRoleRepository {
   findAssetRoles(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetRole[]> {
     return Observable.create(function (observer: Observer<AssetRole[]>) {
       assetRoles.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
         assetRoles.find({ownerPartyId: ownerPartyId, name: new RegExp(searchStr) })
           .skip(skipAmount)
           .limit(pageSize)
@@ -80,7 +80,7 @@ export class AssetRoleRepositoryNeDbAdapter implements AssetRoleRepository {
                 observer.error(err);
               }
               observer.complete();
-            })
+            });
       });
     });
   }
@@ -88,7 +88,7 @@ export class AssetRoleRepositoryNeDbAdapter implements AssetRoleRepository {
   getAssetRoleById(assetRoleId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetRole> {
     return Observable.create(function (observer: Observer<AssetRole>) {
       assetRoles.find(
-        {assetRoleId:assetRoleId, ownerPartyId:ownerPartyId},
+        {assetRoleId: assetRoleId, ownerPartyId: ownerPartyId},
         (err: any, docs: any) => {
           if (!err) {
             observer.next(docs[0]);
@@ -96,14 +96,14 @@ export class AssetRoleRepositoryNeDbAdapter implements AssetRoleRepository {
             observer.error(err);
           }
           observer.complete();
-        })
+        });
     });
   }
 
-  getAssetRoleCount(ownerPartyId:string, headerOptions?: any): Observable<number> {
+  getAssetRoleCount(ownerPartyId: string, headerOptions?: any): Observable<number> {
     return Observable.create(function (observer: Observer<number>) {
       assetRoles.count(
-        {ownerPartyId:ownerPartyId},
+        {ownerPartyId: ownerPartyId},
         (err: any, count: any) => {
           if (!err) {
             observer.next(count);
@@ -111,16 +111,16 @@ export class AssetRoleRepositoryNeDbAdapter implements AssetRoleRepository {
             observer.error(err);
           }
           observer.complete();
-        })
+        });
     });
   }
 
-  getAssetRoles(ownerPartyId:string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetRole[]>> {
+  getAssetRoles(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetRole[]>> {
     return Observable.create(function (observer: Observer<Page<AssetRole[]>>) {
       assetRoles.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-        let generate = SortGenerator.generate(sort);
-        assetRoles.find({ownerPartyId:ownerPartyId})
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        const generate = SortGenerator.generate(sort);
+        assetRoles.find({ownerPartyId: ownerPartyId})
           .skip(skipAmount)
           .limit(pageSize)
           .exec((err: any, docs: any) => {
@@ -131,7 +131,7 @@ export class AssetRoleRepositoryNeDbAdapter implements AssetRoleRepository {
             }
             observer.complete();
           });
-      })
+      });
     });
   }
 

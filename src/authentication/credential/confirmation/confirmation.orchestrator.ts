@@ -2,6 +2,7 @@ import {createCredentialConfirmationRepositoryFactory} from "../../../adapter/au
 import {ConfirmationRepository} from "../../../repository/confirmation.repository";
 import {Confirmation} from "../../../data/authentication/confirmation";
 import {Observable} from "rxjs";
+import { HeaderBaseOptions } from "../../../header.base.options";
 
 export class ConfirmationOrchestrator {
 
@@ -11,20 +12,20 @@ export class ConfirmationOrchestrator {
     this.confirmationRepository = createCredentialConfirmationRepositoryFactory();
   }
 
-  resendConfirmCode(confirmationId: string, credentialId: string, options?: any): Observable<Confirmation> {
-    return this.confirmationRepository.resendConfirmCode(confirmationId, credentialId, options);
+  // resendConfirmCode(confirmationId: string, credentialId: string, options?: any): Observable<Confirmation> {
+  //   return this.confirmationRepository.resendConfirmCode(confirmationId, credentialId, options);
+  // }
+
+  confirmCode(confirmationId: string, credentialId: string, code: string, options?: HeaderBaseOptions): Observable<Confirmation> {
+    return this.confirmationRepository.confirmCode(confirmationId, credentialId, code, options);
   }
 
-  confirmCode(confirmationId: string, credentialId: string, confirmation: Confirmation, options?: any): Observable<Confirmation> {
-    return this.confirmationRepository.confirmCode(confirmationId, credentialId, confirmation, options);
-  }
+  // resendConfirmCodeByUsername(username: string, options?: any): Observable<Confirmation> {
+  //   return this.confirmationRepository.resendConfirmCodeByUsername(username, options);
+  // }
 
-  resendConfirmCodeByUsername(username: string, options?: any): Observable<Confirmation> {
-    return this.confirmationRepository.resendConfirmCodeByUsername(username, options);
-  }
-
-  validateCode(credentialId: string, code: string, options?: any): Observable<boolean> {
-    return this.confirmationRepository.validateCode(credentialId, code, options);
-  }
+  // validateCode(credentialId: string, code: string, options?: any): Observable<boolean> {
+  //   return this.confirmationRepository.validateCode(credentialId, code, options);
+  // }
 
 }

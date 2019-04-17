@@ -14,11 +14,11 @@ export class AssetNameRepositoryRestAdapter implements AssetNameRepository {
     return undefined;
   }
 
-  deleteAssetName(assetNameId: string, ownerPartyId: string, headerOptions?:any): Observable<Affect> {
+  deleteAssetName(assetNameId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
     return undefined;
   }
 
-  findAssetNames(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?:any): Observable<AssetName[]> {
+  findAssetNames(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetName[]> {
     return undefined;
   }
 

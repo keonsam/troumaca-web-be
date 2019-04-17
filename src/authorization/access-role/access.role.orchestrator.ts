@@ -13,6 +13,7 @@ import {createPartyAccessRoleRepositoryFactory} from "../../adapter/authorizatio
 import {AccessRoleTypeRepository} from "../../repository/access.role.type.repository";
 import {createAccessRoleTypeRepositoryFactory} from "../../adapter/authorization/access.role.type.repository.factory";
 import {AccessRole} from "../../data/authorization/access.role";
+import { HeaderBaseOptions } from "../../header.base.options";
 
 export class AccessRoleOrchestrator {
 
@@ -28,8 +29,8 @@ export class AccessRoleOrchestrator {
     this.accessRoleTypeRepository = createAccessRoleTypeRepositoryFactory();
   }
 
-  findAccessRoles(searchStr: string, pageSize: number): Observable<AccessRole[]> {
-    return this.accessRoleRepository.findAccessRoles(searchStr, pageSize);
+  findAccessRoles(searchStr: string, pageSize: number, options: HeaderBaseOptions): Observable<AccessRole[]> {
+    return this.accessRoleRepository.findAccessRoles(searchStr, pageSize, options);
   }
 
   getAccessRoles(number: number, size: number, field: string, direction: string): Observable<Result<any>> {
@@ -66,7 +67,7 @@ export class AccessRoleOrchestrator {
     //       }));
     //   }));
 
-    return null;
+    return undefined;
   }
 
   updateAccessRole(accessRoleId: string, accessRole: AccessRole, grants: Grant[]): Observable<number> {
@@ -85,7 +86,7 @@ export class AccessRoleOrchestrator {
     //       }));
     //   }));
 
-    return null;
+    return undefined;
   }
 
   deleteAccessRole(accessRoleId: string): Observable<number> {
@@ -101,7 +102,7 @@ export class AccessRoleOrchestrator {
     //         }));
     //     }
     //   }));
-    return null;
+    return undefined;
   }
 
 }

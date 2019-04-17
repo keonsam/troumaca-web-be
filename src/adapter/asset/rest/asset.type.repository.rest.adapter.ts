@@ -1,36 +1,33 @@
 import {AssetTypeRepository} from "../../../repository/asset.type.repository";
 import {AssetType} from "../../../data/asset/asset.type";
-import {Observable, Observer} from "rxjs";
+import {Observable} from "rxjs";
 import {Affect} from "../../../data/affect";
-import {Page} from "../../../util/page";
 import {Sort} from "../../../util/sort";
+import { AssetTypes } from "../../../data/asset/asset.types";
+import { HeaderBaseOptions } from "../../../header.base.options";
 
 export class AssetTypeRepositoryRestAdapter implements AssetTypeRepository {
-  addAssetType(assetType: AssetType, headerOptions?: any): Observable<AssetType> {
+  addAssetType(assetType: AssetType, headerOptions?: HeaderBaseOptions): Observable<AssetType> {
     return undefined;
   }
 
-  deleteAssetType(assetTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
+  deleteAssetType(assetTypeId: string, headerOptions?: HeaderBaseOptions): Observable<Affect> {
     return undefined;
   }
 
-  findAssetTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetType[]> {
+  findAssetTypes(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetType[]> {
     return undefined;
   }
 
-  getAssetTypeById(assetTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetType> {
+  getAssetTypeById(assetTypeId: string, headerOptions?: HeaderBaseOptions): Observable<AssetType> {
     return undefined;
   }
 
-  getAssetTypeCount(ownerPartyId: string, headerOptions?: any): Observable<number> {
+  getAssetTypes(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: HeaderBaseOptions): Observable<AssetTypes> {
     return undefined;
   }
 
-  getAssetTypes(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetType[]>> {
-    return undefined;
-  }
-
-  updateAssetType(assetType: AssetType, headerOptions?: any): Observable<Affect> {
+  updateAssetType(assetTypeId: string, assetType: AssetType, headerOptions?: HeaderBaseOptions): Observable<Affect> {
     return undefined;
   }
 }

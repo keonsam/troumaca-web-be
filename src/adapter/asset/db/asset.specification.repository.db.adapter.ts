@@ -35,10 +35,10 @@ export class AssetSpecificationRepositoryNeDbAdapter implements AssetSpecificati
 
     return Observable.create(function (observer: Observer<Affect>) {
       assetSpecifications.update(
-        {assetTypeId:assetSpecification.assetTypeId, ownerPartyId:assetSpecification.ownerPartyId},
+        {assetTypeId: assetSpecification.assetTypeId, ownerPartyId: assetSpecification.ownerPartyId},
         assetSpecification,
         { upsert: true },
-        function (err:any, numReplaced:number, upsert:any) {
+        function (err: any, numReplaced: number, upsert: any) {
           if (err) {
             observer.error(err);
           } else {
@@ -53,9 +53,9 @@ export class AssetSpecificationRepositoryNeDbAdapter implements AssetSpecificati
   deleteAssetSpecification(assetTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
     return Observable.create(function (observer: Observer<Affect>) {
       assetSpecifications.remove(
-        {assetTypeId:assetTypeId, ownerPartyId:ownerPartyId},
+        {assetTypeId: assetTypeId, ownerPartyId: ownerPartyId},
         { multi: true },
-        function (err:any, numRemoved:number) {
+        function (err: any, numRemoved: number) {
           if (err) {
             observer.error(err);
           } else {
@@ -69,7 +69,7 @@ export class AssetSpecificationRepositoryNeDbAdapter implements AssetSpecificati
   findAssetSpecifications(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetSpecification[]> {
     return Observable.create(function (observer: Observer<AssetSpecification[]>) {
       assetSpecifications.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
         assetSpecifications.find({ownerPartyId: ownerPartyId, name: new RegExp(searchStr) })
           .skip(skipAmount)
           .limit(pageSize)
@@ -81,7 +81,7 @@ export class AssetSpecificationRepositoryNeDbAdapter implements AssetSpecificati
                 observer.error(err);
               }
               observer.complete();
-            })
+            });
       });
     });
   }
@@ -89,7 +89,7 @@ export class AssetSpecificationRepositoryNeDbAdapter implements AssetSpecificati
   getAssetSpecificationById(assetTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetSpecification> {
     return Observable.create(function (observer: Observer<AssetSpecification>) {
       assetSpecifications.find(
-        {assetTypeId:assetTypeId, ownerPartyId:ownerPartyId},
+        {assetTypeId: assetTypeId, ownerPartyId: ownerPartyId},
         (err: any, docs: any) => {
           if (!err) {
             observer.next(docs[0]);
@@ -97,14 +97,14 @@ export class AssetSpecificationRepositoryNeDbAdapter implements AssetSpecificati
             observer.error(err);
           }
           observer.complete();
-        })
+        });
     });
   }
 
-  getAssetSpecificationCount(ownerPartyId:string, headerOptions?: any): Observable<number> {
+  getAssetSpecificationCount(ownerPartyId: string, headerOptions?: any): Observable<number> {
     return Observable.create(function (observer: Observer<number>) {
       assetSpecifications.count(
-        {ownerPartyId:ownerPartyId},
+        {ownerPartyId: ownerPartyId},
         (err: any, count: any) => {
           if (!err) {
             observer.next(count);
@@ -112,16 +112,16 @@ export class AssetSpecificationRepositoryNeDbAdapter implements AssetSpecificati
             observer.error(err);
           }
           observer.complete();
-        })
+        });
     });
   }
 
-  getAssetSpecifications(ownerPartyId:string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetSpecification[]>> {
+  getAssetSpecifications(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetSpecification[]>> {
     return Observable.create(function (observer: Observer<Page<AssetSpecification[]>>) {
       assetSpecifications.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-        let generate = SortGenerator.generate(sort);
-        assetSpecifications.find({ownerPartyId:ownerPartyId})
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        const generate = SortGenerator.generate(sort);
+        assetSpecifications.find({ownerPartyId: ownerPartyId})
           .skip(skipAmount)
           .limit(pageSize)
           .exec((err: any, docs: any) => {
@@ -132,7 +132,7 @@ export class AssetSpecificationRepositoryNeDbAdapter implements AssetSpecificati
             }
             observer.complete();
           });
-      })
+      });
     });
   }
 

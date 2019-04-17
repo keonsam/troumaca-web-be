@@ -14,27 +14,27 @@ export class AssetCharacteristicTypeOrchestrator {
     this.assetCharacteristicTypeRepository = createAssetCharacteristicTypeRepository(options);
   }
 
-  addAssetCharacteristicType(assetCharacteristicType: AssetCharacteristicType, headerOptions?:any): Observable<AssetCharacteristicType> {
+  addAssetCharacteristicType(assetCharacteristicType: AssetCharacteristicType, headerOptions?: any): Observable<AssetCharacteristicType> {
     return this.assetCharacteristicTypeRepository.addAssetCharacteristicType(assetCharacteristicType, headerOptions);
   }
 
-  findAssetCharacteristicTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?:any): Observable<AssetCharacteristicType[]> {
+  findAssetCharacteristicTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetCharacteristicType[]> {
     return this.assetCharacteristicTypeRepository.findAssetCharacteristicTypes(ownerPartyId, searchStr, pageNumber, pageSize, headerOptions);
   }
 
   getAssetCharacteristicTypes(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetCharacteristicType[]>> {
-    return this.assetCharacteristicTypeRepository.getAssetCharacteristicTypes(ownerPartyId, pageNumber, pageSize, sort, headerOptions)
+    return this.assetCharacteristicTypeRepository.getAssetCharacteristicTypes(ownerPartyId, pageNumber, pageSize, sort, headerOptions);
   }
 
-  updateAssetCharacteristicType(assetCharacteristicType: AssetCharacteristicType, headerOptions?:any): Observable<Affect> {
+  updateAssetCharacteristicType(assetCharacteristicType: AssetCharacteristicType, headerOptions?: any): Observable<Affect> {
     return this.assetCharacteristicTypeRepository.updateAssetCharacteristicType(assetCharacteristicType, headerOptions);
   }
 
-  getAssetCharacteristicTypeById(assetCharacteristicTypeId: string, ownerPartyId: string, headerOptions?:any): Observable<AssetCharacteristicType> {
+  getAssetCharacteristicTypeById(assetCharacteristicTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetCharacteristicType> {
     return this.assetCharacteristicTypeRepository.getAssetCharacteristicTypeById(assetCharacteristicTypeId, ownerPartyId, headerOptions);
   }
 
-  deleteAssetCharacteristicType(assetCharacteristicTypeId: string, ownerPartyId: string, headerOptions?:any): Observable<Affect> {
+  deleteAssetCharacteristicType(assetCharacteristicTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
     return this.assetCharacteristicTypeRepository.deleteAssetCharacteristicType(assetCharacteristicTypeId, ownerPartyId, headerOptions);
   }
 

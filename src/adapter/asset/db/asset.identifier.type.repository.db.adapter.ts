@@ -3,17 +3,20 @@ import {AssetIdentifierType} from "../../../data/asset/asset.identifier.type";
 import {Observable, Observer} from "rxjs";
 import {Affect} from "../../../data/affect";
 import {Sort} from "../../../util/sort";
-import {Page} from "../../../util/page";
+import { Page} from "../../../data/page/page";
 import {generateUUID} from "../../../uuid.generator";
 import {assetIdentifierTypes} from "../../../db";
 import {SkipGenerator} from "../../util/skip.generator";
 import {SortGenerator} from "../../util/sort.generator";
+import { HeaderBaseOptions } from "../../../header.base.options";
+import { AssetIdentifierTypes } from "../../../data/asset/asset.identifier.types";
 
 export class AssetIdentifierTypeRepositoryNeDbAdapter implements AssetIdentifierTypeRepository {
-  addAssetIdentifierType(assetIdentifierType: AssetIdentifierType, headerOptions?: any): Observable<AssetIdentifierType> {
+  addAssetIdentifierType(assetIdentifierType: AssetIdentifierType, headerOptions?: HeaderBaseOptions): Observable<AssetIdentifierType> {
     assetIdentifierType.assetIdentifierTypeId = generateUUID();
     assetIdentifierType.version = generateUUID();
     assetIdentifierType.dateModified = new Date();
+    assetIdentifierType.ownerPartyId = headerOptions.ownerPartyId;
 
     return Observable.create(function (observer: Observer<AssetIdentifierType>) {
       assetIdentifierTypes.insert(assetIdentifierType, function (err: any, doc: any) {
@@ -27,16 +30,15 @@ export class AssetIdentifierTypeRepositoryNeDbAdapter implements AssetIdentifier
     });
   }
 
-  updateAssetIdentifierType(assetIdentifierType: AssetIdentifierType, headerOptions?: any): Observable<Affect> {
+  updateAssetIdentifierType(assetIdentifierTypeId: string, assetIdentifierType: AssetIdentifierType, headerOptions?: HeaderBaseOptions): Observable<Affect> {
     assetIdentifierType.version = generateUUID();
     assetIdentifierType.dateModified = new Date();
-    //ownerPartyId:assetIdentifierType.ownerPartyId
     return Observable.create(function (observer: Observer<Affect>) {
       assetIdentifierTypes.update(
-        {assetIdentifierTypeId:assetIdentifierType.assetIdentifierTypeId},
-        assetIdentifierType,
-        { upsert: true },
-        function (err:any, numReplaced:number, upsert:any) {
+        {assetIdentifierTypeId: assetIdentifierTypeId},
+          {$set: assetIdentifierType},
+        { },
+        function (err: any, numReplaced: number) {
           if (err) {
             observer.error(err);
           } else {
@@ -48,11 +50,11 @@ export class AssetIdentifierTypeRepositoryNeDbAdapter implements AssetIdentifier
     });
   }
 
-  deleteAssetIdentifierType(assetIdentifierTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
+  deleteAssetIdentifierType(assetIdentifierTypeId: string, headerOptions?: HeaderBaseOptions): Observable<Affect> {
     return Observable.create(function (observer: Observer<Affect>) {
       assetIdentifierTypes.remove(
-        {assetIdentifierTypeId: assetIdentifierTypeId, ownerPartyId: ownerPartyId},
-        function (err:any, numRemoved:number) {
+        {assetIdentifierTypeId: assetIdentifierTypeId},
+        function (err: any, numRemoved: number) {
           if (err) {
             observer.error(err);
           } else {
@@ -63,11 +65,11 @@ export class AssetIdentifierTypeRepositoryNeDbAdapter implements AssetIdentifier
     });
   }
 
-  findAssetIdentifierTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetIdentifierType[]> {
+  findAssetIdentifierTypes(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetIdentifierType[]> {
     return Observable.create(function (observer: Observer<AssetIdentifierType[]>) {
-      assetIdentifierTypes.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-        assetIdentifierTypes.find({ownerPartyId: ownerPartyId, name: new RegExp(searchStr) })
+      assetIdentifierTypes.count({ ownerPartyId: headerOptions.ownerPartyId}, function (err, count) {
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        assetIdentifierTypes.find({ ownerPartyId: headerOptions.ownerPartyId, name: new RegExp(searchStr) })
           .skip(skipAmount)
           .limit(pageSize)
           .exec(
@@ -78,16 +80,16 @@ export class AssetIdentifierTypeRepositoryNeDbAdapter implements AssetIdentifier
                 observer.error(err);
               }
               observer.complete();
-            })
+            });
       });
     });
   }
 
-  getAssetIdentifierTypeById(assetIdentifierTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetIdentifierType> {
+  getAssetIdentifierTypeById(assetIdentifierTypeId: string, headerOptions?: HeaderBaseOptions): Observable<AssetIdentifierType> {
     return Observable.create(function (observer: Observer<AssetIdentifierType>) {
       // , ownerPartyId:ownerPartyId
       assetIdentifierTypes.find(
-        {assetIdentifierTypeId:assetIdentifierTypeId},
+        {assetIdentifierTypeId: assetIdentifierTypeId},
         (err: any, docs: any) => {
           if (!err) {
             observer.next(docs[0]);
@@ -95,42 +97,42 @@ export class AssetIdentifierTypeRepositoryNeDbAdapter implements AssetIdentifier
             observer.error(err);
           }
           observer.complete();
-        })
+        });
     });
   }
 
-  getAssetIdentifierTypeCount(ownerPartyId: string, headerOptions?: any): Observable<number> {
-    return Observable.create(function (observer: Observer<number>) {
-      assetIdentifierTypes.count(
-        {ownerPartyId:ownerPartyId},
-        (err: any, count: any) => {
-          if (!err) {
-            observer.next(count);
-          } else {
-            observer.error(err);
-          }
-          observer.complete();
-        })
-    });
-  }
+  // getAssetIdentifierTypeCount(headerOptions?: HeaderBaseOptions): Observable<number> {
+  //   return Observable.create(function (observer: Observer<number>) {
+  //     assetIdentifierTypes.count(
+  //       { },
+  //       (err: any, count: any) => {
+  //         if (!err) {
+  //           observer.next(count);
+  //         } else {
+  //           observer.error(err);
+  //         }
+  //         observer.complete();
+  //       });
+  //   });
+  // }
 
-  getAssetIdentifierTypes(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetIdentifierType[]>> {
-    return Observable.create(function (observer: Observer<Page<AssetIdentifierType[]>>) {
-      assetIdentifierTypes.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-        let generate = SortGenerator.generate(sort);
-        assetIdentifierTypes.find({ownerPartyId:ownerPartyId})
+  getAssetIdentifierTypes(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: HeaderBaseOptions): Observable<AssetIdentifierTypes> {
+    return Observable.create(function (observer: Observer<AssetIdentifierTypes>) {
+      assetIdentifierTypes.count({ ownerPartyId: headerOptions.ownerPartyId }, function (err, count) {
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        const generate = SortGenerator.generate(sort);
+        assetIdentifierTypes.find({ ownerPartyId: headerOptions.ownerPartyId })
           .skip(skipAmount)
           .limit(pageSize)
-          .exec((err: any, docs: any) => {
+          .exec((err: any, docs: AssetIdentifierType[]) => {
             if (!err) {
-              observer.next(docs);
+              observer.next(new AssetIdentifierTypes(docs, new Page(pageNumber, pageSize, docs.length, count)));
             } else {
               observer.error(err);
             }
             observer.complete();
           });
-      })
+      });
     });
   }
 

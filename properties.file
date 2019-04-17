@@ -37,6 +37,13 @@ port = 8080
 host.port = http://localhost:8080
 repository.type = 1
 
+[assetName]
+host = localhost
+port = 8080
+#host.port = http://localhost:8080
+host.port = https://x6n3pm6l8i.execute-api.us-east-1.amazonaws.com/Prod
+repository.type = 2
+
 [contract]
 host = localhost
 port = 6161

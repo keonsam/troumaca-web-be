@@ -31,13 +31,13 @@ export class AssetNameAssignmentRepositoryNeDbAdapter implements AssetNameAssign
   updateAssetNameAssignment(assetNameAssignment: AssetNameAssignment, headerOptions?: any): Observable<Affect> {
     assetNameAssignment.version = generateUUID();
     assetNameAssignment.dateModified = new Date();
-    //ownerPartyId:assetNameAssignment.ownerPartyId
+    // ownerPartyId:assetNameAssignment.ownerPartyId
     return Observable.create(function (observer: Observer<Affect>) {
       assetNameAssignments.update(
-        {assetNameAssignmentId:assetNameAssignment.assetNameAssignmentId},
+        {assetNameAssignmentId: assetNameAssignment.assetNameAssignmentId},
         assetNameAssignment,
         { upsert: true },
-        function (err:any, numReplaced:number, upsert:any) {
+        function (err: any, numReplaced: number, upsert: any) {
           if (err) {
             observer.error(err);
           } else {
@@ -51,12 +51,12 @@ export class AssetNameAssignmentRepositoryNeDbAdapter implements AssetNameAssign
   }
 
 
-  deleteAssetNameAssignment(assetNameAssignmentId: string, ownerPartyId: string, headerOptions?:any): Observable<Affect> {
+  deleteAssetNameAssignment(assetNameAssignmentId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
     return Observable.create(function (observer: Observer<Affect>) {
       assetNameAssignments.remove(
-        {assetNameAssignmentId:assetNameAssignmentId, ownerPartyId:ownerPartyId},
+        {assetNameAssignmentId: assetNameAssignmentId, ownerPartyId: ownerPartyId},
         {},
-        function (err:any, numRemoved:number) {
+        function (err: any, numRemoved: number) {
           if (err) {
             observer.error(err);
           } else {
@@ -67,10 +67,10 @@ export class AssetNameAssignmentRepositoryNeDbAdapter implements AssetNameAssign
     });
   }
 
-  findAssetNameAssignments(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?:any): Observable<AssetNameAssignment[]> {
+  findAssetNameAssignments(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetNameAssignment[]> {
     return Observable.create(function (observer: Observer<AssetIdentifierAssignment[]>) {
       assetNameAssignments.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
         assetNameAssignments.find({ownerPartyId: ownerPartyId, name: new RegExp(searchStr) })
           .skip(skipAmount)
           .limit(pageSize)
@@ -82,16 +82,16 @@ export class AssetNameAssignmentRepositoryNeDbAdapter implements AssetNameAssign
                 observer.error(err);
               }
               observer.complete();
-            })
+            });
       });
     });
   }
 
-  getAssetNameAssignmentById(assetNameAssignmentId: string, ownerPartyId: string, headerOptions?:any): Observable<AssetNameAssignment> {
+  getAssetNameAssignmentById(assetNameAssignmentId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetNameAssignment> {
     return Observable.create(function (observer: Observer<AssetIdentifierAssignment>) {
     // , ownerPartyId:ownerPartyId
       assetNameAssignments.find(
-        {assetNameAssignmentId:assetNameAssignmentId},
+        {assetNameAssignmentId: assetNameAssignmentId},
         (err: any, docs: any) => {
           if (!err) {
             observer.next(docs[0]);
@@ -99,14 +99,14 @@ export class AssetNameAssignmentRepositoryNeDbAdapter implements AssetNameAssign
             observer.error(err);
           }
           observer.complete();
-        })
+        });
     });
   }
 
-  getAssetNameAssignmentCount(ownerPartyId: string, headerOptions?:any): Observable<number> {
+  getAssetNameAssignmentCount(ownerPartyId: string, headerOptions?: any): Observable<number> {
     return Observable.create(function (observer: Observer<number>) {
       assetNameAssignments.count(
-        {ownerPartyId:ownerPartyId},
+        {ownerPartyId: ownerPartyId},
         (err: any, count: any) => {
           if (!err) {
             observer.next(count);
@@ -114,16 +114,16 @@ export class AssetNameAssignmentRepositoryNeDbAdapter implements AssetNameAssign
             observer.error(err);
           }
           observer.complete();
-        })
+        });
     });
   }
 
   getAssetNameAssignments(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetNameAssignment[]>> {
     return Observable.create(function (observer: Observer<Page<AssetNameAssignment[]>>) {
       assetNameAssignments.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        let skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-        let generate = SortGenerator.generate(sort);
-        assetNameAssignments.find({ownerPartyId:ownerPartyId})
+        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        const generate = SortGenerator.generate(sort);
+        assetNameAssignments.find({ownerPartyId: ownerPartyId})
           .skip(skipAmount)
           .limit(pageSize)
           .exec((err: any, docs: any) => {
@@ -134,7 +134,7 @@ export class AssetNameAssignmentRepositoryNeDbAdapter implements AssetNameAssign
             }
             observer.complete();
           });
-      })
+      });
     });
   }
 

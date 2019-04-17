@@ -4,33 +4,35 @@ import {Observable} from "rxjs";
 import {Affect} from "../../../data/affect";
 import {Page} from "../../../util/page";
 import {Sort} from "../../../util/sort";
+import { HeaderBaseOptions } from "../../../header.base.options";
+import { AssetRoleTypes } from "../../../data/asset/asset.role.types";
 
 export class AssetRoleTypeRepositoryRestAdapter implements AssetRoleTypeRepository {
-  addAssetRoleType(assetRoleType: AssetRoleType, headerOptions?: any): Observable<AssetRoleType> {
+  addAssetRoleType(assetRoleType: AssetRoleType, headerOptions?: HeaderBaseOptions): Observable<AssetRoleType> {
     return undefined;
   }
 
-  deleteAssetRoleType(assetRoleTypeId: string, headerOptions?: any): Observable<Affect> {
+  deleteAssetRoleType(assetRoleTypeId: string, headerOptions?: HeaderBaseOptions): Observable<Affect> {
     return undefined;
   }
 
-  findAssetRoleTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetRoleType[]> {
+  findAssetRoleTypes(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetRoleType[]> {
     return undefined;
   }
 
-  getAssetRoleTypeById(assetRoleTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetRoleType> {
+  getAssetRoleTypeById(assetRoleTypeId: string,  headerOptions?: HeaderBaseOptions): Observable<AssetRoleType> {
     return undefined;
   }
 
-  getAssetRoleTypeCount(ownerPartyId: string, headerOptions?: any): Observable<number> {
+  // getAssetRoleTypeCount(headerOptions?: HeaderBaseOptions): Observable<number> {
+  //   return undefined;
+  // }
+
+  getAssetRoleTypes(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: HeaderBaseOptions): Observable<AssetRoleTypes> {
     return undefined;
   }
 
-  getAssetRoleTypes(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetRoleType[]>> {
-    return undefined;
-  }
-
-  updateAssetRoleType(assetRoleType: AssetRoleType, headerOptions?: any): Observable<Affect> {
+  updateAssetRoleType(assetRoleTypeId: string, assetRoleType: AssetRoleType, headerOptions?: HeaderBaseOptions): Observable<Affect> {
     return undefined;
   }
 

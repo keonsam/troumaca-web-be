@@ -3,21 +3,27 @@ import {Observable} from "rxjs";
 import {Affect} from "../data/affect";
 import {Sort} from "../util/sort";
 import {Page} from "../util/page";
+import { AssetCharacteristicType } from "../data/asset/asset.characteristic.type";
+import { HeaderBaseOptions } from "../header.base.options";
+import { AssetCharacteristics } from "../data/asset/asset.characteristics";
 
 export interface AssetCharacteristicRepository {
 
-  addAssetCharacteristic(assetCharacteristic: AssetCharacteristic, headerOptions?:any): Observable<AssetCharacteristic>;
+  addAssetCharacteristic(assetCharacteristic: AssetCharacteristic, headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristic>;
 
-  updateAssetCharacteristic(assetCharacteristic: AssetCharacteristic, headerOptions?:any): Observable<Affect>;
+  updateAssetCharacteristic(assetCharacteristicId: string, assetCharacteristic: AssetCharacteristic, headerOptions?: HeaderBaseOptions): Observable<Affect>;
 
-  deleteAssetCharacteristic(assetCharacteristicId: string, ownerPartyId: string, headerOptions?:any): Observable<Affect>;
+  deleteAssetCharacteristic(assetCharacteristicId: string, headerOptions?: HeaderBaseOptions): Observable<Affect>;
 
-  findAssetCharacteristics(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?:any): Observable<AssetCharacteristic[]>;
+  findAssetCharacteristics(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristic[]>;
 
-  getAssetCharacteristics(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetCharacteristic[]>>;
+  getAssetCharacteristics(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristics>;
 
-  getAssetCharacteristicCount(ownerPartyId: string, headerOptions?:any): Observable<number>;
+  // getAssetCharacteristicCount(headerOptions?: HeaderBaseOptions): Observable<number>;
 
-  getAssetCharacteristicById(assetCharacteristicId: string, ownerPartyId: string, headerOptions?:any): Observable<AssetCharacteristic>;
+  getAssetCharacteristicById(assetCharacteristicId: string, headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristic>;
 
+  getAssetCharacteristicTypes(headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristicType[]>;
+
+  getAssetCharacteristicType(assetCharacteristicTypeId: string, headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristicType>;
 }

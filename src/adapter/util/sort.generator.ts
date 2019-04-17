@@ -3,7 +3,7 @@ import {Direction} from "../../util/direction";
 
 export class SortGenerator {
   static generate(sort: Sort): any {
-    let obj:any = {};
+    const obj: any = {};
     if (!sort.orders) {
       return obj;
     }
@@ -12,22 +12,22 @@ export class SortGenerator {
       return obj;
     }
 
-    let order = sort.orders[0];
+    const order = sort.orders[0];
 
     if (!order.direction) {
-      return obj
+      return obj;
     }
 
-    let direction = order.direction;
+    const direction = order.direction;
     let directionNumber = 1;
     if (direction as Direction === Direction.DESC) {
       directionNumber = -1;
     }
 
-    let property = order.property;
+    const property = order.property;
 
     if (property) {
-      obj[property] = directionNumber
+      obj[property] = directionNumber;
     }
 
     return obj;

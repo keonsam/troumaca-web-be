@@ -4,7 +4,7 @@ import {Sort} from "../util/sort";
 import {Page} from "../util/page";
 import {OtherAssetType} from "../data/asset/other.asset.type";
 
-export interface OtherAssetTypeRepository{
+export interface OtherAssetTypeRepository {
 
   addOtherAssetType(otherAssetType: OtherAssetType, headerOptions?: any): Observable<OtherAssetType>;
 

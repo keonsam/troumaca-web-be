@@ -5,6 +5,9 @@ import {createAssetRepository} from "../adapter/asset/asset.repository.factory";
 import {Affect} from "../data/affect";
 import {Page} from "../util/page";
 import {Sort} from "../util/sort";
+import { HeaderBaseOptions } from "../header.base.options";
+import { map } from "rxjs/operators";
+import { Assets } from "../data/asset/assets";
 
 export class AssetOrchestrator {
 
@@ -14,28 +17,30 @@ export class AssetOrchestrator {
     this.assetRepository = createAssetRepository(options);
   }
 
-  addAsset(asset: Asset, headerOptions?: any): Observable<Asset> {
+  addAsset(asset: Asset, headerOptions?: HeaderBaseOptions): Observable<Asset> {
     return this.assetRepository.addAsset(asset, headerOptions);
   }
 
-  findAssets(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<Asset[]> {
-    return this.assetRepository.findAssets(ownerPartyId, searchStr, pageNumber, pageSize, headerOptions);
+  findAssets(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<Asset[]> {
+    return this.assetRepository.findAssets(searchStr, pageNumber, pageSize, headerOptions);
   }
 
-  getAssets(ownerPartyId: string, number: number, size: number, sort: Sort, headerOptions?: any): Observable<Page<Asset[]>> {
-    return this.assetRepository.getAssets(ownerPartyId, number, size, sort, headerOptions);
+  getAssets(number: number, size: number, sort: Sort, headerOptions?: HeaderBaseOptions): Observable<Assets> {
+    return this.assetRepository.getAssets(number, size, sort, headerOptions);
   }
 
-  updateAsset(asset: Asset, headerOptions?: any): Observable<Affect> {
-    return this.assetRepository.updateAsset(asset, headerOptions);
+  updateAsset(assetId: string, asset: Asset, headerOptions?: HeaderBaseOptions): Observable<number> {
+    return this.assetRepository.updateAsset(assetId, asset, headerOptions)
+        .pipe(map( aff => aff.affected));
   }
 
-  getAssetById(assetId: string, ownerPartyId: string, headerOptions?: any): Observable<Asset> {
-    return this.assetRepository.getAssetById(assetId, ownerPartyId, headerOptions);
+  getAssetById(assetId: string, headerOptions?: HeaderBaseOptions): Observable<Asset> {
+    return this.assetRepository.getAssetById(assetId, headerOptions);
   }
 
-  deleteAsset(assetId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
-    return this.assetRepository.deleteAsset(assetId, ownerPartyId, headerOptions);
+  deleteAsset(assetId: string, headerOptions?: HeaderBaseOptions): Observable<number> {
+    return this.assetRepository.deleteAsset(assetId, headerOptions)
+        .pipe(map( aff => aff.affected));
   }
 
 }

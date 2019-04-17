@@ -4,33 +4,35 @@ import {Observable} from "rxjs";
 import {Affect} from "../../../data/affect";
 import {Sort} from "../../../util/sort";
 import {Page} from "../../../util/page";
+import { UnitOfMeasurements } from "../../../data/unit-of-measurement/unit.of.measurements";
+import { HeaderBaseOptions } from "../../../header.base.options";
 
 export class UnitOfMeasurementRepositoryRestAdapter implements UnitOfMeasurementRepository {
-  addUnitOfMeasurement(unitOfMeasurement: UnitOfMeasurement, headerOptions?: any): Observable<UnitOfMeasurement> {
+  addUnitOfMeasurement(unitOfMeasurement: UnitOfMeasurement, headerOptions?: HeaderBaseOptions): Observable<UnitOfMeasurement> {
     return undefined;
   }
 
-  deleteUnitOfMeasurement(unitOfMeasurementId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
+  deleteUnitOfMeasurement(unitOfMeasurementId: string, headerOptions?: HeaderBaseOptions): Observable<Affect> {
     return undefined;
   }
 
-  findUnitOfMeasurements(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<UnitOfMeasurement[]> {
+  findUnitOfMeasurements(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<UnitOfMeasurement[]> {
     return undefined;
   }
 
-  getUnitOfMeasurementById(unitOfMeasurementId: string, ownerPartyId: string, headerOptions?: any): Observable<UnitOfMeasurement> {
+  getUnitOfMeasurementById(unitOfMeasurementId: string, headerOptions?: HeaderBaseOptions): Observable<UnitOfMeasurement> {
     return undefined;
   }
 
-  getUnitOfMeasurementCount(ownerPartyId: string, headerOptions?: any): Observable<number> {
+  // getUnitOfMeasurementCount(headerOptions?: HeaderBaseOptions): Observable<number> {
+  //   return undefined;
+  // }
+
+  getUnitOfMeasurements(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: HeaderBaseOptions): Observable<UnitOfMeasurements> {
     return undefined;
   }
 
-  getUnitOfMeasurements(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<UnitOfMeasurement[]>> {
-    return undefined;
-  }
-
-  updateUnitOfMeasurement(unitOfMeasurement: UnitOfMeasurement, headerOptions?: any): Observable<Affect> {
+  updateUnitOfMeasurement(unitOfMeasureId: string, unitOfMeasurement: UnitOfMeasurement, headerOptions?: HeaderBaseOptions): Observable<Affect> {
     return undefined;
   }
 }

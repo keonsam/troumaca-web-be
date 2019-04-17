@@ -1,6 +1,7 @@
 import {AccessRoleRepository} from "../../repository/access.role.repository";
 import {AccessRole} from "../../data/authorization/access.role";
 import {Observable} from "rxjs";
+import { HeaderBaseOptions } from "../../header.base.options";
 
 export class AccessRoleRestRepository implements AccessRoleRepository {
 
@@ -12,7 +13,7 @@ export class AccessRoleRestRepository implements AccessRoleRepository {
     return undefined;
   }
 
-  findAccessRoles(searchStr: string, pageSize: number): Observable<AccessRole[]> {
+  findAccessRoles(searchStr: string, pageSize: number, options: HeaderBaseOptions): Observable<AccessRole[]> {
     return undefined;
   }
 

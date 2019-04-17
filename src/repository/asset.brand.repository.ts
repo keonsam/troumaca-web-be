@@ -6,18 +6,18 @@ import {Page} from "../util/page";
 
 export interface AssetBrandRepository {
 
-  addAssetBrand(assetBrand: AssetBrand, headerOptions?:any): Observable<AssetBrand>;
+  addAssetBrand(assetBrand: AssetBrand, headerOptions?: any): Observable<AssetBrand>;
 
-  updateAssetBrand(assetBrand: AssetBrand, headerOptions?:any): Observable<Affect>;
+  updateAssetBrand(assetBrand: AssetBrand, headerOptions?: any): Observable<Affect>;
 
-  deleteAssetBrand(assetBrandId: string, ownerPartyId: string, headerOptions?:any): Observable<Affect>;
+  deleteAssetBrand(assetBrandId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect>;
 
-  findAssetBrands(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?:any): Observable<AssetBrand[]>;
+  findAssetBrands(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetBrand[]>;
 
   getAssetBrands(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetBrand[]>>;
 
   getAssetBrandCount(ownerPartyId: string, headerOptions?: any): Observable<number>;
 
-  getAssetBrandById(assetBrandId: string, ownerPartyId: string, headerOptions?:any): Observable<AssetBrand>;
+  getAssetBrandById(assetBrandId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetBrand>;
 
 }

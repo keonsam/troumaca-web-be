@@ -7,12 +7,13 @@ import {generateUUID} from "../../uuid.generator";
 import { map, switchMap } from "rxjs/operators";
 import { AccessRoleType } from "../../data/authorization/access.role.type";
 import { Grant } from "../../data/authorization/grant";
+import { HeaderBaseOptions } from "../../header.base.options";
 
 export class AccessRoleDBRepository implements AccessRoleRepository {
 
   private defaultPageSize: number = 10;
 
-  findAccessRoles(searchStr: string, pageSize: number): Observable<AccessRole[]> {
+  findAccessRoles(searchStr: string, pageSize: number, options: HeaderBaseOptions): Observable<AccessRole[]> {
     const searchStrLocal = new RegExp(searchStr);
     const query = searchStr ? {name: {$regex: searchStrLocal}} : {};
     return Observable.create(function (observer: Observer<AccessRole[]>) {

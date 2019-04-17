@@ -14,8 +14,8 @@ export function createAssetTypeRepository(kind?: RepositoryKind): AssetTypeRepos
   const k: RepositoryKind = (kind) ? kind : (type === 2) ? RepositoryKind.Rest : RepositoryKind.Nedb;
   switch (k) {
     case RepositoryKind.Nedb:
-      //let assetSpecificationRepository: AssetSpecificationRepository = new AssetSpecificationRepositoryNeDbAdapter();
-      //let otherAssetTypeRepository: OtherAssetTypeRepository = new OtherAssetTypeRepositoryNeDbAdapter();
+      // let assetSpecificationRepository: AssetSpecificationRepository = new AssetSpecificationRepositoryNeDbAdapter();
+      // let otherAssetTypeRepository: OtherAssetTypeRepository = new OtherAssetTypeRepositoryNeDbAdapter();
       return new AssetTypeRepositoryNeDbAdapter();
     case RepositoryKind.Rest:
       return new AssetTypeRepositoryRestAdapter();
