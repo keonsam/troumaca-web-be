@@ -16,7 +16,7 @@ export interface OrganizationRepository {
   //
   // getOrganizationCount(): Observable<number>;
   //
-  // getOrganization(partyId: string): Observable<Organization>;
+  getOrganization(options: HeaderBaseOptions): Observable<Organization>;
 
   saveOrganization(organization: Organization, options?: HeaderBaseOptions): Observable<Organization>;
 
@@ -24,7 +24,7 @@ export interface OrganizationRepository {
 
   // deleteOrganization(partyId: string): Observable<number>;
   //
-  // updateOrganization(partyId: string, organization: Organization): Observable<number>;
+  updateOrganization(organization: Organization, options: HeaderBaseOptions): Observable<number>;
   //
   // getCompany(options: any): Observable<CompanyInfo>;
 }

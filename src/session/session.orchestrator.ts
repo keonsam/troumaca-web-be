@@ -3,6 +3,7 @@ import {SessionRepository} from "../repository/session.repository";
 import {Observable} from "rxjs";
 import {map} from "rxjs/operators";
 import {ValidSession} from "../data/session/valid.session";
+import { HeaderBaseOptions } from "../header.base.options";
 
 export class SessionOrchestrator {
 
@@ -12,7 +13,7 @@ export class SessionOrchestrator {
     this.sessionRepository = createSessionRepositoryFactory();
   }
 
-  isValidSession(sessionId: string, options?: any): Observable<ValidSession> {
+  isValidSession(sessionId: string, options?: HeaderBaseOptions): Observable<ValidSession> {
     return this.sessionRepository.isValidSession(sessionId, options);
   }
 

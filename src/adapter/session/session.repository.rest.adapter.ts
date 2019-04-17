@@ -5,10 +5,11 @@ import {properties} from "../../properties.helpers";
 import {jsonRequestHeaderMap, postJsonOptions} from "../../request.helpers";
 import request from "request";
 import {ValidSession} from "../../data/session/valid.session";
+import { HeaderBaseOptions } from "../../header.base.options";
 
 export class SessionRepositoryRestAdapter implements SessionRepository {
 
-  isValidSession(sessionId: string, options?: any): Observable<ValidSession> {
+  isValidSession(sessionId: string, options?: HeaderBaseOptions): Observable<ValidSession> {
     // TODO: fix this please
     return throwError(undefined);
     // const uri: string = properties.get("session.host.port") as string;

@@ -7,6 +7,7 @@ import {jsonRequestHeaderMap, postJsonOptions} from "../../request.helpers";
 import request from "request";
 import {JoinOrganization} from "../../data/party/join.organization";
 import { CompanyInfo } from "../../data/party/company.info";
+import { HeaderBaseOptions } from "../../header.base.options";
 
 export class OrganizationRestRepository implements OrganizationRepository {
 
@@ -76,9 +77,9 @@ export class OrganizationRestRepository implements OrganizationRepository {
   //   return undefined;
   // }
   //
-  // getOrganization(partyId: string): Observable<Organization> {
-  //   return undefined;
-  // }
+  getOrganization(options: HeaderBaseOptions): Observable<Organization> {
+    return undefined;
+  }
   //
   // getOrganizationCount(): Observable<number> {
   //   return undefined;
@@ -88,9 +89,9 @@ export class OrganizationRestRepository implements OrganizationRepository {
   //   return undefined;
   // }
   //
-  // updateOrganization(partyId: string, organization: Organization): Observable<number> {
-  //   return undefined;
-  // }
+  updateOrganization(organization: Organization, options: HeaderBaseOptions): Observable<number> {
+    return undefined;
+  }
   //
   // getCompany(partyId: any): Observable<CompanyInfo> {
   //   return undefined;

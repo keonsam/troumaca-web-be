@@ -28,12 +28,16 @@ export class OrganizationOrchestrator {
   //         }));
   // }
 
-  // getOrganization(partyId: any): Observable<Organization> {
-  //   return this.organizationRepository.getOrganization(partyId);
-  // }
+  getOrganization(options: HeaderBaseOptions): Observable<Organization> {
+    return this.organizationRepository.getOrganization(options);
+  }
 
   saveOrganization(organization: Organization, options?: HeaderBaseOptions): Observable<Organization> {
     return this.organizationRepository.saveOrganization(organization, options);
+  }
+
+  updateOrganization(organization: Organization, options: HeaderBaseOptions): Observable<number> {
+    return this.organizationRepository.updateOrganization(organization, options);
   }
 
   // addCustomer(organization: Organization, options?: any): Observable<Organization> {
@@ -81,9 +85,6 @@ export class OrganizationOrchestrator {
   //   return this.organizationRepository.deleteOrganization(partyId);
   // }
   //
-  // updateOrganization(partyId: string, organization: Organization): Observable<number> {
-  //   return this.organizationRepository.updateOrganization(partyId, organization);
-  // }
   //
   // getCompany(options: any): Observable<CompanyInfo> {
   //     return this.organizationRepository.getCompany(options);

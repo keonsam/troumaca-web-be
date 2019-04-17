@@ -25,6 +25,20 @@ export class OrganizationDBRepository implements OrganizationRepository {
   //   });
   // }
 
+  getOrganization(options: HeaderBaseOptions): Observable<Organization> {
+    return Observable.create(function (observer: Observer<Organization>) {
+      const query = {ownerPartyId: options.ownerPartyId };
+      organizations.findOne(query, function (err: any, doc: any) {
+        if (!err) {
+          observer.next(doc);
+        } else {
+          observer.error(err);
+        }
+        observer.complete();
+      });
+    });
+  }
+
   saveOrganization(organization: Organization, options?: HeaderBaseOptions): Observable<Organization> {
     const partyId = options.partyId;
     return this.saveOrganizationLocal(organization, partyId)
@@ -133,19 +147,6 @@ export class OrganizationDBRepository implements OrganizationRepository {
   //   });
   // }
 
-  // getOrganization(ownerPartyId: string): Observable<Organization> {
-  //   return Observable.create(function (observer: Observer<Organization>) {
-  //     const query = {ownerPartyId};
-  //     organizations.findOne(query, function (err: any, doc: any) {
-  //       if (!err) {
-  //         observer.next(doc);
-  //       } else {
-  //         observer.error(err);
-  //       }
-  //       observer.complete();
-  //     });
-  //   });
-  // }
 
   // deleteOrganization(partyId: string): Observable<number> {
   //   return Observable.create(function (observer: Observer<number>) {
@@ -164,22 +165,22 @@ export class OrganizationDBRepository implements OrganizationRepository {
   //   });
   // }
   //
-  // updateOrganization(partyId: string, organization: Organization): Observable<number> {
-  //   return Observable.create(function (observer: Observer<number>) {
-  //     organization.modifiedOn = new Date();
-  //     const query = {
-  //       "partyId": partyId
-  //     };
-  //     organizations.update(query, organization, {}, function (err: any, numReplaced: number) {
-  //       if (!err) {
-  //         observer.next(numReplaced);
-  //       } else {
-  //         observer.error(err);
-  //       }
-  //       observer.complete();
-  //     });
-  //   });
-  // }
+  updateOrganization(organization: Organization, options: HeaderBaseOptions): Observable<number> {
+    return Observable.create(function (observer: Observer<number>) {
+      organization.modifiedOn = new Date();
+      const query = {
+        ownerPartyId: options.ownerPartyId
+      };
+      organizations.update(query, { $set: organization}, {}, function (err: any, numReplaced: number) {
+        if (!err) {
+          observer.next(numReplaced);
+        } else {
+          observer.error(err);
+        }
+        observer.complete();
+      });
+    });
+  }
   //
   // getCompany(options: any): Observable<CompanyInfo> {
   //   return this.getOrganization(options["Owner-Party-Id"])

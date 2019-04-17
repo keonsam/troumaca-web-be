@@ -1,3 +1,2 @@
-{"$$indexCreated":{"fieldName":"partyId","unique":true,"sparse":false}}
-{"firstName":"Keon","lastName":"Samuel","version":"a43e2ba6-48fa-40f9-a663-a03ada1040f7","createdOn":{"$$date":1555335620955},"modifiedOn":{"$$date":1555335620955},"partyId":"7952d087-ed28-4906-a592-4386878e631c","ownerPartyId":"fba78d62-2679-4b73-9948-fa34ef970f76","_id":"ew4kaHaeyetrBTrS"}
 {"firstName":"Prince","lastName":"williams","version":"2","createdOn":{"$$date":1555335620955},"modifiedOn":{"$$date":1555335695892},"partyId":"7952d087-ed28-4906-a592-4386878e631c","ownerPartyId":"fba78d62-2679-4b73-9948-fa34ef970f76","_id":"ew4kaHaeyetrBTrS"}
+{"$$indexCreated":{"fieldName":"partyId","unique":true,"sparse":false}}

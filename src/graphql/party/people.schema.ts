@@ -25,14 +25,11 @@ export const typeDef = gql`
         lastName: String!
         username: String
         version: String!
-#        partyAccessRoles: PartyAccessRole
+        partyAccessRoles: PartyAccessRole
     }
-#    type PartyAccessRole {
-#        accessRoleId: String
-#        accessRole: AccessRole
-#    }
-    type AccessRole {
-        name: String
+    type PartyAccessRole {
+        accessRoleId: String
+        accessRole: AccessRole
     }
     type Persons {
         persons: [Person]
@@ -50,6 +47,7 @@ export const typeDef = gql`
     }
     input CredentialInput {
         username: String,
+        password: String,
         version: String
     }
 `;

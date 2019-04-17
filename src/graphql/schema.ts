@@ -2,7 +2,7 @@ import { gql, makeExecutableSchema } from "apollo-server-express";
 import { merge } from "lodash";
 import { typeDef as  Credential, resolvers as CredentialResolvers } from "./authentication/credential.schema";
 import { typeDef as Confirmation, resolvers as ConfirmationResolvers} from "./authentication/confirmation.schema";
-import { typeDef as Company, resolvers as CompanyResolvers} from "./party/company";
+import { typeDef as Company, resolvers as CompanyResolvers} from "./party/company.schema";
 import { typeDef as AssetNameType, resolvers as AssetNameTypeResolvers} from "./asset/asset.name.type.schema";
 import { typeDef as AssetIdentifierType, resolvers as AssetIdentifierTypeResolvers} from "./asset/asset.identifier.type.schema";
 import { typeDef as AssetRoleType, resolvers as AssetRoleTypeResolvers} from "./asset/asset.role.type.schema";
@@ -11,17 +11,13 @@ import { typeDef as UnitOfMeasure, resolvers as UnitOfMeasureResolvers} from "./
 import { typeDef as AssetCharacteristic, resolvers as AssetCharacteristicResolvers} from "./asset/asset.characteristic.schema";
 import { typeDef as AssetType, resolvers as AssetTypeResolvers} from "./asset/asset.type.schema";
 import { typeDef as Asset, resolvers as AssetResolvers } from "./asset/asset.schema";
+import {typeDef as AccessRole, resolvers as AccessRoleResolvers } from "./authorization/access.role.schema";
 import { typeDef as People, resolvers as PeopleResolvers } from "./party/people.schema";
+import { typeDef as User, resolvers as UserResolvers } from "./party/user.schema";
+import { typeDef as Session, resolvers as SessionResolvers } from "./authorization/session.schema";
+
+// Directives
 import { RequireAuth } from "../middleware/require.auth";
-// import {
-//   typeDef as OrganizationProfile,
-//   resolvers as organizationProfileResolvers
-// } from "./organization.profile";
-//
-// import {
-//   typeDef as AssetNameType,
-//   resolvers as assetNameTypeResolvers
-// } from "./asset.name.type";
 
 // using: https://blog.apollographql.com/modularizing-your-graphql-schema-code-d7f71d5ed5f2
 // other reference: https://graphql.org/learn/queries/
@@ -60,6 +56,7 @@ const schema = makeExecutableSchema({
       typeDefs,
       Credential,
       Confirmation,
+      Session,
       Company,
       AssetNameType,
       AssetIdentifierType,
@@ -69,14 +66,15 @@ const schema = makeExecutableSchema({
       AssetCharacteristic,
       AssetType,
       Asset,
-      People
-      // MeType
-    // OrganizationProfile,
+      AccessRole,
+      People,
+      User
   ],
   resolvers: merge(
       resolvers,
       CredentialResolvers,
       ConfirmationResolvers,
+      SessionResolvers,
       CompanyResolvers,
       AssetNameTypeResolvers,
       AssetIdentifierTypeResolvers,
@@ -86,10 +84,9 @@ const schema = makeExecutableSchema({
       AssetCharacteristicResolvers,
       AssetTypeResolvers,
       AssetResolvers,
-      PeopleResolvers
-      // MeResolvers
-    // organizationProfileResolvers,
-    // assetNameTypeResolvers
+      AccessRoleResolvers,
+      PeopleResolvers,
+      UserResolvers
   ),
     schemaDirectives: {
         requireAuth: RequireAuth
