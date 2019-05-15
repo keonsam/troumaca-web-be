@@ -40,12 +40,12 @@ export class CredentialOrchestrator {
     return this.credentialRepository.isValidPassword(password, options);
   }
 
-  addCredential(credential: Credential, person: Person, options?: HeaderBaseOptions): Observable<Confirmation> {
-    return this.credentialRepository.addCredential(person, credential, options)
+  addCredential(credential: Credential, options?: HeaderBaseOptions): Observable<Confirmation> {
+    return this.credentialRepository.addCredential(new Person(credential.username), credential, options)
         .pipe(map( res => res.confirmation));
   }
 
-  authenticate(credential: Credential, options?: HeaderBaseOptions): Observable<AuthenticatedCredential> {
+  authenticate(credential: any, options?: HeaderBaseOptions): Observable<AuthenticatedCredential> {
     // A person can access the application under the following conditions:
     // 1. He/she provides a valid set of credentials
     // 2. He/she has confirmed their username (email, or phone)
