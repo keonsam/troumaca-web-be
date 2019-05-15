@@ -2,7 +2,6 @@ import { gql, ApolloError } from "apollo-server-express";
 import { CredentialOrchestrator } from "../../authentication/credential/credential.orchestrator";
 import { map } from "rxjs/operators";
 import { Credential } from "../../data/authentication/credential";
-import { Person } from "../../data/party/person";
 
 const credentialOrchestrator: CredentialOrchestrator = new CredentialOrchestrator();
 
@@ -10,7 +9,7 @@ export const typeDef = gql`
     extend type Mutation {
         validateUsername(username: String!): ValidRes
         validatePassword(password: String!): ValidRes
-        register(username: String!, password: String!, firstName: String!, lastName: String!): Confirmation
+        register(username: String!, companyName: String, accountType: String!, usernameType: String!, password: String!, confirmedPassword: String!): Confirmation
         login(username: String!, password: String!): Authenticate
   }
     type ValidRes {
@@ -53,9 +52,9 @@ export const resolvers = {
                     throw new ApolloError(error);
                 });
         },
-        register: async (_: any, {username, password, firstName, lastName}: any) => {
+        register: async (_: any, {username, companyName, accountType, usernameType,  password, confirmedPassword }: any) => {
             return await credentialOrchestrator
-                .addCredential(new Credential(username, password), new Person(firstName, lastName))
+                .addCredential(new Credential(username, companyName, accountType, usernameType, password, confirmedPassword))
                 .toPromise()
                 .then( res => {
                     return res;
@@ -66,7 +65,7 @@ export const resolvers = {
         },
         login: async (_: any, {username, password}: any, {req}: any) => {
             return await credentialOrchestrator.
-            authenticate(new Credential(username, password)).
+            authenticate({username, password}).
             toPromise()
                 .then( auth => {
                     if (auth && auth.sessionId) {
@@ -74,8 +73,7 @@ export const resolvers = {
                     }
                     return auth;
                 }, error => {
-                    console.log(error);
-                    throw new ApolloError(error);
+                    throw new ApolloError(error, "404");
                 });
         }
     }
