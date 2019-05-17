@@ -14,7 +14,6 @@ import {PersonRepository} from "../../repository/person.repository";
 import {createPersonRepository} from "../../adapter/party/person.repository.factory";
 import {Person} from "../../data/party/person";
 import {ChangePassword} from "../../data/authentication/change.password";
-import { ChangeResponse } from "../../data/authentication/change.response";
 import { HeaderBaseOptions } from "../../header.base.options";
 
 export class CredentialOrchestrator {
@@ -89,11 +88,11 @@ export class CredentialOrchestrator {
     }));
   }
 
-  // forgetPassword(credential: Credential, options?: HeaderBaseOptions): Observable<Confirmation> {
-  //   return this.credentialRepository.forgetPassword(credential, options);
-  // }
+  forgetPassword(username: string, options?: HeaderBaseOptions): Observable<Confirmation> {
+    return this.credentialRepository.forgetPassword(username, options);
+  }
   //
-  // changePassword(changePassword: ChangePassword, options?: HeaderBaseOptions): Observable<ChangeResponse> {
-  //   return this.credentialRepository.changePassword(changePassword, options);
-  // }
+  changePassword(changePassword: ChangePassword, options?: HeaderBaseOptions): Observable<boolean> {
+    return this.credentialRepository.changePassword(changePassword, options);
+  }
 }
