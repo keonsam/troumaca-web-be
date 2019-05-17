@@ -144,13 +144,13 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
     });
   }
 
-  forgetPassword(credential: Credential, options?: HeaderBaseOptions): Observable<Confirmation> {
+  forgetPassword(username: string, options?: HeaderBaseOptions): Observable<Confirmation> {
     const uri: string = properties.get("credential.host.port") as string;
 
     const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});
 
     const json = {
-      username: credential.username
+      username: username
     };
 
     const uriAndPath: string = uri + "/authentication/credentials/forget-password-confirm-code";
@@ -175,7 +175,10 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
     });
   }
 
-  changePassword(changePassword: ChangePassword, options?: HeaderBaseOptions): Observable<ChangeResponse> {
+  changePassword(changePassword: ChangePassword, options?: HeaderBaseOptions): Observable<boolean> {
+    // change to a boolean
+    return  undefined;
+
     const uri: string = properties.get("credential.host.port") as string;
 
     const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});
@@ -184,7 +187,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
       credentialId: changePassword.credentialId,
       username: changePassword.username,
       password: changePassword.password,
-      newPassword: changePassword.newPassword,
+      newPassword: changePassword.password,
       code: changePassword.code
     };
 
@@ -192,7 +195,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
 
     const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
 
-    return Observable.create(function (observer: Observer<ChangeResponse>) {
+    return Observable.create(function (observer: Observer<true>) {
       request(requestOptions, function (error: any, response: any, body: any) {
         try {
           if (error) {
@@ -200,7 +203,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
           } else if (response && response.statusCode != 200) {
             observer.error(body);
           } else {
-            observer.next(body);
+            observer.next(true);
           }
         } catch (e) {
           observer.error(new Error(e.message));

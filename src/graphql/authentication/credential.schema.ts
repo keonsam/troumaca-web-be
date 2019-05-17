@@ -11,6 +11,8 @@ export const typeDef = gql`
         validatePassword(password: String!): ValidRes
         register(username: String!, companyName: String, accountType: String!, usernameType: String!, password: String!, confirmedPassword: String!): Confirmation
         login(username: String!, password: String!): Authenticate
+        forgetPassword(username: String!): Confirmation
+        changePassword(changePassword: ChangePasswordInput): Boolean
   }
     type ValidRes {
         valid: Boolean
@@ -21,6 +23,12 @@ export const typeDef = gql`
     }
     type Authenticate {
         authenticateStatus: String!
+    }
+    input ChangePasswordInput {
+        credentialId: ID!
+        username: String!
+        password: String!
+        code: String!
     }
 `;
 
@@ -64,14 +72,34 @@ export const resolvers = {
                 });
         },
         login: async (_: any, {username, password}: any, {req}: any) => {
-            return await credentialOrchestrator.
-            authenticate({username, password}).
-            toPromise()
+            return await credentialOrchestrator
+                .authenticate({username, password})
+                .toPromise()
                 .then( auth => {
                     if (auth && auth.sessionId) {
                         req.session.sessionId = auth.sessionId;
                     }
                     return auth;
+                }, error => {
+                    throw new ApolloError(error, "404");
+                });
+        },
+        forgetPassword: async (_: any, {username}: any, {req}: any) => {
+            return await credentialOrchestrator
+                .forgetPassword(username)
+                .toPromise()
+                .then( res => {
+                    return res;
+                }, error => {
+                    throw new ApolloError(error, "404");
+                });
+        },
+        changePassword: async (_: any, {changePassword}: any, {req}: any) => {
+            return await credentialOrchestrator
+                .changePassword(changePassword)
+                .toPromise()
+                .then( res => {
+                    return res;
                 }, error => {
                     throw new ApolloError(error, "404");
                 });

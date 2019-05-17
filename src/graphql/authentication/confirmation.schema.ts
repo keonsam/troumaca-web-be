@@ -8,6 +8,7 @@ export const typeDef = gql`
         confirmation(confirmationId: ID!, credentialId: ID!, code: String!): Confirmation
     }
     extend type Confirmation {
+        code: String
         status: String
     }
 `;

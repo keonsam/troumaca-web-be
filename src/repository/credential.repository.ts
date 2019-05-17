@@ -18,9 +18,9 @@ export interface CredentialRepository {
 
   authenticate(credential: Credential, options?: HeaderBaseOptions): Observable<AuthenticatedCredential>;
 
-  // forgetPassword(credential: Credential, options?: HeaderBaseOptions): Observable<Confirmation>;
+  forgetPassword(username: string, options?: HeaderBaseOptions): Observable<Confirmation>;
   //
-  // changePassword(changePassword: ChangePassword, options?: HeaderBaseOptions): Observable<ChangeResponse>;
+  changePassword(changePassword: ChangePassword, options?: HeaderBaseOptions): Observable<boolean>;
 
   // updateCredential(partyId: string, credential: Credential, options?: HeaderBaseOptions): Observable<number>;
 
