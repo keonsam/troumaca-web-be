@@ -8,6 +8,7 @@ import {switchMap, map} from "rxjs/operators";
 import {factory} from "../../ConfigLog4j";
 import { Credential } from "../../data/authentication/credential";
 import { HeaderBaseOptions } from "../../header.base.options";
+import { ConfirmationInput } from "../../graphql/authentication/dto/confirmation.input";
 
 const log = factory.getLogger("authentication.ConfirmationRepositoryNeDbAdapter");
 
@@ -16,34 +17,34 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
     constructor() {
     }
 
-    // resendConfirmCode(confirmationId: string, credentialId: string, options?: any): Observable<Confirmation> {
-    //   return this.getConfirmationByCredentialId(credentialId, "Confirmed")
-    //     .pipe(switchMap(confirmation => {
-    //       if (confirmation) {
-    //         return of(confirmation);
-    //       } else {
-    //         return this.updateConfirmationStatus(credentialId, "Expired")
-    //           .pipe(switchMap(numReplaced => {
-    //             if (!numReplaced) {
-    //               return throwError(undefined);
-    //             } else {
-    //               const confirmation: Confirmation = new Confirmation();
-    //               confirmation.credentialId = credentialId;
-    //               return this.addConfirmation(confirmation);
-    //             }
-    //           }));
-    //       }
-    //     }));
-    // }
+    resendConfirmCode(confirmationId: string, credentialId: string, options?: any): Observable<Confirmation> {
+      return this.getConfirmationByCredentialId(credentialId, "Confirmed")
+        .pipe(switchMap(confirmation => {
+          if (confirmation) {
+            return of(confirmation);
+          } else {
+            return this.updateConfirmationStatus(credentialId, "Expired")
+              .pipe(switchMap(numReplaced => {
+                if (!numReplaced) {
+                  return throwError(undefined);
+                } else {
+                  const confirmation: Confirmation = new Confirmation();
+                  confirmation.credentialId = credentialId;
+                  return this.addConfirmation(confirmation);
+                }
+              }));
+          }
+        }));
+    }
 
-    confirmCode(confirmationId: string, credentialId: string, code: string, options?: HeaderBaseOptions): Observable<Confirmation> {
-        return this.verifyCode(confirmationId, code)
+    confirmCode(confirmationInput: ConfirmationInput, options?: HeaderBaseOptions): Observable<Confirmation> {
+        return this.verifyCode(confirmationInput.confirmationId, confirmationInput.code)
             .pipe(switchMap((confirmationRes: Confirmation) => {
                 log.debug("Confirmation: " + confirmationRes);
                 if (!confirmationRes || confirmationRes.status === "Expired" || confirmationRes.status === "Confirmed") {
                     return of(confirmationRes);
                 } else if (new Date(confirmationRes.createdOn.getTime() + (20 * 60000)) < new Date()) {
-                    return this.updateConfirmationStatus(credentialId, "Expired")
+                    return this.updateConfirmationStatus(confirmationInput.credentialId, "Expired")
                         .pipe(map(numRep => {
                             if (!numRep) {
                                 throw new Error(`ConfirmCode Error. Failed to update confirmation status ${numRep}`);
@@ -53,13 +54,13 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
                             }
                         }));
                 } else {
-                    return this.updateConfirmationStatus(credentialId, "Confirmed")
+                    return this.updateConfirmationStatus(confirmationInput.credentialId, "Confirmed")
                         .pipe(switchMap(numReplaced => {
                             log.debug("Number update: " + numReplaced);
                             if (!numReplaced) {
                                 return throwError(undefined);
                             } else {
-                                return this.updateCredentialStatusById(credentialId, "Confirmed")
+                                return this.updateCredentialStatusById(confirmationInput.credentialId, "Confirmed")
                                     .pipe(map(numReplaced1 => {
                                         log.debug("Number update: " + numReplaced);
                                         if (!numReplaced1) {
@@ -136,6 +137,42 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
         });
     }
 
+    private addConfirmation(confirmation: Confirmation): Observable<Confirmation> {
+        confirmation.confirmationId = generateUUID();
+        confirmation.code = phoneToken(6, {type: "string"});
+        confirmation.status = "New";
+        confirmation.createdOn = new Date();
+        confirmation.modifiedOn = new Date();
+        return Observable.create(function (observer: Observer<Confirmation>) {
+            credentialConfirmations.insert(confirmation, function (err: any, doc: any) {
+                if (!err) {
+                    observer.next(doc);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
+        });
+    }
+
+    private getConfirmationByCredentialId(credentialId: string, status: string): Observable<Confirmation> {
+        return Observable.create((observer: Observer<Confirmation>) => {
+            const query = {
+                "credentialId": credentialId,
+                "status": status
+            };
+
+            credentialConfirmations.findOne(query, (err: any, doc: any) => {
+                if (!err) {
+                    observer.next(doc);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
+        });
+    }
+
     // resendConfirmCodeByUsername(username: string, options?: any): Observable<Confirmation> {
     //     return this.getCredentialByUsername(username)
     //         .pipe( switchMap( credential => {
@@ -157,42 +194,6 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
     // }
 
     // USED BY OTHER REPO
-
-    // addConfirmation(confirmation: Confirmation): Observable<Confirmation> {
-    //   confirmation.confirmationId = generateUUID();
-    //   confirmation.code = phoneToken(6, {type: "string"});
-    //   confirmation.status = "New";
-    //   confirmation.createdOn = new Date();
-    //   confirmation.modifiedOn = new Date();
-    //   return Observable.create(function (observer: Observer<Confirmation>) {
-    //     credentialConfirmations.insert(confirmation, function (err: any, doc: any) {
-    //       if (!err) {
-    //         observer.next(doc);
-    //       } else {
-    //         observer.error(err);
-    //       }
-    //       observer.complete();
-    //     });
-    //   });
-    // }
-
-    // getConfirmationByCredentialId(credentialId: string, status: string): Observable<Confirmation> {
-    //   return Observable.create((observer: Observer<Confirmation>) => {
-    //     const query = {
-    //       "credentialId": credentialId,
-    //       "status": status
-    //     };
-    //
-    //     credentialConfirmations.findOne(query, (err: any, doc: any) => {
-    //       if (!err) {
-    //         observer.next(doc);
-    //       } else {
-    //         observer.error(err);
-    //       }
-    //       observer.complete();
-    //     });
-    //   });
-    // }
 
     // HELPERS
 

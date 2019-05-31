@@ -12,10 +12,11 @@ import {CreatedCredential} from "../../data/authentication/created.credential";
 import {Observable, Observer, of, throwError} from "rxjs";
 import {switchMap, map} from "rxjs/operators";
 import {Person} from "../../data/party/person";
-import {ChangePassword} from "../../data/authentication/change.password";
+import {ChangePasswordInput} from "../../graphql/authentication/dto/change.password.input";
 import { ChangeResponse } from "../../data/authentication/change.response";
 import phoneToken from "generate-sms-verification-code";
 import { HeaderBaseOptions } from "../../header.base.options";
+import { RegisterInput } from "../../graphql/authentication/dto/register.input";
 
 export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
 
@@ -82,8 +83,8 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
 
     }
 
-    addCredential(person: Person, credential: Credential, options?: HeaderBaseOptions): Observable<CreatedCredential> {
-        return this.addCredentialLocal(credential)
+    addCredential(person: Person, register: RegisterInput, options?: HeaderBaseOptions): Observable<CreatedCredential> {
+        return this.addCredentialLocal(register)
             .pipe(switchMap(credential => {
                 if (!credential) {
                     return throwError("Credential was not created.");
@@ -143,7 +144,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
             }));
     }
 
-    changePassword(changePassword: ChangePassword, options?: HeaderBaseOptions): Observable<boolean> {
+    changePassword(changePassword: ChangePasswordInput, options?: HeaderBaseOptions): Observable<boolean> {
         return Observable.create(function (observer: Observer<boolean>) {
             const query = {
                 "credentialId": changePassword.credentialId
@@ -212,7 +213,8 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
         });
     }
 
-    private addCredentialLocal(credential: Credential): Observable<Credential> {
+    private addCredentialLocal(registerInput: RegisterInput): Observable<Credential> {
+        const credential = new Credential(registerInput.username, registerInput.companyName, registerInput.password);
         credential.credentialId = generateUUID();
         credential.partyId = generateUUID();
         credential.createdOn = new Date();

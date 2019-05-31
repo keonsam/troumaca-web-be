@@ -13,8 +13,9 @@ import {Confirmation} from "../../data/authentication/confirmation";
 import {PersonRepository} from "../../repository/person.repository";
 import {createPersonRepository} from "../../adapter/party/person.repository.factory";
 import {Person} from "../../data/party/person";
-import {ChangePassword} from "../../data/authentication/change.password";
+import {ChangePasswordInput} from "../../graphql/authentication/dto/change.password.input";
 import { HeaderBaseOptions } from "../../header.base.options";
+import { RegisterInput } from "../../graphql/authentication/dto/register.input";
 
 export class CredentialOrchestrator {
 
@@ -39,7 +40,7 @@ export class CredentialOrchestrator {
     return this.credentialRepository.isValidPassword(password, options);
   }
 
-  addCredential(credential: Credential, options?: HeaderBaseOptions): Observable<Confirmation> {
+  addCredential(credential: RegisterInput, options?: HeaderBaseOptions): Observable<Confirmation> {
     return this.credentialRepository.addCredential(new Person(credential.username), credential, options)
         .pipe(map( res => res.confirmation));
   }
@@ -92,7 +93,7 @@ export class CredentialOrchestrator {
     return this.credentialRepository.forgetPassword(username, options);
   }
   //
-  changePassword(changePassword: ChangePassword, options?: HeaderBaseOptions): Observable<boolean> {
+  changePassword(changePassword: ChangePasswordInput, options?: HeaderBaseOptions): Observable<boolean> {
     return this.credentialRepository.changePassword(changePassword, options);
   }
 }
