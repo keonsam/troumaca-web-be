@@ -7,17 +7,18 @@ import {Confirmation} from "../../data/authentication/confirmation";
 import {classToPlain} from "class-transformer";
 import {ValidateConfirmCode} from "../../repository/validate.confirm.code";
 import { HeaderBaseOptions } from "../../header.base.options";
+import { ConfirmationInput } from "../../graphql/authentication/dto/confirmation.input";
 
 export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository {
 
-  confirmCode(confirmationId: string, credentialId: string, code: string, options?: HeaderBaseOptions): Observable<Confirmation> {
+  confirmCode(confirmationInput: ConfirmationInput, options?: HeaderBaseOptions): Observable<Confirmation> {
     const uri: string = properties.get("credential.host.port") as string;
 
     const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});
 
-    const json = {code};
+    const json = { code: confirmationInput.code };
 
-    const uriAndPath: string = `${uri}/authentication/confirmations/${confirmationId}/credentials/${credentialId}`;
+    const uriAndPath: string = `${uri}/authentication/confirmations/${confirmationInput.confirmationId}/credentials/${confirmationInput.credentialId}`;
 
     const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
 

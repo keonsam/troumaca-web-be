@@ -7,9 +7,11 @@ import cors from "cors";
 // import bodyParser from "body-parser";
 // import cookieParser from "cookie-parser";
 import {ApolloServer} from "apollo-server-express";
-import schema from "./graphql/schema";
+// import schema from "./graphql/schema";
 // import router from "./routes";
 import session from "express-session";
+import { buildSchema } from "type-graphql";
+import RESOLVERS from "./graphql/resolvers";
 
 const app = express();
 
@@ -69,18 +71,26 @@ app.use(session({
     }
 }));
 
-const server = new ApolloServer({
-    schema,
-    context: ({req}: any) => {
-        return ({ req});
-    }
-});
+async function bootstrap() {
 
-server.applyMiddleware({
-    app,
-    path: graphqlPath,
-    cors: false,
-});
+    const schema = await buildSchema({
+        resolvers: RESOLVERS,
+    });
+    const server = new ApolloServer({
+        schema,
+        context: ({req}: any) => {
+            return ({ req});
+        }
+    });
+
+    server.applyMiddleware({
+        app,
+        path: graphqlPath,
+        cors: false,
+    });
+}
+
+
 
 // catch 404 and forward to error handler
 // app.use((req: any, res: any, next: any) => {
@@ -101,5 +111,5 @@ server.applyMiddleware({
 //   res.send('{"message":"Express REST API error"}');
 //   res.render("error");
 // });
-
+bootstrap();
 export default app;

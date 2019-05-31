@@ -4,9 +4,10 @@ import {CreatedCredential} from "../data/authentication/created.credential";
 import {Observable} from "rxjs";
 import {Person} from "../data/party/person";
 import { Confirmation } from "../data/authentication/confirmation";
-import {ChangePassword} from "../data/authentication/change.password";
+import {ChangePasswordInput} from "../graphql/authentication/dto/change.password.input";
 import { ChangeResponse } from "../data/authentication/change.response";
 import { HeaderBaseOptions } from "../header.base.options";
+import { RegisterInput } from "../graphql/authentication/dto/register.input";
 
 export interface CredentialRepository {
 
@@ -14,13 +15,13 @@ export interface CredentialRepository {
 
   isValidPassword(password: string, options?: HeaderBaseOptions): Observable<boolean>;
 
-  addCredential(person: Person, credential: Credential, options?: HeaderBaseOptions): Observable<CreatedCredential>;
+  addCredential(person: Person, credential: RegisterInput, options?: HeaderBaseOptions): Observable<CreatedCredential>;
 
   authenticate(credential: Credential, options?: HeaderBaseOptions): Observable<AuthenticatedCredential>;
 
   forgetPassword(username: string, options?: HeaderBaseOptions): Observable<Confirmation>;
   //
-  changePassword(changePassword: ChangePassword, options?: HeaderBaseOptions): Observable<boolean>;
+  changePassword(changePassword: ChangePasswordInput, options?: HeaderBaseOptions): Observable<boolean>;
 
   // updateCredential(partyId: string, credential: Credential, options?: HeaderBaseOptions): Observable<number>;
 
