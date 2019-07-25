@@ -11,7 +11,7 @@ export class RequireAuth extends SchemaDirectiveVisitor {
         field.resolve = async (...args) => {
             const [, , context] = args;
             if (!context.req.session.sessionId) {
-                throw new AuthenticationError("You must be signed in to view this resource.");
+                throw new AuthenticationError("You must be logged in.");
             }
             return await sessionOrchestrator
                 .isValidSession(context.req.session.sessionId)

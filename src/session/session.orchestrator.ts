@@ -1,6 +1,6 @@
 import {createSessionRepositoryFactory} from "../adapter/session/session.repository.factory";
 import {SessionRepository} from "../repository/session.repository";
-import {Observable} from "rxjs";
+import { Observable, of } from "rxjs";
 import {map} from "rxjs/operators";
 import {ValidSession} from "../data/session/valid.session";
 import { HeaderBaseOptions } from "../header.base.options";
@@ -14,7 +14,8 @@ export class SessionOrchestrator {
   }
 
   isValidSession(sessionId: string, options?: HeaderBaseOptions): Observable<ValidSession> {
-    return this.sessionRepository.isValidSession(sessionId, options);
+    return of(new ValidSession(!!sessionId));
+    // return this.sessionRepository.isValidSession(sessionId, options);
   }
 
   handleSessionLogOut(sessionId: string, options?: any): Observable<boolean> {
@@ -27,6 +28,4 @@ export class SessionOrchestrator {
         }
       }));
   }
-
-
 }

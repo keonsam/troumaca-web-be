@@ -9,7 +9,7 @@ export class AuthenticatedCredential {
   @Field()
   username: string;
   @Field()
-  authenticateStatus: string;
+  status: string;
   @Field(type => ID)
   confirmationId: string;
   @Field(type => ID)

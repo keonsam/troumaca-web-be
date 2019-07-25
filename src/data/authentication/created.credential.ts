@@ -5,7 +5,7 @@ export class CreatedCredential {
   credential: Credential;
   confirmation: Confirmation;
 
-  constructor(credential: Credential, confirmation: Confirmation) {
+  constructor(credential?: Credential, confirmation?: Confirmation) {
     this.credential = credential;
     this.confirmation = confirmation;
   }

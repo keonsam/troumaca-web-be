@@ -5,7 +5,7 @@ import { ConfirmationInput } from "../graphql/authentication/dto/confirmation.in
 
 export interface ConfirmationRepository {
 
-  confirmCode(confirmationInput: ConfirmationInput, options?: HeaderBaseOptions): Observable<Confirmation>;
+  confirmCode(confirmationInput: ConfirmationInput, options?: HeaderBaseOptions): Observable<string>;
 
   resendConfirmCode(confirmationId: string, credentialId: string, options?: any): Observable<Confirmation>;
   //

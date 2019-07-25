@@ -37,12 +37,12 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
         }));
     }
 
-    confirmCode(confirmationInput: ConfirmationInput, options?: HeaderBaseOptions): Observable<Confirmation> {
+    confirmCode(confirmationInput: ConfirmationInput, options?: HeaderBaseOptions): Observable<string> {
         return this.verifyCode(confirmationInput.confirmationId, confirmationInput.code)
             .pipe(switchMap((confirmationRes: Confirmation) => {
                 log.debug("Confirmation: " + confirmationRes);
                 if (!confirmationRes || confirmationRes.status === "Expired" || confirmationRes.status === "Confirmed") {
-                    return of(confirmationRes);
+                    return of(confirmationRes.status);
                 } else if (new Date(confirmationRes.createdOn.getTime() + (20 * 60000)) < new Date()) {
                     return this.updateConfirmationStatus(confirmationInput.credentialId, "Expired")
                         .pipe(map(numRep => {
@@ -50,7 +50,7 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
                                 throw new Error(`ConfirmCode Error. Failed to update confirmation status ${numRep}`);
                             } else {
                                 confirmationRes.status = "Expired";
-                                return confirmationRes;
+                                return confirmationRes.status;
                             }
                         }));
                 } else {
@@ -67,7 +67,7 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
                                             throw new Error("credential not updated");
                                         } else {
                                             confirmationRes.status = "Confirmed";
-                                            return confirmationRes;
+                                            return confirmationRes.status;
                                         }
                                     }));
                             }

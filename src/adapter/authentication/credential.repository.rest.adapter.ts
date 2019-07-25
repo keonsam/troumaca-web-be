@@ -13,14 +13,17 @@ import {Confirmation} from "../../data/authentication/confirmation";
 import {ChangePasswordInput} from "../../graphql/authentication/dto/change.password.input";
 import { ChangeResponse } from "../../data/authentication/change.response";
 import { HeaderBaseOptions } from "../../header.base.options";
+import { RegisterInput } from "../../graphql/authentication/dto/register.input";
 
 export class CredentialRepositoryRestAdapter implements CredentialRepository {
 
+  localhost = "http://localhost:8888";
+  remote = true;
   constructor() {
   }
 
   isValidPassword(password: string, options?: HeaderBaseOptions): Observable<boolean> {
-    let uri: string = properties.get("credential.host.port") as string;
+    let uri: string = this.remote ? properties.get("credential.host.port") as string : this.localhost;
 
     const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});
 
@@ -51,7 +54,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
   }
 
   isValidUsername(username: string, options?: HeaderBaseOptions): Observable<boolean> {
-    let uri: string = properties.get("credential.host.port") as string;
+    let uri: string = this.remote ? properties.get("credential.host.port") as string : this.localhost;
 
     const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});
 
@@ -80,38 +83,34 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
     });
   }
 
-  addCredential(person: Person, credential: Credential, options?: HeaderBaseOptions): Observable<CreatedCredential> {
-    return undefined;
-    // const uri: string = properties.get("credential.host.port") as string;
-    //
-    // const createCredential: CreateCredential = new CreateCredential(person, credential);
-    //
-    // const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});
-    //
-    // const credentialJson = classToPlain(createCredential);
-    //
-    // const uriAndPath: string = uri + "/authentication/credentials";
-    //
-    // const requestOptions: any = postJsonOptions(uriAndPath, headerMap, credentialJson);
-    //
-    // return Observable.create(function (observer: Observer<CreatedCredential>) {
-    //   request(requestOptions, function (error: any, response: any, body: any) {
-    //     if (error) {
-    //       observer.error(error);
-    //     } else {
-    //       if (response && response.statusCode != 200) {
-    //         observer.error(body);
-    //       } else {
-    //         observer.next(body);
-    //       }
-    //     }
-    //     observer.complete();
-    //   });
-    // });
+  addCredential(register: RegisterInput, options?: HeaderBaseOptions): Observable<Confirmation> {
+    const uri: string = this.remote ? properties.get("registrar.host.port") as string : this.localhost;
+
+    const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});
+
+    const uriAndPath: string = `${uri}/registrar/register`;
+
+    const requestOptions: any = postJsonOptions(uriAndPath, headerMap, register);
+
+    return Observable.create(function (observer: Observer<CreatedCredential>) {
+      request(requestOptions, function (error: any, response: any, body: any) {
+        if (error) {
+          observer.error(error);
+        } else {
+          if (response && response.statusCode != 200) {
+            observer.error(body);
+          } else {
+            observer.next(body["createdCredential"]["confirmationEvent"]["confirmation"]);
+          }
+        }
+        observer.complete();
+      });
+    });
   }
 
-  authenticate(credential: Credential, options?: HeaderBaseOptions): Observable<AuthenticatedCredential> {
-    const uri: string = properties.get("credential.host.port") as string;
+  authenticate(credential: Credential, options?: HeaderBaseOptions): Observable<string> {
+    const uri: string = this.remote ? properties.get("login.host.port") as string : this.localhost;
+
 
     const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});
 
@@ -121,7 +120,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
       password: credential.password
     };
 
-    const uriAndPath: string = uri + "/authentication/authenticate";
+    const uriAndPath: string = `${uri}/login`;
 
     const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
 
@@ -133,8 +132,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
           } else if (response && response.statusCode != 200) {
             observer.error(body);
           } else {
-            // let vp:boolean = plainToClass(Boolean, body["valid"] as Object);
-            observer.next(body);
+            observer.next(body["session"]["sessionId"]);
           }
           observer.complete();
         } catch (e) {
@@ -154,7 +152,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
       username: username
     };
 
-    const uriAndPath: string = uri + "/authentication/credentials/forget-password-confirm-code";
+    const uriAndPath: string = `${uri}/authentication/credentials/forget-password`;
 
     const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
 
@@ -166,7 +164,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
           } else if (response && response.statusCode != 200) {
             observer.error(body);
           } else {
-            observer.next(body);
+            observer.next(body["confirmationEvent"]["confirmation"]);
           }
         } catch (e) {
           observer.error(new Error(e.message));
@@ -178,21 +176,19 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
 
   changePassword(changePassword: ChangePasswordInput, options?: HeaderBaseOptions): Observable<boolean> {
     // change to a boolean
-    return  undefined;
-
     const uri: string = properties.get("credential.host.port") as string;
 
     const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});
 
     const json = {
-      credentialId: changePassword.credentialId,
-      username: changePassword.username,
-      password: changePassword.password,
-      newPassword: changePassword.password,
-      code: changePassword.code
+        confirmationId: changePassword.confirmationId,
+        credentialId: changePassword.credentialId,
+        oldPassword: changePassword.oldPassword,
+        newPassword: changePassword.newPassword,
+        code: changePassword.code
     };
 
-    const uriAndPath: string = uri + "/authentication/credentials/changed-password-with-code";
+    const uriAndPath: string = `${uri}/authentication/credentials/changed-password-with-code`;
 
     const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
 
@@ -204,7 +200,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
           } else if (response && response.statusCode != 200) {
             observer.error(body);
           } else {
-            observer.next(true);
+            observer.next(body["changed"]);
           }
         } catch (e) {
           observer.error(new Error(e.message));
@@ -213,17 +209,4 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
       });
     });
   }
-
-  // updateCredential(partyId: string, credential: Credential, options?: HeaderBaseOptions): Observable<number> {
-  //     return undefined;
-  // }
-
-  deleteCredentialByPartyId(partyId: string, options?: HeaderBaseOptions): Observable<number> {
-    return undefined;
-  }
-
-  public updateCredentialStatusByPartyId(partyId: string, status: string, options?: HeaderBaseOptions): Observable<number> {
-    return undefined;
-  }
-
 }
