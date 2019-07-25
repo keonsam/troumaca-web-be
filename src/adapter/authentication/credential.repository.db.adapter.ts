@@ -3,28 +3,28 @@ import libphonenumberjs from "libphonenumber-js";
 import PasswordValidator from "password-validator";
 import {generateUUID} from "../../uuid.generator";
 import {Credential} from "../../data/authentication/credential";
-import { credentialConfirmations, credentials, organizations, persons } from "../../db";
+import { credentialConfirmations, credentials, persons } from "../../db";
 import {CredentialRepository} from "../../repository/credential.repository";
 import {AuthenticatedCredential} from "../../data/authentication/authenticated.credential";
 import {Confirmation} from "../../data/authentication/confirmation";
-import {ConfirmationRepositoryNeDbAdapter} from "./confirmation.repository.db.adapter";
-import {CreatedCredential} from "../../data/authentication/created.credential";
 import {Observable, Observer, of, throwError} from "rxjs";
 import {switchMap, map} from "rxjs/operators";
 import {Person} from "../../data/party/person";
 import {ChangePasswordInput} from "../../graphql/authentication/dto/change.password.input";
-import { ChangeResponse } from "../../data/authentication/change.response";
 import phoneToken from "generate-sms-verification-code";
 import { HeaderBaseOptions } from "../../header.base.options";
 import { RegisterInput } from "../../graphql/authentication/dto/register.input";
+import { Session } from "../../data/session/session";
+import { SessionRepositoryNeDbAdapter } from "../session/session.repository.db.adapter";
 
 export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
 
     // private confirmationRepositoryNeDbAdapter: ConfirmationRepositoryNeDbAdapter = new ConfirmationRepositoryNeDbAdapter();
+    private sessionRepositoryNeDbAdapter: SessionRepositoryNeDbAdapter = new SessionRepositoryNeDbAdapter();
 
     isValidUsername(username: string, options?: HeaderBaseOptions): Observable<boolean> {
         if (!username) {
-            return of(false);
+            return throwError("Username must be sent.");
         }
 
         // the user name is valid if:
@@ -44,7 +44,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
 
         if (!validUsername) {
             // 3. and is not taken
-            return of(false);
+            return throwError("Must be a valid email or mobile number.");
         } else {
             return this.getCredentialByUsername(username)
                 .pipe(map(credential => {
@@ -53,7 +53,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
                     } else if (options && credential.partyId === options.partyId) {
                         return true;
                     } else {
-                        return false;
+                        throw new Error("Username is taken.");
                     }
                 }));
         }
@@ -83,7 +83,10 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
 
     }
 
-    addCredential(person: Person, register: RegisterInput, options?: HeaderBaseOptions): Observable<CreatedCredential> {
+    addCredential(register: RegisterInput, options?: HeaderBaseOptions): Observable<Confirmation> {
+        const person = new Person(register.firstName, register.lastName);
+        delete register.firstName;
+        delete register.lastName;
         return this.addCredentialLocal(register)
             .pipe(switchMap(credential => {
                 if (!credential) {
@@ -102,7 +105,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
                                         if (!confirmation) {
                                             throw new Error("Confirmation failed to be created.");
                                         } else {
-                                            return new CreatedCredential(credential, confirmation);
+                                            return confirmation;
                                         }
                                     }));
                             }
@@ -111,7 +114,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
             }));
     }
 
-    authenticate(cred: Credential, options?: HeaderBaseOptions): Observable<AuthenticatedCredential> {
+    authenticate(cred: Credential, options?: HeaderBaseOptions): Observable<string> {
         return this.getCredentialByUsername(cred.username)
             .pipe(switchMap((credential: Credential) => {
                 if (!credential) {
@@ -119,7 +122,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
                 } else if (cred.password !== credential.password) {
                     return throwError("password does not match");
                 } else {
-                    return of(this.authCred(credential));
+                    return this.addSession(credential);
                 }
             }));
     }
@@ -150,7 +153,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
                 "credentialId": changePassword.credentialId
             };
 
-            credentials.update(query, {$set: {password: changePassword.password}}, {}, function (err: any, num: any) {
+            credentials.update(query, {$set: {password: changePassword.newPassword}}, {}, function (err: any, num: any) {
                 if (!err) {
                     observer.next(true);
                 } else {
@@ -214,7 +217,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
     }
 
     private addCredentialLocal(registerInput: RegisterInput): Observable<Credential> {
-        const credential = new Credential(registerInput.username, registerInput.companyName, registerInput.password);
+        const credential = new Credential(registerInput.username, registerInput.organizationName, registerInput.password);
         credential.credentialId = generateUUID();
         credential.partyId = generateUUID();
         credential.createdOn = new Date();
@@ -234,14 +237,30 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
         });
     }
 
-    private authCred(credential: Credential) {
-        const authenticatedCredential: AuthenticatedCredential = new AuthenticatedCredential();
-        const credentialId = credential.credentialId;
-        authenticatedCredential.username = credential.username;
-        authenticatedCredential.ownerPartyId = credential.ownerPartyId;
-        authenticatedCredential.credentialId = credentialId;
-        authenticatedCredential.partyId = credential.partyId;
-        authenticatedCredential.authenticateStatus = credential.status === "Active" ? "CredentialActive" : "CredentialConfirmed";
-        return authenticatedCredential;
+    private addSession(credential: Credential): Observable<string> {
+        const session: Session = new Session();
+        session.partyId = credential.partyId;
+        session.ownerPartyId = credential.ownerPartyId;
+        session.credentialId = credential.credentialId;
+        session.data.set("status", credential.status);
+        return this.sessionRepositoryNeDbAdapter.addSession(session)
+            .pipe(switchMap(session => {
+                if (!session) {
+                    return throwError("Session was not created.");
+                } else {
+                    return of(session.sessionId);
+                }
+            }));
     }
+
+    // private authCred(credential: Credential) {
+    //     const authenticatedCredential: AuthenticatedCredential = new AuthenticatedCredential();
+    //     const credentialId = credential.credentialId;
+    //     authenticatedCredential.username = credential.username;
+    //     authenticatedCredential.ownerPartyId = credential.ownerPartyId;
+    //     authenticatedCredential.credentialId = credentialId;
+    //     authenticatedCredential.partyId = credential.partyId;
+    //     authenticatedCredential.status = credential.status;
+    //     return authenticatedCredential;
+    // }
 }

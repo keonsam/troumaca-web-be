@@ -12,7 +12,7 @@ import {createUserRepository} from "../../adapter/party/user.repository.factory"
 import {Confirmation} from "../../data/authentication/confirmation";
 import {PersonRepository} from "../../repository/person.repository";
 import {createPersonRepository} from "../../adapter/party/person.repository.factory";
-import {Person} from "../../data/party/person";
+// import {Person} from "../../data/party/person";
 import {ChangePasswordInput} from "../../graphql/authentication/dto/change.password.input";
 import { HeaderBaseOptions } from "../../header.base.options";
 import { RegisterInput } from "../../graphql/authentication/dto/register.input";
@@ -40,53 +40,12 @@ export class CredentialOrchestrator {
     return this.credentialRepository.isValidPassword(password, options);
   }
 
-  addCredential(credential: RegisterInput, options?: HeaderBaseOptions): Observable<Confirmation> {
-    return this.credentialRepository.addCredential(new Person(credential.username), credential, options)
-        .pipe(map( res => res.confirmation));
+  addCredential(register: RegisterInput, options?: HeaderBaseOptions): Observable<Confirmation> {
+    return this.credentialRepository.addCredential(register, options);
   }
 
-  authenticate(credential: any, options?: HeaderBaseOptions): Observable<AuthenticatedCredential> {
-    // A person can access the application under the following conditions:
-    // 1. He/she provides a valid set of credentials
-    // 2. He/she has confirmed their username (email, or phone)
-    // 3. He/she has completed the quick profile, person, account type, and possible organization name.
-      return this.credentialRepository
-      .authenticate(credential, options)
-      .pipe(switchMap(authenticatedCredential => {
-        if (!authenticatedCredential) {
-          return throwError(authenticatedCredential);
-        } else if (authenticatedCredential.authenticateStatus === "CredentialConfirmed" || authenticatedCredential.authenticateStatus === "CredentialActive") {
-          const session: Session = new Session();
-          session.partyId = authenticatedCredential.partyId;
-          session.ownerPartyId = authenticatedCredential.ownerPartyId;
-          session.credentialId = authenticatedCredential.credentialId;
-          session.username = authenticatedCredential.username;
-
-        if (authenticatedCredential.authenticateStatus) {
-          session.data.set("authenticateStatus", authenticatedCredential.authenticateStatus);
-        }
-
-        if (authenticatedCredential.username) {
-          session.data.set("username", authenticatedCredential.username);
-        }
-
-        if (authenticatedCredential.confirmationId) {
-          session.data.set("confirmationId", authenticatedCredential.confirmationId);
-        }
-
-        return this.sessionRepository.addSession(session, options)
-          .pipe(map(session => {
-            if (!session) {
-              throw new Error("Session was not created.");
-            } else {
-              authenticatedCredential.sessionId = session.sessionId;
-              return authenticatedCredential;
-            }
-          }));
-      } else {
-        return of(authenticatedCredential);
-      }
-    }));
+  authenticate(credential: any, options?: HeaderBaseOptions): Observable<string> {
+      return this.credentialRepository.authenticate(credential, options);
   }
 
   forgetPassword(username: string, options?: HeaderBaseOptions): Observable<Confirmation> {

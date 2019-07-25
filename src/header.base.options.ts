@@ -1,5 +1,6 @@
 import {Request} from "express";
 import {HeaderNormalizer} from "./header.normalizer";
+import { generateUUID } from "./uuid.generator";
 
 export class HeaderBaseOptions {
 
@@ -21,7 +22,7 @@ export class HeaderBaseOptions {
       if (!partyId) {
         partyId =  req.headers["Party-Id"];
       }
-    this.correlationId = correlationId ? correlationId.toString() : "";
+    this.correlationId = correlationId ? correlationId.toString() : generateUUID();
     this.ownerPartyId = ownerPartyId ? ownerPartyId.toString() : "";
     this.partyId = partyId ? partyId.toString() : "";
   }

@@ -13,11 +13,11 @@ export class ConfirmationOrchestrator {
     this.confirmationRepository = createCredentialConfirmationRepositoryFactory();
   }
 
-  resendConfirmCode(confirmationId: string, credentialId: string, options?: any): Observable<Confirmation> {
+  resendConfirmCode(confirmationId: string, credentialId: string, options?: HeaderBaseOptions): Observable<Confirmation> {
     return this.confirmationRepository.resendConfirmCode(confirmationId, credentialId, options);
   }
 
-  confirmCode(confirmationInput: ConfirmationInput, options?: HeaderBaseOptions): Observable<Confirmation> {
+  confirmCode(confirmationInput: ConfirmationInput, options?: HeaderBaseOptions): Observable<string> {
     return this.confirmationRepository.confirmCode(confirmationInput, options);
   }
 

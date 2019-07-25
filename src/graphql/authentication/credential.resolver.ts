@@ -7,16 +7,19 @@ import { Confirmation } from "../../data/authentication/confirmation";
 import { RegisterInput } from "./dto/register.input";
 import { AuthenticatedCredential } from "../../data/authentication/authenticated.credential";
 import { ChangePasswordInput } from "./dto/change.password.input";
+import { HeaderBaseOptions } from "../../header.base.options";
+import { IsValid } from "../../data/isValid";
 
 @Resolver()
 export class CredentialResolver {
     private credentialOrchestrator: CredentialOrchestrator = new CredentialOrchestrator();
 
-    @Query(() => Boolean)
-    async validateUsername(@Arg("username") username: string) {
-        return await this.credentialOrchestrator.isValidUsername(username).pipe(
+    @Query(() => IsValid)
+    async validateUsername(@Arg("username") username: string, @Ctx("req") req: any): Promise<IsValid> {
+        const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
+        return await this.credentialOrchestrator.isValidUsername(username, headerOptions).pipe(
             map(value => {
-                return value;
+                return new IsValid(value);
             }))
             .toPromise()
             .then(res => {
@@ -27,11 +30,12 @@ export class CredentialResolver {
             });
     }
 
-    @Query(() => Boolean)
-    async validatePassword(@Arg("password") password: string) {
-        return await this.credentialOrchestrator.isValidPassword(password).pipe(
+    @Query(() => IsValid)
+    async validatePassword(@Arg("password") password: string, @Ctx("req") req: any): Promise<IsValid> {
+        const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
+        return await this.credentialOrchestrator.isValidPassword(password, headerOptions).pipe(
             map(value => {
-                return value;
+                return new IsValid(value);
             }))
             .toPromise()
             .then(res => {
@@ -43,9 +47,10 @@ export class CredentialResolver {
     }
 
     @Mutation(() => Confirmation)
-    async register(@Arg("data") registerInput: RegisterInput) {
+    async register(@Arg("data") registerInput: RegisterInput, @Ctx("req") req: any): Promise<Confirmation> {
+        const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
         return await this.credentialOrchestrator
-            .addCredential(registerInput)
+            .addCredential(registerInput, headerOptions)
             .toPromise()
             .then(res => {
                 return res;
@@ -55,25 +60,30 @@ export class CredentialResolver {
             });
     }
 
-    @Mutation(() => AuthenticatedCredential)
-    async login(@Arg("username") username: string, @Arg("password") password: string, @Ctx("req") req: any) {
+    @Mutation(() => IsValid)
+    async login(@Arg("username") username: string,
+                @Arg("password") password: string,
+                @Ctx("req") req: any): Promise<IsValid> {
+        const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
         return await this.credentialOrchestrator
-            .authenticate({username, password})
+            .authenticate({username, password}, headerOptions)
             .toPromise()
-            .then(auth => {
-                if (auth && auth.sessionId) {
-                    req.session.sessionId = auth.sessionId;
+            .then(sessionId => {
+                if (sessionId) {
+                    req.session.sessionId = sessionId;
                 }
-                return auth;
+                return new IsValid(!!sessionId);
             }, error => {
+                console.log(error);
                 throw new ApolloError(error, ERROR_CODE);
             });
     }
 
     @Mutation(() => Confirmation)
-    async forgetPassword(@Arg("username") username: string) {
+    async forgetPassword(@Arg("username") username: string, @Ctx("req") req: any): Promise<Confirmation> {
+        const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
         return await this.credentialOrchestrator
-            .forgetPassword(username)
+            .forgetPassword(username, headerOptions)
             .toPromise()
             .then(res => {
                 return res;
@@ -82,15 +92,16 @@ export class CredentialResolver {
             });
     }
 
-    @Mutation(() => Boolean)
-    async changePassword(@Arg("data") changePasswordInput: ChangePasswordInput) {
+    @Mutation(() => IsValid)
+    async changePassword(@Arg("data") changePasswordInput: ChangePasswordInput, @Ctx("req") req: any): Promise<IsValid> {
+        const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
         return await this.credentialOrchestrator
-            .changePassword(changePasswordInput)
+            .changePassword(changePasswordInput, headerOptions)
             .toPromise()
             .then(res => {
-                return res;
+                return new IsValid(res);
             }, error => {
-                throw new ApolloError(error, "404");
+                throw new ApolloError(error, ERROR_CODE);
             });
     }
 }

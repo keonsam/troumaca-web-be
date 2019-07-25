@@ -6,7 +6,6 @@ export class Confirmation {
   confirmationId: string;
   @Field(type => ID)
   credentialId: string;
-  @Field()
   code: string;
   @Field()
   status: string;
