@@ -2,9 +2,9 @@ import { Field, ID, ObjectType } from "type-graphql";
 
 @ObjectType()
 export class Confirmation {
-  @Field(type => ID)
+  @Field(() => ID)
   confirmationId: string;
-  @Field(type => ID)
+  @Field(() => ID)
   credentialId: string;
   code: string;
   @Field()

@@ -1,19 +1,11 @@
-import { Field, ID, ObjectType } from "type-graphql";
+import { Field, ObjectType } from "type-graphql";
+import { Confirmation } from "./confirmation";
 
 @ObjectType()
 export class AuthenticatedCredential {
-  @Field(type => ID)
-  ownerPartyId: string;
-  @Field(type => ID)
-  credentialId: string;
   @Field()
-  username: string;
-  @Field()
-  status: string;
-  @Field(type => ID)
-  confirmationId: string;
-  @Field(type => ID)
-  partyId: string;
-  @Field(type => ID)
+  state: string;
   sessionId: string;
+  @Field( () => Confirmation, {nullable: true})
+  confirmation: Confirmation;
 }

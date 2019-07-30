@@ -114,7 +114,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
             }));
     }
 
-    authenticate(cred: Credential, options?: HeaderBaseOptions): Observable<string> {
+    authenticate(cred: Credential, options?: HeaderBaseOptions): Observable<AuthenticatedCredential> {
         return this.getCredentialByUsername(cred.username)
             .pipe(switchMap((credential: Credential) => {
                 if (!credential) {
@@ -122,7 +122,11 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
                 } else if (cred.password !== credential.password) {
                     return throwError("password does not match");
                 } else {
-                    return this.addSession(credential);
+                    return this.addSession(credential).pipe( map( val => {
+                        const authenticatedCredential: AuthenticatedCredential = new AuthenticatedCredential();
+                        authenticatedCredential.sessionId = val;
+                        return authenticatedCredential;
+                    }));
                 }
             }));
     }

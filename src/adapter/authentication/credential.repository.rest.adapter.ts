@@ -108,7 +108,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
     });
   }
 
-  authenticate(credential: Credential, options?: HeaderBaseOptions): Observable<string> {
+  authenticate(credential: Credential, options?: HeaderBaseOptions): Observable<AuthenticatedCredential> {
     const uri: string = this.remote ? properties.get("login.host.port") as string : this.localhost;
 
 
@@ -124,7 +124,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
 
     const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
 
-    return Observable.create(function (observer: Observer<number>) {
+    return Observable.create(function (observer: Observer<AuthenticatedCredential>) {
       request(requestOptions, function (error: any, response: any, body: any) {
         try {
           if (error) {
@@ -132,7 +132,11 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
           } else if (response && response.statusCode != 200) {
             observer.error(body);
           } else {
-            observer.next(body["session"]["sessionId"]);
+            const authenticatedCredential: AuthenticatedCredential = new AuthenticatedCredential();
+            authenticatedCredential.state = body["authenticatedCredential"]["state"];
+            authenticatedCredential.confirmation = body["authenticatedCredential"]["confirmation"];
+            authenticatedCredential.sessionId = body["session"]["sessionId"];
+            observer.next(authenticatedCredential);
           }
           observer.complete();
         } catch (e) {
