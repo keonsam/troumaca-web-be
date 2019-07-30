@@ -7,6 +7,7 @@ import {CredentialRepositoryRestAdapter} from "./credential.repository.rest.adap
 
 export function createCredentialRepositoryFactory(kind?: RepositoryKind): CredentialRepository {
   const type: number = properties.get("credential.repository.type") as number;
+  console.log(type);
 
   const k: RepositoryKind = (kind) ? kind : (type === 2) ? RepositoryKind.Rest : RepositoryKind.Nedb;
 

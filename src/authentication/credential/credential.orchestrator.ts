@@ -44,7 +44,7 @@ export class CredentialOrchestrator {
     return this.credentialRepository.addCredential(register, options);
   }
 
-  authenticate(credential: any, options?: HeaderBaseOptions): Observable<string> {
+  authenticate(credential: any, options?: HeaderBaseOptions): Observable<AuthenticatedCredential> {
       return this.credentialRepository.authenticate(credential, options);
   }
 

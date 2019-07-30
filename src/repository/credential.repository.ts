@@ -17,7 +17,7 @@ export interface CredentialRepository {
 
   addCredential(register: RegisterInput, options?: HeaderBaseOptions): Observable<Confirmation>;
 
-  authenticate(credential: Credential, options?: HeaderBaseOptions): Observable<string>;
+  authenticate(credential: Credential, options?: HeaderBaseOptions): Observable<AuthenticatedCredential>;
 
   forgetPassword(username: string, options?: HeaderBaseOptions): Observable<Confirmation>;
   //

@@ -60,19 +60,19 @@ export class CredentialResolver {
             });
     }
 
-    @Mutation(() => IsValid)
+    @Mutation(() => AuthenticatedCredential)
     async login(@Arg("username") username: string,
                 @Arg("password") password: string,
-                @Ctx("req") req: any): Promise<IsValid> {
+                @Ctx("req") req: any): Promise<AuthenticatedCredential> {
         const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
         return await this.credentialOrchestrator
             .authenticate({username, password}, headerOptions)
             .toPromise()
-            .then(sessionId => {
-                if (sessionId) {
-                    req.session.sessionId = sessionId;
+            .then(authenticatedCredential => {
+                if (authenticatedCredential.sessionId) {
+                    req.session.sessionId = authenticatedCredential.sessionId;
                 }
-                return new IsValid(!!sessionId);
+                return authenticatedCredential;
             }, error => {
                 console.log(error);
                 throw new ApolloError(error, ERROR_CODE);
