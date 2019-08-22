@@ -14,8 +14,7 @@ export class SessionOrchestrator {
   }
 
   isValidSession(sessionId: string, options?: HeaderBaseOptions): Observable<ValidSession> {
-    return of(new ValidSession(!!sessionId));
-    // return this.sessionRepository.isValidSession(sessionId, options);
+    return this.sessionRepository.isValidSession(sessionId, options);
   }
 
   handleSessionLogOut(sessionId: string, options?: any): Observable<boolean> {

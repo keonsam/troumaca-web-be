@@ -10,42 +10,38 @@ import { HeaderBaseOptions } from "../../header.base.options";
 export class SessionRepositoryRestAdapter implements SessionRepository {
 
   isValidSession(sessionId: string, options?: HeaderBaseOptions): Observable<ValidSession> {
-    // TODO: fix this please
-    return throwError(undefined);
-    // const uri: string = properties.get("session.host.port") as string;
-    //
-    // const headerMap = jsonRequestHeaderMap(options ? options : {});
-    //
-    // // let headers:any = strMapToJson(headerMap);
-    // const json = {
-    //     "sessionId": sessionId
-    // };
-    //
-    // const uriAndPath: string = uri + `/sessions/${sessionId}/active`;
-    //
-    // const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
-    //
-    // return Observable.create(function (observer: Observer<boolean>) {
-    //     request(requestOptions, function (error: any, response: any, body: any) {
-    //         console.log(body);
-    //         try {
-    //             if (error) {
-    //                 observer.error(error);
-    //                 observer.complete();
-    //             } else if (response && response.statusCode != 200) {
-    //                 observer.next(false);
-    //                 observer.complete();
-    //             } else {
-    //                 // let vp:boolean = plainToClass(Boolean, body["valid"] as Object);
-    //                 observer.next(body);
-    //                 observer.complete();
-    //             }
-    //         } catch (e) {
-    //             observer.error(new Error(e.message));
-    //             observer.complete();
-    //         }
-    //     });
-    // });
+    const uri: string = properties.get("session.host.port") as string;
+
+    const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});
+
+    // let headers:any = strMapToJson(headerMap);
+    const json = {
+        "sessionId": sessionId
+    };
+
+    const uriAndPath: string = uri + `/sessions/${sessionId}/check`;
+
+    const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
+
+    return Observable.create(function (observer: Observer<ValidSession>) {
+        request(requestOptions, function (error: any, response: any, body: any) {
+            try {
+                if (error) {
+                    observer.error(error);
+                    observer.complete();
+                } else if (response && response.statusCode != 200) {
+                    observer.next(new ValidSession(false));
+                    observer.complete();
+                } else {
+                    observer.next(new ValidSession(body["active"]));
+                    observer.complete();
+                }
+            } catch (e) {
+                observer.error(new Error(e.message));
+                observer.complete();
+            }
+        });
+    });
   }
 
   getSessionById(sessionId: string, options?: any): Observable<Session> {
