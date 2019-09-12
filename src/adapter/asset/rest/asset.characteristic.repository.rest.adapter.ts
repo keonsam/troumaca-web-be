@@ -7,9 +7,10 @@ import {Sort} from "../../../util/sort";
 import { AssetCharacteristicType } from "../../../data/asset/asset.characteristic.type";
 import { HeaderBaseOptions } from "../../../header.base.options";
 import { AssetCharacteristics } from "../../../data/asset/asset.characteristics";
+import { AssetCharacteristicInput } from "../../../graphql/asset/dto/asset.characteristic.input";
 
 export class AssetCharacteristicRepositoryRestAdapter implements AssetCharacteristicRepository {
-  addAssetCharacteristic(assetCharacteristic: AssetCharacteristic, headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristic> {
+  addAssetCharacteristic(assetCharacteristic: AssetCharacteristicInput, headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristic> {
     return undefined;
   }
 

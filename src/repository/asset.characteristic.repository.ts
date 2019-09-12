@@ -6,10 +6,11 @@ import {Page} from "../util/page";
 import { AssetCharacteristicType } from "../data/asset/asset.characteristic.type";
 import { HeaderBaseOptions } from "../header.base.options";
 import { AssetCharacteristics } from "../data/asset/asset.characteristics";
+import { AssetCharacteristicInput } from "../graphql/asset/dto/asset.characteristic.input";
 
 export interface AssetCharacteristicRepository {
 
-  addAssetCharacteristic(assetCharacteristic: AssetCharacteristic, headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristic>;
+  addAssetCharacteristic(assetCharacteristic: AssetCharacteristicInput, headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristic>;
 
   updateAssetCharacteristic(assetCharacteristicId: string, assetCharacteristic: AssetCharacteristic, headerOptions?: HeaderBaseOptions): Observable<Affect>;
 

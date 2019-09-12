@@ -7,6 +7,13 @@
 import { CredentialResolver } from "./authentication/credential.resolver";
 import { ConfirmationResolver } from "./authentication/confirmation.resolver";
 import { SessionResolver } from "./authorization/session.resolver";
+import { AssetCharacteristicResolver } from "./asset/asset.characteristic.resolver";
 
-const RESOLVERS: any[] = [CredentialResolver, ConfirmationResolver, SessionResolver];
+const RESOLVERS: any[] = [
+    CredentialResolver,
+    ConfirmationResolver,
+    SessionResolver,
+    AssetCharacteristicResolver
+];
+
 export default RESOLVERS;
