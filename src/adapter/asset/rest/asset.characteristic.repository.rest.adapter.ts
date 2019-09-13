@@ -7,9 +7,10 @@ import {Sort} from "../../../util/sort";
 import { AssetCharacteristicType } from "../../../data/asset/asset.characteristic.type";
 import { HeaderBaseOptions } from "../../../header.base.options";
 import { AssetCharacteristics } from "../../../data/asset/asset.characteristics";
+import { AssetCharacteristicInput } from "../../../graphql/asset/dto/asset.characteristic.input";
 
 export class AssetCharacteristicRepositoryRestAdapter implements AssetCharacteristicRepository {
-  addAssetCharacteristic(assetCharacteristic: AssetCharacteristic, headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristic> {
+  addAssetCharacteristic(assetCharacteristic: AssetCharacteristicInput, headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristic> {
     return undefined;
   }
 
@@ -29,7 +30,7 @@ export class AssetCharacteristicRepositoryRestAdapter implements AssetCharacteri
   //   return undefined;
   // }
 
-  getAssetCharacteristics( pageNumber: number, pageSize: number, sort: Sort, headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristics> {
+  getAssetCharacteristics(search?: string , selected?: [string], headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristics> {
     return undefined;
   }
 

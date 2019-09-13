@@ -18,6 +18,10 @@ repository.type = 2
 host.port = https://kwifo6dv15.execute-api.us-east-1.amazonaws.com/Stage/authentication/confirmations
 repository.type = 2
 
+[session]
+host.port = https://ngibhimapk.execute-api.us-east-1.amazonaws.com/Stage
+repository.type = 2
+
 [authorization]
 host = localhost
 port = 8080
@@ -47,13 +51,6 @@ repository.type = 2
 host = localhost
 port = 6161
 host.port = http://localhost:6161
-repository.type = 1
-
-[session]
-host = localhost
-port = 8080
-#host.port = http://localhost:8888
-host.port = http://ec2-52-55-156-224.compute-1.amazonaws.com:8080
 repository.type = 1
 
 [search]
