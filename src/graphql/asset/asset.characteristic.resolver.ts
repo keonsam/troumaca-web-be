@@ -8,6 +8,7 @@ import { map } from "rxjs/operators";
 import { ApolloError } from "apollo-server-errors";
 import { ERROR_CODE } from "../error.code";
 import { AssetCharacteristics } from "../../data/asset/asset.characteristics";
+import { GetCharacteristicInput } from "./dto/get.characteristic.input";
 
 @Resolver()
 export class AssetCharacteristicResolver {
@@ -27,9 +28,10 @@ export class AssetCharacteristicResolver {
     }
 
     @Query( () => AssetCharacteristics)
-    async getAssetCharacteristics(@Ctx("req") req: any): Promise<AssetCharacteristics> {
+    async getAssetCharacteristics(@Arg("data") searchInfo: GetCharacteristicInput,
+                                  @Ctx("req") req?: any): Promise<AssetCharacteristics> {
         const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-        return await this.assetCharacteristicOrchestrator.getAssetCharacteristics(undefined, undefined, undefined, headerOptions)
+        return await this.assetCharacteristicOrchestrator.getAssetCharacteristics(searchInfo.search, searchInfo.selected, headerOptions)
             .toPromise()
             .then(res => {
                 return res;
