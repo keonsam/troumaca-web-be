@@ -6,10 +6,11 @@ import {Sort} from "../../../util/sort";
 import {Page} from "../../../util/page";
 import { HeaderBaseOptions } from "../../../header.base.options";
 import { Assets } from "../../../data/asset/assets";
+import { AssetInput } from "../../../graphql/asset/dto/asset.input";
 
 
 export class AssetRepositoryRestAdapter implements AssetRepository {
-  addAsset(asset: Asset, headerOptions?: HeaderBaseOptions): Observable<Asset> {
+  addAsset(asset: AssetInput, headerOptions?: HeaderBaseOptions): Observable<Asset> {
     return undefined;
   }
 
@@ -29,7 +30,7 @@ export class AssetRepositoryRestAdapter implements AssetRepository {
   //   return undefined;
   // }
 
-  getAssets(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: HeaderBaseOptions): Observable<Assets> {
+  getAssets(search?: string, headerOptions?: HeaderBaseOptions): Observable<Assets> {
     return undefined;
   }
 

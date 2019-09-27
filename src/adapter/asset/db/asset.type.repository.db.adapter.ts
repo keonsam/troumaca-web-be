@@ -10,13 +10,16 @@ import {SortGenerator} from "../../util/sort.generator";
 import { AssetTypes } from "../../../data/asset/asset.types";
 import { Page } from "../../../data/page/page";
 import { HeaderBaseOptions } from "../../../header.base.options";
+import { AssetTypeInput } from "../../../graphql/asset/dto/asset.type.input";
+import { mapObjectProps } from "../../../graphql/object.property.mapper";
 
 export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
 
   constructor() {
   }
 
-  addAssetType(assetType: AssetType, headerOptions?: HeaderBaseOptions): Observable<AssetType> {
+  addAssetType(assetTypeInput: AssetTypeInput, headerOptions?: HeaderBaseOptions): Observable<AssetType> {
+      const assetType = mapObjectProps(assetTypeInput, new AssetType());
       assetType.assetTypeId = generateUUID();
       assetType.ownerPartyId = headerOptions.ownerPartyId;
       assetType.version = generateUUID();
@@ -89,17 +92,17 @@ export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
       });
   }
 
-  getAssetTypes(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: HeaderBaseOptions): Observable<AssetTypes> {
+  getAssetTypes(search?: string, headerOptions?: HeaderBaseOptions): Observable<AssetTypes> {
       return Observable.create(function (observer: Observer<AssetTypes>) {
           assetTypes.count({ ownerPartyId: headerOptions.ownerPartyId }, function (err, count) {
-              const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-              const generate = SortGenerator.generate(sort);
-              assetTypes.find({ ownerPartyId: headerOptions.ownerPartyId })
-                  .skip(skipAmount)
-                  .limit(pageSize)
+              assetTypes.find({
+                  ownerPartyId: headerOptions.ownerPartyId,
+                  name: new RegExp(search),
+                  // assetTypeId: {$nin: selected}
+              })
                   .exec((err: any, docs: any) => {
                       if (!err) {
-                          observer.next(new AssetTypes(docs, new Page(pageNumber, pageSize, docs.length, count)));
+                          observer.next(new AssetTypes(docs));
                       } else {
                           observer.error(err);
                       }

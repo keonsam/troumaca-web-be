@@ -1,9 +1,9 @@
 import { Field, InputType } from "type-graphql";
 
 @InputType()
-export class GetCharacteristicInput {
+export class GetAssetTypes {
     @Field({ nullable: true })
     search: string;
-    @Field(() => [String], { nullable: true })
-    selected: string[];
+    // @Field(() => [String], { nullable: true })
+    // selected: string[];
 }

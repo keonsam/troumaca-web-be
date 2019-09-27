@@ -8,6 +8,7 @@ import {Sort} from "../util/sort";
 import { HeaderBaseOptions } from "../header.base.options";
 import { map } from "rxjs/operators";
 import { Assets } from "../data/asset/assets";
+import { AssetInput } from "../graphql/asset/dto/asset.input";
 
 export class AssetOrchestrator {
 
@@ -17,7 +18,7 @@ export class AssetOrchestrator {
     this.assetRepository = createAssetRepository(options);
   }
 
-  addAsset(asset: Asset, headerOptions?: HeaderBaseOptions): Observable<Asset> {
+  addAsset(asset: AssetInput, headerOptions?: HeaderBaseOptions): Observable<Asset> {
     return this.assetRepository.addAsset(asset, headerOptions);
   }
 
@@ -25,8 +26,8 @@ export class AssetOrchestrator {
     return this.assetRepository.findAssets(searchStr, pageNumber, pageSize, headerOptions);
   }
 
-  getAssets(number: number, size: number, sort: Sort, headerOptions?: HeaderBaseOptions): Observable<Assets> {
-    return this.assetRepository.getAssets(number, size, sort, headerOptions);
+  getAssets(search?: string, headerOptions?: HeaderBaseOptions): Observable<Assets> {
+    return this.assetRepository.getAssets(search, headerOptions);
   }
 
   updateAsset(assetId: string, asset: Asset, headerOptions?: HeaderBaseOptions): Observable<number> {

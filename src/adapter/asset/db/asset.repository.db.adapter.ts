@@ -5,18 +5,24 @@ import {Observable, Observer} from "rxjs";
 import {Affect} from "../../../data/affect";
 import {Sort} from "../../../util/sort";
 import { Page } from "../../../data/page/page";
-import { assets } from "../../../db";
+import { assets, assetTypes } from "../../../db";
 import {SkipGenerator} from "../../util/skip.generator";
 import {SortGenerator} from "../../util/sort.generator";
 import { HeaderBaseOptions } from "../../../header.base.options";
 import { Assets } from "../../../data/asset/assets";
+import { AssetInput } from "../../../graphql/asset/dto/asset.input";
+import { mapObjectProps } from "../../../graphql/object.property.mapper";
+import { map, switchMap } from "rxjs/operators";
+import { AssetTypeRepositoryNeDbAdapter } from "./asset.type.repository.db.adapter";
+import { AssetTypes } from "../../../data/asset/asset.types";
+import { AssetType } from "../../../data/asset/asset.type";
 
 export class AssetRepositoryNeDbAdapter implements AssetRepository {
-
     constructor() {
     }
 
-    addAsset(asset: Asset, headerOptions?: HeaderBaseOptions): Observable<Asset> {
+    addAsset(assetInput: AssetInput, headerOptions?: HeaderBaseOptions): Observable<Asset> {
+        const asset = mapObjectProps(assetInput, new Asset());
         asset.assetId = generateUUID();
         asset.ownerPartyId = headerOptions.ownerPartyId;
         asset.version = generateUUID();
@@ -106,23 +112,52 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
         });
     }
 
-    getAssets(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: HeaderBaseOptions): Observable<Assets> {
-        return Observable.create(function (observer: Observer<Assets>) {
+    getAssets(search?: string, headerOptions?: HeaderBaseOptions): Observable<Assets> {
+        // just for now this might change
+        return this.getAssetsLocal(search, headerOptions)
+            .pipe(switchMap( assets => {
+                const assetTypeIds: string[] = assets.map( x => x.assetTypeId);
+                return this.getAssetTypesLocal(assetTypeIds, headerOptions)
+                    .pipe(map(values => {
+                        assets.forEach( x => {
+                            x.assetType = values.find( v => v.assetTypeId === x.assetTypeId);
+                        });
+                        return new Assets(assets);
+                    }));
+            }));
+    }
+
+    private getAssetsLocal(search: string, headerOptions?: HeaderBaseOptions): Observable<Asset[]> {
+        return Observable.create(function (observer: Observer<Asset[]>) {
             assets.count({ownerPartyId: headerOptions.ownerPartyId}, function (err, count) {
-                const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-                const generate = SortGenerator.generate(sort);
-                assets.find({ownerPartyId: headerOptions.ownerPartyId})
-                    .skip(skipAmount)
-                    .limit(pageSize)
+                // const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+                // const generate = SortGenerator.generate(sort);
+                assets.find({ownerPartyId: headerOptions.ownerPartyId, name: new RegExp(search)})
+                // .skip(skipAmount)
+                // .limit(pageSize)
                     .exec((err: any, docs: Asset[]) => {
                         if (!err) {
-                            observer.next(new Assets(docs, new Page(pageNumber, pageSize, docs.length, count)));
+                            observer.next(docs);
                         } else {
                             observer.error(err);
                         }
                         observer.complete();
                     });
             });
+        });
+    }
+
+    private getAssetTypesLocal(assetTypeIds: string[], headerOptions?: HeaderBaseOptions): Observable<AssetType[]> {
+        return Observable.create(function (observer: Observer<AssetType[]>) {
+            assetTypes.find({ownerPartyId: headerOptions.ownerPartyId, assetTypeId: { $in: assetTypeIds }})
+                .exec((err: any, docs: AssetType[]) => {
+                    if (!err) {
+                        observer.next(docs);
+                    } else {
+                        observer.error(err);
+                    }
+                    observer.complete();
+                });
         });
     }
 
