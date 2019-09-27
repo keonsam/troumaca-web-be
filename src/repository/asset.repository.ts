@@ -5,10 +5,11 @@ import {Sort} from "../util/sort";
 import {Page} from "../util/page";
 import { HeaderBaseOptions } from "../header.base.options";
 import { Assets } from "../data/asset/assets";
+import { AssetInput } from "../graphql/asset/dto/asset.input";
 
 export interface AssetRepository {
 
-  addAsset(asset: Asset, headerOptions?: HeaderBaseOptions): Observable<Asset>;
+  addAsset(asset: AssetInput, headerOptions?: HeaderBaseOptions): Observable<Asset>;
 
   updateAsset(assetId: string, asset: Asset, headerOptions?: HeaderBaseOptions): Observable<Affect>;
 
@@ -16,7 +17,7 @@ export interface AssetRepository {
 
   findAssets(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<Asset[]>;
 
-  getAssets(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: HeaderBaseOptions): Observable<Assets>;
+  getAssets(search?: string, headerOptions?: HeaderBaseOptions): Observable<Assets>;
 
   // getAssetCount(ownerPartyId: string, headerOptions?: HeaderBaseOptions): Observable<number>;
 

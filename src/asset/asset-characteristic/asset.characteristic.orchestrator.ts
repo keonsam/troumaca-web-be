@@ -23,7 +23,7 @@ export class AssetCharacteristicOrchestrator {
         return this.assetCharacteristicRepository.findAssetCharacteristics(searchStr, pageNumber, pageSize, options);
     }
 
-    getAssetCharacteristics(search?: string, selected?: [string], options?: HeaderBaseOptions): Observable<AssetCharacteristics> {
+    getAssetCharacteristics(search?: string, selected?: string[], options?: HeaderBaseOptions): Observable<AssetCharacteristics> {
         return this.assetCharacteristicRepository.getAssetCharacteristics(search, selected, options);
     }
 

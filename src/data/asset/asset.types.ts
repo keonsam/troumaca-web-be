@@ -1,13 +1,13 @@
 import {AssetType} from "./asset.type";
 import {Page} from "../page/page";
+import { Field, ObjectType } from "type-graphql";
 
+@ObjectType()
 export class AssetTypes {
-
-  constructor(assetTypes: AssetType[], page: Page) {
-    this.assetTypes = assetTypes;
-    this.page = page;
-  }
-
+  @Field(() => [AssetType])
   assetTypes: AssetType[] = [];
   page: Page;
+  constructor(assetTypes: AssetType[]) {
+    this.assetTypes = assetTypes;
+  }
 }
