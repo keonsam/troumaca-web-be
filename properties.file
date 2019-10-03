@@ -1,25 +1,30 @@
 # contents of properties file
 
 [credential]
-host.port = https://wx7frujw04.execute-api.us-east-1.amazonaws.com/Stage
+#host.port = https://wx7frujw04.execute-api.us-east-1.amazonaws.com/Stage
+host.port = http://ec2-3-83-92-118.compute-1.amazonaws.com:8080
 repository.type = 2
 
 [registrar]
 #host.port = https://zlipbqvho8.execute-api.us-east-1.amazonaws.com/Stage
-host.port = http://register-alb-2013141962.us-east-1.elb.amazonaws.com
+#host.port = http://register-alb-2013141962.us-east-1.elb.amazonaws.com
+host.port = http://ec2-3-83-92-118.compute-1.amazonaws.com:8080
 repository.type = 2
 
 [login]
 #host.port = https://d4n3hcu7fe.execute-api.us-east-1.amazonaws.com/Stage
-host.port = http://login-alb-661932912.us-east-1.elb.amazonaws.com
+#host.port = http://login-alb-661932912.us-east-1.elb.amazonaws.com
+host.port = http://ec2-3-83-92-118.compute-1.amazonaws.com:8080
 repository.type = 2
 
 [confirmation]
-host.port = https://kwifo6dv15.execute-api.us-east-1.amazonaws.com/Stage/authentication/confirmations
+#host.port = https://kwifo6dv15.execute-api.us-east-1.amazonaws.com/Stage/authentication/confirmations
+host.port = http://ec2-3-83-92-118.compute-1.amazonaws.com:8080
 repository.type = 2
 
 [session]
-host.port = https://ngibhimapk.execute-api.us-east-1.amazonaws.com/Stage
+#host.port = https://ngibhimapk.execute-api.us-east-1.amazonaws.com/Stage
+host.port = http://ec2-3-83-92-118.compute-1.amazonaws.com:8080
 repository.type = 2
 
 [authorization]

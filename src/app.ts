@@ -12,10 +12,14 @@ import {ApolloServer} from "apollo-server-express";
 import session from "express-session";
 import { buildSchema } from "type-graphql";
 import RESOLVERS from "./graphql/resolvers";
-
+import * as helmet from "helmet";
 const app = express();
 
 app.use(logger("dev"));
+// app.use(helmet.hidePoweredBy({ setTo: "PHP 7.3.9" }));
+// helmet.frameguard({action: "deny"});
+// helmet.xssFilter();
+// helmet.noSniff();
 // app.use(cookieParser());
 // app.use(bodyParser.json({limit: "50mb"}));
 // app.use(bodyParser.urlencoded({limit: "50mb", extended: false}));
@@ -46,14 +50,6 @@ const corsOptions = {
   credentials: true
 };
 
-
-// routes
-// app.use(router);
-
-// Uncomment to secure graphql path. not tested.
-// app.use(graphqlPath, checkSession);
-
-// and and add the session information to the request.
 
 app.use(cors(corsOptions));
 // app.use(cors());
@@ -90,26 +86,5 @@ async function bootstrap() {
     });
 }
 
-
-
-// catch 404 and forward to error handler
-// app.use((req: any, res: any, next: any) => {
-//   const err: any = new Error("Not Found");
-//   err.status = 404;
-//   next(err);
-// });
-
-// error handler
-// app.use(function (err: any, req: any, res: any, next: any) {
-//   // set locals, only providing error in development
-//   res.locals.message = err.message;
-//   res.locals.error = req.app.get("env") === "development" ? err : {};
-//
-//   // render the error page
-//   res.status(err.status || 500);
-//   res.setHeader("Content-Type", "application/json");
-//   res.send('{"message":"Express REST API error"}');
-//   res.render("error");
-// });
 bootstrap();
 export default app;
