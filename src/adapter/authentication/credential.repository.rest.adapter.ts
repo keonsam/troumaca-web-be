@@ -100,7 +100,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
           if (response && response.statusCode != 200) {
             observer.error(body);
           } else {
-            observer.next(body["createdCredential"]["confirmationEvent"]["confirmation"]);
+            observer.next(body["createdCredentialResult"]["createdConfirmation"]["confirmationEvent"]["confirmation"]);
           }
         }
         observer.complete();
@@ -135,7 +135,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
             const authenticatedCredential: AuthenticatedCredential = new AuthenticatedCredential();
             authenticatedCredential.state = body["authenticatedCredential"]["state"];
             authenticatedCredential.confirmation = body["authenticatedCredential"]["confirmation"];
-            authenticatedCredential.sessionId = body["session"]["sessionId"];
+            authenticatedCredential.sessionId = body["sessionDto"]["createdSession"]["sessionEvent"]["session"]["sessionId"];
             observer.next(authenticatedCredential);
           }
           observer.complete();
