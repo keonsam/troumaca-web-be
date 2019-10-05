@@ -19,9 +19,13 @@ export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository
 
     const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});
 
-    const json = { code: confirmationInput.code };
+    const json = {
+        credentialId: confirmationInput.credentialId,
+        confirmationId: confirmationInput.confirmationId,
+        code: confirmationInput.code
+    };
 
-    const uriAndPath: string = `${uri}/${confirmationInput.confirmationId}/credentials/${confirmationInput.credentialId}`;
+    const uriAndPath: string = `${uri}/authentication/confirmations/${confirmationInput.confirmationId}/credentials/${confirmationInput.credentialId}`;
 
     const requestOptions: any = postJsonOptions(uriAndPath, headerMap, json);
 

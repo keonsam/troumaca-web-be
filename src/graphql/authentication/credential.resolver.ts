@@ -49,6 +49,10 @@ export class CredentialResolver {
     @Mutation(() => Confirmation)
     async register(@Arg("data") registerInput: RegisterInput, @Ctx("req") req: any): Promise<Confirmation> {
         const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
+        // remove in the future to front-end
+        if (!registerInput.organizationName) {
+            registerInput.organizationName = registerInput.firstName;
+        }
         return await this.credentialOrchestrator
             .addCredential(registerInput, headerOptions)
             .toPromise()
