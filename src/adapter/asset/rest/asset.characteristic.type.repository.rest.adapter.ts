@@ -26,7 +26,7 @@ export class AssetCharacteristicTypeRepositoryRestAdapter implements AssetCharac
     return undefined;
   }
 
-  getAssetCharacteristicTypes(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetCharacteristicType[]>> {
+  getAssetCharacteristicTypes(headerOptions?: any): Observable<Page<AssetCharacteristicType[]>> {
     return undefined;
   }
 

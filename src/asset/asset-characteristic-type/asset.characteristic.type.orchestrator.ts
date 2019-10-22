@@ -5,6 +5,7 @@ import {Page} from "../../util/page";
 import {Sort} from "../../util/sort";
 import {AssetCharacteristicTypeRepository} from "../../repository/asset.characteristic.type.repository";
 import {createAssetCharacteristicTypeRepository} from "../../adapter/asset/asset.characteristic.type.repository.factory";
+import { AssetCharacteristicTypes } from "../../data/asset/asset.characteristic.types";
 
 export class AssetCharacteristicTypeOrchestrator {
 
@@ -22,8 +23,8 @@ export class AssetCharacteristicTypeOrchestrator {
     return this.assetCharacteristicTypeRepository.findAssetCharacteristicTypes(ownerPartyId, searchStr, pageNumber, pageSize, headerOptions);
   }
 
-  getAssetCharacteristicTypes(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetCharacteristicType[]>> {
-    return this.assetCharacteristicTypeRepository.getAssetCharacteristicTypes(ownerPartyId, pageNumber, pageSize, sort, headerOptions);
+  getAssetCharacteristicTypes(headerOptions?: any): Observable<AssetCharacteristicTypes> {
+    return this.assetCharacteristicTypeRepository.getAssetCharacteristicTypes(headerOptions);
   }
 
   updateAssetCharacteristicType(assetCharacteristicType: AssetCharacteristicType, headerOptions?: any): Observable<Affect> {
