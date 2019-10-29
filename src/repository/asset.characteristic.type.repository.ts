@@ -3,6 +3,7 @@ import {Observable} from "rxjs";
 import {Affect} from "../data/affect";
 import {Sort} from "../util/sort";
 import {Page} from "../util/page";
+import { AssetCharacteristicTypes } from "../data/asset/asset.characteristic.types";
 
 export interface AssetCharacteristicTypeRepository {
 
@@ -14,7 +15,7 @@ export interface AssetCharacteristicTypeRepository {
 
   findAssetCharacteristicTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetCharacteristicType[]>;
 
-  getAssetCharacteristicTypes(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetCharacteristicType[]>>;
+  // getAssetCharacteristicTypes(headerOptions?: any): Observable<AssetCharacteristicTypes>;
 
   getAssetCharacteristicTypeCount(ownerPartyId: string, headerOptions?: any): Observable<number>;
 
