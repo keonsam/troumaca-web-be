@@ -26,9 +26,9 @@ export class AssetCharacteristicTypeRepositoryRestAdapter implements AssetCharac
     return undefined;
   }
 
-  getAssetCharacteristicTypes(headerOptions?: any): Observable<Page<AssetCharacteristicType[]>> {
-    return undefined;
-  }
+  // getAssetCharacteristicTypes(headerOptions?: any): Observable<Page<AssetCharacteristicType[]>> {
+  //   return undefined;
+  // }
 
   updateAssetCharacteristicType(assetCharacteristicType: AssetCharacteristicType, headerOptions?: any): Observable<Affect> {
     return undefined;

@@ -99,38 +99,38 @@ export class AssetCharacteristicTypeRepositoryNeDbAdapter implements AssetCharac
     });
   }
 
-  getAssetCharacteristicTypes(headerOptions?: any): Observable<AssetCharacteristicTypes> {
-      const assets: AssetCharacteristicTypes = new AssetCharacteristicTypes();
-      assets.types = [
-          new AssetCharacteristicType("1", "Text"),
-          new AssetCharacteristicType( "2", "Number"),
-          new AssetCharacteristicType("3", "Checkbox"),
-          new AssetCharacteristicType("4", "Select"),
-          new AssetCharacteristicType("5",  "Multi Select"),
-          new AssetCharacteristicType("6",  "Date"),
-          new AssetCharacteristicType("7", "Person"),
-          new AssetCharacteristicType("8", "URL"),
-          new AssetCharacteristicType("9", "Location")
-      ];
-      return of(assets);
-    // return Observable.create(function (observer: Observer<Page<AssetCharacteristicType[]>>) {
-    //   assetCharacteristicTypes.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-    //     const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-    //     const generate = SortGenerator.generate(sort);
-    //     assetCharacteristicTypes.find({ownerPartyId: ownerPartyId})
-    //       .skip(skipAmount)
-    //       .limit(pageSize)
-    //       .exec((err: any, docs: any) => {
-    //         if (!err) {
-    //           observer.next(docs);
-    //         } else {
-    //           observer.error(err);
-    //         }
-    //         observer.complete();
-    //       });
-    //   });
-    // });
-  }
+  // getAssetCharacteristicTypes(headerOptions?: any): Observable<AssetCharacteristicTypes> {
+  //     const assets: AssetCharacteristicTypes = new AssetCharacteristicTypes();
+  //     assets.types = [
+  //         new AssetCharacteristicType("1", "Text"),
+  //         new AssetCharacteristicType( "2", "Number"),
+  //         new AssetCharacteristicType("3", "Checkbox"),
+  //         new AssetCharacteristicType("4", "Select"),
+  //         new AssetCharacteristicType("5",  "Multi Select"),
+  //         new AssetCharacteristicType("6",  "Date"),
+  //         new AssetCharacteristicType("7", "Person"),
+  //         new AssetCharacteristicType("8", "URL"),
+  //         new AssetCharacteristicType("9", "Location")
+  //     ];
+  //     return of(assets);
+  //   // return Observable.create(function (observer: Observer<Page<AssetCharacteristicType[]>>) {
+  //   //   assetCharacteristicTypes.count({ ownerPartyId: ownerPartyId }, function (err, count) {
+  //   //     const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+  //   //     const generate = SortGenerator.generate(sort);
+  //   //     assetCharacteristicTypes.find({ownerPartyId: ownerPartyId})
+  //   //       .skip(skipAmount)
+  //   //       .limit(pageSize)
+  //   //       .exec((err: any, docs: any) => {
+  //   //         if (!err) {
+  //   //           observer.next(docs);
+  //   //         } else {
+  //   //           observer.error(err);
+  //   //         }
+  //   //         observer.complete();
+  //   //       });
+  //   //   });
+  //   // });
+  // }
 
   updateAssetCharacteristicType(assetCharacteristicType: AssetCharacteristicType, headerOptions?: any): Observable<Affect> {
     assetCharacteristicType.version = generateUUID();

@@ -23,9 +23,9 @@ export class AssetCharacteristicTypeOrchestrator {
     return this.assetCharacteristicTypeRepository.findAssetCharacteristicTypes(ownerPartyId, searchStr, pageNumber, pageSize, headerOptions);
   }
 
-  getAssetCharacteristicTypes(headerOptions?: any): Observable<AssetCharacteristicTypes> {
-    return this.assetCharacteristicTypeRepository.getAssetCharacteristicTypes(headerOptions);
-  }
+  // getAssetCharacteristicTypes(headerOptions?: any): Observable<AssetCharacteristicTypes> {
+  //   return this.assetCharacteristicTypeRepository.getAssetCharacteristicTypes(headerOptions);
+  // }
 
   updateAssetCharacteristicType(assetCharacteristicType: AssetCharacteristicType, headerOptions?: any): Observable<Affect> {
     return this.assetCharacteristicTypeRepository.updateAssetCharacteristicType(assetCharacteristicType, headerOptions);

@@ -11,15 +11,21 @@ export class AssetCharacteristic {
   assetCharacteristicType: AssetCharacteristicType;
   @Field()
   name: string;
-  @Field({nullable: true})
-  defaultValue: string;
+  @Field( () => [String], {nullable: true})
+  list: string[];
+  // @Field({nullable: true})
+  // defaultValue: string;
   @Field({nullable: true})
   description: string;
   @Field({nullable: true})
-  preFilled: boolean;
+  type: string;
   @Field({nullable: true})
-  required: boolean;
   format: string;
+  // @Field({nullable: true})
+  // preFilled: boolean;
+  // @Field({nullable: true})
+  // required: boolean;
+  // format: string;
   unitOfMeasurementId: string;
   unitOfMeasurement: UnitOfMeasurement;
   formula: string;

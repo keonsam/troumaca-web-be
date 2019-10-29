@@ -15,7 +15,7 @@ export interface AssetCharacteristicTypeRepository {
 
   findAssetCharacteristicTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetCharacteristicType[]>;
 
-  getAssetCharacteristicTypes(headerOptions?: any): Observable<AssetCharacteristicTypes>;
+  // getAssetCharacteristicTypes(headerOptions?: any): Observable<AssetCharacteristicTypes>;
 
   getAssetCharacteristicTypeCount(ownerPartyId: string, headerOptions?: any): Observable<number>;
 
