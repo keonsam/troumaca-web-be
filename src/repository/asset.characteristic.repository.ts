@@ -18,7 +18,7 @@ export interface AssetCharacteristicRepository {
 
   findAssetCharacteristics(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristic[]>;
 
-  getAssetCharacteristics(search?: string, selected?: string[], headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristics>;
+  getAssetCharacteristics(tab?: string, search?: string, selected?: string[], headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristics>;
 
   // getAssetCharacteristicCount(headerOptions?: HeaderBaseOptions): Observable<number>;
 

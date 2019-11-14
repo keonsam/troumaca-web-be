@@ -30,7 +30,7 @@ export class AssetCharacteristicRepositoryRestAdapter implements AssetCharacteri
   //   return undefined;
   // }
 
-  getAssetCharacteristics(search?: string , selected?: string[], headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristics> {
+  getAssetCharacteristics(tab?: string, search?: string , selected?: string[], headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristics> {
     return undefined;
   }
 
