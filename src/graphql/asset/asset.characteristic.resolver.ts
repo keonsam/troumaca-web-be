@@ -31,7 +31,7 @@ export class AssetCharacteristicResolver {
     async getAssetCharacteristics(@Arg("data") searchInfo: GetCharacteristicInput,
                                   @Ctx("req") req?: any): Promise<AssetCharacteristics> {
         const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-        return await this.assetCharacteristicOrchestrator.getAssetCharacteristics(searchInfo.search, searchInfo.selected, headerOptions)
+        return await this.assetCharacteristicOrchestrator.getAssetCharacteristics(searchInfo.tab, searchInfo.search, searchInfo.selected, headerOptions)
             .toPromise()
             .then(res => {
                 return res;
