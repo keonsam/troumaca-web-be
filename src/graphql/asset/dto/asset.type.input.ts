@@ -1,4 +1,5 @@
 import { Field, InputType } from "type-graphql";
+import {SelectedCharacteristicsInput} from "./selected.characteristics.input";
 
 @InputType()
 export class AssetTypeInput {
@@ -12,5 +13,6 @@ export class AssetTypeInput {
     share: boolean;
     @Field({nullable: true})
     use: boolean;
-    attribute: string[];
+    @Field(() => [SelectedCharacteristicsInput], {nullable: true})
+    characteristics: SelectedCharacteristicsInput[];
 }

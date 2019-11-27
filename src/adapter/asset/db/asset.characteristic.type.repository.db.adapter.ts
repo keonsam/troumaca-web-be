@@ -1,5 +1,5 @@
 import {AssetCharacteristicTypeRepository} from "../../../repository/asset.characteristic.type.repository";
-import {AssetCharacteristicType} from "../../../data/asset/asset.characteristic.type";
+import {CharacteristicType} from "../../../data/asset/characteristic.type";
 import { Observable, Observer, of } from "rxjs";
 import {Affect} from "../../../data/affect";
 import {Sort} from "../../../util/sort";
@@ -8,19 +8,38 @@ import {generateUUID} from "../../../uuid.generator";
 import {assetCharacteristicTypes} from "../../../db";
 import {SkipGenerator} from "../../util/skip.generator";
 import {SortGenerator} from "../../util/sort.generator";
-import { AssetCharacteristicTypes } from "../../../data/asset/asset.characteristic.types";
+import { CharacteristicTypes } from "../../../data/asset/characteristic.types";
 
-const continuous = new AssetCharacteristicType("054b50c2-9e8a-4cfb-8bac-54af9ac53613", "Continuous Asset Characteristic");
-const category = new AssetCharacteristicType("2f062d58-f464-40a6-921a-a49528f205f6", "Asset Category");
-const types: AssetCharacteristicType[] = [continuous, category];
+// const continuous = new CharacteristicType("054b50c2-9e8a-4cfb-8bac-54af9ac53613", "Continuous Asset Characteristic");
+// const category = new CharacteristicType("2f062d58-f464-40a6-921a-a49528f205f6", "Asset Category");
+// const types: CharacteristicType[] = [continuous, category];
 
 export class AssetCharacteristicTypeRepositoryNeDbAdapter implements AssetCharacteristicTypeRepository {
-  addAssetCharacteristicType(assetCharacteristicType: AssetCharacteristicType, headerOptions?: any): Observable<AssetCharacteristicType> {
+
+    getCharacteristicTypes(headerOptions?: any): Observable<CharacteristicTypes> {
+        const assets: CharacteristicTypes = new CharacteristicTypes();
+        assets.types = [
+            new CharacteristicType("1", "Text"),
+            new CharacteristicType( "2", "Number"),
+            new CharacteristicType("3", "Checkbox"),
+            new CharacteristicType("4", "Select"),
+            new CharacteristicType("5",  "Multi Select"),
+            new CharacteristicType("6",  "Date"),
+            new CharacteristicType("7", "Person"),
+            new CharacteristicType("8", "URL"),
+            new CharacteristicType("9", "Location")
+        ];
+        return of(assets);
+    }
+
+
+    // OTHERS
+  addAssetCharacteristicType(assetCharacteristicType: CharacteristicType, headerOptions?: any): Observable<CharacteristicType> {
     assetCharacteristicType.assetCharacteristicTypeId = generateUUID();
     assetCharacteristicType.version = generateUUID();
     assetCharacteristicType.dateModified = new Date();
 
-    return Observable.create(function (observer: Observer<AssetCharacteristicType>) {
+    return Observable.create(function (observer: Observer<CharacteristicType>) {
       assetCharacteristicTypes.insert(assetCharacteristicType, function (err: any, doc: any) {
         if (err) {
           observer.error(err);
@@ -47,8 +66,8 @@ export class AssetCharacteristicTypeRepositoryNeDbAdapter implements AssetCharac
     });
   }
 
-  findAssetCharacteristicTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetCharacteristicType[]> {
-    return Observable.create(function (observer: Observer<AssetCharacteristicType[]>) {
+  findAssetCharacteristicTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<CharacteristicType[]> {
+    return Observable.create(function (observer: Observer<CharacteristicType[]>) {
       assetCharacteristicTypes.count({ ownerPartyId: ownerPartyId }, function (err, count) {
         const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
         assetCharacteristicTypes.find({ownerPartyId: ownerPartyId, name: new RegExp(searchStr) })
@@ -67,9 +86,10 @@ export class AssetCharacteristicTypeRepositoryNeDbAdapter implements AssetCharac
     });
   }
 
-  getAssetCharacteristicTypeById(assetCharacteristicTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetCharacteristicType> {
-      return of(types.find(x => x.assetCharacteristicTypeId === assetCharacteristicTypeId));
-    // return Observable.create(function (observer: Observer<AssetCharacteristicType>) {
+  getAssetCharacteristicTypeById(assetCharacteristicTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<CharacteristicType> {
+        return undefined;
+      // return of(types.find(x => x.assetCharacteristicTypeId === assetCharacteristicTypeId));
+    // return Observable.create(function (observer: Observer<CharacteristicType>) {
     //   // , ownerPartyId:ownerPartyId
     //   assetCharacteristicTypes.find(
     //     {assetCharacteristicTypeId:assetCharacteristicTypeId},
@@ -99,40 +119,8 @@ export class AssetCharacteristicTypeRepositoryNeDbAdapter implements AssetCharac
     });
   }
 
-  // getAssetCharacteristicTypes(headerOptions?: any): Observable<AssetCharacteristicTypes> {
-  //     const assets: AssetCharacteristicTypes = new AssetCharacteristicTypes();
-  //     assets.types = [
-  //         new AssetCharacteristicType("1", "Text"),
-  //         new AssetCharacteristicType( "2", "Number"),
-  //         new AssetCharacteristicType("3", "Checkbox"),
-  //         new AssetCharacteristicType("4", "Select"),
-  //         new AssetCharacteristicType("5",  "Multi Select"),
-  //         new AssetCharacteristicType("6",  "Date"),
-  //         new AssetCharacteristicType("7", "Person"),
-  //         new AssetCharacteristicType("8", "URL"),
-  //         new AssetCharacteristicType("9", "Location")
-  //     ];
-  //     return of(assets);
-  //   // return Observable.create(function (observer: Observer<Page<AssetCharacteristicType[]>>) {
-  //   //   assetCharacteristicTypes.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-  //   //     const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-  //   //     const generate = SortGenerator.generate(sort);
-  //   //     assetCharacteristicTypes.find({ownerPartyId: ownerPartyId})
-  //   //       .skip(skipAmount)
-  //   //       .limit(pageSize)
-  //   //       .exec((err: any, docs: any) => {
-  //   //         if (!err) {
-  //   //           observer.next(docs);
-  //   //         } else {
-  //   //           observer.error(err);
-  //   //         }
-  //   //         observer.complete();
-  //   //       });
-  //   //   });
-  //   // });
-  // }
 
-  updateAssetCharacteristicType(assetCharacteristicType: AssetCharacteristicType, headerOptions?: any): Observable<Affect> {
+  updateAssetCharacteristicType(assetCharacteristicType: CharacteristicType, headerOptions?: any): Observable<Affect> {
     assetCharacteristicType.version = generateUUID();
     assetCharacteristicType.dateModified = new Date();
     // ownerPartyId:assetCharacteristicType.ownerPartyId
