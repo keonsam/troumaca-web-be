@@ -1,12 +1,16 @@
 import {AssetCharacteristicTypeRepository} from "../../../repository/asset.characteristic.type.repository";
-import {AssetCharacteristicType} from "../../../data/asset/asset.characteristic.type";
+import {CharacteristicType} from "../../../data/asset/characteristic.type";
 import {Observable} from "rxjs";
 import {Affect} from "../../../data/affect";
-import {Page} from "../../../util/page";
-import {Sort} from "../../../util/sort";
+import {CharacteristicTypes} from "../../../data/asset/characteristic.types";
 
 export class AssetCharacteristicTypeRepositoryRestAdapter implements AssetCharacteristicTypeRepository {
-  addAssetCharacteristicType(assetCharacteristicType: AssetCharacteristicType, headerOptions?: any): Observable<AssetCharacteristicType> {
+
+  getCharacteristicTypes(headerOptions?: any): Observable<CharacteristicTypes> {
+    return undefined;
+  }
+
+  addAssetCharacteristicType(assetCharacteristicType: CharacteristicType, headerOptions?: any): Observable<CharacteristicType> {
     return undefined;
   }
 
@@ -14,11 +18,11 @@ export class AssetCharacteristicTypeRepositoryRestAdapter implements AssetCharac
     return undefined;
   }
 
-  findAssetCharacteristicTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetCharacteristicType[]> {
+  findAssetCharacteristicTypes(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<CharacteristicType[]> {
     return undefined;
   }
 
-  getAssetCharacteristicTypeById(assetCharacteristicTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetCharacteristicType> {
+  getAssetCharacteristicTypeById(assetCharacteristicTypeId: string, ownerPartyId: string, headerOptions?: any): Observable<CharacteristicType> {
     return undefined;
   }
 
@@ -26,11 +30,7 @@ export class AssetCharacteristicTypeRepositoryRestAdapter implements AssetCharac
     return undefined;
   }
 
-  // getAssetCharacteristicTypes(headerOptions?: any): Observable<Page<AssetCharacteristicType[]>> {
-  //   return undefined;
-  // }
-
-  updateAssetCharacteristicType(assetCharacteristicType: AssetCharacteristicType, headerOptions?: any): Observable<Affect> {
+  updateAssetCharacteristicType(assetCharacteristicType: CharacteristicType, headerOptions?: any): Observable<Affect> {
     return undefined;
   }
 }

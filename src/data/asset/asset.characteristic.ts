@@ -1,4 +1,4 @@
-import { AssetCharacteristicType } from "./asset.characteristic.type";
+import { CharacteristicType } from "./characteristic.type";
 import { UnitOfMeasurement } from "../unit-of-measurement/unit.of.measurement";
 import { Field, ID, ObjectType } from "type-graphql";
 
@@ -8,7 +8,7 @@ export class AssetCharacteristic {
   assetCharacteristicId: string;
   @Field( () => ID)
   assetCharacteristicTypeId: string;
-  assetCharacteristicType: AssetCharacteristicType;
+  assetCharacteristicType: CharacteristicType;
   @Field()
   name: string;
   @Field( () => [String], {nullable: true})

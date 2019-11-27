@@ -1,7 +1,7 @@
 import { Field, ObjectType } from "type-graphql";
 
 @ObjectType()
-export class AssetCharacteristicType {
+export class CharacteristicType {
   @Field()
   assetCharacteristicTypeId: string;
   @Field()

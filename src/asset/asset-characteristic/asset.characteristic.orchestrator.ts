@@ -6,7 +6,7 @@ import {switchMap, map} from "rxjs/operators";
 import {Sort} from "../../util/sort";
 import { AssetCharacteristics } from "../../data/asset/asset.characteristics";
 import { Page } from "../../data/page/page";
-import { AssetCharacteristicType } from "../../data/asset/asset.characteristic.type";
+import { CharacteristicType } from "../../data/asset/characteristic.type";
 import { HeaderBaseOptions } from "../../header.base.options";
 import { RepositoryKind } from "../../repository.kind";
 import { AssetCharacteristicInput } from "../../graphql/asset/dto/asset.characteristic.input";
@@ -45,11 +45,11 @@ export class AssetCharacteristicOrchestrator {
             .pipe(map(aff => aff.affected));
     }
 
-    getAssetCharacteristicTypes(options?: HeaderBaseOptions): Observable<AssetCharacteristicType[]> {
+    getAssetCharacteristicTypes(options?: HeaderBaseOptions): Observable<CharacteristicType[]> {
         return this.assetCharacteristicRepository.getAssetCharacteristicTypes(options);
     }
 
-    getAssetCharacteristicType(assetCharacteristicTypeId: string, options?: HeaderBaseOptions): Observable<AssetCharacteristicType> {
+    getAssetCharacteristicType(assetCharacteristicTypeId: string, options?: HeaderBaseOptions): Observable<CharacteristicType> {
         return this.assetCharacteristicRepository.getAssetCharacteristicType(assetCharacteristicTypeId, options);
     }
 }

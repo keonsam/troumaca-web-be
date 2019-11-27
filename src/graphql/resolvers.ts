@@ -10,12 +10,14 @@ import { SessionResolver } from "./authorization/session.resolver";
 import { AssetCharacteristicResolver } from "./asset/asset.characteristic.resolver";
 import { AssetTypeResolver } from "./asset/asset.type.resolver";
 import { AssetResolve } from "./asset/asset.resolve";
+import {CharacteristicTypeResolver} from "./asset/characteristic.type.resolver";
 
 const RESOLVERS: any[] = [
     CredentialResolver,
     ConfirmationResolver,
     SessionResolver,
     AssetCharacteristicResolver,
+    CharacteristicTypeResolver,
     AssetTypeResolver,
     AssetResolve
 ];

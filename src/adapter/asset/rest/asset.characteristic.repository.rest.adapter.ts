@@ -4,7 +4,7 @@ import { Observable, of } from "rxjs";
 import {Affect} from "../../../data/affect";
 import {Page} from "../../../util/page";
 import {Sort} from "../../../util/sort";
-import { AssetCharacteristicType } from "../../../data/asset/asset.characteristic.type";
+import { CharacteristicType } from "../../../data/asset/characteristic.type";
 import { HeaderBaseOptions } from "../../../header.base.options";
 import { AssetCharacteristics } from "../../../data/asset/asset.characteristics";
 import { AssetCharacteristicInput } from "../../../graphql/asset/dto/asset.characteristic.input";
@@ -38,11 +38,11 @@ export class AssetCharacteristicRepositoryRestAdapter implements AssetCharacteri
     return undefined;
   }
 
-  getAssetCharacteristicTypes(headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristicType[]> {
+  getAssetCharacteristicTypes(headerOptions?: HeaderBaseOptions): Observable<CharacteristicType[]> {
     return undefined;
   }
 
-  getAssetCharacteristicType(assetCharacteristicTypeId: string, headerOptions?: any): Observable<AssetCharacteristicType> {
+  getAssetCharacteristicType(assetCharacteristicTypeId: string, headerOptions?: any): Observable<CharacteristicType> {
     return undefined;
   }
 }

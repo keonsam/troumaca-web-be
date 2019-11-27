@@ -8,15 +8,15 @@ import {SkipGenerator} from "../../util/skip.generator";
 import {Sort} from "../../../util/sort";
 import { Page} from "../../../data/page/page";
 import {SortGenerator} from "../../util/sort.generator";
-import { AssetCharacteristicType } from "../../../data/asset/asset.characteristic.type";
+import { CharacteristicType } from "../../../data/asset/characteristic.type";
 import { AssetCharacteristics } from "../../../data/asset/asset.characteristics";
 import { HeaderBaseOptions } from "../../../header.base.options";
 import { AssetCharacteristicInput } from "../../../graphql/asset/dto/asset.characteristic.input";
 import { mapObjectProps } from "../../../graphql/object.property.mapper";
 
-const continuous = new AssetCharacteristicType("054b50c2-9e8a-4cfb-8bac-54af9ac53613", "Continuous");
-const category = new AssetCharacteristicType("2f062d58-f464-40a6-921a-a49528f205f6", "Category");
-const types: AssetCharacteristicType[] = [continuous, category];
+const continuous = new CharacteristicType("054b50c2-9e8a-4cfb-8bac-54af9ac53613", "Continuous");
+const category = new CharacteristicType("2f062d58-f464-40a6-921a-a49528f205f6", "Category");
+const types: CharacteristicType[] = [continuous, category];
 export class AssetCharacteristicRepositoryNeDbAdapter implements AssetCharacteristicRepository {
     addAssetCharacteristic(assetCharacteristicInput: AssetCharacteristicInput, headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristic> {
         const assetCharacteristic: AssetCharacteristic = mapObjectProps(assetCharacteristicInput, new AssetCharacteristic());
@@ -144,12 +144,12 @@ export class AssetCharacteristicRepositoryNeDbAdapter implements AssetCharacteri
         });
     }
 
-    getAssetCharacteristicTypes(options?: HeaderBaseOptions): Observable<AssetCharacteristicType[]> {
+    getAssetCharacteristicTypes(options?: HeaderBaseOptions): Observable<CharacteristicType[]> {
         // not generated values
         return of(types);
     }
 
-    getAssetCharacteristicType(assetCharacteristicTypeId: string, options?: HeaderBaseOptions): Observable<AssetCharacteristicType> {
+    getAssetCharacteristicType(assetCharacteristicTypeId: string, options?: HeaderBaseOptions): Observable<CharacteristicType> {
         return of(types.find(x => x.assetCharacteristicTypeId === assetCharacteristicTypeId));
     }
 

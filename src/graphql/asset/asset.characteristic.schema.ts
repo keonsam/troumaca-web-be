@@ -22,13 +22,13 @@
 //         getAssetCharacteristic(assetCharacteristicId: ID!): AssetCharacteristic! @requireAuth
 //         getAssetCharacteristics(pageNumber: Int!, pageSize: Int!, sortOrder: String!): AssetCharacteristics! @requireAuth
 //         findAssetCharacteristics(searchStr: String!, pageSize: Int!): [AssetCharacteristic]! @requireAuth
-//         getAssetCharacteristicTypes: [AssetCharacteristicType] @requireAuth
+//         getAssetCharacteristicTypes: [CharacteristicType] @requireAuth
 //     }
 //     type AssetCharacteristic {
 //         assetCharacteristicId: ID!
 //         name: String
 //         assetCharacteristicTypeId: ID
-//         assetCharacteristicType: AssetCharacteristicType
+//         assetCharacteristicType: CharacteristicType
 //         defaultValue: String
 //         description: String
 //         unitOfMeasurementId: ID
@@ -45,7 +45,7 @@
 //         assetCharacteristics: [AssetCharacteristic]!
 //         page: Page!
 //     }
-//     type AssetCharacteristicType {
+//     type CharacteristicType {
 //         assetCharacteristicTypeId: String!
 //         name: String!
 //     }
