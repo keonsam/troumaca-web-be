@@ -4,10 +4,15 @@ import { Field, ObjectType } from "type-graphql";
 
 @ObjectType()
 export class AssetTypes {
+  // @Field(() => [AssetType])
+  // assetTypes: AssetType[] = [];
   @Field(() => [AssetType])
-  assetTypes: AssetType[] = [];
+  recent: AssetType[];
+  @Field(() => [AssetType])
+  recommended: AssetType[];
   page: Page;
   constructor(assetTypes: AssetType[]) {
-    this.assetTypes = assetTypes;
+    this.recent = assetTypes;
+    this.recommended = assetTypes;
   }
 }

@@ -11,6 +11,8 @@ import { AssetCharacteristicResolver } from "./asset/asset.characteristic.resolv
 import { AssetTypeResolver } from "./asset/asset.type.resolver";
 import { AssetResolve } from "./asset/asset.resolve";
 import {CharacteristicTypeResolver} from "./asset/characteristic.type.resolver";
+import {PeopleResolver} from "./party/people.resolver";
+import {SiteResolver} from "./site/site.resolver";
 
 const RESOLVERS: any[] = [
     CredentialResolver,
@@ -19,7 +21,9 @@ const RESOLVERS: any[] = [
     AssetCharacteristicResolver,
     CharacteristicTypeResolver,
     AssetTypeResolver,
-    AssetResolve
+    AssetResolve,
+    PeopleResolver,
+    SiteResolver
 ];
 
 export default RESOLVERS;

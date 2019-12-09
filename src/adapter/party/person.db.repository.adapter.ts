@@ -16,11 +16,11 @@ import { Persons } from "../../data/party/persons";
 
 export class PersonDbRepositoryAdapter implements PersonRepository {
 
-  findPeople(searchStr: string, pageSize: number, options: HeaderBaseOptions): Observable<Person[]> {
+  findPeople(searchStr: string, options: HeaderBaseOptions): Observable<Person[]> {
     const searchStrLocal = new RegExp(searchStr);
     const query = searchStr ? {
       firstName: {$regex: searchStrLocal},
-      ownerPartyId: options.ownerPartyId
+      // ownerPartyId: options.ownerPartyId
     } : {};
     return Observable.create(function (observer: Observer<Person[]>) {
       persons.find(query).limit(100).exec(function (err: any, doc: any) {

@@ -92,7 +92,7 @@ export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
       });
   }
 
-  getAssetTypes(search?: string, headerOptions?: HeaderBaseOptions): Observable<AssetTypes> {
+  getAssetTypes(tab?: string, search?: string, headerOptions?: HeaderBaseOptions): Observable<AssetTypes> {
       return Observable.create(function (observer: Observer<AssetTypes>) {
           assetTypes.count({ ownerPartyId: headerOptions.ownerPartyId }, function (err, count) {
               assetTypes.find({

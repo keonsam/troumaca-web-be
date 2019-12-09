@@ -57,7 +57,7 @@ export class PersonRepositoryRestAdapter implements PersonRepository {
   //   });
   // }
 
-  findPeople(searchStr: string, pageSize: number, options: HeaderBaseOptions): Observable<Person[]> {
+  findPeople(searchStr: string, options: HeaderBaseOptions): Observable<Person[]> {
     return undefined;
   }
 

@@ -16,7 +16,7 @@ export interface AssetTypeRepository {
 
   findAssetTypes(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetType[]>;
 
-  getAssetTypes(search?: string, headerOptions?: HeaderBaseOptions): Observable<AssetTypes>;
+  getAssetTypes(tab?: string, search?: string, headerOptions?: HeaderBaseOptions): Observable<AssetTypes>;
 
   getAssetTypeById(assetTypeId: string, headerOptions?: HeaderBaseOptions): Observable<AssetType>;
 

@@ -24,7 +24,7 @@ export class AssetTypeRepositoryRestAdapter implements AssetTypeRepository {
     return undefined;
   }
 
-  getAssetTypes(search?: string, headerOptions?: HeaderBaseOptions): Observable<AssetTypes> {
+  getAssetTypes(tab?: string, search?: string, headerOptions?: HeaderBaseOptions): Observable<AssetTypes> {
     return undefined;
   }
 

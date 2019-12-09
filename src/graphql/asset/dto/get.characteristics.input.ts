@@ -1,7 +1,7 @@
 import { Field, InputType } from "type-graphql";
 
 @InputType()
-export class GetCharacteristicInput {
+export class GetCharacteristicsInput {
     @Field({ nullable: true })
     tab: string;
     @Field({ nullable: true })

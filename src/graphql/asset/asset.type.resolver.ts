@@ -6,7 +6,7 @@ import { AssetTypeInput } from "./dto/asset.type.input";
 import { ApolloError } from "apollo-server-errors";
 import { ERROR_CODE } from "../error.code";
 import { AssetTypes } from "../../data/asset/asset.types";
-import { GetAssetTypes } from "./dto/get.asset.types";
+import { GetAssetTypesInput } from "./dto/get.asset.types.input";
 
 @Resolver()
 export class AssetTypeResolver {
@@ -26,9 +26,9 @@ export class AssetTypeResolver {
     }
 
     @Query( () => AssetTypes)
-    async getAssetTypes(@Arg("data") searchInfo: GetAssetTypes, @Ctx("req") req: any): Promise<AssetTypes> {
+    async getAssetTypes(@Arg("data") searchInfo: GetAssetTypesInput, @Ctx("req") req: any): Promise<AssetTypes> {
         const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-        return await this.assetTypeOrchestrator.getAssetTypes(searchInfo.search, headerOptions)
+        return await this.assetTypeOrchestrator.getAssetTypes(searchInfo.tab, searchInfo.search, headerOptions)
             .toPromise()
             .then(res => {
                 return res;

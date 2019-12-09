@@ -18,8 +18,8 @@ export class PersonOrchestrator {
     this.personRepository = createPersonRepository();
   }
 
-  findPeople(searchStr: string, pageSize: number, options: HeaderBaseOptions): Observable<Person[]> {
-    return this.personRepository.findPeople(searchStr, pageSize, options);
+  findPeople(searchStr: string, options: HeaderBaseOptions): Observable<Person[]> {
+    return this.personRepository.findPeople(searchStr, options);
   }
 
   getPersons(pageNumber: number, pageSize: number, sort: Sort, options: HeaderBaseOptions): Observable<Persons> {
