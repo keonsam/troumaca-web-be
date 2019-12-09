@@ -2,9 +2,10 @@ import {SiteRepository} from "../../repository/site.repository";
 import {Observable, Observer} from "rxjs";
 import {sites} from "../../db";
 import {Site} from "../../data/site/site";
+import {HeaderBaseOptions} from "../../header.base.options";
 
 export class SiteRepositoryNeDbAdapter implements SiteRepository {
-  findSite(searchStr: string, pageSize: number): Observable<Site[]> {
+  findSite(searchStr: string, options: HeaderBaseOptions): Observable<Site[]> {
     const searchStrLocal = new RegExp(searchStr);
     const query = searchStr ? {name: {$regex: searchStrLocal}} : {};
     return Observable.create(function (observer: Observer<Site[]>) {

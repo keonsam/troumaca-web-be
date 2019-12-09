@@ -7,7 +7,7 @@ import { Persons } from "../data/party/persons";
 
 export interface PersonRepository {
 
-  findPeople(searchStr: string, pageSize: number, options: HeaderBaseOptions): Observable<Person[]>;
+  findPeople(searchStr: string, options: HeaderBaseOptions): Observable<Person[]>;
 
   getPersons(pageNumber: number, pageSize: number, order: Sort, options: HeaderBaseOptions): Observable<Persons>;
 

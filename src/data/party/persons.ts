@@ -1,12 +1,14 @@
 import { Page } from "../page/page";
 import { Person } from "./person";
+import {Field, ObjectType} from "type-graphql";
 
+@ObjectType()
 export class Persons {
-    constructor(persons: Person[], page: Page) {
+    @Field(() => Person)
+    persons: Person[] = [];
+    page: Page;
+    constructor(persons?: Person[], page?: Page) {
         this.persons = persons;
         this.page = page;
     }
-
-    persons: Person[] = [];
-    page: Page;
 }

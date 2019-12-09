@@ -25,8 +25,8 @@ export class AssetTypeOrchestrator {
     return this.assetTypeRepository.findAssetTypes(searchStr, pageNumber, pageSize, headerOptions);
   }
 
-  getAssetTypes(search?: string, headerOptions?: HeaderBaseOptions): Observable<AssetTypes> {
-    return this.assetTypeRepository.getAssetTypes(search, headerOptions);
+  getAssetTypes(tab?: string, search?: string, headerOptions?: HeaderBaseOptions): Observable<AssetTypes> {
+    return this.assetTypeRepository.getAssetTypes(tab, search, headerOptions);
   }
 
   updateAssetType(assetTypeId: string, assetType: AssetType, headerOptions?: HeaderBaseOptions): Observable<number> {

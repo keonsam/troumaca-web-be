@@ -144,7 +144,7 @@ export const resolvers = {
         findPeople: async (_: any, {searchStr, pageSize}: any, {req}: any) => {
             const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
             return await personOrchestrator
-                .findPeople(searchStr, pageSize, headerOptions)
+                .findPeople(searchStr, headerOptions)
                 .toPromise()
                 .then( res => {
                     return res;

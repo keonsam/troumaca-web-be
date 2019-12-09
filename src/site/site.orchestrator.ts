@@ -2,6 +2,7 @@ import {createSiteRepository} from "../adapter/site/site.repository.factory";
 import {SiteRepository} from "../repository/site.repository";
 import {Observable} from "rxjs";
 import { Site } from "../data/site/site";
+import {HeaderBaseOptions} from "../header.base.options";
 
 export class SiteOrchestrator {
 
@@ -11,8 +12,8 @@ export class SiteOrchestrator {
     this.siteRepository = createSiteRepository();
   }
 
-  findSite(searchStr: string, pageSize: number): Observable<Site[]> {
-    return this.siteRepository.findSite(searchStr, pageSize);
+  findSite(searchStr: string, options: HeaderBaseOptions): Observable<Site[]> {
+    return this.siteRepository.findSite(searchStr, options);
   }
 
 }
