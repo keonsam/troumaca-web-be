@@ -26,8 +26,8 @@ export class AssetOrchestrator {
     return this.assetRepository.findAssets(searchStr, pageNumber, pageSize, headerOptions);
   }
 
-  getAssets(search?: string, headerOptions?: HeaderBaseOptions): Observable<Assets> {
-    return this.assetRepository.getAssets(search, headerOptions);
+  getAssets(search?: string, pageNumber?: number, pageSize?: number, headerOptions?: HeaderBaseOptions): Observable<Assets> {
+    return this.assetRepository.getAssets(search, pageNumber, pageSize, headerOptions);
   }
 
   updateAsset(assetId: string, asset: Asset, headerOptions?: HeaderBaseOptions): Observable<number> {

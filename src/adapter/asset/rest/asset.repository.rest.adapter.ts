@@ -30,7 +30,7 @@ export class AssetRepositoryRestAdapter implements AssetRepository {
   //   return undefined;
   // }
 
-  getAssets(search?: string, headerOptions?: HeaderBaseOptions): Observable<Assets> {
+  getAssets(search?: string, pageNumber?: number, pageSize?: number, headerOptions?: HeaderBaseOptions): Observable<Assets> {
     return undefined;
   }
 
