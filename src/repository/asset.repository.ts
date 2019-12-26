@@ -17,7 +17,7 @@ export interface AssetRepository {
 
   findAssets(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<Asset[]>;
 
-  getAssets(search?: string, headerOptions?: HeaderBaseOptions): Observable<Assets>;
+  getAssets(search?: string, pageNumber?: number, pageSize?: number, headerOptions?: HeaderBaseOptions): Observable<Assets>;
 
   // getAssetCount(ownerPartyId: string, headerOptions?: HeaderBaseOptions): Observable<number>;
 

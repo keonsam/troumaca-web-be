@@ -4,7 +4,7 @@ import { Field, ObjectType } from "type-graphql";
 
 @ObjectType()
 export class Assets {
-  @Field( () => [Asset])
+  @Field( () => [Asset], {nullable: true})
   assets: Asset[] = [];
   page: Page;
   constructor(assets: Asset[], page?: Page) {

@@ -82,8 +82,8 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
             assets.count({ ownerPartyId: headerOptions.ownerPartyId }, function (err, count) {
                 const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
                 assets.find({ownerPartyId: headerOptions.ownerPartyId, name: new RegExp(searchStr) })
-                    .skip(skipAmount)
-                    .limit(pageSize)
+                    // .skip(pageNumber)
+                    // .limit(pageSize)
                     .exec(
                         (err: any, docs: any) => {
                             if (!err) {
@@ -112,9 +112,9 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
         });
     }
 
-    getAssets(search?: string, headerOptions?: HeaderBaseOptions): Observable<Assets> {
+    getAssets(search?: string, pageNumber?: number, pageSize?: number, headerOptions?: HeaderBaseOptions): Observable<Assets> {
         // just for now this might change
-        return this.getAssetsLocal(search, headerOptions)
+        return this.getAssetsLocal(search, pageNumber, pageSize, headerOptions)
             .pipe(switchMap( assets => {
                 const assetTypeIds: string[] = assets.map( x => x.assetTypeId);
                 return this.getAssetTypesLocal(assetTypeIds, headerOptions)
@@ -127,14 +127,13 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
             }));
     }
 
-    private getAssetsLocal(search: string, headerOptions?: HeaderBaseOptions): Observable<Asset[]> {
+    private getAssetsLocal(search: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<Asset[]> {
         return Observable.create(function (observer: Observer<Asset[]>) {
             assets.count({ownerPartyId: headerOptions.ownerPartyId}, function (err, count) {
-                // const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-                // const generate = SortGenerator.generate(sort);
+                const skipAmount = pageNumber ? pageNumber * pageSize : 0;
                 assets.find({ownerPartyId: headerOptions.ownerPartyId, name: new RegExp(search)})
-                // .skip(skipAmount)
-                // .limit(pageSize)
+                .skip(skipAmount)
+                .limit(pageSize)
                     .exec((err: any, docs: Asset[]) => {
                         if (!err) {
                             observer.next(docs);
