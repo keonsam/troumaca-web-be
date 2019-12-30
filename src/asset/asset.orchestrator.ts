@@ -30,7 +30,7 @@ export class AssetOrchestrator {
     return this.assetRepository.getAssets(search, pageNumber, pageSize, headerOptions);
   }
 
-  updateAsset(assetId: string, asset: Asset, headerOptions?: HeaderBaseOptions): Observable<number> {
+  updateAsset(assetId: string, asset: AssetInput, headerOptions?: HeaderBaseOptions): Observable<number> {
     return this.assetRepository.updateAsset(assetId, asset, headerOptions)
         .pipe(map( aff => aff.affected));
   }

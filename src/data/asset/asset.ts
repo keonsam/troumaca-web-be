@@ -18,7 +18,9 @@ export class Asset {
   // not in query
   dateOfCreation: Date;
   dateOfDestruction: Date;
+  @Field( {nullable: true})
   version: string;
+  @Field( {nullable: true})
   ownerPartyId: string;
   dateModified: Date;
 }

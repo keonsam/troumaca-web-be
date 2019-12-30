@@ -1,4 +1,4 @@
-import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import {Arg, Ctx, ID, Mutation, Query, Resolver} from "type-graphql";
 import { AssetOrchestrator } from "../../asset/asset.orchestrator";
 import { Asset } from "../../data/asset/asset";
 import { AssetTypeInput } from "./dto/asset.type.input";
@@ -35,6 +35,49 @@ export class AssetResolve {
             .toPromise()
             .then(res => {
                 return res;
+            }, error => {
+                console.log(error);
+                throw new ApolloError(error, ERROR_CODE);
+            });
+    }
+
+    @Query( () => Asset)
+    async getAssetById(@Arg("assetId", () => ID) assetId: string, @Ctx("req") req: any): Promise<Asset> {
+        const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
+        return this.assetOrchestrator.getAssetById(assetId, headerOptions)
+            .toPromise()
+            .then(res => {
+                return res;
+            }, error => {
+                console.log(error);
+                throw new ApolloError(error, ERROR_CODE);
+            });
+    }
+
+    @Mutation( () => Boolean)
+    async deleteAsset(@Arg("assetId", () => ID) assetId: string, @Ctx("req") req: any): Promise<boolean> {
+        const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
+        return this.assetOrchestrator.deleteAsset(assetId, headerOptions)
+            .toPromise()
+            .then(res => {
+                return !!res;
+            }, error => {
+                console.log(error);
+                throw new ApolloError(error, ERROR_CODE);
+            });
+    }
+
+    @Mutation( () => Boolean)
+    async updateAsset(
+        @Arg("assetId", () => ID) assetId: string,
+        @Arg("asset", ) assetInput: AssetInput,
+        @Ctx("req") req: any
+    ): Promise<boolean> {
+        const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
+        return this.assetOrchestrator.updateAsset(assetId, assetInput, headerOptions)
+            .toPromise()
+            .then(res => {
+                return !!res;
             }, error => {
                 console.log(error);
                 throw new ApolloError(error, ERROR_CODE);
