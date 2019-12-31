@@ -1,13 +1,12 @@
 import {Arg, Ctx, ID, Mutation, Query, Resolver} from "type-graphql";
 import { AssetOrchestrator } from "../../asset/asset.orchestrator";
 import { Asset } from "../../data/asset/asset";
-import { AssetTypeInput } from "./dto/asset.type.input";
 import { AssetInput } from "./dto/asset.input";
 import { HeaderBaseOptions } from "../../header.base.options";
 import { ApolloError } from "apollo-server-errors";
 import { ERROR_CODE } from "../error.code";
 import { Assets } from "../../data/asset/assets";
-import {AssetPagingInput} from "./dto/asset.paging.input";
+import {Paging} from "../paging";
 
 @Resolver()
 export class AssetResolve {
@@ -28,7 +27,7 @@ export class AssetResolve {
 
     @Query( () => Assets)
     async getAssets(@Arg("search", { nullable: true }) search: string,
-                    @Arg("paging", () => AssetPagingInput, { nullable: true }) paging: AssetPagingInput,
+                    @Arg("paging", () => Paging) paging: Paging,
                     @Ctx("req") req: any): Promise<Assets> {
         const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
         return this.assetOrchestrator.getAssets(search, paging.pageNumber, paging.pageSize, headerOptions)

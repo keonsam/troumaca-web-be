@@ -7,6 +7,7 @@ import { ApolloError } from "apollo-server-errors";
 import { ERROR_CODE } from "../error.code";
 import { AssetTypes } from "../../data/asset/asset.types";
 import { GetAssetTypesInput } from "./dto/get.asset.types.input";
+import {Paging} from "../paging";
 
 @Resolver()
 export class AssetTypeResolver {
@@ -26,9 +27,11 @@ export class AssetTypeResolver {
     }
 
     @Query( () => AssetTypes)
-    async getAssetTypes(@Arg("data") searchInfo: GetAssetTypesInput, @Ctx("req") req: any): Promise<AssetTypes> {
+    async getAssetTypes(@Arg("search", () => GetAssetTypesInput) searchInfo: GetAssetTypesInput,
+                        @Arg("paging", () => Paging) paging: Paging,
+                        @Ctx("req") req: any): Promise<AssetTypes> {
         const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
-        return await this.assetTypeOrchestrator.getAssetTypes(searchInfo.tab, searchInfo.search, headerOptions)
+        return await this.assetTypeOrchestrator.getAssetTypes(searchInfo.tab, searchInfo.type, searchInfo.search, paging.pageNumber, paging.pageSize, headerOptions)
             .toPromise()
             .then(res => {
                 return res;
