@@ -10,7 +10,7 @@ export interface AssetTypeRepository {
 
   addAssetType(assetType: AssetTypeInput, headerOptions?: HeaderBaseOptions): Observable<AssetType>;
 
-  updateAssetType(assetTypeId: string, assetType: AssetType, headerOptions?: HeaderBaseOptions): Observable<Affect>;
+  updateAssetType(assetTypeId: string, assetType: AssetTypeInput, headerOptions?: HeaderBaseOptions): Observable<Affect>;
 
   deleteAssetType(assetTypeId: string, headerOptions?: HeaderBaseOptions): Observable<Affect>;
 

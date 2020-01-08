@@ -37,9 +37,9 @@ export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
       });
   }
 
-  updateAssetType(assetTypeId: string, assetType: AssetType, headerOptions?: HeaderBaseOptions): Observable<Affect> {
-      assetType.version = generateUUID();
-      assetType.dateModified = new Date();
+  updateAssetType(assetTypeId: string, assetType: AssetTypeInput, headerOptions?: HeaderBaseOptions): Observable<Affect> {
+      // assetType.version = generateUUID();
+      // assetType.dateModified = new Date();
 
       return Observable.create(function (observer: Observer<Affect>) {
           assetTypes.update(

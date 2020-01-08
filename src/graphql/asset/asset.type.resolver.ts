@@ -1,4 +1,4 @@
-import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import {Arg, Ctx, ID, Mutation, Query, Resolver} from "type-graphql";
 import { AssetTypeOrchestrator } from "../../asset/asset-type/asset.type.orchestrator";
 import { AssetType } from "../../data/asset/asset.type";
 import { HeaderBaseOptions } from "../../header.base.options";
@@ -35,6 +35,47 @@ export class AssetTypeResolver {
             .toPromise()
             .then(res => {
                 return res;
+            }, error => {
+                console.log(error);
+                throw new ApolloError(error, ERROR_CODE);
+            });
+    }
+
+    @Query( () => AssetType)
+    async getAssetTypeById(@Arg("assetTypeId", () => ID) assetTypeId: string, @Ctx("req") req: any): Promise<AssetType> {
+        const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
+        return this.assetTypeOrchestrator.getAssetTypeById(assetTypeId, headerOptions)
+            .toPromise()
+            .then(res => {
+                return res;
+            }, error => {
+                console.log(error);
+                throw new ApolloError(error, ERROR_CODE);
+            });
+    }
+
+    @Mutation( () => Boolean)
+    async updateAssetType(@Arg("assetTypeId", () => ID) assetTypeId: string,
+                          @Arg("assetType") assetTypeInput: AssetTypeInput,
+                          @Ctx("req") req: any): Promise<boolean> {
+        const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
+        return await this.assetTypeOrchestrator.updateAssetType(assetTypeId, assetTypeInput, headerOptions)
+            .toPromise()
+            .then(res => {
+                return !!res;
+            }, error => {
+                console.log(error);
+                throw new ApolloError(error, ERROR_CODE);
+            });
+    }
+
+    @Mutation( () => Boolean)
+    async deleteAssetType(@Arg("assetTypeId", () => ID) assetTypeId: string, @Ctx("req") req: any): Promise<boolean> {
+        const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
+        return this.assetTypeOrchestrator.deleteAssetType(assetTypeId, headerOptions)
+            .toPromise()
+            .then(res => {
+                return !!res;
             }, error => {
                 console.log(error);
                 throw new ApolloError(error, ERROR_CODE);

@@ -29,7 +29,7 @@ export class AssetTypeOrchestrator {
     return this.assetTypeRepository.getAssetTypes(tab, type, search, pageNumber, pageSize, headerOptions);
   }
 
-  updateAssetType(assetTypeId: string, assetType: AssetType, headerOptions?: HeaderBaseOptions): Observable<number> {
+  updateAssetType(assetTypeId: string, assetType: AssetTypeInput, headerOptions?: HeaderBaseOptions): Observable<number> {
     return this.assetTypeRepository.updateAssetType(assetTypeId, assetType, headerOptions)
         .pipe(map( aff => aff.affected));
   }
