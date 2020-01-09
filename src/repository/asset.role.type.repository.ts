@@ -16,10 +16,9 @@ export interface AssetRoleTypeRepository {
 
   findAssetRoleTypes(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetRoleType[]>;
 
-  getAssetRoleTypes(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: HeaderBaseOptions): Observable<AssetRoleTypes>;
+  getAssetRoleTypes(search: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetRoleTypes>;
 
   // getAssetRoleTypeCount(headerOptions?: HeaderBaseOptions): Observable<number>;
 
   getAssetRoleTypeById(assetRoleTypeId: string, headerOptions?: HeaderBaseOptions): Observable<AssetRoleType>;
-
 }

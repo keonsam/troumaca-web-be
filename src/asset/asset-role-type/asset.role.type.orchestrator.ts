@@ -24,8 +24,8 @@ export class AssetRoleTypeOrchestrator {
         return this.assetRoleTypeRepository.findAssetRoleTypes(searchStr, pageNumber, pageSize, options);
     }
 
-    getAssetRoleTypes(pageNumber: number, pageSize: number, sort: Sort, options?: HeaderBaseOptions): Observable<AssetRoleTypes> {
-        return this.assetRoleTypeRepository.getAssetRoleTypes(pageNumber, pageSize, sort, options);
+    getAssetRoleTypes(search: string, pageNumber: number, pageSize: number, options?: HeaderBaseOptions): Observable<AssetRoleTypes> {
+        return this.assetRoleTypeRepository.getAssetRoleTypes(search, pageNumber, pageSize, options);
             // .pipe(switchMap((assetRoleTypes: AssetRoleType[]) => {
             //     return this.assetRoleTypeRepository
             //         .getAssetRoleTypeCount(options)

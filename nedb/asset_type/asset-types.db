@@ -1,5 +1,5 @@
-{"name":"assetTypeTest","color":"#E7CCF1","assetTypeId":"79e354e7-db5d-4e09-89cd-e649f19f5848","ownerPartyId":"","version":"ff807891-ee8d-4ffb-ad81-3cccd1de8c48","dateModified":{"$$date":1568736952685},"_id":"1ILx18MZm9qXzGUI"}
-{"name":"typeTest","description":"Testing","color":"#F2CBCB","share":false,"use":false,"assetTypeId":"51062ca8-667c-4288-a837-63f20ea79e20","ownerPartyId":"","version":"65cfd646-ab87-459e-b12f-a657198ef63c","dateModified":{"$$date":1575894239343},"_id":"1YYrRrp7dnGEVCXi"}
+{"name":"assetTypeTest","color":"#E7CCF1","assetTypeId":"79e354e7-db5d-4e09-89cd-e649f19f5848","ownerPartyId":"","version":"ff807891-ee8d-4ffb-ad81-3cccd1de8c48","dateModified":{"$$date":1568736952685},"_id":"1ILx18MZm9qXzGUI","description":"testing","share":true,"use":false}
+{"name":"typeTestU","description":"","color":"#F2CBCB","share":false,"use":false,"assetTypeId":"51062ca8-667c-4288-a837-63f20ea79e20","ownerPartyId":"","version":"65cfd646-ab87-459e-b12f-a657198ef63c","dateModified":{"$$date":1575894239343},"_id":"1YYrRrp7dnGEVCXi"}
 {"name":"Discrete Item","description":"","assetTypeId":"2988337e-6f9f-4f96-a393-474161b2c1d9","_id":"3BmZyS0jvpP7EjnW"}
 {"name":"Inventory","description":"","assetTypeId":"3088337e-6f9f-4f96-a393-474161b2c1d9","_id":"4BmZyS0jvpP8EjnW"}
 {"name":"Lot","description":"","assetTypeId":"4188337e-6f9f-4f96-a393-474161b2c1d9","_id":"5BmZyS1jvpP7EjnW"}
@@ -38,7 +38,3 @@
 {"name":"van","description":"","color":"#F2CBCB","share":false,"use":false,"assetTypeId":"9e71517a-fe1f-47db-9fb6-689c75142374","ownerPartyId":"","version":"38a10267-0468-4c3f-af7d-49b6f40b26d2","dateModified":{"$$date":1577704583139},"_id":"uU4dc7Pm9N0x1yjw"}
 {"name":"trucks","description":"","color":"#F2CBCB","share":false,"use":false,"assetTypeId":"0b6c84c8-3afb-4e2f-bab7-76e322beb91b","ownerPartyId":"","version":"d320b24f-48bf-453c-81a5-f3c074d96cb6","dateModified":{"$$date":1577704713958},"_id":"wuycnjIESEiL95Ym"}
 {"$$indexCreated":{"fieldName":"assetTypeId","unique":true,"sparse":false}}
-{"name":"assetTypeTest","color":"#E7CCF1","assetTypeId":"79e354e7-db5d-4e09-89cd-e649f19f5848","ownerPartyId":"","version":"ff807891-ee8d-4ffb-ad81-3cccd1de8c48","dateModified":{"$$date":1568736952685},"_id":"1ILx18MZm9qXzGUI","description":"testing","share":true,"use":false}
-{"name":"assetTypeTest","color":"#E7CCF1","assetTypeId":"79e354e7-db5d-4e09-89cd-e649f19f5848","ownerPartyId":"","version":"ff807891-ee8d-4ffb-ad81-3cccd1de8c48","dateModified":{"$$date":1568736952685},"_id":"1ILx18MZm9qXzGUI","description":"testing","share":true,"use":false}
-{"name":"typeTestUp","description":"","color":"#F2CBCB","share":false,"use":false,"assetTypeId":"51062ca8-667c-4288-a837-63f20ea79e20","ownerPartyId":"","version":"65cfd646-ab87-459e-b12f-a657198ef63c","dateModified":{"$$date":1575894239343},"_id":"1YYrRrp7dnGEVCXi"}
-{"name":"typeTestU","description":"","color":"#F2CBCB","share":false,"use":false,"assetTypeId":"51062ca8-667c-4288-a837-63f20ea79e20","ownerPartyId":"","version":"65cfd646-ab87-459e-b12f-a657198ef63c","dateModified":{"$$date":1575894239343},"_id":"1YYrRrp7dnGEVCXi"}

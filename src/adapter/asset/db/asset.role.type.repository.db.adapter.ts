@@ -118,12 +118,16 @@ export class AssetRoleTypeRepositoryNeDbAdapter implements AssetRoleTypeReposito
   //   });
   // }
 
-  getAssetRoleTypes(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: HeaderBaseOptions): Observable<AssetRoleTypes> {
+  getAssetRoleTypes(search: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetRoleTypes> {
     return Observable.create(function (observer: Observer<AssetRoleTypes>) {
       assetRoleTypes.count({ ownerPartyId: headerOptions.ownerPartyId }, function (err, count) {
-        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-        const generate = SortGenerator.generate(sort);
-        assetRoleTypes.find({ ownerPartyId: headerOptions.ownerPartyId })
+        // const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        // const generate = SortGenerator.generate(sort);
+          const skipAmount = pageNumber ? pageNumber * pageSize : 0;
+          assetRoleTypes.find({
+              ownerPartyId: headerOptions.ownerPartyId,
+              name: new RegExp(search),
+          })
           .skip(skipAmount)
           .limit(pageSize)
           .exec((err: any, docs: AssetRoleType[]) => {
