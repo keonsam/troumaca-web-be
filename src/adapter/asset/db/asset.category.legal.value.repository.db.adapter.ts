@@ -8,6 +8,7 @@ import {generateUUID} from "../../../uuid.generator";
 import {assetCategoryLegalValues} from "../../../db";
 import {SkipGenerator} from "../../util/skip.generator";
 import {SortGenerator} from "../../util/sort.generator";
+import {AssetCategoryLegalValues} from "../../../data/asset/asset.category.legal.values";
 
 export class AssetCategoryLegalValueRepositoryNeDbAdapter implements AssetCategoryLegalValueRepository {
   addAssetCategoryLegalValue(assetCategoryLegalValue: AssetCategoryLegalValue, headerOptions?: any): Observable<AssetCategoryLegalValue> {
@@ -27,10 +28,12 @@ export class AssetCategoryLegalValueRepositoryNeDbAdapter implements AssetCatego
     });
   }
 
-  deleteAssetCategoryLegalValue(assetCategoryLegalValueId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
+  deleteAssetCategoryLegalValue(assetCategoryLegalValueId: string,  headerOptions?: any): Observable<Affect> {
     return Observable.create(function (observer: Observer<Affect>) {
       assetCategoryLegalValues.remove(
-        {assetCategoryLegalValueId: assetCategoryLegalValueId, ownerPartyId: ownerPartyId},
+        {assetCategoryLegalValueId: assetCategoryLegalValueId,
+            // ownerPartyId: ownerPartyId
+        },
         {},
         function (err: any, numRemoved: number) {
           if (err) {
@@ -43,11 +46,19 @@ export class AssetCategoryLegalValueRepositoryNeDbAdapter implements AssetCatego
     });
   }
 
-  findAssetCategoryLegalValues(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetCategoryLegalValue[]> {
+  findAssetCategoryLegalValues( searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetCategoryLegalValue[]> {
     return Observable.create(function (observer: Observer<AssetCategoryLegalValue[]>) {
-      assetCategoryLegalValues.count({ ownerPartyId: ownerPartyId }, function (err, count) {
+      assetCategoryLegalValues.count(
+          {
+              // ownerPartyId: ownerPartyId
+          },
+          function (err, count) {
         const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-        assetCategoryLegalValues.find({ownerPartyId: ownerPartyId, categoryValue: new RegExp(searchStr) })
+        assetCategoryLegalValues.find(
+            {ownerPartyId: headerOptions.ownerPartyId,
+                name: new RegExp(searchStr)
+            }
+            )
           .skip(skipAmount)
           .limit(pageSize)
           .exec(
@@ -63,7 +74,7 @@ export class AssetCategoryLegalValueRepositoryNeDbAdapter implements AssetCatego
     });
   }
 
-  getAssetCategoryLegalValueById(assetCategoryLegalValueId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetCategoryLegalValue> {
+  getAssetCategoryLegalValueById(assetCategoryLegalValueId: string,  headerOptions?: any): Observable<AssetCategoryLegalValue> {
     return Observable.create(function (observer: Observer<AssetCategoryLegalValue>) {
       // , ownerPartyId:ownerPartyId
       assetCategoryLegalValues.find(
@@ -79,10 +90,10 @@ export class AssetCategoryLegalValueRepositoryNeDbAdapter implements AssetCatego
     });
   }
 
-  getAssetCategoryLegalValueCount(ownerPartyId: string, headerOptions?: any): Observable<number> {
+  getAssetCategoryLegalValueCount( headerOptions?: any): Observable<number> {
     return Observable.create(function (observer: Observer<number>) {
       assetCategoryLegalValues.count(
-        {ownerPartyId: ownerPartyId},
+        {ownerPartyId: headerOptions.ownerPartyId},
         (err: any, count: any) => {
           if (!err) {
             observer.next(count);
@@ -94,17 +105,21 @@ export class AssetCategoryLegalValueRepositoryNeDbAdapter implements AssetCatego
     });
   }
 
-  getAssetCategoryLegalValues(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetCategoryLegalValue[]>> {
-    return Observable.create(function (observer: Observer<Page<AssetCategoryLegalValue[]>>) {
-      assetCategoryLegalValues.count({ ownerPartyId: ownerPartyId }, function (err, count) {
-        const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-        const generate = SortGenerator.generate(sort);
-        assetCategoryLegalValues.find({ownerPartyId: ownerPartyId})
+  getAssetCategoryLegalValues(search: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetCategoryLegalValues> {
+    return Observable.create(function (observer: Observer<AssetCategoryLegalValues>) {
+      assetCategoryLegalValues.count({ ownerPartyId: headerOptions.ownerPartyId }, function (err, count) {
+        // const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+        // const generate = SortGenerator.generate(sort);
+          const skipAmount = pageNumber ? pageNumber * pageSize : 0;
+          assetCategoryLegalValues.find({
+              // ownerPartyId: headerOptions.ownerPartyId,
+              name: new RegExp(search)
+          })
           .skip(skipAmount)
           .limit(pageSize)
           .exec((err: any, docs: any) => {
             if (!err) {
-              observer.next(docs);
+              observer.next(new AssetCategoryLegalValues(docs));
             } else {
               observer.error(err);
             }

@@ -2,31 +2,30 @@ import {AssetCategoryLegalValueRepository} from "../../../repository/asset.categ
 import {AssetCategoryLegalValue} from "../../../data/asset/asset.category.legal.value";
 import {Observable} from "rxjs";
 import {Affect} from "../../../data/affect";
-import {Page} from "../../../util/page";
-import {Sort} from "../../../util/sort";
+import {AssetCategoryLegalValues} from "../../../data/asset/asset.category.legal.values";
 
 export class AssetCategoryLegalValueRepositoryRestAdapter implements AssetCategoryLegalValueRepository {
   addAssetCategoryLegalValue(assetCategoryLegalValue: AssetCategoryLegalValue, headerOptions?: any): Observable<AssetCategoryLegalValue> {
     return undefined;
   }
 
-  deleteAssetCategoryLegalValue(assetCategoryLegalValueId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
+  deleteAssetCategoryLegalValue(assetCategoryLegalValueId: string,  headerOptions?: any): Observable<Affect> {
     return undefined;
   }
 
-  findAssetCategoryLegalValues(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetCategoryLegalValue[]> {
+  findAssetCategoryLegalValues( searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetCategoryLegalValue[]> {
     return undefined;
   }
 
-  getAssetCategoryLegalValueById(assetCategoryLegalValueId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetCategoryLegalValue> {
+  getAssetCategoryLegalValueById(assetCategoryLegalValueId: string,  headerOptions?: any): Observable<AssetCategoryLegalValue> {
     return undefined;
   }
 
-  getAssetCategoryLegalValueCount(ownerPartyId: string, headerOptions?: any): Observable<number> {
+  getAssetCategoryLegalValueCount( headerOptions?: any): Observable<number> {
     return undefined;
   }
 
-  getAssetCategoryLegalValues(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetCategoryLegalValue[]>> {
+  getAssetCategoryLegalValues( search: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetCategoryLegalValues> {
     return undefined;
   }
 

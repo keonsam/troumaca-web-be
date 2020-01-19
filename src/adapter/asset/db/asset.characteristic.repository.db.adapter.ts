@@ -103,14 +103,17 @@ export class AssetCharacteristicRepositoryNeDbAdapter implements AssetCharacteri
     //   });
     // }
 
-    getAssetCharacteristics(tab?: string, search?: string, selected?: string[], headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristics> {
+    getAssetCharacteristics(tab?: string, search?: string, selected?: string[], pageNumber?: number, pageSize?: number, headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristics> {
         return Observable.create(function (observer: Observer<AssetCharacteristics>) {
             assetCharacteristics.count({ownerPartyId: headerOptions.ownerPartyId}, function (err, count) {
+                const skipAmount = pageNumber ? pageNumber * pageSize : 0;
                 assetCharacteristics.find({
                     ownerPartyId: headerOptions.ownerPartyId,
                     name: new RegExp(search),
                     assetCharacteristicId: {$nin: selected}
                 })
+                    .skip(skipAmount)
+                    .limit(pageSize)
                     .exec((err: any, docs: AssetCharacteristic[]) => {
                         if (!err) {
                             observer.next(new AssetCharacteristics(docs));

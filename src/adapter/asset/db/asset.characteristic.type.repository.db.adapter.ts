@@ -17,25 +17,25 @@ import { CharacteristicTypes } from "../../../data/asset/characteristic.types";
 export class AssetCharacteristicTypeRepositoryNeDbAdapter implements AssetCharacteristicTypeRepository {
 
     getCharacteristicTypes(headerOptions?: any): Observable<CharacteristicTypes> {
-        const assets: CharacteristicTypes = new CharacteristicTypes();
-        assets.types = [
-            new CharacteristicType("1", "Text"),
-            new CharacteristicType( "2", "Number"),
-            new CharacteristicType("3", "Checkbox"),
-            new CharacteristicType("4", "Select"),
-            new CharacteristicType("5",  "Multi Select"),
-            new CharacteristicType("6",  "Date"),
-            new CharacteristicType("7", "Person"),
-            new CharacteristicType("8", "URL"),
-            new CharacteristicType("9", "Location")
+        const characteristicTypes: CharacteristicTypes = new CharacteristicTypes();
+        characteristicTypes.characteristicTypes = [
+            new CharacteristicType("1", "Text", ["fas", "font"]),
+            new CharacteristicType( "2", "Number", ["fas", "hashtag"]),
+            new CharacteristicType("3", "Checkbox", ["fas", "check-square"]),
+            new CharacteristicType("4", "Select", ["fas", "check"]),
+            new CharacteristicType("5",  "Multi Select", ["fas", "check-double"]),
+            new CharacteristicType("6",  "Date", ["fas", "calendar"]),
+            new CharacteristicType("7", "Person", ["fas", "user"]),
+            new CharacteristicType("8", "URL", ["fas", "link"]),
+            new CharacteristicType("9", "Location", ["fas", "map-marker-alt"])
         ];
-        return of(assets);
+        return of(characteristicTypes);
     }
 
 
     // OTHERS
   addAssetCharacteristicType(assetCharacteristicType: CharacteristicType, headerOptions?: any): Observable<CharacteristicType> {
-    assetCharacteristicType.assetCharacteristicTypeId = generateUUID();
+    // assetCharacteristicType.assetCharacteristicTypeId = generateUUID();
     assetCharacteristicType.version = generateUUID();
     assetCharacteristicType.dateModified = new Date();
 

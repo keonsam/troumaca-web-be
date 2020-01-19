@@ -4,5 +4,5 @@ import { CharacteristicType } from "./characteristic.type";
 @ObjectType()
 export class CharacteristicTypes {
     @Field( () => [CharacteristicType])
-    types: CharacteristicType[];
+    characteristicTypes: CharacteristicType[];
 }

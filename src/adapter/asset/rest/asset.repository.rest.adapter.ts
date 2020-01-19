@@ -34,7 +34,7 @@ export class AssetRepositoryRestAdapter implements AssetRepository {
     return undefined;
   }
 
-  updateAsset(assetId: string, asset: Asset, headerOptions?: HeaderBaseOptions): Observable<Affect> {
+  updateAsset(assetId: string, asset: AssetInput, headerOptions?: HeaderBaseOptions): Observable<Affect> {
     return undefined;
   }
 }

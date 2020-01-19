@@ -28,7 +28,7 @@ export class AssetRoleTypeRepositoryRestAdapter implements AssetRoleTypeReposito
   //   return undefined;
   // }
 
-  getAssetRoleTypes(pageNumber: number, pageSize: number, sort: Sort, headerOptions?: HeaderBaseOptions): Observable<AssetRoleTypes> {
+  getAssetRoleTypes(search: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetRoleTypes> {
     return undefined;
   }
 
