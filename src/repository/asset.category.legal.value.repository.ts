@@ -3,6 +3,7 @@ import {Affect} from "../data/affect";
 import {AssetCategoryLegalValue} from "../data/asset/asset.category.legal.value";
 import {Sort} from "../util/sort";
 import {Page} from "../util/page";
+import {AssetCategoryLegalValues} from "../data/asset/asset.category.legal.values";
 
 export interface AssetCategoryLegalValueRepository {
 
@@ -10,14 +11,14 @@ export interface AssetCategoryLegalValueRepository {
 
   updateAssetCategoryLegalValue(assetCategoryLegalValue: AssetCategoryLegalValue, headerOptions?: any): Observable<Affect>;
 
-  deleteAssetCategoryLegalValue(assetCategoryLegalValueId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect>;
+  deleteAssetCategoryLegalValue(assetCategoryLegalValueId: string, headerOptions?: any): Observable<Affect>;
 
-  findAssetCategoryLegalValues(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetCategoryLegalValue[]>;
+  findAssetCategoryLegalValues(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetCategoryLegalValue[]>;
 
-  getAssetCategoryLegalValues(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetCategoryLegalValue[]>>;
+  getAssetCategoryLegalValues(search: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetCategoryLegalValues>;
 
-  getAssetCategoryLegalValueCount(ownerPartyId: string, headerOptions?: any): Observable<number>;
+  getAssetCategoryLegalValueCount(headerOptions?: any): Observable<number>;
 
-  getAssetCategoryLegalValueById(assetCategoryLegalValueId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetCategoryLegalValue>;
+  getAssetCategoryLegalValueById(assetCategoryLegalValueId: string,  headerOptions?: any): Observable<AssetCategoryLegalValue>;
 
 }

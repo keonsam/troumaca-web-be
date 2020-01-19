@@ -14,7 +14,7 @@ export class BrandRepositoryRestAdapter implements BrandRepository {
     return undefined;
   }
 
-  getBrands(pageNumber: number, pageSize: number, order: Sort, options?: HeaderBaseOptions): Observable<Brands> {
+  getBrands(search: string, pageNumber: number, pageSize: number, options?: HeaderBaseOptions): Observable<Brands> {
     return undefined;
   }
 

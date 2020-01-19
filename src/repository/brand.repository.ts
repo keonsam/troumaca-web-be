@@ -8,7 +8,7 @@ export interface BrandRepository {
 
   findBrands(searchStr: string, pageSize: number, options?: HeaderBaseOptions): Observable<Brand[]>;
 
-  getBrands(pageNumber: number, pageSize: number, order: Sort, options?: HeaderBaseOptions): Observable<Brands>;
+  getBrands(search: string, pageNumber: number, pageSize: number, options?: HeaderBaseOptions): Observable<Brands>;
 
   // getBrandCount(options?: HeaderBaseOptions): Observable<number>;
 

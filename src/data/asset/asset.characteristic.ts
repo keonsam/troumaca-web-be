@@ -8,6 +8,7 @@ export class AssetCharacteristic {
   assetCharacteristicId: string;
   @Field( () => ID)
   assetCharacteristicTypeId: string;
+  @Field( () => CharacteristicType)
   assetCharacteristicType: CharacteristicType;
   @Field()
   name: string;
