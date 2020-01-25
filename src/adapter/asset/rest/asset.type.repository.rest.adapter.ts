@@ -24,11 +24,11 @@ export class AssetTypeRepositoryRestAdapter implements AssetTypeRepository {
     return undefined;
   }
 
-  getAssetTypes(tab?: string, search?: string, headerOptions?: HeaderBaseOptions): Observable<AssetTypes> {
+  getAssetTypes(tab: string, type: string, search: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetTypes> {
     return undefined;
   }
 
-  updateAssetType(assetTypeId: string, assetType: AssetType, headerOptions?: HeaderBaseOptions): Observable<Affect> {
+  updateAssetType(assetTypeId: string, assetType: AssetTypeInput, headerOptions?: HeaderBaseOptions): Observable<Affect> {
     return undefined;
   }
 }

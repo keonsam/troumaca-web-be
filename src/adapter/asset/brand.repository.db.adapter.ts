@@ -35,12 +35,16 @@ export class BrandRepositoryDbAdapter implements BrandRepository {
         });
     }
 
-    getBrands(pageNumber: number, pageSize: number, sort: Sort, options?: HeaderBaseOptions): Observable<Brands> {
+    getBrands(search: string, pageNumber: number, pageSize: number, options?: HeaderBaseOptions): Observable<Brands> {
         return Observable.create(function (observer: Observer<Brands>) {
             assetBrands.count({ownerPartyId: options.ownerPartyId }, function (err, count) {
-                const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
-                const generate = SortGenerator.generate(sort);
-                assetBrands.find({ ownerPartyId: options.ownerPartyId})
+                // const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
+                // const generate = SortGenerator.generate(sort);
+                const skipAmount = pageNumber ? pageNumber * pageSize : 0;
+                assetBrands.find({
+                    ownerPartyId: options.ownerPartyId,
+                    name: new RegExp(search),
+                })
                     .skip(skipAmount)
                     .limit(pageSize)
                     .exec((err: any, docs: Brand[]) => {

@@ -5,6 +5,7 @@ import {Page} from "../../util/page";
 import {Sort} from "../../util/sort";
 import {AssetCategoryLegalValueRepository} from "../../repository/asset.category.legal.value.repository";
 import {createAssetCategoryLegalValueRepository} from "../../adapter/asset/asset.category.legal.value.repository.factory";
+import {AssetCategoryLegalValues} from "../../data/asset/asset.category.legal.values";
 
 export class AssetCategoryLegalValueOrchestrator {
 
@@ -18,24 +19,24 @@ export class AssetCategoryLegalValueOrchestrator {
     return this.assetCategoryLegalValueRepository.addAssetCategoryLegalValue(assetCategoryLegalValue, headerOptions);
   }
 
-  findAssetCategoryLegalValues(ownerPartyId: string, searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetCategoryLegalValue[]> {
-    return this.assetCategoryLegalValueRepository.findAssetCategoryLegalValues(ownerPartyId, searchStr, pageNumber, pageSize, headerOptions);
+  findAssetCategoryLegalValues(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetCategoryLegalValue[]> {
+    return this.assetCategoryLegalValueRepository.findAssetCategoryLegalValues(searchStr, pageNumber, pageSize, headerOptions);
   }
 
-  getAssetCategoryLegalValues(ownerPartyId: string, pageNumber: number, pageSize: number, sort: Sort, headerOptions?: any): Observable<Page<AssetCategoryLegalValue[]>> {
-    return this.assetCategoryLegalValueRepository.getAssetCategoryLegalValues(ownerPartyId, pageNumber, pageSize, sort, headerOptions);
+  getAssetCategoryLegalValues(search: string, pageNumber: number, pageSize: number, headerOptions?: any): Observable<AssetCategoryLegalValues> {
+    return this.assetCategoryLegalValueRepository.getAssetCategoryLegalValues(search, pageNumber, pageSize, headerOptions);
   }
 
   updateAssetCategoryLegalValue(assetCategoryLegalValue: AssetCategoryLegalValue, headerOptions?: any): Observable<Affect> {
     return this.assetCategoryLegalValueRepository.updateAssetCategoryLegalValue(assetCategoryLegalValue, headerOptions);
   }
 
-  getAssetCategoryLegalValueById(assetCategoryLegalValueId: string, ownerPartyId: string, headerOptions?: any): Observable<AssetCategoryLegalValue> {
-    return this.assetCategoryLegalValueRepository.getAssetCategoryLegalValueById(assetCategoryLegalValueId, ownerPartyId, headerOptions);
+  getAssetCategoryLegalValueById(assetCategoryLegalValueId: string, headerOptions?: any): Observable<AssetCategoryLegalValue> {
+    return this.assetCategoryLegalValueRepository.getAssetCategoryLegalValueById(assetCategoryLegalValueId, headerOptions);
   }
 
-  deleteAssetCategoryLegalValue(assetCategoryLegalValueId: string, ownerPartyId: string, headerOptions?: any): Observable<Affect> {
-    return this.assetCategoryLegalValueRepository.deleteAssetCategoryLegalValue(assetCategoryLegalValueId, ownerPartyId, headerOptions);
+  deleteAssetCategoryLegalValue(assetCategoryLegalValueId: string, headerOptions?: any): Observable<Affect> {
+    return this.assetCategoryLegalValueRepository.deleteAssetCategoryLegalValue(assetCategoryLegalValueId, headerOptions);
   }
 
 }

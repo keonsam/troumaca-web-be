@@ -21,8 +21,8 @@ export class BrandOrchestrator {
         return this.brandRepository.findBrands(searchStr, pageSize, options);
     }
 
-    getBrands(number: number, size: number, sort: Sort, options?: HeaderBaseOptions): Observable<Brands> {
-        return this.brandRepository.getBrands(number, size, sort, options);
+    getBrands(search: string, number: number, size: number, options?: HeaderBaseOptions): Observable<Brands> {
+        return this.brandRepository.getBrands(search, number, size, options);
     }
 
     getBrandById(brandId: string, options?: HeaderBaseOptions): Observable<Brand> {

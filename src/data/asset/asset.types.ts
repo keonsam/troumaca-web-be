@@ -7,12 +7,9 @@ export class AssetTypes {
   // @Field(() => [AssetType])
   // assetTypes: AssetType[] = [];
   @Field(() => [AssetType])
-  recent: AssetType[];
-  @Field(() => [AssetType])
-  recommended: AssetType[];
+  assetTypes: AssetType[];
   page: Page;
   constructor(assetTypes: AssetType[]) {
-    this.recent = assetTypes;
-    this.recommended = assetTypes;
+    this.assetTypes = assetTypes;
   }
 }

@@ -10,13 +10,13 @@ export interface AssetTypeRepository {
 
   addAssetType(assetType: AssetTypeInput, headerOptions?: HeaderBaseOptions): Observable<AssetType>;
 
-  updateAssetType(assetTypeId: string, assetType: AssetType, headerOptions?: HeaderBaseOptions): Observable<Affect>;
+  updateAssetType(assetTypeId: string, assetType: AssetTypeInput, headerOptions?: HeaderBaseOptions): Observable<Affect>;
 
   deleteAssetType(assetTypeId: string, headerOptions?: HeaderBaseOptions): Observable<Affect>;
 
   findAssetTypes(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetType[]>;
 
-  getAssetTypes(tab?: string, search?: string, headerOptions?: HeaderBaseOptions): Observable<AssetTypes>;
+  getAssetTypes(tab: string, type: string, search: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetTypes>;
 
   getAssetTypeById(assetTypeId: string, headerOptions?: HeaderBaseOptions): Observable<AssetType>;
 

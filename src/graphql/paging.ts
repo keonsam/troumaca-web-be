@@ -1,9 +1,9 @@
 import {Field, InputType} from "type-graphql";
 
 @InputType()
-export class AssetPagingInput {
-    @Field({nullable: true})
+export class Paging {
+    @Field()
     pageSize: number;
-    @Field({nullable: true})
+    @Field()
     pageNumber: number;
 }

@@ -37,9 +37,9 @@ export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
       });
   }
 
-  updateAssetType(assetTypeId: string, assetType: AssetType, headerOptions?: HeaderBaseOptions): Observable<Affect> {
-      assetType.version = generateUUID();
-      assetType.dateModified = new Date();
+  updateAssetType(assetTypeId: string, assetType: AssetTypeInput, headerOptions?: HeaderBaseOptions): Observable<Affect> {
+      // assetType.version = generateUUID();
+      // assetType.dateModified = new Date();
 
       return Observable.create(function (observer: Observer<Affect>) {
           assetTypes.update(
@@ -92,14 +92,16 @@ export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
       });
   }
 
-  getAssetTypes(tab?: string, search?: string, headerOptions?: HeaderBaseOptions): Observable<AssetTypes> {
+  getAssetTypes(tab: string, type: string, search: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetTypes> {
       return Observable.create(function (observer: Observer<AssetTypes>) {
           assetTypes.count({ ownerPartyId: headerOptions.ownerPartyId }, function (err, count) {
+              const skipAmount = pageNumber ? pageNumber * pageSize : 0;
               assetTypes.find({
                   ownerPartyId: headerOptions.ownerPartyId,
                   name: new RegExp(search),
-                  // assetTypeId: {$nin: selected}
               })
+                  .skip(skipAmount)
+                  .limit(pageSize)
                   .exec((err: any, docs: any) => {
                       if (!err) {
                           observer.next(new AssetTypes(docs));

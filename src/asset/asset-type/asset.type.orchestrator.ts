@@ -25,11 +25,11 @@ export class AssetTypeOrchestrator {
     return this.assetTypeRepository.findAssetTypes(searchStr, pageNumber, pageSize, headerOptions);
   }
 
-  getAssetTypes(tab?: string, search?: string, headerOptions?: HeaderBaseOptions): Observable<AssetTypes> {
-    return this.assetTypeRepository.getAssetTypes(tab, search, headerOptions);
+  getAssetTypes(tab: string, type: string, search: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetTypes> {
+    return this.assetTypeRepository.getAssetTypes(tab, type, search, pageNumber, pageSize, headerOptions);
   }
 
-  updateAssetType(assetTypeId: string, assetType: AssetType, headerOptions?: HeaderBaseOptions): Observable<number> {
+  updateAssetType(assetTypeId: string, assetType: AssetTypeInput, headerOptions?: HeaderBaseOptions): Observable<number> {
     return this.assetTypeRepository.updateAssetType(assetTypeId, assetType, headerOptions)
         .pipe(map( aff => aff.affected));
   }

@@ -40,9 +40,15 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
         });
     }
 
-    updateAsset(assetId: string, asset: Asset, headerOptions?: HeaderBaseOptions): Observable<Affect> {
-        asset.version = generateUUID();
-        asset.dateModified = new Date();
+    updateAsset(assetId: string, assetInput: AssetInput, headerOptions?: HeaderBaseOptions): Observable<Affect> {
+        const asset: Asset = new Asset();
+        asset.name = assetInput.name;
+        asset.description = assetInput.description;
+        asset.assetId = assetId;
+        asset.assetTypeId = assetInput.assetTypeId;
+        asset.image = assetInput.image;
+        // asset.version = generateUUID();
+        // asset.dateModified = new Date();
 
         return Observable.create(function (observer: Observer<Affect>) {
             assets.update(
@@ -98,17 +104,43 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
     }
 
     getAssetById(assetId: string, headerOptions?: HeaderBaseOptions): Observable<Asset> {
+        return this.getAssetByIdLocal(assetId)
+            .pipe(switchMap(asset => {
+                return this.getAssetTypeByIdLocal(asset.assetTypeId)
+                    .pipe(map( assetType => {
+                        asset.assetType = assetType;
+                        return asset;
+                    }));
+            }));
+    }
+
+    private getAssetByIdLocal(assetId: string): Observable<Asset> {
         return Observable.create(function (observer: Observer<Asset>) {
             assets.findOne(
                 {assetId: assetId },
                 (err: any, doc: Asset) => {
-                    if (!err) {
+                    if (!err && doc) {
                         observer.next(doc);
                     } else {
                         observer.error(err);
                     }
                     observer.complete();
                 });
+        });
+    }
+
+    private getAssetTypeByIdLocal(assetTypeId: string): Observable<AssetType> {
+        return Observable.create(function (observer: Observer<AssetType>) {
+            assetTypes.findOne(
+                {assetTypeId: assetTypeId},
+                (err: any, doc: AssetType) => {
+                if (!err && doc) {
+                    observer.next(doc);
+                } else {
+                    observer.error(err);
+                }
+                observer.complete();
+            });
         });
     }
 
