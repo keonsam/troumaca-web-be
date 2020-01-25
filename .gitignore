@@ -226,5 +226,6 @@ fabric.properties
 
 /web-be-tests/node_modules
 /web-be-tests/test-result
+/troumaca-web-be.iml
 
 *.iml

@@ -2,7 +2,7 @@
 
 [credential]
 #host.port = https://wx7frujw04.execute-api.us-east-1.amazonaws.com/Stage
-host.port = http://ec2-3-83-92-118.compute-1.amazonaws.com:8080
+host.port = http://localhost:8080
 repository.type = 2
 
 [registrar]

@@ -51,7 +51,7 @@ const corsOptions = {
 };
 
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 // app.use(cors());
 
 const TWO_HOURS = 1000 * 60 * 60 * 60 * 2;
@@ -67,6 +67,7 @@ app.use(session({
     }
 }));
 
+// What's the point of making this an async function
 async function bootstrap() {
 
     const schema = await buildSchema({
