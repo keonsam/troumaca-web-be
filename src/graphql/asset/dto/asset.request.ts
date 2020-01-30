@@ -1,7 +1,7 @@
 import { Field, ID, InputType } from "type-graphql";
 
 @InputType()
-export class AssetInput {
+export class AssetRequest {
     @Field( () => ID, {nullable: true})
     assetTypeId: string;
     @Field()

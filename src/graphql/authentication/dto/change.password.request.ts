@@ -1,7 +1,7 @@
 import { Field, ID, InputType } from "type-graphql";
 
 @InputType()
-export class ChangePasswordInput {
+export class ChangePasswordRequest {
   @Field(() => ID)
   confirmationId: string;
   @Field(() => ID)

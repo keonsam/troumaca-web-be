@@ -1,11 +1,11 @@
 import {Confirmation} from "../data/authentication/confirmation";
 import {Observable} from "rxjs";
 import { HeaderBaseOptions } from "../header.base.options";
-import { ConfirmationInput } from "../graphql/authentication/dto/confirmation.input";
+import { ConfirmationRequest } from "../graphql/authentication/dto/confirmation.request";
 
 export interface ConfirmationRepository {
 
-  confirmCode(confirmationInput: ConfirmationInput, options?: HeaderBaseOptions): Observable<string>;
+  confirmCode(confirmationInput: ConfirmationRequest, options?: HeaderBaseOptions): Observable<string>;
 
   resendConfirmCode(confirmationId: string, credentialId: string, options?: any): Observable<Confirmation>;
   //

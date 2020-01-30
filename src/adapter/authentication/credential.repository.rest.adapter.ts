@@ -10,10 +10,10 @@ import {CreatedCredential} from "../../data/authentication/created.credential";
 import {CreateCredential} from "../../repository/create.credential";
 import {Person} from "../../data/party/person";
 import {Confirmation} from "../../data/authentication/confirmation";
-import {ChangePasswordInput} from "../../graphql/authentication/dto/change.password.input";
+import {ChangePasswordRequest} from "../../graphql/authentication/dto/change.password.request";
 import { ChangeResponse } from "../../data/authentication/change.response";
 import { HeaderBaseOptions } from "../../header.base.options";
-import { RegisterInput } from "../../graphql/authentication/dto/register.input";
+import { RegisterRequest } from "../../graphql/authentication/dto/register.request";
 
 export class CredentialRepositoryRestAdapter implements CredentialRepository {
 
@@ -83,12 +83,12 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
     });
   }
 
-  addCredential(register: RegisterInput, options?: HeaderBaseOptions): Observable<Confirmation> {
+  addCredential(register: RegisterRequest, options?: HeaderBaseOptions): Observable<Confirmation> {
     const uri: string = this.remote ? properties.get("registrar.host.port") as string : this.localhost;
 
     const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});
 
-    const uriAndPath: string = `${uri}/registrar/register`;
+    const uriAndPath: string = `${uri}/registrar/v2/register`;
 
     const requestOptions: any = postJsonOptions(uriAndPath, headerMap, register);
 
@@ -178,7 +178,7 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
     });
   }
 
-  changePassword(changePassword: ChangePasswordInput, options?: HeaderBaseOptions): Observable<boolean> {
+  changePassword(changePassword: ChangePasswordRequest, options?: HeaderBaseOptions): Observable<boolean> {
     // change to a boolean
     const uri: string = properties.get("credential.host.port") as string;
 

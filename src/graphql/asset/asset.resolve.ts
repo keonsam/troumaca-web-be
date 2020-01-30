@@ -1,7 +1,7 @@
 import {Arg, Ctx, ID, Mutation, Query, Resolver} from "type-graphql";
 import { AssetOrchestrator } from "../../asset/asset.orchestrator";
 import { Asset } from "../../data/asset/asset";
-import { AssetInput } from "./dto/asset.input";
+import { AssetRequest } from "./dto/asset.request";
 import { HeaderBaseOptions } from "../../header.base.options";
 import { ApolloError } from "apollo-server-errors";
 import { ERROR_CODE } from "../error.code";
@@ -13,7 +13,7 @@ export class AssetResolve {
     private assetOrchestrator: AssetOrchestrator = new AssetOrchestrator();
 
     @Mutation( () => Asset)
-    async addAsset(@Arg("data") assetInput: AssetInput, @Ctx("req") req: any): Promise<Asset> {
+    async addAsset(@Arg("data") assetInput: AssetRequest, @Ctx("req") req: any): Promise<Asset> {
         const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
         return this.assetOrchestrator.addAsset(assetInput, headerOptions)
             .toPromise()
@@ -69,7 +69,7 @@ export class AssetResolve {
     @Mutation( () => Boolean)
     async updateAsset(
         @Arg("assetId", () => ID) assetId: string,
-        @Arg("asset", ) assetInput: AssetInput,
+        @Arg("asset", ) assetInput: AssetRequest,
         @Ctx("req") req: any
     ): Promise<boolean> {
         const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);

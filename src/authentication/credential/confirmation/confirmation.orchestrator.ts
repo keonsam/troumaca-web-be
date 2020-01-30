@@ -3,7 +3,7 @@ import {ConfirmationRepository} from "../../../repository/confirmation.repositor
 import {Confirmation} from "../../../data/authentication/confirmation";
 import {Observable} from "rxjs";
 import { HeaderBaseOptions } from "../../../header.base.options";
-import { ConfirmationInput } from "../../../graphql/authentication/dto/confirmation.input";
+import { ConfirmationRequest } from "../../../graphql/authentication/dto/confirmation.request";
 
 export class ConfirmationOrchestrator {
 
@@ -17,7 +17,7 @@ export class ConfirmationOrchestrator {
     return this.confirmationRepository.resendConfirmCode(confirmationId, credentialId, options);
   }
 
-  confirmCode(confirmationInput: ConfirmationInput, options?: HeaderBaseOptions): Observable<string> {
+  confirmCode(confirmationInput: ConfirmationRequest, options?: HeaderBaseOptions): Observable<string> {
     return this.confirmationRepository.confirmCode(confirmationInput, options);
   }
 

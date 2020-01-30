@@ -10,7 +10,7 @@ import {SortGenerator} from "../../util/sort.generator";
 import { AssetTypes } from "../../../data/asset/asset.types";
 import { Page } from "../../../data/page/page";
 import { HeaderBaseOptions } from "../../../header.base.options";
-import { AssetTypeInput } from "../../../graphql/asset/dto/asset.type.input";
+import { AssetTypeRequest } from "../../../graphql/asset/dto/asset.type.request";
 import { mapObjectProps } from "../../../graphql/object.property.mapper";
 
 export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
@@ -18,7 +18,7 @@ export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
   constructor() {
   }
 
-  addAssetType(assetTypeInput: AssetTypeInput, headerOptions?: HeaderBaseOptions): Observable<AssetType> {
+  addAssetType(assetTypeInput: AssetTypeRequest, headerOptions?: HeaderBaseOptions): Observable<AssetType> {
       const assetType = mapObjectProps(assetTypeInput, new AssetType());
       assetType.assetTypeId = generateUUID();
       assetType.ownerPartyId = headerOptions.ownerPartyId;
@@ -37,7 +37,7 @@ export class AssetTypeRepositoryNeDbAdapter implements AssetTypeRepository {
       });
   }
 
-  updateAssetType(assetTypeId: string, assetType: AssetTypeInput, headerOptions?: HeaderBaseOptions): Observable<Affect> {
+  updateAssetType(assetTypeId: string, assetType: AssetTypeRequest, headerOptions?: HeaderBaseOptions): Observable<Affect> {
       // assetType.version = generateUUID();
       // assetType.dateModified = new Date();
 

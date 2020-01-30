@@ -1,7 +1,7 @@
-import {Field, InputType} from "type-graphql";
+import {Field, ID, InputType} from "type-graphql";
 
 @InputType()
-export class AssetCategoryLegalValueInput {
+export class BrandRequest {
     @Field()
     name: string;
     @Field( {nullable: true})

@@ -10,12 +10,14 @@ import {Confirmation} from "../../data/authentication/confirmation";
 import {Observable, Observer, of, throwError} from "rxjs";
 import {switchMap, map} from "rxjs/operators";
 import {Person} from "../../data/party/person";
-import {ChangePasswordInput} from "../../graphql/authentication/dto/change.password.input";
+import {ChangePasswordRequest} from "../../graphql/authentication/dto/change.password.request";
 import phoneToken from "generate-sms-verification-code";
 import { HeaderBaseOptions } from "../../header.base.options";
-import { RegisterInput } from "../../graphql/authentication/dto/register.input";
+import { RegisterRequest } from "../../graphql/authentication/dto/register.request";
 import { Session } from "../../data/session/session";
 import { SessionRepositoryNeDbAdapter } from "../session/session.repository.db.adapter";
+import {RegisterResponse} from "../../data/authentication/register.response";
+import {Depreciation} from "../../data/asset/depreciation";
 
 export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
 
@@ -83,7 +85,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
 
     }
 
-    addCredential(register: RegisterInput, options?: HeaderBaseOptions): Observable<Confirmation> {
+    addCredential(register: RegisterRequest, options?: HeaderBaseOptions): Observable<Confirmation> {
         const person = new Person(register.firstName, register.lastName);
         delete register.firstName;
         delete register.lastName;
@@ -151,7 +153,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
             }));
     }
 
-    changePassword(changePassword: ChangePasswordInput, options?: HeaderBaseOptions): Observable<boolean> {
+    changePassword(changePassword: ChangePasswordRequest, options?: HeaderBaseOptions): Observable<boolean> {
         return Observable.create(function (observer: Observer<boolean>) {
             const query = {
                 "credentialId": changePassword.credentialId
@@ -205,9 +207,9 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
     private addConfirmation(confirmation: Confirmation): Observable<Confirmation> {
         confirmation.confirmationId = generateUUID();
         confirmation.code = phoneToken(6, {type: "string"});
-        confirmation.status = "New";
-        confirmation.createdOn = new Date();
-        confirmation.modifiedOn = new Date();
+        // confirmation.status = "New";
+        // confirmation.createdOn = new Date();
+        // confirmation.modifiedOn = new Date();
         return Observable.create(function (observer: Observer<Confirmation>) {
             credentialConfirmations.insert(confirmation, function (err: any, doc: any) {
                 if (!err) {
@@ -220,7 +222,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
         });
     }
 
-    private addCredentialLocal(registerInput: RegisterInput): Observable<Credential> {
+    private addCredentialLocal(registerInput: RegisterRequest): Observable<Credential> {
         const credential = new Credential(registerInput.username, registerInput.organizationName, registerInput.password);
         credential.credentialId = generateUUID();
         credential.partyId = generateUUID();

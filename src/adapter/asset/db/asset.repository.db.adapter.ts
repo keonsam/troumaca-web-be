@@ -10,7 +10,7 @@ import {SkipGenerator} from "../../util/skip.generator";
 import {SortGenerator} from "../../util/sort.generator";
 import { HeaderBaseOptions } from "../../../header.base.options";
 import { Assets } from "../../../data/asset/assets";
-import { AssetInput } from "../../../graphql/asset/dto/asset.input";
+import { AssetRequest } from "../../../graphql/asset/dto/asset.request";
 import { mapObjectProps } from "../../../graphql/object.property.mapper";
 import { map, switchMap } from "rxjs/operators";
 import { AssetTypeRepositoryNeDbAdapter } from "./asset.type.repository.db.adapter";
@@ -21,7 +21,7 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
     constructor() {
     }
 
-    addAsset(assetInput: AssetInput, headerOptions?: HeaderBaseOptions): Observable<Asset> {
+    addAsset(assetInput: AssetRequest, headerOptions?: HeaderBaseOptions): Observable<Asset> {
         const asset = mapObjectProps(assetInput, new Asset());
         asset.assetId = generateUUID();
         asset.ownerPartyId = headerOptions.ownerPartyId;
@@ -40,7 +40,7 @@ export class AssetRepositoryNeDbAdapter implements AssetRepository {
         });
     }
 
-    updateAsset(assetId: string, assetInput: AssetInput, headerOptions?: HeaderBaseOptions): Observable<Affect> {
+    updateAsset(assetId: string, assetInput: AssetRequest, headerOptions?: HeaderBaseOptions): Observable<Affect> {
         const asset: Asset = new Asset();
         asset.name = assetInput.name;
         asset.description = assetInput.description;

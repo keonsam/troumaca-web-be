@@ -9,7 +9,7 @@ import { Page } from "../../data/page/page";
 import { CharacteristicType } from "../../data/asset/characteristic.type";
 import { HeaderBaseOptions } from "../../header.base.options";
 import { RepositoryKind } from "../../repository.kind";
-import { AssetCharacteristicInput } from "../../graphql/asset/dto/asset.characteristic.input";
+import { AssetCharacteristicRequest } from "../../graphql/asset/dto/asset.characteristic.request";
 
 export class AssetCharacteristicOrchestrator {
 
@@ -31,7 +31,7 @@ export class AssetCharacteristicOrchestrator {
         return this.assetCharacteristicRepository.getAssetCharacteristicById(assetCharacteristicId, options);
     }
 
-    saveAssetCharacteristic(assetCharacteristic: AssetCharacteristicInput, options?: HeaderBaseOptions): Observable<AssetCharacteristic> {
+    saveAssetCharacteristic(assetCharacteristic: AssetCharacteristicRequest, options?: HeaderBaseOptions): Observable<AssetCharacteristic> {
         return this.assetCharacteristicRepository.addAssetCharacteristic(assetCharacteristic, options);
     }
 

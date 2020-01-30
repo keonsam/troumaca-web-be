@@ -5,7 +5,7 @@ import {ERROR_CODE} from "../error.code";
 import {Paging} from "../paging";
 import {AssetRoleTypeOrchestrator} from "../../asset/asset-role-type/asset.role.type.orchestrator";
 import {AssetRoleType} from "../../data/asset/asset.role.type";
-import {AssetRoleTypeInput} from "./dto/asset.role.type.input";
+import {AssetRoleTypeRequest} from "./dto/asset.role.type.request";
 import {AssetRoleTypes} from "../../data/asset/asset.role.types";
 
 @Resolver()
@@ -13,7 +13,7 @@ export class AssetRoleTypeResolver {
     private assetRoleTypeOrchestrator: AssetRoleTypeOrchestrator = new AssetRoleTypeOrchestrator();
 
     @Mutation( () => AssetRoleType)
-    async addAssetRoleType(@Arg("data") assetRoleTypeInput: AssetRoleTypeInput, @Ctx("req") req: any): Promise<AssetRoleType> {
+    async addAssetRoleType(@Arg("data") assetRoleTypeInput: AssetRoleTypeRequest, @Ctx("req") req: any): Promise<AssetRoleType> {
         const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
         const assetRoleType = new AssetRoleType(assetRoleTypeInput.name);
         return await this.assetRoleTypeOrchestrator.saveAssetRoleType(assetRoleType, headerOptions)
@@ -56,7 +56,7 @@ export class AssetRoleTypeResolver {
 
     @Mutation( () => Boolean)
     async updateAssetRoleType(@Arg("assetRoleTypeId", () => ID) assetRoleTypeId: string,
-                          @Arg("assetRoleType") assetRoleTypeInput: AssetRoleTypeInput,
+                          @Arg("assetRoleType") assetRoleTypeInput: AssetRoleTypeRequest,
                           @Ctx("req") req: any): Promise<boolean> {
         const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
         const assetRoleType = new AssetRoleType(assetRoleTypeInput.name);

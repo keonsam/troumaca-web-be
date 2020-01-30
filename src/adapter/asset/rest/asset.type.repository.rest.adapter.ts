@@ -5,10 +5,10 @@ import {Affect} from "../../../data/affect";
 import {Sort} from "../../../util/sort";
 import { AssetTypes } from "../../../data/asset/asset.types";
 import { HeaderBaseOptions } from "../../../header.base.options";
-import { AssetTypeInput } from "../../../graphql/asset/dto/asset.type.input";
+import { AssetTypeRequest } from "../../../graphql/asset/dto/asset.type.request";
 
 export class AssetTypeRepositoryRestAdapter implements AssetTypeRepository {
-  addAssetType(assetType: AssetTypeInput, headerOptions?: HeaderBaseOptions): Observable<AssetType> {
+  addAssetType(assetType: AssetTypeRequest, headerOptions?: HeaderBaseOptions): Observable<AssetType> {
     return undefined;
   }
 
@@ -28,7 +28,7 @@ export class AssetTypeRepositoryRestAdapter implements AssetTypeRepository {
     return undefined;
   }
 
-  updateAssetType(assetTypeId: string, assetType: AssetTypeInput, headerOptions?: HeaderBaseOptions): Observable<Affect> {
+  updateAssetType(assetTypeId: string, assetType: AssetTypeRequest, headerOptions?: HeaderBaseOptions): Observable<Affect> {
     return undefined;
   }
 }

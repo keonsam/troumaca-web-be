@@ -2,11 +2,11 @@ import {Arg, Ctx, ID, Mutation, Query, Resolver} from "type-graphql";
 import { AssetTypeOrchestrator } from "../../asset/asset-type/asset.type.orchestrator";
 import { AssetType } from "../../data/asset/asset.type";
 import { HeaderBaseOptions } from "../../header.base.options";
-import { AssetTypeInput } from "./dto/asset.type.input";
+import { AssetTypeRequest } from "./dto/asset.type.request";
 import { ApolloError } from "apollo-server-errors";
 import { ERROR_CODE } from "../error.code";
 import { AssetTypes } from "../../data/asset/asset.types";
-import { GetAssetTypesInput } from "./dto/get.asset.types.input";
+import { GetAssetTypesRequest } from "./dto/get.asset.types.request";
 import {Paging} from "../paging";
 
 @Resolver()
@@ -14,7 +14,7 @@ export class AssetTypeResolver {
     private assetTypeOrchestrator: AssetTypeOrchestrator = new AssetTypeOrchestrator();
 
     @Mutation( () => AssetType)
-    async addAssetType(@Arg("data") assetTypeInput: AssetTypeInput, @Ctx("req") req: any): Promise<AssetType> {
+    async addAssetType(@Arg("data") assetTypeInput: AssetTypeRequest, @Ctx("req") req: any): Promise<AssetType> {
         const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
         return await this.assetTypeOrchestrator.addAssetType(assetTypeInput, headerOptions)
             .toPromise()
@@ -27,7 +27,7 @@ export class AssetTypeResolver {
     }
 
     @Query( () => AssetTypes)
-    async getAssetTypes(@Arg("search", () => GetAssetTypesInput) searchInfo: GetAssetTypesInput,
+    async getAssetTypes(@Arg("search", () => GetAssetTypesRequest) searchInfo: GetAssetTypesRequest,
                         @Arg("paging", () => Paging) paging: Paging,
                         @Ctx("req") req: any): Promise<AssetTypes> {
         const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
@@ -56,7 +56,7 @@ export class AssetTypeResolver {
 
     @Mutation( () => Boolean)
     async updateAssetType(@Arg("assetTypeId", () => ID) assetTypeId: string,
-                          @Arg("assetType") assetTypeInput: AssetTypeInput,
+                          @Arg("assetType") assetTypeInput: AssetTypeRequest,
                           @Ctx("req") req: any): Promise<boolean> {
         const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
         return await this.assetTypeOrchestrator.updateAssetType(assetTypeId, assetTypeInput, headerOptions)

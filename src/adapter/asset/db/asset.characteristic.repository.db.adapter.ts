@@ -11,14 +11,14 @@ import {SortGenerator} from "../../util/sort.generator";
 import { CharacteristicType } from "../../../data/asset/characteristic.type";
 import { AssetCharacteristics } from "../../../data/asset/asset.characteristics";
 import { HeaderBaseOptions } from "../../../header.base.options";
-import { AssetCharacteristicInput } from "../../../graphql/asset/dto/asset.characteristic.input";
+import { AssetCharacteristicRequest } from "../../../graphql/asset/dto/asset.characteristic.request";
 import { mapObjectProps } from "../../../graphql/object.property.mapper";
 
 const continuous = new CharacteristicType("054b50c2-9e8a-4cfb-8bac-54af9ac53613", "Continuous");
 const category = new CharacteristicType("2f062d58-f464-40a6-921a-a49528f205f6", "Category");
 const types: CharacteristicType[] = [continuous, category];
 export class AssetCharacteristicRepositoryNeDbAdapter implements AssetCharacteristicRepository {
-    addAssetCharacteristic(assetCharacteristicInput: AssetCharacteristicInput, headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristic> {
+    addAssetCharacteristic(assetCharacteristicInput: AssetCharacteristicRequest, headerOptions?: HeaderBaseOptions): Observable<AssetCharacteristic> {
         const assetCharacteristic: AssetCharacteristic = mapObjectProps(assetCharacteristicInput, new AssetCharacteristic());
         assetCharacteristic.assetCharacteristicId = generateUUID();
         assetCharacteristic.version = generateUUID();

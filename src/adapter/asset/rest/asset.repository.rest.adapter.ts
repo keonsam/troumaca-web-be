@@ -6,11 +6,11 @@ import {Sort} from "../../../util/sort";
 import {Page} from "../../../util/page";
 import { HeaderBaseOptions } from "../../../header.base.options";
 import { Assets } from "../../../data/asset/assets";
-import { AssetInput } from "../../../graphql/asset/dto/asset.input";
+import { AssetRequest } from "../../../graphql/asset/dto/asset.request";
 
 
 export class AssetRepositoryRestAdapter implements AssetRepository {
-  addAsset(asset: AssetInput, headerOptions?: HeaderBaseOptions): Observable<Asset> {
+  addAsset(asset: AssetRequest, headerOptions?: HeaderBaseOptions): Observable<Asset> {
     return undefined;
   }
 
@@ -34,7 +34,7 @@ export class AssetRepositoryRestAdapter implements AssetRepository {
     return undefined;
   }
 
-  updateAsset(assetId: string, asset: AssetInput, headerOptions?: HeaderBaseOptions): Observable<Affect> {
+  updateAsset(assetId: string, asset: AssetRequest, headerOptions?: HeaderBaseOptions): Observable<Affect> {
     return undefined;
   }
 }

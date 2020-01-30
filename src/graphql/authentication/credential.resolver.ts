@@ -4,9 +4,9 @@ import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { CredentialOrchestrator } from "../../authentication/credential/credential.orchestrator";
 import { ERROR_CODE } from "../error.code";
 import { Confirmation } from "../../data/authentication/confirmation";
-import { RegisterInput } from "./dto/register.input";
+import { RegisterRequest } from "./dto/register.request";
 import { AuthenticatedCredential } from "../../data/authentication/authenticated.credential";
-import { ChangePasswordInput } from "./dto/change.password.input";
+import { ChangePasswordRequest } from "./dto/change.password.request";
 import { HeaderBaseOptions } from "../../header.base.options";
 import { IsValid } from "../../data/isValid";
 
@@ -18,50 +18,50 @@ export class CredentialResolver {
     async validateUsername(@Arg("username") username: string, @Ctx("req") req: any): Promise<IsValid> {
         const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
         return await this.credentialOrchestrator.isValidUsername(username, headerOptions).pipe(
-            map(value => {
-                return new IsValid(value);
-            }))
-            .toPromise()
-            .then(res => {
-                return res;
-            }, error => {
-                console.log(error);
-                throw new ApolloError(error, ERROR_CODE);
-            });
+        map(value => {
+            return new IsValid(value);
+        }))
+        .toPromise()
+        .then(res => {
+            return res;
+        }, error => {
+            console.log(error);
+            throw new ApolloError(error, ERROR_CODE);
+        });
     }
 
     @Query(() => IsValid)
     async validatePassword(@Arg("password") password: string, @Ctx("req") req: any): Promise<IsValid> {
         const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
         return await this.credentialOrchestrator.isValidPassword(password, headerOptions).pipe(
-            map(value => {
-                return new IsValid(value);
-            }))
-            .toPromise()
-            .then(res => {
-                return res;
-            }, error => {
-                console.log(error);
-                throw new ApolloError(error, ERROR_CODE);
-            });
+        map(value => {
+            return new IsValid(value);
+        }))
+        .toPromise()
+        .then(res => {
+            return res;
+        }, error => {
+            console.log(error);
+            throw new ApolloError(error, ERROR_CODE);
+        });
     }
 
     @Mutation(() => Confirmation)
-    async register(@Arg("data") registerInput: RegisterInput, @Ctx("req") req: any): Promise<Confirmation> {
+    async register(@Arg("data") registerInput: RegisterRequest, @Ctx("req") req: any): Promise<Confirmation> {
         const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
         // remove in the future to front-end
         if (!registerInput.organizationName) {
             registerInput.organizationName = registerInput.firstName;
         }
         return await this.credentialOrchestrator
-            .addCredential(registerInput, headerOptions)
-            .toPromise()
-            .then(res => {
-                return res;
-            }, error => {
-                console.log(error);
-                throw new ApolloError(error, ERROR_CODE);
-            });
+        .addCredential(registerInput, headerOptions)
+        .toPromise()
+        .then(res => {
+            return res;
+        }, error => {
+            console.log(error);
+            throw new ApolloError(error, ERROR_CODE);
+        });
     }
 
     @Mutation(() => AuthenticatedCredential)
@@ -70,42 +70,42 @@ export class CredentialResolver {
                 @Ctx("req") req: any): Promise<AuthenticatedCredential> {
         const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
         return await this.credentialOrchestrator
-            .authenticate({username, password}, headerOptions)
-            .toPromise()
-            .then(authenticatedCredential => {
-                if (authenticatedCredential.sessionId) {
-                    req.session.sessionId = authenticatedCredential.sessionId;
-                }
-                return authenticatedCredential;
-            }, error => {
-                console.log(error);
-                throw new ApolloError(error, ERROR_CODE);
-            });
+        .authenticate({username, password}, headerOptions)
+        .toPromise()
+        .then(authenticatedCredential => {
+            if (authenticatedCredential.sessionId) {
+                req.session.sessionId = authenticatedCredential.sessionId;
+            }
+            return authenticatedCredential;
+        }, error => {
+            console.log(error);
+            throw new ApolloError(error, ERROR_CODE);
+        });
     }
 
     @Mutation(() => Confirmation)
     async forgetPassword(@Arg("username") username: string, @Ctx("req") req: any): Promise<Confirmation> {
         const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
         return await this.credentialOrchestrator
-            .forgetPassword(username, headerOptions)
-            .toPromise()
-            .then(res => {
-                return res;
-            }, error => {
-                throw new ApolloError(error, ERROR_CODE);
-            });
+        .forgetPassword(username, headerOptions)
+        .toPromise()
+        .then(res => {
+            return res;
+        }, error => {
+            throw new ApolloError(error, ERROR_CODE);
+        });
     }
 
     @Mutation(() => IsValid)
-    async changePassword(@Arg("data") changePasswordInput: ChangePasswordInput, @Ctx("req") req: any): Promise<IsValid> {
+    async changePassword(@Arg("data") changePasswordInput: ChangePasswordRequest, @Ctx("req") req: any): Promise<IsValid> {
         const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
         return await this.credentialOrchestrator
-            .changePassword(changePasswordInput, headerOptions)
-            .toPromise()
-            .then(res => {
-                return new IsValid(res);
-            }, error => {
-                throw new ApolloError(error, ERROR_CODE);
-            });
+        .changePassword(changePasswordInput, headerOptions)
+        .toPromise()
+        .then(res => {
+            return new IsValid(res);
+        }, error => {
+            throw new ApolloError(error, ERROR_CODE);
+        });
     }
 }

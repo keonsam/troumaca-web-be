@@ -1,7 +1,7 @@
 import { Field, ID, InputType } from "type-graphql";
 
 @InputType()
-export class AssetCharacteristicInput {
+export class AssetCharacteristicRequest {
     @Field( () => ID)
     assetCharacteristicTypeId: string;
     @Field()

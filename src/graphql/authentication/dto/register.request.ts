@@ -2,7 +2,7 @@ import { Field, InputType } from "type-graphql";
 import { Credential } from "../../../data/authentication/credential";
 
 @InputType()
-export class RegisterInput implements Partial<Credential> {
+export class RegisterRequest implements Partial<Credential> {
     @Field()
     firstName: string;
 

@@ -1,7 +1,7 @@
 import {Field, InputType} from "type-graphql";
 
 @InputType()
-export class AssetRoleTypeInput {
+export class AssetRoleTypeRequest {
     @Field()
     name: string;
     @Field({nullable: true})

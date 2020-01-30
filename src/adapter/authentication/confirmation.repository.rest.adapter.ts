@@ -7,14 +7,14 @@ import {Confirmation} from "../../data/authentication/confirmation";
 import {classToPlain} from "class-transformer";
 import {ValidateConfirmCode} from "../../repository/validate.confirm.code";
 import { HeaderBaseOptions } from "../../header.base.options";
-import { ConfirmationInput } from "../../graphql/authentication/dto/confirmation.input";
+import { ConfirmationRequest } from "../../graphql/authentication/dto/confirmation.request";
 
 export class ConfirmationRepositoryRestAdapter implements ConfirmationRepository {
 
   localhost = "http://localhost:8888";
   remote = true;
 
-  confirmCode(confirmationInput: ConfirmationInput, options?: HeaderBaseOptions): Observable<string> {
+  confirmCode(confirmationInput: ConfirmationRequest, options?: HeaderBaseOptions): Observable<string> {
     const uri: string = this.remote ? properties.get("confirmation.host.port") as string : this.localhost;
 
     const headerMap = jsonRequestHeaderMap(options ? options.toHeaders() : {});

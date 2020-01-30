@@ -2,11 +2,11 @@ import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { AssetCharacteristicOrchestrator } from "../../asset/asset-characteristic/asset.characteristic.orchestrator";
 import { AssetCharacteristic } from "../../data/asset/asset.characteristic";
 import { HeaderBaseOptions } from "../../header.base.options";
-import { AssetCharacteristicInput } from "./dto/asset.characteristic.input";
+import { AssetCharacteristicRequest } from "./dto/asset.characteristic.request";
 import { ApolloError } from "apollo-server-errors";
 import { ERROR_CODE } from "../error.code";
 import { AssetCharacteristics } from "../../data/asset/asset.characteristics";
-import { GetCharacteristicsInput } from "./dto/get.characteristics.input";
+import { GetCharacteristicsRequest } from "./dto/get.characteristics.request";
 import {Paging} from "../paging";
 
 @Resolver()
@@ -14,7 +14,7 @@ export class AssetCharacteristicResolver {
     private assetCharacteristicOrchestrator: AssetCharacteristicOrchestrator = new AssetCharacteristicOrchestrator();
 
     @Mutation( () => AssetCharacteristic)
-    async addAssetCharacteristic(@Arg("data") assetCharacteristicInput: AssetCharacteristicInput, @Ctx("req") req: any): Promise<AssetCharacteristic> {
+    async addAssetCharacteristic(@Arg("data") assetCharacteristicInput: AssetCharacteristicRequest, @Ctx("req") req: any): Promise<AssetCharacteristic> {
         const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
         return await this.assetCharacteristicOrchestrator.saveAssetCharacteristic(assetCharacteristicInput, headerOptions)
             .toPromise()
@@ -27,7 +27,7 @@ export class AssetCharacteristicResolver {
     }
 
     @Query( () => AssetCharacteristics)
-    async getAssetCharacteristics(@Arg("data") searchInfo: GetCharacteristicsInput,
+    async getAssetCharacteristics(@Arg("data") searchInfo: GetCharacteristicsRequest,
                                   @Arg("paging", () => Paging) paging: Paging,
                                   @Ctx("req") req?: any): Promise<AssetCharacteristics> {
         const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
@@ -58,7 +58,7 @@ export class AssetCharacteristicResolver {
 
     @Mutation( () => Boolean)
     async updateAssetCharacteristic(@Arg("assetCharacteristicId") assetCharacteristicId: string,
-                                    @Arg("assetCharacteristic") assetCharacteristicInput: AssetCharacteristicInput,
+                                    @Arg("assetCharacteristic") assetCharacteristicInput: AssetCharacteristicRequest,
                                     @Ctx("req") req: any): Promise<boolean> {
         const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
         const assetCharacteristic: AssetCharacteristic = new AssetCharacteristic();

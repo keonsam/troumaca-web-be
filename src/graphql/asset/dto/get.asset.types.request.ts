@@ -1,7 +1,7 @@
 import { Field, InputType } from "type-graphql";
 
 @InputType()
-export class GetAssetTypesInput {
+export class GetAssetTypesRequest {
     @Field()
     tab: string;
     @Field()
