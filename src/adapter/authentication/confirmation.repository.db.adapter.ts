@@ -43,7 +43,7 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
                 log.debug("Confirmation: " + confirmationRes);
                 if (!confirmationRes || confirmationRes.status === "Expired" || confirmationRes.status === "Confirmed") {
                     return of(confirmationRes.status);
-                } else if (new Date(confirmationRes.createdOn.getTime() + (20 * 60000)) < new Date()) {
+                } else if (confirmationRes.createdOn + (20 * 60000) < Date.now()) {
                     return this.updateConfirmationStatus(confirmationInput.credentialId, "Expired")
                         .pipe(map(numRep => {
                             if (!numRep) {
@@ -85,7 +85,7 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
             credentials.update(query, {
                 $set: {
                     status: status,
-                    modifiedOn: new Date()
+                    modifiedOn: Date.now()
                 }
             }, {}, function (err: any, numReplaced: number) {
                 if (!err) {
@@ -124,7 +124,7 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
             credentialConfirmations.update(query, {
                 $set: {
                     status: status,
-                    modifiedOn: new Date()
+                    modifiedOn: Date.now()
                 }
             }, {multi: true}, (err: any, numReplaced: number) => {
                 if (!err) {
@@ -141,8 +141,8 @@ export class ConfirmationRepositoryNeDbAdapter implements ConfirmationRepository
         confirmation.confirmationId = generateUUID();
         confirmation.code = phoneToken(6, {type: "string"});
         confirmation.status = "New";
-        confirmation.createdOn = new Date();
-        confirmation.modifiedOn = new Date();
+        confirmation.createdOn = Date.now();
+        confirmation.modifiedOn = Date.now();
         return Observable.create(function (observer: Observer<Confirmation>) {
             credentialConfirmations.insert(confirmation, function (err: any, doc: any) {
                 if (!err) {

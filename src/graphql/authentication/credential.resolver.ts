@@ -1,6 +1,6 @@
 import { ApolloError } from "apollo-server-express";
 import { map } from "rxjs/operators";
-import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import {Arg, Ctx, Mutation, Query, Resolver, UseMiddleware} from "type-graphql";
 import { CredentialOrchestrator } from "../../authentication/credential/credential.orchestrator";
 import { ERROR_CODE } from "../error.code";
 import { Confirmation } from "../../data/authentication/confirmation";
@@ -9,6 +9,8 @@ import { AuthenticatedCredential } from "../../data/authentication/authenticated
 import { ChangePasswordInput } from "./dto/change.password.input";
 import { HeaderBaseOptions } from "../../header.base.options";
 import { IsValid } from "../../data/isValid";
+import {Credential} from "../../data/authentication/credential";
+import {isAuth} from "../../middleware/isAuth";
 
 @Resolver()
 export class CredentialResolver {
@@ -105,6 +107,21 @@ export class CredentialResolver {
             .then(res => {
                 return new IsValid(res);
             }, error => {
+                throw new ApolloError(error, ERROR_CODE);
+            });
+    }
+
+    @UseMiddleware(isAuth)
+    @Query( () => Credential)
+    async getCredential(@Ctx("req") req: any): Promise<Credential> {
+        const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
+        return await this.credentialOrchestrator
+            .getCredential(headerOptions.partyId)
+            .toPromise()
+            .then(res => {
+                return res;
+            }, error => {
+                console.log(error);
                 throw new ApolloError(error, ERROR_CODE);
             });
     }

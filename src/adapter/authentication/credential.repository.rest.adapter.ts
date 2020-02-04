@@ -83,6 +83,10 @@ export class CredentialRepositoryRestAdapter implements CredentialRepository {
     });
   }
 
+  getCredential(partyId: string, options?: HeaderBaseOptions): Observable<Credential> {
+    return undefined;
+  }
+
   addCredential(register: RegisterInput, options?: HeaderBaseOptions): Observable<Confirmation> {
     const uri: string = this.remote ? properties.get("registrar.host.port") as string : this.localhost;
 

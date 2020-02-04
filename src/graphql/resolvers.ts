@@ -16,6 +16,8 @@ import {SiteResolver} from "./site/site.resolver";
 import {AssetRoleTypeResolver} from "./asset/asset.role.type.resolver";
 import {BrandResolver} from "./asset/brand.resolver";
 import {AssetCategoryLegalValueResolver} from "./asset/asset.category.legal.value.resolver";
+import {CompanyResolver} from "./party/company.resolver";
+import {AccessRoleResolver} from "./authorization/access.role.resolver";
 
 const RESOLVERS: any[] = [
     CredentialResolver,
@@ -29,7 +31,9 @@ const RESOLVERS: any[] = [
     PeopleResolver,
     SiteResolver,
     BrandResolver,
-    AssetCategoryLegalValueResolver
+    AssetCategoryLegalValueResolver,
+    CompanyResolver,
+    AccessRoleResolver
 ];
 
 export default RESOLVERS;

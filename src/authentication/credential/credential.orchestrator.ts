@@ -6,6 +6,7 @@ import {Confirmation} from "../../data/authentication/confirmation";
 import {ChangePasswordInput} from "../../graphql/authentication/dto/change.password.input";
 import { HeaderBaseOptions } from "../../header.base.options";
 import { RegisterInput } from "../../graphql/authentication/dto/register.input";
+import {Credential} from "../../data/authentication/credential";
 
 export class CredentialOrchestrator {
 
@@ -22,6 +23,10 @@ export class CredentialOrchestrator {
 
   isValidPassword(password: string, options?: HeaderBaseOptions): Observable<boolean> {
     return this.credentialRepository.isValidPassword(password, options);
+  }
+
+  getCredential(partyId: string, options?: HeaderBaseOptions): Observable<Credential> {
+    return this.credentialRepository.getCredential(partyId, options);
   }
 
   addCredential(register: RegisterInput, options?: HeaderBaseOptions): Observable<Confirmation> {

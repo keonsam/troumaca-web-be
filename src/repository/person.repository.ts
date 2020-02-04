@@ -19,4 +19,6 @@ export interface PersonRepository {
 
   updatePerson(partyId: string, person: Person, credential: Credential, partyAccessRoles: string[], options: HeaderBaseOptions): Observable<number>;
 
+  updatePersonMe(partyId: string, person: Person, options: HeaderBaseOptions): Observable<number>;
+
 }

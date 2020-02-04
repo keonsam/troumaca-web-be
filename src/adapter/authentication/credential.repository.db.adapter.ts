@@ -83,6 +83,23 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
 
     }
 
+    getCredential(partyId: string, options?: HeaderBaseOptions): Observable<Credential> {
+        return Observable.create(function (observer: Observer<Credential>) {
+            const query = {
+                partyId
+            };
+
+            credentials.find(query, function (err: any, doc: Credential) {
+                if (!err) {
+                    observer.next(doc);
+                } else {
+                    observer.error(`Failed to get Credential ${err}`);
+                }
+                observer.complete();
+            });
+        });
+    }
+
     addCredential(register: RegisterInput, options?: HeaderBaseOptions): Observable<Confirmation> {
         const person = new Person(register.firstName, register.lastName);
         delete register.firstName;
@@ -125,6 +142,7 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
                     return this.addSession(credential).pipe( map( val => {
                         const authenticatedCredential: AuthenticatedCredential = new AuthenticatedCredential();
                         authenticatedCredential.sessionId = val;
+                        authenticatedCredential.state = "Confirmed";
                         return authenticatedCredential;
                     }));
                 }
@@ -188,8 +206,8 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
     }
 
     private addPerson(person: Person, options: HeaderBaseOptions): Observable<Person> {
-        person.createdOn = new Date();
-        person.modifiedOn = new Date();
+        person.createdOn = Date.now();
+        person.modifiedOn = Date.now();
         return Observable.create(function (observer: Observer<Person>) {
             persons.insert(person, function (err: any, doc: any) {
                 if (!err) {
@@ -206,8 +224,8 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
         confirmation.confirmationId = generateUUID();
         confirmation.code = phoneToken(6, {type: "string"});
         confirmation.status = "New";
-        confirmation.createdOn = new Date();
-        confirmation.modifiedOn = new Date();
+        confirmation.createdOn = Date.now();
+        confirmation.modifiedOn = Date.now();
         return Observable.create(function (observer: Observer<Confirmation>) {
             credentialConfirmations.insert(confirmation, function (err: any, doc: any) {
                 if (!err) {
@@ -224,8 +242,8 @@ export class CredentialRepositoryNeDbAdapter implements CredentialRepository {
         const credential = new Credential(registerInput.username, registerInput.organizationName, registerInput.password);
         credential.credentialId = generateUUID();
         credential.partyId = generateUUID();
-        credential.createdOn = new Date();
-        credential.modifiedOn = new Date();
+        credential.createdOn = Date.now();
+        credential.modifiedOn = Date.now();
         if (!credential.status) {
             credential.status = "New";
         }

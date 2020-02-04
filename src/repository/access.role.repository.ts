@@ -14,8 +14,14 @@ export interface AccessRoleRepository {
 
   addAccessRoles(accessRoles: AccessRole[]): Observable<AccessRole[]>;
 
-  getAccessRoleById(accessRoleId: string): Observable<AccessRole>;
+  addAccessRole(accessRole: AccessRole, options: HeaderBaseOptions): Observable<AccessRole>;
+
+  getAccessRoleById(accessRoleId: string, options: HeaderBaseOptions): Observable<AccessRole>;
 
   getAccessRoleByIds(accessRoleIds: string[]): Observable<AccessRole[]>;
+
+  updateAccessRole(accessRoleId: string, accessRole: AccessRole, options: HeaderBaseOptions): Observable<number>;
+
+  deleteAccessRole(accessRoleId: string, options: HeaderBaseOptions): Observable<number>;
 
 }

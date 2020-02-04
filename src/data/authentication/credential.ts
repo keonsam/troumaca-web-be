@@ -1,15 +1,21 @@
-export class Credential {
-  ownerPartyId: string;
-  partyId: string;
+import {Field, ObjectType} from "type-graphql";
+import {Party} from "../party";
+
+@ObjectType()
+export class Credential extends Party {
+  @Field()
   credentialId: string;
+  @Field()
   username: string;
+  @Field()
   companyName: string;
+  @Field()
   password: string;
   status: string;
-  modifiedOn: Date;
-  createdOn: Date;
 
-  constructor(username: string, companyName: string, password: string) {
+
+  constructor(username?: string, companyName?: string, password?: string) {
+    super();
     this.username = username;
     this.companyName = companyName;
     this.password = password;
