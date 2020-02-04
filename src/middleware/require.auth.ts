@@ -1,6 +1,6 @@
 import { SchemaDirectiveVisitor, AuthenticationError } from "apollo-server-express";
 import { defaultFieldResolver, GraphQLField } from "graphql";
-import { SessionOrchestrator } from "../session/session.orchestrator";
+import { SessionOrchestrator } from "../application/service/session/session.orchestrator";
 import { map } from "rxjs/operators";
 
 const sessionOrchestrator = new SessionOrchestrator();
@@ -14,16 +14,16 @@ export class RequireAuth extends SchemaDirectiveVisitor {
                 throw new AuthenticationError("You must be logged in.");
             }
             return await sessionOrchestrator
-                .isValidSession(context.req.session.sessionId)
-                .pipe(map(isValid => {
-                    if (isValid) {
-                        context.req.headers["Party-ID"] = isValid.partyId;
-                        context.req.headers["Owner-Party-ID"] = isValid.ownerPartyId;
-                        return resolve.apply(this, args);
-                    } else {
-                        throw new AuthenticationError("Invalid session...");
-                    }
-                })).toPromise();
+            .isValidSession(context.req.session.sessionId)
+            .pipe(map(isValid => {
+                if (isValid) {
+                    context.req.headers["Party-ID"] = isValid.partyId;
+                    context.req.headers["Owner-Party-ID"] = isValid.ownerPartyId;
+                    return resolve.apply(this, args);
+                } else {
+                    throw new AuthenticationError("Invalid session...");
+                }
+            })).toPromise();
         };
     }
 }

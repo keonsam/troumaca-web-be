@@ -68,7 +68,7 @@
 // // authentication
 // router.post("/authentication/validate-password", credentialController.isValidPassword);
 // router.post("/authentication/validate-username", credentialController.isValidUsername);
-// router.post("/authentication/credentials", credentialController.addCredential);
+// router.post("/authentication/credentials", credentialController.registerCustomer);
 // router.post("/authentication/authenticate", credentialController.authenticate);
 // // router.post("/authentication/forgot-password", credentialController.forgetPassword);
 // router.post("/authentication/change-password", credentialController.changePassword);

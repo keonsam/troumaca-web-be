@@ -3,7 +3,7 @@ import "reflect-metadata";
 import express from "express";
 // import path from "path";
 import logger from "morgan";
-import cors from "cors";
+// import cors from "cors";
 // import bodyParser from "body-parser";
 // import cookieParser from "cookie-parser";
 import {ApolloServer} from "apollo-server-express";
@@ -11,8 +11,10 @@ import {ApolloServer} from "apollo-server-express";
 // import router from "./routes";
 import session from "express-session";
 import { buildSchema } from "type-graphql";
-import RESOLVERS from "./graphql/resolvers";
-import * as helmet from "helmet";
+import { Container } from "typedi";
+// import {RegistrarConfig} from "./application/config/registrar/registrar.data.provider.factory";
+import RESOLVERS from "./application/config/resolvers";
+// import * as helmet from "helmet";
 const app = express();
 
 app.use(logger("dev"));
@@ -70,20 +72,26 @@ app.use(session({
 // What's the point of making this an async function
 async function bootstrap() {
 
+    // const schema = await buildSchema({
+    //   resolvers: RESOLVERS,
+    //   container: Container
+    // });
+
     const schema = await buildSchema({
-        resolvers: RESOLVERS,
+      resolvers: RESOLVERS
     });
+
     const server = new ApolloServer({
-        schema,
-        context: ({req}: any) => {
-            return ({ req});
-        }
+      schema,
+      context: ({req}: any) => {
+          return ({ req});
+      }
     });
 
     server.applyMiddleware({
-        app,
-        path: graphqlPath,
-        cors: false,
+      app,
+      path: graphqlPath,
+      cors: false,
     });
 }
 

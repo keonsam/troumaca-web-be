@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from "express";
-import {SessionOrchestrator} from "../session/session.orchestrator";
+import {SessionOrchestrator} from "../application/service/session/session.orchestrator";
 
 const checkSession = (req: Request, res: Response, next: NextFunction) => {
 
