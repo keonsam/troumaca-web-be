@@ -4,5 +4,4 @@ export class Party {
   ownerPartyId: string;
   createdOn: Date;
   modifiedOn: Date;
-
 }

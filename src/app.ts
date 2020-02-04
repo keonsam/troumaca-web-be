@@ -13,6 +13,7 @@ import session from "express-session";
 import { buildSchema } from "type-graphql";
 import RESOLVERS from "./graphql/resolvers";
 import * as helmet from "helmet";
+import {customAuthChecker} from "./graphql/custom.auth.checker";
 const app = express();
 
 app.use(logger("dev"));
@@ -27,13 +28,14 @@ app.use(logger("dev"));
 // app.use(express.static(path.join(__dirname, "dist")));
 
 const whitelist = [
-  "http://localhost:4200",
-  "http://ec2-18-207-220-164.compute-1.amazonaws.com:4200",
-  "http://dev.troumaca.com",
-  "troumaca.com",
-  "troumaka.com",
-  /\.troumaca\.com$/,
-  /\.troumaka\.com$/
+    "http://localhost:3000",
+    "http://localhost:4200",
+    "http://ec2-18-207-220-164.compute-1.amazonaws.com:4200",
+    "http://dev.troumaca.com",
+    "troumaca.com",
+    "troumaka.com",
+    /\.troumaca\.com$/,
+    /\.troumaka\.com$/
 ];
 
 const graphqlPath: string = "/graphql";

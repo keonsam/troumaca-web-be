@@ -5,11 +5,7 @@ import { HeaderBaseOptions } from "../../header.base.options";
 
 export class AccessRoleRestRepository implements AccessRoleRepository {
 
-  addAccessRole(accessRole: AccessRole): Observable<AccessRole> {
-    return undefined;
-  }
-
-  deleteAccessRole(accessRoleId: string): Observable<number> {
+  deleteAccessRole(accessRoleId: string, options: HeaderBaseOptions): Observable<number> {
     return undefined;
   }
 
@@ -17,7 +13,7 @@ export class AccessRoleRestRepository implements AccessRoleRepository {
     return undefined;
   }
 
-  getAccessRoleById(accessRoleId: string): Observable<AccessRole> {
+  getAccessRoleById(accessRoleId: string, options: HeaderBaseOptions): Observable<AccessRole> {
     return undefined;
   }
 
@@ -33,7 +29,11 @@ export class AccessRoleRestRepository implements AccessRoleRepository {
     return undefined;
   }
 
-  updateAccessRole(accessRoleId: string, accessRole: AccessRole): Observable<number> {
+  addAccessRole(accessRole: AccessRole, options: HeaderBaseOptions): Observable<AccessRole> {
+    return undefined;
+  }
+
+  updateAccessRole(accessRoleId: string, accessRole: AccessRole, options: HeaderBaseOptions): Observable<number> {
     return undefined;
   }
 

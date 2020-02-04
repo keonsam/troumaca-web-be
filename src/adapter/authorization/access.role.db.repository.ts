@@ -56,7 +56,7 @@ export class AccessRoleDBRepository implements AccessRoleRepository {
     });
   }
 
-  addAccessRole(accessRole: AccessRole): Observable<AccessRole> {
+  addAccessRole(accessRole: AccessRole, options: HeaderBaseOptions): Observable<AccessRole> {
     accessRole.accessRoleId = generateUUID();
     return Observable.create(function (observer: Observer<AccessRole>) {
       accessRoles.insert(accessRole, function (err: any, doc: any) {
@@ -70,7 +70,7 @@ export class AccessRoleDBRepository implements AccessRoleRepository {
     });
   }
 
-  deleteAccessRole(accessRoleId: string): Observable<number> {
+  deleteAccessRole(accessRoleId: string, options: HeaderBaseOptions): Observable<number> {
     return Observable.create(function (observer: Observer<number>) {
       const query = {
         "accessRoleId": accessRoleId
@@ -86,7 +86,7 @@ export class AccessRoleDBRepository implements AccessRoleRepository {
     });
   }
 
-  getAccessRoleById(accessRoleId: string): Observable<AccessRole> {
+  getAccessRoleById(accessRoleId: string, options: HeaderBaseOptions): Observable<AccessRole> {
     return this.getAccessRoleByIdLocal(accessRoleId)
         .pipe(switchMap( accessRole => {
           return this.getAccessRoleTypeById(accessRole.accessRoleTypeId)
@@ -117,7 +117,7 @@ export class AccessRoleDBRepository implements AccessRoleRepository {
     });
   }
 
-  updateAccessRole(accessRoleId: string, accessRole: AccessRole): Observable<number> {
+  updateAccessRole(accessRoleId: string, accessRole: AccessRole, options: HeaderBaseOptions): Observable<number> {
     return Observable.create(function (observer: Observer<number>) {
       const query = {
         "accessRoleId": accessRoleId

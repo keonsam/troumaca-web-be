@@ -1,7 +1,8 @@
-import { Field, ID, ObjectType } from "type-graphql";
+import {Field, ID, ObjectType} from "type-graphql";
+import {Base} from "../base";
 
 @ObjectType()
-export class Confirmation {
+export class Confirmation extends Base {
   @Field(() => ID)
   confirmationId: string;
   @Field(() => ID)
@@ -9,10 +10,4 @@ export class Confirmation {
   code: string;
   @Field()
   status: string;
-  @Field()
-  modifiedOn: Date;
-  @Field()
-  createdOn: Date;
-  @Field()
-  version: string;
 }

@@ -46,63 +46,58 @@ export class AccessRoleOrchestrator {
       }));
   }
 
-  getAccessRoleById(accessRoleId: string): Observable<AccessRole> {
-    return this.accessRoleRepository.getAccessRoleById(accessRoleId);
+  getAccessRoleById(accessRoleId: string, options: HeaderBaseOptions): Observable<AccessRole> {
+    return this.accessRoleRepository.getAccessRoleById(accessRoleId, options);
   }
 
-  addAccessRole(accessRole: AccessRole, grants: Grant[]): Observable<AccessRole> {
-    // return this.accessRoleRepository.addAccessRole(accessRole)
-    //   .pipe(switchMap(accessRole => {
-    //     if (!accessRole) {
-    //         return throwError(`Failed to save access role ${accessRole}`);
-    //     }
-    //     const accessRoleId = accessRole.accessRoleId;
-    //     grants.forEach(value => {
-    //       value.accessRoleId = accessRoleId;
-    //     });
-    //     return this.grantRepository.addGrant(grants)
-    //       .pipe(map(grants => {
-    //         if (!grants) return new AccessRole();
-    //         return accessRole;
-    //       }));
-    //   }));
-
-    return undefined;
+  addAccessRole(accessRole: AccessRole, options: HeaderBaseOptions): Observable<AccessRole> {
+    return this.accessRoleRepository.addAccessRole(accessRole, options);
+      // .pipe(switchMap(accessRole => {
+      //   if (!accessRole) {
+      //       return throwError(`Failed to save access role ${accessRole}`);
+      //   }
+      //   const accessRoleId = accessRole.accessRoleId;
+      //   grants.forEach(value => {
+      //     value.accessRoleId = accessRoleId;
+      //   });
+      //   return this.grantRepository.addGrant(grants)
+      //     .pipe(map(grants => {
+      //       if (!grants) return new AccessRole();
+      //       return accessRole;
+      //     }));
+      // }));
   }
 
-  updateAccessRole(accessRoleId: string, accessRole: AccessRole, grants: Grant[]): Observable<number> {
-    // return this.accessRoleRepository.updateAccessRole(accessRoleId, accessRole)
-    //   .pipe(switchMap(numUpdated => {
-    //     if (!numUpdated) {
-    //         return throwError(`Failed to update access role ${accessRoleId} ${numUpdated}`);
-    //     }
-    //     return this.grantRepository.deleteGrant(accessRoleId)
-    //       .pipe(switchMap(numReplaced => {
-    //         return this.grantRepository.addGrant(grants)
-    //           .pipe(map(grants => {
-    //             if (!grants) return 0;
-    //             return numUpdated;
-    //           }));
-    //       }));
-    //   }));
-
-    return undefined;
+  updateAccessRole(accessRoleId: string, accessRole: AccessRole, options: HeaderBaseOptions): Observable<number> {
+    return this.accessRoleRepository.updateAccessRole(accessRoleId, accessRole, options);
+      // .pipe(switchMap(numUpdated => {
+      //   if (!numUpdated) {
+      //       return throwError(`Failed to update access role ${accessRoleId} ${numUpdated}`);
+      //   }
+      //   return this.grantRepository.deleteGrant(accessRoleId)
+      //     .pipe(switchMap(numReplaced => {
+      //       return this.grantRepository.addGrant(grants)
+      //         .pipe(map(grants => {
+      //           if (!grants) return 0;
+      //           return numUpdated;
+      //         }));
+      //     }));
+      // }));
   }
 
-  deleteAccessRole(accessRoleId: string): Observable<number> {
-    // return this.accessRoleRepository.deleteAccessRole(accessRoleId)
-    //   .pipe(switchMap(numReplaced => {
-    //     if (numReplaced) {
-    //       return this.grantRepository.deleteGrant(accessRoleId)
-    //         .pipe(switchMap(numReplaced2 => {
-    //           return this.partyAccessRoleRepository.deletePartyAccessRoleByAccessRoleId(accessRoleId)
-    //             .pipe(map(numReplaced3 => {
-    //               return numReplaced;
-    //             }));
-    //         }));
-    //     }
-    //   }));
-    return undefined;
+  deleteAccessRole(accessRoleId: string, options: HeaderBaseOptions): Observable<number> {
+    return this.accessRoleRepository.deleteAccessRole(accessRoleId, options);
+      // .pipe(switchMap(numReplaced => {
+      //   if (numReplaced) {
+      //     return this.grantRepository.deleteGrant(accessRoleId)
+      //       .pipe(switchMap(numReplaced2 => {
+      //         return this.partyAccessRoleRepository.deletePartyAccessRoleByAccessRoleId(accessRoleId)
+      //           .pipe(map(numReplaced3 => {
+      //             return numReplaced;
+      //           }));
+      //       }));
+      //   }
+      // }));
   }
 
 }
