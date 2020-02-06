@@ -17,4 +17,5 @@ export function createRegistrarDataProvider(): RegisterDataProvider {
     default:
       throw new Error(`Unknown Registrar Data Provider ${k}`);
   }
+
 }

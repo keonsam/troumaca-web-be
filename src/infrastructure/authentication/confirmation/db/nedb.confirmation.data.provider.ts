@@ -1,13 +1,13 @@
-import {ConfirmationDataProvider} from "../../../port/confirmation.data.provider";
-import {generateUUID} from "../../../uuid.generator";
+import {ConfirmationDataProvider} from "../../../../port/confirmation.data.provider";
+import {generateUUID} from "../../../../uuid.generator";
 import phoneToken from "generate-sms-verification-code";
-import {credentialConfirmations, credentials} from "../../../db";
-import {Confirmation} from "../../../domain/model/authentication/confirmation";
+import {credentialConfirmations, credentials} from "../../../../db";
+import {Confirmation} from "../../../../domain/model/authentication/confirmation";
 import {Observable, Observer, of, throwError} from "rxjs";
 import {switchMap, map} from "rxjs/operators";
-import {factory} from "../../../ConfigLog4j";
-import { HeaderBaseOptions } from "../../../header.base.options";
-import { ConfirmationRequest } from "../../../domain/model/authentication/request/confirmation.request";
+import {factory} from "../../../../ConfigLog4j";
+import { HeaderBaseOptions } from "../../../../header.base.options";
+import { ConfirmationRequest } from "../../../../domain/model/authentication/request/confirmation.request";
 
 const log = factory.getLogger("authentication.NedbConfirmationDataProvider");
 

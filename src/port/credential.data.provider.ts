@@ -15,20 +15,8 @@ export interface CredentialDataProvider {
 
   isValidPassword(password: string, options?: HeaderBaseOptions): Observable<boolean>;
 
-  addCredential(register: RegisterRequest, options?: HeaderBaseOptions): Observable<CreatedCredential>;
-
-  authenticate(credential: Credential, options?: HeaderBaseOptions): Observable<AuthenticatedCredential>;
-
   forgetPassword(username: string, options?: HeaderBaseOptions): Observable<Confirmation>;
-  //
+
   changePassword(changePassword: ChangePasswordRequest, options?: HeaderBaseOptions): Observable<boolean>;
-
-  // updateCredential(partyId: string, credential: Credential, options?: HeaderBaseOptions): Observable<number>;
-
-  // USED BY OTHER REPOS
-
-  // updateCredentialStatusByPartyId(partyId: string, status: string, options?: HeaderBaseOptions): Observable<number>;
-  //
-  // deleteCredentialByPartyId(partyId: string, options?: HeaderBaseOptions): Observable<number>;
 
 }

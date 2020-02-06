@@ -4,8 +4,8 @@
 // other reference: https://www.prisma.io/blog/how-to-wrap-a-rest-api-with-graphql-8bf3fb17547d
 // other reference: https://www.apollographql.com/docs/apollo-server/essentials/data.html
 
-import { CredentialResolver } from "../../presentation/authentication/credential.resolver";
-import { ConfirmationResolver } from "../../presentation/authentication/confirmation.resolver";
+import { CredentialResolver } from "../../presentation/authentication/credential/credential.resolver";
+import { ConfirmationResolver } from "../../presentation/authentication/confirmation/confirmation.resolver";
 import { SessionResolver } from "../../presentation/session/session.resolver";
 import { AssetCharacteristicResolver } from "../../presentation/asset/asset.characteristic.resolver";
 import { AssetTypeResolver } from "../../presentation/asset/asset.type.resolver";
@@ -17,9 +17,11 @@ import {AssetRoleTypeResolver} from "../../presentation/asset/asset.role.type.re
 import {BrandResolver} from "../../presentation/asset/brand.resolver";
 import {AssetCategoryLegalValueResolver} from "../../presentation/asset/asset.category.legal.value.resolver";
 import {RegisterResolver} from "../../presentation/register/register.resolver";
+import {LoginResolver} from "../../presentation/login/login.resolver";
 
 const RESOLVERS: any[] = [
     RegisterResolver,
+    LoginResolver,
     CredentialResolver,
     ConfirmationResolver,
     SessionResolver,

@@ -1,14 +1,23 @@
 import { ApolloError } from "apollo-server-express";
-import { ConfirmationOrchestrator } from "../../application/service/authentication/credential/confirmation.orchestrator";
+import { ConfirmationOrchestrator } from "../../../application/service/authentication/confirmation/confirmation.orchestrator";
 import { Arg, Ctx, ID, Mutation, Resolver } from "type-graphql";
-import { ConfirmationRequest } from "../../domain/model/authentication/request/confirmation.request";
-import { ERROR_CODE } from "../../domain/model/error/error.code";
-import { HeaderBaseOptions } from "../../header.base.options";
-import { IsValid } from "../../domain/model/is-valid";
+import { ConfirmationRequest } from "../../../domain/model/authentication/request/confirmation.request";
+import { ERROR_CODE } from "../../../domain/model/error/error.code";
+import { HeaderBaseOptions } from "../../../header.base.options";
+import { IsValid } from "../../../domain/model/is-valid";
 
 @Resolver()
 export class ConfirmationResolver {
-    private confirmationOrchestrator: ConfirmationOrchestrator = new ConfirmationOrchestrator();
+
+    private confirmationOrchestrator: ConfirmationOrchestrator;
+
+    constructor(confirmationOrchestrator?: ConfirmationOrchestrator) {
+        if (confirmationOrchestrator != null) {
+            this.confirmationOrchestrator = confirmationOrchestrator;
+        } else {
+            this.confirmationOrchestrator = new ConfirmationOrchestrator();
+        }
+    }
 
     @Mutation(() => IsValid)
     async confirmation(@Arg("data") confirmationInput: ConfirmationRequest, @Ctx("req") req: any): Promise<IsValid> {

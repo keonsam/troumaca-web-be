@@ -1,22 +1,21 @@
 import validator from "validator";
 import libphonenumberjs from "libphonenumber-js";
 import PasswordValidator from "password-validator";
-import {generateUUID} from "../../../uuid.generator";
-import {Credential} from "../../../domain/model/authentication/credential";
-import { credentialConfirmations, credentials, persons } from "../../../db";
-import {CredentialDataProvider} from "../../../port/credential.data.provider";
-import {AuthenticatedCredential} from "../../../domain/model/authentication/authenticated.credential";
-import {Confirmation} from "../../../domain/model/authentication/confirmation";
+import {generateUUID} from "../../../../uuid.generator";
+import {Credential} from "../../../../domain/model/authentication/credential";
+import { credentialConfirmations, credentials, persons } from "../../../../db";
+import {CredentialDataProvider} from "../../../../port/credential.data.provider";
+import {Confirmation} from "../../../../domain/model/authentication/confirmation";
 import {Observable, Observer, of, throwError} from "rxjs";
 import {switchMap, map} from "rxjs/operators";
-import {Person} from "../../../domain/model/party/person/person";
-import {ChangePasswordRequest} from "../../../domain/model/authentication/request/change.password.request";
+import {Person} from "../../../../domain/model/party/person/person";
+import {ChangePasswordRequest} from "../../../../domain/model/authentication/request/change.password.request";
 import phoneToken from "generate-sms-verification-code";
-import { HeaderBaseOptions } from "../../../header.base.options";
-import { RegisterRequest } from "../../../domain/model/authentication/request/register.request";
-import { Session } from "../../../domain/model/session/session";
-import { NedbSessionDataProvider } from "../../session/nedb.session.data.provider";
-import {CreatedCredential} from "../../../domain/model/authentication/dto/created.credential";
+import { HeaderBaseOptions } from "../../../../header.base.options";
+import { RegisterRequest } from "../../../../domain/model/authentication/request/register.request";
+import { Session } from "../../../../domain/model/session/session";
+import { NedbSessionDataProvider } from "../../../session/nedb.session.data.provider";
+import {CreatedCredential} from "../../../../domain/model/authentication/dto/created.credential";
 
 export class NedbCredentialDataProvider implements CredentialDataProvider {
 
@@ -81,55 +80,6 @@ export class NedbCredentialDataProvider implements CredentialDataProvider {
             return of(schema.validate(password));
         }
 
-    }
-
-    addCredential(register: RegisterRequest, options?: HeaderBaseOptions): Observable<CreatedCredential> {
-        const person = new Person(register.firstName, register.lastName);
-        delete register.firstName;
-        delete register.lastName;
-        return this.addCredentialLocal(register)
-            .pipe(switchMap(credential => {
-                return throwError("Credential was not created.");
-                // if (!credential) {
-                //     return throwError("Credential was not created.");
-                // } else {
-                //     person.partyId = credential.partyId;
-                //     return this.addPerson(person, options)
-                //         .pipe(switchMap(personRes => {
-                //             if (!personRes) {
-                //                 return throwError("Failed to save Person");
-                //             } else {
-                //                 const confirmation: Confirmation = new Confirmation();
-                //                 confirmation.credentialId = credential.credentialId;
-                //                 return this.addConfirmation(confirmation)
-                //                     .pipe(map(confirmation => {
-                //                         if (!confirmation) {
-                //                             throw new Error("Confirmation failed to be created.");
-                //                         } else {
-                //                             return confirmation;
-                //                         }
-                //                     }));
-                //             }
-                //         }));
-                // }
-            }));
-    }
-
-    authenticate(cred: Credential, options?: HeaderBaseOptions): Observable<AuthenticatedCredential> {
-        return this.getCredentialByUsername(cred.username)
-            .pipe(switchMap((credential: Credential) => {
-                if (!credential) {
-                    return throwError("username not found");
-                } else if (cred.password !== credential.password) {
-                    return throwError("password does not match");
-                } else {
-                    return this.addSession(credential).pipe( map( val => {
-                        const authenticatedCredential: AuthenticatedCredential = new AuthenticatedCredential();
-                        authenticatedCredential.sessionId = val;
-                        return authenticatedCredential;
-                    }));
-                }
-            }));
     }
 
     forgetPassword(username: string, options?: HeaderBaseOptions): Observable<Confirmation> {
