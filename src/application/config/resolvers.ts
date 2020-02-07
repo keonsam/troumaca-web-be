@@ -9,7 +9,7 @@ import { ConfirmationResolver } from "../../presentation/authentication/confirma
 import { SessionResolver } from "../../presentation/session/session.resolver";
 import { AssetCharacteristicResolver } from "../../presentation/asset/asset.characteristic.resolver";
 import { AssetTypeResolver } from "../../presentation/asset/asset.type.resolver";
-import { AssetResolve } from "../../presentation/asset/asset.resolve";
+import { AssetResolver } from "../../presentation/asset/asset.resolver";
 import {CharacteristicTypeResolver} from "../../presentation/asset/characteristic.type.resolver";
 import {PeopleResolver} from "../../presentation/party/people.resolver";
 import {SiteResolver} from "../../presentation/site/site.resolver";
@@ -29,7 +29,7 @@ const RESOLVERS: any[] = [
     CharacteristicTypeResolver,
     AssetTypeResolver,
     AssetRoleTypeResolver,
-    AssetResolve,
+    AssetResolver,
     PeopleResolver,
     SiteResolver,
     BrandResolver,

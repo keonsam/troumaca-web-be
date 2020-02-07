@@ -9,7 +9,8 @@ import { Assets } from "../../domain/model/asset/assets";
 import {Paging} from "../../domain/model/page/paging";
 
 @Resolver()
-export class AssetResolve {
+export class AssetResolver {
+
     private assetOrchestrator: AssetOrchestrator = new AssetOrchestrator();
 
     @Mutation( () => Asset)

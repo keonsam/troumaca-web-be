@@ -5,7 +5,7 @@ import {generateUUID} from "../../../uuid.generator";
 import {bookDepreciation, depreciationMethod, depreciationSystem, propertyClasses, taxDepreciation} from "../../../db";
 import {calcSkip} from "../../../db.util";
 import {Asset} from "../../../domain/model/asset/asset";
-import {NedbAssetDataProvider} from "./nedb.asset.data.provider";
+// import {NedbAssetDataProvider} from "./nedb.asset.data.provider";
 import {DepreciationMethod} from "../../../domain/model/asset/depreciation.method";
 import {DepreciationSystem} from "../../../domain/model/asset/depreciation.system";
 import {PropertyClass} from "../../../domain/model/asset/property.class";
@@ -13,7 +13,7 @@ import {PropertyClass} from "../../../domain/model/asset/property.class";
 export class NedbDepreciationDataProvider implements DepreciationDataProvider {
 
   readonly defaultPageSize: number;
-  private assetDataProvider: NedbAssetDataProvider = new NedbAssetDataProvider();
+  //private assetDataProvider: NedbAssetDataProvider = new NedbAssetDataProvider();
 
   constructor() {
     this.defaultPageSize = 10;

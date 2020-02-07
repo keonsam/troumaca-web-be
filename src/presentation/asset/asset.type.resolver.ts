@@ -11,19 +11,33 @@ import {Paging} from "../../domain/model/page/paging";
 
 @Resolver()
 export class AssetTypeResolver {
+
     private assetTypeOrchestrator: AssetTypeOrchestrator = new AssetTypeOrchestrator();
+
+    @Mutation( () => AssetType)
+    async addAssetTypeRoot(@Arg("data") assetTypeInput: AssetTypeRequest, @Ctx("req") req: any): Promise<AssetType> {
+        const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
+        return await this.assetTypeOrchestrator.addAssetType(assetTypeInput, headerOptions)
+        .toPromise()
+        .then(res => {
+            return res;
+        }, error => {
+            console.log(error);
+            throw new ApolloError(error, ERROR_CODE);
+        });
+    }
 
     @Mutation( () => AssetType)
     async addAssetType(@Arg("data") assetTypeInput: AssetTypeRequest, @Ctx("req") req: any): Promise<AssetType> {
         const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
         return await this.assetTypeOrchestrator.addAssetType(assetTypeInput, headerOptions)
-            .toPromise()
-            .then(res => {
-                return res;
-            }, error => {
-                console.log(error);
-                throw new ApolloError(error, ERROR_CODE);
-            });
+        .toPromise()
+        .then(res => {
+            return res;
+        }, error => {
+            console.log(error);
+            throw new ApolloError(error, ERROR_CODE);
+        });
     }
 
     @Query( () => AssetTypes)
@@ -32,26 +46,26 @@ export class AssetTypeResolver {
                         @Ctx("req") req: any): Promise<AssetTypes> {
         const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
         return await this.assetTypeOrchestrator.getAssetTypes(searchInfo.tab, searchInfo.type, searchInfo.search, paging.pageNumber, paging.pageSize, headerOptions)
-            .toPromise()
-            .then(res => {
-                return res;
-            }, error => {
-                console.log(error);
-                throw new ApolloError(error, ERROR_CODE);
-            });
+        .toPromise()
+        .then(res => {
+            return res;
+        }, error => {
+            console.log(error);
+            throw new ApolloError(error, ERROR_CODE);
+        });
     }
 
     @Query( () => AssetType)
     async getAssetTypeById(@Arg("assetTypeId", () => ID) assetTypeId: string, @Ctx("req") req: any): Promise<AssetType> {
         const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
         return this.assetTypeOrchestrator.getAssetTypeById(assetTypeId, headerOptions)
-            .toPromise()
-            .then(res => {
-                return res;
-            }, error => {
-                console.log(error);
-                throw new ApolloError(error, ERROR_CODE);
-            });
+        .toPromise()
+        .then(res => {
+            return res;
+        }, error => {
+            console.log(error);
+            throw new ApolloError(error, ERROR_CODE);
+        });
     }
 
     @Mutation( () => Boolean)
@@ -60,25 +74,26 @@ export class AssetTypeResolver {
                           @Ctx("req") req: any): Promise<boolean> {
         const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
         return await this.assetTypeOrchestrator.updateAssetType(assetTypeId, assetTypeInput, headerOptions)
-            .toPromise()
-            .then(res => {
-                return !!res;
-            }, error => {
-                console.log(error);
-                throw new ApolloError(error, ERROR_CODE);
-            });
+        .toPromise()
+        .then(res => {
+            return !!res;
+        }, error => {
+            console.log(error);
+            throw new ApolloError(error, ERROR_CODE);
+        });
     }
 
     @Mutation( () => Boolean)
     async deleteAssetType(@Arg("assetTypeId", () => ID) assetTypeId: string, @Ctx("req") req: any): Promise<boolean> {
         const headerOptions: HeaderBaseOptions = new HeaderBaseOptions(req);
         return this.assetTypeOrchestrator.deleteAssetType(assetTypeId, headerOptions)
-            .toPromise()
-            .then(res => {
-                return !!res;
-            }, error => {
-                console.log(error);
-                throw new ApolloError(error, ERROR_CODE);
-            });
+        .toPromise()
+        .then(res => {
+            return !!res;
+        }, error => {
+            console.log(error);
+            throw new ApolloError(error, ERROR_CODE);
+        });
     }
+
 }

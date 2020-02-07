@@ -1,6 +1,6 @@
-import {RepositoryKind} from "../../repository.kind";
-import {properties} from "../../properties.helpers";
-import {AssetDataProvider} from "../../port/asset.data.provider";
+import {RepositoryKind} from "../../../repository.kind";
+import {properties} from "../../../properties.helpers";
+import {AssetDataProvider} from "../../../port/asset.data.provider";
 import {NedbAssetDataProvider} from "./db/nedb.asset.data.provider";
 import {RestAssetDataProvider} from "./rest/rest.asset.data.provider";
 
@@ -14,7 +14,8 @@ export function createAssetDataProvider(kind?: RepositoryKind): AssetDataProvide
     case RepositoryKind.Nedb:
       return new NedbAssetDataProvider();
     case RepositoryKind.Rest:
-      return new RestAssetDataProvider();
+      const uri: string = properties.get("asset.host.port") as string;
+      return new RestAssetDataProvider(uri);
     default:
       throw new Error(`Unknown Asset Data Provider ${k}`);
   }

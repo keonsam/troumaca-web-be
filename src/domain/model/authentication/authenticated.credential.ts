@@ -5,6 +5,7 @@ import { Confirmation } from "./confirmation";
 export class AuthenticatedCredential {
   @Field()
   state: string;
+  @Field()
   sessionId: string;
   @Field( () => Confirmation, {nullable: true})
   confirmation: Confirmation;

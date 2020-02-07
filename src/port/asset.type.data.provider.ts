@@ -8,6 +8,8 @@ import { AssetTypeRequest } from "../domain/model/asset/request/asset.type.reque
 
 export interface AssetTypeDataProvider {
 
+  addAssetTypeRoot(assetType: AssetTypeRequest, headerOptions?: HeaderBaseOptions): Observable<AssetType>;
+
   addAssetType(assetType: AssetTypeRequest, headerOptions?: HeaderBaseOptions): Observable<AssetType>;
 
   updateAssetType(assetTypeId: string, assetType: AssetTypeRequest, headerOptions?: HeaderBaseOptions): Observable<Affect>;

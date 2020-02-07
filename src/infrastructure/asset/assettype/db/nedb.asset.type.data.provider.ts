@@ -1,21 +1,22 @@
-import {AssetTypeDataProvider} from "../../../port/asset.type.data.provider";
+import {AssetTypeDataProvider} from "../../../../port/asset.type.data.provider";
 import {Observable, Observer} from "rxjs";
-import {AssetType} from "../../../domain/model/asset/asset.type";
-import {assetTypes} from "../../../db";
-import {generateUUID} from "../../../uuid.generator";
-import {Affect} from "../../../domain/model/affect";
-// import {Sort} from "../../../util/sort";
-import {SkipGenerator} from "../../util/skip.generator";
-// import {SortGenerator} from "../../util/sort.generator";
-import { AssetTypes } from "../../../domain/model/asset/asset.types";
-// import { Page } from "../../../domain/model/page/page";
-import { HeaderBaseOptions } from "../../../header.base.options";
-import { AssetTypeRequest } from "../../../domain/model/asset/request/asset.type.request";
-import { mapObjectProps } from "../../mapper/object.property.mapper";
+import {AssetType} from "../../../../domain/model/asset/asset.type";
+import {assetTypes} from "../../../../db";
+import {generateUUID} from "../../../../uuid.generator";
+import {Affect} from "../../../../domain/model/affect";
+import {SkipGenerator} from "../../../util/skip.generator";
+import { AssetTypes } from "../../../../domain/model/asset/asset.types";
+import { HeaderBaseOptions } from "../../../../header.base.options";
+import { AssetTypeRequest } from "../../../../domain/model/asset/request/asset.type.request";
+import { mapObjectProps } from "../../../mapper/object.property.mapper";
 
 export class NedbAssetTypeDataProvider implements AssetTypeDataProvider {
 
   constructor() {
+  }
+
+  addAssetTypeRoot(assetType: AssetTypeRequest, headerOptions?: HeaderBaseOptions): Observable<AssetType> {
+    return undefined;
   }
 
   addAssetType(assetTypeRequest: AssetTypeRequest, headerOptions?: HeaderBaseOptions): Observable<AssetType> {
