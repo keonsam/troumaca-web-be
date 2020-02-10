@@ -30,7 +30,8 @@ host.port = http://ec2-18-221-229-21.us-east-2.compute.amazonaws.com:8080
 data.provider.type = 2
 
 [asset]
-host.port = http://ec2-18-191-207-110.us-east-2.compute.amazonaws.com:8080
+host.port = http://localhost:8282
+#host.port = http://ec2-18-191-207-110.us-east-2.compute.amazonaws.com:8080
 data.provider.type = 2
 
 [contract]

@@ -2,9 +2,9 @@ import { Field, InputType } from "type-graphql";
 
 @InputType()
 export class GetAssetTypesRequest {
-    @Field()
+    @Field({ nullable: true })
     tab: string;
-    @Field()
+    @Field({ nullable: true })
     type: string;
     @Field({ nullable: true })
     search: string;

@@ -26,7 +26,7 @@ export class NedbAssetTypeDataProvider implements AssetTypeDataProvider {
       assetType.version = generateUUID();
       assetType.dateModified = new Date();
 
-      return Observable.create(function (observer: Observer<AssetType>) {
+      return new Observable(observer => {
           assetTypes.insert(assetType, function (err: any, doc: any) {
               if (err) {
                   observer.error(err);
@@ -42,7 +42,7 @@ export class NedbAssetTypeDataProvider implements AssetTypeDataProvider {
       // assetType.version = generateUUID();
       // assetType.dateModified = new Date();
 
-      return Observable.create(function (observer: Observer<Affect>) {
+      return new Observable(observer => {
           assetTypes.update(
               {assetTypeId: assetTypeId},
               {$set : assetType},
@@ -58,8 +58,8 @@ export class NedbAssetTypeDataProvider implements AssetTypeDataProvider {
       });
   }
 
-  deleteAssetType(assetTypeId: string, headerOptions?: HeaderBaseOptions): Observable<Affect> {
-      return Observable.create(function (observer: Observer<Affect>) {
+  deleteAssetType(assetTypeId: string, version: string, headerOptions?: HeaderBaseOptions): Observable<Affect> {
+      return new Observable(observer => {
           assetTypes.remove(
               {assetTypeId: assetTypeId},
               { },
@@ -79,7 +79,7 @@ export class NedbAssetTypeDataProvider implements AssetTypeDataProvider {
   }
 
   getAssetTypeById(assetTypeId: string, headerOptions?: HeaderBaseOptions): Observable<AssetType> {
-      return Observable.create(function (observer: Observer<AssetType>) {
+      return new Observable(observer => {
           assetTypes.find(
               {assetTypeId: assetTypeId},
               (err: any, docs: any) => {
@@ -93,19 +93,19 @@ export class NedbAssetTypeDataProvider implements AssetTypeDataProvider {
       });
   }
 
-  getAssetTypes(tab: string, type: string, search: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetTypes> {
-      return Observable.create(function (observer: Observer<AssetTypes>) {
+  getAssetTypes(pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetType[]> {
+      return new Observable(observer => {
           assetTypes.count({ ownerPartyId: headerOptions.ownerPartyId }, function (err, count) {
               const skipAmount = pageNumber ? pageNumber * pageSize : 0;
               assetTypes.find({
                   ownerPartyId: headerOptions.ownerPartyId,
-                  name: new RegExp(search),
+                  name: new RegExp("search"),
               })
                   .skip(skipAmount)
                   .limit(pageSize)
                   .exec((err: any, docs: any) => {
                       if (!err) {
-                          observer.next(new AssetTypes(docs));
+                          observer.next(new Array<AssetType>());
                       } else {
                           observer.error(err);
                       }
@@ -116,7 +116,7 @@ export class NedbAssetTypeDataProvider implements AssetTypeDataProvider {
   }
 
   findAssetTypesInternal(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetType[]> {
-    return Observable.create(function (observer: Observer<AssetType[]>) {
+    return new Observable(observer => {
       assetTypes.count({ }, function (err, count) {
         const skipAmount = SkipGenerator.generate(pageNumber, pageSize, count);
         assetTypes.find({ name: new RegExp(searchStr) })

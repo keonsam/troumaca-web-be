@@ -32,8 +32,8 @@ export class AssetTypeOrchestrator {
     return this.assetTypeDataProvider.findAssetTypes(searchStr, pageNumber, pageSize, headerOptions);
   }
 
-  getAssetTypes(tab: string, type: string, search: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetTypes> {
-    return this.assetTypeDataProvider.getAssetTypes(tab, type, search, pageNumber, pageSize, headerOptions);
+  getAssetTypes(pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetType[]> {
+    return this.assetTypeDataProvider.getAssetTypes(pageNumber, pageSize, headerOptions);
   }
 
   updateAssetType(assetTypeId: string, assetType: AssetTypeRequest, headerOptions?: HeaderBaseOptions): Observable<number> {
@@ -45,8 +45,8 @@ export class AssetTypeOrchestrator {
     return this.assetTypeDataProvider.getAssetTypeById(assetTypeId, headerOptions);
   }
 
-  deleteAssetType(assetTypeId: string, headerOptions?: HeaderBaseOptions): Observable<number> {
-    return this.assetTypeDataProvider.deleteAssetType(assetTypeId, headerOptions)
+  deleteAssetType(assetTypeId: string, version: string, headerOptions?: HeaderBaseOptions): Observable<number> {
+    return this.assetTypeDataProvider.deleteAssetType(assetTypeId, version, headerOptions)
         .pipe(map(aff => aff.affected));
   }
 
