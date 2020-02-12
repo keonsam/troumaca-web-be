@@ -1,5 +1,5 @@
 import {Request} from "express";
-import {HeaderNormalizer} from "./header.normalizer";
+import { HeaderNormalizer } from "./header.normalizer";
 import { generateUUID } from "./uuid.generator";
 
 export class HeaderBaseOptions {

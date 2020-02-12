@@ -3,7 +3,7 @@ import "reflect-metadata";
 import express from "express";
 // import path from "path";
 import logger from "morgan";
-// import cors from "cors";
+import cors from "cors";
 // import bodyParser from "body-parser";
 // import cookieParser from "cookie-parser";
 import {ApolloServer} from "apollo-server-express";
@@ -11,10 +11,9 @@ import {ApolloServer} from "apollo-server-express";
 // import router from "./routes";
 import session from "express-session";
 import { buildSchema } from "type-graphql";
-import { Container } from "typedi";
-// import {RegistrarConfig} from "./application/config/registrar/registrar.data.provider.factory";
 import RESOLVERS from "./application/config/resolvers";
-// import * as helmet from "helmet";
+import * as helmet from "helmet";
+import {customAuthChecker} from "./graphql/custom.auth.checker";
 const app = express();
 
 app.use(logger("dev"));
@@ -29,13 +28,14 @@ app.use(logger("dev"));
 // app.use(express.static(path.join(__dirname, "dist")));
 
 const whitelist = [
-  "http://localhost:4200",
-  "http://ec2-18-207-220-164.compute-1.amazonaws.com:4200",
-  "http://dev.troumaca.com",
-  "troumaca.com",
-  "troumaka.com",
-  /\.troumaca\.com$/,
-  /\.troumaka\.com$/
+    "http://localhost:3000",
+    "http://localhost:4200",
+    "http://ec2-18-207-220-164.compute-1.amazonaws.com:4200",
+    "http://dev.troumaca.com",
+    "troumaca.com",
+    "troumaka.com",
+    /\.troumaca\.com$/,
+    /\.troumaka\.com$/
 ];
 
 const graphqlPath: string = "/graphql";
@@ -52,8 +52,7 @@ const corsOptions = {
   credentials: true
 };
 
-
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 // app.use(cors());
 
 const TWO_HOURS = 1000 * 60 * 60 * 60 * 2;
@@ -69,29 +68,22 @@ app.use(session({
     }
 }));
 
-// What's the point of making this an async function
 async function bootstrap() {
 
-    // const schema = await buildSchema({
-    //   resolvers: RESOLVERS,
-    //   container: Container
-    // });
-
     const schema = await buildSchema({
-      resolvers: RESOLVERS
+        resolvers: RESOLVERS,
     });
-
     const server = new ApolloServer({
-      schema,
-      context: ({req}: any) => {
-          return ({ req});
-      }
+        schema,
+        context: ({req}: any) => {
+            return ({ req});
+        }
     });
 
     server.applyMiddleware({
-      app,
-      path: graphqlPath,
-      cors: false,
+        app,
+        path: graphqlPath,
+        cors: false,
     });
 }
 

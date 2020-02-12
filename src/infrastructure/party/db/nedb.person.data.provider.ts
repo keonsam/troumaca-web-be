@@ -129,6 +129,10 @@ export class NedbPersonDataProvider implements PersonDataProvider {
         }));
   }
 
+  updatePersonMe(partyId: string, person: Person, options: HeaderBaseOptions): Observable<number> {
+    return this.updatePersonLocal(partyId, person);
+  }
+
   deletePerson(partyId: string, options: HeaderBaseOptions): Observable<number> {
     return Observable.create(function (observer: Observer<number>) {
       const query = {
@@ -149,8 +153,8 @@ export class NedbPersonDataProvider implements PersonDataProvider {
   // HELPERS
 
   private savePersonLocal(person: Person, options: HeaderBaseOptions): Observable<Person> {
-    person.createdOn = new Date();
-    person.modifiedOn = new Date();
+    // person.createdOn = Date.now();
+    // person.modifiedOn = Date.now();
     person.partyId = generateUUID();
     person.ownerPartyId = options.ownerPartyId;
     person.version = generateUUID();
@@ -201,7 +205,7 @@ export class NedbPersonDataProvider implements PersonDataProvider {
       const query = {
         "partyId": partyId
       };
-      person.modifiedOn = new Date();
+      // person.modifiedOn = Date.now();
       persons.update(query, {$set: person}, {}, function (err: any, numReplaced: number) {
         if (!err) {
           observer.next(numReplaced);

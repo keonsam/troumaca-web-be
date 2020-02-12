@@ -92,7 +92,7 @@ export class NedbUserDataProvider implements UserDataProvider {
 
     private updateUserMeCredentialLocal(query: any, credential: Credential): Observable<number> {
         return Observable.create(function (observer: Observer<number>) {
-            credential.modifiedOn = new Date();
+            //credential.modifiedOn = Date.now();
             credentials.update(query, { $set: credential}, {}, function (err: any, numReplaced: number) {
                 if (!err) {
                     observer.next(numReplaced);

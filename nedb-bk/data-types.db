@@ -1,6 +1,0 @@
-{"dataTypeId":"f8400178-5f14-45ec-80ac-bbd0daca1e8a","name":"String","_id":"DtSn55kxQe2Dvlw5"}
-{"dataTypeId":"96bbf69d-1b31-4f74-abc4-2708059f21d8","name":"Long","_id":"KAdDszWxrhRnFYTg"}
-{"dataTypeId":"1739b494-4404-4dcd-a386-a6221f5a2248","name":"Integer","_id":"WEGioPpH8GdOq04n"}
-{"dataTypeId":"61ae91b0-e01f-414b-98c6-2e5da6b12ff0","name":"Boolean","_id":"fdhnLnA3Y9q38ypO"}
-{"dataTypeId":"972d0758-03c0-45e8-82e1-99815cbc77e5","name":"Decimal","_id":"kPktm5d722rqtSbw"}
-{"$$indexCreated":{"fieldName":"dataTypeId","unique":true,"sparse":false}}

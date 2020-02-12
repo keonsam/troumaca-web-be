@@ -81,5 +81,9 @@ export class RestPersonDataProvider implements PersonDataProvider {
     return undefined;
   }
 
+  updatePersonMe(partyId: string, person: Person, options: HeaderBaseOptions): Observable<number> {
+    return undefined;
+  }
+
 }
 

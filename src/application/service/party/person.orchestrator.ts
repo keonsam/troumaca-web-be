@@ -35,6 +35,10 @@ export class PersonOrchestrator {
     return this.personRepository.updatePerson(partyId, person, credential, partyAccessRoles, options);
   }
 
+  updatePersonMe(partyId: string, person: Person, options: HeaderBaseOptions): Observable<number> {
+    return this.personRepository.updatePersonMe(partyId, person, options);
+  }
+
   deletePerson(partyId: string, options: HeaderBaseOptions): Observable<number> {
     return this.personRepository.deletePerson(partyId, options);
   }
