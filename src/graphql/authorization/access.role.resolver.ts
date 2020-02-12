@@ -2,10 +2,10 @@ import {Arg, Ctx, Query, Resolver, UseMiddleware} from "type-graphql";
 import {isAuth} from "../../middleware/isAuth";
 import {HeaderBaseOptions} from "../../header.base.options";
 import {ApolloError} from "apollo-server-errors";
-import {ERROR_CODE} from "../error.code";
-import {AccessRoleOrchestrator} from "../../authorization/access-role/access.role.orchestrator";
-import {AccessRole} from "../../data/authorization/access.role";
-import {AccessRoles} from "../../data/authorization/access.roles";
+import {ERROR_CODE} from "../../domain/model/error/error.code";
+import {AccessRoleOrchestrator} from "../../application/service/authorization/access.role.orchestrator";
+import {AccessRole} from "../../domain/model/authorization/access.role";
+import {AccessRoles} from "../../domain/model/authorization/access.roles";
 import {AccessRoleInput} from "./dto/access.role.input";
 
 @Resolver()

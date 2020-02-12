@@ -1,0 +1,64 @@
+# contents of properties file
+
+[credential]
+host.port = http://ec2-3-83-92-118.compute-1.amazonaws.com:8080
+host.port = http://localhost:8080
+repository.type = 2
+
+[registrar]
+host.port = http://ec2-3-83-92-118.compute-1.amazonaws.com:8080
+repository.type = 2
+
+[login]
+#host.port = https://d4n3hcu7fe.execute-api.us-east-1.amazonaws.com/Stage
+#host.port = http://login-alb-661932912.us-east-1.elb.amazonaws.com
+host.port = http://ec2-3-83-92-118.compute-1.amazonaws.com:8080
+repository.type = 2
+
+[confirmation]
+#host.port = https://kwifo6dv15.execute-api.us-east-1.amazonaws.com/Stage/authentication/confirmations
+host.port = http://ec2-3-83-92-118.compute-1.amazonaws.com:8080
+repository.type = 2
+
+[session]
+#host.port = https://ngibhimapk.execute-api.us-east-1.amazonaws.com/Stage
+host.port = http://ec2-3-83-92-118.compute-1.amazonaws.com:8080
+repository.type = 2
+
+[authorization]
+host = localhost
+port = 8080
+host.port = http://localhost:8888
+repository.type = 1
+
+[party]
+host = localhost
+port = 8686
+host.port = http://localhost:8686
+repository.type = 1
+
+[asset]
+host = localhost
+port = 8080
+host.port = http://localhost:8080
+repository.type = 1
+
+[assetName]
+host = localhost
+port = 8080
+#host.port = http://localhost:8080
+host.port = https://x6n3pm6l8i.execute-api.us-east-1.amazonaws.com/Prod
+repository.type = 2
+
+[contract]
+host = localhost
+port = 6161
+host.port = http://localhost:6161
+repository.type = 1
+
+[search]
+host = localhost
+port = 6262
+host.port = http://localhost:6262
+#host.port = http://ec2-52-55-156-224.compute-1.amazonaws.com:8080
+repository.type = 1

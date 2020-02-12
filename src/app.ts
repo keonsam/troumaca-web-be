@@ -11,7 +11,7 @@ import {ApolloServer} from "apollo-server-express";
 // import router from "./routes";
 import session from "express-session";
 import { buildSchema } from "type-graphql";
-import RESOLVERS from "./graphql/resolvers";
+import RESOLVERS from "./application/config/resolvers";
 import * as helmet from "helmet";
 import {customAuthChecker} from "./graphql/custom.auth.checker";
 const app = express();

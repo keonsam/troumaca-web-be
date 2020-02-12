@@ -1,5 +1,5 @@
 import {AuthChecker} from "type-graphql";
-import {SessionOrchestrator} from "../session/session.orchestrator";
+import {SessionOrchestrator} from "../application/service/session/session.orchestrator";
 
 const sessionOrchestrator = new SessionOrchestrator();
 

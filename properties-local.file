@@ -1,0 +1,45 @@
+# contents of properties file
+
+[credential]
+host.port = http://localhost:8586
+repository.type = 2
+
+[registrar]
+host.port = http://localhost:8586
+repository.type = 2
+
+[login]
+host.port = http://localhost:8586
+repository.type = 2
+
+[confirmation]
+host.port = http://localhost:8586
+repository.type = 2
+
+[session]
+host.port = http://localhost:8586
+repository.type = 2
+
+[authorization]
+host.port = http://localhost:8888
+repository.type = 2
+
+[party]
+host.port = http://localhost:8686
+repository.type = 2
+
+[asset]
+host.port = http://localhost:8282
+repository.type = 2
+
+[assetName]
+host.port = http://localhost:8586
+repository.type = 2
+
+[contract]
+host.port = http://localhost:8586
+repository.type = 2
+
+[search]
+host.port = http://localhost:8586
+repository.type = 2

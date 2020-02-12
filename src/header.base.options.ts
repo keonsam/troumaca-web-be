@@ -22,6 +22,10 @@ export class HeaderBaseOptions {
       if (!partyId) {
         partyId =  req.headers["Party-Id"];
       }
+      if (!partyId) {
+        partyId =  req.headers["Requester-Party-Id"];
+      }
+
     this.correlationId = correlationId ? correlationId.toString() : generateUUID();
     this.ownerPartyId = ownerPartyId ? ownerPartyId.toString() : "";
     this.partyId = partyId ? partyId.toString() : "";
@@ -31,7 +35,8 @@ export class HeaderBaseOptions {
     return {
       "Correlation-ID": this.correlationId,
       "Owner-Party-ID": this.partyId,
-      "Party-ID": this.partyId
+      "Party-ID": this.partyId,
+      "Requester-Party-ID": this.partyId
     };
   }
 }

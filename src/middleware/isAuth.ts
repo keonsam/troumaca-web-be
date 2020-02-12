@@ -2,7 +2,7 @@ import {MiddlewareFn} from "type-graphql";
 import {MyContext} from "../graphql/my.context";
 import {AuthenticationError} from "apollo-server-express";
 import {map} from "rxjs/operators";
-import {SessionOrchestrator} from "../session/session.orchestrator";
+import {SessionOrchestrator} from "../application/service/session/session.orchestrator";
 
 const sessionOrchestrator = new SessionOrchestrator();
 

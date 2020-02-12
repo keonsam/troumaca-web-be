@@ -55,6 +55,7 @@ const theUsersDb = path.resolve(__dirname, "..") + "/nedb/party/users.db";
 
 // authentication
 const theCredentialDb = path.resolve(__dirname, "..") + "/nedb/authentication/credentials.db";
+const theRegistrationDb = path.resolve(__dirname, "..") + "/nedb/authentication/registrations.db";
 const theCredentialConfirmationsDb = path.resolve(__dirname, "..") + "/nedb/authentication/credential_confirmations.db";
 
 // file
@@ -127,6 +128,10 @@ export let credentialConfirmations = new Datastore(theCredentialConfirmationsDb)
 credentialConfirmations.loadDatabase(handleError);
 credentialConfirmations.ensureIndex({fieldName: "confirmationId", unique: true}, handleError);
 
+// registrars
+export let registrars = new Datastore(theRegistrationDb);
+registrars.loadDatabase(handleError);
+registrars.ensureIndex({fieldName: "registrationId", unique: true}, handleError);
 
 // sites
 export let sites = new Datastore(theSitesDb);

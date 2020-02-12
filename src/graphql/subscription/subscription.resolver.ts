@@ -1,11 +1,11 @@
 import {Ctx, Query, Resolver, UseMiddleware} from "type-graphql";
 import {isAuth} from "../../middleware/isAuth";
 import {of} from "rxjs";
-import {Cards} from "../../data/subscription/cards";
-import {Card} from "../../data/subscription/card";
-import {SubInfo} from "../../data/subscription/sub.info";
-import {Invoice} from "../../data/subscription/invoice";
-import {Invoices} from "../../data/subscription/invoices";
+import {Cards} from "../../domain/model/subscription/cards";
+import {Card} from "../../domain/model/subscription/card";
+import {SubInfo} from "../../domain/model/subscription/sub.info";
+import {Invoice} from "../../domain/model/subscription/invoice";
+import {Invoices} from "../../domain/model/subscription/invoices";
 
 @Resolver()
 export class SubscriptionResolver {
