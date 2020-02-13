@@ -25,4 +25,4 @@ artifacts:
       - dist/troumaca-web-be.zip
 #        - '**/*'
 #    base-directory: 'dist*'
-#    discard-paths: no
+    discard-paths: yes
