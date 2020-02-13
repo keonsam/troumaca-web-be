@@ -1,8 +1,5 @@
 #!/bin/sh
 
-set -e
-
 source /home/ec2-user/.bash_profile
 cd /home/ec2-user/troumaca-web-be-server
-#~/.nvm/versions/node/v10.4.0/bin/forever start server.js
-pm2 start server.js
+unzip -o troumaca-web-be.zip -d troumaca-web-be
