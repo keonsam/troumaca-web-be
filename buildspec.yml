@@ -24,7 +24,7 @@ artifacts:
     files:
       - dist/appspec.yml
       - dist/troumaca-web-be.zip
-      - dist/script/*.sh
+      - dist/scripts/*
 #        - '**/*'
 #    base-directory: 'dist*'
     discard-paths: yes
