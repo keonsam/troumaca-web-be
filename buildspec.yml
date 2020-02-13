@@ -16,9 +16,11 @@ phases:
       - cp -r scripts dist
       - cp properties.file dist
       - cp -r nedb dist
+      - zip -qr build-output.zip dist/*
       - echo Build completed on `date`
 artifacts:
     files:
-        - '**/*'
-    base-directory: 'dist*'
-    discard-paths: no
+      - build-output.zip
+#        - '**/*'
+#    base-directory: 'dist*'
+#    discard-paths: no
