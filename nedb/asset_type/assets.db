@@ -17,3 +17,4 @@
 {"assetId":"6a78e89c-9501-4aa0-86a3-8f67e1993a40","name":"Some Product","description":"Some Product Description","buildingId":"1593577856","ownerPartyId":"854757a6-8ae3-4a6a-ab41-c29479ad76a9","dateModified":{"$$date":1549614416671},"version":"21348f22-d0b4-4910-85b7-93579686070f","_id":"vlzsR41Qn1ORufrR"}
 {"assetTypeId":"7799561a-f648-4f0c-b468-7b352fc00324","name":"AssetTest4","description":"","image":"../../css/images/assets-img/asset-2.3.png","assetId":"c1d71d61-8a06-42c7-976d-73aa16662999","ownerPartyId":"","version":"f7197589-874d-448c-b247-aa0e4db30761","dateModified":{"$$date":1568941102164},"_id":"xudINhvZNcnzdRsQ"}
 {"$$indexCreated":{"fieldName":"assetId","unique":true,"sparse":false}}
+{"$$indexCreated":{"fieldName":"assetId","unique":true}}

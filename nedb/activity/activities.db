@@ -1,1 +1,2 @@
 {"$$indexCreated":{"fieldName":"activityId","unique":true,"sparse":false}}
+{"$$indexCreated":{"fieldName":"activityId","unique":true}}

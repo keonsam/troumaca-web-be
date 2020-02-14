@@ -1,1 +1,2 @@
 {"$$indexCreated":{"fieldName":"siteId","unique":true,"sparse":false}}
+{"$$indexCreated":{"fieldName":"siteId","unique":true}}

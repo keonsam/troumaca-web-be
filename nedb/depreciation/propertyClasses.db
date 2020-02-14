@@ -1,1 +1,2 @@
 {"$$indexCreated":{"fieldName":"propertyClassId","unique":true,"sparse":false}}
+{"$$indexCreated":{"fieldName":"propertyClassId","unique":true}}

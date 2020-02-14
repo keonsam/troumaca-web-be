@@ -128,3 +128,4 @@
 {"assetRoleTypeId":"bff9cdcc-d912-48c2-9d9f-b017bc4e1fa1","name":"Manufacturer","canonicalName":"manufacturer","description":"The retailer","version":"53159f3a-b6ad-4877-94a8-d39dddd73b3d","ownerPartyId":"2b408ca3-7290-4f73-87ce-17a7e51710ab","dateModified":{"$$date":1549008001310},"_id":"zXWgCFbn4gI2IiC6"}
 {"name":"Retailer","canonicalName":"retailer","description":"Retailer","ownerPartyId":"854757a6-8ae3-4a6a-ab41-c29479ad76a9","assetRoleTypeId":"46a87ad0-b40e-4dff-b240-219f44661e23","version":"52be6f7d-966a-4773-9017-01e83da37842","dateModified":{"$$date":1549082279456},"_id":"zjmt63VA1hzJYXDX"}
 {"$$indexCreated":{"fieldName":"assetRoleTypeId","unique":true,"sparse":false}}
+{"$$indexCreated":{"fieldName":"assetRoleTypeId","unique":true}}

@@ -8,3 +8,4 @@
 {"resourceId":"ab9e4f37-8bed-47d7-8e9a-218a2317aeef","resourceTypeId":"7c91240c-e941-4fa1-98a1-0b083cc9c2f7","name":"Profile15 1 edit","description":"","_id":"XOhu2GVJCxJY0QW5"}
 {"resourceTypeId":"7714d005-59a0-40f5-87f6-c2cb656215f6","name":"Test2","description":"","resourceId":"1c0f92cb-347f-466c-8bfd-1f32a7e3711c","_id":"aavWpiifij3wPorz"}
 {"$$indexCreated":{"fieldName":"resourceId","unique":true,"sparse":false}}
+{"$$indexCreated":{"fieldName":"resourceId","unique":true}}

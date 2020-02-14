@@ -52,3 +52,4 @@
 {"resourceId":"08940b75-8bdf-44c3-9eee-4228409e312f","permission":{"name":"Delete","permissionId":"54baacc2-5998-4399-bd5e-476e9d8a9d6d"},"resourcePermissionId":"89e52f05-af5d-47f9-9b1c-c10e9c318647","_id":"yTj9T5OFDg1ZRZ1l"}
 {"permission":{"name":"read","permissionId":"f3265b6c-667e-4689-b3ce-f0b2f48eeed3"},"resourceId":"56575aed-ad9d-4179-94b0-b4508258fc92","resourcePermissionId":"12a2858a-f8fd-4e0a-90a3-677d8b3681f0","_id":"zAkmFbJJneMx1mKd"}
 {"$$indexCreated":{"fieldName":"resourcePermissionId","unique":true,"sparse":false}}
+{"$$indexCreated":{"fieldName":"resourcePermissionId","unique":true}}
