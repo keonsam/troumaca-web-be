@@ -22,9 +22,9 @@ phases:
       - echo Build completed on `date`
 artifacts:
     files:
-      - dist/appspec.yml
+#      - dist/appspec.yml
       - dist/troumaca-web-be.zip
-      - dist/scripts/*
+#      - dist/scripts/*
 #        - '**/*'
 #    base-directory: 'dist*'
     discard-paths: yes
