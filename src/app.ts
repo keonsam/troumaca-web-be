@@ -3,7 +3,7 @@ import "reflect-metadata";
 import express from "express";
 // import path from "path";
 import logger from "morgan";
-import cors from "cors";
+//import cors from "cors";
 // import bodyParser from "body-parser";
 // import cookieParser from "cookie-parser";
 import {ApolloServer} from "apollo-server-express";
@@ -52,7 +52,7 @@ const corsOptions = {
   credentials: true
 };
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 // app.use(cors());
 
 const TWO_HOURS = 1000 * 60 * 60 * 60 * 2;
@@ -68,11 +68,18 @@ app.use(session({
     }
 }));
 
+// What's the point of making this an async function
 async function bootstrap() {
+
+    // const schema = await buildSchema({
+    //   resolvers: RESOLVERS,
+    //   container: Container
+    // });
 
     const schema = await buildSchema({
         resolvers: RESOLVERS,
     });
+
     const server = new ApolloServer({
         schema,
         context: ({req}: any) => {
