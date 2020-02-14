@@ -7,3 +7,4 @@
 {"name":"test2","description":"front-edn","version":"a38ff42d-586c-4f81-9d40-6d462bb0fb99","dateModified":{"$$date":1554720016840},"ownerPartyId":"fba78d62-2679-4b73-9948-fa34ef970f76","_id":"rq9uxHwVtbFyDLFT"}
 {"name":"test7","description":"any","assetNameTypeId":"ba599f09-378b-4fc7-9df8-40a35b8024e4","version":"8e763283-8313-4f69-bb9a-0ba15faf1443","dateModified":{"$$date":1554722511926},"ownerPartyId":"fba78d62-2679-4b73-9948-fa34ef970f76","_id":"sxROtihXsqylfjmk"}
 {"$$indexCreated":{"fieldName":"assetNameTypeId","unique":true,"sparse":false}}
+{"$$indexCreated":{"fieldName":"assetNameTypeId","unique":true}}

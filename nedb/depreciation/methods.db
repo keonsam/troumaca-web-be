@@ -1,1 +1,2 @@
 {"$$indexCreated":{"fieldName":"methodId","unique":true,"sparse":false}}
+{"$$indexCreated":{"fieldName":"methodId","unique":true}}

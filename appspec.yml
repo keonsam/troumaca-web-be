@@ -11,10 +11,6 @@ permissions:
     group: ec2-user
 
 hooks:
-#  BeforeInstall:
-#    - location: unzip-resource-bundle.sh
-#      timeout: 300
-#      runas: ec2-user
   ApplicationStart:
     - location: scripts/run.sh
       timeout: 300

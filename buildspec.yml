@@ -11,19 +11,20 @@ phases:
       - npm run build-ts
   post_build:
     commands:
-      - cp appspec.yml dist
-      - cp -r node_modules dist
-      - cp -r scripts dist
-      - cp properties.file dist
-      - cp -r nedb dist
-      - cd dist
+      - mkdir troumaca-web-be
+      - cp appspec.yml troumaca-web-be
+      - cp -r node_modules troumaca-web-be
+      - cp -r scripts troumaca-web-be
+      - cp -r nedb troumaca-web-be
+      - cp -r dist troumaca-web-be
+      - cd troumaca-web-be
       - zip -qr troumaca-web-be.zip *
       - cd ..
       - echo Build completed on `date`
 artifacts:
     files:
 #      - dist/appspec.yml
-      - dist/troumaca-web-be.zip
+      - troumaca-web-be/troumaca-web-be.zip
 #      - dist/scripts/*
 #        - '**/*'
 #    base-directory: 'dist*'

@@ -39,3 +39,4 @@
 {"assetCharacteristicTypeId":"5","name":"multTest1","list":["Hello","test1","test3"],"description":"sflkl","assetCharacteristicId":"e519394e-b19d-4a5a-a69f-778e429d18ae","version":"132830ac-8cd7-4c55-9f33-5fe3bd686f6b","dateModified":{"$$date":1575587587978},"ownerPartyId":"","_id":"yV2as8BHZYokW8Y7"}
 {"assetCharacteristicTypeId":"3","name":"test2","preFilled":false,"required":false,"assetCharacteristicId":"0d6359b4-2e2e-4f37-9404-1303c63915cf","version":"7fb9e500-307c-4b1b-a723-9cd0b162328a","dateModified":{"$$date":1568309294987},"ownerPartyId":"","_id":"zxUf8dmIDkUzpODu"}
 {"$$indexCreated":{"fieldName":"assetCharacteristicId","unique":true,"sparse":false}}
+{"$$indexCreated":{"fieldName":"assetCharacteristicId","unique":true}}

@@ -1,1 +1,2 @@
 {"$$indexCreated":{"fieldName":"unitOfMeasurementConversionId","unique":true,"sparse":false}}
+{"$$indexCreated":{"fieldName":"unitOfMeasurementConversionId","unique":true}}

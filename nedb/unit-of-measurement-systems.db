@@ -12,3 +12,4 @@
 {"name":"International System of Units","canonicalName":"international_system_of_units","abbreviation":"SI","description":"International System of Units","ownerPartyId":"854757a6-8ae3-4a6a-ab41-c29479ad76a9","unitOfMeasurementSystemId":"5cd77cff-166b-414c-95fc-1c5666de925b","version":"f99cff85-c4ba-4eec-8521-ca61f34d7a30","dateModified":{"$$date":1549258914029},"_id":"oNnWCaYYjDlfadLK"}
 {"name":"Imperial system of units","canonicalName":"British Imperial system of units","abbreviation":"BG","description":"British Imperial system of units","ownerPartyId":"854757a6-8ae3-4a6a-ab41-c29479ad76a9","unitOfMeasurementSystemId":"4b6b78b6-56a6-47dd-b280-ba9d7f54f7f6","version":"4e5315af-8b6f-4bc2-bb15-3f035088cf4b","dateModified":{"$$date":1549258931899},"_id":"qK38JNEAOgumz9VH"}
 {"$$indexCreated":{"fieldName":"unitOfMeasurementSystemId","unique":true,"sparse":false}}
+{"$$indexCreated":{"fieldName":"unitOfMeasurementSystemId","unique":true}}

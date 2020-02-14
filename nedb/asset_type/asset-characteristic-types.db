@@ -5,3 +5,4 @@
 {"assetCharacteristicTypeId":"264a35db-a4fc-4abb-a1c5-3af136d0963d","name":"Golden State Warriors Home Court","canonicalName":"golden_state_warriors_home_court","description":"Warriors Home Court","version":"621382cc-bc74-4d8e-9ee8-755a1cb5cfad","ownerPartyId":"854757a6-8ae3-4a6a-ab41-c29479ad76a9","dateModified":{"$$date":1549246027285},"_id":"ul6UhL8IUpsWAs1q"}
 {"assetIdentifierTypeId":null,"name":"HOB Sunset","canonicalName":"hob_sunset","description":"HOB Sunset","ownerPartyId":"854757a6-8ae3-4a6a-ab41-c29479ad76a9","dateModified":{"$$date":1549246040897},"assetCharacteristicTypeId":"5a49259c-afe2-4feb-b2c7-5577bdf3bd61","version":"86962498-1ae0-461e-9444-e1382bb3cede","_id":"x0LIVQrvDnRaoCiK"}
 {"$$indexCreated":{"fieldName":"assetCharacteristicTypeId","unique":true,"sparse":false}}
+{"$$indexCreated":{"fieldName":"assetCharacteristicTypeId","unique":true}}

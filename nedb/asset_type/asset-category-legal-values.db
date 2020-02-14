@@ -4,3 +4,4 @@
 {"assetCategoryLegalValueId":"d10d1768-95aa-4342-88bf-d814fc3cb914","name":"Niva","canonicalName":"niva","description":"Nivea for ment","abbreviation":"Niva","version":"d8c99603-01a4-4670-bab7-750827888119","assetCharacteristicId":"01ec3c40-8361-4b2c-8d11-894c55dab2de","ownerPartyId":"854757a6-8ae3-4a6a-ab41-c29479ad76a9","dateModified":{"$$date":1549251814891},"_id":"oaeUllWETso63ZPm"}
 {"assetCategoryLegalValueId":"c8e8e8a1-ca67-4fd0-8289-eea23eeacc1e","name":"Manufacturer","canonicalName":"manufacturer","description":"Manufacturer","version":"c84f12b6-dd3f-4f4d-835e-1feadadf47a0","assetCharacteristicId":"01ec3c40-8361-4b2c-8d11-894c55dab2de","ownerPartyId":"854757a6-8ae3-4a6a-ab41-c29479ad76a9","dateModified":{"$$date":1549251855964},"_id":"tECqMU2mqlRWh4PS"}
 {"$$indexCreated":{"fieldName":"assetCategoryLegalValueId","unique":true,"sparse":false}}
+{"$$indexCreated":{"fieldName":"assetCategoryLegalValueId","unique":true}}

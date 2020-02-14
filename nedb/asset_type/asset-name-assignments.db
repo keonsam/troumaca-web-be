@@ -1,1 +1,2 @@
 {"$$indexCreated":{"fieldName":"assetNameAssignmentId","unique":true,"sparse":false}}
+{"$$indexCreated":{"fieldName":"assetNameAssignmentId","unique":true}}

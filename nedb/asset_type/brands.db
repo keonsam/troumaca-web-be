@@ -1,3 +1,4 @@
 {"name":"Nike","description":"","brandId":"2e4366a8-4997-43e0-ac4e-9369847e1c9d","ownerPartyId":"","_id":"Yj4NRbAjj0WhZ2xi"}
 {"name":"test Updated","abbreviation":"T","description":"front-end","brandId":"e5b5cec3-4082-45ea-a1c0-32e0015dccfc","ownerPartyId":"","_id":"eN4ydGccgH1qMzyS"}
 {"$$indexCreated":{"fieldName":"brandId","unique":true,"sparse":false}}
+{"$$indexCreated":{"fieldName":"brandId","unique":true}}
