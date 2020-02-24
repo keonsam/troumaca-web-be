@@ -4,4 +4,3 @@
 {"dataTypeId":"61ae91b0-e01f-414b-98c6-2e5da6b12ff0","name":"Boolean","_id":"fdhnLnA3Y9q38ypO"}
 {"dataTypeId":"972d0758-03c0-45e8-82e1-99815cbc77e5","name":"Decimal","_id":"kPktm5d722rqtSbw"}
 {"$$indexCreated":{"fieldName":"dataTypeId","unique":true,"sparse":false}}
-{"$$indexCreated":{"fieldName":"dataTypeId","unique":true}}

@@ -8,4 +8,3 @@
 {"resourceId":"c14bc835-98dd-4a8d-b208-e4db505b5d53","resourcePermissionId":"76ab2feb-8dfc-4d61-95f1-c2967a81141b","accessRoleId":"d16f4bdd-0085-4497-a275-a0f4b9fa6a50","grantId":"2c01abb6-1efe-4c0c-b4b4-f4e98bf7bb3c","_id":"oXqXn9H9zidrazUe"}
 {"resourcePermissionId":"22b8ad13-0889-4c80-a3b9-433cebe3c88e","accessRoleId":"52753d36-45b0-48bd-96a3-e845d7f22928","grantId":"3772d12f-f3ac-4f95-a28b-1aba0798a6f8","_id":"rNEBSIGMn1sEeFyW"}
 {"$$indexCreated":{"fieldName":"grantId","unique":true,"sparse":false}}
-{"$$indexCreated":{"fieldName":"grantId","unique":true}}

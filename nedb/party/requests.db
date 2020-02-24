@@ -87,4 +87,3 @@
 {"accessRequestId":"8fc38280-cc13-40d7-a85e-7ea09db90c64","partyId":"ec48593d-1087-4c8e-b952-90294072d0ad","organizationId":"ec48593d-1087-4c8e-b952-90294072d0ad","_id":"wyookoj2tsnpV5TR"}
 {"accessRequestId":"9f235de3-ef07-4d58-a163-a5d5d671a683","partyId":"8a7d1bcd-5153-4700-be07-ef5e49b2236c","organizationId":"8a7d1bcd-5153-4700-be07-ef5e49b2236c","_id":"xLa6lBBlte6CXtfW"}
 {"$$indexCreated":{"fieldName":"accessRequestId","unique":true,"sparse":false}}
-{"$$indexCreated":{"fieldName":"accessRequestId","unique":true}}

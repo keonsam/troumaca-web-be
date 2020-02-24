@@ -1,3 +1,2 @@
 {"name":"test Edited","description":"","accessRoleTypeId":"b8ace9f8-a1b8-4231-bda4-a7278e884609","_id":"mS6cDyjREjSx6XqF"}
 {"$$indexCreated":{"fieldName":"accessRoleTypeId","unique":true,"sparse":false}}
-{"$$indexCreated":{"fieldName":"accessRoleTypeId","unique":true}}

@@ -1,4 +1,3 @@
 {"paymentMethodId":"9f9e5106-1235-4f61-9609-b8fea945e066","name":"Credit Card","_id":"ejn9uOeF24GS6pDX"}
 {"paymentMethodId":"b173a8b9-1b57-47b8-8106-58a3ab879bf4","name":"PayPal","_id":"lcDFEJuwygVTOHfA"}
 {"$$indexCreated":{"fieldName":"paymentMethodId","unique":true,"sparse":false}}
-{"$$indexCreated":{"fieldName":"paymentMethodId","unique":true}}
