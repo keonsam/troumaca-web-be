@@ -36,4 +36,3 @@
 {"name":"van","description":"","color":"#F2CBCB","share":false,"use":false,"assetTypeId":"9e71517a-fe1f-47db-9fb6-689c75142374","ownerPartyId":"","version":"38a10267-0468-4c3f-af7d-49b6f40b26d2","dateModified":{"$$date":1577704583139},"_id":"uU4dc7Pm9N0x1yjw"}
 {"name":"trucks","description":"","color":"#F2CBCB","share":false,"use":false,"assetTypeId":"0b6c84c8-3afb-4e2f-bab7-76e322beb91b","ownerPartyId":"","version":"d320b24f-48bf-453c-81a5-f3c074d96cb6","dateModified":{"$$date":1577704713958},"_id":"wuycnjIESEiL95Ym"}
 {"$$indexCreated":{"fieldName":"assetTypeId","unique":true,"sparse":false}}
-{"$$indexCreated":{"fieldName":"assetTypeId","unique":true}}

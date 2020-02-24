@@ -1,3 +1,2 @@
 {"name":"test Edited","description":"","permissionId":"27ca2442-0d93-4736-ae53-09d605e44069","_id":"enXG1UWYObosdVCs"}
 {"$$indexCreated":{"fieldName":"permissionId","unique":true,"sparse":false}}
-{"$$indexCreated":{"fieldName":"permissionId","unique":true}}

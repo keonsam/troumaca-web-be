@@ -1,14 +1,15 @@
 import {AssetTypeDataProvider} from "../../../../port/asset.type.data.provider";
-import {Observable, Observer} from "rxjs";
+import {Observable} from "rxjs";
 import {AssetType} from "../../../../domain/model/asset/asset.type";
 import {assetTypes} from "../../../../db";
 import {generateUUID} from "../../../../uuid.generator";
 import {Affect} from "../../../../domain/model/affect";
 import {SkipGenerator} from "../../../util/skip.generator";
-import { AssetTypes } from "../../../../domain/model/asset/asset.types";
 import { HeaderBaseOptions } from "../../../../header.base.options";
 import { AssetTypeRequest } from "../../../../domain/model/asset/request/asset.type.request";
 import { mapObjectProps } from "../../../mapper/object.property.mapper";
+import {AssetTypeCompositeRequest} from "../../../../domain/model/asset/request/asset.type.composite.request";
+import {CreateAssetTypeCompositeResponse} from "../../../../domain/model/asset/dto/create.asset.type.composite.response";
 
 export class NedbAssetTypeDataProvider implements AssetTypeDataProvider {
 
@@ -16,6 +17,10 @@ export class NedbAssetTypeDataProvider implements AssetTypeDataProvider {
   }
 
   addAssetTypeRoot(assetType: AssetTypeRequest, headerOptions?: HeaderBaseOptions): Observable<AssetType> {
+    return undefined;
+  }
+
+  addAssetTypeRootComposite(assetType: AssetTypeCompositeRequest, headerOptions?: HeaderBaseOptions): Observable<CreateAssetTypeCompositeResponse> {
     return undefined;
   }
 
@@ -38,9 +43,29 @@ export class NedbAssetTypeDataProvider implements AssetTypeDataProvider {
       });
   }
 
+  addAssetTypeComposite(assetTypeRequest: AssetTypeCompositeRequest, headerOptions?: HeaderBaseOptions)
+    : Observable<CreateAssetTypeCompositeResponse> {
+    const assetType = mapObjectProps(assetTypeRequest, new CreateAssetTypeCompositeResponse());
+    assetType.assetTypeId = generateUUID();
+    assetType.ownerPartyId = headerOptions.ownerPartyId;
+    assetType.version = generateUUID();
+    assetType.dateModified = new Date();
+
+    return new Observable(observer => {
+      assetTypes.insert(assetType, function (err: any, doc: any) {
+        if (err) {
+          observer.error(err);
+        } else {
+          observer.next(doc);
+        }
+        observer.complete();
+      });
+    });
+  }
+
   updateAssetType(assetTypeId: string, assetType: AssetTypeRequest, headerOptions?: HeaderBaseOptions): Observable<Affect> {
-      // assetType.version = generateUUID();
-      // assetType.dateModified = new Date();
+      assetType.version = generateUUID();
+      //assetType.dateModified = new Date();
 
       return new Observable(observer => {
           assetTypes.update(
@@ -93,6 +118,21 @@ export class NedbAssetTypeDataProvider implements AssetTypeDataProvider {
       });
   }
 
+  queryAssetTypeById(query: string, headerOptions?: HeaderBaseOptions): Observable<AssetType> {
+    return new Observable(observer => {
+      assetTypes.find(
+        {assetTypeId: query},
+        (err: any, docs: any) => {
+          if (!err) {
+            observer.next(docs[0]);
+          } else {
+            observer.error(err);
+          }
+          observer.complete();
+        });
+    });
+  }
+
   getAssetTypes(pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetType[]> {
       return new Observable(observer => {
           assetTypes.count({ ownerPartyId: headerOptions.ownerPartyId }, function (err, count) {
@@ -113,6 +153,30 @@ export class NedbAssetTypeDataProvider implements AssetTypeDataProvider {
                   });
           });
       });
+  }
+
+  queryAssetTypes(query: string, headerOptions?: HeaderBaseOptions): Observable<AssetType[]> {
+    return new Observable(observer => {
+      assetTypes.count({ ownerPartyId: headerOptions.ownerPartyId }, function (err, count) {
+        //const skipAmount = pageNumber ? pageNumber * pageSize : 0;
+        const skipAmount = 0;
+        const pageSize = 10;
+        assetTypes.find({
+          ownerPartyId: headerOptions.ownerPartyId,
+          name: new RegExp("search"),
+        })
+          .skip(skipAmount)
+          .limit(pageSize)
+          .exec((err: any, docs: any) => {
+            if (!err) {
+              observer.next(new Array<AssetType>());
+            } else {
+              observer.error(err);
+            }
+            observer.complete();
+          });
+      });
+    });
   }
 
   findAssetTypesInternal(searchStr: string, pageNumber: number, pageSize: number, headerOptions?: HeaderBaseOptions): Observable<AssetType[]> {

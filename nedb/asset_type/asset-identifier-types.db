@@ -1,3 +1,2 @@
 {"name":"test updated","description":"front-end","assetIdentifierTypeId":"95f268c6-f494-4ba9-b0f8-e44968a783b1","version":"06b2aaa4-4f0b-4572-b710-d4f0128e25d5","dateModified":{"$$date":1554379856278},"ownerPartyId":"fba78d62-2679-4b73-9948-fa34ef970f76","_id":"Mndp4K0p1R5ERcNE"}
 {"$$indexCreated":{"fieldName":"assetIdentifierTypeId","unique":true,"sparse":false}}
-{"$$indexCreated":{"fieldName":"assetIdentifierTypeId","unique":true}}

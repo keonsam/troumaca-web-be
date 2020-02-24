@@ -32,4 +32,3 @@
 {"firstName":"test25@test.com","partyId":"ee8b58ce-84db-4e80-bad2-211327dc7fdd","createdOn":{"$$date":1558023024810},"modifiedOn":{"$$date":1558023024810},"_id":"vgUiQAlsUnbg8H4f"}
 {"firstName":"test20@test.com","partyId":"40665639-c1a0-4220-b899-e3f58a2cbf72","createdOn":{"$$date":1558021883350},"modifiedOn":{"$$date":1558021883350},"_id":"wMJ7EItHjlMOE7Ko"}
 {"$$indexCreated":{"fieldName":"partyId","unique":true,"sparse":false}}
-{"$$indexCreated":{"fieldName":"partyId","unique":true}}

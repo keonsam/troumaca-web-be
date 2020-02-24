@@ -5,4 +5,3 @@
 {"name":"International System of Units","canonicalName":"international_system_of_units","abbreviation":"SI","description":"International System of Units","ownerPartyId":"854757a6-8ae3-4a6a-ab41-c29479ad76a9","unitOfMeasurementDimensionId":"34412e38-54a0-47be-a071-b6764ee751da","version":"29bcd150-0126-4163-871b-ee94d9ca543a","dateModified":{"$$date":1549260281160},"_id":"cgwl7cB1oOTsVqoU"}
 {"unitOfMeasurementDimensionId":"5fbc11a9-0607-4886-9b73-bf1d6fe71688","name":"English Engineering System of Units","abbreviation":"English","description":"English Engineering System of Units","ownerPartyId":"854757a6-8ae3-4a6a-ab41-c29479ad76a9","dateModified":{"$$date":1549260787994},"version":"0c91f59c-5662-4ac9-97d3-f4197fc81dae","_id":"wxyHn6CyrtI027im"}
 {"$$indexCreated":{"fieldName":"unitOfMeasurementDimensionId","unique":true,"sparse":false}}
-{"$$indexCreated":{"fieldName":"unitOfMeasurementDimensionId","unique":true}}

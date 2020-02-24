@@ -20,16 +20,22 @@ import {RegisterResolver} from "../../presentation/register/register.resolver";
 import {LoginResolver} from "../../presentation/login/login.resolver";
 
 const RESOLVERS: any[] = [
+    //Verified
     RegisterResolver,
     LoginResolver,
     CredentialResolver,
     ConfirmationResolver,
+
+    // Partially verified
+    AssetTypeResolver,
+    AssetResolver,
     SessionResolver,
+
+    // Others
     AssetCharacteristicResolver,
     CharacteristicTypeResolver,
-    AssetTypeResolver,
     AssetRoleTypeResolver,
-    AssetResolver,
+
     PeopleResolver,
     SiteResolver,
     BrandResolver,
