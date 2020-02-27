@@ -10,10 +10,10 @@ export class CredentialOrchestrator {
   private credentialDataProvider: CredentialDataProvider;
 
   constructor(credentialDataProvider?: CredentialDataProvider) {
-    if (credentialDataProvider != null) {
+    if (credentialDataProvider != undefined) {
       this.credentialDataProvider = credentialDataProvider;
     } else {
-      this.credentialDataProvider = new CredentialDataProviderContext()
+      this.credentialDataProvider = new CredentialDataProviderContext();
     }
   }
 
